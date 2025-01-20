@@ -14,6 +14,7 @@ import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerboundPacket;
+import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.units.monsters.*;
 import com.solegendary.reignofnether.unit.units.neutral.EndermanProd;
 import com.solegendary.reignofnether.unit.units.piglins.*;
@@ -34,6 +35,8 @@ public class SandboxClientEvents {
 
     // NONE == neutral
     private static Faction faction = Faction.NONE;
+
+    private static Relationship relationship = Relationship.OWNED;
 
     public static SandboxMenuType sandboxMenuType = SandboxMenuType.BUILDINGS;
 
@@ -116,6 +119,15 @@ public class SandboxClientEvents {
         };
     }
 
+    private static String getRelationshipName() {
+        return switch (relationship) {
+            case OWNED -> I18n.get("hud.relationship.reignofnether.owned");
+            case FRIENDLY -> I18n.get("hud.relationship.reignofnether.allied");
+            case NEUTRAL -> I18n.get("hud.relationship.reignofnether.neutral");
+            case HOSTILE -> I18n.get("hud.relationship.reignofnether.enemy");
+        };
+    }
+
     public static Button getToggleFactionButton() {
         return new Button(
                 "Toggle Faction",
@@ -140,8 +152,38 @@ public class SandboxClientEvents {
                 },
                 ClientGameModeHelper::cycleGameMode,
                 List.of(
-                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.faction_button1", getFactionName()), Style.EMPTY),
-                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.faction_button2"), Style.EMPTY)
+                        FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.faction_button1", getFactionName()), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.faction_button2"), Style.EMPTY)
+                )
+        );
+    }
+
+    public static Button getToggleRelationshipButton() {
+        return new Button(
+                "Toggle Relationship",
+                Button.itemIconSize,
+                switch (relationship) {
+                    case OWNED -> new ResourceLocation("minecraft", "textures/block/lime_wool.png");
+                    case FRIENDLY -> new ResourceLocation("minecraft", "textures/block/blue_wool.png");
+                    case NEUTRAL -> new ResourceLocation("minecraft", "textures/block/yellow_wool.png");
+                    case HOSTILE -> new ResourceLocation("minecraft", "textures/block/red_wool.png");
+                },
+                (Keybinding) null,
+                () -> false,
+                () -> false,
+                () -> true,
+                () -> {
+                    switch (relationship) {
+                        case OWNED -> relationship = Relationship.NEUTRAL;
+                        case FRIENDLY -> relationship = Relationship.NEUTRAL;
+                        case NEUTRAL -> relationship = Relationship.HOSTILE;
+                        case HOSTILE -> relationship = Relationship.OWNED;
+                    }
+                },
+                ClientGameModeHelper::cycleGameMode,
+                List.of(
+                        FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.relationship_button1", getRelationshipName()), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.relationship_button2"), Style.EMPTY)
                 )
         );
     }
@@ -224,9 +266,16 @@ public class SandboxClientEvents {
 
         if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1) {
            SandboxAction sandboxAction = CursorClientEvents.getLeftClickSandboxAction();
+
+           String ownerName = switch (relationship) {
+               case NEUTRAL -> "";
+               case HOSTILE -> "Enemy";
+               default -> MC.player.getName().getString();
+           };
+
            if (sandboxAction != null && sandboxAction.name().toLowerCase().contains("spawn_") && !spawnUnitName.isBlank()) {
                 SandboxServerboundPacket.spawnUnit(CursorClientEvents.getLeftClickSandboxAction(),
-                        MC.player.getName().getString(), spawnUnitName, CursorClientEvents.getPreselectedBlockPos());
+                        ownerName, spawnUnitName, CursorClientEvents.getPreselectedBlockPos());
            }
 
            if (!Keybindings.shiftMod.isDown()) {

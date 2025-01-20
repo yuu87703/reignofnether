@@ -439,6 +439,11 @@
     "hud.faction.reignofnether.random": "Random",
     "hud.faction.reignofnether.neutral": "Neutral",
 
+    "hud.relationship.reignofnether.owned": "Owned",
+    "hud.relationship.reignofnether.allied": "Allied",
+    "hud.relationship.reignofnether.enemy": "Enemy",
+    "hud.relationship.reignofnether.neutral": "Neutral",
+
     "server.reignofnether.is_defeated": "%s has %s and is defeated!",
     "server.reignofnether.lost_buildings": "lost all their buildings",
     "server.reignofnether.lost_capitol": "%s has lost their capitol and will be revealed in %d seconds unless they rebuild it!",
@@ -928,6 +933,8 @@
     "config.reignofnether.warn_config_change": "Server host has changed configs",
     "config.reignofnether.hide_config_change": "(Click to hide)",
 
+    "sandbox.reignofnether.relationship_button1": "Relationship: %s",
+    "sandbox.reignofnether.relationship_button2": "(Click to change)",
     "sandbox.reignofnether.faction_button1": "Faction: %s",
     "sandbox.reignofnether.faction_button2": "(Click to change)",
     "sandbox.reignofnether.menu_type_button_buildings": "Menu: Buildings",

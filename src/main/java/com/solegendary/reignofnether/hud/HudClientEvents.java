@@ -855,6 +855,7 @@ public class HudClientEvents {
             ArrayList<Button> actionButtons = new ArrayList<>();
             actionButtons.add(SandboxClientEvents.getToggleBuildingOrUnitsButton());
             actionButtons.add(SandboxClientEvents.getToggleFactionButton());
+            actionButtons.add(SandboxClientEvents.getToggleRelationshipButton());
 
             if (SandboxClientEvents.sandboxMenuType == SandboxMenuType.BUILDINGS) {
                 actionButtons.add(SandboxClientEvents.getToggleBuildingCheatsButton());
