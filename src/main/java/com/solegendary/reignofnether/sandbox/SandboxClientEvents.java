@@ -1,6 +1,9 @@
 package com.solegendary.reignofnether.sandbox;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
+import com.solegendary.reignofnether.building.buildings.neutral.EndPortal;
+import com.solegendary.reignofnether.building.buildings.neutral.HealingFountain;
 import com.solegendary.reignofnether.building.buildings.villagers.*;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
@@ -53,7 +56,9 @@ public class SandboxClientEvents {
 
     public static List<AbilityButton> getNeutralBuildingButtons() {
         return List.of(
-            TownCentre.getBuildButton(Keybindings.keyQ)
+            Beacon.getBuildButton(Keybindings.keyQ),
+            HealingFountain.getBuildButton(Keybindings.keyW),
+            EndPortal.getBuildButton(Keybindings.keyE)
         );
     }
 
@@ -150,7 +155,7 @@ public class SandboxClientEvents {
                         case NONE -> faction = Faction.VILLAGERS;
                     }
                 },
-                ClientGameModeHelper::cycleGameMode,
+                null,
                 List.of(
                         FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.faction_button1", getFactionName()), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.faction_button2"), Style.EMPTY)
@@ -180,7 +185,7 @@ public class SandboxClientEvents {
                         case HOSTILE -> relationship = Relationship.OWNED;
                     }
                 },
-                ClientGameModeHelper::cycleGameMode,
+                null,
                 List.of(
                         FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.relationship_button1", getRelationshipName()), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.relationship_button2"), Style.EMPTY)
@@ -208,7 +213,7 @@ public class SandboxClientEvents {
                         case OTHER -> sandboxMenuType = SandboxMenuType.BUILDINGS;
                     }
                 },
-                ClientGameModeHelper::cycleGameMode,
+                null,
                 List.of(
                         switch (sandboxMenuType) {
                             case BUILDINGS -> FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.menu_type_button_buildings"), Style.EMPTY);
@@ -231,8 +236,8 @@ public class SandboxClientEvents {
                 "Toggle Building Cheats",
                 Button.itemIconSize,
                 hasCheats ?
-                    new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_side.png") :
-                    new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_side_dark.png"),
+                        new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_side.png") :
+                        new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_side_dark.png"),
                 (Keybinding) null,
                 () -> false,
                 () -> false,
@@ -249,7 +254,50 @@ public class SandboxClientEvents {
                 ClientGameModeHelper::cycleGameMode,
                 List.of(hasCheats ? FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.building_cheats_on"), Style.EMPTY) :
                                     FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.building_cheats_off"), Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.building_cheats1"), Style.EMPTY)
+                                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.building_cheats1"), Style.EMPTY),
+                                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.building_cheats2"), Style.EMPTY)
+                )
+        );
+    }
+
+    public static Button getToggleUnitCheatsButton() {
+        Minecraft MC = Minecraft.getInstance();
+        if (MC.player == null)
+            return null;
+        boolean hasCheats = ResearchClient.hasCheat("operationcwal") &&
+                            ResearchClient.hasCheat("medievalman") &&
+                            ResearchClient.hasCheat("foodforthought") &&
+                            ResearchClient.hasCheat("slipslopslap");
+        String playerName = Minecraft.getInstance().player.getName().getString();
+        return new Button(
+                "Toggle Unit Cheats",
+                Button.itemIconSize,
+                hasCheats ?
+                        new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/chain_command_block_side.png") :
+                        new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/chain_command_block_side_dark.png"),
+                (Keybinding) null,
+                () -> false,
+                () -> false,
+                () -> true,
+                () -> {
+                    if (hasCheats) {
+                        ResearchServerboundPacket.removeCheat(playerName, "operationcwal");
+                        ResearchServerboundPacket.removeCheat(playerName, "medievalman");
+                        ResearchServerboundPacket.removeCheat(playerName, "foodforthought");
+                        ResearchServerboundPacket.removeCheat(playerName, "slipslopslap");
+                    } else {
+                        ResearchServerboundPacket.addCheat(playerName, "operationcwal");
+                        ResearchServerboundPacket.addCheat(playerName, "medievalman");
+                        ResearchServerboundPacket.addCheat(playerName, "foodforthought");
+                        ResearchServerboundPacket.addCheat(playerName, "slipslopslap");
+                    }
+                },
+                ClientGameModeHelper::cycleGameMode,
+                List.of(hasCheats ? FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.unit_cheats_on"), Style.EMPTY) :
+                                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.unit_cheats_off"), Style.EMPTY),
+                                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.unit_cheats1"), Style.EMPTY),
+                                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.unit_cheats2"), Style.EMPTY),
+                                    FormattedCharSequence.forward(I18n.get("sandbox.reignofnether.unit_cheats3"), Style.EMPTY)
                 )
         );
     }

@@ -28,35 +28,32 @@ import java.util.List;
 
 import static com.solegendary.reignofnether.building.BuildingUtils.getAbsoluteBlockData;
 
-public class Beacon extends ProductionBuilding {
+public class EndPortal extends ProductionBuilding {
 
-    public final static String buildingName = "Beacon";
-    public final static String structureName = "beacon";
+    public final static String buildingName = "End Portal";
+    public final static String structureName = "end_portal";
     public final static ResourceCost cost = ResourceCost.Building(0,0,0,0);
 
-    public Beacon(Level level, BlockPos originPos, Rotation rotation, String ownerName) {
+    public EndPortal(Level level, BlockPos originPos, Rotation rotation, String ownerName) {
         super(level, originPos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, originPos, rotation), false);
         this.name = buildingName;
         this.ownerName = ownerName;
-        this.portraitBlock = Blocks.BEACON;
-        this.icon = new ResourceLocation("minecraft", "textures/item/nether_star.png");
+        this.portraitBlock = Blocks.END_PORTAL;
+        this.icon = new ResourceLocation("minecraft", "textures/block/end_portal_frame_top.png");
 
         this.foodCost = cost.food;
         this.woodCost = cost.wood;
         this.oreCost = cost.ore;
         this.popSupply = cost.population;
 
-        this.startingBlockTypes.add(Blocks.STONE_BRICKS);
+        this.startingBlockTypes.add(Blocks.PURPUR_BLOCK);
 
         this.explodeChance = 0.2f;
 
-        /*
-        TODO: upgrade
         if (level.isClientSide())
             this.productionButtons = Arrays.asList(
                     EndermanProd.getStartButton(this, Keybindings.keyQ)
             );
-         */
     }
 
     public Faction getFaction() {return Faction.NONE;}
@@ -68,18 +65,18 @@ public class Beacon extends ProductionBuilding {
     public static AbilityButton getBuildButton(Keybinding hotkey) {
         return new AbilityButton(
                 buildingName,
-                new ResourceLocation("minecraft", "textures/item/nether_star.png"),
+                new ResourceLocation("minecraft", "textures/block/end_portal_frame_top.png"),
                 hotkey,
-                () -> BuildingClientEvents.getBuildingToPlace() == Beacon.class,
+                () -> BuildingClientEvents.getBuildingToPlace() == EndPortal.class,
                 () -> false,
                 () -> true,
-                () -> BuildingClientEvents.setBuildingToPlace(Beacon.class),
+                () -> BuildingClientEvents.setBuildingToPlace(EndPortal.class),
                 null,
                 List.of(
-                        FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.beacon"), Style.EMPTY.withBold(true)),
+                        FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.end_portal"), Style.EMPTY.withBold(true)),
                         FormattedCharSequence.forward("", Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.beacon.tooltip1"), Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.beacon.tooltip2"), Style.EMPTY)
+                        FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.end_portal.tooltip1"), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.end_portal.tooltip2"), Style.EMPTY)
                 ),
                 null
         );

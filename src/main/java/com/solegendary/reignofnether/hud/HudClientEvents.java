@@ -859,6 +859,8 @@ public class HudClientEvents {
 
             if (SandboxClientEvents.sandboxMenuType == SandboxMenuType.BUILDINGS) {
                 actionButtons.add(SandboxClientEvents.getToggleBuildingCheatsButton());
+            } else {
+                actionButtons.add(SandboxClientEvents.getToggleUnitCheatsButton());
             }
 
             for (Button actionButton : actionButtons) {
