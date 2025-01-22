@@ -90,10 +90,16 @@ public class RTSPlayer {
         }
 
         for (Building building : BuildingServerEvents.getBuildings()) {
-            if (building.ownerName.equals(this.name))
-                beaconOwnerTicks += 1;
-            if (beaconOwnerTicks >= Beacon.TICKS_TO_WIN)
-                PlayerServerEvents.beaconVictory(this.name);
+            if (building instanceof Beacon beacon && beacon.isBuilt) {
+                if (building.ownerName.equals(this.name)) {
+                    beaconOwnerTicks += 1;
+                    if (beaconOwnerTicks == Beacon.TICKS_TO_WIN / 4 ||
+                        beaconOwnerTicks == Beacon.TICKS_TO_WIN / 2)
+                        beacon.sendWarning("time_warning");
+                    if (beaconOwnerTicks >= Beacon.TICKS_TO_WIN)
+                        PlayerServerEvents.beaconVictory(this.name);
+                }
+            }
         }
     }
 

@@ -5,9 +5,10 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
-import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.research.researchItems.*;
 import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
@@ -67,6 +68,12 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
                 ResearchBeaconLevel4.getStartButton(this, Keybindings.keyQ),
                 ResearchBeaconLevel5.getStartButton(this, Keybindings.keyQ)
             );
+
+        if (!level.isClientSide) {
+            PlayerServerEvents.sendMessageToAllPlayers("buildings.neutral.reignofnether.beacon.build_warning",
+                    true, ownerName);
+            SoundClientboundPacket.playSoundForAllPlayers(SoundAction.CHAT);
+        }
     }
 
     @Override
@@ -74,11 +81,29 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
         super.tick(tickLevel);
         if (tickLevel.isClientSide && tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 100 == 0)
             updateBorderBps();
-        if (!tickLevel.isClientSide) {
-            for (RTSPlayer rtsPlayer : PlayerServerEvents.rtsPlayers) {
+    }
 
-            }
+    @Override
+    public void onBuilt() {
+        super.onBuilt();
+        sendWarning("completed_warning");
+    }
+
+    public void sendWarning(String msg) {
+        if (!level.isClientSide) {
+            PlayerServerEvents.sendMessageToAllPlayersNoNewlines("");
+            PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon." + msg,
+                    true, ownerName);
+            PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon.time_to_win",
+                    false, ownerName, PlayerServerEvents.getBeaconWinTime(ownerName));
+            PlayerServerEvents.sendMessageToAllPlayersNoNewlines("");
+            SoundClientboundPacket.playSoundForAllPlayers(SoundAction.CHAT);
         }
+    }
+
+    public void activate(BeaconEffect beaconEffect) {
+        // TODO: activate the beam and set the effect
+        // set other abilities on cooldown
     }
 
     public static final int RANGE = 40;

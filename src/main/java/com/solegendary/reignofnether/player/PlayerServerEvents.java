@@ -20,6 +20,7 @@ import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.Resources;
 import com.solegendary.reignofnether.resources.ResourcesServerEvents;
+import com.solegendary.reignofnether.sandbox.SandboxServer;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.time.TimeUtils;
@@ -591,6 +592,9 @@ public class PlayerServerEvents {
     }
 
     public static void defeat(String playerName, String reason) {
+        if (SandboxServer.isSandboxPlayer(playerName))
+            return;
+
         synchronized (rtsPlayers) {
             // Remove the defeated player from the list
             rtsPlayers.removeIf(rtsPlayer -> {

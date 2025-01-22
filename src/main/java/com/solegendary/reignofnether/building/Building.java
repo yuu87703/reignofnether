@@ -872,9 +872,8 @@ public abstract class Building {
         }
     }
 
+    // if the owner of the building has no units around, change owners to the person with the highest total pop in range
     private void checkIfCaptured(ServerLevel serverLevel) {
-        // TODO: if the owner of the building has no units around, change owners to the person with the highest total pop in range
-
         List<Mob> nearbyUnits = MiscUtil.getEntitiesWithinRange(
                         new Vector3d(centrePos.getX(), minCorner.getY(), centrePos.getZ()),
                         captureRange, Mob.class, serverLevel)
@@ -906,15 +905,8 @@ public abstract class Building {
             if (highestPop > 0 && highestPopPlayer != null) {
                 ownerName = highestPopPlayer;
 
-                if (this instanceof Beacon) {
-                    PlayerServerEvents.sendMessageToAllPlayersNoNewlines("");
-                    PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon.capture_warning",
-                            true, ownerName);
-                    PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon.time_to_win",
-                            true, ownerName, PlayerServerEvents.getBeaconWinTime(ownerName));
-                    PlayerServerEvents.sendMessageToAllPlayersNoNewlines("");
-                    SoundClientboundPacket.playSoundForAllPlayers(SoundAction.CHAT);
-                }
+                if (this instanceof Beacon beacon)
+                    beacon.sendWarning("capture_warning");
             }
         }
     }

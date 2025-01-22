@@ -333,6 +333,7 @@
     "buildings.neutral.reignofnether.beacon": "Beacon",
     "buildings.neutral.reignofnether.beacon.tooltip1": "A grand stone pyramid that can be upgraded to produce auras.",
     "buildings.neutral.reignofnether.beacon.tooltip2": "Controlling a beacon for long enough wins you the game.",
+    "buildings.neutral.reignofnether.beacon.time_warning": "%s still controls a Beacon!",
     "buildings.neutral.reignofnether.beacon.build_warning": "%s is building a Beacon!",
     "buildings.neutral.reignofnether.beacon.completed_warning": "%s has completed a Beacon!",
     "buildings.neutral.reignofnether.beacon.capture_warning": "The beacon has been captured by %s!",
