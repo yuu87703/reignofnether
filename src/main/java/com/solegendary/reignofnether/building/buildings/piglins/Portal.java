@@ -125,7 +125,7 @@ public class Portal extends ProductionBuilding implements NetherConvertingBuildi
         this.woodCost = cost.wood;
         this.oreCost = cost.ore;
         this.popSupply = cost.population;
-        this.buildTimeModifier = 1.2f;
+        this.buildTimeModifier = 2.0f;
 
         this.canSetRallyPoint = false;
 
