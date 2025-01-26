@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
+import com.solegendary.reignofnether.time.TimeUtils;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
@@ -146,27 +147,36 @@ public class HelperButtons {
             List.of(FormattedCharSequence.forward(I18n.get("hud.helperbuttons.reignofnether.select_all_military_units"), Style.EMPTY))
     );
 
-    private static List<FormattedCharSequence> getBeaconButtonTooltip() {
+    private static List<FormattedCharSequence> getBeaconButtonTooltip(String ownerName) {
         ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
         fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.time_to_win")));
-        for (String playerName : PlayerClientEvents.beaconWinTimes.keySet()) {
-            fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.player_and_time",
-                    playerName, PlayerClientEvents.beaconWinTimes.get(playerName))));
+
+        if (PlayerClientEvents.beaconWinTimes.isEmpty()) {
+            fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.no_controller")));
+        } else {
+            for (String playerName : PlayerClientEvents.beaconWinTimes.keySet()) {
+                long ticksToWin = Math.max(0, Beacon.TICKS_TO_WIN - PlayerClientEvents.beaconWinTimes.get(playerName));
+                String timeToWin = TimeUtils.getTimeStrFromTicks(ticksToWin);
+                fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.player_and_time",
+                        playerName, timeToWin), ownerName.equals(playerName)));
+            }
         }
-        fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.idle_workers")));
+
+
+        fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.click_to_centre")));
         return fcsList;
     }
 
     // button that tracks all beacons in the game, including how long each player has owned a beacon for
     // clicking the button should make
-    public static Button getBeaconButton(String buildingName) {
+    public static Button getBeaconButton(String ownerName) {
         return new Button(
                 "Beacon",
                 14,
                 new ResourceLocation("minecraft", "textures/item/nether_star.png"),
                 (Keybinding) null,
                 () -> false,
-                () -> BuildingUtils.beaconExists(true),
+                () -> BuildingUtils.getBeacon(true) == null,
                 () -> true,
                 () -> {
                     List<Building> beacons = BuildingClientEvents.getBuildings().stream().filter(b -> b instanceof Beacon).toList();
@@ -176,7 +186,7 @@ public class HelperButtons {
                     }
                 },
                 null,
-                getBeaconButtonTooltip()
+                getBeaconButtonTooltip(ownerName)
         );
     }
 }

@@ -3,7 +3,6 @@ package com.solegendary.reignofnether.player;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
-import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -276,7 +275,7 @@ public class PlayerClientEvents {
         canStartRTS = canStart;
     }
 
-    public static void syncBeaconWinTime(String playerName, long ticks) {
+    public static void syncBeaconOwnerTicks(String playerName, long ticks) {
         beaconWinTimes.put(playerName, ticks);
     }
 }

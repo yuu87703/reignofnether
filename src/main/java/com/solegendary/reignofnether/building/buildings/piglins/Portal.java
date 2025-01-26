@@ -236,8 +236,8 @@ public class Portal extends ProductionBuilding implements NetherConvertingBuildi
     }
 
     @Override
-    public boolean isUpgraded() {
-        return portalType != PortalType.BASIC;
+    public int getUpgradeLevel() {
+        return portalType != PortalType.BASIC ? 1 : 0;
     }
 
     public static ArrayList<BuildingBlock> getRelativeBlockData(LevelAccessor level) {

@@ -83,9 +83,9 @@ public class PlayerClientboundPacket {
                 new PlayerClientboundPacket(PlayerAction.SYNC_NEUTRAL_AGGRO, "", neutralAggro ? 1L : 0L));
     }
 
-    public static void syncBeaconWinTimes(String playerName, long ticks) {
+    public static void syncBeaconOwnerTicks(String playerName, long ticks) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new PlayerClientboundPacket(PlayerAction.SYNC_BEACON_WIN_TIME, playerName, ticks));
+                new PlayerClientboundPacket(PlayerAction.SYNC_BEACON_OWNER_TICKS, playerName, ticks));
     }
 
     public PlayerClientboundPacket(PlayerAction playerAction, String playerName, Long value) {
@@ -127,7 +127,7 @@ public class PlayerClientboundPacket {
                             case SYNC_MAX_POPULATION -> UnitClientEvents.setMaxPopulation(Math.toIntExact(value));
                             case SET_MIN_ORTHOVIEW_Y -> OrthoviewClientEvents.setMinOrthoviewY(value);
                             case SYNC_NEUTRAL_AGGRO -> UnitClientEvents.neutralAggro = value == 1L;
-                            case SYNC_BEACON_WIN_TIME -> PlayerClientEvents.syncBeaconWinTime(playerName, value);
+                            case SYNC_BEACON_OWNER_TICKS -> PlayerClientEvents.syncBeaconOwnerTicks(playerName, value);
                         }
                         success.set(true);
                     });

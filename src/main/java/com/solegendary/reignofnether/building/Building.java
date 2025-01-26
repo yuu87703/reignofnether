@@ -1075,7 +1075,7 @@ public abstract class Building {
         }
     }
 
-    public boolean isUpgraded() {
-        return false;
+    public int getUpgradeLevel() {
+        return 0;
     }
 }

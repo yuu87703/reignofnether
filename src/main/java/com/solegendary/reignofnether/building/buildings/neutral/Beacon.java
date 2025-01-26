@@ -1,15 +1,21 @@
 package com.solegendary.reignofnether.building.buildings.neutral;
 
+import com.mojang.math.Vector3d;
+import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.*;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
+import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.time.TimeClientEvents;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
@@ -18,11 +24,18 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.inventory.BeaconMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BeaconBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BeaconBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.*;
 
@@ -65,15 +78,31 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
 
         this.explodeChance = 0.2f;
 
-        if (level.isClientSide())
-            this.productionButtons = Arrays.asList(
-                ResearchBeaconLevel1.getStartButton(this, Keybindings.keyQ),
-                ResearchBeaconLevel2.getStartButton(this, Keybindings.keyQ),
-                ResearchBeaconLevel3.getStartButton(this, Keybindings.keyQ),
-                ResearchBeaconLevel4.getStartButton(this, Keybindings.keyQ),
-                ResearchBeaconLevel5.getStartButton(this, Keybindings.keyQ)
-            );
+        Ability beaconWealth = new BeaconWealth(this);
+        this.abilities.add(beaconWealth);
+        Ability beaconHaste = new BeaconHaste(this);
+        this.abilities.add(beaconHaste);
+        Ability beaconRegen = new BeaconRegeneration(this);
+        this.abilities.add(beaconRegen);
+        Ability beaconStrength = new BeaconStrength(this);
+        this.abilities.add(beaconStrength);
+        Ability beaconResistance = new BeaconResistance(this);
+        this.abilities.add(beaconResistance);
 
+        if (level.isClientSide()) {
+            this.productionButtons = Arrays.asList(
+                    ResearchBeaconLevel1.getStartButton(this, null),
+                    ResearchBeaconLevel2.getStartButton(this, null),
+                    ResearchBeaconLevel3.getStartButton(this, null),
+                    ResearchBeaconLevel4.getStartButton(this, null),
+                    ResearchBeaconLevel5.getStartButton(this, null)
+            );
+            this.abilityButtons.add(beaconWealth.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(beaconHaste.getButton(Keybindings.keyW));
+            this.abilityButtons.add(beaconRegen.getButton(Keybindings.keyE));
+            this.abilityButtons.add(beaconStrength.getButton(Keybindings.keyR));
+            this.abilityButtons.add(beaconResistance.getButton(Keybindings.keyT));
+        }
         if (!level.isClientSide) {
             PlayerServerEvents.sendMessageToAllPlayers("buildings.neutral.reignofnether.beacon.build_warning",
                     true, ownerName);
@@ -83,10 +112,43 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
 
     public MobEffect getAuraEffect() { return auraEffect; }
 
+    private Block getBeaconBlock() {
+        for (BuildingBlock bb : blocks)
+            if (bb.getBlockState().getBlock() == Blocks.BEACON)
+                return level.getBlockState(bb.getBlockPos()).getBlock();
+        return null;
+    }
+
+    private BlockEntity getBeaconBlockEntity() {
+        for (BuildingBlock bb : blocks)
+            if (bb.getBlockState().getBlock() == Blocks.BEACON)
+                return level.getBlockEntity(bb.getBlockPos());
+        return null;
+    }
+
+    private BlockPos getBeaconBlockPos() {
+        for (BuildingBlock bb : blocks)
+            if (bb.getBlockState().getBlock() == Blocks.BEACON)
+                return bb.getBlockPos();
+        return null;
+    }
+
+    // serverside only
     public void setAuraEffect(MobEffect effect) {
         // turn off the beacon
         // after delay, turn on the beacon and change the effect
         auraEffect = effect;
+
+        Block block = getBeaconBlock();
+        BlockEntity blockEntity = getBeaconBlockEntity();
+        BlockPos bp = getBeaconBlockPos();
+
+        if (block instanceof BeaconBlock bb &&
+                blockEntity instanceof BeaconBlockEntity bbe &&
+                bp != null) {
+            bbe.dataAccess.set(1, MobEffect.getId(auraEffect));
+            level.blockEntityChanged(bp);
+        }
     }
 
     @Override
@@ -94,6 +156,23 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
         super.tick(tickLevel);
         if (tickLevel.isClientSide && tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 100 == 0)
             updateBorderBps();
+
+        // apply slowness level 2 during daytime for a short time repeatedly
+        if (auraEffect != null && tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 10 == 0 &&
+                !this.level.isClientSide() && this.level.isDay()) {
+
+            List<Mob> nearbyMobs = MiscUtil.getEntitiesWithinRange(
+                    new Vector3d(this.centrePos.getX(), this.centrePos.getY(), this.centrePos.getZ()),
+                    RANGE,
+                    Mob.class,
+                    this.level);
+
+            for (Mob mob : nearbyMobs)
+                if (mob instanceof Unit unit && unit.getOwnerName().equals(this.ownerName) &&
+                    auraEffect != MobEffects.LUCK &&
+                    getBeaconBlockEntity() != null)
+                    mob.addEffect(new MobEffectInstance(auraEffect, 15, 1));
+        }
     }
 
     @Override
@@ -123,7 +202,7 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
     private final Set<BlockPos> borderBps = new HashSet<>();
 
     private int getBorderRange() {
-        return isBuilt && isUpgraded() ? RANGE : 0;
+        return isBuilt && getUpgradeLevel() > 0 ? RANGE : 0;
     }
 
     @Override
@@ -179,7 +258,7 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
                 hotkey,
                 () -> BuildingClientEvents.getBuildingToPlace() == Beacon.class,
                 () -> false,
-                () -> !BuildingClientEvents.getBuildings().stream().filter(b -> b instanceof Beacon).toList().isEmpty(),
+                () -> BuildingClientEvents.getBuildings().stream().filter(b -> b instanceof Beacon).toList().isEmpty(),
                 () -> BuildingClientEvents.setBuildingToPlace(Beacon.class),
                 null,
                 List.of(
@@ -208,10 +287,6 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
                 return 1;
         }
         return 0;
-    }
-
-    public boolean isUpgraded() {
-        return getUpgradeLevel() > 0;
     }
 }
 

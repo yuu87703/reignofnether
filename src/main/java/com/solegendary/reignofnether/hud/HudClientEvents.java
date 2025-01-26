@@ -7,11 +7,13 @@ import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
 import com.solegendary.reignofnether.alliance.AllianceSystem;
 import com.solegendary.reignofnether.attackwarnings.AttackWarningClientEvents;
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.config.ConfigClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.buttons.ActionButtons;
+import com.solegendary.reignofnether.hud.buttons.HelperButtons;
 import com.solegendary.reignofnether.hud.buttons.StartButtons;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -1291,8 +1293,20 @@ public class HudClientEvents {
                 renderedButtons.add(nextWaveButton);
             }
         }
-        else if (BuildingUtils.beaconExists(true)) {
 
+        Beacon beacon = BuildingUtils.getBeacon(true);
+        if (beacon != null) {
+            Button beaconButton = HelperButtons.getBeaconButton(beacon.ownerName);
+            if (!beaconButton.isHidden.get()) {
+                beaconButton.tooltipOffsetY = 15;
+                beaconButton.render(evt.getPoseStack(),
+                        screenWidth - (StartButtons.ICON_SIZE * 4),
+                        StartButtons.ICON_SIZE / 2,
+                        mouseX,
+                        mouseY
+                );
+                renderedButtons.add(beaconButton);
+            }
         }
 
         // --------------------

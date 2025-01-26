@@ -198,11 +198,10 @@ public class Library extends ProductionBuilding implements RangeIndicator {
 
     // check that the flag is built based on existing placed blocks
     @Override
-    public boolean isUpgraded() {
+    public int getUpgradeLevel() {
         for (BuildingBlock block : blocks)
-            if (block.getBlockState().getBlock() == Blocks.GLOWSTONE) {
-                return true;
-            }
-        return false;
+            if (block.getBlockState().getBlock() == Blocks.GLOWSTONE)
+                return 1;
+        return 0;
     }
 }

@@ -80,7 +80,7 @@ public class BuildingUtils {
             ownerName = "";
 
         if (buildingName.equals(Beacon.buildingName))
-            if (BuildingUtils.beaconExists(false))
+            if (BuildingUtils.getBeacon(level.isClientSide) != null)
                 return null;
 
         Building building = null;
@@ -319,8 +319,11 @@ public class BuildingUtils {
                 : BuildingServerEvents.getBuildings();
     }
 
-    public static boolean beaconExists(boolean isClientSide) {
+    public static Beacon getBeacon(boolean isClientSide) {
         List<Building> buildings = getBuildingsList(isClientSide);
-        return buildings.stream().filter(b -> b instanceof Beacon).toList().isEmpty();
+        for (Building building : buildings)
+            if (building instanceof Beacon beacon)
+                return beacon;
+        return null;
     }
 }

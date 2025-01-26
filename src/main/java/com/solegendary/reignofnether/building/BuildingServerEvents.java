@@ -95,7 +95,7 @@ public class BuildingServerEvents {
         buildingData.buildings.clear();
 
         getBuildings().forEach(b -> {
-            int upgradeLevel = b.isUpgraded() ? 1 : 0;
+            int upgradeLevel = b.getUpgradeLevel();
             if (b instanceof Beacon beacon)
                 upgradeLevel = beacon.getUpgradeLevel();
             Portal.PortalType portalType = null;
@@ -256,7 +256,7 @@ public class BuildingServerEvents {
                     ownerName,
                     newBuilding.blockPlaceQueue.size(),
                     isDiagonalBridge,
-                    false,
+                    0,
                     false,
                     Portal.PortalType.BASIC,
                     false
@@ -440,8 +440,8 @@ public class BuildingServerEvents {
                 building.ownerName,
                 building.blockPlaceQueue.size(),
                 building instanceof AbstractBridge bridge && bridge.isDiagonalBridge,
+                building.getUpgradeLevel(),
                 building.isBuilt,
-                building.isUpgraded(),
                 building instanceof Portal p ? p.portalType : Portal.PortalType.BASIC,
                 true
             );
@@ -663,8 +663,8 @@ public class BuildingServerEvents {
                     building.ownerName,
                     building.blockPlaceQueue.size(),
                     building instanceof AbstractBridge bridge && bridge.isDiagonalBridge,
+                    building.getUpgradeLevel(),
                     building.isBuilt,
-                    building.isUpgraded(),
                     building instanceof Portal p ? p.portalType : Portal.PortalType.BASIC,
                     false
                 );

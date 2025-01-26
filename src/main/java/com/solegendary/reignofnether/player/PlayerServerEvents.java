@@ -29,7 +29,6 @@ import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
-import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -187,7 +186,7 @@ public class PlayerServerEvents {
                     }
                     if (rtsGameTicks % 20 == 0) {
                         for (RTSPlayer rtsPlayer : rtsPlayers) {
-                            PlayerClientboundPacket.syncBeaconWinTimes(rtsPlayer.name, rtsPlayer.beaconOwnerTicks);
+                            PlayerClientboundPacket.syncBeaconOwnerTicks(rtsPlayer.name, rtsPlayer.beaconOwnerTicks);
                         }
                     }
                 }

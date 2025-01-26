@@ -345,7 +345,7 @@
     "buildings.neutral.reignofnether.beacon.tooltip1": "A grand stone pyramid that can be upgraded to produce auras.",
     "buildings.neutral.reignofnether.beacon.tooltip2": "Controlling a beacon for long enough wins you the game.",
     "buildings.neutral.reignofnether.beacon.tooltip3": "Only one beacon can exist at a time",
-    "buildings.neutral.reignofnether.beacon.time_warning": "%s still controls a Beacon!",
+    "buildings.neutral.reignofnether.beacon.time_warning": "%s still controls the Beacon!",
     "buildings.neutral.reignofnether.beacon.build_warning": "%s is building a Beacon!",
     "buildings.neutral.reignofnether.beacon.completed_warning": "%s has completed a Beacon!",
     "buildings.neutral.reignofnether.beacon.capture_warning": "%s has gained control of the Beacon!",
@@ -415,7 +415,8 @@
     "hud.helperbuttons.reignofnether.select_all_military_units": "Select all military units",
     "hud.helperbuttons.reignofnether.cancel": "Cancel",
 
-    "hud.helperbuttons.reignofnether.beacon.time_to_win": "The beacon controller will win in:",
+    "hud.helperbuttons.reignofnether.beacon.time_to_win": "The beacon controller wins in:",
+    "hud.helperbuttons.reignofnether.beacon.no_controller": "No one controls the beacon",
     "hud.helperbuttons.reignofnether.beacon.player_and_time": "%s: %s",
     "hud.helperbuttons.reignofnether.beacon.click_to_centre": "(Click to go to beacon)",
 

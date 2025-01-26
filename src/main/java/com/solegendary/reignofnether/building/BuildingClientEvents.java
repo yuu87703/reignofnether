@@ -969,7 +969,7 @@ public class BuildingClientEvents {
         String ownerName,
         int numBlocksToPlace,
         boolean isDiagonalBridge,
-        boolean isUpgraded,
+        int upgradeLevel,
         boolean isBuilt,
         Portal.PortalType portalType,
         boolean forPlayerLoggingIn
@@ -1000,7 +1000,7 @@ public class BuildingClientEvents {
                 newBuilding.highestBlockCountReached = newBuilding.getBlocksTotal();
             }
 
-            if (isUpgraded) {
+            if (upgradeLevel > 0) {
                 if (newBuilding instanceof Castle castle) {
                     castle.changeStructure(Castle.upgradedStructureName);
                 } else if (newBuilding instanceof Laboratory lab) {
@@ -1009,6 +1009,8 @@ public class BuildingClientEvents {
                     portal.changeStructure(portalType);
                 } else if (newBuilding instanceof Library library) {
                     library.changeStructure(Library.upgradedStructureName);
+                } else if (newBuilding instanceof Beacon beacon) {
+                    beacon.changeStructure(beacon.getUpgradeLevel());
                 }
             }
             buildings.add(newBuilding);

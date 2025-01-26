@@ -7,13 +7,13 @@ import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 
 import java.util.List;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class BeaconWealth extends BeaconAbility {
 
@@ -35,10 +35,10 @@ public class BeaconWealth extends BeaconAbility {
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BEACON_WEALTH),
                 null,
                 List.of(
-                        FormattedCharSequence.forward(I18n.get("ability.reignofnether.beacon_aura.wealth"), Style.EMPTY),
-                        FormattedCharSequence.forward("", Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("ability.reignofnether.beacon_aura.wealth.tooltip1"), Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("ability.reignofnether.beacon_aura.one_aura"), Style.EMPTY)
+                        fcs(I18n.get("ability.reignofnether.beacon_aura.wealth"), true),
+                        fcs(""),
+                        fcs(I18n.get("ability.reignofnether.beacon_aura.wealth.tooltip1")),
+                        fcs(I18n.get("ability.reignofnether.beacon_aura.one_aura"))
                 ),
                 this
         );
