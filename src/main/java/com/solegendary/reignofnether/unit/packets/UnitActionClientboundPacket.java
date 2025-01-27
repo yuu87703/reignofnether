@@ -14,51 +14,30 @@ import java.util.function.Supplier;
 // allow the server to force unit actions as though it was sent by the client so it is recorded on both sides
 public class UnitActionClientboundPacket {
 
-    private final String ownerName; // player that is issuing this command
     private final UnitAction action;
     private final int unitId;
     private final int[] unitIds; // units to be controlled
     private final BlockPos preselectedBlockPos;
     private final BlockPos selectedBuildingPos; // for building abilities
 
-    public static void reflectUnitAction(String ownerName, UnitAction action, int unitId, int[] unitIds,
-                                 BlockPos preselectedBlockPos, BlockPos selectedBuildingPos) {
+    public static void sendUnitCommandClientOnly(UnitAction action, int unitId, int[] unitIds,
+                                                 BlockPos preselectedBlockPos, BlockPos selectedBuildingPos) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
             new UnitActionClientboundPacket(
-                ownerName, action, unitId, unitIds,
+                action, unitId, unitIds,
                 preselectedBlockPos,
                 selectedBuildingPos
             ));
     }
 
-    public static void reflectUnitAction(String ownerName, UnitAction action, int unitId, int[] unitIds) {
-        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-            new UnitActionClientboundPacket(
-                ownerName, action, unitId, unitIds,
-                new BlockPos(0,0,0),
-                new BlockPos(0,0,0)
-            ));
-    }
-
-    public static void reflectUnitAction(String ownerName, UnitAction action, int[] unitIds) {
-        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-            new UnitActionClientboundPacket(
-                ownerName, action, -1, unitIds,
-                new BlockPos(0,0,0),
-                new BlockPos(0,0,0)
-            ));
-    }
-
     // packet-handler functions
     public UnitActionClientboundPacket(
-        String ownerName,
         UnitAction action,
         int unitId,
         int[] unitIds,
         BlockPos preselectedBlockPos,
         BlockPos selectedBuildingPos
     ) {
-        this.ownerName = ownerName;
         this.action = action;
         this.unitId = unitId;
         this.unitIds = unitIds;
@@ -67,7 +46,6 @@ public class UnitActionClientboundPacket {
     }
 
     public UnitActionClientboundPacket(FriendlyByteBuf buffer) {
-        this.ownerName = buffer.readUtf();
         this.action = buffer.readEnum(UnitAction.class);
         this.unitId = buffer.readInt();
         this.unitIds = buffer.readVarIntArray();
@@ -76,7 +54,6 @@ public class UnitActionClientboundPacket {
     }
 
     public void encode(FriendlyByteBuf buffer) {
-        buffer.writeUtf(this.ownerName);
         buffer.writeEnum(this.action);
         buffer.writeInt(this.unitId);
         buffer.writeVarIntArray(this.unitIds);
@@ -88,8 +65,7 @@ public class UnitActionClientboundPacket {
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         final var success = new AtomicBoolean(false);
         ctx.get().enqueueWork(() -> {
-            UnitClientEvents.sendUnitCommandManual(
-                this.ownerName,
+            UnitClientEvents.sendUnitCommandClientOnly(
                 this.action,
                 this.unitId,
                 this.unitIds,

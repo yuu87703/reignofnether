@@ -126,15 +126,15 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
     @Override
     public String getUpgradedName() {
         if (getAuraEffect() == MobEffects.LUCK)
-            return name + "(" + I18n.get("ability.reignofnether.beacon_aura.wealth") + ")";
+            return name + " (" + I18n.get("ability.reignofnether.beacon_aura.wealth") + ")";
         else if (getAuraEffect() == MobEffects.DIG_SPEED)
-            return name + "(" + I18n.get("ability.reignofnether.beacon_aura.haste") + ")";
+            return name + " (" + I18n.get("ability.reignofnether.beacon_aura.haste") + ")";
         else if (getAuraEffect() == MobEffects.REGENERATION)
-            return name + "(" + I18n.get("ability.reignofnether.beacon_aura.regeneration") + ")";
+            return name + " (" + I18n.get("ability.reignofnether.beacon_aura.regeneration") + ")";
         else if (getAuraEffect() == MobEffects.DAMAGE_BOOST)
-            return name + "(" + I18n.get("ability.reignofnether.beacon_aura.strength") + ")";
+            return name + " (" + I18n.get("ability.reignofnether.beacon_aura.strength") + ")";
         else if (getAuraEffect() == MobEffects.DAMAGE_RESISTANCE)
-            return name + "(" + I18n.get("ability.reignofnether.beacon_aura.resistance") + ")";
+            return name + " (" + I18n.get("ability.reignofnether.beacon_aura.resistance") + ")";
         else
             return name;
     }

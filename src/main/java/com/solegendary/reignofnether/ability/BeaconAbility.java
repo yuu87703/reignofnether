@@ -3,6 +3,8 @@ package com.solegendary.reignofnether.ability;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.packets.UnitActionClientboundPacket;
+import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.Level;
@@ -39,5 +41,10 @@ public abstract class BeaconAbility extends Ability {
     public void use(Level level, Building buildingUsing, BlockPos bp) {
         beacon.setAuraEffect(effect);
         setToMaxCooldownAllAbiltities();
+        if (!level.isClientSide()) {
+            UnitActionClientboundPacket.sendUnitCommandClientOnly(
+                this.action, 0, new int[]{}, this.beacon.originPos, this.beacon.originPos
+            );
+        }
     }
 }

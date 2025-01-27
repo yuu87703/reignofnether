@@ -43,8 +43,7 @@ Features
         - Greatly increase the cost and time of upgrades
         - Remove the invulnerable flag
 
-        [🟡] Neutral buildings are always owned
-
+    [❌] Sync beacon effect to other clients
 
 Bugfixes
 --------
