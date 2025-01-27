@@ -3,10 +3,7 @@ package com.solegendary.reignofnether.player;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AllianceSystem;
 import com.solegendary.reignofnether.alliance.AllyCommand;
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.BuildingServerEvents;
-import com.solegendary.reignofnether.building.NetherZone;
-import com.solegendary.reignofnether.building.ProductionBuilding;
+import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamemode.GameModeClientboundPacket;
@@ -698,7 +695,7 @@ public class PlayerServerEvents {
                 if (!building.shouldDestroyOnReset || destroyAllBuildings)
                     building.destroy((ServerLevel) building.getLevel());
             }
-            BuildingServerEvents.getBuildings().clear();
+            BuildingServerEvents.getBuildings().removeIf(b -> b.shouldDestroyOnReset);
             ResearchServerEvents.removeAllResearch();
             ResearchServerEvents.removeAllCheats();
             PlayerClientboundPacket.resetRTS();

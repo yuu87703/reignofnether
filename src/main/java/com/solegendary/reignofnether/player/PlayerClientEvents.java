@@ -259,7 +259,7 @@ public class PlayerClientEvents {
         ResearchClient.removeAllResearch();
         ResearchClient.removeAllCheats();
         BuildingClientEvents.getSelectedBuildings().clear();
-        BuildingClientEvents.getBuildings().clear();
+        BuildingClientEvents.getBuildings().removeIf(b -> b.shouldDestroyOnReset);
         ResourcesClientEvents.resourcesList.clear();
         ClientGameModeHelper.gameMode = ClientGameModeHelper.DEFAULT_GAMEMODE;
         SurvivalClientEvents.reset();
