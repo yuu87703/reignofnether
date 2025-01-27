@@ -22,6 +22,13 @@ public class SandboxServer {
 
     public static boolean isSandboxPlayer(String playerName) {
         for (RTSPlayer rtsPlayer : PlayerServerEvents.rtsPlayers)
+            if (rtsPlayer.faction == Faction.NONE && playerName.equals(rtsPlayer.name))
+                return true;
+        return false;
+    }
+
+    public static boolean isAnyoneASandboxPlayer() {
+        for (RTSPlayer rtsPlayer : PlayerServerEvents.rtsPlayers)
             if (rtsPlayer.faction == Faction.NONE)
                 return true;
         return false;

@@ -59,13 +59,13 @@ public class BuildingClientboundPacket {
         ));
     }
 
-    public static void syncBuilding(BlockPos buildingPos, int blocksPlaced) {
+    public static void syncBuilding(BlockPos buildingPos, int blocksPlaced, String ownerName) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-            new BuildingClientboundPacket(BuildingAction.SYNC_BLOCKS,
+            new BuildingClientboundPacket(BuildingAction.SYNC_BLOCKS_AND_OWNER,
                 "",
                 buildingPos,
                 Rotation.NONE,
-                "",
+                ownerName,
                 blocksPlaced,
                 0,
                 false,
@@ -239,7 +239,7 @@ public class BuildingClientboundPacket {
                     if (building == null) {
 
                         // if the client was missing a building, replace it
-                        if (this.action == BuildingAction.SYNC_BLOCKS) {
+                        if (this.action == BuildingAction.SYNC_BLOCKS_AND_OWNER) {
                             BuildingServerboundPacket.requestReplacement(this.buildingPos);
                             ReignOfNether.LOGGER.warn("Missing building");
                         }
@@ -258,7 +258,7 @@ public class BuildingClientboundPacket {
                         this.portalType,
                         this.forPlayerLoggingIn
                     );
-                    case SYNC_BLOCKS -> BuildingClientEvents.syncBuildingBlocks(building, this.blocksPlaced);
+                    case SYNC_BLOCKS_AND_OWNER -> BuildingClientEvents.syncBuilding(building, this.blocksPlaced, this.ownerName);
                     case START_PRODUCTION -> {
                         ProductionBuilding.startProductionItem(
                             (ProductionBuilding) building,

@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.building.buildings.shared.AbstractStockpile
 import com.solegendary.reignofnether.building.buildings.villagers.OakStockpile;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.registrars.PacketHandler;
+import com.solegendary.reignofnether.sandbox.SandboxServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -150,10 +151,11 @@ public class BuildingServerboundPacket {
                 success.set(false);
                 return;
             }
-            else if ((newBuildingAuthActions.contains(this.action) &&
+            else if (((newBuildingAuthActions.contains(this.action) &&
                     !player.getName().getString().equals(ownerName)) ||
                     (existingBuildingAuthActions.contains(this.action) && building != null &&
-                    !player.getName().getString().equals(building.ownerName)) ) {
+                    !player.getName().getString().equals(building.ownerName))) &&
+                    !SandboxServer.isAnyoneASandboxPlayer()) {
 
                 ReignOfNether.LOGGER.warn("Tried to process packet from " + player.getName() + " for " + ownerName);
                 success.set(false);

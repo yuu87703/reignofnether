@@ -60,9 +60,9 @@ public final class PacketHandler {
                 .encoder(UnitActionServerboundPacket::encode).decoder(UnitActionServerboundPacket::new)
                 .consumer(UnitActionServerboundPacket::handle).add();
 
-        INSTANCE.messageBuilder(UnitActionClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(UnitActionClientboundPacket::encode).decoder(UnitActionClientboundPacket::new)
-                .consumer(UnitActionClientboundPacket::handle).add();
+        INSTANCE.messageBuilder(BeaconSyncClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(BeaconSyncClientboundPacket::encode).decoder(BeaconSyncClientboundPacket::new)
+                .consumer(BeaconSyncClientboundPacket::handle).add();
 
         INSTANCE.messageBuilder(UnitConvertClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(UnitConvertClientboundPacket::encode).decoder(UnitConvertClientboundPacket::new)

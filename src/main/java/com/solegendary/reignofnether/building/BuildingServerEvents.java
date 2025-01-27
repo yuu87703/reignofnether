@@ -232,7 +232,7 @@ public class BuildingServerEvents {
                 }
             }
 
-            if (newBuilding.canAfford(ownerName)) {
+            if (newBuilding.canAfford(ownerName) || SandboxServer.isAnyoneASandboxPlayer()) {
                 buildings.add(newBuilding);
                 newBuilding.forceChunk(true);
                 int minY = BuildingUtils.getMinCorner(newBuilding.blocks).getY();
@@ -259,11 +259,14 @@ public class BuildingServerEvents {
                     false
                 );
 
-                ResourcesServerEvents.addSubtractResources(new Resources(ownerName,
-                    -newBuilding.foodCost,
-                    -newBuilding.woodCost,
-                    -newBuilding.oreCost
-                ));
+                if (!SandboxServer.isAnyoneASandboxPlayer())
+                    ResourcesServerEvents.addSubtractResources(new Resources(ownerName,
+                        -newBuilding.foodCost,
+                        -newBuilding.woodCost,
+                        -newBuilding.oreCost
+                    ));
+                else if (ownerName.isEmpty() || ownerName.equals("Enemy"))
+                    newBuilding.selfBuilding = true;
 
                 assignBuilderUnits(builderUnitIds, queue, newBuilding);
 
@@ -484,7 +487,7 @@ public class BuildingServerEvents {
         if (buildingSyncTicks <= 0) {
             buildingSyncTicks = BUILDING_SYNC_TICKS_MAX;
             for (Building building : buildings)
-                BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced());
+                BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), building.ownerName);
         }
 
         // need to remove from the list first as destroy() will read it to check defeats

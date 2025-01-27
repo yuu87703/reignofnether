@@ -175,7 +175,7 @@ public abstract class Building {
         return name;
     }
 
-    public int captureRange = 40;
+    public int captureRange = 20;
     public boolean capturable = false;
     public boolean invulnerable = false;
     public boolean shouldDestroyOnReset = true;
@@ -879,6 +879,9 @@ public abstract class Building {
 
     // if the owner of the building has no units around, change owners to the person with the highest total pop in range
     private void checkIfCaptured(ServerLevel serverLevel) {
+        if (PlayerServerEvents.rtsPlayers.isEmpty())
+            return;
+
         List<Mob> nearbyUnits = MiscUtil.getEntitiesWithinRange(
                         new Vector3d(centrePos.getX(), minCorner.getY(), centrePos.getZ()),
                         captureRange, Mob.class, serverLevel)

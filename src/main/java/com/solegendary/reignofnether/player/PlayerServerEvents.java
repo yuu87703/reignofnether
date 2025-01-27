@@ -661,9 +661,10 @@ public class PlayerServerEvents {
     }
 
     public static void beaconVictory(String playerName) {
-        for (RTSPlayer rtsPlayer : rtsPlayers)
-            if (!rtsPlayer.name.equals(playerName))
-                defeat(rtsPlayer.name, "server.reignofnether.beacon_defeat");
+        List<String> defeatedPlayerNames = rtsPlayers.stream().map(p -> p.name).toList();
+        for (String name : defeatedPlayerNames)
+            if (!name.equals(playerName))
+                defeat(name, "server.reignofnether.beacon_defeat");
     }
 
     public static String getBeaconWinTime(String playerName) {

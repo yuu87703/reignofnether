@@ -16,7 +16,9 @@ import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.time.TimeClientEvents;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.packets.BeaconSyncClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
@@ -153,18 +155,47 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
         return null;
     }
 
-    private void activate(MobEffect effect) {
-        beaconActive = true;
-        auraEffect = effect;
-        if (!level.isClientSide())
-            SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_ACTIVATE, beaconPos);
+    public static MobEffect getMobEffectForAction(UnitAction action) {
+        return switch (action) {
+            case BEACON_HASTE -> MobEffects.DIG_SPEED;
+            case BEACON_REGENERATION -> MobEffects.REGENERATION;
+            case BEACON_RESISTANCE -> MobEffects.DAMAGE_RESISTANCE;
+            case BEACON_WEALTH -> MobEffects.LUCK;
+            case BEACON_STRENGTH -> MobEffects.DAMAGE_BOOST;
+            default -> null;
+        };
     }
 
-    private void deactivate() {
+    public static UnitAction getActionForMobEffect(MobEffect effect) {
+        if (effect == MobEffects.DIG_SPEED)
+            return UnitAction.BEACON_HASTE;
+        else if (effect == MobEffects.REGENERATION)
+            return UnitAction.BEACON_REGENERATION;
+        else if (effect == MobEffects.DAMAGE_RESISTANCE)
+            return UnitAction.BEACON_RESISTANCE;
+        else if (effect == MobEffects.LUCK)
+            return UnitAction.BEACON_WEALTH;
+        else if (effect == MobEffects.DAMAGE_BOOST)
+            return UnitAction.BEACON_STRENGTH;
+        return UnitAction.NONE;
+    }
+
+    public void activate(MobEffect effect) {
+        beaconActive = true;
+        auraEffect = effect;
+        if (!level.isClientSide()) {
+            SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_ACTIVATE, beaconPos);
+            BeaconSyncClientboundPacket.syncBeacon(getActionForMobEffect(effect), originPos, true);
+        }
+    }
+
+    public void deactivate() {
         beaconActive = false;
         auraEffect = null;
-        if (!level.isClientSide())
+        if (!level.isClientSide()) {
             SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, beaconPos);
+            BeaconSyncClientboundPacket.syncBeacon(UnitAction.NONE, originPos, false);
+        }
     }
 
     // serverside only

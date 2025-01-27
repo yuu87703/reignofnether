@@ -1286,7 +1286,7 @@ public class HudClientEvents {
                 nextWaveButton.tooltipOffsetY = 15;
                 nextWaveButton.render(evt.getPoseStack(),
                         screenWidth - (StartButtons.ICON_SIZE * 2),
-                        40,
+                        StartButtons.ICON_SIZE / 2,
                         mouseX,
                         mouseY
                 );
@@ -1301,7 +1301,7 @@ public class HudClientEvents {
                 beaconButton.tooltipOffsetY = 15;
                 beaconButton.render(evt.getPoseStack(),
                         screenWidth - (StartButtons.ICON_SIZE * 2),
-                        StartButtons.ICON_SIZE / 2,
+                        40,
                         mouseX,
                         mouseY
                 );

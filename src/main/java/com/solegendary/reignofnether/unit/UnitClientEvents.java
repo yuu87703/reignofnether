@@ -191,18 +191,6 @@ public class UnitClientEvents {
                 new BlockPos(0,0,0));
     }
 
-    public static void sendUnitCommandClientOnly(UnitAction action, int unitId, int[] unitIds,
-                                             BlockPos preselectedBlockPos, BlockPos selectedBuildingPos) {
-        if (MC.player != null) {
-            UnitActionItem actionItem = new UnitActionItem(
-                    MC.player.getName().getString(),
-                    action, unitId, unitIds,
-                    preselectedBlockPos,
-                    selectedBuildingPos
-            );
-        }
-    }
-
     public static void sendUnitCommandManual(UnitAction action, int unitId, int[] unitIds,
                                              BlockPos preselectedBlockPos, BlockPos selectedBuildingPos) {
         if (MC.player != null) {

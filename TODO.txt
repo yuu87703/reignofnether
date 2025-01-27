@@ -43,7 +43,6 @@ Features
         - Greatly increase the cost and time of upgrades
         - Remove the invulnerable flag
 
-    [❌] Sync beacon effect to other clients
 
 Bugfixes
 --------
