@@ -23,7 +23,7 @@ Features
         - Make the sandbox beacon always place as fully upgraded
         - Fix warning messages
         - Test it works in wave survival
-    [❌] Allow more than one beacon at a time unless there is a neutral capturable one
+        - Free automatic upgrades when placed in sandbox
 
     [❌] Add polar bears, wolves, llamas and foxes as neutral unit options
 
@@ -48,7 +48,8 @@ Quality of Life
 
 [❌] Prevent damage from fire blocks inside a flame sanctuary
 
-
+[❌] Split gamerule help into a new command /rts-gamerules
+    - add new gamerule lines
 
 Balancing
 ---------

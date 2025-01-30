@@ -5,6 +5,12 @@ import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.alliance.AllianceSystem;
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.monsters.Stronghold;
+import com.solegendary.reignofnether.building.buildings.piglins.Fortress;
+import com.solegendary.reignofnether.building.buildings.villagers.ArcaneTower;
+import com.solegendary.reignofnether.building.buildings.villagers.Barracks;
+import com.solegendary.reignofnether.building.buildings.villagers.Blacksmith;
+import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -86,25 +92,12 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
         this.woodCost = cost.wood;
         this.oreCost = cost.ore;
         this.popSupply = cost.population;
-        this.buildTimeModifier = 2.0f;
+        this.buildTimeModifier = 1.0f;
 
-        this.capturable = true;
-        this.invulnerable = true;
-        this.shouldDestroyOnReset = false;
+        this.capturable = false;
+        this.invulnerable = false;
+        this.shouldDestroyOnReset = true;
 
-        if (level.isClientSide()) {
-            if (SurvivalClientEvents.isEnabled) {
-                this.capturable = false;
-                this.invulnerable = false;
-                this.shouldDestroyOnReset = true;
-            }
-        } else {
-            if (SurvivalServerEvents.isEnabled()) {
-                this.capturable = false;
-                this.invulnerable = false;
-                this.shouldDestroyOnReset = true;
-            }
-        }
         this.startingBlockTypes.add(Blocks.CHISELED_STONE_BRICKS);
 
         this.explodeChance = 0.2f;
@@ -134,12 +127,6 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
             this.abilityButtons.add(beaconStrength.getButton(Keybindings.keyR));
             this.abilityButtons.add(beaconResistance.getButton(Keybindings.keyT));
         }
-        if (!level.isClientSide) {
-            PlayerServerEvents.sendMessageToAllPlayers("buildings.neutral.reignofnether.beacon.build_warning",
-                    true, ownerName);
-            SoundClientboundPacket.playSoundForAllPlayers(SoundAction.CHAT);
-        }
-
         for (BuildingBlock bb : blocks)
             if (bb.getBlockState().getBlock() == Blocks.BEACON)
                 beaconPos = bb.getBlockPos();
@@ -272,10 +259,25 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
     public void sendWarning(String msg) {
         if (!level.isClientSide) {
             PlayerServerEvents.sendMessageToAllPlayersNoNewlines("");
-            PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon." + msg,
-                    true, ownerName);
-            PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon.time_to_win",
-                    false, ownerName, PlayerServerEvents.getBeaconWinTime(ownerName));
+            Beacon beacon = BuildingUtils.getBeacon(true);
+            if (beacon != null && msg.equals("upgraded_warning")) {
+                String upgradeName = "";
+                if (beacon.getUpgradeLevel() == 1) upgradeName = "Iron";
+                else if (beacon.getUpgradeLevel() == 1) upgradeName = "Gold";
+                else if (beacon.getUpgradeLevel() == 1) upgradeName = "Emerald";
+                else if (beacon.getUpgradeLevel() == 1) upgradeName = "Diamond";
+                else upgradeName = "Netherite";
+
+                PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon.upgrade",
+                        false, ownerName, upgradeName, beacon.getUpgradeLevel(), Beacon.MAX_UPGRADE_LEVEL);
+            } else {
+                PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon." + msg,
+                        true, ownerName);
+            }
+            if (beacon != null && beacon.getUpgradeLevel() >= Beacon.MAX_UPGRADE_LEVEL) {
+                PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon.time_to_win",
+                        false, ownerName, PlayerServerEvents.getBeaconWinTime(ownerName));
+            }
             PlayerServerEvents.sendMessageToAllPlayersNoNewlines("");
             SoundClientboundPacket.playSoundForAllPlayers(SoundAction.CHAT);
         }
@@ -335,7 +337,7 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
         return BuildingBlockData.getBuildingBlocks(structureName, level);
     }
 
-    private static boolean beaconsAllowed() {
+    protected static boolean beaconsAllowed() {
         Level mcLevel = Minecraft.getInstance().level;
         return mcLevel != null && mcLevel.getGameRules().getRule(GameRuleRegistrar.ALLOW_BEACONS).get();
     }
@@ -347,7 +349,11 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
                 hotkey,
                 () -> BuildingClientEvents.getBuildingToPlace() == Beacon.class,
                 () -> TutorialClientEvents.isEnabled() || !beaconsAllowed(),
-                () -> BuildingClientEvents.getBuildings().stream().filter(b -> b instanceof Beacon).toList().isEmpty(),
+                () -> BuildingClientEvents.getBuildings().stream().filter(b -> b instanceof Beacon).toList().isEmpty() && (
+                    BuildingClientEvents.hasFinishedBuilding(Castle.buildingName) ||
+                    BuildingClientEvents.hasFinishedBuilding(Stronghold.buildingName) ||
+                    BuildingClientEvents.hasFinishedBuilding(Fortress.buildingName)
+                ),
                 () -> BuildingClientEvents.setBuildingToPlace(Beacon.class),
                 null,
                 List.of(

@@ -56,7 +56,8 @@ public class ResearchBeaconLevel1 extends ProductionItem {
                         ResourceCosts.getFormattedCost(cost),
                         ResourceCosts.getFormattedTime(cost),
                         FormattedCharSequence.forward("", Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("research.reignofnether.beacon_level1.tooltip1"), Style.EMPTY)
+                        FormattedCharSequence.forward(I18n.get("research.reignofnether.beacon_level1.tooltip1"), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("research.reignofnether.beacon_level_win"), Style.EMPTY)
                 )
         );
     }

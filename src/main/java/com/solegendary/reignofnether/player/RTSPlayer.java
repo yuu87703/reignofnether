@@ -95,7 +95,7 @@ public class RTSPlayer {
         }
 
         for (Building building : BuildingServerEvents.getBuildings()) {
-            if (building instanceof Beacon beacon && beacon.isBuilt) {
+            if (building instanceof Beacon beacon && beacon.isBuilt && beacon.getUpgradeLevel() == Beacon.MAX_UPGRADE_LEVEL) {
                 if (building.ownerName.equals(this.name)) {
                     beaconOwnerTicks += 1;
                     if (beaconOwnerTicks == Beacon.TICKS_TO_WIN / 4 ||

@@ -27,6 +27,9 @@ public class ResearchBeaconLevel5 extends ProductionItem {
         this.onComplete = (Level level) -> {
             if (this.building instanceof Beacon beacon) {
                 beacon.changeStructure(5);
+                if (!level.isClientSide()) {
+                    beacon.sendWarning("upgraded_warning");
+                }
             }
         };
         this.foodCost = cost.food;
@@ -56,7 +59,8 @@ public class ResearchBeaconLevel5 extends ProductionItem {
                         ResourceCosts.getFormattedCost(cost),
                         ResourceCosts.getFormattedTime(cost),
                         FormattedCharSequence.forward("", Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("research.reignofnether.beacon_level5.tooltip1"), Style.EMPTY)
+                        FormattedCharSequence.forward(I18n.get("research.reignofnether.beacon_level5.tooltip1"), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("research.reignofnether.beacon_level_win"), Style.EMPTY)
                 )
         );
     }

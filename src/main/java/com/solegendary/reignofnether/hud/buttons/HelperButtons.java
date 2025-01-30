@@ -150,19 +150,27 @@ public class HelperButtons {
 
     private static List<FormattedCharSequence> getBeaconButtonTooltip(String ownerName) {
         ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
+        Beacon beacon = BuildingUtils.getBeacon(true);
+        if (beacon == null)
+            return fcsList;
 
-        if (PlayerClientEvents.beaconWinTimes.isEmpty()) {
-            fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.no_controller")));
+        fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.beacon_level_title",
+                beacon.getUpgradeLevel(), Beacon.MAX_UPGRADE_LEVEL)));
+
+        if (beacon.getUpgradeLevel() < Beacon.MAX_UPGRADE_LEVEL) {
+            fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.player_controls", ownerName), true));
         } else {
-            fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.time_to_win")));
-            for (String playerName : PlayerClientEvents.beaconWinTimes.keySet()) {
-                long ticksToWin = Math.max(0, Beacon.TICKS_TO_WIN - PlayerClientEvents.beaconWinTimes.get(playerName));
-                String timeToWin = TimeUtils.getTimeStrFromTicks(ticksToWin);
-                fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.player_and_time",
-                        playerName, timeToWin), ownerName.equals(playerName)));
+            if (PlayerClientEvents.beaconWinTimes.isEmpty()) {
+                fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.no_controller")));
+            } else {
+                for (String playerName : PlayerClientEvents.beaconWinTimes.keySet()) {
+                    long ticksToWin = Math.max(0, Beacon.TICKS_TO_WIN - PlayerClientEvents.beaconWinTimes.get(playerName));
+                    String timeToWin = TimeUtils.getTimeStrFromTicks(ticksToWin);
+                    fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.player_wins_in",
+                            playerName, timeToWin), ownerName.equals(playerName)));
+                }
             }
         }
-
 
         fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.click_to_centre")));
         return fcsList;

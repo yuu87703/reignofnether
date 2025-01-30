@@ -37,6 +37,8 @@ Bugfixes
 Quality of Life Features
 ------------------------
 
+[❌] UI for all gamerules
+
 [❌] Added /gamerule for bridges over void
 
 [❌] Save transport portal links between server restarts
