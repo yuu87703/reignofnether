@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.building.buildings.piglins.*;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -252,5 +253,10 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     public void setupEquipmentAndUpgradesServer() {
         if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ResearchResourceCapacity.itemName))
             this.maxResources = 200;
+    }
+
+    @Override
+    public boolean fireImmune() {
+        return super.fireImmune() || BuildingUtils.findBuilding(level.isClientSide(), getOnPos()) instanceof FlameSanctuary;
     }
 }

@@ -9,24 +9,12 @@
 Features
 --------
 
-[❌] Sandbox mode
-    [❌] Add End portal to build endermen
-    [❌] Add Healing fountain
-    [❌] Add option to make neutral units a permanent fixture
-        - add option to reset at bottom left when selected
-        - on /rts-reset, kill and respawn it back at the original location
-        - enforce a leash range
-    [🟡] Prevent the beacon, or the beacon block itself being damaged
+[✔] Sandbox mode
 
     [❌] Require a fully upgraded beacon to tick the cooldown
         - Make the sandbox beacon always place as fully upgraded
         - Fix warning messages
         - Test it works in wave survival
-
-    [❌] Add polar bears, wolves, llamas and foxes as neutral unit options
-
-
-    [✔] fixed crash when placing bridges
 
     [🟡]  Also test that beacon team victory works, including in wave survival
 
@@ -35,7 +23,7 @@ Features
 Bugfixes
 --------
 
-[🟡] Fixed ally bugs (maybe?)
+[🟡] Possibly fixed a bug where allying players caused alliances to rapidly switch
 
 [🟡] Fixed camera centering inaccuracies when sensitivity is changed
 
@@ -46,16 +34,18 @@ Bugfixes
 
 Quality of Life
 ---------------
-[🟡] Ally everyone by default if wave survival is enabled
 
-[❌] Right click to garrison and mount
+[🟡] Added a GUI to easily modify gamerules before a game starts
+    - You can still use /gamerule commands if you prefer that
+    - All players can see the menu, but only server ops can make changes
+    - Any changes made will be reflected on all clients
 
-[❌] Prevent damage from fire blocks inside a flame sanctuary
-
-[🟡] Gamerule GUI
-
-[🟡] Move F6 to bottom right options
-
+[🟡] Right-clicking a mountable unit now mounts a ranged unit onto it
+[🟡] Right-clicking a garrison will garrison ranged units into it
+[🟡] Fire and lava blocks in Flame Sanctuaries no longer damage piglin units
+[🟡] Moved F6 option (hiding leaf blocks) to bottom right map menu
+[🟡] In wave survival, all players are allied by default
+    - You can still use /disband to remove an alliance
 
 Balancing
 ---------

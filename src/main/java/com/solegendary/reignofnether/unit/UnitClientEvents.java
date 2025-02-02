@@ -16,17 +16,20 @@ import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.registrars.PacketHandler;
+import com.solegendary.reignofnether.research.ResearchClient;
+import com.solegendary.reignofnether.research.researchItems.ResearchHoglinCavalry;
+import com.solegendary.reignofnether.research.researchItems.ResearchRavagerCavalry;
+import com.solegendary.reignofnether.research.researchItems.ResearchSpiderJockeys;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.unit.goals.MeleeAttackBuildingGoal;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.packets.UnitActionServerboundPacket;
-import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
-import com.solegendary.reignofnether.unit.units.monsters.WardenUnit;
-import com.solegendary.reignofnether.unit.units.monsters.ZoglinUnit;
+import com.solegendary.reignofnether.unit.units.monsters.*;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
+import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HoglinUnit;
 import com.solegendary.reignofnether.unit.units.villagers.*;
 import com.solegendary.reignofnether.util.Faction;
@@ -42,6 +45,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -596,8 +600,24 @@ public class UnitClientEvents {
             if (selectedUnits.size() > 0) {
                 Building preSelBuilding = BuildingClientEvents.getPreselectedBuilding();
 
+                // right click -> mount friendly unit
+                if (preselectedUnits.size() == 1 && canMountUnit(hudSelectedEntity, preselectedUnits.get(0))) {
+                    if (hudSelectedEntity instanceof PillagerUnit && getPreselectedUnits().get(0) instanceof RavagerUnit)
+                        sendUnitCommand(UnitAction.MOUNT_RAVAGER);
+                    if (hudSelectedEntity instanceof HeadhunterUnit && getPreselectedUnits().get(0) instanceof HoglinUnit)
+                        sendUnitCommand(UnitAction.MOUNT_HOGLIN);
+                    if (hudSelectedEntity instanceof Unit && hudSelectedEntity instanceof Skeleton && getPreselectedUnits().get(0) instanceof RavagerUnit)
+                        sendUnitCommand(UnitAction.MOUNT_SPIDER);
+                }
+                // right click -> garrison friendly building
+                else if (preSelBuilding instanceof GarrisonableBuilding garr &&
+                        hudSelectedEntity instanceof RangedAttackerUnit &&
+                        hudSelectedEntity instanceof Unit unit && unit.canGarrison() &&
+                        preSelBuilding.ownerName.equals(unit.getOwnerName())) {
+                    sendUnitCommand(UnitAction.GARRISON);
+                }
                 // right click -> attack unfriendly unit
-                if (preselectedUnits.size() == 1 &&
+                else if (preselectedUnits.size() == 1 &&
                     !targetingSelf() &&
                     ((GameruleClient.neutralAggro && getPlayerToEntityRelationship(preselectedUnits.get(0)) == Relationship.NEUTRAL) ||
                     getPlayerToEntityRelationship(preselectedUnits.get(0)) == Relationship.HOSTILE ||
@@ -986,6 +1006,24 @@ public class UnitClientEvents {
         for (LivingEntity entity : getAllUnits())
             if (entity instanceof VillagerUnit vUnit && unitId == entity.getId())
                 vUnit.isVeteran = true;
+    }
+
+    // used only for right click mounting shortcut
+    public static boolean canMountUnit(LivingEntity passenger, LivingEntity vehicle) {
+        if (!(passenger instanceof Unit) || !(vehicle instanceof Unit))
+            return false;
+        if (!((Unit) passenger).getOwnerName().equals(((Unit) vehicle).getOwnerName()))
+            return false;
+        if (hudSelectedEntity instanceof PillagerUnit && getPreselectedUnits().get(0) instanceof RavagerUnit &&
+            ResearchClient.hasResearch(ResearchRavagerCavalry.itemName))
+            return true;
+        if (hudSelectedEntity instanceof HeadhunterUnit && getPreselectedUnits().get(0) instanceof HoglinUnit &&
+            ResearchClient.hasResearch(ResearchHoglinCavalry.itemName))
+            return true;
+        if (hudSelectedEntity instanceof Unit && hudSelectedEntity instanceof Skeleton && getPreselectedUnits().get(0) instanceof RavagerUnit &&
+            ResearchClient.hasResearch(ResearchSpiderJockeys.itemName))
+            return true;
+        return false;
     }
 
     /*

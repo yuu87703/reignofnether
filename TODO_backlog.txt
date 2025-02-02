@@ -6,7 +6,14 @@
 Features
 --------
 
+[❌] Add option to make neutral units a permanent fixture
+    - add option to reset at bottom left when selected
+    - on /rts-reset, kill and respawn it back at the original location
+    - enforce a leash range
 
+[❌] Add End portal to build endermen
+[❌] Add Healing fountain
+[❌] Add polar bears, wolves, llamas and foxes as neutral unit options
 
 [❌] Piglin mines
     - Static defense for piglins, but can also be used to siege
