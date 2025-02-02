@@ -272,7 +272,7 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
                 PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon." + msg,
                         true, ownerName);
             }
-            if (beacon != null && beacon.getUpgradeLevel() >= Beacon.MAX_UPGRADE_LEVEL) {
+            if (beacon != null && beacon.getUpgradeLevel() >= Beacon.MAX_UPGRADE_LEVEL && !msg.equals("destroy_warning")) {
                 PlayerServerEvents.sendMessageToAllPlayersNoNewlines("buildings.neutral.reignofnether.beacon.time_to_win",
                         false, ownerName, PlayerServerEvents.getBeaconWinTime(ownerName));
             }
