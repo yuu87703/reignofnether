@@ -115,8 +115,8 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
             this.abilityButtons.add(beaconWealth.getButton(Keybindings.keyQ));
             this.abilityButtons.add(beaconHaste.getButton(Keybindings.keyW));
             this.abilityButtons.add(beaconRegen.getButton(Keybindings.keyE));
-            this.abilityButtons.add(beaconStrength.getButton(Keybindings.keyR));
-            this.abilityButtons.add(beaconResistance.getButton(Keybindings.keyT));
+            this.abilityButtons.add(beaconResistance.getButton(Keybindings.keyR));
+            this.abilityButtons.add(beaconStrength.getButton(Keybindings.keyT));
         }
         for (BuildingBlock bb : blocks)
             if (bb.getBlockState().getBlock() == Blocks.BEACON)

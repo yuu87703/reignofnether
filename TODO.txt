@@ -7,10 +7,7 @@
 
 
 
-
 [❌] add notification if other players ally each other
-
-[❌] regen doesn't work
 
 
 

@@ -31,7 +31,7 @@ public class BeaconResistance extends BeaconAbility {
                 hotkey,
                 () -> beacon.getAuraEffect() == AURA_EFFECT,
                 () -> false,
-                () -> beacon.getUpgradeLevel() >= 5,
+                () -> beacon.getUpgradeLevel() >= 4,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BEACON_RESISTANCE),
                 null,
                 List.of(

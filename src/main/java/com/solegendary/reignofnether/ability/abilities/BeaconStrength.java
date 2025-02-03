@@ -31,7 +31,7 @@ public class BeaconStrength extends BeaconAbility {
                 hotkey,
                 () -> beacon.getAuraEffect() == AURA_EFFECT,
                 () -> false,
-                () -> beacon.getUpgradeLevel() >= 4,
+                () -> beacon.getUpgradeLevel() >= 5,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BEACON_STRENGTH),
                 null,
                 List.of(
