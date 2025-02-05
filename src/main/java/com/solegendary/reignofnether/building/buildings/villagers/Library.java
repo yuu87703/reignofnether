@@ -97,7 +97,7 @@ public class Library extends ProductionBuilding implements RangeIndicator {
     public void tick(Level tickLevel) {
         super.tick(tickLevel);
 
-        if (tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 15 == 0 && isBuilt && autoCastEnchant != null
+        if (tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 8 == 0 && isBuilt && autoCastEnchant != null
             && autoCastEnchant.isOffCooldown()) {
 
             List<Mob> mobs = MiscUtil.getEntitiesWithinRange(new Vector3d(

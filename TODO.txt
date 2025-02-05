@@ -1,5 +1,5 @@
 
-1.19.2-1.1.1a
+1.19.2-1.1.1b
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -13,7 +13,7 @@ Features
 
 Bugfixes
 --------
-
+[❌] Fixed Beacon Wealth aura granting too much resources
 
 [❌] Pillagers can't garrison while loading
 
@@ -22,7 +22,10 @@ Bugfixes
 
 Quality of Life
 ---------------
+[❌] Library auto-enchant speed increased
 
+[❌] Added an exit-sandbox button at the top right
+    - It does the same thing as /rts-surrender but just doesn't show the defeat screen
 
 Balancing
 ---------

@@ -17,6 +17,8 @@ import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.researchItems.*;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.resources.Resources;
+import com.solegendary.reignofnether.resources.ResourcesServerEvents;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
@@ -243,6 +245,10 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
                     else if (tickAgeAfterBuilt % 80 == 0) // only 1hp/4s
                         le.addEffect(new MobEffectInstance(auraEffect, 60, 0));
                 }
+            }
+
+            if (tickAgeAfterBuilt % 20 == 0 && getAuraEffect() == MobEffects.LUCK && isBeaconActive()) {
+                ResourcesServerEvents.addSubtractResources(new Resources(this.name, 1, 1, 1));
             }
         }
     }

@@ -106,9 +106,6 @@ public class RTSPlayer {
                     if (beaconOwnerTicks == Beacon.TICKS_TO_WIN)
                         PlayerServerEvents.beaconVictory(this.name);
                 }
-                if (beaconOwnerTicks % 40 == 0 && beacon.getAuraEffect() == MobEffects.LUCK && beacon.isBeaconActive()) {
-                    ResourcesServerEvents.addSubtractResources(new Resources(this.name, 1, 1, 1));
-                }
             }
         }
     }
