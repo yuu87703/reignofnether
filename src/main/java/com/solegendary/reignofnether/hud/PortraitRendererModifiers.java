@@ -101,7 +101,7 @@ public class PortraitRendererModifiers {
             yOffset = -33;
             scale = -27;
         } else if (entity instanceof RoyalGuardUnit) {
-            yOffset = -23;
+            yOffset = -32;
             scale = -16;
         }
 

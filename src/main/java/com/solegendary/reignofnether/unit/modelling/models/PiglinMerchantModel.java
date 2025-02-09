@@ -73,16 +73,16 @@ public class PiglinMerchantModel<T extends Entity> extends KeyframeHierarchicalM
 
 		PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create(), PartPose.offset(0.0F, 5.0F, -2.0F));
 
-		PartDefinition head = main.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 0).addBox(-5.0F, -6.0F, -9.0F, 10.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(61, 2).addBox(-2.0F, -2.0F, -10.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(72, 0).addBox(-6.0F, -7.0F, -10.0F, 12.0F, 9.0F, 10.0F, new CubeDeformation(0.0F))
-				.texOffs(32, 5).addBox(-3.0F, 0.0F, -10.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(34, 2).addBox(2.0F, 0.0F, -10.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition head = main.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 0).addBox(-5.0F, -7.0F, -8.0F, 10.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+				.texOffs(61, 2).addBox(-2.0F, -3.0F, -9.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(72, 0).addBox(-6.0F, -8.0F, -9.0F, 12.0F, 9.0F, 10.0F, new CubeDeformation(0.0F))
+				.texOffs(32, 5).addBox(-3.0F, -1.0F, -9.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(34, 2).addBox(2.0F, -1.0F, -9.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0436F, 0.0F, 0.0F));
 
-		PartDefinition earL = head.addOrReplaceChild("earL", CubeListBuilder.create().texOffs(72, 0).mirror().addBox(-1.9239F, 0.3827F, -2.0F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.2F, -4.0F, -6.0F, 0.0F, 0.0F, 0.3927F));
+		PartDefinition earL = head.addOrReplaceChild("earL", CubeListBuilder.create().texOffs(72, 0).mirror().addBox(-1.9239F, -0.6173F, -1.0F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.2F, -4.0F, -6.0F, 0.0F, 0.0F, 0.3927F));
 
-		PartDefinition earR = head.addOrReplaceChild("earR", CubeListBuilder.create().texOffs(72, 0).addBox(0.2F, 0.0F, -2.0F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(60, 18).addBox(-0.8F, 3.0F, 0.0F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.9F, -4.0F, -6.0F, 0.0F, 0.0F, -0.3927F));
+		PartDefinition earR = head.addOrReplaceChild("earR", CubeListBuilder.create().texOffs(72, 0).addBox(0.2F, -1.0F, -1.0F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
+				.texOffs(60, 18).addBox(-0.8F, 2.0F, 1.0F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.9F, -4.0F, -6.0F, 0.0F, 0.0F, -0.3927F));
 
 		PartDefinition pack = main.addOrReplaceChild("pack", CubeListBuilder.create().texOffs(76, 82).mirror().addBox(-10.3333F, -7.8333F, -4.8333F, 21.0F, 15.0F, 13.0F, new CubeDeformation(0.0F)).mirror(false)
 				.texOffs(73, 110).addBox(-8.3333F, 7.1667F, -4.8333F, 16.0F, 9.0F, 9.0F, new CubeDeformation(0.0F))
