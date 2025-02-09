@@ -37,7 +37,7 @@ public class RoyalGuardModel<T extends Entity> extends KeyframeHierarchicalModel
 	private final ModelPart mace;
 	private final ModelPart head2;
 	private final ModelPart legR;
-	private final ModelPart legR2;
+	private final ModelPart legL;
 
 	public RoyalGuardModel(ModelPart root) {
 		this.main = root.getChild("main");
@@ -50,7 +50,7 @@ public class RoyalGuardModel<T extends Entity> extends KeyframeHierarchicalModel
 		this.mace = this.armL.getChild("mace");
 		this.head2 = this.mace.getChild("head2");
 		this.legR = this.main.getChild("legR");
-		this.legR2 = this.main.getChild("legR2");
+		this.legL = this.main.getChild("legL");
 	}
 
 	@Override
@@ -76,26 +76,26 @@ public class RoyalGuardModel<T extends Entity> extends KeyframeHierarchicalModel
 
 		PartDefinition body = main.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 20).addBox(-3.96F, -12.9152F, -3.8888F, 8.0F, 12.0F, 6.0F, new CubeDeformation(0.0F))
 				.texOffs(33, 39).addBox(-3.96F, -12.9152F, -3.8888F, 8.0F, 12.0F, 6.0F, new CubeDeformation(0.5F))
-				.texOffs(66, 29).addBox(-3.96F, -12.9152F, -3.8888F, 8.0F, 12.0F, 6.0F, new CubeDeformation(0.5F)), PartPose.offset(-1.04F, -11.0848F, -0.1112F));
+				.texOffs(66, 29).addBox(-3.96F, -12.9152F, -3.8888F, 8.0F, 12.0F, 6.0F, new CubeDeformation(0.5F)), PartPose.offsetAndRotation(-1.04F, -11.0848F, -0.1112F, 0.0F, 0.1309F, 0.0F));
 
-		PartDefinition cube_r1 = body.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(67, 51).mirror().addBox(-0.5F, -4.0F, -1.0F, 5.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
+		PartDefinition cube2_r1 = body.addOrReplaceChild("cube2_r1", CubeListBuilder.create().texOffs(67, 51).mirror().addBox(-0.5F, -4.0F, -1.0F, 5.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
 				.texOffs(67, 51).addBox(-5.7F, -4.0F, -1.0F, 5.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.54F, -7.4152F, -4.5888F, 0.6109F, 0.0F, 0.0F));
 
-		PartDefinition armR = main.addOrReplaceChild("armR", CubeListBuilder.create().texOffs(0, 40).addBox(-1.0F, -1.0F, -1.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(99, 37).addBox(3.5F, -0.5F, 0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(100, 28).addBox(-0.5F, -1.5F, -1.5F, 4.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
-				.texOffs(91, 5).addBox(2.0F, 8.0F, -2.0F, 2.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
-				.texOffs(91, 14).addBox(1.0F, 11.0F, -2.0F, 3.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(4.0F, -23.0F, -2.0F));
+		PartDefinition armR = main.addOrReplaceChild("armR", CubeListBuilder.create().texOffs(0, 40).addBox(1.0F, -1.0F, -1.4F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+				.texOffs(99, 37).addBox(5.5F, -0.5F, -1.4F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(100, 28).addBox(1.5F, -1.5F, -1.4F, 4.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(91, 5).addBox(4.0F, 8.0F, -1.4F, 2.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(91, 14).addBox(3.0F, 11.0F, -1.4F, 3.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, -23.0F, -2.0F, -0.7156F, 0.0F, 0.0F));
 
-		PartDefinition shield = armR.addOrReplaceChild("shield", CubeListBuilder.create().texOffs(3, 64).addBox(-7.0F, -11.0F, -0.5F, 14.0F, 22.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 13.0F, 0.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition shield = armR.addOrReplaceChild("shield", CubeListBuilder.create().texOffs(3, 64).addBox(-5.0F, -11.0F, -1.9F, 14.0F, 22.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 12.0F, 0.5F, 0.6981F, 0.0F, 0.0F));
 
 		PartDefinition armL = main.addOrReplaceChild("armL", CubeListBuilder.create().texOffs(16, 40).mirror().addBox(-3.5F, -0.7F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
 				.texOffs(99, 37).mirror().addBox(-6.0F, -0.2F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
 				.texOffs(100, 28).mirror().addBox(-4.0F, -1.2F, -2.5F, 4.0F, 7.0F, 5.0F, new CubeDeformation(0.0F)).mirror(false)
 				.texOffs(110, 5).mirror().addBox(-4.5F, 8.3F, -3.0F, 2.0F, 3.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(110, 14).mirror().addBox(-4.5F, 11.3F, -3.0F, 3.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-5.5F, -23.3F, -1.0F));
+				.texOffs(110, 14).mirror().addBox(-4.5F, 11.3F, -3.0F, 3.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-5.5F, -23.3F, -1.0F, 0.5061F, -0.2705F, 0.2356F));
 
-		PartDefinition mace = armL.addOrReplaceChild("mace", CubeListBuilder.create().texOffs(135, 36).addBox(0.0F, -6.0F, -0.5F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.5F, 10.3F, -1.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition mace = armL.addOrReplaceChild("mace", CubeListBuilder.create().texOffs(135, 36).addBox(0.0F, -6.0F, -0.5F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.5F, 10.3F, -1.5F, 2.3562F, 0.0F, 0.0F));
 
 		PartDefinition head2 = mace.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(124, 24).addBox(-4.0F, -5.0F, -1.0F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(124, 35).addBox(-2.0F, -7.0F, 1.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, -6.0F, 0.7F, 0.6981F, 0.0F, 0.0F));
@@ -110,13 +110,13 @@ public class RoyalGuardModel<T extends Entity> extends KeyframeHierarchicalModel
 
 		PartDefinition spike_r5 = head2.addOrReplaceChild("spike_r5", CubeListBuilder.create().texOffs(124, 35).addBox(0.0F, 0.0F, -1.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 2.0F, 2.0F, 0.0F, 0.0F, -3.1416F));
 
-		PartDefinition legR = main.addOrReplaceChild("legR", CubeListBuilder.create().texOffs(0, 22).addBox(-1.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(93, 48).addBox(-1.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F))
-				.texOffs(97, 42).addBox(-1.0F, 5.0F, -3.0F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -12.0F, -1.0F));
+		PartDefinition legR = main.addOrReplaceChild("legR", CubeListBuilder.create().texOffs(0, 22).addBox(0.0F, 0.0F, -5.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+				.texOffs(93, 48).addBox(0.0F, 0.0F, -5.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F))
+				.texOffs(97, 42).addBox(0.0F, 5.0F, -6.0F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -12.0F, -1.0F, -0.0436F, 0.0F, 0.0F));
 
-		PartDefinition legR2 = main.addOrReplaceChild("legR2", CubeListBuilder.create().texOffs(44, 22).mirror().addBox(-2.0F, -5.0F, -3.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(110, 48).mirror().addBox(-2.0F, -5.0F, -3.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(false)
-				.texOffs(113, 42).mirror().addBox(-2.0F, 0.0F, -4.0F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.0F, -7.0F, 0.0F));
+		PartDefinition legL = main.addOrReplaceChild("legL", CubeListBuilder.create().texOffs(44, 22).mirror().addBox(-3.0F, -5.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
+				.texOffs(110, 48).mirror().addBox(-3.0F, -5.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(false)
+				.texOffs(113, 42).mirror().addBox(-3.0F, 0.0F, -1.0F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, -7.0F, 0.0F, 0.1309F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 144, 96);
 	}

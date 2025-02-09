@@ -13,9 +13,11 @@ Features
 
 Bugfixes
 --------
+[❌] Crash on beacon victory against a team?
+
 [❌] Buildings on minimap are positioned slightly off
 [❌] gamerules didn't update when rejoining a different server
-[❌] Magma cubes are slow during the day
+[🟡] Magma cubes are slow during the day
 [❌] Kicked from dragigng on minimap (too many packets)
 [❌] regenerate aura not working for piglin units?
 [❌] raise chat slightly so it doesn't clip your build toolbar (mixin somewhere)
@@ -25,6 +27,8 @@ Quality of Life
 [❌] prevent fortress fires doing damage and spider lairs eggs from being broken
 [❌] Add gamerule for beacon win time
 [❌] control click (same thing as double click)
+
+[❌] add cheat for each specific resource type (greedisgood <resourcename> <value>)
 
 Balancing
 ---------
