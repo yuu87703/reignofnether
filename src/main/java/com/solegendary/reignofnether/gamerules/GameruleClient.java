@@ -166,14 +166,14 @@ public class GameruleClient {
             )
         ));
         buttons.add(new GameruleIntegerButton("groundYLevel: " + Math.round(groundYLevel),
-                () -> {
-                    int value = (int) Math.min(320, groundYLevel + (Keybindings.shiftMod.isDown() ? 10 : 1));
-                    GameruleServerboundPacket.setGroundYLevel(value);
-                },
-                () -> {
-                    int value = (int) Math.max(-320, groundYLevel - (Keybindings.shiftMod.isDown() ? 10 : 1));
-                    GameruleServerboundPacket.setGroundYLevel(value);
-                },
+            () -> {
+                int value = (int) Math.min(320, groundYLevel + (Keybindings.shiftMod.isDown() ? 10 : 1));
+                GameruleServerboundPacket.setGroundYLevel(value);
+            },
+            () -> {
+                int value = (int) Math.max(-320, groundYLevel - (Keybindings.shiftMod.isDown() ? 10 : 1));
+                GameruleServerboundPacket.setGroundYLevel(value);
+            },
             List.of(
                 fcs(I18n.get("commands.reignofnether.gamerule.ground_y_level")),
                 fcs(I18n.get("hud.gamerule.reignofnether.click")),

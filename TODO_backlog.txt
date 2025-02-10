@@ -11,10 +11,6 @@ Features
     - on /rts-reset, kill and respawn it back at the original location
     - enforce a leash range
 
-[❌] Add End portal to build endermen
-[❌] Add Healing fountain
-[❌] Add polar bears, wolves, llamas and foxes as neutral unit options
-
 [❌] Piglin mines
     - Static defense for piglins, but can also be used to siege
     - When built, can be exploded manaully (or set to autoexplode on nearby enemies approaching)
@@ -38,13 +34,9 @@ Bugfixes
 
 [❌] Have too-fast mod be built-in
 
-[❌] Don't kick players for sending too many packets if they drag-move the map
-
 
 Quality of Life Features
 ------------------------
-
-[❌] UI for all gamerules
 
 [❌] Added /gamerule for bridges over void
 

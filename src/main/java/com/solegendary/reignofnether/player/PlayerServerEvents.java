@@ -671,10 +671,11 @@ public class PlayerServerEvents {
             for (String allyName : AlliancesServer.getAllAllies(playerName))
                 PlayerClientboundPacket.victory(allyName);
         } else {
-            List<String> playerNames = rtsPlayers.stream().map(p -> p.name).toList();
+            List<String> playerNames = rtsPlayers.stream().map(p -> p.name)
+                    .filter(n -> !AlliancesServer.isAllied(playerName, n) && !n.equals(playerName))
+                    .toList();
             for (String name : playerNames)
-                if (!name.equals(playerName) && !AlliancesServer.isAllied(playerName, name))
-                    defeat(name, Component.translatable("server.reignofnether.beacon_defeat").getString());
+                defeat(name, Component.translatable("server.reignofnether.beacon_defeat").getString());
         }
     }
 
