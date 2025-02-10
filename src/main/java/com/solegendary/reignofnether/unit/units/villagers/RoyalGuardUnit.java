@@ -130,7 +130,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     public int maxResources = 100;
 
-    private MeleeAttackUnitGoal attackGoal;
+    private AbstractMeleeAttackUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
     private final List<AbilityButton> abilityButtons = new ArrayList<>();
@@ -143,8 +143,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
-    final static private int ATTACK_WINDUP_TICKS = 6; // (int) (NecromancerAnimations.ATTACK.lengthInSeconds() * 20f * 0.22f);
+    final static private int ATTACK_WINDUP_TICKS = 2;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -218,7 +217,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new MeleeAttackUnitGoal(this, false);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
         this.attackBuildingGoal = new MeleeAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
     }

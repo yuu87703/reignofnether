@@ -69,7 +69,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     private MoveToTargetBlockGoal moveGoal;
     private SelectedTargetGoal<? extends LivingEntity> targetGoal;
     private ReturnResourcesGoal returnResourcesGoal;
-    private MeleeAttackUnitGoal attackGoal;
+    private AbstractMeleeAttackUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
     public LivingEntity getFollowTarget() { return followTarget; }
@@ -138,8 +138,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
-    final static private int ATTACK_WINDUP_TICKS = 6; // (int) (NecromancerAnimations.ATTACK.lengthInSeconds() * 20f * 0.22f);
+    final static private int ATTACK_WINDUP_TICKS = 4;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -227,7 +226,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
-        this.attackGoal = new MeleeAttackUnitGoal(this, false);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
         this.attackBuildingGoal = new MeleeAttackBuildingGoal(this);
     }
 

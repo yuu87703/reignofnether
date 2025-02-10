@@ -15,25 +15,26 @@ Bugfixes
 --------
 [❌] Crash on beacon victory against a team?
 
-[❌] Buildings on minimap are positioned slightly off
 [❌] gamerules didn't update when rejoining a different server
 [🟡] Magma cubes are slow during the day
-[❌] Kicked from dragigng on minimap (too many packets)
+[🟡] Rate-limited the number of packets sent when dragging the minimap to prevent being kicked
 [❌] regenerate aura not working for piglin units?
-[❌] raise chat slightly so it doesn't clip your build toolbar (mixin somewhere)
+    - on server only?
+
 
 Quality of Life
 ---------------
-[❌] prevent fortress fires doing damage and spider lairs eggs from being broken
-[❌] Add gamerule for beacon win time
-[❌] control click (same thing as double click)
+[🟡] prevent fortress fires doing damage
+[🟡] Add gamerule for beacon win time
+[🟡] You can now control-click a unit instead of double-clicking to select all nearby units of the same type
 
 [❌] add cheat for each specific resource type (greedisgood <resourcename> <value>)
 
 Balancing
 ---------
-[❌] only let military units capture the beacon
+[🟡] Worker units can no longer capture beacons
 [❌] let beacon regenerate allies
+    - already did this but it but didn't work?
 
 
 Villagers

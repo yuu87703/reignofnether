@@ -171,7 +171,7 @@ public class HelperButtons {
                 fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.no_controller")));
             } else {
                 for (String playerName : PlayerClientEvents.beaconWinTimes.keySet()) {
-                    long ticksToWin = Math.max(0, Beacon.TICKS_TO_WIN - PlayerClientEvents.beaconWinTimes.get(playerName));
+                    long ticksToWin = Math.max(0, Beacon.getTicksToWin() - PlayerClientEvents.beaconWinTimes.get(playerName));
                     String timeToWin = TimeUtils.getTimeStrFromTicks(ticksToWin);
                     fcsList.add(fcs(I18n.get("hud.helperbuttons.reignofnether.beacon.player_wins_in",
                             playerName, timeToWin), ownerName.equals(playerName)));

@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.building.buildings.monsters.Stronghold;
 import com.solegendary.reignofnether.building.buildings.piglins.Fortress;
 import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
+import com.solegendary.reignofnether.gamerules.GameruleClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -66,7 +67,9 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
 
     public final static int MAX_UPGRADE_LEVEL = 5;
 
-    public final static int TICKS_TO_WIN = 24000; // 20mins
+    public static int getTicksToWin() {
+        return (int) (GameruleClient.beaconWinMinutes * 20 * 60);
+    }
 
     private MobEffect auraEffect = null;
     private boolean beaconActive = false;

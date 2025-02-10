@@ -98,12 +98,12 @@ public class RTSPlayer {
             if (building instanceof Beacon beacon && beacon.isBuilt && building.ownerName.equals(this.name)) {
                 if (beacon.getUpgradeLevel() == Beacon.MAX_UPGRADE_LEVEL) {
                     beaconOwnerTicks += 1;
-                    if (beaconOwnerTicks == Beacon.TICKS_TO_WIN / 4 ||
-                            beaconOwnerTicks == Beacon.TICKS_TO_WIN / 2 ||
-                            beaconOwnerTicks == (Beacon.TICKS_TO_WIN * 3) / 4 ||
-                            beaconOwnerTicks == Beacon.TICKS_TO_WIN - 1200)
+                    if (beaconOwnerTicks == Beacon.getTicksToWin() / 4 ||
+                            beaconOwnerTicks == Beacon.getTicksToWin() / 2 ||
+                            beaconOwnerTicks == (Beacon.getTicksToWin() * 3) / 4 ||
+                            beaconOwnerTicks == Beacon.getTicksToWin() - 1200)
                         beacon.sendWarning("time_warning");
-                    if (beaconOwnerTicks == Beacon.TICKS_TO_WIN)
+                    if (beaconOwnerTicks == Beacon.getTicksToWin())
                         PlayerServerEvents.beaconVictory(this.name);
                 }
             }
