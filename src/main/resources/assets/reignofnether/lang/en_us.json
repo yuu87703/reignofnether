@@ -663,7 +663,7 @@
     "tutorial.reignofnether.tutorial_help": "Tutorial Help",
     "tutorial.reignofnether.welcome": "Welcome to Reign of Nether",
     "tutorial.reignofnether.welcome2": "Welcome to the Reign of Nether Tutorial!",
-    "tutorial.reignofnether.get_started": "Press F12 to get started.",
+    "tutorial.reignofnether.get_started": "Press F12 or use /rts-camera to get started.",
     "tutorial.reignofnether.join": "Press F12 to toggle RTS camera and join the game",
     "tutorial.reignofnether.help": "Use '/rts-help' to see the list of all commands",
     "tutorial.reignofnether.controls": "Use '/rts-controls' to see the list of controls",

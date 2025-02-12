@@ -30,30 +30,25 @@ Features
 
 Bugfixes
 --------
-[🟡] Crash on beacon victory against a team?
-
-[❌] Walking on powder snow
-[🟡] Magma cubes are slow during the day
+[🟡] Fixed a crash when a player wins by Beacon control
+[🟡] Magma cubes are no longer slowed during the day
 [🟡] Rate-limited the number of packets sent when dragging the minimap to prevent being kicked
-[❌] regenerate aura not working for piglin units?
-    - on server only?
-[❌] let beacon regenerate allies
-    - already did this but it but didn't work?
+
 
 Quality of Life
 ---------------
-[🟡] prevent fortress fires doing damage
-[🟡] Add gamerule for beacon win time
+[🟡] Fire blocks on Fortresses no longer damage piglin units
+[🟡] Webs in spider lairs no longer slow down monster units
+[🟡] Added /gamerule beaconWinMinutes to control how long it takes to win with a beacon
 [🟡] You can now control-click a unit instead of double-clicking to select all nearby units of the same type
+[🟡] You can now use /rts-camera instead of F12 to toggle the RTS camera
+[🟡] You can now specify a resource when using the greedisgood cheatcode (eg. "greedisgood food 100")
 
-[❌] add cheat for each specific resource type (greedisgood <resourcename> <value>)
-
-[❌] let allied survival players use transport portals
 
 Balancing
 ---------
 [🟡] Worker units can no longer capture beacons
-
+[🟡] Beacon auras now affect allies
 
 
 Villagers

@@ -42,7 +42,10 @@ public class PlayerClientEvents {
 
     @SubscribeEvent
     public static void onRegisterCommand(RegisterClientCommandsEvent evt) {
-
+        evt.getDispatcher().register(Commands.literal("rts-camera").executes((command) -> {
+            OrthoviewClientEvents.tryToToggleEnable();
+            return 1;
+        }));
         evt.getDispatcher().register(Commands.literal("rts-surrender").executes((command) -> {
             PlayerServerboundPacket.surrender();
             return 1;

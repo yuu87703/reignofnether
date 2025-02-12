@@ -28,6 +28,7 @@ import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.BeaconSyncClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
@@ -243,11 +244,15 @@ public class Beacon extends ProductionBuilding implements RangeIndicator {
                     this.level);
 
             for (LivingEntity le : nearbyEntities) {
-                boolean isOwnedUnit = le instanceof Unit unit && unit.getOwnerName().equals(this.ownerName);
+                boolean isOwnedOrFriendlyUnit = le instanceof Unit unit && (unit.getOwnerName().equals(this.ownerName) ||
+                        AlliancesServer.isAllied(this.ownerName, unit.getOwnerName()));
                 boolean isFriendlyPlayer = le instanceof Player player && !player.isCreative() && !player.isSpectator() &&
                         (player.getName().getString().equals(ownerName) || AlliancesServer.isAllied(player.getName().getString(), ownerName));
 
-                if ((isOwnedUnit || isFriendlyPlayer) && (isFriendlyPlayer || auraEffect != MobEffects.LUCK) && getBeaconBlockEntity() != null) {
+                if ((isOwnedOrFriendlyUnit || isFriendlyPlayer) &&
+                        (isFriendlyPlayer || auraEffect != MobEffects.LUCK) &&
+                        (!(le instanceof WorkerUnit) || auraEffect != MobEffects.DIG_SPEED) &&
+                        getBeaconBlockEntity() != null) {
                     if (auraEffect != MobEffects.REGENERATION)
                         le.addEffect(new MobEffectInstance(auraEffect, 25, 0));
                     else if (tickAgeAfterBuilt % 80 == 0) // only 1hp/4s

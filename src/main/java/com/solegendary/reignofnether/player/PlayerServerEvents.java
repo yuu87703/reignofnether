@@ -432,16 +432,40 @@ public class PlayerServerEvents {
                         int amount = Integer.parseInt(words[1]);
                         if (amount > 0) {
                             ResourcesServerEvents.addSubtractResources(new Resources(playerName,
-                                amount,
-                                amount,
-                                amount
+                                    amount,
+                                    amount,
+                                    amount
                             ));
                             evt.setCanceled(true);
                             sendMessageToAllPlayers("server.reignofnether.used_cheat",
-                                false,
-                                playerName,
-                                words[0],
-                                Integer.toString(amount)
+                                    false,
+                                    playerName,
+                                    words[0],
+                                    Integer.toString(amount)
+                            );
+                        }
+                    }
+                } catch (NumberFormatException err) {
+                    ReignOfNether.LOGGER.error(err);
+                }
+            }
+
+            if (words.length == 3) {
+                try {
+                    if (words[0].equalsIgnoreCase("greedisgood")) {
+                        int amount = Integer.parseInt(words[2]);
+                        if (amount > 0 && List.of("food", "wood", "ore").contains(words[1].toLowerCase())) {
+                            switch (words[1].toLowerCase()) {
+                                case "food" -> ResourcesServerEvents.addSubtractResources(new Resources(playerName, amount, 0, 0));
+                                case "wood" -> ResourcesServerEvents.addSubtractResources(new Resources(playerName, 0, amount, 0));
+                                case "ore" -> ResourcesServerEvents.addSubtractResources(new Resources(playerName, 0, 0, amount));
+                            }
+                            evt.setCanceled(true);
+                            sendMessageToAllPlayers("server.reignofnether.used_cheat",
+                                    false,
+                                    playerName,
+                                    words[0] + " " + words[1],
+                                    Integer.toString(amount)
                             );
                         }
                     }

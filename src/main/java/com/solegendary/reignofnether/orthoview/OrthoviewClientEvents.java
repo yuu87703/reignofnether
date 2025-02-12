@@ -367,19 +367,24 @@ public class OrthoviewClientEvents {
         // Prevent repeated key actions
         if (evt.getAction() == GLFW.GLFW_PRESS) {
 
-            if (evt.getKey() == Keybindings.getFnum(12).key && !OrthoviewClientEvents.isCameraLocked()
-                && MC.gameMode != null) {
-                if (MC.player != null && (
-                    MC.gameMode.getPlayerMode() == GameType.ADVENTURE
-                        || MC.gameMode.getPlayerMode() == GameType.SURVIVAL
-                )) {
-                    MC.player.sendSystemMessage(Component.literal(I18n.get("hud.orthoview.reignofnether.ortho_error")));
-                } else {
-                    toggleEnable();
-                }
+            if (evt.getKey() == Keybindings.getFnum(12).key) {
+                tryToToggleEnable();
             }
-            if (evt.getKey() == Keybindings.reset.key) {
+            else if (evt.getKey() == Keybindings.reset.key) {
                 reset();
+            }
+        }
+    }
+
+    public static void tryToToggleEnable() {
+        if (!OrthoviewClientEvents.isCameraLocked() && MC.gameMode != null) {
+            if (MC.player != null && (
+                    MC.gameMode.getPlayerMode() == GameType.ADVENTURE
+                            || MC.gameMode.getPlayerMode() == GameType.SURVIVAL
+            )) {
+                MC.player.sendSystemMessage(Component.literal(I18n.get("hud.orthoview.reignofnether.ortho_error")));
+            } else {
+                toggleEnable();
             }
         }
     }
