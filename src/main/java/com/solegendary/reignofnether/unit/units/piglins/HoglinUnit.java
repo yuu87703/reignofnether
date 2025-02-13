@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.building.buildings.piglins.Fortress;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -240,6 +241,6 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit {
     @Override
     public boolean fireImmune() {
         Building building = BuildingUtils.findBuilding(level.isClientSide(), getOnPos());
-        return super.fireImmune() || building instanceof FlameSanctuary || building instanceof Fortress;
+        return super.fireImmune() || building instanceof FlameSanctuary || building instanceof BasaltSprings;
     }
 }

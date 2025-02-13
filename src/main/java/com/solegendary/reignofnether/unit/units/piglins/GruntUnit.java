@@ -259,6 +259,6 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     @Override
     public boolean fireImmune() {
         Building building = BuildingUtils.findBuilding(level.isClientSide(), getOnPos());
-        return super.fireImmune() || building instanceof FlameSanctuary || building instanceof Fortress;
+        return super.fireImmune() || building instanceof FlameSanctuary || building instanceof BasaltSprings;
     }
 }

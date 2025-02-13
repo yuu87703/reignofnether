@@ -202,6 +202,7 @@ public class SurvivalServerEvents {
         ArrayList<WavePortal> portalsCopy = new ArrayList<>(portals);
         for (WavePortal portal : portalsCopy)
             portal.portal.destroy(serverLevel);
+        return 1;
     }
 
     public static void enable(WaveDifficulty diff) {

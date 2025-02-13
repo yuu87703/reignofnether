@@ -85,7 +85,7 @@ public class HelperButtons {
 
                     Entity entity = MC.level.getEntity(idleWorkerIds.get(idleWorkerIndex));
                     if (entity instanceof WorkerUnit) {
-                        OrthoviewClientEvents.centreCameraOnPos(entity.getX(), entity.getZ());
+                        OrthoviewClientEvents.centreCameraOnPos(entity.position());
                         UnitClientEvents.clearSelectedUnits();
                         UnitClientEvents.addSelectedUnit((LivingEntity) entity);
                     }
@@ -197,7 +197,7 @@ public class HelperButtons {
                     List<Building> beacons = BuildingClientEvents.getBuildings().stream().filter(b -> b instanceof Beacon).toList();
                     if (!beacons.isEmpty()) {
                         BlockPos bp = beacons.get(0).centrePos;
-                        OrthoviewClientEvents.centreCameraOnPos(bp.getX(), bp.getZ());
+                        OrthoviewClientEvents.centreCameraOnPos(bp);
                     }
                 },
                 null,
