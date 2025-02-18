@@ -7,24 +7,23 @@
 
 Features
 --------
-[❌] Neutral animals:
-    - Grizzly bear
-    - Llama
-    - Wolf
+[✔] Neutral animals: panda, grizzly, wolf, polar bear
 
-[❌] Leash range for neutral units
-    - Save position to map data
-    - Respawn on /rts-reset
-    - Show original marker
-    - Reset to original button
-    - Retreat to position if too far away
-    - Credit resources on kill (instead of dropping resources)
+[❌] Neutral animal den
 
-[❌] Add End portal to build endermen
-    - Make endermen not teleport on taking water damage (but still take damage)
+[🟡] Leash range for neutral units
+    [✔] Save position to map data
+    [✔] Show original marker
+    [✔] Reset to original button
+    [❌] Retreat to position if too far away
+    [❌] Credit resources on kill (instead of dropping resources)
+
+[✔] Add End portal to build endermen
 [❌] Add Healing fountain
 [❌] Ancient transport portals
-    - End themed?
+    - Always neutral, usable by anyone
+    - Should look slightly different to piglin ones
+    - Allow vanilla players to use them, on onEntityTravelToDimension
 
 
 
@@ -36,6 +35,20 @@ Bugfixes
 
 Quality of Life
 ---------------
+[❌] Starting blocks
+    - locations saved to world data when placed or broken
+    - limit of 16 total (any additional placed are cancelled)
+    - if any are detected, forces RTS players to select them to start
+        - Have a button that cycles through them
+        - show on minimap (green?)
+        - when announcing a player joining, announce x/y RTS players in the game
+        - change regular start buttons
+            - when clicked, shows a placement of the capitol at the location and reserves the spot
+            - spawn workers when game starts
+    - add button to start the game after a 5 second countdown
+        - add tooltip to show how many players have reserved a starting spot
+    - behave like /rts-lock when at max capacity
+        - different warning message though
 
 
 Balancing
