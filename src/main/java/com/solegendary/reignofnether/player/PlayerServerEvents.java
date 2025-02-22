@@ -286,6 +286,14 @@ public class PlayerServerEvents {
     }
 
     public static void startRTS(int playerId, Vec3 pos, Faction faction) {
+        startRTS(playerId, pos, faction, false);
+    }
+
+    // readied start is a simultaneous start from players using RTS start pos blocks, difference being:
+    // - places the capitol foundations automatically
+    // - spawns workers outside the foundations
+    // - no start messages are sent other than the one from the countdown
+    public static void startRTS(int playerId, Vec3 pos, Faction faction, boolean readiedStart) {
         synchronized (rtsPlayers) {
             ServerPlayer serverPlayer = null;
             for (ServerPlayer player : players)
@@ -351,7 +359,7 @@ public class PlayerServerEvents {
             }
             ResourcesServerEvents.resetResources(playerName);
 
-            if (!TutorialServerEvents.isEnabled()) {
+            if (!TutorialServerEvents.isEnabled() && !readiedStart) {
                 serverPlayer.sendSystemMessage(Component.literal(""));
                 if (faction == Faction.NONE)
                     sendMessageToAllPlayers("server.reignofnether.started_sandbox", true, playerName);
@@ -773,6 +781,10 @@ public class PlayerServerEvents {
     }
 
     public static void setRTSLock(boolean lock) {
+        setRTSLock(lock, false);
+    }
+
+    public static void setRTSLock(boolean lock, boolean noMsg) {
         rtsLocked = lock;
         serverLevel.players().forEach(p -> {
             if (rtsLocked) {
@@ -781,10 +793,12 @@ public class PlayerServerEvents {
                 PlayerClientboundPacket.unlockRTS(p.getName().getString());
             }
         });
-        if (rtsLocked) {
-            sendMessageToAllPlayers("server.reignofnether.match_locked");
-        } else {
-            sendMessageToAllPlayers("server.reignofnether.match_unlocked");
+        if (!noMsg) {
+            if (rtsLocked) {
+                sendMessageToAllPlayers("server.reignofnether.match_locked");
+            } else {
+                sendMessageToAllPlayers("server.reignofnether.match_unlocked");
+            }
         }
     }
 

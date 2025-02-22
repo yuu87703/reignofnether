@@ -2,16 +2,15 @@ package com.solegendary.reignofnether.startpos;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.blocks.RTSStartBlock;
-import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
-import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
-import net.minecraft.client.Minecraft;
+import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -19,11 +18,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
+// manages start block and readied start (startRTSEveryone) actions
+
 public class StartPosServerEvents {
 
     public static final int MAX_START_POSES = 16;
 
     public static ArrayList<StartPos> startPoses = new ArrayList<>();
+
+    private static int TICKS_TO_START_MAX = 100;
+    private static int ticksToStart = TICKS_TO_START_MAX;
+    private static boolean startingGame = false;
 
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent evt) {
@@ -62,13 +67,46 @@ public class StartPosServerEvents {
             StartPosClientboundPacket.addPos(startPos);
     }
 
+    public static void startGameCountdown() {
+        ticksToStart = TICKS_TO_START_MAX;
+        startingGame = true;
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent evt) {
+        if (evt.phase != TickEvent.Phase.END)
+            return;
+
+        if (startingGame) {
+            if (ticksToStart % 20 == 0) {
+                int secondsLeft = ticksToStart / 20;
+                if (secondsLeft > 0)
+                    PlayerServerEvents.sendMessageToAllPlayersNoNewlines("startpos.reignofnether.starting_game");
+                else {
+                    PlayerServerEvents.sendMessageToAllPlayersNoNewlines("startpos.reignofnether.started_game", true);
+                    for (ServerPlayer serverPlayer : PlayerServerEvents.players) {
+                        for (StartPos startPos : startPoses) {
+                            if (startPos.playerName.equals(serverPlayer.getName().getString()) && startPos.faction != Faction.NONE) {
+                                PlayerServerEvents.startRTS(serverPlayer.getId(), Vec3.atCenterOf(startPos.pos), startPos.faction, true);
+                                break;
+                            }
+                        }
+                    }
+                    PlayerServerEvents.setRTSLock(true, true);
+                    startingGame = false;
+                }
+            }
+            if (ticksToStart >= 0)
+                ticksToStart -= 1;
+        }
+    }
+
     public static void saveResearch(ServerLevel serverLevel) {
         StartPosSaveData startPosData = StartPosSaveData.getInstance(serverLevel);
         startPosData.startPoses.clear();
         startPosData.startPoses.addAll(startPoses);
         startPosData.save();
         serverLevel.getDataStorage().save();
-
         ReignOfNether.LOGGER.info("saved " + startPoses.size() + " start positions in serverevents");
     }
 

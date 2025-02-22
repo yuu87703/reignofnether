@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
@@ -87,8 +88,8 @@ public class StartPosClientEvents {
                 null,
                 () -> false,
                 () -> startPoses.isEmpty(),
-                () -> startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size() > 0,
-                null,
+                () -> startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size() > 1,
+                PlayerServerboundPacket::startRTSEveryone,
                 null,
                 List.of(
                         fcs(I18n.get("startpos.reignofnether.start_button.tooltip1"), true),
