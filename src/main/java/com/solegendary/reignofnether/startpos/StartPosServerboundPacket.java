@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.survival.WaveDifficulty;
+import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -15,28 +16,36 @@ public class StartPosServerboundPacket {
 
     StartPosAction action;
     BlockPos blockPos;
+    Faction faction;
+    String playerName;
 
-    public static void reservePos(BlockPos pos) {
-        PacketHandler.INSTANCE.sendToServer(new StartPosServerboundPacket(StartPosAction.RESERVE, pos));
+    public static void reservePos(BlockPos pos, Faction faction, String playerName) {
+        PacketHandler.INSTANCE.sendToServer(new StartPosServerboundPacket(StartPosAction.RESERVE, pos, faction, playerName));
     }
 
     public static void unreservePos(BlockPos pos) {
-        PacketHandler.INSTANCE.sendToServer(new StartPosServerboundPacket(StartPosAction.UNRESERVE, pos));
+        PacketHandler.INSTANCE.sendToServer(new StartPosServerboundPacket(StartPosAction.UNRESERVE, pos, Faction.NONE, ""));
     }
 
-    public StartPosServerboundPacket(StartPosAction action, BlockPos pos) {
+    public StartPosServerboundPacket(StartPosAction action, BlockPos pos, Faction faction, String playerName) {
         this.action = action;
         this.blockPos = pos;
+        this.faction = faction;
+        this.playerName = playerName;
     }
 
     public StartPosServerboundPacket(FriendlyByteBuf buffer) {
         this.action = buffer.readEnum(StartPosAction.class);
         this.blockPos = buffer.readBlockPos();
+        this.faction = buffer.readEnum(Faction.class);
+        this.playerName = buffer.readUtf();
     }
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(this.action);
         buffer.writeBlockPos(this.blockPos);
+        buffer.writeEnum(this.faction);
+        buffer.writeUtf(this.playerName);
     }
 
     // server-side packet-consuming functions
@@ -47,8 +56,9 @@ public class StartPosServerboundPacket {
                 case RESERVE -> {
                     for (StartPos startPos : StartPosServerEvents.startPoses) {
                         if (startPos.pos.equals(blockPos)) {
-                            startPos.reserved = true;
-                            StartPosClientboundPacket.reservePos(blockPos);
+                            startPos.faction = faction;
+                            startPos.playerName = playerName;
+                            StartPosClientboundPacket.reservePos(blockPos, faction, playerName);
                             break;
                         }
                     }
@@ -56,7 +66,7 @@ public class StartPosServerboundPacket {
                 case UNRESERVE -> {
                     for (StartPos startPos : StartPosServerEvents.startPoses) {
                         if (startPos.pos.equals(blockPos)) {
-                            startPos.reserved = false;
+                            startPos.faction = faction;
                             StartPosClientboundPacket.unreservePos(blockPos);
                             break;
                         }

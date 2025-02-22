@@ -6,12 +6,14 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
+import com.solegendary.reignofnether.startpos.StartPos;
 import com.solegendary.reignofnether.startpos.StartPosClientEvents;
 import com.solegendary.reignofnether.startpos.StartPosServerboundPacket;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.util.Faction;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +26,8 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 public class StartButtons {
 
     public static final int ICON_SIZE = 14;
+
+    private static final Minecraft MC = Minecraft.getInstance();
 
     public static Button sandboxStartButton = new Button(
             "Sandbox",
@@ -96,13 +100,14 @@ public class StartButtons {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/villager.png"),
             (Keybinding) null,
             () -> StartPosClientEvents.selectedFaction == Faction.VILLAGERS,
-            () -> !TutorialClientEvents.isAtOrPastStage(TutorialStage.PLACE_WORKERS_B) || !PlayerClientEvents.canStartRTS,
-            () -> true,
+            () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS,
+            () -> !StartPosClientEvents.isSelectedPosReservedByOther(),
             () -> {
-                if (StartPosClientEvents.getPos() != null) {
+                StartPos startPos = StartPosClientEvents.getPos();
+                if (startPos != null && MC.player != null) {
                     if (StartPosClientEvents.selectedFaction != Faction.VILLAGERS) {
                         StartPosClientEvents.selectedFaction = Faction.VILLAGERS;
-                        StartPosServerboundPacket.reservePos(StartPosClientEvents.getPos().pos);
+                        StartPosServerboundPacket.reservePos(startPos.pos, Faction.VILLAGERS, MC.player.getName().getString());
                     } else {
                         StartPosClientEvents.selectedFaction = Faction.NONE;
                         StartPosServerboundPacket.unreservePos(StartPosClientEvents.getPos().pos);
@@ -123,12 +128,13 @@ public class StartButtons {
             (Keybinding) null,
             () -> StartPosClientEvents.selectedFaction == Faction.MONSTERS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS,
-            () -> !TutorialClientEvents.isEnabled(),
+            () -> !StartPosClientEvents.isSelectedPosReservedByOther(),
             () -> {
-                if (StartPosClientEvents.getPos() != null) {
+                StartPos startPos = StartPosClientEvents.getPos();
+                if (startPos != null && MC.player != null) {
                     if (StartPosClientEvents.selectedFaction != Faction.MONSTERS) {
                         StartPosClientEvents.selectedFaction = Faction.MONSTERS;
-                        StartPosServerboundPacket.reservePos(StartPosClientEvents.getPos().pos);
+                        StartPosServerboundPacket.reservePos(startPos.pos, Faction.MONSTERS, MC.player.getName().getString());
                     } else {
                         StartPosClientEvents.selectedFaction = Faction.NONE;
                         StartPosServerboundPacket.unreservePos(StartPosClientEvents.getPos().pos);
@@ -149,12 +155,13 @@ public class StartButtons {
             (Keybinding) null,
             () -> StartPosClientEvents.selectedFaction == Faction.PIGLINS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS,
-            () -> !TutorialClientEvents.isEnabled(),
+            () -> !StartPosClientEvents.isSelectedPosReservedByOther(),
             () -> {
-                if (StartPosClientEvents.getPos() != null) {
+                StartPos startPos = StartPosClientEvents.getPos();
+                if (startPos != null && MC.player != null) {
                     if (StartPosClientEvents.selectedFaction != Faction.PIGLINS) {
                         StartPosClientEvents.selectedFaction = Faction.PIGLINS;
-                        StartPosServerboundPacket.reservePos(StartPosClientEvents.getPos().pos);
+                        StartPosServerboundPacket.reservePos(startPos.pos, Faction.PIGLINS, MC.player.getName().getString());
                     } else {
                         StartPosClientEvents.selectedFaction = Faction.NONE;
                         StartPosServerboundPacket.unreservePos(StartPosClientEvents.getPos().pos);

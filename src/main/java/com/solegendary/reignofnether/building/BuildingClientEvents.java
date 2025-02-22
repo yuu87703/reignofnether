@@ -228,7 +228,8 @@ public class BuildingClientEvents {
     // draws the building with a green/red overlay (based on placement validity) at the target position
     // based on whether the location is valid or not
     // location should be 1 space above the selected spot
-    public static void drawBuildingToPlace(PoseStack matrix, BlockPos originPos) {
+    // forceColour == 0 (none), 1 (green), 2 (red)
+    public static void drawBuildingToPlace(PoseStack matrix, BlockPos originPos, int forceColour) {
         if (buildingToPlace == null)
             return;
 
@@ -264,7 +265,7 @@ public class BuildingClientEvents {
                 // don't render over other stuff
                 15728880,
                 // red if invalid, else green
-                valid ? OverlayTexture.pack(0, 0) : OverlayTexture.pack(0, 3),
+                valid || forceColour == 1 ? OverlayTexture.pack(0, 0) : OverlayTexture.pack(0, 3),
                 net.minecraftforge.client.model.data.ModelData.EMPTY,
                 null
             );
@@ -297,17 +298,24 @@ public class BuildingClientEvents {
 
         float r = valid ? 0 : 1.0f;
         float g = valid ? 1.0f : 0;
-
         // highlight yellow if we are placing a portal on overworld terrain
         if (valid) {
             String buildingName = buildingToPlace.getName().toLowerCase();
             if (buildingName.contains("portal") &&
-                !buildingName.contains("central_portal") &&
-                !isOnNetherBlocks(blocksToDraw, originPos)) {
+                    !buildingName.contains("central_portal") &&
+                    !isOnNetherBlocks(blocksToDraw, originPos)) {
                 r = 0.5f;
                 g = 0.5f;
             }
         }
+        if (forceColour == 1) {
+            r = 0;
+            g = 1;
+        } else if (forceColour == 2) {
+            r = 1;
+            g = 0;
+        }
+
         ResourceLocation rl = new ResourceLocation("forge:textures/white.png");
         AABB aabb = new AABB(minX, minY, minZ, maxX, minY, maxZ);
         MyRenderer.drawLineBox(matrix, aabb, r, g, 0, 0.5f);
@@ -400,7 +408,7 @@ public class BuildingClientEvents {
     // messed up
     private static boolean isOverlappingAnyOtherBuilding() {
 
-        BlockPos origin = getOriginPos();
+        BlockPos origin = getBuildingOriginPos(CursorClientEvents.getPreselectedBlockPos());
         Vec3i originOffset = new Vec3i(origin.getX(), origin.getY(), origin.getZ());
         BlockPos minPos = BuildingUtils.getMinCorner(blocksToDraw).offset(originOffset);//.offset(-1, -1, -1);
         BlockPos maxPos = BuildingUtils.getMaxCorner(blocksToDraw).offset(originOffset);//.offset(1, 1, 1);
@@ -564,7 +572,7 @@ public class BuildingClientEvents {
      */
 
     // gets the cursor position rotated according to the preselected building
-    private static BlockPos getOriginPos() {
+    public static BlockPos getBuildingOriginPos(BlockPos bp) {
         int xAdj = 0;
         int zAdj = 0;
         int xRadius = buildingDimensions.getX() / 2;
@@ -588,7 +596,6 @@ public class BuildingClientEvents {
                 zAdj = zRadius;
             }
         }
-        BlockPos bp = CursorClientEvents.getPreselectedBlockPos();
         if (isBuildingToPlaceABridge()) {
             bp = bp.offset(0, -1, 0);
         }
@@ -605,7 +612,7 @@ public class BuildingClientEvents {
             return;
         }
 
-        drawBuildingToPlace(evt.getPoseStack(), getOriginPos());
+        drawBuildingToPlace(evt.getPoseStack(), getBuildingOriginPos(CursorClientEvents.getPreselectedBlockPos()), 0);
 
         Building preselectedBuilding = getPreselectedBuilding();
 
@@ -744,7 +751,7 @@ public class BuildingClientEvents {
             return;
         }
 
-        BlockPos pos = getOriginPos();
+        BlockPos pos = getBuildingOriginPos(CursorClientEvents.getPreselectedBlockPos());
 
         if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1) {
             Building preSelBuilding = getPreselectedBuilding();

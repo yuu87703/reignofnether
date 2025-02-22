@@ -5,15 +5,14 @@ import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.buildings.monsters.Mausoleum;
 import com.solegendary.reignofnether.building.buildings.piglins.CentralPortal;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
-import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchAdvancedPortals;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -26,10 +25,26 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class StartPosClientEvents {
 
+    // client player is considered to have reserved a spot if selectedFaction != NONE && startPosIndex >= 0
     public static ArrayList<StartPos> startPoses = new ArrayList<>();
     public static int startPosIndex = -1;
-    public static boolean reserved = false;
     public static Faction selectedFaction = Faction.NONE;
+
+    public static boolean isSelectedPosReservedByOther() {
+        return getPos() != null &&
+                !getPos().playerName.isEmpty() &&
+                MC.player != null &&
+                !getPos().playerName.equals(MC.player.getName().getString()) &&
+                getPos().faction != Faction.NONE;
+    }
+
+    public static boolean isSelectedPosReservedBySelf() {
+        return getPos() != null &&
+                !getPos().playerName.isEmpty() &&
+                MC.player != null &&
+                getPos().playerName.equals(MC.player.getName().getString()) &&
+                getPos().faction != Faction.NONE;
+    }
 
     public static Button getPositionsButton() {
         return new Button("Starting Positions",
@@ -42,13 +57,26 @@ public class StartPosClientEvents {
                 () -> true,
                 () -> cycleStartBlock(true),
                 () -> cycleStartBlock(false),
-                List.of(
-                        fcs(I18n.get("startpos.reignofnether.positions_button.tooltip1"), true),
-                        fcs(I18n.get("startpos.reignofnether.positions_button.tooltip2")),
-                        fcs(I18n.get("startpos.reignofnether.positions_button.tooltip3",
-                                startPoses.stream().filter(sp -> sp.reserved).toList().size(), startPoses.size()))
-                )
+                getPosButtonTooltip()
         );
+    }
+
+    private static List<FormattedCharSequence> getPosButtonTooltip() {
+        StartPos startPos = getPos();
+        ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
+
+        fcsList.add(fcs(I18n.get("startpos.reignofnether.positions_button.tooltip1"), true));
+        fcsList.add(fcs(I18n.get("startpos.reignofnether.positions_button.tooltip2")));
+        fcsList.add(fcs(I18n.get("startpos.reignofnether.positions_button.tooltip3",
+            startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size(), startPoses.size())));
+
+        if (isSelectedPosReservedByOther() && startPos != null) {
+            fcsList.add(fcs(I18n.get("startpos.reignofnether.positions_button.tooltip4",
+                    startPos.playerName)));
+        } else if (isSelectedPosReservedBySelf() && startPos != null) {
+            fcsList.add(fcs(I18n.get("startpos.reignofnether.positions_button.tooltip5")));
+        }
+        return fcsList;
     }
 
     public static Button getStartButton() {
@@ -59,13 +87,13 @@ public class StartPosClientEvents {
                 null,
                 () -> false,
                 () -> startPoses.isEmpty(),
-                () -> startPoses.stream().filter(sp -> sp.reserved).toList().size() > 0,
+                () -> startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size() > 0,
                 null,
                 null,
                 List.of(
                         fcs(I18n.get("startpos.reignofnether.start_button.tooltip1"), true),
                         fcs(I18n.get("startpos.reignofnether.start_button.tooltip2",
-                                startPoses.stream().filter(sp -> sp.reserved).toList().size()))
+                                startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size()))
                 )
         );
     }
@@ -86,18 +114,28 @@ public class StartPosClientEvents {
     }
 
     private static void cycleStartBlock(boolean forward) {
-        if (forward) {
-            startPosIndex += 1;
-            if (startPosIndex >= startPoses.size())
-                startPosIndex = 0;
-        } else {
-            startPosIndex -= 1;
-            if (startPosIndex < 0)
-                startPosIndex = startPoses.size() - 1;
-        }
-        if (!startPoses.isEmpty()) {
-            StartPos startPos = startPoses.get(startPosIndex);
-            OrthoviewClientEvents.centreCameraOnPos(startPos.pos);
+        try {
+            StartPos originalStartPos = getPos();
+            if (selectedFaction != Faction.NONE && originalStartPos != null) {
+                selectedFaction = Faction.NONE;
+                StartPosServerboundPacket.unreservePos(originalStartPos.pos);
+            }
+            if (forward) {
+                startPosIndex += 1;
+                if (startPosIndex >= startPoses.size())
+                    startPosIndex = 0;
+            } else {
+                startPosIndex -= 1;
+                if (startPosIndex < 0)
+                    startPosIndex = startPoses.size() - 1;
+            }
+            if (!startPoses.isEmpty()) {
+                StartPos startPos = getPos();
+                if (startPos != null)
+                    OrthoviewClientEvents.centreCameraOnPos(startPos.pos);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBoundsException in cycleStartBlock");
         }
     }
 
@@ -105,31 +143,46 @@ public class StartPosClientEvents {
     public static void onRenderLevel(RenderLevelStageEvent evt) {
         if (evt.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS)
             return;
-        if (!OrthoviewClientEvents.isEnabled() || getPos() == null || selectedFaction == Faction.NONE)
+        if (!OrthoviewClientEvents.isEnabled() || MC.player == null)
             return;
 
-        switch (selectedFaction) {
-            case VILLAGERS -> BuildingClientEvents.setBuildingToPlace(TownCentre.class);
-            case MONSTERS -> BuildingClientEvents.setBuildingToPlace(Mausoleum.class);
-            case PIGLINS -> BuildingClientEvents.setBuildingToPlace(CentralPortal.class);
+        for (StartPos startPos : startPoses) {
+            if (startPos.faction != Faction.NONE) {
+                switch (startPos.faction) {
+                    case VILLAGERS -> BuildingClientEvents.setBuildingToPlace(TownCentre.class);
+                    case MONSTERS -> BuildingClientEvents.setBuildingToPlace(Mausoleum.class);
+                    case PIGLINS -> BuildingClientEvents.setBuildingToPlace(CentralPortal.class);
+                }
+                int forceColour = 2;
+                if (startPos.playerName.equals(MC.player.getName().getString()))
+                    forceColour = 1;
+                BuildingClientEvents.drawBuildingToPlace(evt.getPoseStack(), BuildingClientEvents.getBuildingOriginPos(startPos.pos), forceColour);
+                BuildingClientEvents.setBuildingToPlace(null);
+            }
         }
-        BuildingClientEvents.drawBuildingToPlace(evt.getPoseStack(), getPos().pos);
-        BuildingClientEvents.setBuildingToPlace(null);
     }
 
     private static final Minecraft MC = Minecraft.getInstance();
 
+    public static void reset() {
+        startPoses.clear();
+        startPosIndex = -1;
+        selectedFaction = Faction.NONE;
+    }
+
     @SubscribeEvent
     public static void onClientLogout(ClientPlayerNetworkEvent.LoggingOut evt) {
         // LOG OUT FROM SERVER WORLD ONLY
-        if (MC.player != null && evt.getPlayer() != null && evt.getPlayer().getId() == MC.player.getId())
-            startPoses.clear();
+        if (MC.player != null && evt.getPlayer() != null && evt.getPlayer().getId() == MC.player.getId()) {
+            reset();
+        }
     }
 
     @SubscribeEvent
     public static void onPlayerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent evt) {
         // LOG OUT FROM SINGLEPLAYER WORLD ONLY
-        if (MC.player != null && evt.getEntity().getId() == MC.player.getId())
-            startPoses.clear();
+        if (MC.player != null && evt.getEntity().getId() == MC.player.getId()) {
+            reset();
+        }
     }
 }

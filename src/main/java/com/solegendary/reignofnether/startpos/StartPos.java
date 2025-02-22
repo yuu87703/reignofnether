@@ -1,12 +1,14 @@
 package com.solegendary.reignofnether.startpos;
 
+import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.MaterialColor;
 
 public class StartPos {
     public BlockPos pos;
-    public boolean reserved = false;
+    public Faction faction = Faction.NONE; // if != NONE, is reserved by a player
+    public String playerName = ""; // name of player who has reserved this spot
     public int colorId;
 
     public StartPos(BlockPos pos, int colorId) {
@@ -14,9 +16,10 @@ public class StartPos {
         this.colorId = colorId;
     }
 
-    public StartPos(BlockPos pos, boolean reserved, int colorId) {
+    public StartPos(BlockPos pos, Faction faction, String playerName, int colorId) {
         this.pos = pos;
-        this.reserved = reserved;
+        this.faction = faction;
+        this.playerName = playerName;
         this.colorId = colorId;
     }
 

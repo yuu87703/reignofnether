@@ -1059,6 +1059,8 @@
     "startpos.reignofnether.positions_button.tooltip1": "Starting Locations",
     "startpos.reignofnether.positions_button.tooltip2": "Click to go to next",
     "startpos.reignofnether.positions_button.tooltip3": "%d/%d have been taken",
+    "startpos.reignofnether.positions_button.tooltip4": "Reserved by %s",
+    "startpos.reignofnether.positions_button.tooltip5": "Reserved by you",
     "startpos.reignofnether.start_button.tooltip1": "Start the game",
     "startpos.reignofnether.start_button.tooltip2": "(%d players)"
 }

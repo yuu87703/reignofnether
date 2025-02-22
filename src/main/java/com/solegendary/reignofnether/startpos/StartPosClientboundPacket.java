@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.startpos;
 
 import com.solegendary.reignofnether.registrars.PacketHandler;
+import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,48 +15,52 @@ import java.util.function.Supplier;
 public class StartPosClientboundPacket {
 
     StartPosAction action;
-    boolean reserved;
+    Faction faction;
     BlockPos blockPos;
+    String playerName;
     int colorId;
 
     public static void addPos(StartPos startPos) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new StartPosClientboundPacket(StartPosAction.ADD, startPos.pos, startPos.reserved, startPos.colorId));
+                new StartPosClientboundPacket(StartPosAction.ADD, startPos.pos, startPos.faction, startPos.playerName, startPos.colorId));
     }
 
     public static void removePos(BlockPos pos) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new StartPosClientboundPacket(StartPosAction.REMOVE, pos, false,0));
+                new StartPosClientboundPacket(StartPosAction.REMOVE, pos, Faction.NONE, "", 0));
     }
 
-    public static void reservePos(BlockPos pos) {
+    public static void reservePos(BlockPos pos, Faction faction, String playerName) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new StartPosClientboundPacket(StartPosAction.RESERVE, pos,false,0));
+                new StartPosClientboundPacket(StartPosAction.RESERVE, pos, faction, playerName, 0));
     }
 
     public static void unreservePos(BlockPos pos) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new StartPosClientboundPacket(StartPosAction.UNRESERVE, pos,false,0));
+                new StartPosClientboundPacket(StartPosAction.UNRESERVE, pos, Faction.NONE, "", 0));
     }
 
-    public StartPosClientboundPacket(StartPosAction action, BlockPos blockPos, boolean reserved, int colorId) {
+    public StartPosClientboundPacket(StartPosAction action, BlockPos blockPos, Faction faction, String playerName, int colorId) {
         this.action = action;
         this.blockPos = blockPos;
-        this.reserved = reserved;
+        this.faction = faction;
+        this.playerName = playerName;
         this.colorId = colorId;
     }
 
     public StartPosClientboundPacket(FriendlyByteBuf buffer) {
         this.action = buffer.readEnum(StartPosAction.class);
         this.blockPos = buffer.readBlockPos();
-        this.reserved = buffer.readBoolean();
+        this.faction = buffer.readEnum(Faction.class);
+        this.playerName = buffer.readUtf();
         this.colorId = buffer.readInt();
     }
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(this.action);
         buffer.writeBlockPos(this.blockPos);
-        buffer.writeBoolean(this.reserved);
+        buffer.writeEnum(this.faction);
+        buffer.writeUtf(this.playerName);
         buffer.writeInt(this.colorId);
     }
 
@@ -69,7 +74,7 @@ public class StartPosClientboundPacket {
                         switch (action) {
                             case ADD -> {
                                 StartPosClientEvents.startPoses.removeIf(sp -> sp.pos.equals(blockPos));
-                                StartPosClientEvents.startPoses.add(new StartPos(blockPos, reserved, colorId));
+                                StartPosClientEvents.startPoses.add(new StartPos(blockPos, faction, playerName, colorId));
                             }
                             case REMOVE -> {
                                 StartPosClientEvents.startPoses.removeIf(sp -> sp.pos.equals(blockPos));
@@ -77,7 +82,8 @@ public class StartPosClientboundPacket {
                             case RESERVE -> {
                                 for (StartPos startPos : StartPosClientEvents.startPoses) {
                                     if (startPos.pos.equals(blockPos)) {
-                                        startPos.reserved = true;
+                                        startPos.faction = faction;
+                                        startPos.playerName = playerName;
                                         break;
                                     }
                                 }
@@ -85,7 +91,8 @@ public class StartPosClientboundPacket {
                             case UNRESERVE -> {
                                 for (StartPos startPos : StartPosClientEvents.startPoses) {
                                     if (startPos.pos.equals(blockPos)) {
-                                        startPos.reserved = false;
+                                        startPos.faction = Faction.NONE;
+                                        startPos.playerName = "";
                                         break;
                                     }
                                 }
