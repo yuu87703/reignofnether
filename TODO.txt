@@ -45,8 +45,8 @@ Features
 
 Bugfixes
 --------
-[✔] Fixed not being able to start sandbox mode when a world border is set
-
+[✔] Fixed being unable to start sandbox mode when a world border is set
+[✔] Fixed being unable to upgrade multiple libraries, labs or castles at the same time
 
 
 Quality of Life
