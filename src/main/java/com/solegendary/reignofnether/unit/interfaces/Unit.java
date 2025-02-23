@@ -31,6 +31,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ import java.util.List;
 // (including getters/setters themselves)
 
 public interface Unit {
+
+    static int ANCHOR_RETREAT_RANGE = 30;
 
     static int PIGLIN_HEALING_TICKS = 8 * ResourceCost.TICKS_PER_SECOND;
     static int MONSTER_HEALING_TICKS = 12 * ResourceCost.TICKS_PER_SECOND;
@@ -127,7 +130,7 @@ public interface Unit {
         } else {
             int totalRes = Resources.getTotalResourcesFromItems(unit.getItems()).getTotalValue();
             if (unitMob.canPickUpLoot()) {
-                for (ItemEntity itementity : unitMob.level.getEntitiesOfClass(ItemEntity.class, unitMob.getBoundingBox().inflate(1,0,1))) {
+                for (ItemEntity itementity : unitMob.level.getEntitiesOfClass(ItemEntity.class, unitMob.getBoundingBox().inflate(1, 0, 1))) {
                     if (!itementity.isRemoved() && !itementity.getItem().isEmpty() && !itementity.hasPickUpDelay() && unitMob.isAlive()) {
 
                         if (!Unit.atMaxResources(unit)) {
@@ -197,12 +200,29 @@ public interface Unit {
         }
 
         if (le.isInWater() && // stuck in bridge
-            BuildingUtils.findBuilding(le.level.isClientSide(), le.getOnPos().above()) instanceof AbstractBridge) {
-            le.setDeltaMovement(0,0.2,0);
+                BuildingUtils.findBuilding(le.level.isClientSide(), le.getOnPos().above()) instanceof AbstractBridge) {
+            le.setDeltaMovement(0, 0.2, 0);
         }
 
         if (!le.getLevel().getWorldBorder().isWithinBounds(le.getOnPos()))
             le.kill();
+
+        checkAndRetreatToAnchor(unit);
+    }
+
+    public static boolean hasAnchor(Unit unit) {
+        return unit.getAnchor() != null && !unit.getAnchor().equals(new BlockPos(0,0,0));
+    }
+
+    private static void checkAndRetreatToAnchor(Unit unit) {
+        LivingEntity le = (LivingEntity) unit;
+        if (!hasAnchor(unit) || le.getLevel().isClientSide())
+            return;
+
+        if (unit.isIdle() || le.distanceToSqr(Vec3.atCenterOf(unit.getAnchor())) > ANCHOR_RETREAT_RANGE * ANCHOR_RETREAT_RANGE) {
+            fullResetBehaviours(unit);
+            unit.getMoveGoal().setMoveTarget(unit.getAnchor());
+        }
     }
 
     private static int getThresholdResources(Unit unit) {

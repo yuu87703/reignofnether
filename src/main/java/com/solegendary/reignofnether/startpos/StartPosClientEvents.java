@@ -15,13 +15,11 @@ import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.util.Faction;
-import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,7 +36,6 @@ public class StartPosClientEvents {
     public static int startPosIndex = -1;
     public static Faction selectedFaction = Faction.NONE;
     public static boolean isStartingOrStarted = false;
-    public static boolean isStartingOrStarted() { return isStartingOrStarted; }
 
     public static boolean isEnabled() {
         return ClientGameModeHelper.gameMode == GameMode.CLASSIC && !startPoses.isEmpty();
@@ -102,7 +99,7 @@ public class StartPosClientEvents {
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
                 null,
                 () -> false,
-                () -> !isEnabled() || isStartingOrStarted(),
+                () -> !isEnabled() || isStartingOrStarted,
                 () -> !PlayerClientEvents.rtsLocked && startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size() > 1,
                 PlayerServerboundPacket::startRTSEveryone,
                 null,
@@ -116,7 +113,7 @@ public class StartPosClientEvents {
 
         fcsList.add(fcs(I18n.get("startpos.reignofnether.start_button.tooltip1"), true));
         fcsList.add(fcs(I18n.get("startpos.reignofnether.start_button.tooltip2",
-                startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size())));
+                startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size(), startPoses.size())));
         if (!hasReservedPos())
             fcsList.add(fcs(I18n.get("startpos.reignofnether.start_button.tooltip3")));
 

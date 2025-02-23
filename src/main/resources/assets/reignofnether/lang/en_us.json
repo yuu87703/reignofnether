@@ -1062,7 +1062,7 @@
     "startpos.reignofnether.positions_button.tooltip4": "Taken by %s",
     "startpos.reignofnether.positions_button.tooltip5": "Shift-click to see your location",
     "startpos.reignofnether.start_button.tooltip1": "Start the game",
-    "startpos.reignofnether.start_button.tooltip2": "(%d players)",
+    "startpos.reignofnether.start_button.tooltip2": "(%d/%d players)",
     "startpos.reignofnether.start_button.tooltip3": "You have not reserved a spot!",
     "startpos.reignofnether.cancel_start_button": "Cancel game start",
     "startpos.reignofnether.cancelled_start_game": "Game start cancelled",

@@ -25,7 +25,6 @@ Features
     - Should look slightly different to piglin ones
     - Allow vanilla players to use them, on onEntityTravelToDimension
 
-
 [❌] Starting blocks
     - locations saved to world data when placed or broken
     - limit of 16 total (any additional placed are cancelled)

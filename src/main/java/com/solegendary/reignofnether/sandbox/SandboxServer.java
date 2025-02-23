@@ -40,10 +40,6 @@ public class SandboxServer {
         return false;
     }
 
-    private static boolean hasAnchor(Unit unit) {
-        return unit.getAnchor() != null && !unit.getAnchor().equals(new BlockPos(0,0,0));
-    }
-
     public static void spawnUnit(String playerName, String unitName, BlockPos blockPos) {
         if (serverLevel == null)
             return;
@@ -69,7 +65,7 @@ public class SandboxServer {
 
     public static void resetToAnchor(int entityId) {
         for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
-            if (entity.getId() == entityId && entity instanceof Unit unit && hasAnchor(unit)) {
+            if (entity.getId() == entityId && entity instanceof Unit unit && Unit.hasAnchor(unit)) {
                 entity.moveTo(Vec3.atCenterOf(unit.getAnchor()).add(0, 0.5d, 0));
                 entity.setHealth(entity.getMaxHealth());
                 entity.removeAllEffects();
