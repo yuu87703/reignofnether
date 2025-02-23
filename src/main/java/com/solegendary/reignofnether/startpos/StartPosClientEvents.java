@@ -61,7 +61,7 @@ public class StartPosClientEvents {
                 Keybindings.stop,
                 () -> false,
                 () -> !isEnabled(),
-                () -> true,
+                () -> !isStarting,
                 () -> {
                     if (Keybindings.shiftMod.isDown()) {
                         if (hasReservedPos())

@@ -18,6 +18,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 // manages start block and readied start (startRTSEveryone) actions
@@ -31,6 +32,13 @@ public class StartPosServerEvents {
     private static int TICKS_TO_START_MAX = 100;
     private static int ticksToStart = TICKS_TO_START_MAX;
     private static boolean startingGame = false;
+
+    public static void reset(ServerLevel serverLevel) {
+        for (StartPos startPos : startPoses) {
+            startPos.reset();
+        }
+        savePositions(serverLevel);
+    }
 
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent evt) {
@@ -46,7 +54,7 @@ public class StartPosServerEvents {
                         player.sendSystemMessage(Component.translatable("startpos.reignofnether.max_positions"));
             }
             if (evt.getLevel() instanceof ServerLevel serverLevel)
-                saveResearch(serverLevel);
+                savePositions(serverLevel);
         }
     }
 
@@ -59,7 +67,7 @@ public class StartPosServerEvents {
             }
             return false;
         }) && (evt.getLevel() instanceof ServerLevel serverLevel)) {
-            saveResearch(serverLevel);
+            savePositions(serverLevel);
         }
     }
 
@@ -110,6 +118,8 @@ public class StartPosServerEvents {
                         }
                     }
                     PlayerServerEvents.setRTSLock(true, true);
+                    StartPosServerEvents.reset(evt.getServer().getLevel(Level.OVERWORLD));
+                    StartPosClientboundPacket.reset();
                     startingGame = false;
                 }
             }
@@ -118,7 +128,7 @@ public class StartPosServerEvents {
         }
     }
 
-    public static void saveResearch(ServerLevel serverLevel) {
+    public static void savePositions(ServerLevel serverLevel) {
         StartPosSaveData startPosData = StartPosSaveData.getInstance(serverLevel);
         startPosData.startPoses.clear();
         startPosData.startPoses.addAll(startPoses);
@@ -128,7 +138,7 @@ public class StartPosServerEvents {
     }
 
     @SubscribeEvent
-    public static void loadResearch(ServerStartedEvent evt) {
+    public static void loadPositions(ServerStartedEvent evt) {
         ServerLevel level = evt.getServer().getLevel(Level.OVERWORLD);
         if (level != null) {
             StartPosSaveData startPosData = StartPosSaveData.getInstance(level);

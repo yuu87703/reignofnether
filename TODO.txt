@@ -15,7 +15,7 @@ Features
     [✔] Save position to map data
     [✔] Show original marker
     [✔] Reset to original button
-    [❌] Retreat to position if too far away
+    [✔] Retreat to position if too far away
     [✔] Credit resources on kill (instead of dropping resources)
 
 [✔] Add End portal to build endermen

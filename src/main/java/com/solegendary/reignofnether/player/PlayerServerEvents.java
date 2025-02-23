@@ -405,7 +405,6 @@ public class PlayerServerEvents {
             }
             PlayerClientboundPacket.syncRtsGameTime(rtsGameTicks);
             saveRTSPlayers();
-            StartPosClientboundPacket.reset();
         }
     }
 
