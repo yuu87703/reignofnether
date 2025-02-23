@@ -45,12 +45,12 @@ public class StartPosClientboundPacket {
                 new StartPosClientboundPacket(StartPosAction.RESET, new BlockPos(0,0,0), Faction.NONE, "", 0));
     }
 
-    public static void startGame() {
+    public static void startGameCountdown() {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
                 new StartPosClientboundPacket(StartPosAction.SET_GAME_STARTING, new BlockPos(0,0,0), Faction.NONE, "", 0));
     }
 
-    public static void cancelStartGame() {
+    public static void cancelStartGameCountdown() {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
                 new StartPosClientboundPacket(StartPosAction.UNSET_GAME_STARTING, new BlockPos(0,0,0), Faction.NONE, "", 0));
     }
@@ -112,8 +112,8 @@ public class StartPosClientboundPacket {
                                 }
                             }
                             case RESET -> StartPosClientEvents.reset();
-                            case SET_GAME_STARTING -> StartPosClientEvents.isStartingOrStarted = true;
-                            case UNSET_GAME_STARTING -> StartPosClientEvents.isStartingOrStarted = false;
+                            case SET_GAME_STARTING -> StartPosClientEvents.isStarting = true;
+                            case UNSET_GAME_STARTING -> StartPosClientEvents.isStarting = false;
                         }
                         success.set(true);
                     });

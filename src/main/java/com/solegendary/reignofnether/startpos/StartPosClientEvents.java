@@ -35,7 +35,7 @@ public class StartPosClientEvents {
     public static ArrayList<StartPos> startPoses = new ArrayList<>();
     public static int startPosIndex = -1;
     public static Faction selectedFaction = Faction.NONE;
-    public static boolean isStartingOrStarted = false;
+    public static boolean isStarting = false; // game is counting down to start
 
     public static boolean isEnabled() {
         return ClientGameModeHelper.gameMode == GameMode.CLASSIC && !startPoses.isEmpty();
@@ -99,7 +99,7 @@ public class StartPosClientEvents {
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
                 null,
                 () -> false,
-                () -> !isEnabled() || isStartingOrStarted,
+                () -> !isEnabled() || isStarting,
                 () -> !PlayerClientEvents.rtsLocked && startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size() > 1,
                 PlayerServerboundPacket::startRTSEveryone,
                 null,
@@ -127,7 +127,7 @@ public class StartPosClientEvents {
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
                 null,
                 () -> false,
-                () -> !isEnabled() || !isStartingOrStarted,
+                () -> !isEnabled() || !isStarting,
                 () -> startPoses.stream().filter(sp -> sp.faction != Faction.NONE).toList().size() > 1,
                 PlayerServerboundPacket::cancelStartRTSEveryone,
                 null,
@@ -206,7 +206,7 @@ public class StartPosClientEvents {
     public static void reset() {
         startPosIndex = -1;
         selectedFaction = Faction.NONE;
-        isStartingOrStarted = false;
+        isStarting = false;
         for (StartPos startPos : startPoses)
             startPos.reset();
     }
@@ -236,7 +236,7 @@ public class StartPosClientEvents {
             (Keybinding) null,
             () -> selectedFaction == Faction.VILLAGERS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS || !isEnabled(),
-            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStartingOrStarted,
+            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting,
             () -> {
                 StartPos startPos = getPos();
                 if (startPos != null && MC.player != null) {
@@ -263,7 +263,7 @@ public class StartPosClientEvents {
             (Keybinding) null,
             () -> selectedFaction == Faction.MONSTERS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS || !isEnabled(),
-            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStartingOrStarted,
+            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting,
             () -> {
                 StartPos startPos = getPos();
                 if (startPos != null && MC.player != null) {
@@ -290,7 +290,7 @@ public class StartPosClientEvents {
             (Keybinding) null,
             () -> selectedFaction == Faction.PIGLINS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS || !isEnabled(),
-            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStartingOrStarted,
+            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting,
             () -> {
                 StartPos startPos = getPos();
                 if (startPos != null && MC.player != null) {

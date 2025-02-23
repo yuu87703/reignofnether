@@ -207,7 +207,8 @@ public interface Unit {
         if (!le.getLevel().getWorldBorder().isWithinBounds(le.getOnPos()))
             le.kill();
 
-        checkAndRetreatToAnchor(unit);
+        if (unitMob.tickCount % 20 == 0)
+            checkAndRetreatToAnchor(unit);
     }
 
     public static boolean hasAnchor(Unit unit) {
@@ -219,9 +220,11 @@ public interface Unit {
         if (!hasAnchor(unit) || le.getLevel().isClientSide())
             return;
 
-        if (unit.isIdle() || le.distanceToSqr(Vec3.atCenterOf(unit.getAnchor())) > ANCHOR_RETREAT_RANGE * ANCHOR_RETREAT_RANGE) {
+        if ((unit.isIdle() || le.distanceToSqr(Vec3.atCenterOf(unit.getAnchor())) > ANCHOR_RETREAT_RANGE * ANCHOR_RETREAT_RANGE) &&
+            !le.getOnPos().equals(unit.getAnchor())) {
             fullResetBehaviours(unit);
             unit.getMoveGoal().setMoveTarget(unit.getAnchor());
+            System.out.println("retreating!");
         }
     }
 

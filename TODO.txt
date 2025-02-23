@@ -43,6 +43,7 @@ Features
     [❌] syncing not working when joining a game that's started
 
 
+
 Bugfixes
 --------
 [✔] Fixed not being able to start sandbox mode when a world border is set

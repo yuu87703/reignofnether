@@ -4,6 +4,7 @@ package com.solegendary.reignofnether.util;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3d;
+import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.blocks.RTSStartBlock;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
@@ -342,6 +343,17 @@ public class MiscUtil {
             GuiComponent.drawString(stack, font, str, 0,y, 0xFFFFFF);
             y += 10;
         }
+    }
+
+    public static Relationship getClientsideRelationship(String playerName1, String playerName2) {
+        if (playerName1.isEmpty() || playerName2.isEmpty())
+            return Relationship.NEUTRAL;
+        else if (playerName1.equals(playerName2))
+            return Relationship.OWNED;
+        else if (AlliancesClient.isAllied(playerName1, playerName2))
+            return Relationship.FRIENDLY;
+        else
+            return Relationship.HOSTILE;
     }
 
     // lightens or darkens a hex RGB value

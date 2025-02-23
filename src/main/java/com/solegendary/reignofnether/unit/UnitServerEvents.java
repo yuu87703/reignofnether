@@ -399,15 +399,17 @@ public class UnitServerEvents {
         }
 
         // if a player has no more units, then they are defeated
-        if (evt.getEntity() instanceof Unit unit) {
-            int unitsOwned = allUnits.stream()
-                .filter(u -> (u instanceof Unit unit1 && unit1.getOwnerName().equals(unit.getOwnerName())))
-                .toList()
-                .size();
-            if (!SandboxServer.isSandboxPlayer(unit.getOwnerName()) &&
-                unitsOwned == 0 && isRTSPlayer(unit.getOwnerName())
-                && BuildingUtils.getTotalCompletedBuildingsOwned(false, unit.getOwnerName()) == 0) {
-                PlayerServerEvents.defeat(unit.getOwnerName(), Component.translatable("server.reignofnether.lost_all").getString());
+        synchronized (allUnits) {
+            if (evt.getEntity() instanceof Unit unit) {
+                int unitsOwned = allUnits.stream()
+                        .filter(u -> (u instanceof Unit unit1 && unit1.getOwnerName().equals(unit.getOwnerName())))
+                        .toList()
+                        .size();
+                if (!SandboxServer.isSandboxPlayer(unit.getOwnerName()) &&
+                        unitsOwned == 0 && isRTSPlayer(unit.getOwnerName())
+                        && BuildingUtils.getTotalCompletedBuildingsOwned(false, unit.getOwnerName()) == 0) {
+                    PlayerServerEvents.defeat(unit.getOwnerName(), Component.translatable("server.reignofnether.lost_all").getString());
+                }
             }
         }
     }
