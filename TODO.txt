@@ -30,7 +30,6 @@ Features
     - limit of 16 total (any additional placed are cancelled)
     - if any are detected, forces RTS players to select them to start
         - Have a button that cycles through them
-        - show on minimap (green?)
         - when announcing a player joining, announce x/y RTS players in the game
         - change regular start buttons
             - when clicked, shows a placement of the capitol at the location and reserves the spot

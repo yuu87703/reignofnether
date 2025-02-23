@@ -352,10 +352,24 @@ public class PlayerServerEvents {
                         .above();
                     ((Unit) entity).setOwnerName(playerName);
                     entity.moveTo(bp, 0, 0);
-                    level.addFreshEntity(entity);
+                    if (!readiedStart)
+                        level.addFreshEntity(entity);
                     workers.add(entity);
                 }
             }
+
+            if (faction != Faction.NONE) {
+                if (SurvivalServerEvents.isEnabled()) {
+                    level.setDayTime(TimeUtils.DAWN + getWaveSurvivalTimeModifier(SurvivalServerEvents.getDifficulty()));
+                    for (RTSPlayer rtsPlayer : rtsPlayers)
+                        if (!rtsPlayer.name.equals(playerName))
+                            AlliancesServer.addAlliance(rtsPlayer.name, playerName);
+                } else {
+                    level.setDayTime(MONSTER_START_TIME_OF_DAY);
+                }
+            }
+            ResourcesServerEvents.resetResources(playerName);
+
             if (readiedStart) {
                 String buildingName = null;
                 ArrayList<BuildingBlock> blocks = null;
@@ -376,24 +390,14 @@ public class PlayerServerEvents {
                 };
                 if (buildingName != null) {
                     BlockPos bp = getBuildingOriginPos(new BlockPos(pos.x, pos.y, pos.z), blocks);
-                    for (int i = 0; i < workers.size(); i++)
-                        workers.get(i).moveTo(bp.offset(i,0,0), 0, 0);
+                    for (int i = 0; i < workers.size(); i++) {
+                        workers.get(i).moveTo(bp.offset(i, 0, 0), 0, 0);
+                        level.addFreshEntity(workers.get(i));
+                    }
                     int[] workerIds = workers.stream().map(Entity::getId).mapToInt(Integer::intValue).toArray();
                     BuildingServerEvents.placeBuilding(buildingName, bp, Rotation.NONE, playerName, workerIds, false, false);
                 }
             }
-
-            if (faction != Faction.NONE) {
-                if (SurvivalServerEvents.isEnabled()) {
-                    level.setDayTime(TimeUtils.DAWN + getWaveSurvivalTimeModifier(SurvivalServerEvents.getDifficulty()));
-                    for (RTSPlayer rtsPlayer : rtsPlayers)
-                        if (!rtsPlayer.name.equals(playerName))
-                            AlliancesServer.addAlliance(rtsPlayer.name, playerName);
-                } else {
-                    level.setDayTime(MONSTER_START_TIME_OF_DAY);
-                }
-            }
-            ResourcesServerEvents.resetResources(playerName);
 
             if (!TutorialServerEvents.isEnabled() && !readiedStart) {
                 serverPlayer.sendSystemMessage(Component.literal(""));
