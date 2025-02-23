@@ -5,5 +5,7 @@ public enum StartPosAction {
     REMOVE,
     RESERVE,
     UNRESERVE,
-    RESET
+    RESET,
+    SET_GAME_STARTING,
+    UNSET_GAME_STARTING
 }

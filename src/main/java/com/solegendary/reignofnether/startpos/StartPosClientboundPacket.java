@@ -45,6 +45,16 @@ public class StartPosClientboundPacket {
                 new StartPosClientboundPacket(StartPosAction.RESET, new BlockPos(0,0,0), Faction.NONE, "", 0));
     }
 
+    public static void startGame() {
+        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
+                new StartPosClientboundPacket(StartPosAction.SET_GAME_STARTING, new BlockPos(0,0,0), Faction.NONE, "", 0));
+    }
+
+    public static void cancelStartGame() {
+        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
+                new StartPosClientboundPacket(StartPosAction.UNSET_GAME_STARTING, new BlockPos(0,0,0), Faction.NONE, "", 0));
+    }
+
     public StartPosClientboundPacket(StartPosAction action, BlockPos blockPos, Faction faction, String playerName, int colorId) {
         this.action = action;
         this.blockPos = blockPos;
@@ -102,6 +112,8 @@ public class StartPosClientboundPacket {
                                 }
                             }
                             case RESET -> StartPosClientEvents.reset();
+                            case SET_GAME_STARTING -> StartPosClientEvents.isStartingOrStarted = true;
+                            case UNSET_GAME_STARTING -> StartPosClientEvents.isStartingOrStarted = false;
                         }
                         success.set(true);
                     });

@@ -267,7 +267,6 @@ public class PlayerClientEvents {
         PlayerClientEvents.beaconOwnerTicks.clear();
         SurvivalClientEvents.reset();
         StartPosClientEvents.reset();
-
     }
 
     public static void setRTSLock(boolean lock) {

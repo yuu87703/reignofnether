@@ -778,7 +778,7 @@ public class PlayerServerEvents {
     }
 
     public static void resetRTS(boolean hardReset) {
-        StartPosServerEvents.cancelStartGameCountdown();
+        StartPosServerEvents.cancelStartGameCountdown(true);
 
         synchronized (rtsPlayers) {
             rtsPlayers.clear();

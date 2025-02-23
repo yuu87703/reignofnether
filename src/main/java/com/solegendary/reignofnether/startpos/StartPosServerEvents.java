@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.startpos;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.blocks.RTSStartBlock;
+import com.solegendary.reignofnether.player.PlayerClientboundPacket;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
@@ -73,13 +74,17 @@ public class StartPosServerEvents {
         if (!startingGame) {
             ticksToStart = TICKS_TO_START_MAX;
             startingGame = true;
+            StartPosClientboundPacket.startGame();
         }
     }
 
-    public static void cancelStartGameCountdown() {
+    public static void cancelStartGameCountdown(boolean noMsg) {
         if (startingGame) {
             ticksToStart = TICKS_TO_START_MAX;
             startingGame = false;
+            StartPosClientboundPacket.cancelStartGame();
+            if (!noMsg)
+                PlayerServerEvents.sendMessageToAllPlayers("cancelled_start_game", true);
         }
     }
 
@@ -105,7 +110,7 @@ public class StartPosServerEvents {
                             }
                         }
                     }
-                    PlayerServerEvents.setRTSLock(true, true);
+
                     startingGame = false;
                 }
             }
