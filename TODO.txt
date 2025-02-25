@@ -13,14 +13,16 @@ Features
 
 Bugfixes
 --------
-[❌] Unreserve start block placements if gamemode is changed or orthoview is toggled
-[❌] When reserving a pos, the base indicator is 1 block too high
-
+[🟡] Your start block is unreserved if you log out, change RTS or vanilla gamemodes or disable RTS camera
+[🟡] All start blocks are disabled if the game is started in a different gamemode
+[✔] Fixed building outlines being weird when below Y level 0
 
 Quality of Life
 ---------------
-[❌] Allow start game with only 1 player
-[❌] Add /gamerule buildingsIgnoreTerrain
+[✔] /gamerule neutralAggro is now true by default
+[✔] You can now start the game with start blocks with only one player
+[❌] Added /gamerule slantedBuilding which lets players build regardless of flatness
+    - This will also carve out terrain to fit the building, so be warned!
 [❌] Allow survival players to use allied transport portals
 
 Balancing
