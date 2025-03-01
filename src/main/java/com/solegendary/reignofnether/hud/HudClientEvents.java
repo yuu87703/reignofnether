@@ -303,7 +303,8 @@ public class HudClientEvents {
 
         if (hudSelectedBuilding != null) {
             boolean hudSelBuildingOwned =
-                BuildingClientEvents.getPlayerToBuildingRelationship(hudSelectedBuilding) == Relationship.OWNED;
+                BuildingClientEvents.getPlayerToBuildingRelationship(hudSelectedBuilding) == Relationship.OWNED ||
+                SandboxClientEvents.isSandboxPlayer();
 
             // -----------------
             // Building portrait

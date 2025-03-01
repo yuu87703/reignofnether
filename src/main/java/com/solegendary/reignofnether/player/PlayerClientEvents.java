@@ -150,6 +150,8 @@ public class PlayerClientEvents {
             MC.gui.setTitle(Component.translatable("titles.reignofnether.defeated"));
             MC.player.playSound(SoundRegistrar.DEFEAT.get(), 0.5f, 1.0f);
         }
+        ResearchClient.removeAllResearch();
+        ResearchClient.removeAllCheats();
     }
 
     public static void victory(String playerName) {
@@ -186,7 +188,7 @@ public class PlayerClientEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerLoginEvent(PlayerEvent.PlayerLoggedInEvent evt) {
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent evt) {
         // LOG IN TO SINGLEPLAYER WORLD ONLY
         if (MC.player != null && evt.getEntity().getId() == MC.player.getId()) {
             FogOfWarClientEvents.updateFogChunks();

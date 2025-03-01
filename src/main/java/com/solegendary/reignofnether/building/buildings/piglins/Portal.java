@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.ability.abilities.ConnectPortal;
 import com.solegendary.reignofnether.ability.abilities.DisconnectPortal;
 import com.solegendary.reignofnether.ability.abilities.GotoPortal;
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.neutral.NeutralTransportPortal;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -108,12 +109,14 @@ public class Portal extends ProductionBuilding implements NetherConvertingBuildi
         super.destroy(serverLevel);
     }
 
-    public Portal(Level level, BlockPos originPos, Rotation rotation, String ownerName) {
+    public Portal(Level level, BlockPos originPos, Rotation rotation, String ownerName, boolean neutralTransport) {
         super(level,
             originPos,
             rotation,
             ownerName,
-            getAbsoluteBlockData(getRelativeBlockData(level), level, originPos, rotation),
+            neutralTransport ?
+                getAbsoluteBlockData(NeutralTransportPortal.getRelativeBlockData(level), level, originPos, rotation) :
+                getAbsoluteBlockData(getRelativeBlockData(level), level, originPos, rotation),
             false
         );
         this.name = buildingName;
@@ -165,7 +168,8 @@ public class Portal extends ProductionBuilding implements NetherConvertingBuildi
     @Override
     public void onBuilt() {
         super.onBuilt();
-        setNetherZone(new NetherZone(centrePos.offset(0, -2, 0), getMaxRange(), getStartingRange()));
+        if (getMaxRange() > 0)
+            setNetherZone(new NetherZone(centrePos.offset(0, -2, 0), getMaxRange(), getStartingRange()));
     }
 
     public void disconnectPortal() {

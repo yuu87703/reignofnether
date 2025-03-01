@@ -5,24 +5,26 @@
 [🟡] Partially done and/or needs testing
 [❌] Not done, including unmerged PRs
 
+
 Features
 --------
-[❌] Healing fountains
-[❌] Neutral Transport portals
+[🟡] Healing fountains
+[🟡] Neutral Transport portals
 
 
 Bugfixes
 --------
 [🟡] Production % numbers no longer tick up when the game is paused in singleplayer
     - does this apply to any other ClientTickEvent stuff?
-[❌] are alliances synced for newly logging in players?
-[❌] reset player research after being defeated
+[🟡] Resyncs alliances for players who log in midway through a match
+[🟡] Player research is now reset upon being defeated
+
 
 Quality of Life
 ---------------
 
-[❌] save alliances to world data
-[❌] save transport portal links to world data
+[🟡] Transport portal links are now saved between server restarts
+
 
 Balancing
 ---------

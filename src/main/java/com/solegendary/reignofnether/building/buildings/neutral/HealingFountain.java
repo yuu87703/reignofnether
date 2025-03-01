@@ -1,35 +1,42 @@
 package com.solegendary.reignofnether.building.buildings.neutral;
 
+import com.mojang.math.Vector3d;
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.BuildingBlock;
-import com.solegendary.reignofnether.building.BuildingBlockData;
-import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.ability.EnchantAbility;
+import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
 import com.solegendary.reignofnether.util.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.solegendary.reignofnether.building.BuildingUtils.getAbsoluteBlockData;
 
-public class HealingFountain extends Building {
+public class HealingFountain extends Building implements RangeIndicator {
 
     public final static String buildingName = "Healing Fountain";
     public final static String structureName = "healing_fountain";
@@ -48,11 +55,39 @@ public class HealingFountain extends Building {
         this.popSupply = cost.population;
         this.buildTimeModifier = 0.8f;
 
-        this.startingBlockTypes.add(Blocks.PRISMARINE);
+        this.startingBlockTypes.add(Blocks.POLISHED_ANDESITE);
+        this.startingBlockTypes.add(Blocks.STONE_BRICK_STAIRS);
+        this.startingBlockTypes.add(Blocks.GRASS_BLOCK);
+        this.startingBlockTypes.add(Blocks.SPRUCE_TRAPDOOR);
 
         this.capturable = false;
         this.invulnerable = true;
         this.shouldDestroyOnReset = false;
+    }
+
+    @Override
+    public void onBuilt() {
+        super.onBuilt();
+        //for (BuildingBlock bb : blocks) {
+        //    if (bb.getBlockState().getFluidState().isSource() && bb.getBlockPos().getY() > this.centrePos.getY()) {
+        //        this.level.updateNeighborsAt(bb.getBlockPos().north(), bb.getBlockState().getBlock());
+        //    }
+        //}
+    }
+
+    public void tick(Level tickLevel) {
+        super.tick(tickLevel);
+
+        List<LivingEntity> nearbyEntities = MiscUtil.getEntitiesWithinRange(
+                new Vector3d(this.centrePos.getX(), this.centrePos.getY(), this.centrePos.getZ()),
+                RANGE,
+                LivingEntity.class,
+                this.level);
+
+        for (LivingEntity le : nearbyEntities) {
+            if (tickAgeAfterBuilt % 80 == 0) // only 1hp/4s
+                le.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 0));
+        }
     }
 
     public Faction getFaction() {return Faction.NONE;}
@@ -68,7 +103,7 @@ public class HealingFountain extends Building {
             hotkey,
             () -> BuildingClientEvents.getBuildingToPlace() == HealingFountain.class,
             () -> false,
-            () -> false,
+            () -> true,
             () -> BuildingClientEvents.setBuildingToPlace(HealingFountain.class),
             null,
             List.of(
@@ -80,4 +115,27 @@ public class HealingFountain extends Building {
             null
         );
     }
+
+    public static final int RANGE = 20;
+    private final Set<BlockPos> borderBps = new HashSet<>();
+
+    @Override
+    public void updateBorderBps() {
+        if (!level.isClientSide())
+            return;
+        this.borderBps.clear();
+        this.borderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(centrePos,
+                RANGE - TimeClientEvents.VISIBLE_BORDER_ADJ, level));
+    }
+
+    @Override
+    public Set<BlockPos> getBorderBps() {
+        return borderBps;
+    }
+
+    @Override
+    public boolean showOnlyWhenSelected() {
+        return true;
+    }
+
 }
