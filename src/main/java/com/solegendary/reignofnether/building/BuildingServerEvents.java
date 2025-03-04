@@ -293,6 +293,9 @@ public class BuildingServerEvents {
             } else if (!PlayerServerEvents.isBot(ownerName)) {
                 warnInsufficientResources(newBuilding);
             }
+            if (SandboxServer.isAnyoneASandboxPlayer() && builderUnitIds.length == 0) {
+                newBuilding.shouldDestroyOnReset = false;
+            }
             return newBuilding;
         }
         return null;

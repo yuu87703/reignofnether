@@ -24,6 +24,7 @@ import com.solegendary.reignofnether.startpos.StartPosServerEvents;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.time.TimeUtils;
 import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -787,11 +788,15 @@ public class PlayerServerEvents {
         synchronized (rtsPlayers) {
             rtsPlayers.clear();
 
-            for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
-                if (hardReset || (entity instanceof Unit unit && !unit.getOwnerName().isEmpty()))
+            for (LivingEntity entity : UnitServerEvents.getAllUnits())
+                if (hardReset || (entity instanceof Unit unit && !Unit.hasAnchor(unit)))
                     entity.kill();
-            }
-            UnitServerEvents.getAllUnits().removeIf(u -> (hardReset || (u instanceof Unit unit && !unit.getOwnerName().isEmpty())));
+
+            UnitServerEvents.getAllUnits().removeIf(u -> (hardReset || (u instanceof Unit unit && !Unit.hasAnchor(unit))));
+
+            for (LivingEntity entity : UnitServerEvents.getAllUnits())
+                if (entity instanceof Unit unit)
+                    unit.setOwnerName("");
 
             for (Building building : BuildingServerEvents.getBuildings()) {
                 if (building instanceof ProductionBuilding productionBuilding)

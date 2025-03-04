@@ -254,6 +254,7 @@ public class SurvivalServerEvents {
         if (evt.getEntity() instanceof Unit unit &&
                 evt.getEntity() instanceof LivingEntity entity &&
                 !evt.getLevel().isClientSide &&
+                isEnabled() &&
                 ENEMY_OWNER_NAME.equals(unit.getOwnerName())) {
 
             enemies.add(new WaveEnemy(unit));
