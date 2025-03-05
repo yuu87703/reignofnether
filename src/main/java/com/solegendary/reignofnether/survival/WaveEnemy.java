@@ -25,6 +25,8 @@ import com.solegendary.reignofnether.unit.units.villagers.RavagerUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -89,6 +91,13 @@ public class WaveEnemy {
                 BlockPos bpTarget = nearestBuilding.getClosestGroundPos(((Entity) unit).getOnPos(), 1);
                 if (creeperUnit.distanceToSqr(Vec3.atCenterOf(bpTarget)) < 4)
                     creeperUnit.startToExplode();
+            }
+        }
+        if (ticks > 0 && ticks % 20 == 0 && getEntity().isInWater() && idleTicks > 100) {
+            Material matOn = getEntity().level.getBlockState(getEntity().getOnPos()).getMaterial();
+            if (matOn == Material.WATER) {
+                getEntity().getLevel().setBlockAndUpdate(getEntity().getOnPos(), Blocks.FROSTED_ICE.defaultBlockState());
+                getEntity().moveTo(getEntity().getX(), getEntity().getY() + 0.5f, getEntity().getZ());
             }
         }
     }

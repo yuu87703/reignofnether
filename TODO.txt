@@ -18,7 +18,7 @@ Bugfixes
     - does this apply to any other ClientTickEvent stuff?
 [🟡] Resyncs alliances for players who log in midway through a match
 [🟡] Player research is now reset upon being defeated
-
+[🟡] Fixed enemy illagers getting stuck in and under ice blocks when spawning over water
 
 Quality of Life
 ---------------
