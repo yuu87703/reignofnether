@@ -109,16 +109,16 @@ public class LlamaUnit extends Llama implements Unit, AttackerUnit, RangedAttack
 
     // endregion
 
-    final static public float attackDamage = 5.0f;
+    final static public float attackDamage = 4.0f;
     final static public float attacksPerSecond = 0.4f;
-    final static public float attackRange = 8; // only used by ranged units or melee building attackers
+    final static public float attackRange = 10; // only used by ranged units or melee building attackers
     final static public float aggroRange = 10;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
 
     final static public float maxHealth = 30.0f;
     final static public float armorValue = 0.0f;
-    final static public float movementSpeed = 0.22f;
+    final static public float movementSpeed = 0.30f;
     public int maxResources = 100;
 
     public int fogRevealDuration = 0; // set > 0 for the client who is attacked by this unit

@@ -15,10 +15,10 @@ Features
 Bugfixes
 --------
 [🟡] Production % numbers no longer tick up when the game is paused in singleplayer
-    - does this apply to any other ClientTickEvent stuff?
 [🟡] Resyncs alliances for players who log in midway through a match
 [🟡] Player research is now reset upon being defeated
 [🟡] Fixed enemy illagers getting stuck in and under ice blocks when spawning over water
+[🟡] Units no longer automatically attack bridges and passive vanilla mobs when neutralAggro is true
 
 Quality of Life
 ---------------

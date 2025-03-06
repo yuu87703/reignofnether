@@ -114,7 +114,7 @@ public class BuildingServerEvents {
                 b.isBuilt,
                 b.getUpgradeLevel(),
                 portalType,
-                portalType == Portal.PortalType.TRANSPORT ? ((Portal) b).destination : new BlockPos(0,0,0)
+                portalType == Portal.PortalType.TRANSPORT ? ((Portal) b).destination : null
             ));
             ReignOfNether.LOGGER.info("saved buildings/nether in serverevents: " + b.originPos);
         });
