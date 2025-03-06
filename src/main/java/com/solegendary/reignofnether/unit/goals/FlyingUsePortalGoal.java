@@ -31,9 +31,8 @@ public class FlyingUsePortalGoal extends FlyingMoveToTargetGoal {
                 moveTarget.getY() + 0.5f,
                 moveTarget.getZ() + 0.5f
             )) <= 9f) {
-
                 // teleport to destination
-                if (portal.hasDestination() && ) {
+                if (portal.hasDestination()) {
                     BlockPos bp = portal.destination.offset(0,4,0);
                     SoundClientboundPacket.playSoundAtPos(SoundAction.USE_PORTAL, bp);
                     mob.teleportTo(bp.getX() + 0.5f, bp.getY() + 0.5f, bp.getZ() + 0.5f);

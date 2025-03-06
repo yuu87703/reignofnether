@@ -114,7 +114,7 @@ public class BuildingServerEvents {
                 b.isBuilt,
                 b.getUpgradeLevel(),
                 portalType,
-                portalType == Portal.PortalType.TRANSPORT ? ((Portal) b).destination : new BlockPos(0,0,0)
+                b instanceof Portal portal && portal.hasDestination() ? ((Portal) b).destination : new BlockPos(0,0,0)
             ));
             ReignOfNether.LOGGER.info("saved buildings/nether in serverevents: " + b.originPos);
         });
@@ -166,7 +166,7 @@ public class BuildingServerEvents {
                         } else if (building instanceof Portal portal) {
                             if (!(building instanceof NeutralTransportPortal)) {
                                 portal.changeStructure(b.portalType);
-                            } if (portal.hasDestination()) {
+                            } if (b.portalDestination != null && !b.portalDestination.equals(new BlockPos(0,0,0))) {
                                 portal.destination = b.portalDestination;
                             }
                         } else if (building instanceof Library library) {
@@ -460,7 +460,7 @@ public class BuildingServerEvents {
                 building.getUpgradeLevel(),
                 building.isBuilt,
                 building instanceof Portal p ? p.portalType : Portal.PortalType.BASIC,
-                building instanceof Portal p && p.portalType == Portal.PortalType.TRANSPORT ? p.destination : new BlockPos(0,0,0),
+                building instanceof Portal p && p.hasDestination() ? p.destination : new BlockPos(0,0,0),
                 true
             );
         ReignOfNether.LOGGER.info("Synced " + buildings.size() + " buildings with player logged in");
