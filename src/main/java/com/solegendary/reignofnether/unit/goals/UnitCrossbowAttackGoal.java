@@ -184,7 +184,7 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
                 }
             } else if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.CHARGED) {
                 --this.attackCooldown;
-                if (this.attackCooldown == 0) {
+                if (this.attackCooldown <= 0) {
                     this.crossbowState = UnitCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK;
                 }
             } else if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK && canSeeTarget) {
