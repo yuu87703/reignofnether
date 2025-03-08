@@ -45,10 +45,6 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
         return attackCooldown;
     }
 
-    public void tickAttackCooldown() {
-        attackCooldown -= 1;
-    }
-
     public void setToMaxAttackCooldown() {
         this.attackCooldown = this.attackCooldownMax;
     }
@@ -155,7 +151,7 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
             else if (target instanceof GhastUnit ghastUnit)
                 attackRange += ghastUnit.getAttackerRangeBonus(this.mob);
 
-            boolean flag2 = (distToTarget > attackRange || this.seeTime < 5) && this.attackCooldown == 0;
+            boolean flag2 = (distToTarget > attackRange || this.seeTime < 5) && this.attackCooldown <= 0;
 
             if (target != null)
                 this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
@@ -184,7 +180,7 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
                 }
             } else if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.CHARGED) {
                 --this.attackCooldown;
-                if (this.attackCooldown == 0) {
+                if (this.attackCooldown <= 0) {
                     this.crossbowState = UnitCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK;
                 }
             } else if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK && canSeeTarget) {
