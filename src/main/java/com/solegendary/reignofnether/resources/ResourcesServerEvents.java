@@ -2,6 +2,9 @@ package com.solegendary.reignofnether.resources;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ActiveProduction;
+import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
@@ -13,7 +16,6 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -72,12 +74,12 @@ public class ResourcesServerEvents {
             int prodFood = 0;
             int prodWood = 0;
             int prodOre = 0;
-            for (Building building : BuildingServerEvents.getBuildings()) {
-                if (building instanceof ProductionBuilding pBuilding) {
-                    for (ProductionItem item : pBuilding.productionQueue) {
-                        prodFood += item.foodCost;
-                        prodWood += item.woodCost;
-                        prodOre += item.oreCost;
+            for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
+                if (building instanceof ProductionPlacement pBuilding) {
+                    for (ActiveProduction item : pBuilding.productionQueue) {
+                        prodFood += item.item.cost.food;
+                        prodWood += item.item.cost.wood;
+                        prodOre += item.item.cost.ore;
                     }
                 }
             }

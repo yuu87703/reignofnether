@@ -1,0 +1,53 @@
+package com.solegendary.reignofnether.building;
+
+import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.building.buildings.monsters.*;
+import com.solegendary.reignofnether.building.buildings.piglins.*;
+import com.solegendary.reignofnether.building.buildings.villagers.*;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+
+public class Buildings {
+    public static final Mausoleum MAUSOLEUM = register(new ResourceLocation(ReignOfNether.MOD_ID, "mausoleum"), new Mausoleum());
+    public static final SpruceStockpile SPRUCE_STOCKPILE = register(new ResourceLocation(ReignOfNether.MOD_ID, "spruce_stockpile"), new SpruceStockpile());
+    public static final HauntedHouse HAUNTED_HOUSE = register(new ResourceLocation(ReignOfNether.MOD_ID, "haunted_house"), new HauntedHouse());
+    public static final PumpkinFarm PUMPKIN_FARM = register(new ResourceLocation(ReignOfNether.MOD_ID, "pumpkin_farm"), new PumpkinFarm());
+    public static final DarkWatchtower DARK_WATCHTOWER = register(new ResourceLocation(ReignOfNether.MOD_ID, "dark_watchtower"), new DarkWatchtower());
+    public static final Graveyard GRAVEYARD = register(new ResourceLocation(ReignOfNether.MOD_ID, "graveyard"), new Graveyard());
+    public static final Dungeon DUNGEON = register(new ResourceLocation(ReignOfNether.MOD_ID, "dungeon"), new Dungeon());
+    public static final SpiderLair SPIDER_LAIR = register(new ResourceLocation(ReignOfNether.MOD_ID, "slider_lair"), new SpiderLair());
+    public static final SlimePit SLIME_PIT = register(new ResourceLocation(ReignOfNether.MOD_ID, "slime_pit"), new SlimePit());
+    public static final Laboratory LABORATORY = register(new ResourceLocation(ReignOfNether.MOD_ID, "laboratory"), new Laboratory());
+    public static final Stronghold STRONGHOLD = register(new ResourceLocation(ReignOfNether.MOD_ID, "stronghold"), new Stronghold());
+    public static final SpruceBridge SPRUCE_BRIDGE = register(new ResourceLocation(ReignOfNether.MOD_ID, "spruce_bridge"), new SpruceBridge());
+    public static final SculkCatalyst SCULK_CATALYST = register(new ResourceLocation(ReignOfNether.MOD_ID, "sculk_catalyst"), new SculkCatalyst());
+    public static final CentralPortal CENTRAL_PORTAL = register(new ResourceLocation(ReignOfNether.MOD_ID, "central_portal"), new CentralPortal());
+    public static final Portal PORTAL = register(new ResourceLocation(ReignOfNether.MOD_ID, "portal"), new Portal());
+    public static final NetherwartFarm NETHERWART_FARM = register(new ResourceLocation(ReignOfNether.MOD_ID, "netherwart_farm"), new NetherwartFarm());
+    public static final Bastion BASTION = register(new ResourceLocation(ReignOfNether.MOD_ID, "bastion"), new Bastion());
+    public static final HoglinStables HOGLIN_STABLES = register(new ResourceLocation(ReignOfNether.MOD_ID, "hoglin_stables"), new HoglinStables());
+    public static final FlameSanctuary FLAME_SANCTUARY = register(new ResourceLocation(ReignOfNether.MOD_ID, "flame_sanctuary"), new FlameSanctuary());
+    public static final WitherShrine WITHER_SHRINE = register(new ResourceLocation(ReignOfNether.MOD_ID, "wither_shrine"), new WitherShrine());
+    public static final BasaltSprings BASALT_SPRINGS = register(new ResourceLocation(ReignOfNether.MOD_ID, "basalt_springs"), new BasaltSprings());
+    public static final Fortress FORTRESS = register(new ResourceLocation(ReignOfNether.MOD_ID, "fortress"), new Fortress());
+    public static final BlackstoneBridge BLACKSTONE_BRIDGE = register(new ResourceLocation(ReignOfNether.MOD_ID, "blackstone_bridge"), new BlackstoneBridge());
+    public static final TownCentre TOWN_CENTRE = register(new ResourceLocation(ReignOfNether.MOD_ID, "town_centre"), new TownCentre());
+    public static final OakStockpile OAK_STOCKPILE = register(new ResourceLocation(ReignOfNether.MOD_ID, "oak_stockpile"), new OakStockpile());
+    public static final VillagerHouse VILLAGER_HOUSE = register(new ResourceLocation(ReignOfNether.MOD_ID, "villager_house"), new VillagerHouse());
+    public static final WheatFarm WHEAT_FARM = register(new ResourceLocation(ReignOfNether.MOD_ID, "wheat_farm"), new WheatFarm());
+    public static final Watchtower WATCHTOWER = register(new ResourceLocation(ReignOfNether.MOD_ID, "watchtower"), new Watchtower());
+    public static final Barracks BARRACKS = register(new ResourceLocation(ReignOfNether.MOD_ID, "barracks"), new Barracks());
+    public static final Blacksmith BLACKSMITH = register(new ResourceLocation(ReignOfNether.MOD_ID, "blacksmith"), new Blacksmith());
+    public static final ArcaneTower ARCANE_TOWER = register(new ResourceLocation(ReignOfNether.MOD_ID, "arcane_tower"), new ArcaneTower());
+    public static final Library LIBRARY = register(new ResourceLocation(ReignOfNether.MOD_ID, "library"), new Library());
+    public static final Castle CASTLE = register(new ResourceLocation(ReignOfNether.MOD_ID, "castle"), new Castle());
+    public static final IronGolemBuilding IRON_GOLEM_BUILDING = register(new ResourceLocation(ReignOfNether.MOD_ID, "iron_golem_building"), new IronGolemBuilding());
+    public static final OakBridge OAK_BRIDGE = register(new ResourceLocation(ReignOfNether.MOD_ID, "oak_bridge"), new OakBridge());
+
+    private static <T extends Building> T register(ResourceLocation id, T building) {
+        return Registry.register(ReignOfNetherRegistries.BUILDING, id, building);
+    }
+
+    public static void init() {}
+}

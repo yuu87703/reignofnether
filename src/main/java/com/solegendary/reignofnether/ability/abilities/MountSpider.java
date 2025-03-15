@@ -2,12 +2,12 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchSpiderJockeys;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.goals.MountGoal;
@@ -33,7 +33,7 @@ public class MountSpider extends Ability {
     private final LivingEntity entity;
 
     public MountSpider(LivingEntity entity) {
-        super(UnitAction.MOUNT_SPIDER, entity.level, 0, 0, 0, true);
+        super(UnitAction.MOUNT_SPIDER, 0, 0, 0, true);
         this.entity = entity;
     }
 
@@ -43,7 +43,7 @@ public class MountSpider extends Ability {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/spider.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.MOUNT_SPIDER,
-            () -> entity.isPassenger() || !ResearchClient.hasResearch(ResearchSpiderJockeys.itemName),
+            () -> entity.isPassenger() || !ResearchClient.hasResearch(ProductionItems.RESEARCH_SPIDER_JOCKEYS),
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.MOUNT_SPIDER),
             () -> UnitClientEvents.sendUnitCommand(UnitAction.MOUNT_SPIDER),

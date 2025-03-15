@@ -2,10 +2,10 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchEvokerVexes;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -32,7 +32,6 @@ public class CastSummonVexes extends Ability {
     public CastSummonVexes(EvokerUnit evokerUnit) {
         super(
             UnitAction.CAST_SUMMON_VEXES,
-            evokerUnit.level,
             CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
             0,
             0,
@@ -43,7 +42,7 @@ public class CastSummonVexes extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
             "Summon Vexes",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/vex.png"),
@@ -53,7 +52,7 @@ public class CastSummonVexes extends Ability {
                     return this.evokerUnit.getCastSummonVexesGoal().isCasting();
                 return false;
             },
-            () -> !ResearchClient.hasResearch(ResearchEvokerVexes.itemName),
+            () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_EVOKER_VEXES),
             () -> true,
             () -> UnitClientEvents.sendUnitCommand(UnitAction.CAST_SUMMON_VEXES),
             null,
@@ -68,19 +67,19 @@ public class CastSummonVexes extends Ability {
     }
 
     @Override
-    public void setCooldown(float cooldown) {
+    public void setCooldown(float cooldown, Level level) {
         if (evokerUnit.hasVigorEnchant())
             cooldown *= EnchantVigor.cooldownMultiplier;
-        super.setCooldown(cooldown);
+        super.setCooldown(cooldown, level);
     }
 
 
     @Override
     public void setToMaxCooldown() {
         if (evokerUnit.hasVigorEnchant())
-            setCooldown((int) (cooldownMax * EnchantVigor.cooldownMultiplier));
+            setCooldown((int) (cooldownMax * EnchantVigor.cooldownMultiplier), evokerUnit.level);
         else
-            setCooldown(cooldownMax);
+            setCooldown(cooldownMax, evokerUnit.level);
     }
 
     @Override

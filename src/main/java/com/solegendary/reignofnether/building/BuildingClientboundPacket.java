@@ -1,10 +1,15 @@
 package com.solegendary.reignofnether.building;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ActiveProduction;
+import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -29,7 +34,7 @@ public class BuildingClientboundPacket {
     public boolean isDiagonalBridge;
     public int upgradeLevel;
     public boolean isBuilt;
-    public Portal.PortalType portalType;
+    public PortalPlacement.PortalType portalType;
     public BlockPos portalDestination;
     public boolean forPlayerLoggingIn; // is this placement for someone logging in currently joined?
 
@@ -42,7 +47,7 @@ public class BuildingClientboundPacket {
         boolean isDiagonalBridge,
         int upgradeLevel,
         boolean isBuilt,
-        Portal.PortalType portalType,
+        PortalPlacement.PortalType portalType,
         BlockPos portalDestination,
         boolean forPlayerLoggingIn
     ) {
@@ -74,17 +79,17 @@ public class BuildingClientboundPacket {
                 false,
                 0,
                 false,
-                Portal.PortalType.BASIC,
+                PortalPlacement.PortalType.BASIC,
                 new BlockPos(0,0,0),
                 false
             )
         );
     }
 
-    public static void startProduction(BlockPos buildingPos, String itemName) {
+    public static void startProduction(BlockPos buildingPos, ProductionItem item) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
             new BuildingClientboundPacket(BuildingAction.START_PRODUCTION,
-                itemName,
+                ReignOfNetherRegistries.PRODUCTION_ITEM.getKey(item).toString(),
                 buildingPos,
                 Rotation.NONE,
                 "",
@@ -93,19 +98,19 @@ public class BuildingClientboundPacket {
                 false,
                 0,
                 false,
-                Portal.PortalType.BASIC,
+                PortalPlacement.PortalType.BASIC,
                 new BlockPos(0,0,0),
                 false
             )
         );
     }
 
-    public static void cancelProduction(BlockPos buildingPos, String itemName, boolean frontItem) {
+    public static void cancelProduction(BlockPos buildingPos, ProductionItem item, boolean frontItem) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
             new BuildingClientboundPacket(frontItem
                                           ? BuildingAction.CANCEL_PRODUCTION
                                           : BuildingAction.CANCEL_BACK_PRODUCTION,
-                itemName,
+                ReignOfNetherRegistries.PRODUCTION_ITEM.getKey(item).toString(),
                 buildingPos,
                 Rotation.NONE,
                 "",
@@ -114,17 +119,17 @@ public class BuildingClientboundPacket {
                 false,
                 0,
                 false,
-                Portal.PortalType.BASIC,
+                PortalPlacement.PortalType.BASIC,
                 new BlockPos(0,0,0),
                 false
             )
         );
     }
 
-    public static void changePortal(BlockPos buildingPos, String portalType) {
+    public static void changePortal(BlockPos buildingPos, PortalPlacement.PortalType type) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
             new BuildingClientboundPacket(BuildingAction.CHANGE_PORTAL,
-                portalType,
+                type.name(),
                 buildingPos,
                 Rotation.NONE,
                 "",
@@ -133,7 +138,7 @@ public class BuildingClientboundPacket {
                 false,
                 0,
                 false,
-                Portal.PortalType.BASIC,
+                PortalPlacement.PortalType.BASIC,
                 new BlockPos(0,0,0),
                 false
             )
@@ -152,7 +157,7 @@ public class BuildingClientboundPacket {
                         false,
                         0,
                         false,
-                        Portal.PortalType.BASIC,
+                        PortalPlacement.PortalType.BASIC,
                         new BlockPos(0,0,0),
                         false
                 )
@@ -171,7 +176,7 @@ public class BuildingClientboundPacket {
                         false,
                         0,
                         false,
-                        Portal.PortalType.BASIC,
+                        PortalPlacement.PortalType.BASIC,
                         new BlockPos(0,0,0),
                         false
                 )
@@ -189,7 +194,7 @@ public class BuildingClientboundPacket {
         boolean isDiagonalBridge,
         int upgradeLevel,
         boolean isBuilt,
-        Portal.PortalType portalType,
+        PortalPlacement.PortalType portalType,
         BlockPos portalDestination,
         boolean forPlayerLoggingIn
     ) {
@@ -219,7 +224,7 @@ public class BuildingClientboundPacket {
         this.isDiagonalBridge = buffer.readBoolean();
         this.isBuilt = buffer.readBoolean();
         this.upgradeLevel = buffer.readInt();
-        this.portalType = buffer.readEnum(Portal.PortalType.class);
+        this.portalType = buffer.readEnum(PortalPlacement.PortalType.class);
         this.portalDestination = buffer.readBlockPos();
         this.forPlayerLoggingIn = buffer.readBoolean();
     }
@@ -246,7 +251,7 @@ public class BuildingClientboundPacket {
 
         ctx.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                Building building = null;
+                BuildingPlacement building = null;
                 if (this.action != BuildingAction.PLACE) {
                     building = findBuilding(true, this.buildingPos);
                     if (building == null) {
@@ -260,7 +265,8 @@ public class BuildingClientboundPacket {
                     }
                 }
                 switch (action) {
-                    case PLACE -> BuildingClientEvents.placeBuilding(this.itemName,
+                    case PLACE -> BuildingClientEvents.placeBuilding(
+                        ReignOfNetherRegistries.BUILDING.get(ResourceLocation.tryParse(this.itemName)),
                         this.buildingPos,
                         this.rotation,
                         this.ownerName,
@@ -274,52 +280,49 @@ public class BuildingClientboundPacket {
                     );
                     case SYNC_BLOCKS_AND_OWNER -> BuildingClientEvents.syncBuilding(building, this.blocksPlaced, this.ownerName);
                     case START_PRODUCTION -> {
-                        ProductionBuilding.startProductionItem(
-                            (ProductionBuilding) building,
-                            this.itemName,
+                        ((ProductionPlacement) building).startProductionItem(
+                            ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(this.itemName)),
                             this.buildingPos
                         );
                     }
                     case CANCEL_PRODUCTION -> {
-                        ProductionBuilding.cancelProductionItem(
-                            (ProductionBuilding) building,
-                            this.itemName,
+                        ((ProductionPlacement) building).cancelProductionItem(
+                                ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(this.itemName)),
                             this.buildingPos,
                             true
                         );
                     }
                     case CANCEL_BACK_PRODUCTION -> {
-                        ProductionBuilding.cancelProductionItem(
-                            (ProductionBuilding) building,
-                            this.itemName,
+                        ((ProductionPlacement) building).cancelProductionItem(
+                                ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(this.itemName)),
                             this.buildingPos,
                             false
                         );
                     }
                     case CHANGE_PORTAL -> {
-                        if (building instanceof Portal portal) {
-                            portal.changeStructure(Portal.PortalType.valueOf(itemName));
+                        if (building instanceof PortalPlacement portal) {
+                            portal.changeStructure(PortalPlacement.PortalType.valueOf(itemName));
                         }
                     }
                     case CLEAR_PRODUCTION -> {
-                        if (building instanceof ProductionBuilding pBuilding) {
+                        if (building instanceof ProductionPlacement pBuilding) {
                             if (!pBuilding.productionQueue.isEmpty()) {
-                                ProductionItem pItem = pBuilding.productionQueue.get(0);
+                                ActiveProduction pItem = pBuilding.productionQueue.get(0);
                                 if (!pItem.completed) {
                                     pItem.completed = true;
-                                    pItem.onComplete.accept(pBuilding.level);
+                                    pItem.item.onComplete.accept(pBuilding.level, pBuilding);
                                 }
                                 pBuilding.productionQueue.clear();
                             }
                         }
                     }
                     case COMPLETE_PRODUCTION -> {
-                        if (building instanceof ProductionBuilding pBuilding) {
+                        if (building instanceof ProductionPlacement pBuilding) {
                             if (!pBuilding.productionQueue.isEmpty()) {
-                                ProductionItem pItem = pBuilding.productionQueue.get(0);
+                                ActiveProduction pItem = pBuilding.productionQueue.get(0);
                                 if (!pItem.completed) {
                                     pItem.completed = true;
-                                    pItem.onComplete.accept(pBuilding.level);
+                                    pItem.item.onComplete.accept(pBuilding.level, pBuilding);
                                 }
                                 pBuilding.productionQueue.remove(pItem);
                             }

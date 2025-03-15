@@ -1,13 +1,12 @@
 package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.util.MyMath;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 
@@ -16,7 +15,7 @@ import java.util.function.Consumer;
 public class SonicBoomGoal extends AbstractCastTargetedSpellGoal {
 
     public SonicBoomGoal(Mob mob, int channelTicks, int range,
-                         Consumer<LivingEntity> onEntityCast, Consumer<Building> onBuildingCast) {
+                         Consumer<LivingEntity> onEntityCast, Consumer<BuildingPlacement> onBuildingCast) {
         super(mob, channelTicks, range, onEntityCast, null, onBuildingCast);
     }
 
@@ -32,8 +31,7 @@ public class SonicBoomGoal extends AbstractCastTargetedSpellGoal {
         if (!this.mob.level.isClientSide() && ticksCasting < channelTicks)
             UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.NON_KEYFRAME_STOP, this.mob);
         super.stopCasting();
-        if (this.mob.level.isClientSide() && !Keybindings.shiftMod.isDown())
-            ((Unit) this.mob).getCheckpoints().clear();
+        ((Unit) this.mob).getCheckpoints().clear();
     }
 
     @Override

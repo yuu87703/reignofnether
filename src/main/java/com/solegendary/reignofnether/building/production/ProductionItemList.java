@@ -1,0 +1,34 @@
+package com.solegendary.reignofnether.building.production;
+
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.keybinds.Keybinding;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ProductionItemList {
+    Map<ProductionItem, Keybinding> productions = new HashMap<>();
+
+    public ProductionItemList() {
+
+    }
+
+    public void add(ProductionItem production, Keybinding keybind) {
+        productions.put(production, keybind);
+    }
+
+    public List<Button> getButtons(ProductionPlacement placement) {
+        List<Button> buttons = new ArrayList<>();
+        for (Map.Entry<ProductionItem, Keybinding> production : productions.entrySet()) {
+            buttons.add(production.getKey().getStartButton(placement, production.getValue()));
+        }
+        return buttons;
+    }
+
+    public List<ProductionItem> get() {
+        return new ArrayList<>(productions.keySet());
+    }
+}

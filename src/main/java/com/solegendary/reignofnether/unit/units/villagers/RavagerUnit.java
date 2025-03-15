@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Eject;
 import com.solegendary.reignofnether.ability.abilities.Roar;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -160,8 +161,8 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
         this.abilities.add(ab1);
         this.abilities.add(ab2);
         if (level.isClientSide()) {
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(ab2.getButton(Keybindings.keyW));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
+            this.abilityButtons.add(ab2.getButton(Keybindings.keyW, this));
         }
     }
 
@@ -257,18 +258,18 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
                     }
                 }
 
-                Set<Building> affectedBuildings = new HashSet<>();
+                Set<BuildingPlacement> affectedBuildings = new HashSet<>();
                 for (double x = this.position().x - ROAR_RANGE; x < this.position().x + ROAR_RANGE; x++) {
                     for (double y = this.position().y - ROAR_RANGE; y < this.position().y + ROAR_RANGE; y++) {
                         for (double z = this.position().z - ROAR_RANGE; z < this.position().z + ROAR_RANGE; z++) {
                             BlockPos bp = new BlockPos(x,y,z);
-                            Building building = BuildingUtils.findBuilding(false, bp);
+                            BuildingPlacement building = BuildingUtils.findBuilding(false, bp);
                             if (building != null && !building.ownerName.equals(this.getOwnerName()))
                                 affectedBuildings.add(building);
                         }
                     }
                 }
-                for (Building building : affectedBuildings)
+                for (BuildingPlacement building : affectedBuildings)
                     building.destroyRandomBlocks((int) ROAR_DAMAGE);
 
                 Vec3 vec3 = this.getBoundingBox().getCenter();

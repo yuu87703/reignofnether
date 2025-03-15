@@ -144,7 +144,7 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
         this.abilities.add(explodeAbility);
 
         if (level.isClientSide())
-            this.abilityButtons.add(explodeAbility.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(explodeAbility.getButton(Keybindings.keyQ, this));
     }
 
     @Override

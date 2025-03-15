@@ -169,7 +169,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         this.abilities.add(mountRavagerAbility);
 
         if (level.isClientSide()) {
-            this.abilityButtons.add(mountRavagerAbility.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(mountRavagerAbility.getButton(Keybindings.keyQ, this));
         }
     }
 

@@ -1,9 +1,14 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.building.buildings.monsters.*;
 import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.building.buildings.villagers.*;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -11,6 +16,7 @@ import com.solegendary.reignofnether.research.researchItems.ResearchResourceCapa
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.ArmSwingingUnit;
@@ -47,6 +53,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ZombieVillagerUnit extends Vindicator implements Unit, WorkerUnit, AttackerUnit, ArmSwingingUnit {
@@ -172,22 +179,18 @@ public class ZombieVillagerUnit extends Vindicator implements Unit, WorkerUnit, 
     }
 
     public static List<AbilityButton> getBuildingButtons() {
-        return List.of(
-            Mausoleum.getBuildButton(Keybindings.keyQ),
-            SpruceStockpile.getBuildButton(Keybindings.keyW),
-            HauntedHouse.getBuildButton(Keybindings.keyE),
-            PumpkinFarm.getBuildButton(Keybindings.keyR),
-            DarkWatchtower.getBuildButton(Keybindings.keyT),
-            Graveyard.getBuildButton(Keybindings.keyY),
-            Dungeon.getBuildButton(Keybindings.keyU),
-            SpiderLair.getBuildButton(Keybindings.keyI),
-            SlimePit.getBuildButton(Keybindings.keyO),
-            Laboratory.getBuildButton(Keybindings.keyP),
-            Stronghold.getBuildButton(Keybindings.keyL),
-            SpruceBridge.getBuildButton(Keybindings.keyC),
-            SculkCatalyst.getBuildButton(Keybindings.keyV),
-            Beacon.getBuildButton(null)
-        );
+        List<AbilityButton> buildingButtons = new ArrayList<>();
+
+        List<Keybinding> keybindings = BuildingUtils.keybindings;
+        int index = 0;
+
+        for (Building building : ReignOfNetherRegistries.BUILDING) {
+            if (building.getFaction() == Faction.MONSTERS) {
+                buildingButtons.add(building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index)));
+                index++;
+            }
+        }
+        return buildingButtons;
     }
 
     public ZombieVillagerUnit(EntityType<? extends Vindicator> entityType, Level level) {
@@ -289,13 +292,13 @@ public class ZombieVillagerUnit extends Vindicator implements Unit, WorkerUnit, 
 
     @Override
     public void setupEquipmentAndUpgradesClient() {
-        if (ResearchClient.hasResearch(ResearchResourceCapacity.itemName))
+        if (ResearchClient.hasResearch(ProductionItems.RESEARCH_RESOURCE_CAPACITY))
             this.maxResources = 200;
     }
 
     @Override
     public void setupEquipmentAndUpgradesServer() {
-        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ResearchResourceCapacity.itemName))
+        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ProductionItems.RESEARCH_RESOURCE_CAPACITY))
             this.maxResources = 200;
     }
 }

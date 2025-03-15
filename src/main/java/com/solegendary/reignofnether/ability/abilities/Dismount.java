@@ -25,7 +25,6 @@ public class Dismount extends Ability {
     public Dismount(LivingEntity entity) {
         super(
             UnitAction.DISMOUNT,
-            entity.level,
             0,
             0,
             0,
@@ -35,7 +34,7 @@ public class Dismount extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
             "Dismount",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/barrier.png"),

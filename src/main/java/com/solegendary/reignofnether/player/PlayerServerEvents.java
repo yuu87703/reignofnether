@@ -10,6 +10,8 @@ import com.solegendary.reignofnether.building.buildings.piglins.CentralPortal;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamemode.GameModeClientboundPacket;
+import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.guiscreen.TopdownGuiContainer;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
@@ -26,9 +28,7 @@ import com.solegendary.reignofnether.time.TimeUtils;
 import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
-import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
@@ -136,6 +136,7 @@ public class PlayerServerEvents {
                 }
             }
             UnitServerEvents.maxPopulation = level.getGameRules().getInt(GameRuleRegistrar.MAX_POPULATION);
+            PlayerClientboundPacket.syncMaxPopulation(UnitServerEvents.maxPopulation);
         }
     }
 
@@ -236,7 +237,7 @@ public class PlayerServerEvents {
         // they are frozen so move them away then BuildingClientEvents.placeBuilding moves them to their base later
         // don't do this if they don't own any buildings
         if (isRTSPlayer(playerName) && rtsSyncingEnabled) {
-            for (Building building : BuildingServerEvents.getBuildings()) {
+            for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                 if (building.ownerName.equals(playerName)) {
                     movePlayer(serverPlayer.getId(), 0, ORTHOVIEW_PLAYER_BASE_Y, 0);
                     break;
@@ -720,7 +721,7 @@ public class PlayerServerEvents {
                             unit.setOwnerName("");
                         }
                     }
-                    for (Building building : BuildingServerEvents.getBuildings()) {
+                    for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                         if (building.ownerName.equals(playerName)) {
                             if (building instanceof ProductionBuilding productionBuilding)
                                 productionBuilding.productionQueue.clear();
@@ -817,8 +818,8 @@ public class PlayerServerEvents {
                 if (entity instanceof Unit unit)
                     unit.setOwnerName("");
 
-            for (Building building : BuildingServerEvents.getBuildings()) {
-                if (building instanceof ProductionBuilding productionBuilding)
+            for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
+                if (building instanceof ProductionPlacement productionBuilding)
                     productionBuilding.productionQueue.clear();
                 if (building.shouldDestroyOnReset || hardReset)
                     building.destroy((ServerLevel) building.getLevel());

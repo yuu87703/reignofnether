@@ -29,7 +29,6 @@ public class ThrowHarmingPotion extends Ability {
 
     public ThrowHarmingPotion(WitchUnit witchUnit) {
         super(UnitAction.THROW_HARMING_POTION,
-            witchUnit.level,
             CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
             witchUnit.getPotionThrowRange(),
             0,
@@ -40,7 +39,7 @@ public class ThrowHarmingPotion extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton("Harming Potion",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/splash_potion_harming.png"),
             hotkey,

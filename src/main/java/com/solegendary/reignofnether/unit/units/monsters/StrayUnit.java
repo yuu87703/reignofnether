@@ -149,7 +149,7 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
         MountSpider mountSpiderAbility = new MountSpider(this);
         this.abilities.add(mountSpiderAbility);
         if (level.isClientSide()) {
-            this.abilityButtons.add(mountSpiderAbility.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(mountSpiderAbility.getButton(Keybindings.keyQ, this));
         }
     }
 

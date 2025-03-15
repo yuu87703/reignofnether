@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.unit.units.monsters;
 import com.mojang.math.Vector3d;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.ConsumeSlime;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -167,7 +168,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         ConsumeSlime ab1 = new ConsumeSlime(this);
         this.abilities.add(ab1);
         if (level.isClientSide())
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
     }
 
     // big slimes sometimes bounce off of each other midair
@@ -473,7 +474,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
             return true;
         }
         if (result && getSize() >= 2 && pEntity instanceof LivingEntity && !(this instanceof MagmaCubeUnit) && !this.level.isClientSide())
-            if (ResearchServerEvents.playerHasResearch(getOwnerName(), ResearchSlimeConversion.itemName))
+            if (ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_SLIME_CONVERSION))
                 ((LivingEntity)pEntity).addEffect(new MobEffectInstance(MobEffects.CONFUSION, CONVERT_DEBUFF_DURATION_SECONDS * 20, 0), this);
         return result;
     }

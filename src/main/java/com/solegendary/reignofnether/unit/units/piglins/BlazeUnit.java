@@ -143,7 +143,7 @@ public class BlazeUnit extends Blaze implements Unit, AttackerUnit, RangedAttack
         FirewallShot ab1 = new FirewallShot(this);
         this.abilities.add(ab1);
         if (level.isClientSide())
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
     }
 
 

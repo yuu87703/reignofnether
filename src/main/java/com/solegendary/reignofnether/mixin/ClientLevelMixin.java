@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.mixin;
 
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
@@ -138,7 +139,7 @@ public class ClientLevelMixin {
 
         for (LivingEntity entity : UnitClientEvents.getSelectedUnits())
             posList.add(entity.getEyePosition());
-        for (Building building : BuildingClientEvents.getSelectedBuildings()) {
+        for (BuildingPlacement building : BuildingClientEvents.getSelectedBuildings()) {
             BlockPos bp = BuildingUtils.getCentrePos(building.getBlocks());
             posList.add(new Vec3(bp.getX(), bp.getY(), bp.getZ()));
         }

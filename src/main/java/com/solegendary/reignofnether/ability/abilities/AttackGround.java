@@ -29,7 +29,6 @@ public class AttackGround extends Ability {
     public AttackGround(RangedAttackerUnit rangedAttackerUnit) {
         super(
                 UnitAction.ATTACK_GROUND,
-                ((Entity) rangedAttackerUnit).level,
                 CD_MAX,
                 ((AttackerUnit) rangedAttackerUnit).getAttackRange(),
                 0,
@@ -40,7 +39,7 @@ public class AttackGround extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
                 "Attack Ground",
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/fireball.png"),

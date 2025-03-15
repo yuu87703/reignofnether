@@ -30,13 +30,13 @@ public class ConsumeSlime extends Ability {
     private Slime slime;
 
     public ConsumeSlime(Slime slime) {
-        super(UnitAction.CONSUME_SLIME, slime.level, CD_MAX, RANGE, 0, true, true);
+        super(UnitAction.CONSUME_SLIME, CD_MAX, RANGE, 0, true, true);
         this.slime = slime;
         canAutocast = true;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton("Consume",
             this.slime instanceof MagmaCubeUnit ?
                     new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/magma_cube.png") :

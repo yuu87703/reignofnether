@@ -144,7 +144,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
         WitherCloud ab1 = new WitherCloud(this);
         this.abilities.add(ab1);
         if (level.isClientSide()) {
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
         }
     }
 

@@ -170,7 +170,7 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
         AttackGround ab1 = new AttackGround(this);
         this.abilities.add(ab1);
         if (level.isClientSide())
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
     }
 
     @Override

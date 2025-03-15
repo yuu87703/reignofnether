@@ -75,7 +75,7 @@ public class BuildingClientEvents {
         }
 
         int totalPopulationSupply = 0;
-        for (Building building : buildings)
+        for (BuildingPlacement building : buildings)
             if (building.ownerName.equals(playerName) && building.isBuilt) {
                 totalPopulationSupply += building.popSupply;
             }
@@ -84,9 +84,9 @@ public class BuildingClientEvents {
     }
 
     // clientside buildings used for tracking position (for cursor selection)
-    private static final ArrayList<Building> buildings = new ArrayList<>();
+    private static final ArrayList<BuildingPlacement> buildings = new ArrayList<>();
 
-    private static final ArrayList<Building> selectedBuildings = new ArrayList<>();
+    private static final ArrayList<BuildingPlacement> selectedBuildings = new ArrayList<>();
     private static Class<? extends Building> buildingToPlace = null;
     private static Class<? extends Building> lastBuildingToPlace = null;
     private static ArrayList<BuildingBlock> blocksToDraw = new ArrayList<>();
@@ -112,19 +112,19 @@ public class BuildingClientEvents {
     private static final float MAX_BRIDGE_LIQUID_BLOCKS_PERCENT = 0.95f; // at least 5% of covered blocks must be solid
 
     // can only be one preselected building as you can't box-select them like units
-    public static Building getPreselectedBuilding() {
-        for (Building building : buildings)
+    public static BuildingPlacement getPreselectedBuilding() {
+        for (BuildingPlacement building : buildings)
             if (building.isPosInsideBuilding(CursorClientEvents.getPreselectedBlockPos())) {
                 return building;
             }
         return null;
     }
 
-    public static ArrayList<Building> getSelectedBuildings() {
+    public static ArrayList<BuildingPlacement> getSelectedBuildings() {
         return selectedBuildings;
     }
 
-    public static List<Building> getBuildings() {
+    public static List<BuildingPlacement> getBuildings() {
         return buildings;
     }
 
@@ -132,7 +132,7 @@ public class BuildingClientEvents {
         selectedBuildings.clear();
     }
 
-    public static void addSelectedBuilding(Building building) {
+    public static void addSelectedBuilding(BuildingPlacement building) {
         CursorClientEvents.setLeftClickAction(null);
 
         if (!FogOfWarClientEvents.isBuildingInBrightChunk(building)) {
@@ -152,15 +152,15 @@ public class BuildingClientEvents {
     public static void switchHudToIdlestBuilding() {
         if (hudSelectedBuilding == null || MC.player == null)
             return;
-        Building idlestBuilding = null;
+        BuildingPlacement idlestBuilding = null;
 
-        List<Building> sameNameBuildings = selectedBuildings.stream().filter(
+        List<BuildingPlacement> sameNameBuildings = selectedBuildings.stream().filter(
                 b -> b.name.equals(hudSelectedBuilding.name) && b.isBuilt && b.ownerName.equals(MC.player.getName().getString())
         ).toList();
 
         float prodTicksLeftMax = Float.MAX_VALUE;
-        for (Building building : sameNameBuildings) {
-            if (building instanceof ProductionBuilding prodB) {
+        for (BuildingPlacement building : sameNameBuildings) {
+            if (building.getBuilding() instanceof ProductionBuilding prodB) {
                 Float prodTicksLeft = prodB.productionQueue.stream().map(p -> p.ticksLeft).reduce(0F, Float::sum);
                 if (prodTicksLeft < prodTicksLeftMax) {
                     prodTicksLeftMax = prodTicksLeft;
@@ -421,9 +421,9 @@ public class BuildingClientEvents {
         BlockPos minPos = BuildingUtils.getMinCorner(blocksToDraw).offset(originOffset);//.offset(-1, -1, -1);
         BlockPos maxPos = BuildingUtils.getMaxCorner(blocksToDraw).offset(originOffset);//.offset(1, 1, 1);
 
-        for (Building building : buildings) {
+        for (BuildingPlacement building : buildings) {
             for (BuildingBlock block : building.blocks) {
-                if (isBuildingToPlaceABridge() && building instanceof AbstractBridge) {
+                if (isBuildingToPlaceABridge() && building.getBuilding() instanceof AbstractBridge) {
                     continue;
                 }
                 BlockPos bp = block.getBlockPos();
@@ -622,9 +622,9 @@ public class BuildingClientEvents {
 
         drawBuildingToPlace(evt.getPoseStack(), getBuildingOriginPos(CursorClientEvents.getPreselectedBlockPos()), 0);
 
-        Building preselectedBuilding = getPreselectedBuilding();
+        BuildingPlacement preselectedBuilding = getPreselectedBuilding();
 
-        for (Building building : buildings) {
+        for (BuildingPlacement building : buildings) {
 
             boolean isInBrightChunk = FogOfWarClientEvents.isBuildingInBrightChunk(building);
 
@@ -660,8 +660,8 @@ public class BuildingClientEvents {
         }
 
         // draw rally point and line
-        for (Building selBuilding : selectedBuildings) {
-            if (selBuilding instanceof ProductionBuilding selProdBuilding) {
+        for (BuildingPlacement selBuilding : selectedBuildings) {
+            if (selBuilding.getBuilding() instanceof ProductionBuilding selProdBuilding) {
                 float a = MiscUtil.getOscillatingFloat(0.25f, 0.75f);
 
                 if (selProdBuilding.getRallyPoint() != null) {
@@ -674,7 +674,7 @@ public class BuildingClientEvents {
                         a
                     );
                     MyRenderer.drawLine(evt.getPoseStack(),
-                        selProdBuilding.centrePos,
+                        selBuilding.centrePos,
                         selProdBuilding.getRallyPoint(),
                         0,
                         1,
@@ -683,16 +683,16 @@ public class BuildingClientEvents {
                     );
                 } else if (selProdBuilding.getRallyPointEntity() != null) {
                     LivingEntity le = selProdBuilding.getRallyPointEntity();
-                    MyRenderer.drawLine(evt.getPoseStack(), new Vec3(selProdBuilding.centrePos.getX(),
-                        selProdBuilding.centrePos.getY(),
-                        selProdBuilding.centrePos.getZ()
+                    MyRenderer.drawLine(evt.getPoseStack(), new Vec3(selBuilding.centrePos.getX(),
+                        selBuilding.centrePos.getY(),
+                        selBuilding.centrePos.getZ()
                     ), new Vec3(le.getX(), le.getEyeY(), le.getZ()), 0, 1, 0, a);
                     MyRenderer.drawLineBoxOutlineOnly(evt.getPoseStack(), le.getBoundingBox(), 0, 1.0f, 0, a, false);
                 }
             }
-            if (selBuilding instanceof Portal portal && portal.hasDestination()) {
+            if (selBuilding.getBuilding() instanceof Portal portal && portal.hasDestination()) {
                 float a = MiscUtil.getOscillatingFloat(0.25f, 0.75f);
-                MyRenderer.drawLine(evt.getPoseStack(), portal.centrePos, portal.destination, 0, 1, 0, a);
+                MyRenderer.drawLine(evt.getPoseStack(), selBuilding.centrePos, portal.destination, 0, 1, 0, a);
             }
         }
     }
@@ -762,7 +762,7 @@ public class BuildingClientEvents {
         BlockPos pos = getBuildingOriginPos(CursorClientEvents.getPreselectedBlockPos());
 
         if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1) {
-            Building preSelBuilding = getPreselectedBuilding();
+            BuildingPlacement preSelBuilding = getPreselectedBuilding();
 
             // place a new building
             if (buildingToPlace != null && isBuildingPlacementValid(pos) && MC.player != null) {
@@ -788,7 +788,7 @@ public class BuildingClientEvents {
                             unit.getCheckpoints().removeIf(c -> !BuildingUtils.isPosInsideAnyBuilding(true, c.bp));
                             MiscUtil.addUnitCheckpoint(unit,
                                 CursorClientEvents.getPreselectedBlockPos().above(),
-                                true
+                                false
                             );
                             if (unit instanceof WorkerUnit workerUnit) {
                                 workerUnit.getBuildRepairGoal().ignoreNextCheckpoint = true;
@@ -841,9 +841,9 @@ public class BuildingClientEvents {
                     preSelBuilding != null && selectedBuildings.contains(preSelBuilding)) {
 
                     lastLeftClickTime = 0;
-                    Building selBuilding = selectedBuildings.get(0);
+                    BuildingPlacement selBuilding = selectedBuildings.get(0);
                     BlockPos centre = selBuilding.centrePos;
-                    ArrayList<Building> nearbyBuildings = getBuildingsWithinRange(new Vec3(centre.getX(),
+                    ArrayList<BuildingPlacement> nearbyBuildings = getBuildingsWithinRange(new Vec3(centre.getX(),
                             centre.getY(),
                             centre.getZ()
                         ),
@@ -851,7 +851,7 @@ public class BuildingClientEvents {
                         selBuilding.name
                     );
                     clearSelectedBuildings();
-                    for (Building building : nearbyBuildings)
+                    for (BuildingPlacement building : nearbyBuildings)
                         if (getPlayerToBuildingRelationship(building) == Relationship.OWNED) {
                             addSelectedBuilding(building);
                         }
@@ -890,8 +890,8 @@ public class BuildingClientEvents {
         } else if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_2) {
             // set rally points
             if (!Keybindings.altMod.isDown()) {
-                for (Building selBuilding : selectedBuildings) {
-                    if (selBuilding instanceof ProductionBuilding selProdBuilding
+                for (BuildingPlacement selBuilding : selectedBuildings) {
+                    if (selBuilding.getBuilding() instanceof ProductionBuilding selProdBuilding
                         && getPlayerToBuildingRelationship(selBuilding) == Relationship.OWNED) {
                         if (!UnitClientEvents.getPreselectedUnits().isEmpty()) {
                             LivingEntity rallyPointEntity = UnitClientEvents.getPreselectedUnits().get(0);
@@ -917,7 +917,7 @@ public class BuildingClientEvents {
         }
         if (evt.getKeyCode() == GLFW.GLFW_KEY_DELETE) {
             boolean isSandboxPlayer = MC.player != null && SandboxClientEvents.isSandboxPlayer(MC.player.getName().getString());
-            Building building = HudClientEvents.hudSelectedBuilding;
+            BuildingPlacement building = HudClientEvents.hudSelectedBuilding;
             if (building != null &&
                 ((building.isBuilt && getPlayerToBuildingRelationship(building) == Relationship.OWNED) || isSandboxPlayer)) {
                 HudClientEvents.hudSelectedBuilding = null;
@@ -956,12 +956,12 @@ public class BuildingClientEvents {
             replacedTexture = true;
         }
         if (MC.level != null && MC.level.dimension() == Level.OVERWORLD) {
-            for (Building building : buildings)
+            for (BuildingPlacement building : buildings)
                 if (!MC.isPaused())
                     building.tick(MC.level);
 
             // cleanup destroyed buildings
-            selectedBuildings.removeIf(Building::shouldBeDestroyed);
+            selectedBuildings.removeIf(BuildingPlacement::shouldBeDestroyed);
             buildings.removeIf(b -> {
                 if (b.shouldBeDestroyed()) {
                     b.unFreezeChunks();
@@ -990,9 +990,9 @@ public class BuildingClientEvents {
         }
     }
 
-    public static ArrayList<Building> getBuildingsWithinRange(Vec3 pos, float range, String buildingName) {
-        ArrayList<Building> retBuildings = new ArrayList<>();
-        for (Building building : buildings) {
+    public static ArrayList<BuildingPlacement> getBuildingsWithinRange(Vec3 pos, float range, String buildingName) {
+        ArrayList<BuildingPlacement> retBuildings = new ArrayList<>();
+        for (BuildingPlacement building : buildings) {
             if (building.name.equals(buildingName)) {
                 BlockPos centre = building.centrePos;
                 Vec3 centreVec3 = new Vec3(centre.getX(), centre.getY(), centre.getZ());
@@ -1019,7 +1019,7 @@ public class BuildingClientEvents {
         boolean forPlayerLoggingIn
     ) {
 
-        Building newBuilding = BuildingUtils.getNewBuilding(buildingName,
+        BuildingPlacement newBuilding = BuildingUtils.getNewBuilding(buildingName,
             MC.level,
             pos,
             rotation,
@@ -1027,7 +1027,7 @@ public class BuildingClientEvents {
             isDiagonalBridge
         );
 
-        for (Building building : buildings)
+        for (BuildingPlacement building : buildings)
             if (newBuilding.originPos.equals(building.originPos)) {
                 return; // skip, building already exists clientside
             }
@@ -1045,19 +1045,19 @@ public class BuildingClientEvents {
             }
 
             if (upgradeLevel > 0) {
-                if (newBuilding instanceof Castle castle) {
+                if (newBuilding.getBuilding() instanceof Castle castle) {
                     castle.changeStructure(Castle.upgradedStructureName);
-                } else if (newBuilding instanceof Laboratory lab) {
+                } else if (newBuilding.getBuilding() instanceof Laboratory lab) {
                     lab.changeStructure(Laboratory.upgradedStructureName);
-                } else if (newBuilding instanceof Portal portal) {
-                    if (!(newBuilding instanceof NeutralTransportPortal)) {
+                } else if (newBuilding instanceof PortalPlacement portal) {
+                    if (!(newBuilding.getBuilding() instanceof NeutralTransportPortal)) {
                         portal.changeStructure(portalType);
                     }
-                    if (portalType == Portal.PortalType.TRANSPORT)
+                    if (portalType == PortalPlacement.PortalType.TRANSPORT)
                         portal.destination = portalDestination;
-                } else if (newBuilding instanceof Library library) {
+                } else if (newBuilding.getBuilding() instanceof Library library) {
                     library.changeStructure(Library.upgradedStructureName);
-                } else if (newBuilding instanceof Beacon beacon) {
+                } else if (newBuilding.getBuilding() instanceof Beacon beacon) {
                     beacon.changeStructure(upgradeLevel);
                 }
             }
@@ -1087,15 +1087,15 @@ public class BuildingClientEvents {
         }
     }
 
-    public static void syncBuilding(Building serverBuilding, int blocksPlaced, String ownerName) {
-        for (Building building : buildings)
+    public static void syncBuilding(BuildingPlacement serverBuilding, int blocksPlaced, String ownerName) {
+        for (BuildingPlacement building : buildings)
             if (building.originPos.equals(serverBuilding.originPos)) {
                 building.setServerBlocksPlaced(blocksPlaced);
                 building.ownerName = ownerName;
             }
     }
 
-    public static Relationship getPlayerToBuildingRelationship(Building building) {
+    public static Relationship getPlayerToBuildingRelationship(BuildingPlacement building) {
         if (MC.player != null) {
             String playerName = MC.player.getName().getString();
             String buildingOwnerName = building.ownerName;
@@ -1117,7 +1117,7 @@ public class BuildingClientEvents {
 
     // does the player own one of these buildings?
     public static boolean hasFinishedBuilding(String buildingName) {
-        for (Building building : buildings)
+        for (BuildingPlacement building : buildings)
             if (building.name.equals(buildingName) && building.isBuilt && MC.player != null
                     && building.ownerName.equals(MC.player.getName().getString())) {
                 return true;

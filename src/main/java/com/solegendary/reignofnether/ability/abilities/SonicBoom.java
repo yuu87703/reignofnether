@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -31,7 +32,6 @@ public class SonicBoom extends Ability {
 
     public SonicBoom(WardenUnit wardenUnit) {
         super(UnitAction.CAST_SONIC_BOOM,
-            wardenUnit.level,
             CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
             WardenUnit.SONIC_BOOM_RANGE,
             0,
@@ -50,7 +50,7 @@ public class SonicBoom extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton("Sonic Boom",
             new ResourceLocation("minecraft", "textures/block/note_block.png"),
             hotkey,
@@ -86,7 +86,7 @@ public class SonicBoom extends Ability {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        Building targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), targetBp);
+        BuildingPlacement targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), targetBp);
         if (targetBuilding != null) {
             ((WardenUnit) unitUsing).getSonicBoomGoal().setAbility(this);
             ((WardenUnit) unitUsing).getSonicBoomGoal().setTarget(targetBuilding);

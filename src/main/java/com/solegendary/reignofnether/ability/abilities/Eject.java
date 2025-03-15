@@ -26,7 +26,6 @@ public class Eject extends Ability {
     public Eject(LivingEntity entity) {
         super(
             UnitAction.EJECT,
-            entity.level,
             0,
             0,
             0,
@@ -36,7 +35,7 @@ public class Eject extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
             "Eject",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/barrier.png"),
@@ -59,6 +58,6 @@ public class Eject extends Ability {
 
         for (Ability ability : unitUsing.getAbilities())
             if (ability instanceof SpinWebs spinWebs)
-                spinWebs.setCooldown(spinWebs.getCooldown() / 4f);
+                spinWebs.setCooldown(spinWebs.getCooldown() / 4f, level);
     }
 }

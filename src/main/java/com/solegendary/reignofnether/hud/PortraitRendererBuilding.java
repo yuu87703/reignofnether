@@ -5,10 +5,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.monsters.SculkCatalyst;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
+import com.solegendary.reignofnether.building.buildings.placements.SculkCatalystPlacement;
 import com.solegendary.reignofnether.healthbars.HealthBarClientEvents;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.util.MyRenderer;
@@ -17,6 +20,8 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 // Renders a Building's portrait including an animated block, name, healthbar, list of stats and UI frames
@@ -37,10 +42,11 @@ class PortraitRendererBuilding {
     // - healthbar
     // - building name
     // Must be called from DrawScreenEvent
-    public RectZone render(PoseStack poseStack, int x, int y, Building building) {
+    public RectZone render(PoseStack poseStack, int x, int y, BuildingPlacement building) {
         Relationship rs = BuildingClientEvents.getPlayerToBuildingRelationship(building);
 
-        String name = building.name;
+        ResourceLocation key = ReignOfNetherRegistries.BUILDING.getKey(building.getBuilding());
+        String name = I18n.get("buildings." + building.getFaction().name().toLowerCase() + "." + key.getNamespace() + "." + key.getPath());
 
         if (building.getUpgradeLevel() > 0)
             name = building.getUpgradedName();
@@ -51,7 +57,7 @@ class PortraitRendererBuilding {
         if (rs != Relationship.OWNED && !building.ownerName.isBlank())
             name += " (" + building.ownerName + ")";
 
-        if (building instanceof SculkCatalyst sc && building.isBuilt)
+        if (building instanceof SculkCatalystPlacement sc && building.isBuilt)
             name += " (" + sc.getNightRange() + "/" + SculkCatalyst.nightRangeMax + " range)";
 
         // draw name
@@ -90,7 +96,7 @@ class PortraitRendererBuilding {
         return RectZone.getZoneByLW(x, y, frameWidth, frameHeight);
     }
 
-    private void drawBlockOnScreen(int x, int y, Building building) {
+    private void drawBlockOnScreen(int x, int y, BuildingPlacement building) {
         ItemStack item = new ItemStack(building.portraitBlock);
 
         RenderSystem.enableBlend();

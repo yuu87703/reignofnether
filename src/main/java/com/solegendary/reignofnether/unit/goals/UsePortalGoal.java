@@ -1,9 +1,11 @@
 package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.neutral.NeutralTransportPortal;
 import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
@@ -16,14 +18,14 @@ import net.minecraft.world.phys.Vec3;
 
 public class UsePortalGoal extends MoveToTargetBlockGoal {
 
-    private Building buildingTarget;
+    private BuildingPlacement buildingTarget;
 
     public UsePortalGoal(Mob mob) {
         super(mob, true, 0);
     }
 
     public void tick() {
-        if (buildingTarget instanceof Portal portal && moveTarget != null) {
+        if (buildingTarget instanceof PortalPlacement portal && moveTarget != null) {
             calcMoveTarget();
             if (buildingTarget.getBlocksPlaced() <= 0) {
                 stopUsingPortal();
@@ -47,7 +49,7 @@ public class UsePortalGoal extends MoveToTargetBlockGoal {
     }
 
     private void calcMoveTarget() {
-        if (this.buildingTarget instanceof Portal) {
+        if (this.buildingTarget instanceof PortalPlacement) {
             this.moveTarget = this.buildingTarget.centrePos;
         }
     }
@@ -56,9 +58,9 @@ public class UsePortalGoal extends MoveToTargetBlockGoal {
         if (blockPos != null) {
             if (this.mob.level.isClientSide()) {
                 this.buildingTarget = BuildingUtils.findBuilding(true, blockPos);
-                if (this.buildingTarget instanceof Portal portal &&
+                if (this.buildingTarget instanceof PortalPlacement portal &&
                     (buildingTarget.ownerName.equals(((Unit) mob).getOwnerName()) ||
-                    portal instanceof NeutralTransportPortal)) {
+                    portal.getBuilding() instanceof NeutralTransportPortal)) {
 
                     if (portal.hasDestination()) {
                         MiscUtil.addUnitCheckpoint(((Unit) mob), new BlockPos(
@@ -78,7 +80,7 @@ public class UsePortalGoal extends MoveToTargetBlockGoal {
         }
     }
 
-    public Building getBuildingTarget() {
+    public BuildingPlacement getBuildingTarget() {
         return buildingTarget;
     }
 

@@ -1,17 +1,15 @@
 package com.solegendary.reignofnether.unit.interfaces;
 
 import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
+import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchFireResistance;
-import com.solegendary.reignofnether.research.researchItems.ResearchResourceCapacity;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.time.NightUtils;
-import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.*;
@@ -173,7 +171,7 @@ public interface Unit {
                 unit.setMoveTarget(unit.getFollowTarget().blockPosition());
 
             // remove fire from piglin units if they have research
-            boolean hasImmunityResearch = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ResearchFireResistance.itemName);
+            boolean hasImmunityResearch = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_FIRE_RESISTANCE);
             if (hasImmunityResearch && unit.getFaction() == Faction.PIGLINS)
                 unitMob.setRemainingFireTicks(0);
         }
@@ -200,7 +198,7 @@ public interface Unit {
         }
 
         if (le.isInWater() && // stuck in bridge
-                BuildingUtils.findBuilding(le.level.isClientSide(), le.getOnPos().above()) instanceof AbstractBridge) {
+            BuildingUtils.findBuilding(le.level.isClientSide(), le.getOnPos().above()) instanceof BridgePlacement) {
             le.setDeltaMovement(0, 0.2, 0);
         }
 
@@ -231,9 +229,9 @@ public interface Unit {
     private static int getThresholdResources(Unit unit) {
         boolean hasCarryBags;
         if (((LivingEntity) unit).getLevel().isClientSide())
-            hasCarryBags = ResearchClient.hasResearch(ResearchResourceCapacity.itemName);
+            hasCarryBags = ResearchClient.hasResearch(ProductionItems.RESEARCH_RESOURCE_CAPACITY);
         else
-            hasCarryBags = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ResearchResourceCapacity.itemName);
+            hasCarryBags = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_RESOURCE_CAPACITY);
         return hasCarryBags ? 100 : 50;
     }
 

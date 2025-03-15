@@ -1,5 +1,7 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
+import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.sandbox.SandboxAction;
@@ -7,13 +9,11 @@ import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import net.minecraft.client.resources.language.I18n;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
-import com.solegendary.reignofnether.building.ProductionBuilding;
-import com.solegendary.reignofnether.building.ProductionItem;
+import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchDrowned;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import net.minecraft.network.chat.Style;
@@ -29,11 +29,11 @@ public class DrownedProd extends ProductionItem {
     public final static String itemName = "Drowned";
     public final static ResourceCost cost = ResourceCosts.DROWNED;
 
-    public DrownedProd(ProductionBuilding building) {
-        super(building, cost.ticks);
-        this.onComplete = (Level level) -> {
+    public DrownedProd() {
+        super(cost);
+        this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide())
-                building.produceUnit((ServerLevel) level, EntityRegistrar.DROWNED_UNIT.get(), building.ownerName, true);
+                placement.produceUnit((ServerLevel) level, EntityRegistrar.DROWNED_UNIT.get(), placement.ownerName, true);
         };
         this.foodCost = cost.food;
         this.woodCost = cost.wood;
@@ -45,7 +45,7 @@ public class DrownedProd extends ProductionItem {
         return DrownedProd.itemName;
     }
 
-    public static AbilityButton getPlaceButton() {
+    public AbilityButton getPlaceButton() {
         return new AbilityButton(
                 DrownedProd.itemName,
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/drowned.png"),
@@ -72,7 +72,7 @@ public class DrownedProd extends ProductionItem {
         );
     }
 
-    public static Button getStartButton(ProductionBuilding prodBuilding, Keybinding hotkey) {
+    public Button getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new Button(
             DrownedProd.itemName,
             14,
@@ -80,8 +80,8 @@ public class DrownedProd extends ProductionItem {
             hotkey,
             () -> false,
             () -> false,
-            () -> ResearchClient.hasResearch(ResearchDrowned.itemName),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, itemName),
+            () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_DROWNED),
+            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.DROWNED),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.drowned"), Style.EMPTY.withBold(true)),
@@ -98,7 +98,7 @@ public class DrownedProd extends ProductionItem {
         );
     }
 
-    public Button getCancelButton(ProductionBuilding prodBuilding, boolean first) {
+    public Button getCancelButton(ProductionPlacement prodBuilding, boolean first) {
         return new Button(
             DrownedProd.itemName,
             14,
@@ -107,7 +107,7 @@ public class DrownedProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, itemName, first),
+            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, ProductionItems.DROWNED, first),
             null,
             null
         );

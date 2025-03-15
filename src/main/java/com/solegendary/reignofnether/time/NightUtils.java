@@ -15,11 +15,11 @@ import java.util.List;
 public class NightUtils {
 
     public static boolean isInRangeOfNightSource(Vec3 pos, boolean clientSide) {
-        List<Building> buildings = clientSide ? BuildingClientEvents.getBuildings() : BuildingServerEvents.getBuildings();
+        List<BuildingPlacement> buildings = clientSide ? BuildingClientEvents.getBuildings() : BuildingServerEvents.getBuildings();
 
         Vec2 pos2d = new Vec2((float) pos.x, (float) pos.z);
 
-        for (Building building : buildings) {
+        for (BuildingPlacement building : buildings) {
             if (building.isDestroyedServerside) continue;
             if (building instanceof NightSource ns) {
                 BlockPos centrePos = BuildingUtils.getCentrePos(building.getBlocks());

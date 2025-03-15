@@ -30,7 +30,6 @@ public class ThrowRegenPotion extends Ability {
     public ThrowRegenPotion(WitchUnit witchUnit) {
         super(
             UnitAction.THROW_REGEN_POTION,
-            witchUnit.level,
             CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
             witchUnit.getPotionThrowRange(),
             0,
@@ -41,7 +40,7 @@ public class ThrowRegenPotion extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
             "Regen Potion",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/splash_potion_regeneration.png"),

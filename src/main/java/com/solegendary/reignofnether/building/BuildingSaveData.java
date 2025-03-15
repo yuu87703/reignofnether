@@ -1,11 +1,14 @@
 package com.solegendary.reignofnether.building;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -46,14 +49,14 @@ public class BuildingSaveData extends SavedData {
                 CompoundTag btag = (CompoundTag) ctag;
                 BlockPos pos = new BlockPos(btag.getInt("x"), btag.getInt("y"), btag.getInt("z"));
                 Level level = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD);
-                String name = btag.getString("buildingName");
+                Building name = BuildingUtils.getBuilding(btag.getString("buildingName"));
                 String ownerName = btag.getString("ownerName");
                 Rotation rotation = Rotation.valueOf(btag.getString("rotation"));
                 BlockPos rallyPoint = new BlockPos(btag.getInt("rallyX"), btag.getInt("rallyY"), btag.getInt("rallyZ"));
                 boolean isDiagonalBridge = btag.getBoolean("isDiagonalBridge");
                 boolean isBuilt = btag.getBoolean("isBuilt");
                 int upgradeLevel = btag.getInt("upgradeLevel");
-                Portal.PortalType portalType = Portal.PortalType.valueOf(btag.getString("portalType"));
+                PortalPlacement.PortalType portalType = PortalPlacement.PortalType.valueOf(btag.getString("portalType"));
                 BlockPos portalDestination = new BlockPos(btag.getInt("xp"), btag.getInt("yp"), btag.getInt("zp"));
 
                 data.buildings.add(new BuildingSave(pos,
@@ -80,8 +83,10 @@ public class BuildingSaveData extends SavedData {
 
         ListTag list = new ListTag();
         this.buildings.forEach(b -> {
+            String buildingName = ReignOfNetherRegistries.BUILDING.getKey(b.building).toString();
+
             CompoundTag cTag = new CompoundTag();
-            cTag.putString("buildingName", b.name);
+            cTag.putString("buildingName", buildingName);
             cTag.putInt("x", b.originPos.getX());
             cTag.putInt("y", b.originPos.getY());
             cTag.putInt("z", b.originPos.getZ());
@@ -99,7 +104,7 @@ public class BuildingSaveData extends SavedData {
             cTag.putInt("zp", b.portalDestination != null ? b.portalDestination.getZ() : 0);
             list.add(cTag);
 
-            ReignOfNether.LOGGER.info("BuildingSaveData.save: " + b.ownerName + "|" + b.name);
+            ReignOfNether.LOGGER.info("BuildingSaveData.save: " + b.ownerName + "|" + buildingName);
         });
         tag.put("buildings", list);
         return tag;

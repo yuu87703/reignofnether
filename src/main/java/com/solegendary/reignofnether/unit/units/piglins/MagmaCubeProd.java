@@ -8,6 +8,12 @@ import com.solegendary.reignofnether.building.ProductionItem;
 import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProductionItem;
+import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
+import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
@@ -30,16 +36,12 @@ public class MagmaCubeProd extends ProductionItem {
     public final static String itemName = "Magma Cube";
     public final static ResourceCost cost = ResourceCosts.MAGMA_CUBE;
 
-    public MagmaCubeProd(ProductionBuilding building) {
-        super(building, cost.ticks);
-        this.onComplete = (Level level) -> {
+    public MagmaCubeProd() {
+        super(cost);
+        this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide())
-                building.produceUnit((ServerLevel) level, EntityRegistrar.MAGMA_CUBE_UNIT.get(), building.ownerName, true);
+                placement.produceUnit((ServerLevel) level, EntityRegistrar.MAGMA_CUBE_UNIT.get(), placement.ownerName, true);
         };
-        this.foodCost = cost.food;
-        this.woodCost = cost.wood;
-        this.oreCost = cost.ore;
-        this.popCost = cost.population;
     }
 
     public String getItemName() {
@@ -69,7 +71,7 @@ public class MagmaCubeProd extends ProductionItem {
         );
     }
 
-    public static Button getStartButton(ProductionBuilding prodBuilding, Keybinding hotkey) {
+    public Button getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         List<FormattedCharSequence> tooltipLines = new ArrayList<>(List.of(
                 FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.magma_cube"), Style.EMPTY.withBold(true)),
                 ResourceCosts.getFormattedCost(cost),
@@ -88,14 +90,14 @@ public class MagmaCubeProd extends ProductionItem {
                 hotkey,
                 () -> false,
                 () -> false,
-                () -> BuildingClientEvents.hasFinishedBuilding(BasaltSprings.buildingName),
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, itemName),
+                () -> BuildingClientEvents.hasFinishedBuilding(Buildings.BASALT_SPRINGS),
+                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.MAGMA_CUBE),
                 null,
                 tooltipLines
         );
     }
 
-    public Button getCancelButton(ProductionBuilding prodBuilding, boolean first) {
+    public Button getCancelButton(ProductionPlacement prodBuilding, boolean first) {
         return new Button(
                 MagmaCubeProd.itemName,
                 14,
@@ -104,7 +106,7 @@ public class MagmaCubeProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, itemName, first),
+                () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, ProductionItems.MAGMA_CUBE, first),
                 null,
                 null
         );

@@ -136,7 +136,7 @@ public class ZoglinUnit extends Zoglin implements Unit, AttackerUnit {
         Eject ab1 = new Eject(this);
         this.abilities.add(ab1);
         if (level.isClientSide())
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
     }
 
     @Override

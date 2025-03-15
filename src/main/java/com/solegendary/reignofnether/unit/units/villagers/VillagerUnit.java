@@ -5,9 +5,14 @@ import com.mojang.serialization.Dynamic;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.building.buildings.villagers.*;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
@@ -15,7 +20,6 @@ import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchResourceCapacity;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
@@ -53,6 +57,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.solegendary.reignofnether.unit.units.villagers.VillagerUnitProfession.*;
@@ -201,7 +206,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     // equal to ~4mins of log chopping, excludes leaves
     final static public float LUMBERJACK_SPEED_MULT = 1.25f;
     final static public float LUMBERJACK_SPEED_MULT_VETERAN = 1.5f;
-    final static public int LUMBERJACK_EXP_REQ = 30;
+    final static public int LUMBERJACK_EXP_REQ = 20;
     public int lumberjackExp = 0;
     public void incrementLumberjackExp() {
         lumberjackExp += hasSpeedCheat() ? 10 : 1;
@@ -275,27 +280,24 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     }
 
     public static List<AbilityButton> getBuildingButtons() {
-        return List.of(
-            TownCentre.getBuildButton(Keybindings.keyQ),
-            OakStockpile.getBuildButton(Keybindings.keyW),
-            VillagerHouse.getBuildButton(Keybindings.keyE),
-            WheatFarm.getBuildButton(Keybindings.keyR),
-            Watchtower.getBuildButton(Keybindings.keyT),
-            Barracks.getBuildButton(Keybindings.keyY),
-            Blacksmith.getBuildButton(Keybindings.keyU),
-            ArcaneTower.getBuildButton(Keybindings.keyI),
-            Library.getBuildButton(Keybindings.keyO),
-            Castle.getBuildButton(Keybindings.keyP),
-            IronGolemBuilding.getBuildButton(Keybindings.keyL),
-            OakBridge.getBuildButton(Keybindings.keyC),
-            Beacon.getBuildButton(null)
-        );
+        List<AbilityButton> buildingButtons = new ArrayList<>();
+
+        List<Keybinding> keybindings = BuildingUtils.keybindings;
+        int index = 0;
+
+        for (Building building : ReignOfNetherRegistries.BUILDING) {
+            if (building.getFaction() == Faction.VILLAGERS) {
+                buildingButtons.add(building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index)));
+                index++;
+            }
+        }
+        return buildingButtons;
     }
 
     public VillagerUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
 
-        CallToArmsUnit callToArms = new CallToArmsUnit(level);
+        CallToArmsUnit callToArms = new CallToArmsUnit();
         this.abilities.add(callToArms);
 
         if (level.isClientSide()) {
@@ -399,13 +401,13 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
 
     @Override
     public void setupEquipmentAndUpgradesClient() {
-        if (ResearchClient.hasResearch(ResearchResourceCapacity.itemName))
+        if (ResearchClient.hasResearch(ProductionItems.RESEARCH_RESOURCE_CAPACITY))
             this.maxResources = 200;
     }
 
     @Override
     public void setupEquipmentAndUpgradesServer() {
-        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ResearchResourceCapacity.itemName))
+        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ProductionItems.RESEARCH_RESOURCE_CAPACITY))
             this.maxResources = 200;
 
         if (this.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BannerItem)

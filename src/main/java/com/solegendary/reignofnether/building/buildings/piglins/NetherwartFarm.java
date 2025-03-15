@@ -1,9 +1,7 @@
 package com.solegendary.reignofnether.building.buildings.piglins;
 
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.BuildingBlock;
-import com.solegendary.reignofnether.building.BuildingBlockData;
-import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractFarm;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -33,17 +31,11 @@ public class NetherwartFarm extends AbstractFarm {
     public final static String structureName = "netherwart_farm";
     public final static ResourceCost cost = ResourceCosts.NETHERWART_FARM;
 
-    public NetherwartFarm(Level level, BlockPos originPos, Rotation rotation, String ownerName) {
-        super(level, originPos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, originPos, rotation), false);
+    public NetherwartFarm() {
+        super(structureName, cost, false);
         this.name = buildingName;
-        this.ownerName = ownerName;
         this.portraitBlock = Blocks.NETHER_WART_BLOCK;
         this.icon = new ResourceLocation("minecraft", "textures/block/nether_wart_stage2.png");
-
-        this.foodCost = cost.food;
-        this.woodCost = cost.wood;
-        this.oreCost = cost.ore;
-        this.popSupply = cost.population;
 
         this.startingBlockTypes.add(Blocks.WARPED_STEM);
 
@@ -52,20 +44,18 @@ public class NetherwartFarm extends AbstractFarm {
 
     public Faction getFaction() {return Faction.PIGLINS;}
 
-    public static ArrayList<BuildingBlock> getRelativeBlockData(LevelAccessor level) {
-        return BuildingBlockData.getBuildingBlocks(structureName, level);
-    }
-
-    public static AbilityButton getBuildButton(Keybinding hotkey) {
+    public AbilityButton getBuildButton(Keybinding hotkey) {
+        ResourceLocation key = ReignOfNetherRegistries.BUILDING.getKey(this);
+        String name = I18n.get("buildings." + getFaction().name().toLowerCase() + "." + key.getNamespace() + "." + key.getPath());
         return new AbilityButton(
-                NetherwartFarm.buildingName,
+                name,
                 new ResourceLocation("minecraft", "textures/block/nether_wart_stage2.png"),
                 hotkey,
-                () -> BuildingClientEvents.getBuildingToPlace() == NetherwartFarm.class,
+                () -> BuildingClientEvents.getBuildingToPlace() == Buildings.NETHERWART_FARM,
                 () -> false,
-                () -> BuildingClientEvents.hasFinishedBuilding(CentralPortal.buildingName) ||
+                () -> BuildingClientEvents.hasFinishedBuilding(Buildings.CENTRAL_PORTAL) ||
                         ResearchClient.hasCheat("modifythephasevariance"),
-                () -> BuildingClientEvents.setBuildingToPlace(NetherwartFarm.class),
+                () -> BuildingClientEvents.setBuildingToPlace(Buildings.NETHERWART_FARM),
                 null,
                 List.of(
                         FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.netherwart_farm"), Style.EMPTY.withBold(true)),

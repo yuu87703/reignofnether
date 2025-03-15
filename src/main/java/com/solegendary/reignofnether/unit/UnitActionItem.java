@@ -2,9 +2,12 @@ package com.solegendary.reignofnether.unit;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.buildings.placements.FarmPlacement;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceName;
@@ -184,14 +187,14 @@ public class UnitActionItem {
                 case UNGARRISON -> {
                     GarrisonableBuilding garr = GarrisonableBuilding.getGarrison(unit);
                     if (garr != null) {
-                        Building building = (Building) garr;
+                        BuildingPlacement building = (BuildingPlacement) garr;
                         BlockPos bp = building.originPos.offset(garr.getExitPosition());
                         ((LivingEntity) unit).teleportTo(bp.getX() + 0.5f, bp.getY() + 0.5f, bp.getZ() + 0.5f);
                     }
                 }
                 case MOVE -> {
                     ResourceName resName = ResourceSources.getBlockResourceName(preselectedBlockPos, level);
-                    Building buildingAtPos = BuildingUtils.findBuilding(((Entity) unit).level.isClientSide(),
+                    BuildingPlacement buildingAtPos = BuildingUtils.findBuilding(((Entity) unit).level.isClientSide(),
                         preselectedBlockPos
                     );
 
@@ -206,8 +209,8 @@ public class UnitActionItem {
                             }
                             goal.saveAndReturnResources();
                         }
-                    } else if (buildingAtPos instanceof Portal portal
-                        && portal.portalType == Portal.PortalType.TRANSPORT && unit.canUsePortal()) {
+                    } else if (buildingAtPos instanceof PortalPlacement portal
+                        && portal.portalType == PortalPlacement.PortalType.TRANSPORT && unit.canUsePortal()) {
                         if (unit.getUsePortalGoal() instanceof FlyingUsePortalGoal flyingUsePortalGoal)
                             flyingUsePortalGoal.setBuildingTarget(preselectedBlockPos);
                         if (unit.getUsePortalGoal() instanceof UsePortalGoal usePortalGoal)
@@ -255,7 +258,7 @@ public class UnitActionItem {
                 case BUILD_REPAIR -> {
                     // if the unit can't actually build/repair just treat this as a move action
                     if (unit instanceof WorkerUnit workerUnit) {
-                        Building building = BuildingUtils.findBuilding(level.isClientSide(), preselectedBlockPos);
+                        BuildingPlacement building = BuildingUtils.findBuilding(level.isClientSide(), preselectedBlockPos);
                         if (building != null) {
                             workerUnit.getBuildRepairGoal().setBuildingTarget(building);
                         }
@@ -276,8 +279,8 @@ public class UnitActionItem {
                         if (goal != null) {
                             goal.setTargetResourceName(ResourceName.FOOD);
                             goal.setMoveTarget(preselectedBlockPos);
-                            Building building = BuildingUtils.findBuilding(level.isClientSide(), preselectedBlockPos);
-                            if (building != null && building.name.contains(" Farm")) {
+                            BuildingPlacement building = BuildingUtils.findBuilding(level.isClientSide(), preselectedBlockPos);
+                            if (building != null && building instanceof FarmPlacement) {
                                 goal.setTargetFarm(building);
                                 if (Unit.atMaxResources((Unit) workerUnit)) {
                                     if (level.isClientSide()) {
@@ -299,7 +302,7 @@ public class UnitActionItem {
                         }
                     }
                     ReturnResourcesGoal returnResourcesGoal = unit.getReturnResourcesGoal();
-                    Building building = BuildingUtils.findBuilding(false, preselectedBlockPos);
+                    BuildingPlacement building = BuildingUtils.findBuilding(false, preselectedBlockPos);
                     if (returnResourcesGoal != null && building != null) {
                         returnResourcesGoal.setBuildingTarget(building);
                     }
@@ -361,7 +364,7 @@ public class UnitActionItem {
             return;
         }
 
-        Building actionableBuilding = BuildingUtils.findBuilding(level.isClientSide(), this.selectedBuildingPos);
+        BuildingPlacement actionableBuilding = BuildingUtils.findBuilding(level.isClientSide(), this.selectedBuildingPos);
 
         if (actionableBuilding != null) {
             for (Ability ability : actionableBuilding.getAbilities()) {

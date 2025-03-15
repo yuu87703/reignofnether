@@ -1,7 +1,9 @@
 package com.solegendary.reignofnether.ability;
 
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -44,8 +46,8 @@ public class EnchantAbilityServerboundPacket {
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         final var success = new AtomicBoolean(false);
         ctx.get().enqueueWork(() -> {
-            Building building = BuildingUtils.findBuilding(false, buildingPos);
-            if (building instanceof Library library) {
+            BuildingPlacement building = BuildingUtils.findBuilding(false, buildingPos);
+            if (building instanceof LibraryPlacement library) {
                 Ability ability = null;
                 for (Ability abl : library.getAbilities())
                     if (abl.action == abilityAction)

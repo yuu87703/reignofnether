@@ -165,8 +165,8 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
         SpinWebs ab2 = new SpinWebs(this);
         this.abilities.add(ab2);
         if (level.isClientSide()) {
-            this.abilityButtons.add(ab2.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyW));
+            this.abilityButtons.add(ab2.getButton(Keybindings.keyQ, this));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyW, this));
         }
     }
 

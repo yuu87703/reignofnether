@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.unit.units.villagers;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.BackToWorkUnit;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.villagers.*;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -157,11 +158,11 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Villa
     public MilitiaUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
 
-        Ability backToWork = new BackToWorkUnit(level);
+        Ability backToWork = new BackToWorkUnit();
         this.abilities.add(backToWork);
 
         if (level.isClientSide()) {
-            this.abilityButtons.add(backToWork.getButton(Keybindings.build));
+            this.abilityButtons.add(backToWork.getButton(Keybindings.build, this));
         }
     }
 
@@ -198,8 +199,8 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Villa
             AttackerUnit.tick(this);
 
             if (this.tickCount > 100 && this.tickCount % 10 == 0 && !converted && !level.isClientSide() && !getOwnerName().equals(ENEMY_OWNER_NAME)) {
-                Building building = BuildingUtils.findClosestBuilding(level.isClientSide(), this.getEyePosition(),
-                        (b) -> b.isBuilt && b.ownerName.equals(getOwnerName()) && b instanceof TownCentre);
+                BuildingPlacement building = BuildingUtils.findClosestBuilding(level.isClientSide(), this.getEyePosition(),
+                        (b) -> b.isBuilt && b.ownerName.equals(getOwnerName()) && b.getBuilding() instanceof TownCentre);
 
                 int range = TownCentre.MILITIA_RANGE;
                 if (building != null &&

@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.mojang.math.Vector3d;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -33,10 +34,9 @@ public class BackToWorkBuilding extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE + 5;
 
-    public BackToWorkBuilding(Level level) {
+    public BackToWorkBuilding() {
         super(
                 UnitAction.BACK_TO_WORK_BUILDING,
-                level,
                 0,
                 RANGE,
                 0,
@@ -46,7 +46,7 @@ public class BackToWorkBuilding extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
         return new AbilityButton(
                 "Back to Work (Building)",
                 new ResourceLocation("minecraft", "textures/item/iron_pickaxe.png"),
@@ -67,7 +67,7 @@ public class BackToWorkBuilding extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, BlockPos targetBp) {
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
         if (!level.isClientSide()) {
 
             List<VillagerUnit> nearbyVillagers = MiscUtil.getEntitiesWithinRange(

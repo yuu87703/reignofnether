@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -29,17 +30,12 @@ public class VillagerHouse extends Building {
     public final static String structureName = "villager_house";
     public final static ResourceCost cost = ResourceCosts.VILLAGER_HOUSE;
 
-    public VillagerHouse(Level level, BlockPos originPos, Rotation rotation, String ownerName) {
-        super(level, originPos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, originPos, rotation), false);
+    public VillagerHouse() {
+        super(structureName, cost, false);
         this.name = buildingName;
-        this.ownerName = ownerName;
         this.portraitBlock = Blocks.OAK_LOG;
         this.icon = new ResourceLocation("minecraft", "textures/block/oak_log.png");
 
-        this.foodCost = cost.food;
-        this.woodCost = cost.wood;
-        this.oreCost = cost.ore;
-        this.popSupply = cost.population;
         this.buildTimeModifier = 0.8f;
 
         this.startingBlockTypes.add(Blocks.SPRUCE_PLANKS);
@@ -49,20 +45,18 @@ public class VillagerHouse extends Building {
 
     public Faction getFaction() {return Faction.VILLAGERS;}
 
-    public static ArrayList<BuildingBlock> getRelativeBlockData(LevelAccessor level) {
-        return BuildingBlockData.getBuildingBlocks(structureName, level);
-    }
-
-    public static AbilityButton getBuildButton(Keybinding hotkey) {
+    public AbilityButton getBuildButton(Keybinding hotkey) {
+        ResourceLocation key = ReignOfNetherRegistries.BUILDING.getKey(this);
+        String name = I18n.get("buildings." + getFaction().name().toLowerCase() + "." + key.getNamespace() + "." + key.getPath());
         return new AbilityButton(
-            VillagerHouse.buildingName,
+            name,
             new ResourceLocation("minecraft", "textures/block/oak_log.png"),
             hotkey,
-            () -> BuildingClientEvents.getBuildingToPlace() == VillagerHouse.class,
+            () -> BuildingClientEvents.getBuildingToPlace() == Buildings.VILLAGER_HOUSE,
             () -> !TutorialClientEvents.isAtOrPastStage(TutorialStage.EXPLAIN_BUILDINGS),
-            () -> BuildingClientEvents.hasFinishedBuilding(TownCentre.buildingName) ||
+            () -> BuildingClientEvents.hasFinishedBuilding(Buildings.TOWN_CENTRE) ||
                     ResearchClient.hasCheat("modifythephasevariance"),
-            () -> BuildingClientEvents.setBuildingToPlace(VillagerHouse.class),
+            () -> BuildingClientEvents.setBuildingToPlace(Buildings.VILLAGER_HOUSE),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.villager_house"), Style.EMPTY.withBold(true)),

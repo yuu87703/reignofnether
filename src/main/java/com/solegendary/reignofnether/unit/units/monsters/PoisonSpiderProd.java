@@ -1,9 +1,8 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
-import com.solegendary.reignofnether.cursor.CursorClientEvents;
-import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.sandbox.SandboxAction;
-import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProductionItem;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import net.minecraft.client.resources.language.I18n;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.*;
@@ -11,8 +10,6 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchHusks;
-import com.solegendary.reignofnether.research.researchItems.ResearchPoisonSpiders;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import net.minecraft.network.chat.Style;
@@ -28,16 +25,12 @@ public class PoisonSpiderProd extends ProductionItem {
     public final static String itemName = "Poison Spider";
     public final static ResourceCost cost = ResourceCosts.POISON_SPIDER;
 
-    public PoisonSpiderProd(ProductionBuilding building) {
-        super(building, cost.ticks);
-        this.onComplete = (Level level) -> {
+    public PoisonSpiderProd() {
+        super(cost);
+        this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide())
-                building.produceUnit((ServerLevel) level, EntityRegistrar.POISON_SPIDER_UNIT.get(), building.ownerName, true);
+                placement.produceUnit((ServerLevel) level, EntityRegistrar.POISON_SPIDER_UNIT.get(), placement.ownerName, true);
         };
-        this.foodCost = cost.food;
-        this.woodCost = cost.wood;
-        this.oreCost = cost.ore;
-        this.popCost = cost.population;
     }
 
     public String getItemName() {
@@ -68,7 +61,7 @@ public class PoisonSpiderProd extends ProductionItem {
         );
     }
 
-    public static Button getStartButton(ProductionBuilding prodBuilding, Keybinding hotkey) {
+    public Button getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new Button(
             PoisonSpiderProd.itemName,
             14,
@@ -76,8 +69,8 @@ public class PoisonSpiderProd extends ProductionItem {
             hotkey,
             () -> false,
             () -> false,
-            () -> ResearchClient.hasResearch(ResearchPoisonSpiders.itemName),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, itemName),
+            () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_POISON_SPIDERS),
+            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.POISON_SPIDER),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.poison_spider"), Style.EMPTY.withBold(true)),
@@ -93,7 +86,7 @@ public class PoisonSpiderProd extends ProductionItem {
         );
     }
 
-    public Button getCancelButton(ProductionBuilding prodBuilding, boolean first) {
+    public Button getCancelButton(ProductionPlacement prodBuilding, boolean first) {
         return new Button(
             PoisonSpiderProd.itemName,
             14,
@@ -102,7 +95,7 @@ public class PoisonSpiderProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, itemName, first),
+            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, ProductionItems.POISON_SPIDER, first),
             null,
             null
         );

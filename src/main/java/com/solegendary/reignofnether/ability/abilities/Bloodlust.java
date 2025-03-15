@@ -1,14 +1,13 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchBloodlust;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
-import com.solegendary.reignofnether.unit.goals.UnitBowAttackGoal;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
@@ -21,7 +20,6 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
@@ -39,7 +37,6 @@ public class Bloodlust extends Ability {
     public Bloodlust(Unit unit) {
         super(
                 UnitAction.BLOOD_LUST,
-                ((Entity) unit).level,
                 0,
                 0,
                 0,
@@ -59,13 +56,13 @@ public class Bloodlust extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
                 "Bloodlust",
                 new ResourceLocation("minecraft", "textures/block/redstone_block.png"),
                 hotkey,
                 () -> getDurationLeft(unit) > 0,
-                () -> !ResearchClient.hasResearch(ResearchBloodlust.itemName),
+                () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLOODLUST),
                 () -> true,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BLOOD_LUST),
                 null,

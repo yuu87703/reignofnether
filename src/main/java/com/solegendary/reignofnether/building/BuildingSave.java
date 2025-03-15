@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.building;
 
 import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
@@ -10,7 +11,7 @@ public class BuildingSave {
 
     public BlockPos originPos;
     public Level level;
-    public String name;
+    public Building building;
     public String ownerName;
     public Rotation rotation;
     public BlockPos rallyPoint;
@@ -20,11 +21,11 @@ public class BuildingSave {
     Portal.PortalType portalType;
     public BlockPos portalDestination;
 
-    public BuildingSave(BlockPos originPos, Level level, String name, String ownerName, Rotation rotation, BlockPos rallyPoint,
-                        boolean isDiagonalBridge, boolean isBuilt, int upgradeLevel, Portal.PortalType portalType, BlockPos portalDestination) {
+    public BuildingSave(BlockPos originPos, Level level, Building building, String ownerName, Rotation rotation, BlockPos rallyPoint,
+                        boolean isDiagonalBridge, boolean isBuilt, int upgradeLevel, PortalPlacement.PortalType portalType, BlockPos portalDestination) {
         this.originPos = originPos;
         this.level = level;
-        this.name = name;
+        this.building = building;
         this.ownerName = ownerName;
         this.rotation = rotation;
         this.rallyPoint = rallyPoint;

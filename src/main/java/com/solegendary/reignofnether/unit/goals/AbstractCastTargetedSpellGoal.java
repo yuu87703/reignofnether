@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.unit.goals;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.core.BlockPos;
@@ -25,12 +26,12 @@ public abstract class AbstractCastTargetedSpellGoal extends MoveToTargetBlockGoa
     protected final int range;
     public Consumer<LivingEntity> onEntityCast;
     public Consumer<BlockPos> onGroundCast;
-    public Consumer<Building> onBuildingCast;
+    public Consumer<BuildingPlacement> onBuildingCast;
 
     public AbstractCastTargetedSpellGoal(Mob mob, int channelTicks, int range,
                                          @Nullable Consumer<LivingEntity> onEntityCast,
                                          @Nullable Consumer<BlockPos> onGroundCast,
-                                         @Nullable Consumer<Building> onBuildingCast) {
+                                         @Nullable Consumer<BuildingPlacement> onBuildingCast) {
         super(mob, false, 0);
         this.channelTicks = channelTicks;
         this.range = range;
@@ -49,7 +50,7 @@ public abstract class AbstractCastTargetedSpellGoal extends MoveToTargetBlockGoa
         this.setMoveTarget(bpTarget);
         this.setTarget((LivingEntity) null);
     }
-    public void setTarget(Building building) {
+    public void setTarget(BuildingPlacement building) {
         this.setMoveTarget(building.centrePos);
         this.setTarget((LivingEntity) null);
     }
@@ -100,7 +101,7 @@ public abstract class AbstractCastTargetedSpellGoal extends MoveToTargetBlockGoa
                     if (onEntityCast != null && targetEntity != null)
                         onEntityCast.accept(targetEntity);
                     else if (onGroundCast != null || onBuildingCast != null) {
-                        Building targetBuilding = BuildingUtils.findBuilding(mob.level.isClientSide(), castTarget);
+                        BuildingPlacement targetBuilding = BuildingUtils.findBuilding(mob.level.isClientSide(), castTarget);
                         if (onBuildingCast != null && targetBuilding != null) {
                             onBuildingCast.accept(targetBuilding);
                         }

@@ -24,7 +24,6 @@ public class Explode extends Ability {
     public Explode(CreeperUnit creeperUnit) {
         super(
             UnitAction.EXPLODE,
-            creeperUnit.level,
             0,
             0,
             0,
@@ -34,7 +33,7 @@ public class Explode extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
             "Explode",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/tnt.png"),

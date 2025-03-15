@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.abilities;
 
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import net.minecraft.client.resources.language.I18n;
@@ -8,7 +9,6 @@ import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchBruteShields;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -36,7 +36,6 @@ public class ToggleShield extends Ability {
     public ToggleShield(BruteUnit bruteUnit) {
         super(
                 UnitAction.TOGGLE_SHIELD,
-                bruteUnit.level,
                 CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
                 0,
                 0,
@@ -46,13 +45,13 @@ public class ToggleShield extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
                 "Shield Stance",
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/shield.png"),
                 hotkey,
                 () -> bruteUnit.isHoldingUpShield,
-                () -> !ResearchClient.hasResearch(ResearchBruteShields.itemName) ||
+                () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BRUTE_SHIELDS) ||
                         bruteUnit.getItemBySlot(EquipmentSlot.OFFHAND).getItem() != Items.SHIELD,
                 () -> true,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.TOGGLE_SHIELD),

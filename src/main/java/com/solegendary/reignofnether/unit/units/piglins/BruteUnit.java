@@ -14,7 +14,6 @@ import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchBruteShields;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -160,8 +159,8 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         Bloodlust bloodlust = new Bloodlust(this);
         this.abilities.add(bloodlust);
         if (level.isClientSide()) {
-            this.abilityButtons.add(toggleShield.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(bloodlust.getButton(Keybindings.keyW));
+            this.abilityButtons.add(toggleShield.getButton(Keybindings.keyQ, this));
+            this.abilityButtons.add(bloodlust.getButton(Keybindings.keyW, this));
         }
     }
 
@@ -241,7 +240,7 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         axeStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
         this.setItemSlot(EquipmentSlot.MAINHAND, axeStack);
 
-        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ResearchBruteShields.itemName)) {
+        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ProductionItems.RESEARCH_BRUTE_SHIELDS)) {
             ItemStack shieldStack = new ItemStack(Items.SHIELD);
             this.setItemSlot(EquipmentSlot.OFFHAND, shieldStack);
         }

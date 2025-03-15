@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingBlock;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -21,7 +22,7 @@ public class RangedAttackBuildingGoal<T extends net.minecraft.world.entity.Mob> 
     private BlockPos blockTarget = null;
     private UnitBowAttackGoal<?> bowAttackGoal = null;
     private UnitCrossbowAttackGoal<?> cbowAttackGoal = null;
-    private Building buildingTarget = null;
+    private BuildingPlacement buildingTarget = null;
 
     public RangedAttackBuildingGoal(T mob, UnitBowAttackGoal<?> bowAttackGoal) {
         this.mob = mob;
@@ -76,11 +77,11 @@ public class RangedAttackBuildingGoal<T extends net.minecraft.world.entity.Mob> 
         }
     }
 
-    public void setBuildingTarget(Building building) {
+    public void setBuildingTarget(BuildingPlacement building) {
         this.buildingTarget = building;
     }
 
-    public Building getBuildingTarget() {
+    public BuildingPlacement getBuildingTarget() {
         return buildingTarget;
     }
 

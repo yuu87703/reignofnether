@@ -269,16 +269,16 @@ public class MiscUtil {
     }
 
 
-    public static Building findClosestAttackableBuilding(Mob unitMob, float range, ServerLevel level) {
-        List<Building> buildings = unitMob.level.isClientSide() ?
+    public static BuildingPlacement findClosestAttackableBuilding(Mob unitMob, float range, ServerLevel level) {
+        List<BuildingPlacement> buildings = unitMob.level.isClientSide() ?
                 BuildingClientEvents.getBuildings() : BuildingServerEvents.getBuildings();
 
         double closestDist = range;
-        Building closestBuilding = null;
+        BuildingPlacement closestBuilding = null;
 
-        for (Building building : buildings) {
+        for (BuildingPlacement building : buildings) {
             // Check if the building is attackable, taking into account the relationship
-            if (isBuildingAttackable(unitMob, building) && !(building instanceof AbstractBridge)) {
+            if (isBuildingAttackable(unitMob, building) && !(building instanceof BridgePlacement)) {
                 BlockPos attackPos = building.getClosestGroundPos(unitMob.getOnPos(), 1);
                 double dist = Math.sqrt(unitMob.getOnPos().distSqr(attackPos));
                 if (dist < closestDist) {
@@ -291,19 +291,13 @@ public class MiscUtil {
     }
 
     private static boolean isBuildingAttackable(Mob unitMob, Building building) {
-        if (building.invulnerable)
-            return false;
-
         // Get the relationship between the unit and the building's owner
         Relationship relationship = UnitServerEvents.getUnitToBuildingRelationship((Unit) unitMob, building);
 
         // If the relationship is FRIENDLY, do not allow the attack
-        if (relationship == Relationship.FRIENDLY)
+        if (relationship == Relationship.FRIENDLY) {
             return false;
-
-        boolean neutralAggro = unitMob.getLevel().getGameRules().getRule(GameRuleRegistrar.NEUTRAL_AGGRO).get();
-        if (relationship == Relationship.NEUTRAL && neutralAggro)
-            return true;
+        }
 
         // Additional attack conditions for hostile or neutral relationships can be added here
         return relationship == Relationship.HOSTILE;
@@ -348,17 +342,6 @@ public class MiscUtil {
             GuiComponent.drawString(stack, font, str, 0,y, 0xFFFFFF);
             y += 10;
         }
-    }
-
-    public static Relationship getClientsideRelationship(String playerName1, String playerName2) {
-        if (playerName1.isEmpty() || playerName2.isEmpty())
-            return Relationship.NEUTRAL;
-        else if (playerName1.equals(playerName2))
-            return Relationship.OWNED;
-        else if (AlliancesClient.isAllied(playerName1, playerName2))
-            return Relationship.FRIENDLY;
-        else
-            return Relationship.HOSTILE;
     }
 
     // lightens or darkens a hex RGB value
@@ -465,9 +448,9 @@ public class MiscUtil {
                     BlockState bs;
                     do {
                         bottomBp = topBp.offset(0,-y,0);
-                        bs = level.getBlockState(bottomBp); // TODO: infinite loop negative Y
+                        bs = level.getBlockState(bottomBp);
                         y += 1;
-                    } while (y < 30 && (bs.getBlock() instanceof LeavesBlock || !bs.getMaterial().isSolid()));
+                    } while (y < 30 && bs.getBlock() instanceof LeavesBlock || !bs.getMaterial().isSolid());
                     if (!level.getBlockState(bottomBp.above()).getMaterial().isSolid())
                         bps.add(bottomBp);
                 }
@@ -564,6 +547,7 @@ public class MiscUtil {
                     decisionOver2 += 2 * (z - x) + 1;
                 }
             }
+
             return circleBlocks;
         }
 
@@ -582,11 +566,5 @@ public class MiscUtil {
         }
     }
 
-    public static FormattedCharSequence fcs(String string) {
-        return FormattedCharSequence.forward(string, Style.EMPTY);
-    }
 
-    public static FormattedCharSequence fcs(String string, boolean bold) {
-        return FormattedCharSequence.forward(string, bold ? Style.EMPTY.withBold(true) : Style.EMPTY);
-    }
 }

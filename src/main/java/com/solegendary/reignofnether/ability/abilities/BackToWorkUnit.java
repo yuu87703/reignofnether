@@ -33,10 +33,9 @@ public class BackToWorkUnit extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE;
 
-    public BackToWorkUnit(Level level) {
+    public BackToWorkUnit() {
         super(
                 UnitAction.BACK_TO_WORK_UNIT,
-                level,
                 0,
                 RANGE,
                 0,
@@ -46,7 +45,7 @@ public class BackToWorkUnit extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
                 "Back to Work (Building)",
                 new ResourceLocation("minecraft", "textures/item/iron_pickaxe.png"),

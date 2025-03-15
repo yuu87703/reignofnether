@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.tutorial;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.building.buildings.monsters.*;
 import com.solegendary.reignofnether.building.buildings.villagers.Barracks;
@@ -173,14 +174,14 @@ public class TutorialServerEvents {
 
     public static void attackWithMonstersA() { // order all monster units to attack move towards the enemy base
         BlockPos attackPos = null;
-        for (Building building : BuildingServerEvents.getBuildings())
-            if (building instanceof TownCentre) {
+        for (BuildingPlacement building : BuildingServerEvents.getBuildings())
+            if (building.getBuilding() instanceof TownCentre) {
                 attackPos = building.originPos;
             }
 
         if (attackPos == null) {
-            for (Building building : BuildingServerEvents.getBuildings())
-                if (building instanceof Barracks) {
+            for (BuildingPlacement building : BuildingServerEvents.getBuildings())
+                if (building.getBuilding() instanceof Barracks) {
                     attackPos = building.originPos;
                 }
         }
@@ -196,10 +197,10 @@ public class TutorialServerEvents {
     public static void attackWithMonstersB() {
         BlockPos townCentrePos = null;
         BlockPos barracksPos = null;
-        for (Building building : BuildingServerEvents.getBuildings()) {
-            if (building instanceof TownCentre) {
+        for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
+            if (building.getBuilding() instanceof TownCentre) {
                 townCentrePos = building.originPos;
-            } else if (building instanceof Barracks) {
+            } else if (building.getBuilding() instanceof Barracks) {
                 barracksPos = building.originPos;
             }
         }

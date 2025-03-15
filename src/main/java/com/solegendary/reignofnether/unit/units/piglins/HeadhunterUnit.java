@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.unit.units.piglins;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Bloodlust;
 import com.solegendary.reignofnether.ability.abilities.MountHoglin;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
@@ -14,6 +15,7 @@ import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchHeavyTridents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -166,8 +168,8 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         Bloodlust bloodlust = new Bloodlust(this);
         this.abilities.add(bloodlust);
         if (level.isClientSide()) {
-            this.abilityButtons.add(mountHoglinAbility.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(bloodlust.getButton(Keybindings.keyW));
+            this.abilityButtons.add(mountHoglinAbility.getButton(Keybindings.keyQ, this));
+            this.abilityButtons.add(bloodlust.getButton(Keybindings.keyW, this));
         }
     }
 
@@ -267,7 +269,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), 0, AttributeModifier.Operation.ADDITION);
         tridentStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
 
-        if (ResearchServerEvents.playerHasResearch(getOwnerName(), ResearchHeavyTridents.itemName))
+        if (ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_HEAVY_TRIDENTS))
             tridentStack.enchant(Enchantments.UNBREAKING, 1);
 
         this.setItemSlot(EquipmentSlot.MAINHAND, tridentStack);

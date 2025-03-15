@@ -1,8 +1,8 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchSoulFireballs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,7 +35,7 @@ public class GhastUnitFireball extends LargeFireball {
             return;
 
         if (getOwner() instanceof GhastUnit ghastUnit &&
-                ResearchServerEvents.playerHasResearch(ghastUnit.getOwnerName(), ResearchSoulFireballs.itemName)) {
+                ResearchServerEvents.playerHasResearch(ghastUnit.getOwnerName(), ProductionItems.RESEARCH_SOUL_FIREBALLS)) {
 
             for (int x = -4; x < 4; x++) {
                 for (int y = -4; y < 4; y++) {

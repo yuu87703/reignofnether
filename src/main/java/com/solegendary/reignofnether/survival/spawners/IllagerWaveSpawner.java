@@ -1,18 +1,10 @@
 package com.solegendary.reignofnether.survival.spawners;
 
 import com.solegendary.reignofnether.ability.abilities.*;
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.BuildingServerEvents;
-import com.solegendary.reignofnether.building.GarrisonableBuilding;
-import com.solegendary.reignofnether.building.buildings.piglins.Portal;
-import com.solegendary.reignofnether.building.buildings.villagers.Barracks;
-import com.solegendary.reignofnether.building.buildings.villagers.Watchtower;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchEvokerVexes;
-import com.solegendary.reignofnether.research.researchItems.ResearchHeavyTridents;
-import com.solegendary.reignofnether.research.researchItems.ResearchSoulFireballs;
 import com.solegendary.reignofnether.survival.Wave;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -25,7 +17,6 @@ import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.ItemStack;
@@ -99,8 +90,8 @@ public class IllagerWaveSpawner {
     }
 
     public static void checkAndApplyUpgrades(int tier) {
-        if (tier >= 6 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ResearchEvokerVexes.itemName))
-            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ResearchEvokerVexes.itemName);
+        if (tier >= 6 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_EVOKER_VEXES))
+            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_EVOKER_VEXES);
     }
 
     public static void checkAndApplyEnchants(LivingEntity entity, int tier) {
@@ -152,7 +143,7 @@ public class IllagerWaveSpawner {
 
         final int pop = wave.population * PlayerServerEvents.rtsPlayers.size();
         int remainingPop = wave.population * PlayerServerEvents.rtsPlayers.size();
-        List<BlockPos> spawnBps = getValidSpawnPoints(remainingPop, level, true, 6);
+        List<BlockPos> spawnBps = getValidSpawnPoints(remainingPop, level, true);
         int spawnsThisDir = 0;
         int spawnUntilNextTurn = -2;
 

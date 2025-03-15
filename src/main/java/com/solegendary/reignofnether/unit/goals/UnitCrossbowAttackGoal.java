@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.Random;
 
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -82,7 +83,7 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
         }
     }
 
-    private Building getBuildingTarget() {
+    private BuildingPlacement getBuildingTarget() {
         if (this.mob instanceof PillagerUnit pUnit &&
                 pUnit.getAttackBuildingGoal() instanceof RangedAttackBuildingGoal<?> rabg) {
             return rabg.getBuildingTarget();
@@ -96,7 +97,7 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
 
     public void tick() {
         LivingEntity target = this.mob.getTarget();
-        Building buildTarget = getBuildingTarget();
+        BuildingPlacement buildTarget = getBuildingTarget();
 
         if ((target != null && target.isAlive()) || buildTarget != null) {
 

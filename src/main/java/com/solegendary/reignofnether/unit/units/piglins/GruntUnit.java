@@ -1,17 +1,23 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.building.buildings.piglins.*;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchResourceCapacity;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.ArmSwingingUnit;
@@ -163,19 +169,17 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     }
 
     public static List<AbilityButton> getBuildingButtons() {
-        return List.of(
-            CentralPortal.getBuildButton(Keybindings.keyQ),
-            Portal.getBuildButton(Keybindings.keyW),
-            NetherwartFarm.getBuildButton(Keybindings.keyE),
-            Bastion.getBuildButton(Keybindings.keyR),
-            HoglinStables.getBuildButton(Keybindings.keyT),
-            FlameSanctuary.getBuildButton(Keybindings.keyY),
-            WitherShrine.getBuildButton(Keybindings.keyU),
-            BasaltSprings.getBuildButton(Keybindings.keyI),
-            Fortress.getBuildButton(Keybindings.keyO),
-            BlackstoneBridge.getBuildButton(Keybindings.keyC),
-            Beacon.getBuildButton(null)
-        );
+        List<AbilityButton> buildingButtons = new ArrayList<>();
+        List<Keybinding> keybindings = BuildingUtils.keybindings;
+        int index = 0;
+
+        for (Building building : ReignOfNetherRegistries.BUILDING) {
+            if (building.getFaction() == Faction.PIGLINS) {
+                buildingButtons.add(building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index)));
+                index++;
+            }
+        }
+        return buildingButtons;
     }
 
     public GruntUnit(EntityType<? extends Piglin> entityType, Level level) {
@@ -238,8 +242,9 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     @Override
     protected void registerGoals() {
         initialiseGoals();
-        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, usePortalGoal);
+
+        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, attackGoal);
         this.goalSelector.addGoal(2, buildRepairGoal);
         this.goalSelector.addGoal(2, gatherResourcesGoal);
@@ -252,13 +257,13 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
 
     @Override
     public void setupEquipmentAndUpgradesClient() {
-        if (ResearchClient.hasResearch(ResearchResourceCapacity.itemName))
+        if (ResearchClient.hasResearch(ProductionItems.RESEARCH_RESOURCE_CAPACITY))
             this.maxResources = 200;
     }
 
     @Override
     public void setupEquipmentAndUpgradesServer() {
-        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ResearchResourceCapacity.itemName))
+        if (ResearchServerEvents.playerHasResearch(this.getOwnerName(), ProductionItems.RESEARCH_RESOURCE_CAPACITY))
             this.maxResources = 200;
     }
 

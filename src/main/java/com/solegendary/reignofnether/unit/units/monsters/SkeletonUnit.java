@@ -152,7 +152,7 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
         this.abilities.add(mountSpiderAbility);
 
         if (level.isClientSide()) {
-            this.abilityButtons.add(mountSpiderAbility.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(mountSpiderAbility.getButton(Keybindings.keyQ, this));
         }
     }
 

@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class CallToArmsGoal extends MoveToTargetBlockGoal {
 
-    private Building buildingTarget;
+    private BuildingPlacement buildingTarget;
 
     public CallToArmsGoal(Mob mob) {
         super(mob, true, 0);
@@ -58,13 +59,13 @@ public class CallToArmsGoal extends MoveToTargetBlockGoal {
     }
 
     public void setNearestTownCentreAsTarget() {
-        Building building = BuildingUtils.findClosestBuilding(mob.level.isClientSide(), this.mob.getEyePosition(),
-                (b) -> b.isBuilt && b.ownerName.equals(((Unit) mob).getOwnerName()) && b instanceof TownCentre);
-        if (building instanceof TownCentre townCentre)
-            setBuildingTarget(townCentre);
+        BuildingPlacement building = BuildingUtils.findClosestBuilding(mob.level.isClientSide(), this.mob.getEyePosition(),
+                (b) -> b.isBuilt && b.ownerName.equals(((Unit) mob).getOwnerName()) && b.getBuilding() instanceof TownCentre);
+        if (building.getBuilding() instanceof TownCentre)
+            setBuildingTarget(building);
     }
 
-    private void setBuildingTarget(@Nullable Building target) {
+    private void setBuildingTarget(@Nullable BuildingPlacement target) {
         if (target != null) {
             MiscUtil.addUnitCheckpoint((Unit) mob, new BlockPos(
                     target.centrePos.getX(),
@@ -78,7 +79,7 @@ public class CallToArmsGoal extends MoveToTargetBlockGoal {
         this.start();
     }
 
-    public Building getBuildingTarget() { return buildingTarget; }
+    public BuildingPlacement getBuildingTarget() { return buildingTarget; }
 
     @Override
     public void stop() {

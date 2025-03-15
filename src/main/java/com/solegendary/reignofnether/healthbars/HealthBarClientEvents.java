@@ -6,6 +6,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -162,7 +163,7 @@ public class HealthBarClientEvents {
         render(matrix, percent, percent2, x, y, width, renderMode);
     }
 
-    public static void renderForBuilding(PoseStack matrix, Building building, double x, double y,
+    public static void renderForBuilding(PoseStack matrix, BuildingPlacement building, double x, double y,
                                          float width, RenderMode renderMode) {
         float health = building.getHealth();
         if (health > building.getMaxHealth())
