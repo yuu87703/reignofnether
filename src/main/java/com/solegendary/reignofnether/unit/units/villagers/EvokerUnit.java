@@ -127,8 +127,8 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
     // endregion
 
-    private CastFangsGoal castFangsGoal;
-    public CastFangsGoal getCastFangsGoal() {
+    private GenericTargetedSpellGoal castFangsGoal;
+    public GenericTargetedSpellGoal getCastFangsGoal() {
         return castFangsGoal;
     }
     private CastSummonVexesGoal castSummonVexesGoal;
@@ -222,7 +222,10 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
         this.garrisonGoal = new GarrisonGoal(this);
         this.attackGoal = new UnitBowAttackGoal<>(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
-        this.castFangsGoal = new CastFangsGoal(this, FANGS_CHANNEL_SECONDS * ResourceCost.TICKS_PER_SECOND, FANGS_RANGE_LINE, this::createEvokerFangs);
+        this.castFangsGoal = new GenericTargetedSpellGoal(this,
+            FANGS_CHANNEL_SECONDS * ResourceCost.TICKS_PER_SECOND, FANGS_RANGE_LINE,
+            this::createEvokerFangs, null, null
+        );
         this.castSummonVexesGoal = new CastSummonVexesGoal(this);
     }
 

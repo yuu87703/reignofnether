@@ -4,6 +4,8 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 //Raises the movement and attack speed of all of your units while active (other monster players' units are unaffected)
 //Soul Siphon extends the duration
 
+// play a cave sound and announce "A blood moon rises" in global chat
+
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;

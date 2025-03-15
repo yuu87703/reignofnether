@@ -4,6 +4,8 @@ package com.solegendary.reignofnether.ability.heroAbilities.piglin;
 //Higher levels raise the quality of food thrown
 //Greed is Good raises the amount of food thrown
 
+// TODO: make piglin units stop to eat vanilla food items if they are damaged
+
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;

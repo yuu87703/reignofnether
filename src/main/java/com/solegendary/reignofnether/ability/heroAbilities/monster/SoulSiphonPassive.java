@@ -5,6 +5,8 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 //Higher levels increase the maximum number of souls held
 //can be toggled on and off
 
+// starts at 4/20 souls, raises to 7/30, 10/40 at higher ranks
+
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;

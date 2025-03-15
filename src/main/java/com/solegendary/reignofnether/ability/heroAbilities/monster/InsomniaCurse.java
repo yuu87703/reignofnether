@@ -2,7 +2,9 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 
 //Curses an enemy to be chased by a temporary phantom summon, has multiple charges
 //Higher levels raise number of charges and lowers cooldown
-//Soul Siphon raises the size of the phantoms
+//Soul Siphon raises the size and damage of the phantoms
+
+// Phantoms should despawn after a set number of attacks
 
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.unit.UnitAction;

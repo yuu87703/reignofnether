@@ -36,7 +36,11 @@ Quality of Life Features
 [❌] restore ores on /rts-reset
     - Have to track each ore block when it is mined or converted into nether terrain
 
-
+[❌] buff/debuff icons in vertical list to right of unit stats
+    - potion effects
+    - auras
+    - hero passives
+    - enchantments
 
 Balancing
 ---------

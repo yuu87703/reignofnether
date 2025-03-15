@@ -13,6 +13,7 @@ HEROES (in order of priority)
     - spell animations
     - spell particles
     - levelling and exp
+        - exp bar/level number above portrait, below name
     - spell levelling and requirements
     - mana?
     - equipment
@@ -31,13 +32,20 @@ Quality of Life
 ---------------
 [❌] Ravagers that are mounted no longer aggro automatically onto buildings
     - This prevents them hurting themselves from the splash damage
+[❌] Button to toggle spider climbing
+[❌] Slimes and magma cubes no longer clip into log blocks, but are just slowed down
+[❌] Turn cheats on by default for sandbox mode
+
+
 
 Balancing
 ---------
 - Nerf sculk amplifiers? (can reduce damage)
 - Nerf ravager artillery? (take away bonus damage?)
 - Buff creepers?
-- Buff
+- Give witches autocast and attack move
+    - Make AOE spherical instead of hemispherical
+    - Add antifire and healing potions with upgrades
 
 
 Villagers
