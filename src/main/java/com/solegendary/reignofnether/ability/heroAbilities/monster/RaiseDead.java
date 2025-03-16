@@ -8,7 +8,10 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -22,11 +25,14 @@ import java.util.List;
 
 import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitCommand;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
+import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class RaiseDead extends HeroAbility {
 
+    private static final int CD_MAX_SECONDS = 240 * ResourceCost.TICKS_PER_SECOND;
+
     public RaiseDead(HeroUnit hero) {
-        super(hero, 3, UnitAction.RAISE_DEAD, 60, 0, 0, false);
+        super(hero, 3, UnitAction.RAISE_DEAD, CD_MAX_SECONDS, 0, 0, false);
     }
 
     @Override
@@ -35,7 +41,7 @@ public class RaiseDead extends HeroAbility {
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/zombie.png"),
                 hotkey,
                 () -> false,
-                () -> rank > 0,
+                () -> rank <= 0,
                 () -> true,
                 () -> sendUnitCommand(UnitAction.RAISE_DEAD),
                 null,
@@ -44,12 +50,21 @@ public class RaiseDead extends HeroAbility {
         );
     }
 
+    @Override
+    public Button getRankUpButton() {
+        return super.getRankUpButtonProtected(
+            "Raise Dead",
+            new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/zombie.png")
+        );
+    }
+
     private static final float BONUS_HEALTH_PER_SOUL = 2;
     private static final float BONUS_DAMAGE_PER_SOUL = 0.3f;
 
     public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
-                fcs(I18n.get("abilities.reignofnether.raise_dead"), true),
+                fcs(I18n.get("abilities.reignofnether.raise_dead") + " " + rankString(), true),
+                fcsIcons(I18n.get("abilities.reignofnether.raise_dead.stats", CD_MAX_SECONDS / 20)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip2")),
@@ -59,6 +74,10 @@ public class RaiseDead extends HeroAbility {
 
     public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
+                fcs(I18n.get("abilities.reignofnether.raise_dead"), true),
+                fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip2")),
+                fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.rank1"), rank == 0),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.rank2"), rank == 1),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.rank3"), rank == 2)

@@ -586,6 +586,10 @@ public class MiscUtil {
         return FormattedCharSequence.forward(string, Style.EMPTY);
     }
 
+    public static FormattedCharSequence fcsIcons(String string) {
+        return FormattedCharSequence.forward(string, MyRenderer.iconStyle);
+    }
+
     public static FormattedCharSequence fcs(String string, boolean bold) {
         return FormattedCharSequence.forward(string, bold ? Style.EMPTY.withBold(true) : Style.EMPTY);
     }

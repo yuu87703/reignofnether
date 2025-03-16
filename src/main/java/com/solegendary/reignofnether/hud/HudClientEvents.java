@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.hud;
 import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.attackwarnings.AttackWarningClientEvents;
@@ -36,6 +37,7 @@ import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
+import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.units.monsters.*;
@@ -854,17 +856,31 @@ public class HudClientEvents {
                         break;
                     }
                 }
-                List<AbilityButton> shownAbilities = abilityButtons.stream()
-                        .filter(ab -> !ab.isHidden.get() && !(ab.ability instanceof CallToArmsUnit))
+                List<AbilityButton> unitAbilities = abilityButtons.stream()
+                        .filter(ab -> !(ab.ability instanceof CallToArmsUnit))
                         .toList();
 
-                int rowsUp = (int) Math.floor((float) (shownAbilities.size() - 1) / MAX_BUTTONS_PER_ROW);
+                int rowsUp = (int) Math.floor((float) (unitAbilities.size() - 1) / MAX_BUTTONS_PER_ROW);
                 rowsUp = Math.max(0, rowsUp);
                 blitY -= iconFrameSize * rowsUp;
 
                 int i = 0;
-                for (AbilityButton abilityButton : shownAbilities) {
-                    if (!abilityButton.isHidden.get()) {
+                for (AbilityButton abilityButton : unitAbilities) {
+
+                    if (abilityButton.ability instanceof HeroAbility heroAbility &&
+                        heroAbility.hero.isRankUpMenuOpen()) {
+                        Button rankUpButton = heroAbility.getRankUpButton();
+                        if (!rankUpButton.isHidden.get()) {
+                            i += 1;
+                            rankUpButton.render(evt.getPoseStack(), blitX, blitY, mouseX, mouseY);
+                            renderedButtons.add(rankUpButton);
+                            blitX += iconFrameSize;
+                            if (i % MAX_BUTTONS_PER_ROW == 0) {
+                                blitX = 0;
+                                blitY += iconFrameSize;
+                            }
+                        }
+                    } else if (!abilityButton.isHidden.get()) {
                         i += 1;
                         abilityButton.render(evt.getPoseStack(), blitX, blitY, mouseX, mouseY);
                         renderedButtons.add(abilityButton);
@@ -873,6 +889,13 @@ public class HudClientEvents {
                             blitX = 0;
                             blitY += iconFrameSize;
                         }
+                    }
+                }
+                if (hudSelectedEntity instanceof HeroUnit hero) {
+                    Button rankUpMenuButton = HeroAbility.getRankUpMenuButton(hero);
+                    if (!rankUpMenuButton.isHidden.get()) {
+                        rankUpMenuButton.render(evt.getPoseStack(), 0, blitY - iconFrameSize, mouseX, mouseY);
+                        renderedButtons.add(rankUpMenuButton);
                     }
                 }
             }
@@ -1478,9 +1501,8 @@ public class HudClientEvents {
         // Button tooltips (has to be rendered last to be on top)
         // ------------------------------------------------------
         for (Button button : renderedButtons)
-            if (button.isMouseOver(mouseX, mouseY)) {
+            if (button.isMouseOver(mouseX, mouseY))
                 button.renderTooltip(evt.getPoseStack(), mouseX, mouseY);
-            }
 
         TutorialClientEvents.checkAndRenderNextAction(evt.getPoseStack(), renderedButtons);
     }

@@ -1,9 +1,11 @@
 package com.solegendary.reignofnether.ability;
 
+import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.packets.UnitActionServerboundPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.NetworkEvent;
@@ -17,11 +19,7 @@ public class AbilityServerboundPacket {
     private final UnitAction unitAction;
 
     public static void rankUpAbility(int unitId, UnitAction abilityAction) {
-        for (LivingEntity entity : UnitServerEvents.getAllUnits())
-            if (entity.getId() == unitId && entity instanceof Unit unit)
-                for (Ability ability : unit.getAbilities())
-                    if (ability instanceof HeroAbility heroAbility && ability.action == abilityAction)
-                        heroAbility.rankUp();
+        PacketHandler.INSTANCE.sendToServer(new AbilityServerboundPacket(unitId, abilityAction));
     }
 
     public AbilityServerboundPacket(

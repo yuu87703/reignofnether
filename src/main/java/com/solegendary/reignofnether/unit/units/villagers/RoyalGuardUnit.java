@@ -121,7 +121,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     // endregion
 
     private int skillPoints = 0;
-    @Override public int getSkillPoints() { return 0; }
+    @Override public int getSkillPoints() { return skillPoints; }
     @Override public void setSkillPoints(int points) { skillPoints = points; }
     private int heroLevel = 1;
     private boolean rankUpMenuOpen = false;
@@ -201,12 +201,16 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.abilities.add(ab2);
         this.abilities.add(ab3);
         this.abilities.add(ab4);
+        updateAbilityButtons();
+    }
 
+    public void updateAbilityButtons() {
         if (level.isClientSide()) {
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(ab2.getButton(Keybindings.keyW));
-            this.abilityButtons.add(ab3.getButton(Keybindings.keyE));
-            this.abilityButtons.add(ab4.getButton(Keybindings.keyR));
+            this.abilityButtons.clear();
+            this.abilityButtons.add(this.abilities.get(0).getButton(Keybindings.keyQ));
+            this.abilityButtons.add(this.abilities.get(1).getButton(Keybindings.keyW));
+            this.abilityButtons.add(this.abilities.get(2).getButton(Keybindings.keyE));
+            this.abilityButtons.add(this.abilities.get(3).getButton(Keybindings.keyR));
         }
     }
 

@@ -12,4 +12,6 @@ public interface HeroUnit {
 
     int getHeroLevel();
     void levelUp();
+
+    void updateAbilityButtons();
 }

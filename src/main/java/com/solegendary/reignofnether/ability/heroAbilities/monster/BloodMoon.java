@@ -10,7 +10,9 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -24,11 +26,16 @@ import java.util.List;
 
 import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitCommand;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
+import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class BloodMoon extends HeroAbility {
 
+    private static final int CD_MAX_SECONDS = 240 * ResourceCost.TICKS_PER_SECOND;
+    private static final int DURATION_SECONDS = 60;
+    private static final int BONUS_SECONDS_PER_SOUL = 3;
+
     public BloodMoon(HeroUnit hero) {
-        super(hero, 1, UnitAction.BLOOD_MOON, 240, 0, 0, false);
+        super(hero, 1, UnitAction.BLOOD_MOON, CD_MAX_SECONDS, 0, 0, false);
     }
 
     @Override
@@ -37,7 +44,7 @@ public class BloodMoon extends HeroAbility {
             new ResourceLocation("minecraft", "textures/block/redstone_block.png"),
             hotkey,
             () -> false,
-            () -> rank > 0,
+            () -> rank == 0,
             () -> true,
             () -> sendUnitCommand(UnitAction.BLOOD_MOON),
             null,
@@ -46,16 +53,31 @@ public class BloodMoon extends HeroAbility {
         );
     }
 
-    private static final int DURATION = 60;
-    private static final int BONUS_SECONDS_PER_SOUL = 3;
+    @Override
+    public Button getRankUpButton() {
+        return super.getRankUpButtonProtected(
+            "Blood Moon",
+            new ResourceLocation("minecraft", "textures/block/redstone_block.png")
+        );
+    }
 
     public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.blood_moon"), true),
-                fcs(""),
+                fcsIcons(I18n.get("abilities.reignofnether.blood_moon.stats", CD_MAX_SECONDS / 20)),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip3", BONUS_SECONDS_PER_SOUL))
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip3")),
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip4", DURATION_SECONDS, BONUS_SECONDS_PER_SOUL))
+        );
+    }
+
+    public List<FormattedCharSequence> getRankUpTooltipLines() {
+        return List.of(
+                fcs(I18n.get("abilities.reignofnether.blood_moon"), true),
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip3"))
         );
     }
 

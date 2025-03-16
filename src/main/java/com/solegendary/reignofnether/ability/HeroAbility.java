@@ -2,16 +2,22 @@ package com.solegendary.reignofnether.ability;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public abstract class HeroAbility extends Ability {
 
@@ -28,11 +34,17 @@ public abstract class HeroAbility extends Ability {
         this.maxRank = maxRank;
     }
 
-    public void rankUp() {
+    public boolean rankUp() {
         if (rank < maxRank && hero.getSkillPoints() > 0) {
             rank += 1;
             hero.setSkillPoints(hero.getSkillPoints() - 1);
+            return true;
         }
+        return false;
+    }
+
+    protected String rankString() {
+        return rank > 0 ? I18n.get("abilities.reignofnether.rank", rank) : I18n.get("abilities.reignofnether.unlearnt");
     }
 
     public List<FormattedCharSequence> getRankUpTooltipLines() {
@@ -48,35 +60,47 @@ public abstract class HeroAbility extends Ability {
     }
 
     // rank up button for this specific ability
-    public AbilityButton getRankUpButton(Keybinding hotkey, String name, ResourceLocation resourceLocation) {
-        return new AbilityButton(name,
-            resourceLocation,
-            hotkey,
+    public Button getRankUpButton() {
+        return null;
+    }
+
+    protected Button getRankUpButtonProtected(String name, ResourceLocation resourceLocation) {
+        Button button = new Button(name,
+            14,
+            new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/level_up_skill.png"),
+            (Keybinding) null,
             () -> false,
-            () -> hero.isRankUpMenuOpen() && rank < maxRank,
+            () -> !hero.isRankUpMenuOpen() || rank >= maxRank,
             () -> hero.getSkillPoints() > 0,
             () -> {
-                AbilityServerboundPacket.rankUpAbility(((Entity) hero).getId(), action);
-                hero.showRankUpMenu(true);
+                if (rankUp()) {
+                    AbilityServerboundPacket.rankUpAbility(((Entity) hero).getId(), action);
+                    hero.updateAbilityButtons();
+                }
+                if (hero.getSkillPoints() <= 0)
+                    hero.showRankUpMenu(false);
             },
             null,
-            getRankUpTooltipLines(),
-            this
+            getRankUpTooltipLines()
         );
+        button.bgIconResource = resourceLocation;
+        return button;
     }
 
     // button that all heroes have to show
-    public AbilityButton getRankUpMenuButton() {
-        return new AbilityButton("Rank up abilities",
-            new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/tick.png"),
+    public static Button getRankUpMenuButton(HeroUnit hero) {
+        return new Button("Rank up abilities",
+            14,
+            hero.isRankUpMenuOpen() ?
+                new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/cross.png") :
+                new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/tick.png"),
             Keybindings.keyU,
             () -> false,
-            () -> hero.getSkillPoints() > 0,
+            () -> hero.getSkillPoints() <= 0,
             () -> true,
             () -> hero.showRankUpMenu(!hero.isRankUpMenuOpen()),
             null,
-            getRankUpTooltipLines(),
-            this
+            List.of(fcs(I18n.get("abilities.reignofnether.rank_up_menu", hero.getSkillPoints()), true))
         );
     }
 }
