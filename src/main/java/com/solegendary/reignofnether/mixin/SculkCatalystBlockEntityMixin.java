@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.entity.SculkCatalystBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,6 +42,8 @@ public abstract class SculkCatalystBlockEntityMixin {
     @Shadow
     @Final
     private BlockState blockState;
+
+    @Shadow @Final private PositionSource positionSource;
 
     @Inject(
             method = "handleGameEvent",
@@ -75,7 +78,7 @@ public abstract class SculkCatalystBlockEntityMixin {
                         }
                     }
                     $$3.skipDropExperience();
-                    bloom(pLevel, new BlockPos((int) pPos.x, (int) pPos.y, (int) pPos.z), this.blockState, pLevel.getRandom());
+                    positionSource.getPosition(pLevel).ifPresent((p_289513_) -> this.bloom(pLevel, BlockPos.containing(p_289513_), this.blockState, pLevel.getRandom()));
                 }
                 cir.setReturnValue(true);
                 return;
