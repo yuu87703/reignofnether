@@ -593,4 +593,8 @@ public class MiscUtil {
     public static FormattedCharSequence fcs(String string, boolean bold) {
         return FormattedCharSequence.forward(string, bold ? Style.EMPTY.withBold(true) : Style.EMPTY);
     }
+
+    public static FormattedCharSequence fcs(String string, Style style) {
+        return FormattedCharSequence.forward(string, style);
+    }
 }

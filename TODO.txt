@@ -27,7 +27,7 @@ Bugfixes
 [❌] gui scale not working?
 
 [❌] tutorial camera centering is off
-
+[❌] Mounted piglins don't heal from nether terrain
 
 
 Quality of Life

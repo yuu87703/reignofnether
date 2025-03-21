@@ -15,10 +15,14 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
+import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -29,7 +33,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class RaiseDead extends HeroAbility {
 
-    private static final int CD_MAX_SECONDS = 240 * ResourceCost.TICKS_PER_SECOND;
+    private static final int CD_MAX_SECONDS = 5 * ResourceCost.TICKS_PER_SECOND;
 
     public RaiseDead(HeroUnit hero) {
         super(hero, 3, UnitAction.RAISE_DEAD, CD_MAX_SECONDS, 0, 0, false);
@@ -75,7 +79,7 @@ public class RaiseDead extends HeroAbility {
     public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.raise_dead"), true),
-                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement())),
+                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip2")),
@@ -86,7 +90,15 @@ public class RaiseDead extends HeroAbility {
         );
     }
 
+    @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
+        ((NecromancerUnit) unitUsing).getCastRaiseDeadGoal().setAbility(this);
+        ((NecromancerUnit) unitUsing).getCastRaiseDeadGoal().startCasting();
+    }
 
+    @Override
+    public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
+        ((NecromancerUnit) unitUsing).getCastRaiseDeadGoal().setAbility(this);
+        ((NecromancerUnit) unitUsing).getCastRaiseDeadGoal().startCasting();
     }
 }

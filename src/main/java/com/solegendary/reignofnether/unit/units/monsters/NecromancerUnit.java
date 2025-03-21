@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.monster.SoulSiphonPas
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
@@ -25,17 +26,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
@@ -81,6 +81,11 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     private ReturnResourcesGoal returnResourcesGoal;
     public MountGoal mountGoal;
 
+    public UntargetedChanneledSpellGoal castRaiseDeadGoal;
+    public UntargetedChanneledSpellGoal getCastRaiseDeadGoal() {
+        return castRaiseDeadGoal;
+    }
+
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public LivingEntity getFollowTarget() { return followTarget; }
     public boolean getHoldPosition() { return holdPosition; }
@@ -124,8 +129,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
 
     // endregion
 
-    private int skillPoints = 4;
-    private int experience = 1000;
+    private int skillPoints = 1;
+    private int experience = 0;
     private boolean rankUpMenuOpen = false;
     @Override public int getSkillPoints() { return skillPoints; }
     @Override public void setSkillPoints(int points) { skillPoints = points; }
@@ -165,6 +170,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
     final static private int ATTACK_WINDUP_TICKS = 6; // (int) (NecromancerAnimations.ATTACK.lengthInSeconds() * 20f * 0.22f);
 
+    final static private int RAISE_DEAD_CHANNEL_TICKS = 40;
+
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
     public AnimationState activeAnimState = null;
@@ -183,12 +190,25 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public int getAnimateTicksLeft() { return animateTicks; }
 
     public void playSingleAnimation(UnitAnimationAction animAction) {
+        animateScaleReducing = false;
         switch (animAction) {
             case ATTACK_UNIT, ATTACK_BUILDING -> {
                 activeAnimDef = NecromancerAnimations.ATTACK;
                 activeAnimState = attackAnimState;
                 animateScale = 1.0f;
-                startAnimation(NecromancerAnimations.ATTACK);
+                startAnimation(activeAnimDef);
+            }
+            case CHARGE_SPELL -> {
+                activeAnimDef = NecromancerAnimations.SPELL_CHARGE;
+                activeAnimState = spellChargeAnimState;
+                animateScale = 1.0f;
+                startAnimation(activeAnimDef);
+            }
+            case CAST_SPELL -> {
+                activeAnimDef = NecromancerAnimations.SPELL_ACTIVATE;
+                activeAnimState = spellActivateAnimState;
+                animateScale = 1.0f;
+                startAnimation(activeAnimDef);
             }
         }
     }
@@ -220,6 +240,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     @Override
     public void resetBehaviours() {
         animateScaleReducing = true;
+        this.castRaiseDeadGoal.stop();
     }
 
     @Override
@@ -253,6 +274,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
                 stopAllAnimations();
             }
         }
+        this.castRaiseDeadGoal.tick();
     }
 
     @Override
@@ -267,6 +289,30 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.garrisonGoal = new GarrisonGoal(this);
         this.attackGoal = new UnitRangedAttackGoal<>(this, ATTACK_WINDUP_TICKS);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
+        this.castRaiseDeadGoal = new UntargetedChanneledSpellGoal(
+                this,
+                RAISE_DEAD_CHANNEL_TICKS,
+                this::raiseDead,
+                UnitAnimationAction.CHARGE_SPELL,
+                UnitAnimationAction.STOP,
+                UnitAnimationAction.CAST_SPELL
+        );
+    }
+
+    public void raiseDead() {
+        if (this.level.isClientSide())
+            return;
+
+        for(int i = 0; i < 2; ++i) {
+            BlockPos blockpos = this.blockPosition().offset(-2 + this.random.nextInt(5), 1, -2 + this.random.nextInt(5));
+            ZombieUnit zombieUnit = EntityRegistrar.ZOMBIE_UNIT.get().create(this.level);
+            if (zombieUnit != null) {
+                zombieUnit.moveTo(blockpos, 0.0F, 0.0F);
+                zombieUnit.setOwnerName(this.getOwnerName());
+                this.level.addFreshEntity(zombieUnit);
+                zombieUnit.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+            }
+        }
     }
 
     @Override

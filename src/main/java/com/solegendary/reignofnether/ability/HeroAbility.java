@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
@@ -94,18 +95,24 @@ public abstract class HeroAbility extends Ability {
 
     // button that all heroes have to show ability level up options
     public static Button getRankUpMenuButton(HeroUnit hero) {
-        return new Button("Rank up abilities",
+        Button menuButton = new Button("Rank up abilities",
             14,
             hero.isRankUpMenuOpen() ?
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/cross.png") :
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/tick.png"),
             Keybindings.keyU,
             () -> false,
-            () -> hero.getSkillPoints() <= 0,
+            () -> hero.getHeroLevel() >= HeroUnit.MAX_HERO_LEVEL && hero.getSkillPoints() <= 0,
             () -> true,
             () -> hero.showRankUpMenu(!hero.isRankUpMenuOpen()),
             null,
             List.of(fcs(I18n.get("abilities.reignofnether.rank_up_menu", hero.getSkillPoints()), true))
         );
+        menuButton.isFlashing = () -> !hero.isRankUpMenuOpen() && hero.getSkillPoints() > 0;
+        return menuButton;
+    }
+
+    public Style getLevelReqStyle() {
+        return Style.EMPTY.withColor(hero.getHeroLevel() >= getLevelRequirement() ? 0x00FF00 : 0xFF0000);
     }
 }

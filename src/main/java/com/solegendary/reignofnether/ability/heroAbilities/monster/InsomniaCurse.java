@@ -97,7 +97,7 @@ public class InsomniaCurse extends HeroAbility {
     public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
             fcs(I18n.get("abilities.reignofnether.insomnia_curse"), true),
-            fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement())),
+            fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
             fcs(""),
             fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip1")),
             fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip2")),

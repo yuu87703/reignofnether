@@ -75,7 +75,7 @@ public class BloodMoon extends HeroAbility {
     public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.blood_moon"), true),
-                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement())),
+                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip2")),
