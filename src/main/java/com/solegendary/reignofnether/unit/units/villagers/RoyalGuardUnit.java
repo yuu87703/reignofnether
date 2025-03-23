@@ -242,21 +242,8 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         AttackerUnit.tick(this);
         PromoteIllager.checkAndApplyBuff(this);
 
-        if (level.isClientSide()) {
-            if (animateTicks > 0) {
-                animateTicks -= 1;
-            }
-            if (animateScale > 0 && animateScaleReducing) {
-                animateScale -= 0.1f;
-            }
-            if (animateScale <= 0) {
-                activeAnimDef = null;
-                activeAnimState = null;
-                animateScaleReducing = false;
-                stopAllAnimations();
-            }
-            if (tickCount % 20 == 0)
-                updateAbilityButtons();
+        if (level.isClientSide() && animateTicks > 0) {
+            animateTicks -= 1;
         }
     }
 

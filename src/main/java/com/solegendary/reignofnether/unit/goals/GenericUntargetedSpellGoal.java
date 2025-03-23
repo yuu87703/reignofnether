@@ -64,7 +64,8 @@ public class GenericUntargetedSpellGoal extends Goal {
                     else
                         this.ability.setToMaxCooldown();
                 }
-                this.stop();
+                this.ticksCasting = 0;
+                this.isCasting = false;
             }
         }
     }

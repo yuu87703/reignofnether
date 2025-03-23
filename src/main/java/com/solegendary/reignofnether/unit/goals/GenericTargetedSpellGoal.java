@@ -134,7 +134,7 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
                     }
                     if (this.ability != null && !this.mob.level.isClientSide())
                         AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
-                    this.stop();
+                    this.stopExceptAnimations();
                 }
             }
         }
@@ -169,5 +169,13 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
         this.stopMoving();
         this.setTarget((LivingEntity) null);
         this.stopCasting();
+    }
+
+    public void stopExceptAnimations() {
+        this.stopMoving();
+        this.setTarget((LivingEntity) null);
+        this.isCasting = false;
+        this.ticksCasting = 0;
+        this.castTarget = null;
     }
 }

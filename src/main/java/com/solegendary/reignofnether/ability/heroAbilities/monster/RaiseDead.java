@@ -33,6 +33,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class RaiseDead extends HeroAbility {
 
+    public static final int CHANNEL_TICKS = 40;
     private static final int CD_MAX_SECONDS = 5 * ResourceCost.TICKS_PER_SECOND;
 
     public RaiseDead(HeroUnit hero) {

@@ -162,10 +162,10 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
+    public String animDebug = "";
+
     // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
     final static private int ATTACK_WINDUP_TICKS = 6; // (int) (NecromancerAnimations.ATTACK.lengthInSeconds() * 20f * 0.22f);
-
-    final static private int RAISE_DEAD_CHANNEL_TICKS = 40;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -205,6 +205,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
+            default -> animateScaleReducing = true;
         }
     }
 
@@ -255,19 +256,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         Unit.tick(this);
         AttackerUnit.tick(this);
 
-        if (level.isClientSide()) {
-            if (animateTicks > 0) {
-                animateTicks -= 1;
-            }
-            if (animateScale > 0 && animateScaleReducing) {
-                animateScale -= 0.1f;
-            }
-            if (animateScale <= 0) {
-                activeAnimDef = null;
-                activeAnimState = null;
-                animateScaleReducing = false;
-                stopAllAnimations();
-            }
+        if (level.isClientSide() && animateTicks > 0) {
+            animateTicks -= 1;
         }
         this.castRaiseDeadGoal.tick();
     }
@@ -286,7 +276,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.castRaiseDeadGoal = new GenericUntargetedSpellGoal(
                 this,
-                RAISE_DEAD_CHANNEL_TICKS,
+                RaiseDead.CHANNEL_TICKS,
                 this::raiseDead,
                 UnitAnimationAction.CHARGE_SPELL,
                 UnitAnimationAction.STOP,

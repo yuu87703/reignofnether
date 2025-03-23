@@ -33,7 +33,6 @@ public interface HeroUnit {
             HeroClientboundPacket.setSkillPoints(((LivingEntity) this).getId(), getSkillPoints());
             SoundClientboundPacket.playSoundAtPos(SoundAction.LEVEL_UP, ((LivingEntity) this).getOnPos());
         }
-        System.out.println("added exp: " + amount);
     }
 
     // we always track total exp and then reduce down for the UI
