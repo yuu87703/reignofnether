@@ -142,14 +142,14 @@
     "abilities.reignofnether.back_to_work_building.tooltip2": "йдуть працювати на останнє робоче місце.",
     "abilities.reignofnether.back_to_work_unit": "Знову до праці",
     "abilities.reignofnether.back_to_work_unit.tooltip1": "Перетворює Ополченця у Селяна, та ",
-    "abilities.reignofnether.back_to_work_unit.tooltip2": "йде працювати на останнє робоче місце."
+    "abilities.reignofnether.back_to_work_unit.tooltip2": "йде працювати на останнє робоче місце.",
     "abilities.reignofnether.wither_cloud": "Візер дим",
     "abilities.reignofnether.wither_cloud.tooltip1": "Закликає Візер-скелета випустити дим",
     "abilities.reignofnether.wither_cloud.tooltip2": "з смертоностним висушенням який буде розпадатися %d секунд.",
     "abilities.reignofnether.bloodlust": "Кровожерливість",
     "abilities.reignofnether.bloodlust.tooltip1": "Заплати %d життя щоб на 50%% швидше атакувати ",
     "abilities.reignofnether.bloodlust.tooltip2": "та 20%% швидше передвигатися на %d секунд.",
-    
+
     "ability.reignofnether.enchant.error1": "Ви можете зачаровати тільки своїх юнітів",
     "ability.reignofnether.enchant.error2": "Юніт не в зоні радіусу",
     "ability.reignofnether.enchant.error3": "Неможливо зачарувати цей тип юнітів",
@@ -197,7 +197,7 @@
     "tutorial.reignofnether.op_commands": "Як адмінистатор сервера ви можете використовувати:",
     "tutorial.reignofnether.fog": "/rts-fog enable | disable Включити/виключити туман війни",
     "tutorial.reignofnether.lock": "/rts-lock enable | disable Щоб заборонити/дозволити новим гравцям заходити в гру",
-    "tutorial.reignofnether.syncing": "/rts-syncing enable | disable Увімкнути/вимкнути синхронізацію",   
+    "tutorial.reignofnether.syncing": "/rts-syncing enable | disable Увімкнути/вимкнути синхронізацію",
     "tutorial.reignofnether.reset": "/rts-reset Закінчити гру",
     "tutorial.reignofnether.sync_disabled1": "Синхронізація RTS вимкнена, тому ви не можете вибирати будівлі або бачити власників будинків, вибачте!",
     "tutorial.reignofnether.sync_disabled2": "Щоб вирішити цю проблему, попросіть хост повторно увімкнути його, а потім перезалогіньтесь.",
@@ -206,7 +206,7 @@
     "tutorial.reignofnether.skipping": "Пропустити етап навчання... ви вже на: %s",
     "tutorial.reignofnether.ready_continue": "Натисніть пробіл, коли будете готові продовжити.",
     "tutorial.reignofnether.rts_view": "Ласкаво просимо до RTS перспективи. Замість звичної камери від першої особи в Minecraft, тут ми можемо подивитися на світ з перспективи зверху вниз.",
-    "tutorial.reignofnether.see_again": "Порада: Якщо ви хочете знову побачити будь-яке з цих повідомлень, відкрийте чат, натиснувши клавішу ENTER або кнопку праворуч.",    
+    "tutorial.reignofnether.see_again": "Порада: Якщо ви хочете знову побачити будь-яке з цих повідомлень, відкрийте чат, натиснувши клавішу ENTER або кнопку праворуч.",
 
     "tutorial.reignofnether.all_workers_build": "Якщо вони ще не працюють, ви можете залучити всіх мешканців села до будівництва, щоб пришвидшити прогрес. Для цього виберіть робітників і клацніть будівлю ПКМ.",
     "tutorial.reignofnether.attack": "Вибравши юнітів, клацніть ПКМ на ворога, щоб атакувати його. Юніти також автоматично атакуватимуть сусідніх ворогів, якщо вони простоюють.",
@@ -348,7 +348,7 @@
     "units.reignofnether.veteran_mason": "Досвідчений Будівельник",
     "units.reignofnether.veteran_hunter": "Досвідчений Мисливець",
 
-    
+
     "block.reignofnether.decayable_nether_wart_block": "Розпадається блок незерського наросту",
     "block.reignofnether.decayable_warped_wart_block": "Розпадається блок химерного наросту",
     "block.reignofnether.falling_acacia_log": "Падає акацієва колода",
@@ -368,7 +368,7 @@
     "building.reignofnether.outside_map": "За межами карти або надто близько до неї",
     "building.reignofnether.too_close": "Занадто близько до іншої поверхні",
     "building.reignofnether.unexplored": "Місцевість незвідана",
-    
+
     "buildings.monsters.reignofnether.dark_watchtower": "Темна сторожева вежа",
     "buildings.monsters.reignofnether.dark_watchtower.tooltip1": "Зловісна вежа, яка може гарнізувати юнітів.",
     "buildings.monsters.reignofnether.dark_watchtower.tooltip2": "Стрільці в гарнізоні мають підвищену дальність.",
@@ -412,7 +412,7 @@
     "buildings.monsters.reignofnether.stronghold.tooltip2": "і гарнізоном до %d юнітів.",
     "buildings.monsters.reignofnether.stronghold.tooltip3": "Спотворює час до опівночі в радіусі %d блоку",
     "buildings.monsters.reignofnether.stronghold.tooltip4": "Потребує цвинтар, павуче лігво та підземелля.",
-    
+
     "buildings.piglins.reignofnether.bastion": "Бастіон",
     "buildings.piglins.reignofnether.bastion.tooltip1": "Укріплена казарма для утримання військових піґлінів, ",
     "buildings.piglins.reignofnether.bastion.tooltip2": "уможливлення їх виробництва на військових порталах.",
@@ -449,7 +449,7 @@
     "buildings.piglins.reignofnether.wither_shrine.tooltip1": "Темна каплиця присвячений силі Візерів.",
     "buildings.piglins.reignofnether.wither_shrine.tooltip2": "Дозволяє виробляти візер скелети на військових порталах.",
     "buildings.piglins.reignofnether.wither_shrine.tooltip3": "Потребує бастіон.",
-    
+
     "buildings.villagers.reignofnether.arcane_tower": "Чарівна Вежа",
     "buildings.villagers.reignofnether.arcane_tower.tooltip1": "Чарівна вежа яка служить домом для відьм і заклиначів.",
     "buildings.villagers.reignofnether.arcane_tower.tooltip2": "Потребує Казарми.",
@@ -489,7 +489,7 @@
     "buildings.villagers.reignofnether.wheat_farm.tooltip1": "\uE001  %d  +  %d за кожну посаджену пшеницю",
     "buildings.villagers.reignofnether.wheat_farm.tooltip2": "Пшеничне поле, яке можна обробити, щоб зібрати їжу. Працівники ",
     "buildings.villagers.reignofnether.wheat_farm.tooltip3": "використовують деревину для висаджування насіння під час роботи.",
-    
+
     "commands.reignofnether.lock": "%s - Заборонити всім гравцям приєднуватися до RTS-матчу",
     "commands.reignofnether.reset": "%s - Видалити всіх юнітів/будівлі, встановити всі на глядача",
     "commands.reignofnether.surrender": "%s - Сдатися",
@@ -507,14 +507,14 @@
     "controls.reignofnether.toggle_fps_tps": "F7 - Перемикання лічильників FPS/TPS",
     "controls.reignofnether.toggle_leaves": "F6 - Листя перекидної шкури (експериментальне)",
     "controls.reignofnether.zoom": "Alt + scroll - збільшити/зменшити вид",
-    
+
     "fogofwar.reignofnether.chunk_bugs": "- Може спричинити помилки рендерингу фрагментів",
     "fogofwar.reignofnether.cpu_usage": "- Підвищує використання процесора (зменшує відстань рендерингу фрагментів)",
     "fogofwar.reignofnether.experimental": "Ви збираєтеся увімкнути туман війни для всіх гравців. Це експериментальна функція з кількома проблемами:",
     "fogofwar.reignofnether.optifine_crash": "- ВСІ ГРАВЦІ З OPTIFINE ВИЛЕТЯТЬ",
     "fogofwar.reignofnether.to_confirm": "Повторно введіть /rts-fog enable, щоб підтвердити.",
     "fogofwar.reignofnether.warning": "[ПОПЕРЕДЖЕННЯ]",
-    
+
     "hud.actionbuttons.reignofnether.attack": "Атакувати",
     "hud.actionbuttons.reignofnether.build_repair": "Построїти/полагодити",
     "hud.actionbuttons.reignofnether.garrison": "Гарнізон",
@@ -523,22 +523,22 @@
     "hud.actionbuttons.reignofnether.move": "Передвігатися",
     "hud.actionbuttons.reignofnether.stop": "Зупинитися",
     "hud.actionbuttons.reignofnether.ungarrison": "Вийти з гарнізону",
-    
+
     "hud.buttons.reignofnether.on_cooldown": "Ця здатність все ще перебуває в стані відновлення",
     "hud.control_group.reignofnether.control_group": "Група %s (Правий клік щоб видалити)",
-    
+
     "hud.helperbuttons.reignofnether.cancel": "Відмінити",
     "hud.helperbuttons.reignofnether.chat": "Чат (enter)",
     "hud.helperbuttons.reignofnether.idle_workers": "Бездіяльні робітники",
     "hud.helperbuttons.reignofnether.select_all_military_units": "Обрати усіх воєних юнітів",
-    
+
     "hud.map.reignofnether.close": "Закрити",
     "hud.map.reignofnether.open": "Відкрити велику карту",
-    
+
     "hud.orthoview.reignofnether.disabled_hiding_leaves": "Виключення приховування листя",
     "hud.orthoview.reignofnether.hiding_leaves_all": "Приховування листя: усюди",
     "hud.orthoview.reignofnether.hiding_leaves_around": "Приховування листя: навколо юнітів та курсору",
-    
+
     "hud.reignofnether.building_full": "Ця будівля переповнена!",
     "hud.reignofnether.change_target_resource": "Натисніть, щоб змінити обраний ресурс",
     "hud.reignofnether.drop_off_resources": "Скиньте ресурси",
@@ -553,7 +553,7 @@
     "hud.reignofnether.worker_inv_full": "Інвентар робітників заповнений, скидання ресурсів першим...",
     "hud.reignofnether.workers_on": "Робітників на %s",
     "hud.reignofnether.you_are_spectator": "Ти глядач",
-    
+
     "hud.startbuttons.monsters.reignofnether.first": "Увійти у гру за монстрів.",
     "hud.startbuttons.monsters.reignofnether.second": "Створити 3 зомбі-селян у вибраній локації.",
     "hud.startbuttons.piglins.reignofnether.first": "Увійти у гру за Піґлінів.",
@@ -651,13 +651,13 @@
     "research.reignofnether.sculk_amplifiers.tooltip1": "Боронитель може розділяти звуковий удар  ",
     "research.reignofnether.sculk_amplifiers.tooltip2": "на %d випадкових ворогів поблизу в діапазоні %d",
     "research.reignofnether.sculk_amplifiers.tooltip3": "Потрібен Твердиня.",
-    
+
     "resources.reignofnether.food": "їжа",
     "resources.reignofnether.none": "Нічого",
     "resources.reignofnether.ore": "Руда",
     "resources.reignofnether.population": "Населення",
     "resources.reignofnether.wood": "Дерево",
-    
+
     "server.reignofnether.all_cheats": "%s ввімкнено всі чити",
     "server.reignofnether.already_started": "Ви вже розпочали свій RTS матч!",
     "server.reignofnether.bot_added": "%s До гри додано бота!",
@@ -682,7 +682,7 @@
     "server.reignofnether.total_players": "Всього гравців у RTS зараз %d",
     "server.reignofnether.used_cheat": "%s використаний чит: %s %s",
     "server.reignofnether.victorious": "%s переможець!",
-    
+
     "server.resources.reignofnether.max_pop": "Ви досягли максимальної чисельності населення",
     "server.resources.reignofnether.not_enough_food": "У вас недостатньо їжі",
     "server.resources.reignofnether.not_enough_ore": "У вас недостатньо руди",
@@ -691,7 +691,7 @@
 
     "survival.reignofnether.dawn": "Світанок розгортається",
     "survival.reignofnether.dusk": "Настає ніч...",
-    
+
     "time.reignofnether.day": "день",
     "time.reignofnether.game_time": "Час у грі: %s",
     "time.reignofnether.night": "ніч",
@@ -704,7 +704,7 @@
     "time.reignofnether.time_is_distorted": "Час спотворено до півночі",
     "time.reignofnether.time_until_day": "%s до дня",
     "time.reignofnether.time_until_night": "%s до ночі",
-    
+
     "titles.reignofnether.defeated": "Ти був переможен",
     "titles.reignofnether.victorious": "Ти переможець!",
 
@@ -745,7 +745,7 @@
     "units.monsters.reignofnether.zombie_villager.tooltip1": "Неживий робітник, який може будувати і",
     "units.monsters.reignofnether.zombie_villager.tooltip2": "ремонтувати будівлі та збирати ресурси.",
     "units.monsters.reignofnether.zombie_villager.tooltip3": "Зомбі-селяни НЕ згорають під сонячними променями.",
-    
+
     "units.piglins.reignofnether.blaze": "Пломінь",
     "units.piglins.reignofnether.blaze.tooltip1": "Вогняний елементаль, що стріляє вогняними кулями здалеку.",
     "units.piglins.reignofnether.blaze.tooltip2": "Атаки швидкі і запалюють ворогів, але неточні.",
@@ -772,7 +772,7 @@
     "units.piglins.reignofnether.wither_skeleton.tooltip2": "висушування на ворогах і завдає додаткової шкоди",
     "units.piglins.reignofnether.wither_skeleton.tooltip3": "(до подвійного) ворогам на порозі смерті.",
     "units.piglins.reignofnether.wither_skeleton.tooltip4": "Потребує Каплицю Візерів.",
-    
+
     "units.villagers.reignofnether.evoker": "Заклинач",
     "units.villagers.reignofnether.evoker.tooltip1": "Досвідчений чарівник, який вміє накладати бойові заклинання.",
     "units.villagers.reignofnether.evoker.tooltip2": "Потребую бібліотеку.",
@@ -793,7 +793,7 @@
     "units.villagers.reignofnether.vindicator.tooltip2": "Покращений діамантовими сокирами, які завдають +2 шкоди",
     "units.villagers.reignofnether.witch": "Відьма",
     "units.villagers.reignofnether.witch.tooltip1": "Підступна відьма, яка може лікувати і шкодити зіллям.",
-    
+
     "hud.gamemode.reignofnether.classic1": "Класика",
     "hud.gamemode.reignofnether.classic2": "Класичний досвід RTS. Перемагайте супротивників ",
     "hud.gamemode.reignofnether.classic3": "зруйнувавши всі їхні будівлі.",
@@ -804,7 +804,7 @@
     "hud.gamemode.reignofnether.survival6": "ЛКМ, щоб змінити складність",
     "hud.gamemode.reignofnether.changemode": "ПКМ щоб змінити режим гри",
     "hud.gamemode.reignofnether.locked": "(закрито)",
-    
+
     "alliance.reignofnether.sent_request": "Запрошення на вступ до союзу надіслано %s.",
     "alliance.reignofnether.ally_self": "Ти не можешь вступити в собз з самим собой!",
     "alliance.reignofnether.ally_confirm": "%s хоче стати союзником с тобою. Напиши /allyconfirm %s щоб приняти.",
@@ -816,11 +816,9 @@
     "alliance.reignofnether.disband_self": "Ти не можешь себе скасувати.",
     "alliance.reignofnether.disband_pending": "Запит на скасування союзу з цим гравцем вже надіслан.",
 
-
-    "time.reignofnether.survival_wave": "Пережита хвиля: %s",
     "server.reignofnether.surrendered": "сдався",
     "server.reignofnether.victory_alliance": "%s та його союзники переможці!",
     "survival.reignofnether.wave_cleared": "Твої супротивники були переможені... поки що.",
     "survival.reignofnether.remaining_enemies_one": "1 ворог залишився",
-    "survival.reignofnether.remaining_enemies": "%d ворогів залишилось",
+    "survival.reignofnether.remaining_enemies": "%d ворогів залишилось"
 }
