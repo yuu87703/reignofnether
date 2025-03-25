@@ -121,15 +121,15 @@ public class ResourcesClientEvents {
 
         int tickAge = 0;
         if (res.food > 0) {
-            floatingTexts.add(new FloatingText("+" + res.food + "  \uE000", pos, tickAge));
+            floatingTexts.add(new FloatingText("+" + res.food + "  \uD83D\uDD0D", pos, tickAge));
             tickAge -= 25;
         }
         if (res.wood > 0) {
-            floatingTexts.add(new FloatingText("+" + res.wood + "  \uE001", pos, tickAge));
+            floatingTexts.add(new FloatingText("+" + res.wood + "  ✓", pos, tickAge));
             tickAge -= 25;
         }
         if (res.ore > 0) {
-            floatingTexts.add(new FloatingText("+" + res.ore + "  \uE002", pos, tickAge));
+            floatingTexts.add(new FloatingText("+" + res.ore + "  ■", pos, tickAge));
         }
     }
 
