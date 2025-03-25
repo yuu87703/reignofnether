@@ -651,7 +651,7 @@ public class PlayerServerEvents {
 
     public static void movePlayer(int playerId, double x, double y, double z) {
         ServerPlayer serverPlayer = getPlayerById(playerId);
-        serverPlayer.moveTo(x, y, z);
+        serverPlayer.teleportTo(x, y, z);
     }
 
     public static void sendMessageToAllPlayers(String msg) {
