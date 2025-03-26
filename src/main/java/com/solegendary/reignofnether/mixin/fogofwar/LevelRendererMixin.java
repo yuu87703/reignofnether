@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.level.lighting.LevelLightEngine;
 import org.joml.Matrix4f;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.fogofwar.FrozenChunk;
@@ -203,6 +205,7 @@ public abstract class LevelRendererMixin {
         }
 
         this.minecraft.getProfiler().push("populate_chunks_to_compile");
+        LevelLightEngine levellightengine = this.level.getLightEngine();
         RenderRegionCache renderregioncache = new RenderRegionCache();
         BlockPos blockpos = pCamera.getBlockPosition();
         List<ChunkRenderDispatcher.RenderChunk> list = Lists.newArrayList();
@@ -229,8 +232,8 @@ public abstract class LevelRendererMixin {
                     semiFrozenChunks.add(originPos);
             }
             ChunkRenderDispatcher.RenderChunk renderChunk = chunkInfo.chunk;
-            ChunkPos chunkpos = new ChunkPos(renderChunk.getOrigin());
-            if (renderChunk.isDirty() && this.level.getChunk(chunkpos.x, chunkpos.z).isLightCorrect()) {
+            SectionPos sectionpos = SectionPos.of(renderChunk.getOrigin());
+            if (renderChunk.isDirty() && levellightengine.lightOnInSection(sectionpos)) {
                 boolean flag = false;
                 if (this.minecraft.options.prioritizeChunkUpdates().get() != PrioritizeChunkUpdates.NEARBY) {
                     if (this.minecraft.options.prioritizeChunkUpdates().get() == PrioritizeChunkUpdates.PLAYER_AFFECTED) {
