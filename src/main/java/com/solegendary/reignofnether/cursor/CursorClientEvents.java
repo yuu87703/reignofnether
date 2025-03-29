@@ -474,12 +474,12 @@ public class CursorClientEvents {
             BlockHitResult result = d0 <= d1 ? blockhitresult : blockhitresult1;
 
             if (result != null) {
-                Block block = level.getBlockState(result.getBlockPos()).getBlock();
+                BlockState bs = level.getBlockState(result.getBlockPos());
                 if (OrthoviewClientEvents.shouldHideLeaves() && level.getBlockState(result.getBlockPos()).getBlock() instanceof LeavesBlock)
                     result = null;
-                else if (!MiscUtil.isSolidBlocking(level, result.getBlockPos()))
+                else if (!MiscUtil.isSolidBlocking(level, result.getBlockPos()) && bs.getFluidState().isEmpty())
                     result = null;
-                else if (block instanceof SnowLayerBlock)
+                else if (bs.getBlock() instanceof SnowLayerBlock)
                     result = null;
             }
             return result;

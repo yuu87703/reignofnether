@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.resources;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.network.chat.Style;
 import org.joml.Vector3f;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -163,6 +164,7 @@ public class ResourcesClientEvents {
                     poseStack.scale(-0.05F, -0.05F, 0.05F);
                 }
                 Font font = MC.font;
+
                 float f2 = (float) (-font.width(component) / 2);
                 float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
                 float alphaPercent =
@@ -176,7 +178,7 @@ public class ResourcesClientEvents {
                 int textCol = 0x00FFFFFF + ((int) (0xFF * alphaPercent) << 24);
                 int bgCol = (int) (f1 * 255.0F * alphaPercent) << 24;
 
-                font.drawInBatch(component.getString(),
+                font.drawInBatch(component,
                     f2,
                     0,
                     textCol,
@@ -185,7 +187,7 @@ public class ResourcesClientEvents {
                     MC.renderBuffers().bufferSource(),
                     Font.DisplayMode.NORMAL,
                     bgCol,
-                    255, false
+                    255
                 );
 
                 poseStack.popPose();
