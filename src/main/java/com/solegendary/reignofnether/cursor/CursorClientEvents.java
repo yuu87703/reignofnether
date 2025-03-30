@@ -188,8 +188,8 @@ public class CursorClientEvents {
                 cursorWorldPos.z
         );
         cursorWorldPos = MiscUtil.screenPosToWorldPos(MC, evt.getMouseX(), evt.getMouseY());
-        cursorWorldPos.y -= 1.3f;
-        cursorWorldPos.z -= 2.0f;
+        //cursorWorldPos.y -= 1.3f;
+        //cursorWorldPos.z -= 2.0f;
 
         // calc near and far cursorWorldPos to get a cursor line vector
         Vector3d lookVector = MiscUtil.getPlayerLookVector(MC);
@@ -242,8 +242,8 @@ public class CursorClientEvents {
 
             Vector3d cursorWorldPosAdj = new Vector3d(
                     cursorWorldPos.x,
-                    cursorWorldPos.y + 1.3f,
-                    cursorWorldPos.z + 2.0f
+                    cursorWorldPos.y,// + 1.3f,
+                    cursorWorldPos.z// + 2.0f
             );
             Vector3d cursorWorldPosNearAdj = MyMath.addVector3d(cursorWorldPosAdj, lookVector, -200);
 

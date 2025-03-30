@@ -19,7 +19,8 @@ HEROES (in order of priority)
     - equipment
 
 
-April fools mob ;)
+[❌] April fools mob ;)
+    - Add plus jump power when targeting a ghast
 
 Bugfixes
 --------

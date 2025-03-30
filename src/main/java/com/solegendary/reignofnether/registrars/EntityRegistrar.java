@@ -277,6 +277,12 @@ public class EntityRegistrar {
                     .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
                     .build(new ResourceLocation(ReignOfNether.MOD_ID, "hero_experience_orb").toString()));
 
+    public static final RegistryObject<EntityType<KillerRabbitUnit>> KILLER_RABBIT_UNIT = ENTITIES.register("killer_rabbit_unit",
+            () -> EntityType.Builder.of(KillerRabbitUnit::new, MobCategory.MISC)
+                    .sized(EntityType.RABBIT.getWidth(), EntityType.RABBIT.getHeight())
+                    .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
+                    .build(new ResourceLocation(ReignOfNether.MOD_ID, "killer_rabbit_unit").toString()));
+
     public static void init() {
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
@@ -320,6 +326,7 @@ public class EntityRegistrar {
             case PandaProd.itemName -> EntityRegistrar.PANDA_UNIT.get();
             case WolfProd.itemName -> EntityRegistrar.WOLF_UNIT.get();
             case LlamaProd.itemName -> EntityRegistrar.LLAMA_UNIT.get();
+            case "Killer Rabbit" -> EntityRegistrar.KILLER_RABBIT_UNIT.get();
             default -> null;
         };
     }

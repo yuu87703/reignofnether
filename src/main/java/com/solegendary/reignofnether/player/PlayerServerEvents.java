@@ -30,6 +30,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
+import com.solegendary.reignofnether.unit.units.neutral.KillerRabbitUnit;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
@@ -99,6 +100,7 @@ public class PlayerServerEvents {
     // foodforthought - ignore soft population caps
     // thereisnospoon - allow changing survival wave by clicking the wave indicator and using debug commands
     // slipslopslap - monster units are unaffected by sunlight
+    // thebeastofcaerbannog - spawns the Killer Rabbit
     public static final List<String> singleWordCheats = List.of(
         "warpten",
         "operationcwal",
@@ -504,6 +506,11 @@ public class PlayerServerEvents {
             String[] words = msg.split(" ");
             String playerName = evt.getPlayer().getName().getString();
 
+            if (words.length == 1 && words[0].equalsIgnoreCase("thebeastofcaerbannog")) {
+                UnitServerEvents.spawnMob(EntityRegistrar.getEntityType("Killer Rabbit"), serverLevel, evt.getPlayer().getOnPos(), playerName);
+                sendMessageToAllPlayers("server.reignofnether.used_cheat",false, playerName, words[0]);
+            }
+
             if (words.length == 2) {
                 try {
                     if (words[0].equalsIgnoreCase("greedisgood")) {
@@ -515,7 +522,7 @@ public class PlayerServerEvents {
                                     amount
                             ));
                             evt.setCanceled(true);
-                            sendMessageToAllPlayers("server.reignofnether.used_cheat",
+                            sendMessageToAllPlayers("server.reignofnether.used_cheat_amount",
                                     false,
                                     playerName,
                                     words[0],
@@ -539,7 +546,7 @@ public class PlayerServerEvents {
                                 case "ore" -> ResourcesServerEvents.addSubtractResources(new Resources(playerName, 0, 0, amount));
                             }
                             evt.setCanceled(true);
-                            sendMessageToAllPlayers("server.reignofnether.used_cheat",
+                            sendMessageToAllPlayers("server.reignofnether.used_cheat_amount",
                                     false,
                                     playerName,
                                     words[0] + " " + words[1],
