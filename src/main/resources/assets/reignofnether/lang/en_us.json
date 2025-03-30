@@ -640,6 +640,7 @@
 
     "server.resources.reignofnether.sent_resources": "You gave %d %s to %d!",
     "server.resources.reignofnether.received_resources": "You received %d %s from %d!",
+    "server.resources.reignofnether.not_allies": "You can only send resources to allies",
 
     "research.reignofnether.upgrade_completed": "Upgrade completed: %s",
     "research.reignofnether.advanced_portals": "Advanced Portals",

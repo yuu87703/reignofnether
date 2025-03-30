@@ -35,7 +35,7 @@ Bugfixes
 
 Quality of Life
 ---------------
-[❌] Add commands to send resources
+[🟡] Add commands to send resources
 [❌] Ravagers that are mounted no longer aggro automatically onto buildings
     - This prevents them hurting themselves from the splash damage
 [🟡] Button to toggle spider climbing

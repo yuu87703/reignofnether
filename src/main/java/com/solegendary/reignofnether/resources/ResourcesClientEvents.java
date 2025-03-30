@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.math.Axis;
+import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -208,6 +209,12 @@ public class ResourcesClientEvents {
         Resources res = getOwnResources();
         if (res == null || thisPlayer == null)
             return 0;
+
+        if (!AlliancesClient.isAllied(thisPlayer.getName().getString(), sendToPlayer.getName().getString())) {
+            thisPlayer.sendSystemMessage(Component.literal(""));
+            thisPlayer.sendSystemMessage(Component.literal(I18n.get("server.resources.reignofnether.not_allies")));
+            thisPlayer.sendSystemMessage(Component.literal(""));
+        }
 
         switch (resourceName) {
             case FOOD -> {
