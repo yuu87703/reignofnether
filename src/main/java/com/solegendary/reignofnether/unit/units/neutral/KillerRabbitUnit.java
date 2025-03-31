@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -146,10 +147,18 @@ public class KillerRabbitUnit extends Rabbit implements Unit, AttackerUnit {
 
     @Override
     protected float getJumpPower() {
+        float jumpPower = super.getJumpPower();
         if (getTarget() instanceof GhastUnit && distanceTo(getTarget()) < 12)
-            return super.getJumpPower() * 4;
+            return jumpPower * 4;
+        else if (jumpPower > 0.1f && jumpPower < 0.3f) {
+            // prevents getting stuck jumping on the spot when pushed flush against a block
+            double x = (random.nextDouble() - 0.5f) / 0.5f;
+            double z = (random.nextDouble() - 0.5f) / 0.5f;
+            move(MoverType.SELF, new Vec3(x, 0, z));
+            return jumpPower * 3;
+        }
         else
-            return super.getJumpPower() * 2;
+            return jumpPower * 2;
     }
 
     @Override

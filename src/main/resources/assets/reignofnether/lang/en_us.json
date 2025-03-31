@@ -646,7 +646,7 @@
     "server.resources.reignofnether.sent_ore": "You gave %d ore to %d!",
     "server.resources.reignofnether.received_ore": "You received %d ore from %d!",
     "server.resources.reignofnether.not_allies": "You can only send resources to allies",
-    "server.resources.reignofnether.sending_to_self": "You can't send resources to yourself'",
+    "server.resources.reignofnether.sending_to_self": "You can't send resources to yourself",
 
     "research.reignofnether.upgrade_completed": "Upgrade completed: %s",
     "research.reignofnether.advanced_portals": "Advanced Portals",

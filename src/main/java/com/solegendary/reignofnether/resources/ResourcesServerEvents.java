@@ -297,17 +297,17 @@ public class ResourcesServerEvents {
 
         evt.getDispatcher().register(Commands.literal("sendfood")
             .then(Commands.argument("player", EntityArgument.player())
-            .then(Commands.argument("amount", IntegerArgumentType.integer(0, Integer.MAX_VALUE))
+            .then(Commands.argument("amount", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
             .executes((command) -> trySendingResources(command, ResourceName.FOOD)))));
 
         evt.getDispatcher().register(Commands.literal("sendwood")
             .then(Commands.argument("player", EntityArgument.player())
-            .then(Commands.argument("amount", IntegerArgumentType.integer(0, Integer.MAX_VALUE))
+            .then(Commands.argument("amount", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
             .executes((command) -> trySendingResources(command, ResourceName.WOOD)))));
 
         evt.getDispatcher().register(Commands.literal("sendore")
             .then(Commands.argument("player", EntityArgument.player())
-            .then(Commands.argument("amount", IntegerArgumentType.integer(0, Integer.MAX_VALUE))
+            .then(Commands.argument("amount", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
             .executes((command) -> trySendingResources(command, ResourceName.ORE)))));
     }
 

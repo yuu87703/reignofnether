@@ -487,20 +487,8 @@ public class PlayerServerEvents {
         }
     }
 
-    // commands for ops to give resources
     @SubscribeEvent
     public static void onPlayerChat(ServerChatEvent evt) {
-        /*
-        if (evt.getMessage().getString().equals("test spiders")) {
-            UnitServerEvents.convertAllToUnit(
-                    evt.getPlayer().getName().getString(),
-                    evt.getPlayer().getLevel(),
-                    (LivingEntity entity) ->
-                            entity instanceof SpiderUnit sUnit &&
-                                    sUnit.getOwnerName().equals(evt.getPlayer().getName().getString()),
-                    EntityRegistrar.POISON_SPIDER_UNIT.get()
-            );
-        }*/
         if (evt.getPlayer().hasPermissions(4)) {
             String msg = evt.getMessage().getString();
             String[] words = msg.split(" ");
