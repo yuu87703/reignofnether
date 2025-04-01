@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.util.Faction;
+import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -148,8 +149,16 @@ public class KillerRabbitUnit extends Rabbit implements Unit, AttackerUnit {
     @Override
     protected float getJumpPower() {
         float jumpPower = super.getJumpPower();
-        if (getTarget() instanceof GhastUnit && distanceTo(getTarget()) < 12)
+
+        Vec3 xz1 = new Vec3(getX(), 0, getZ());
+        Vec3 xz2 = null;
+        if (getTarget() != null) {
+            xz2 = new Vec3(getTarget().getX(), 0, getTarget().getZ());
+        }
+
+        if (xz2 != null && getTarget().getY() - getY() > 6 && xz1.distanceTo(xz2) < 4) {
             return jumpPower * 4;
+        }
         else if (jumpPower > 0.1f && jumpPower < 0.3f) {
             // prevents getting stuck jumping on the spot when pushed flush against a block
             double x = (random.nextDouble() - 0.5f) / 0.5f;

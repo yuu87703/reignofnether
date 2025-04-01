@@ -294,8 +294,9 @@ public class GatherResourcesGoal extends MoveToTargetBlockGoal {
                         gatherTicksLeft = DEFAULT_MAX_GATHER_TICKS;
                         ResourceName resourceName = ResourceSources.getBlockResourceName(this.data.gatherTarget, mob.level());
 
-                        boolean isLogBlock = isLogBlock(this.mob.level().getBlockState(data.gatherTarget));
-                        boolean isFallingLogBlock = isFallingLogBlock(this.mob.level().getBlockState(data.gatherTarget));
+                        BlockState bs = this.mob.level().getBlockState(data.gatherTarget);
+                        boolean isLogBlock = isLogBlock(bs);
+                        boolean isFallingLogBlock = isFallingLogBlock(bs);
                         if (isLogBlock)
                             ResourcesServerEvents.fellAdjacentLogs(data.gatherTarget, new ArrayList<>(), this.mob.level());
 
@@ -304,7 +305,7 @@ public class GatherResourcesGoal extends MoveToTargetBlockGoal {
                             expName = ResourceName.FOOD;
                         else if (ResourceSources.getBlockResourceName(getGatherTarget(), mob.level()) == ResourceName.WOOD && (isLogBlock || isFallingLogBlock))
                             expName = ResourceName.WOOD;
-                        else if (ResourceSources.getBlockResourceName(getGatherTarget(), mob.level()) == ResourceName.ORE)
+                        else if (ResourceSources.getBlockResourceName(getGatherTarget(), mob.level()) == ResourceName.ORE && bs.getBlock() != Blocks.POINTED_DRIPSTONE)
                             expName = ResourceName.ORE;
 
                         if (mob.level().destroyBlock(data.gatherTarget, false)) {

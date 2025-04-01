@@ -347,9 +347,9 @@ public class ResourcesServerEvents {
                     resourceName == ResourceName.ORE ? -amount : 0
             ));
             addSubtractResources(new Resources(receivingPlayerName,
-                    resourceName == ResourceName.FOOD ? -amount : 0,
-                    resourceName == ResourceName.WOOD ? -amount : 0,
-                    resourceName == ResourceName.ORE ? -amount : 0
+                    resourceName == ResourceName.FOOD ? amount : 0,
+                    resourceName == ResourceName.WOOD ? amount : 0,
+                    resourceName == ResourceName.ORE ? amount : 0
             ));
             switch (resourceName) {
                 case FOOD -> {
