@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.cursor;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.solegendary.reignofnether.unit.NonUnitClientEvents;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
@@ -169,7 +170,7 @@ public class CursorClientEvents {
             RenderSystem.setShaderTexture(0, TEXTURE_CURSOR);
             texture = TEXTURE_CURSOR;
         }
-        evt.getGuiGraphics().pose().translate(0,0,1000);
+        evt.getGuiGraphics().pose().translate(0,0,2500);
         evt.getGuiGraphics().blit(texture,
                 cursorDrawX, cursorDrawY,
                 16,
@@ -177,7 +178,7 @@ public class CursorClientEvents {
                 16, 16,
                 16, 16
         );
-        evt.getGuiGraphics().pose().translate(0,0,-1000);
+        evt.getGuiGraphics().pose().translate(0,0,-2500);
 
         // ***********************************************
         // Convert cursor on-screen 2d pos to world 3d pos
@@ -337,13 +338,13 @@ public class CursorClientEvents {
                 // only act if there is at least 1 owned entity so we don't deselect things by box selecting only non-owned entities
                 int ownedEntities = 0;
                 for (LivingEntity unit : preselectedUnit)
-                    if (UnitClientEvents.getPlayerToEntityRelationship(unit) == Relationship.OWNED)
+                    if (UnitClientEvents.getPlayerToEntityRelationship(unit) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits())
                         ownedEntities += 1;
 
                 if (ownedEntities > 0) {
                     ArrayList<LivingEntity> unitsToAdd = new ArrayList<>();
                     for (LivingEntity unit : preselectedUnit)
-                        if (UnitClientEvents.getPlayerToEntityRelationship(unit) == Relationship.OWNED)
+                        if (UnitClientEvents.getPlayerToEntityRelationship(unit) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits())
                             unitsToAdd.add(unit);
 
                     if (Keybindings.shiftMod.isDown()) {

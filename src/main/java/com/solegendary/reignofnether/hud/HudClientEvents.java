@@ -778,7 +778,7 @@ public class HudClientEvents {
         if (selUnits.size() > 0 && SandboxClientEvents.isSandboxPlayer() && hudSelectedEntity instanceof Unit &&
             getPlayerToEntityRelationship(selUnits.get(0)) != Relationship.OWNED) {
             blitX = 0;
-            blitY = screenHeight - iconFrameSize;
+            blitY = screenHeight - (iconFrameSize * 2);
             ArrayList<Button> actionButtons = new ArrayList<>();
 
             if (hudSelectedEntity instanceof AttackerUnit) {
@@ -1613,6 +1613,8 @@ public class HudClientEvents {
     @SubscribeEvent
     // hudSelectedEntity and portraitRendererUnit should be assigned in the same event to avoid desyncs
     public static void onRenderLivingEntity(RenderLivingEvent.Post<? extends LivingEntity, ? extends Model> evt) {
+        if (hudSelectedEntity != null && hudSelectedEntity.isRemoved())
+            hudSelectedEntity = null;
 
         ArrayList<LivingEntity> units = UnitClientEvents.getSelectedUnits();
 

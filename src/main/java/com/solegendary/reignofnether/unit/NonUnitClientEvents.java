@@ -30,11 +30,12 @@ public class NonUnitClientEvents {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
+    public static boolean isMoveCheckpointGreen = true;
+
     public static boolean canControlNonUnits() {
         return MC.player != null &&
-                !getSelectedUnits().isEmpty() &&
-                (ResearchClient.hasCheat("wouldyoukindly") ||
-                        SandboxClientEvents.isSandboxPlayer(MC.player.getName().getString()));
+            (ResearchClient.hasCheat("wouldyoukindly") ||
+            SandboxClientEvents.isSandboxPlayer(MC.player.getName().getString()));
     }
 
     public static boolean canAttack(LivingEntity le) {
@@ -75,17 +76,20 @@ public class NonUnitClientEvents {
                         if (a > 0) {
                             BlockPos bp = mob.getNavigation().getTargetPos().below();
                             Vec3 pos = new Vec3(bp.getX() + 0.5f, bp.getY() + 1.0f, bp.getZ() + 0.5f);
-                            MyRenderer.drawLine(evt.getPoseStack(), firstPos, pos, 0, 1, 0, a);
+                            MyRenderer.drawLine(evt.getPoseStack(), firstPos, pos, isMoveCheckpointGreen ? 0 : 1, isMoveCheckpointGreen ? 1 : 0, 0, a);
 
                             if (MC.level.getBlockState(bp.offset(0, 1, 0)).getBlock() instanceof SnowLayerBlock) {
                                 AABB aabb = new AABB(bp);
                                 aabb = aabb.setMaxY(aabb.maxY + 0.13f);
-                                MyRenderer.drawSolidBox(evt.getPoseStack(), aabb, Direction.UP, 0, 1, 0, a * 0.5f,
+                                MyRenderer.drawSolidBox(evt.getPoseStack(), aabb, Direction.UP, isMoveCheckpointGreen ? 0 : 1, isMoveCheckpointGreen ? 1 : 0, 0, a * 0.5f,
                                         new ResourceLocation("forge:textures/white.png"));
                             } else {
-                                MyRenderer.drawBlockFace(evt.getPoseStack(), Direction.UP, bp, 0, 1, 0, a * 0.5f);
+                                MyRenderer.drawBlockFace(evt.getPoseStack(), Direction.UP, bp, isMoveCheckpointGreen ? 0 : 1, isMoveCheckpointGreen ? 1 : 0, 0, a * 0.5f);
                             }
                         }
+                    } else {
+                        mob.getNavigation().stop();
+                        mob.setTarget(null);
                     }
                 }
             }

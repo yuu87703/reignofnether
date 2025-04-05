@@ -1,13 +1,12 @@
 package com.solegendary.reignofnether.unit;
 
+import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.building.buildings.piglins.Portal;
 import com.solegendary.reignofnether.hud.HudClientEvents;
-import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.ResourceSources;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
@@ -30,6 +29,8 @@ import net.minecraft.world.level.pathfinder.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.solegendary.reignofnether.unit.NonUnitServerEvents.nonUnitMoveTargets;
 
 public class UnitActionItem {
     private final String ownerName;
@@ -394,18 +395,30 @@ public class UnitActionItem {
                 mob.getNavigation().stop();
                 mob.setTarget(null);
 
-                if (action == UnitAction.MOVE) {
+                if (List.of(UnitAction.MOVE, UnitAction.FOLLOW, UnitAction.ATTACK_MOVE).contains(action)) {
                     mob.getNavigation().stop();
                     BlockPos bp = preselectedBlockPos;
                     Path path = mob.getNavigation().createPath(bp.getX(), bp.getY(), bp.getZ(), 0);
                     mob.getNavigation().moveTo(path, 1);
+                    if (!level.isClientSide()) {
+                        synchronized (NonUnitServerEvents.nonUnitMoveTargets) {
+                            NonUnitServerEvents.nonUnitMoveTargets.removeIf(p -> p.getFirst() == mob);
+                            NonUnitServerEvents.nonUnitMoveTargets.add(new Pair<>(mob, preselectedBlockPos));
+                        }
+                    }
                 } else if (action == UnitAction.ATTACK) {
                     if (level.getEntity(unitId) instanceof LivingEntity le) {
                         mob.setTarget(le);
                     }
                 }
-                if (!level.isClientSide())
-                    NonUnitServerEvents.controlledNonUnits.add(mob);
+                if (!level.isClientSide()) {
+                    if (action != UnitAction.ATTACK_MOVE) {
+                        NonUnitServerEvents.attackSuppressedNonUnits.add(mob);
+                    } else {
+                        NonUnitClientEvents.isMoveCheckpointGreen = false;
+                    }
+                    NonUnitServerEvents.moveSuppressedNonUnits.add(mob);
+                }
             }
         }
     }

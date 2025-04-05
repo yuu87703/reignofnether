@@ -21,8 +21,8 @@ public abstract class RandomStrollGoalMixin {
             cancellable = true
     )
     public void canContinueToUse(CallbackInfoReturnable<Boolean> cir) {
-        synchronized (NonUnitServerEvents.controlledNonUnits) {
-            if (NonUnitServerEvents.controlledNonUnits.contains(mob))
+        synchronized (NonUnitServerEvents.moveSuppressedNonUnits) {
+            if (NonUnitServerEvents.moveSuppressedNonUnits.contains(mob))
                 cir.setReturnValue(false);
         }
     }

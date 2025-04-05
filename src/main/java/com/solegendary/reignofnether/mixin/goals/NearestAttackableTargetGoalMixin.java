@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NearestAttackableTargetGoal.class)
 public abstract class NearestAttackableTargetGoalMixin extends TargetGoal {
@@ -23,8 +22,8 @@ public abstract class NearestAttackableTargetGoalMixin extends TargetGoal {
             cancellable = true
     )
     public void findTarget(CallbackInfo ci) {
-        synchronized (NonUnitServerEvents.controlledNonUnits) {
-            if (mob instanceof PathfinderMob pfMob && NonUnitServerEvents.controlledNonUnits.contains(pfMob))
+        synchronized (NonUnitServerEvents.attackSuppressedNonUnits) {
+            if (mob instanceof PathfinderMob pfMob && NonUnitServerEvents.attackSuppressedNonUnits.contains(pfMob))
                 ci.cancel();
         }
     }

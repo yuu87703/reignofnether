@@ -143,6 +143,7 @@ public class KillerRabbitUnit extends Rabbit implements Unit, AttackerUnit {
                 .add(Attributes.MOVEMENT_SPEED, KillerRabbitUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, KillerRabbitUnit.maxHealth)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.75d)
                 .add(Attributes.ARMOR, KillerRabbitUnit.armorValue);
     }
 
@@ -157,7 +158,7 @@ public class KillerRabbitUnit extends Rabbit implements Unit, AttackerUnit {
         }
 
         if (xz2 != null && getTarget().getY() - getY() > 6 && xz1.distanceTo(xz2) < 4) {
-            return jumpPower * 4;
+            return jumpPower * 4.5f;
         }
         else if (jumpPower > 0.1f && jumpPower < 0.3f) {
             // prevents getting stuck jumping on the spot when pushed flush against a block
