@@ -639,12 +639,12 @@
     "server.resources.reignofnether.not_enough_pop": "Ви не маєте достатньої кількості населення",
     "server.resources.reignofnether.not_enough_wood": "У вас недостатньо дерева",
 
-    "server.resources.reignofnether.sent_food": "Ви віддали %d їжі гравцю %d!",
-    "server.resources.reignofnether.received_food": "Ви отримали %d їжі від %d!",
-    "server.resources.reignofnether.sent_wood": "Ви віддали %d деревини гравцю %d!",
-    "server.resources.reignofnether.received_wood": "Ви отримали %d деревини від %d!",
-    "server.resources.reignofnether.sent_ore": "Ви віддали %d руди гравцю %d!",
-    "server.resources.reignofnether.received_ore": "Ви отримали %d руди від %d!",
+    "server.resources.reignofnether.sent_food": "Ви віддали %d їжі гравцю %s!",
+    "server.resources.reignofnether.received_food": "Ви отримали %d їжі від %s!",
+    "server.resources.reignofnether.sent_wood": "Ви віддали %d деревини гравцю %s!",
+    "server.resources.reignofnether.received_wood": "Ви отримали %d деревини від %s!",
+    "server.resources.reignofnether.sent_ore": "Ви віддали %d руди гравцю %s!",
+    "server.resources.reignofnether.received_ore": "Ви отримали %d руди від %s!",
     "server.resources.reignofnether.not_allies": "Ви можете надсилати ресурси лише союзникам",
     "server.resources.reignofnether.sending_to_self": "Ви не можете надсилати ресурси собі",
 

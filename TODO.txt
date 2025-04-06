@@ -31,13 +31,18 @@ Controlling non-RoN mobs
 Bugfixes
 --------
 [🟡] Can no longer send resources to a non-RTS ally
-[🟡] Misc language fixes and additions
+
 
 Quality of Life
 ---------------
 [🟡] Updated /rts-help list
 [🟡] Huntable animals now show their food value next to their portrait
 
+
+Languages
+---------
+[🟡] Misc language fixes and additions
+[🟡] Added Spanish (es_es)
 
 Balancing
 ---------
