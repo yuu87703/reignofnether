@@ -10,7 +10,7 @@ import org.joml.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
 import static net.minecraft.util.Mth.cos;
 import static net.minecraft.util.Mth.sin;
 

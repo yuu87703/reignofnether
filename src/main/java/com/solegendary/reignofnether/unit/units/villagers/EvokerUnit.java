@@ -181,9 +181,9 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
         this.abilities.add(ab3);
 
         if (level.isClientSide()) {
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(ab2.getButton(Keybindings.keyW));
-            this.abilityButtons.add(ab3.getButton(Keybindings.keyE));
+            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
+            this.abilityButtons.add(ab2.getButton(Keybindings.keyW, this));
+            this.abilityButtons.add(ab3.getButton(Keybindings.keyE, this));
         }
     }
 

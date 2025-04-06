@@ -2,13 +2,11 @@ package com.solegendary.reignofnether.survival;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.*;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchBruteShields;
-import com.solegendary.reignofnether.research.researchItems.ResearchSpiderWebs;
 import com.solegendary.reignofnether.unit.UnitAction;
-import com.solegendary.reignofnether.unit.UnitActionItem;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.MeleeAttackBuildingGoal;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -85,7 +83,7 @@ public class WaveEnemy {
             idleCommand();
 
         if (unit instanceof CreeperUnit creeperUnit) {
-            Building nearestBuilding = getNearestAttackableBuilding();
+            BuildingPlacement nearestBuilding = getNearestAttackableBuilding();
             if (nearestBuilding != null) {
                 BlockPos bpTarget = nearestBuilding.getClosestGroundPos(((Entity) unit).getOnPos(), 1);
                 if (creeperUnit.distanceToSqr(Vec3.atCenterOf(bpTarget)) < 4)
@@ -103,7 +101,7 @@ public class WaveEnemy {
     // done shortly after spawn
     public void startingCommand() {
         if (unit instanceof SpiderUnit spiderUnit &&
-            ResearchServerEvents.playerHasResearch(spiderUnit.getOwnerName(), ResearchSpiderWebs.itemName) &&
+            ResearchServerEvents.playerHasResearch(spiderUnit.getOwnerName(), ProductionItems.RESEARCH_SPIDER_WEBS) &&
             spiderUnit.getWebAbility() != null) {
             spiderUnit.getWebAbility().autocast = true;
         }
@@ -144,7 +142,7 @@ public class WaveEnemy {
         if (unit instanceof BruteUnit bruteUnit) {
             for (Ability ability : bruteUnit.getAbilities()) {
                 if (ability instanceof ToggleShield shield &&
-                    ResearchServerEvents.playerHasResearch(bruteUnit.getOwnerName(), ResearchBruteShields.itemName)) {
+                    ResearchServerEvents.playerHasResearch(bruteUnit.getOwnerName(), ProductionItems.RESEARCH_BRUTE_SHIELDS)) {
 
                     boolean shouldRaiseShield =
                             (bruteUnit.getTarget() instanceof RangedAttackerUnit rTarget && bruteUnit.distanceToSqr((Entity) rTarget) <= 36) ||
@@ -181,8 +179,8 @@ public class WaveEnemy {
     // done when attacked
     public void retaliateCommand() { }
 
-    private Building getNearestAttackableBuilding() {
-        List<Building> buildings = BuildingServerEvents.getBuildings().stream()
+    private BuildingPlacement getNearestAttackableBuilding() {
+        List<BuildingPlacement> buildings = BuildingServerEvents.getBuildings().stream()
                 .filter(b -> !SurvivalServerEvents.ENEMY_OWNER_NAME.equals(b.ownerName) && !b.ownerName.isBlank() && !b.invulnerable)
                 .sorted(Comparator.comparing(b -> b.centrePos.distToCenterSqr(((Entity) unit).position())))
                 .toList();
@@ -239,7 +237,7 @@ public class WaveEnemy {
         unit.resetBehaviours();
 
         Entity entity = (Entity) unit;
-        Building nearestBuilding = getNearestAttackableBuilding();
+        BuildingPlacement nearestBuilding = getNearestAttackableBuilding();
 
         BlockPos targetBp = null;
         if (nearestBuilding != null)
@@ -258,10 +256,10 @@ public class WaveEnemy {
     private void attackMoveRandomBuilding() {
         unit.resetBehaviours();
 
-        ArrayList<Building> buildings = BuildingServerEvents.getBuildings();
+        ArrayList<BuildingPlacement> buildings = BuildingServerEvents.getBuildings();
         Collections.shuffle(buildings);
 
-        List<Building> playerBuildings = buildings.stream()
+        List<BuildingPlacement> playerBuildings = buildings.stream()
                 .filter(b -> !SurvivalServerEvents.ENEMY_OWNER_NAME.equals(b.ownerName) && !b.ownerName.isBlank())
                 .toList();
 

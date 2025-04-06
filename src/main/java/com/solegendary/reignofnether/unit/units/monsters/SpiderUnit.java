@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
+import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.abilities.Eject;
@@ -14,7 +15,6 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
@@ -54,6 +54,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpiderUnit extends Spider implements Unit, AttackerUnit, ConvertableUnit {
+    public static final Abilities ABILITIES = new Abilities();
+    static {
+        ABILITIES.add(new SpiderClimbing(), Keybindings.keyQ);
+        ABILITIES.add(new Eject(), Keybindings.keyW);
+        ABILITIES.add(new SpinWebs(), Keybindings.keyE);
+    }
+
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -159,29 +166,15 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
         return null;
     }
 
-    private final List<AbilityButton> abilityButtons = new ArrayList<>();
-    protected final List<Ability> abilities = new ArrayList<>();
+    private final List<AbilityButton> abilityButtons;
+    protected final List<Ability> abilities;
     private final List<ItemStack> items = new ArrayList<>();
 
     public SpiderUnit(EntityType<? extends Spider> entityType, Level level) {
         super(entityType, level);
 
-        SpiderClimbing ab1 = new SpiderClimbing(this);
-        this.abilities.add(ab1);
-        Eject ab2 = new Eject(this);
-        this.abilities.add(ab2);
-        SpinWebs ab3 = new SpinWebs(this);
-        this.abilities.add(ab3);
-        updateAbilityButtons();
-    }
-
-    public void updateAbilityButtons() {
-        if (level().isClientSide()) {
-            this.abilityButtons.clear();
-            this.abilityButtons.add(this.abilities.get(0).getButton(Keybindings.keyQ));
-            this.abilityButtons.add(this.abilities.get(1).getButton(Keybindings.keyW));
-            this.abilityButtons.add(this.abilities.get(2).getButton(Keybindings.keyE));
-        }
+        this.abilities = ABILITIES.get();
+        this.abilityButtons = ABILITIES.getButtons(this);
     }
 
     public boolean isWallClimbing() { return wallClimbing; }

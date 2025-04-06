@@ -27,59 +27,58 @@ public class SetFangsCircle extends Ability {
 
     public SetFangsCircle(EvokerUnit evokerUnit) {
         super(UnitAction.SET_FANGS_CIRCLE,
-            evokerUnit.level(),
-            CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
-            EvokerUnit.FANGS_RANGE_CIRCLE,
-            0,
-            true
+                CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
+                EvokerUnit.FANGS_RANGE_CIRCLE,
+                0,
+                true
         );
         this.evokerUnit = evokerUnit;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton("Evoker Fangs (Circular)",
-            new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/shears.png"),
-            hotkey,
-            () -> !evokerUnit.isUsingLineFangs,
-            () -> false,
-            () -> true,
-            () -> UnitClientEvents.sendUnitCommand(UnitAction.SET_FANGS_CIRCLE),
-            null,
-            List.of(FormattedCharSequence.forward(
-                    I18n.get("abilities.reignofnether.evoker_fangs_circular"),
-                    Style.EMPTY.withBold(true)
+                new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/shears.png"),
+                hotkey,
+                () -> !evokerUnit.isUsingLineFangs,
+                () -> false,
+                () -> true,
+                () -> UnitClientEvents.sendUnitCommand(UnitAction.SET_FANGS_CIRCLE),
+                null,
+                List.of(FormattedCharSequence.forward(
+                                I18n.get("abilities.reignofnether.evoker_fangs_circular"),
+                                Style.EMPTY.withBold(true)
+                        ),
+                        FormattedCharSequence.forward(I18n.get("abilities.reignofnether.evoker_fangs_circular.tooltip1",
+                                EvokerUnit.FANGS_DAMAGE * 2,
+                                CD_MAX_SECONDS
+                        ) + EvokerUnit.FANGS_RANGE_CIRCLE, MyRenderer.iconStyle),
+                        FormattedCharSequence.forward(
+                                I18n.get("abilities.reignofnether.evoker_fangs_circular.tooltip2"),
+                                Style.EMPTY
+                        ),
+                        FormattedCharSequence.forward(
+                                I18n.get("abilities.reignofnether.evoker_fangs_circular.tooltip3"),
+                                Style.EMPTY
+                        )
                 ),
-                FormattedCharSequence.forward(I18n.get("abilities.reignofnether.evoker_fangs_circular.tooltip1",
-                    EvokerUnit.FANGS_DAMAGE * 2,
-                    CD_MAX_SECONDS
-                ) + EvokerUnit.FANGS_RANGE_CIRCLE, MyRenderer.iconStyle),
-                FormattedCharSequence.forward(
-                    I18n.get("abilities.reignofnether.evoker_fangs_circular.tooltip2"),
-                    Style.EMPTY
-                ),
-                FormattedCharSequence.forward(
-                    I18n.get("abilities.reignofnether.evoker_fangs_circular.tooltip3"),
-                    Style.EMPTY
-                )
-            ),
-            this
+                this
         );
     }
 
-    public void setCooldownSingle(float cooldown) {
-        super.setCooldown(cooldown);
+    public void setCooldownSingle(float cooldown, Level level) {
+        super.setCooldown(cooldown, level);
     }
 
     @Override
-    public void setCooldown(float cooldown) {
+    public void setCooldown(float cooldown, Level level) {
         if (evokerUnit.hasVigorEnchant())
             cooldown *= EnchantVigor.cooldownMultiplier;
 
-        super.setCooldown(cooldown);
+        super.setCooldown(cooldown, level);
         for (Ability ability : this.evokerUnit.getAbilities())
             if (ability instanceof SetFangsLine ab) {
-                ab.setCooldownSingle(cooldown);
+                ab.setCooldownSingle(cooldown, level);
             }
     }
 

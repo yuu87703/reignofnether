@@ -1,5 +1,7 @@
 package com.solegendary.reignofnether;
 
+import com.solegendary.reignofnether.building.Buildings;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.mojang.realmsclient.util.task.ConnectTask;
 import com.solegendary.reignofnether.config.ReignOfNetherCommonConfigs;
 import com.solegendary.reignofnether.mixin.DownloadPackSourceAccessor;
@@ -64,6 +66,8 @@ public class ReignOfNether {
         SoundRegistrar.init();
         BlockRegistrar.init();
         GameRuleRegistrar.init();
+        Buildings.init();
+        ProductionItems.init();
         final ClientEventRegistrar clientRegistrar = new ClientEventRegistrar();
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientRegistrar::registerClientEvents);
 

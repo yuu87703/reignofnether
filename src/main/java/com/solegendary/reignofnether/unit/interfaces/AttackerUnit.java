@@ -1,6 +1,6 @@
 package com.solegendary.reignofnether.unit.interfaces;
 
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.unit.Relationship;
@@ -11,7 +11,10 @@ import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -61,7 +64,7 @@ public interface AttackerUnit {
                 mabg.setBuildingTarget(preselectedBlockPos);
         } else {
             Level level = ((LivingEntity) this).level();
-            Building building = BuildingUtils.findBuilding(level.isClientSide(), preselectedBlockPos);
+            BuildingPlacement building = BuildingUtils.findBuilding(level.isClientSide(), preselectedBlockPos);
 
             if (building != null) {
                 BlockPos groundCentrePos = new BlockPos(building.centrePos.getX(), building.originPos.getY() + 1, building.centrePos.getZ());
@@ -215,7 +218,7 @@ public interface AttackerUnit {
             return;
         }
         if (canAttackBuildings() && !(this instanceof RavagerUnit && ((LivingEntity) this).isVehicle())) {
-            Building closestBuilding = MiscUtil.findClosestAttackableBuilding((Mob) this, aggroRange, level);
+            BuildingPlacement closestBuilding = MiscUtil.findClosestAttackableBuilding((Mob) this, aggroRange, level);
             if (closestBuilding != null) {
                 ((Unit) this).getMoveGoal().stopMoving();
                 setAttackBuildingTarget(closestBuilding.originPos);

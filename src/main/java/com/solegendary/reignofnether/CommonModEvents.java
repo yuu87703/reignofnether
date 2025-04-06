@@ -1,8 +1,8 @@
 package com.solegendary.reignofnether;
 
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.registrars.*;
 import com.solegendary.reignofnether.unit.modelling.models.NecromancerModel;
@@ -45,8 +45,8 @@ public class CommonModEvents {
         evt.register((bs, blockAndTintGetter, bp, tintIndex) -> {
             int tint = 0xFFFFFF;
             if (bp != null) {
-                Building building = BuildingUtils.findBuilding(true, bp);
-                if (building instanceof Portal portal) {
+                BuildingPlacement building = BuildingUtils.findBuilding(true, bp);
+                if (building instanceof PortalPlacement portal) {
                     switch (portal.portalType) {
                         case CIVILIAN -> tint = 0x00FF00;
                         case MILITARY -> tint = 0xFF0000;

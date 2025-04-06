@@ -1,8 +1,8 @@
 package com.solegendary.reignofnether.time;
 
 import com.mojang.datafixers.util.Pair;
-import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.NightSource;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.hud.Button;
@@ -10,7 +10,6 @@ import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
-import com.solegendary.reignofnether.survival.SurvivalServerboundPacket;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
 import com.solegendary.reignofnether.util.MyRenderer;
@@ -31,7 +30,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.solegendary.reignofnether.time.TimeUtils.*;
 
@@ -173,7 +171,7 @@ public class TimeClientEvents {
         }
 
         // draw range indicators for buildings with abilities and monster night sources
-        for (Building building : BuildingClientEvents.getBuildings())
+        for (BuildingPlacement building : BuildingClientEvents.getBuildings())
             if (building instanceof RangeIndicator ri) {
                 for (BlockPos bp : ri.getBorderBps()) {
                     if (BuildingClientEvents.getSelectedBuildings().contains(building)) {
@@ -213,7 +211,7 @@ public class TimeClientEvents {
             nightSourceOrigins.clear();
 
             // get list of night source centre:range pairs
-            for (Building building : BuildingClientEvents.getBuildings()) {
+            for (BuildingPlacement building : BuildingClientEvents.getBuildings()) {
                 if (!building.isExploredClientside || !(building instanceof NightSource ns)) {
                     continue;
                 }

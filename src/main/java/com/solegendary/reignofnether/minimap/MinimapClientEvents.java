@@ -11,10 +11,10 @@ import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
-import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.RangeIndicator;
-import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
+import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.hud.Button;
@@ -228,7 +228,7 @@ public class MinimapClientEvents {
                     } else if (nightCircleMode == NightCircleMode.OFF) {
                         nightCircleMode = NightCircleMode.ALL;
                     }
-                    for (Building building : BuildingClientEvents.getBuildings())
+                    for (BuildingPlacement building : BuildingClientEvents.getBuildings())
                         if (building instanceof RangeIndicator ri)
                             ri.updateBorderBps();
                 },
@@ -535,9 +535,9 @@ public class MinimapClientEvents {
 
     private static void updateMapUnitsAndBuildings() {
         // draw buildings
-        for (Building building : BuildingClientEvents.getBuildings()) {
+        for (BuildingPlacement building : BuildingClientEvents.getBuildings()) {
 
-            if (!building.isExploredClientside || building instanceof AbstractBridge)
+            if (!building.isExploredClientside || building instanceof BridgePlacement)
                 continue;
 
             int xc = building.centrePos.getX() + (BUILDING_RADIUS / 2);

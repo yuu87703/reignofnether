@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class ResearchSaveData extends SavedData {
 
-    public final ArrayList<Pair<String, String>> researchItems = new ArrayList<>();
+    public final ArrayList<Pair<String, ResourceLocation>> researchItems = new ArrayList<>();
 
     private static ResearchSaveData create() {
         return new ResearchSaveData();
@@ -41,9 +42,15 @@ public class ResearchSaveData extends SavedData {
             for (Tag ctag : ltag) {
                 CompoundTag btag = (CompoundTag) ctag;
                 String ownerName = btag.getString("ownerName");
-                String researchName = btag.getString("researchName");
-                data.researchItems.add(new Pair<>(ownerName, researchName));
-                ReignOfNether.LOGGER.info("ResearchSaveData.load: " + ownerName + "|" + researchName);
+                ResourceLocation researchKey;
+                if (btag.contains("researchKey")) {
+                    researchKey = ResourceLocation.tryParse(btag.getString("researchKey"));
+                }else {
+                    String researchName = btag.getString("researchName");
+                    researchKey = new ResourceLocation(ReignOfNether.MOD_ID, "research_" + researchName.toLowerCase().replace(' ', '_'));
+                }
+                data.researchItems.add(new Pair<>(ownerName, researchKey));
+                ReignOfNether.LOGGER.info("ResearchSaveData.load: " + ownerName + "|" + researchKey.toString());
             }
         }
         return data;
@@ -57,7 +64,7 @@ public class ResearchSaveData extends SavedData {
         this.researchItems.forEach(b -> {
             CompoundTag cTag = new CompoundTag();
             cTag.putString("ownerName", b.getFirst());
-            cTag.putString("researchName", b.getSecond());
+            cTag.putString("researchKey", b.getSecond().toString());
             list.add(cTag);
             ReignOfNether.LOGGER.info("ResearchSaveData.save: " + b.getFirst() + "|" + b.getSecond());
         });

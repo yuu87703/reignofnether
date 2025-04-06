@@ -2,8 +2,9 @@ package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
-import com.solegendary.reignofnether.building.ProductionBuilding;
-import com.solegendary.reignofnether.building.ProductionItem;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProductionItem;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -27,23 +28,19 @@ public class SlimeProd extends ProductionItem {
     public final static String itemName = "Slime";
     public final static ResourceCost cost = ResourceCosts.SLIME;
 
-    public SlimeProd(ProductionBuilding building) {
-        super(building, cost.ticks);
-        this.onComplete = (Level level) -> {
+    public SlimeProd() {
+        super(cost);
+        this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide())
-                building.produceUnit((ServerLevel) level, EntityRegistrar.SLIME_UNIT.get(), building.ownerName, false);
+                placement.produceUnit((ServerLevel) level, EntityRegistrar.SLIME_UNIT.get(), placement.ownerName, false);
         };
-        this.foodCost = cost.food;
-        this.woodCost = cost.wood;
-        this.oreCost = cost.ore;
-        this.popCost = cost.population;
     }
 
     public String getItemName() {
         return SlimeProd.itemName;
     }
 
-    public static AbilityButton getPlaceButton() {
+    public AbilityButton getPlaceButton() {
         return new AbilityButton(
                 itemName,
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/slime.png"),
@@ -68,7 +65,7 @@ public class SlimeProd extends ProductionItem {
         );
     }
 
-    public static Button getStartButton(ProductionBuilding prodBuilding, Keybinding hotkey) {
+    public Button getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new Button(
             SlimeProd.itemName,
             14,
@@ -77,7 +74,7 @@ public class SlimeProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, itemName),
+            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.SLIME),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.slime"), Style.EMPTY.withBold(true)),
@@ -92,7 +89,7 @@ public class SlimeProd extends ProductionItem {
         );
     }
 
-    public Button getCancelButton(ProductionBuilding prodBuilding, boolean first) {
+    public Button getCancelButton(ProductionPlacement prodBuilding, boolean first) {
         return new Button(
             SlimeProd.itemName,
             14,
@@ -101,7 +98,7 @@ public class SlimeProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, itemName, first),
+            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, ProductionItems.SLIME, first),
             null,
             null
         );

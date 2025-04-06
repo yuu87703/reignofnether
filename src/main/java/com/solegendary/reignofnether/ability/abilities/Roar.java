@@ -23,15 +23,12 @@ public class Roar extends Ability {
 
     private static final int CD_MAX_SECONDS = 20;
 
-    private final RavagerUnit ravagerUnit;
-
-    public Roar(RavagerUnit ravagerUnit) {
-        super(UnitAction.ROAR, ravagerUnit.level(), CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND, 0, 0, false, true);
-        this.ravagerUnit = ravagerUnit;
+    public Roar() {
+        super(UnitAction.ROAR, CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND, 0, 0, false, true);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton("Roar",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/ravager.png"),
             hotkey,
@@ -57,8 +54,8 @@ public class Roar extends Ability {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        ravagerUnit.resetBehaviours();
-        ravagerUnit.startToRoar();
+        ((RavagerUnit)unitUsing).resetBehaviours();
+        ((RavagerUnit)unitUsing).startToRoar();
         this.setToMaxCooldown();
     }
 }

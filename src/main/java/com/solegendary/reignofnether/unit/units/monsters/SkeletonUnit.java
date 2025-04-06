@@ -9,7 +9,6 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
@@ -148,11 +147,11 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
     public SkeletonUnit(EntityType<? extends Skeleton> entityType, Level level) {
         super(entityType, level);
 
-        MountSpider mountSpiderAbility = new MountSpider(this);
+        MountSpider mountSpiderAbility = new MountSpider();
         this.abilities.add(mountSpiderAbility);
 
         if (level.isClientSide()) {
-            this.abilityButtons.add(mountSpiderAbility.getButton(Keybindings.keyQ));
+            this.abilityButtons.add(mountSpiderAbility.getButton(Keybindings.keyQ, this));
         }
     }
 

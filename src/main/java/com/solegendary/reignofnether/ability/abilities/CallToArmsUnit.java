@@ -3,14 +3,11 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.sounds.SoundAction;
-import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.unit.units.villagers.MilitiaUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -28,10 +25,9 @@ import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitComman
 
 public class CallToArmsUnit extends Ability {
 
-    public CallToArmsUnit(Level level) {
+    public CallToArmsUnit() {
         super(
                 UnitAction.CALL_TO_ARMS_UNIT,
-                level,
                 0,
                 0,
                 0,
@@ -41,7 +37,7 @@ public class CallToArmsUnit extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
                 "Call To Arms (Building)",
                 new ResourceLocation("minecraft", "textures/item/bell.png"),

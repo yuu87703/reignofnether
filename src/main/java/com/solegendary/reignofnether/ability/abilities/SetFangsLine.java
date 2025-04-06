@@ -27,7 +27,6 @@ public class SetFangsLine extends Ability {
 
     public SetFangsLine(EvokerUnit evokerUnit) {
         super(UnitAction.SET_FANGS_LINE,
-            evokerUnit.level(),
             CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
             EvokerUnit.FANGS_RANGE_LINE,
             0,
@@ -37,7 +36,7 @@ public class SetFangsLine extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton("Evoker Fangs (Line)",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/shears.png"),
             hotkey,
@@ -67,19 +66,19 @@ public class SetFangsLine extends Ability {
         );
     }
 
-    public void setCooldownSingle(float cooldown) {
-        super.setCooldown(cooldown);
+    public void setCooldownSingle(float cooldown, Level level) {
+        super.setCooldown(cooldown, level);
     }
 
     @Override
-    public void setCooldown(float cooldown) {
+    public void setCooldown(float cooldown, Level level) {
         if (evokerUnit.hasVigorEnchant())
             cooldown *= EnchantVigor.cooldownMultiplier;
 
-        super.setCooldown(cooldown);
+        super.setCooldown(cooldown, level);
         for (Ability ability : this.evokerUnit.getAbilities())
             if (ability instanceof SetFangsCircle ab) {
-                ab.setCooldownSingle(cooldown);
+                ab.setCooldownSingle(cooldown, level);
             }
     }
 

@@ -1,9 +1,11 @@
 package com.solegendary.reignofnether.unit.goals;
 
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
-import com.solegendary.reignofnether.resources.*;
-import com.solegendary.reignofnether.unit.*;
+import com.solegendary.reignofnether.resources.Resources;
+import com.solegendary.reignofnether.resources.ResourcesClientboundPacket;
+import com.solegendary.reignofnether.resources.ResourcesServerEvents;
+import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
@@ -21,7 +23,7 @@ import javax.annotation.Nullable;
 
 public class ReturnResourcesGoal extends MoveToTargetBlockGoal {
 
-    private Building buildingTarget;
+    private BuildingPlacement buildingTarget;
 
     public ReturnResourcesGoal(Mob mob) {
         super(mob, true, 0);
@@ -83,13 +85,13 @@ public class ReturnResourcesGoal extends MoveToTargetBlockGoal {
             return;
 
         BlockPos pos = mob.getOnPos();
-        Building closestBuilding = null;
+        BuildingPlacement closestBuilding = null;
         double closestDist = 99999;
-        for (Building building : BuildingServerEvents.getBuildings()) {
+        for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
             if (building.ownerName.equals(((Unit) mob).getOwnerName()) && building.canAcceptResources && building.isBuilt) {
                 BlockPos bp = building.getClosestGroundPos(pos, 1);
                 double dist = bp.distSqr(pos);
-                if (bp.distSqr(pos) < closestDist) {
+                if (dist < closestDist) {
                     closestBuilding = building;
                     closestDist = dist;
                 }
@@ -99,7 +101,7 @@ public class ReturnResourcesGoal extends MoveToTargetBlockGoal {
             this.setBuildingTarget(closestBuilding);
     }
 
-    public void setBuildingTarget(@Nullable Building target) {
+    public void setBuildingTarget(@Nullable BuildingPlacement target) {
         if (target != null) {
             MiscUtil.addUnitCheckpoint((Unit) mob, target.centrePos, true);
         }
@@ -108,7 +110,7 @@ public class ReturnResourcesGoal extends MoveToTargetBlockGoal {
         this.start();
     }
 
-    public Building getBuildingTarget() { return buildingTarget; }
+    public BuildingPlacement getBuildingTarget() { return buildingTarget; }
 
     public void stopReturning() {
         buildingTarget = null;

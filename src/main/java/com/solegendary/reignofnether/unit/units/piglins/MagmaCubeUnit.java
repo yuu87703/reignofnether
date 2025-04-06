@@ -1,9 +1,9 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchCubeMagma;
 import com.solegendary.reignofnether.unit.goals.AbstractMeleeAttackUnitGoal;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -104,7 +104,7 @@ public class MagmaCubeUnit extends SlimeUnit implements Unit, AttackerUnit {
         if (getSize() < 4 || level().isClientSide())
             return;
 
-        if (!ResearchServerEvents.playerHasResearch(getOwnerName(), ResearchCubeMagma.itemName))
+        if (!ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_CUBE_MAGMA))
             return;
 
         BlockState bsToPlace = BlockRegistrar.WALKABLE_MAGMA_BLOCK.get().defaultBlockState();

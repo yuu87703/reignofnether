@@ -1,22 +1,17 @@
 package com.solegendary.reignofnether.survival.spawners;
 
-import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingBlock;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
-import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.Buildings;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchBruteShields;
-import com.solegendary.reignofnether.research.researchItems.ResearchCubeMagma;
-import com.solegendary.reignofnether.research.researchItems.ResearchHeavyTridents;
-import com.solegendary.reignofnether.research.researchItems.ResearchSoulFireballs;
-import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.survival.Wave;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
 import com.solegendary.reignofnether.util.Faction;
-import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -114,14 +109,14 @@ public class PiglinWaveSpawner {
     }
 
     public static void checkAndApplyUpgrades(int tier) {
-        if (tier >= 4 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ResearchBruteShields.itemName))
-            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ResearchBruteShields.itemName);
-        if (tier >= 4 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ResearchHeavyTridents.itemName))
-            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ResearchHeavyTridents.itemName);
-        if (tier >= 6 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ResearchSoulFireballs.itemName))
-            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ResearchSoulFireballs.itemName);
-        if (tier >= 6 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ResearchCubeMagma.itemName))
-            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ResearchCubeMagma.itemName);
+        if (tier >= 4 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_BRUTE_SHIELDS))
+            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_BRUTE_SHIELDS);
+        if (tier >= 4 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_HEAVY_TRIDENTS))
+            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_HEAVY_TRIDENTS);
+        if (tier >= 6 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_SOUL_FIREBALLS))
+            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_SOUL_FIREBALLS);
+        if (tier >= 6 && !ResearchServerEvents.playerHasResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_CUBE_MAGMA))
+            ResearchServerEvents.addResearch(ENEMY_OWNER_NAME, ProductionItems.RESEARCH_CUBE_MAGMA);
     }
 
     // spawn portals which spawn half of the wave immediately, and trickle in constantly
@@ -156,7 +151,17 @@ public class PiglinWaveSpawner {
 
             if (spawnBp != null) {
                 portalBps.add(spawnBp);
-                WaveSpawner.spawnBuilding(Portal.buildingName, new BlockPos(spawnBp).above());
+                BuildingPlacement building = BuildingServerEvents.placeBuilding(Buildings.PORTAL,
+                        new BlockPos(spawnBp).above(),
+                        Rotation.NONE,
+                        ENEMY_OWNER_NAME,
+                        new int[] {},
+                        false,
+                        false
+                );
+                if (building != null)
+                    for (BuildingBlock bb : building.getBlocks())
+                        building.getLevel().setBlockAndUpdate(bb.getBlockPos(), Blocks.AIR.defaultBlockState());
             } else
                 failedPortalPlacements += 1;
         }

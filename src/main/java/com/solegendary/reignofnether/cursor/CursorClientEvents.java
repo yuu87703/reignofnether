@@ -1,9 +1,11 @@
 package com.solegendary.reignofnether.cursor;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Vector3d;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.HudClientEvents;
@@ -381,7 +383,7 @@ public class CursorClientEvents {
             return;
         if (MC.level != null && OrthoviewClientEvents.isEnabled()) {
 
-            Building preSelBuilding = BuildingClientEvents.getPreselectedBuilding();
+            BuildingPlacement preSelBuilding = BuildingClientEvents.getPreselectedBuilding();
             // don't draw block outline if we've selected a builder unit and are mousing over a building (unless leftClick action is MOVE)
             boolean buildingTargetedByWorker = (HudClientEvents.hudSelectedEntity instanceof WorkerUnit &&
                     preSelBuilding != null &&
@@ -398,8 +400,8 @@ public class CursorClientEvents {
             // do we own any of the selected buildings or entities?
             // will be false if there are none selected in the first place
             boolean ownAnySelected = false;
-            ArrayList<Building> selBuildings = BuildingClientEvents.getSelectedBuildings();
-            for (Building building : selBuildings)
+            ArrayList<BuildingPlacement> selBuildings = BuildingClientEvents.getSelectedBuildings();
+            for (BuildingPlacement building : selBuildings)
                 if (building != null && BuildingClientEvents.getPlayerToBuildingRelationship(building) == Relationship.OWNED)
                     ownAnySelected = true;
             for (LivingEntity entity : UnitClientEvents.getSelectedUnits()) {

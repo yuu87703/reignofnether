@@ -3,11 +3,11 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchBlazeFirewall;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -18,7 +18,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
@@ -29,20 +28,17 @@ public class FirewallShot extends Ability {
     public static final int CD_MAX_SECONDS = 20;
     public static final int RANGE = 15;
 
-    private final BlazeUnit blazeUnit;
-
     public FirewallShot(BlazeUnit blazeUnit) {
-        super(UnitAction.SHOOT_FIREWALL, blazeUnit.level(),CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true, true);
-        this.blazeUnit = blazeUnit;
+        super(UnitAction.SHOOT_FIREWALL, CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true, true);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey) {
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton("Fire Wall Shot",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/fire.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.SHOOT_FIREWALL,
-            () -> !ResearchClient.hasResearch(ResearchBlazeFirewall.itemName),
+            () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLAZE_FIREWALL),
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.SHOOT_FIREWALL),
             null,
@@ -69,10 +65,11 @@ public class FirewallShot extends Ability {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        this.blazeUnit.shootFirewallShot(targetBp);
+        BlazeUnit blazeUnit = (BlazeUnit) unitUsing;
+        blazeUnit.shootFirewallShot(targetBp);
         this.setToMaxCooldown();
         if (!level.isClientSide()) {
-            AbilityClientboundPacket.sendSetCooldownPacket(this.blazeUnit.getId(), this.action, this.cooldownMax);
+            AbilityClientboundPacket.sendSetCooldownPacket(blazeUnit.getId(), this.action, this.cooldownMax);
         }
     }
 }
