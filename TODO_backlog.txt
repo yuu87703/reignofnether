@@ -27,6 +27,9 @@ Bugfixes
 Quality of Life Features
 ------------------------
 
+[❌] Colours for different players (with toggle under map options for ally/enemy)
+
+
 [❌] Added /gamerule for bridges over void
 
 [❌] restore ores on /rts-reset

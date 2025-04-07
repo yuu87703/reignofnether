@@ -1,5 +1,5 @@
 
-1.19.2-1.1.4
+1.19.2-1.1.5
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -36,8 +36,8 @@ Bugfixes
 Quality of Life
 ---------------
 [🟡] Updated /rts-help list
-[🟡] Huntable animals now show their food value next to their portrait
-
+[✔] Huntable animals now show their food value next to their portrait
+[❌] Block tags to allow mining of modded logs and ores
 
 Languages
 ---------

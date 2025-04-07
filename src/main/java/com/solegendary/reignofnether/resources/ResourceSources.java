@@ -23,6 +23,7 @@ import net.minecraftforge.common.IPlantable;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ResourceSources {
 
@@ -57,12 +58,17 @@ public class ResourceSources {
     }
 
     public static ResourceSource getFromBlockPos(BlockPos bp, Level level) {
-        Block block = level.getBlockState(bp).getBlock();
+        BlockState bs = level.getBlockState(bp);
+        Block block = bs.getBlock();
 
         for (List<ResourceSource> resourceSources : List.of(FOOD_BLOCKS, WOOD_BLOCKS, ORE_BLOCKS))
             for (ResourceSource resourceSource : resourceSources)
                 if (resourceSource.validBlocks.contains(block))
                     return resourceSource;
+        if (bs.getTags().collect(Collectors.toSet()).contains(BlockTags.LOGS))
+            return GENERIC_LOG_BLOCK;
+        if (bs.getTags().collect(Collectors.toSet()).contains(BlockTags.LEAVES))
+            return GENERIC_LEAVES_BLOCK;
         return null;
     }
 
@@ -71,6 +77,10 @@ public class ResourceSources {
             for (ResourceSource resourceSource : resourceSources)
                 if (resourceSource.validBlocks.contains(bs.getBlock()))
                     return resourceSource;
+        if (bs.getTags().collect(Collectors.toSet()).contains(BlockTags.LOGS))
+            return GENERIC_LOG_BLOCK;
+        if (bs.getTags().collect(Collectors.toSet()).contains(BlockTags.LEAVES))
+            return GENERIC_LEAVES_BLOCK;
         return null;
     }
 
@@ -124,6 +134,21 @@ public class ResourceSources {
     }
 
     public static final int REPLANT_TICKS_MAX = 10;
+
+    public static final ResourceSource GENERIC_LOG_BLOCK = new ResourceSource("Unknown Logs",
+            List.of(),
+            List.of(Items.OAK_LOG),
+            TICKS_PER_SECOND * 12,
+            15,
+            ResourceName.WOOD
+    );
+    public static final ResourceSource GENERIC_LEAVES_BLOCK = new ResourceSource("Unknown Leaves",
+            List.of(),
+            List.of(Items.OAK_LEAVES),
+            8,
+            1,
+            ResourceName.WOOD
+    );
 
     public static final List<ResourceSource> FOOD_BLOCKS = List.of(
             new ResourceSource("Sugar", // item only
