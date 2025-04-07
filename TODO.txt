@@ -25,28 +25,28 @@ Controlling non-RoN mobs
 [✔] All vanilla and modded mobs now have basic movement and attack controls
     - Enabled in Sandbox or by using the cheatcode 'wouldyoukindly'
     - Attack-move only works against mobs that the controlled mob is naturally aggressive to
-    - Disclaimer: sometimes the inherent AI of mobs interferes with what you commanded
+    - Disclaimer: sometimes the mob AI interferes with your commands
         - For example, iron golems constantly try to go back to the nearest village
 
 Bugfixes
 --------
-[🟡] Can no longer send resources to a non-RTS ally
-
+[✔] Can no longer send resources to a non-RTS ally
+[❌] Fixed unit and building ability tooltips not updating when language is changed
 
 Quality of Life
 ---------------
-[🟡] Updated /rts-help list
+[✔] Workers can now gather modded log blocks such as those from Biomes O'Plenty
 [✔] Huntable animals now show their food value next to their portrait
-[❌] Block tags to allow mining of modded logs and ores
+[✔] Updated /rts-help list
 
 Languages
 ---------
-[🟡] Misc language fixes and additions
-[🟡] Added Spanish (es_es)
+[✔] Added Spanish (es_es)
+[✔] Misc language fixes and additions
 
 Balancing
 ---------
-[🟡] The Killer Rabbit now has increased knockback resistance and attack jump height
+[✔] The Killer Rabbit now has increased knockback resistance and attack jump height
 
 
 - Nerf sculk amplifiers? (can reduce damage)

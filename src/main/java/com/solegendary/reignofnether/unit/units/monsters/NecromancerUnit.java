@@ -223,16 +223,6 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         updateAbilityButtons();
     }
 
-    public void updateAbilityButtons() {
-        if (level().isClientSide()) {
-            this.abilityButtons.clear();
-            this.abilityButtons.add(this.abilities.get(0).getButton(Keybindings.keyQ));
-            this.abilityButtons.add(this.abilities.get(1).getButton(Keybindings.keyW));
-            this.abilityButtons.add(this.abilities.get(2).getButton(Keybindings.keyE));
-            this.abilityButtons.add(this.abilities.get(3).getButton(Keybindings.keyR));
-        }
-    }
-
     @Override
     public void resetBehaviours() {
         animateScaleReducing = true;

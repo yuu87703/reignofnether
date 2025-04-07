@@ -159,7 +159,7 @@
     "abilities.reignofnether.consume.error2": "Solo puedes apuntar a Cubos de Magma o Slimes que poseas",
     "abilities.reignofnether.consume.error3": "Solo puede consumir Cubos/Slimes iguales o más pequeños",
     "abilities.reignofnether.spider_climbing_on": "Escalada de paredes: ACTIVADA",
-    "abilities.reignofnether.spider_climbing_off": "Escalada de paredes: DESACTIVADA"
+    "abilities.reignofnether.spider_climbing_off": "Escalada de paredes: DESACTIVADA",
 
     "abilities.reignofnether.raise_dead": "Invocar Muertos",
     "abilities.reignofnether.raise_dead.stats": "\uE004  %ds",
@@ -577,7 +577,7 @@
     "hud.reignofnether.worker_inv_full": "¡Inventario de trabajador lleno, depositando primero...",
     "hud.reignofnether.building_full": "¡Ese edificio está lleno!",
     "hud.reignofnether.not_garrisonable": "Ese edificio no puede guarnecer",
-    "hud.reignofnether.no_destination": "¡Ese portal no tiene destino!"
+    "hud.reignofnether.no_destination": "¡Ese portal no tiene destino!",
 
     "hud.units.reignofnether.hero": "Héroe",
     "hud.units.reignofnether.armoured": "Blindado",
@@ -924,7 +924,7 @@
     "tutorial.reignofnether.reset_game": "Para reiniciar y elegir otra facción, escribe /rts-reset",
     "tutorial.reignofnether.server_hosting": "Para jugar multijugador, consulta la guía de CurseForge de Reign of Nether.",
     "tutorial.reignofnether.good_luck": "¡Hasta la próxima! ¡Buena suerte y diviértete!",
-    "tutorial.reignofnether.tutorial_disabled": "Modo tutorial desactivado"
+    "tutorial.reignofnether.tutorial_disabled": "Modo tutorial desactivado",
     
     "units.villagers.reignofnether.captain": "Capitán",
     "units.villagers.reignofnether.ravager_artillery": "Artillería Ravager",

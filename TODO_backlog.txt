@@ -8,8 +8,6 @@ Features
 
 [❌] Import the Bedrock Minecraft Movie addon piglins
 
-[❌] Add basic controls for non-rts units (so you can control modded units)
-
 [❌] Config to allow changing resource block values, including modded blocks
 
 
