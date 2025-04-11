@@ -21,6 +21,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -192,8 +194,11 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         Unit.tick(this);
         AttackerUnit.tick(this);
 
+        int bloodlustTicksBefore = bloodlustTicks;
         if (bloodlustTicks > 0)
             bloodlustTicks -= 1;
+        if (bloodlustTicksBefore == 1 && bloodlustTicks == 0)
+            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 25 * ResourceCost.TICKS_PER_SECOND));
     }
 
     public void initialiseGoals() {

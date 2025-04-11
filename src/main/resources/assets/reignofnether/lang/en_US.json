@@ -750,7 +750,7 @@
     "research.reignofnether.sticky_webbing.tooltip3": "Cannot be used by mounted spiders.",
     "research.reignofnether.sculk_amplifiers": "Sculk Amplifiers",
     "research.reignofnether.sculk_amplifiers.tooltip1": "Wardens can Sonic Boom Sculk Catalysts to split the boom ",
-    "research.reignofnether.sculk_amplifiers.tooltip2": "onto %d random nearby enemies within a range of %d",
+    "research.reignofnether.sculk_amplifiers.tooltip2": "onto %d random enemies in %d range with reduced damage.",
     "research.reignofnether.sculk_amplifiers.tooltip3": "Requires a Stronghold.",
     "research.reignofnether.grand_library": "Grand Library",
     "research.reignofnether.grand_library.tooltip1": "Upgrades this library, unlocking more powerful enchantments.",

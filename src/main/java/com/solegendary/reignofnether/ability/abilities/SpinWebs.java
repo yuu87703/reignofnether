@@ -48,7 +48,7 @@ public class SpinWebs extends Ability {
 
     public static final int CD_MAX_SECONDS = 30;
     public static final int RANGE = 8;
-    public static final int DURATION_SECONDS = 5;
+    public static final int DURATION_SECONDS = 6;
 
     private final Spider spider;
 

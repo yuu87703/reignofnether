@@ -47,31 +47,46 @@ Languages
 ---------
 [✔] Added Spanish (España) (es_es)
 [✔] Misc language fixes and additions
-[❌] Add crowdin project
 
 Balancing
 ---------
+
+Neutral
+-------
 [✔] The Killer Rabbit now has increased knockback resistance and attack jump height
-
-[❌] Buff bloodlust
-[❌] Buff soulfireballs
-[❌] Nerf blazes (0 damage on hit, fire only)
-
-
-- Nerf sculk amplifiers? (can reduce damage)
-- Nerf ravager artillery? (take away bonus damage?)
-- Buff creepers?
-- Give witches autocast and attack move
-    - Make AOE spherical instead of hemispherical
-    - Add antifire and healing potions with upgrades
 
 
 Villagers
 ---------
+[❌] Witches
+    [❌] Can now autocast friendly potions
+    [❌] Make AOE spherical instead of hemispherical
+    [❌] Add water and healing potions with upgrades
 
 Piglins
 -------
+[🟡] Bloodlusted units now regenerate their lost health over 25 seconds after the effect ends
+
+[✔] Soul Fireballs
+    - Cost reduced from (350 wood, 350 ore) to (300 wood, 300 ore)
+    - Research time reduced by 10s
+    - Soulsand duration raised from 8s to 10s
+
+[🟡] Blazes now do 0 damage on hit (only setting enemies on fire)
+
+[✔] Wither Skeletons
+    - Health raised from 90 to 100
+    - Max wither stacks raised from 5 to 6
+
 
 Monsters
 --------
 
+[🟡] Sculk Amplifiers
+    - Sonic boom damage is now reduced by 33% (from 75 to 50 damage) when split
+    - Can no longer be used on unfinished catalysts
+
+[✔] Slimes
+    - Cost reduced from (40 food, 40 wood, 40 ore) to (35 food, 35 wood, 35 ore)
+
+[✔] Spin web duration raised from 5s to 6s
