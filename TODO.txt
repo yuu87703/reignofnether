@@ -47,10 +47,15 @@ Languages
 ---------
 [✔] Added Spanish (España) (es_es)
 [✔] Misc language fixes and additions
+[❌] Add crowdin project
 
 Balancing
 ---------
 [✔] The Killer Rabbit now has increased knockback resistance and attack jump height
+
+[❌] Buff bloodlust
+[❌] Buff soulfireballs
+[❌] Nerf blazes (0 damage on hit, fire only)
 
 
 - Nerf sculk amplifiers? (can reduce damage)
