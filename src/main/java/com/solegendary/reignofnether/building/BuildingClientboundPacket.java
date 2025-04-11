@@ -130,7 +130,7 @@ public class BuildingClientboundPacket {
     public static void changePortal(BlockPos buildingPos, PortalPlacement.PortalType type) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
             new BuildingClientboundPacket(BuildingAction.CHANGE_PORTAL,
-                new ResourceLocation("", type.name().toLowerCase()),
+                EMPTY,
                 buildingPos,
                 Rotation.NONE,
                 "",
@@ -139,7 +139,7 @@ public class BuildingClientboundPacket {
                 false,
                 0,
                 false,
-                PortalPlacement.PortalType.BASIC,
+                type,
                 new BlockPos(0,0,0),
                 false
             )
@@ -168,7 +168,7 @@ public class BuildingClientboundPacket {
     public static void completeProduction(BlockPos buildingPos) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
                 new BuildingClientboundPacket(BuildingAction.COMPLETE_PRODUCTION,
-                        new ResourceLocation("", ""),
+                        EMPTY,
                         buildingPos,
                         Rotation.NONE,
                         "",
@@ -302,7 +302,7 @@ public class BuildingClientboundPacket {
                     }
                     case CHANGE_PORTAL -> {
                         if (building instanceof PortalPlacement portal) {
-                            portal.changeStructure(PortalPlacement.PortalType.valueOf(itemKey.getPath().toUpperCase()));
+                            portal.changeStructure(portalType);
                         }
                     }
                     case CLEAR_PRODUCTION -> {
