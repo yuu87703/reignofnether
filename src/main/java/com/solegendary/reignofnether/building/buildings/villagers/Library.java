@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
+import com.solegendary.reignofnether.research.researchItems.*;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.EnchantAbility;
@@ -9,9 +10,6 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchEvokerVexes;
-import com.solegendary.reignofnether.research.researchItems.ResearchGrandLibrary;
-import com.solegendary.reignofnether.research.researchItems.ResearchLingeringPotions;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.TimeClientEvents;
@@ -87,8 +85,10 @@ public class Library extends ProductionBuilding implements RangeIndicator {
             this.abilityButtons.add(abilities.get(4).getButton(Keybindings.keyT));
             this.productionButtons = Arrays.asList(
                 ResearchLingeringPotions.getStartButton(this, Keybindings.keyY),
-                ResearchEvokerVexes.getStartButton(this, Keybindings.keyU),
-                ResearchGrandLibrary.getStartButton(this, Keybindings.keyI)
+                ResearchHealingPotions.getStartButton(this, Keybindings.keyU),
+                ResearchWaterPotions.getStartButton(this, Keybindings.keyI),
+                ResearchEvokerVexes.getStartButton(this, Keybindings.keyO),
+                ResearchGrandLibrary.getStartButton(this, Keybindings.keyP)
             );
         }
     }

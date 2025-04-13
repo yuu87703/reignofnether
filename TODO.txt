@@ -32,8 +32,8 @@ Bugfixes
 --------
 [✔] Can no longer send resources to a non-RTS ally
 [✔] Fixed unit and building ability tooltips not updating when language is changed
-
 [❌] GUI sometimes still going above size 3 when set to auto
+[❌] Camera moving up constantly on fresh world generation
 
 Quality of Life
 ---------------
@@ -58,14 +58,20 @@ Neutral
 
 Villagers
 ---------
-[❌] Witches
-    [❌] Can now autocast friendly potions
-    [❌] Make AOE spherical instead of hemispherical
-    [❌] Add water and healing potions with upgrades
+Witches
+    [✔] Can now autocast any potion, but only one at a time
+    [✔] All potion abilities now have a shared cooldown
+    [🟡] Added water potions, unlocked with research costing (250 wood, 250 ore, 140s)
+    [🟡] Added healing potions, unlocked with research costing (350 wood, 350 ore, 180s)
+    [✔] Extended lingering potions research cost reduced from (250 food, 250 wood, 250 ore) to (0 food, 250 wood, 250 ore)
+
 
 Piglins
 -------
-[🟡] Bloodlusted units now regenerate their lost health over 25 seconds after the effect ends
+[✔] Bloodlust
+    - Health cost raised from 10 to 12
+    - Attack speed boost raised from 50% to 60%
+    - Affected units now regenerate their lost health over 30 seconds
 
 [✔] Soul Fireballs
     - Cost reduced from (350 wood, 350 ore) to (300 wood, 300 ore)
@@ -82,7 +88,7 @@ Piglins
 Monsters
 --------
 
-[🟡] Sculk Amplifiers
+[✔] Sculk Amplifiers
     - Sonic boom damage is now reduced by 33% (from 75 to 50 damage) when split
     - Can no longer be used on unfinished catalysts
 

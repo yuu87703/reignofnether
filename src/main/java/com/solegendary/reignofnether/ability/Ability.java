@@ -12,6 +12,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
+import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitCommand;
+
 public class Ability {
     public final UnitAction action; // null for worker building production items (handled specially in BuildingClientEvents)
     public final Level level;
@@ -21,7 +23,8 @@ public class Ability {
     public final float radius; // if <= 0, is single target
     public final boolean canTargetEntities;
     public boolean oneClickOneUse; // if true, a group of units/buildings will use their abilities one by one
-    public boolean canAutocast = false;
+    public UnitAction autocastEnableAction = null;
+    public UnitAction autocastDisableAction = null;
     public boolean autocast = false;
 
     public Ability(UnitAction action, Level level, int cooldownMax, float range, float radius, boolean canTargetEntities) {
@@ -42,6 +45,17 @@ public class Ability {
         this.radius = radius;
         this.canTargetEntities = canTargetEntities;
         this.oneClickOneUse = oneClickOneUse;
+    }
+
+    protected void toggleAutocast() {
+        if (!level.isClientSide())
+            return;
+
+        if (autocast && autocastDisableAction != null) {
+            sendUnitCommand(autocastDisableAction);
+        } else if (!autocast && autocastEnableAction != null) {
+            sendUnitCommand(autocastEnableAction);
+        }
     }
 
     public void tickCooldown() {

@@ -16,7 +16,6 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
-import com.solegendary.reignofnether.unit.units.villagers.IronGolemUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -30,8 +29,6 @@ import net.minecraft.world.level.pathfinder.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.solegendary.reignofnether.unit.NonUnitServerEvents.nonUnitMoveTargets;
 
 public class UnitActionItem {
     private final String ownerName;
@@ -330,16 +327,11 @@ public class UnitActionItem {
                         cUnit.setShouldDiscard(true);
                     }
                 }
-                case AUTOCAST -> {
-                    for (Ability ability : unit.getAbilities())
-                        if (ability.canAutocast)
-                            ability.autocast = !ability.autocast;
-                }
                 // any other Ability not explicitly defined here
                 default -> {
+                    boolean enabledAutocast = false;
                     for (Ability ability : unit.getAbilities()) {
                         if (ability.action == action && (ability.isOffCooldown() || ability.canBypassCooldown())) {
-
                             if (ability.canTargetEntities && this.unitId > 0) {
                                 ability.use(level, unit, (LivingEntity) level.getEntity(unitId));
                                 usedAbility = ability;
@@ -353,8 +345,18 @@ public class UnitActionItem {
                                     break actionableUnitsLoop;
                                 }
                             }
+                        } else if (ability.autocastEnableAction == action) {
+                            ability.autocast = true;
+                            enabledAutocast = true;
+                        } else if (ability.autocastDisableAction == action) {
+                            ability.autocast = false;
                         }
                     }
+                    // turn off all other autocasts
+                    if (enabledAutocast)
+                        for (Ability ability : unit.getAbilities())
+                            if (ability.autocastEnableAction != null && ability.autocastEnableAction != action)
+                                ability.autocast = false;
                 }
             }
         }

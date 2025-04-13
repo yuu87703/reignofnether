@@ -133,7 +133,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         return (int) (20 / attacksPerSecond);
     }
 
-    final static public float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.5f;
+    final static public float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.6f;
 
     final static public float attackDamage = 6.0f;
     final static public float attacksPerSecond = 0.3f;

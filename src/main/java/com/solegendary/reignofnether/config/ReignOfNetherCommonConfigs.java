@@ -117,6 +117,8 @@ public class ReignOfNetherCommonConfigs {
         ResearchCosts.RESEARCH_STRAYS.define(BUILDER);
         ResearchCosts.RESEARCH_SLIME_CONVERSION.define(BUILDER);
         ResearchCosts.RESEARCH_LINGERING_POTIONS.define(BUILDER);
+        ResearchCosts.RESEARCH_HEALING_POTIONS.define(BUILDER);
+        ResearchCosts.RESEARCH_WATER_POTIONS.define(BUILDER);
         ResearchCosts.RESEARCH_EVOKER_VEXES.define(BUILDER);
         ResearchCosts.RESEARCH_CASTLE_FLAG.define(BUILDER);
         ResearchCosts.RESEARCH_GRAND_LIBRARY.define(BUILDER);
@@ -254,7 +256,9 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry RESEARCH_DROWNED = ResourceCostConfigEntry.Research(500,0,500, 200, ResourceCosts.RESEARCH_DROWNED, "Drowned Research Config");
         public static final ResourceCostConfigEntry RESEARCH_STRAYS = ResourceCostConfigEntry.Research(500,500,0, 200, ResourceCosts.RESEARCH_STRAYS, "Stray Research Config");
         public static final ResourceCostConfigEntry RESEARCH_SLIME_CONVERSION = ResourceCostConfigEntry.Research(300,0,300, 140, ResourceCosts.RESEARCH_SLIME_CONVERSION, "Slime Conversion Research Config");
-        public static final ResourceCostConfigEntry RESEARCH_LINGERING_POTIONS = ResourceCostConfigEntry.Research(250,250,250, 140, ResourceCosts.RESEARCH_LINGERING_POTIONS, "Lingering Potion Research Config");
+        public static final ResourceCostConfigEntry RESEARCH_LINGERING_POTIONS = ResourceCostConfigEntry.Research(0,250,250, 140, ResourceCosts.RESEARCH_LINGERING_POTIONS, "Extended Lingering Potion Research Config");
+        public static final ResourceCostConfigEntry RESEARCH_HEALING_POTIONS = ResourceCostConfigEntry.Research(0,350,350, 180, ResourceCosts.RESEARCH_HEALING_POTIONS, "Healing Potion Research Config");
+        public static final ResourceCostConfigEntry RESEARCH_WATER_POTIONS = ResourceCostConfigEntry.Research(0,250,250, 140, ResourceCosts.RESEARCH_WATER_POTIONS, "Water Potion Research Config");
         public static final ResourceCostConfigEntry RESEARCH_EVOKER_VEXES = ResourceCostConfigEntry.Research(500,0,300, 120, ResourceCosts.RESEARCH_EVOKER_VEXES, "Evoker Vex Research Config");
         public static final ResourceCostConfigEntry RESEARCH_CASTLE_FLAG = ResourceCostConfigEntry.Research(200,150,150, 90, ResourceCosts.RESEARCH_CASTLE_FLAG, "Captain Banner Research Config");
         public static final ResourceCostConfigEntry RESEARCH_GRAND_LIBRARY = ResourceCostConfigEntry.Research(0,200,100, 140, ResourceCosts.RESEARCH_GRAND_LIBRARY, "Grand Library Research Config");

@@ -2,19 +2,31 @@ package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
+import com.solegendary.reignofnether.ability.abilities.ThrowHealingPotion;
+import com.solegendary.reignofnether.ability.abilities.ThrowLingeringHarmingPotion;
+import com.solegendary.reignofnether.ability.abilities.ThrowLingeringRegenPotion;
+import com.solegendary.reignofnether.ability.abilities.ThrowWaterPotion;
+import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.villagers.WitchUnit;
+import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ThrowPotionGoal extends MoveToTargetBlockGoal {
 
     private Potion potion = null;
     private LivingEntity targetEntity = null;
-    private Ability ability; // used for syncing cooldown with clientside
 
     public ThrowPotionGoal(Mob mob) {
         super(mob, false, 0);
@@ -22,9 +34,6 @@ public class ThrowPotionGoal extends MoveToTargetBlockGoal {
 
     public void setPotion(Potion potion) {
         this.potion = potion;
-    }
-    public void setAbility(Ability ability) {
-        this.ability = ability;
     }
 
     // set the target to throw a potion - the witch will move towards this location until we're within range
@@ -44,30 +53,100 @@ public class ThrowPotionGoal extends MoveToTargetBlockGoal {
         if (this.targetEntity != null)
             this.setMoveTarget(this.targetEntity.getOnPos());
 
+        WitchUnit witch = (WitchUnit) this.mob;
         if (moveTarget != null) {
-
-            WitchUnit witch = (WitchUnit) this.mob;
-
             if (MyMath.distance(
                 this.mob.getX(), this.mob.getZ(),
                 moveTarget.getX(), moveTarget.getZ()) <= witch.getPotionThrowRange()) {
 
                 this.mob.getLookControl().setLookAt(moveTarget.getX(), moveTarget.getY(), moveTarget.getZ());
-                if (moveTarget != null)
+                if (moveTarget != null) {
                     witch.throwPotion(new Vec3(moveTarget.getX(), moveTarget.getY(), moveTarget.getZ()), this.potion);
-                if (this.ability != null && !this.mob.level().isClientSide()) {
-                    AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
+
+                    if (!this.mob.level().isClientSide())
+                        for (Ability potionAbility : witch.getAbilities())
+                            AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), potionAbility.action, potionAbility.cooldownMax);
                 }
                 this.stop();
             }
         }
+
+        // autocast
+        if (this.targetEntity == null && moveTarget == null && !mob.level().isClientSide() && witch.isIdle()) {
+
+            for (Ability potionAbility : witch.getAbilities()) {
+                if (!potionAbility.autocast || !potionAbility.isOffCooldown())
+                    continue;
+
+                List<Mob> nearbyMobs = MiscUtil.getEntitiesWithinRange(
+                        new Vector3d(witch.position().x, witch.position().y, witch.position().z),
+                        potionAbility.range,
+                        Mob.class,
+                        witch.level());
+
+                if (potionAbility instanceof ThrowLingeringRegenPotion ||
+                    potionAbility instanceof ThrowHealingPotion) {
+
+                    List<Mob> nearbyFriendlyHurtUnits = nearbyMobs.stream().filter(mb ->
+                        mb instanceof Unit unit &&
+                        mb.getMobType() != MobType.UNDEAD &&
+                        mb.getHealth() < mb.getMaxHealth() && (
+                            unit.getOwnerName().equals(witch.getOwnerName()) ||
+                            AlliancesServerEvents.isAllied(unit.getOwnerName(), witch.getOwnerName())
+                        ))
+                        .sorted(Comparator.comparing(mb -> mb.getHealth() / mb.getMaxHealth()))
+                        .toList();
+
+                    if (!nearbyFriendlyHurtUnits.isEmpty()) {
+                        if (potionAbility instanceof ThrowLingeringRegenPotion pa)
+                            setPotion(pa.potion);
+                        else if (potionAbility instanceof ThrowHealingPotion pa)
+                            setPotion(pa.potion);
+                        setTarget(nearbyFriendlyHurtUnits.get(0));
+                        break;
+                    }
+                }
+                else if (potionAbility instanceof ThrowWaterPotion throwWaterPotion) {
+                    List<Mob> nearbyOnFireUnits = nearbyMobs.stream().filter(mb ->
+                        mb instanceof Unit unit &&
+                            mb.isOnFire() && (
+                            unit.getOwnerName().equals(witch.getOwnerName()) ||
+                            AlliancesServerEvents.isAllied(unit.getOwnerName(), witch.getOwnerName())
+                        ))
+                        .sorted(Comparator.comparing(mb -> mb.getHealth() / mb.getMaxHealth()))
+                        .toList();
+
+                    if (!nearbyOnFireUnits.isEmpty()) {
+                        setPotion(throwWaterPotion.potion);
+                        setTarget(nearbyOnFireUnits.get(0));
+                        break;
+                    }
+                }
+                else if (potionAbility instanceof ThrowLingeringHarmingPotion throwHarmingPotion) {
+                    List<Mob> nearbyEnemyUnits = nearbyMobs.stream().filter(mb ->
+                        mb instanceof Unit unit &&
+                            mb.getMobType() != MobType.UNDEAD && (
+                            !unit.getOwnerName().equals(witch.getOwnerName()) &&
+                            !AlliancesServerEvents.isAllied(unit.getOwnerName(), witch.getOwnerName())
+                        ))
+                        .toList();
+
+                    if (!nearbyEnemyUnits.isEmpty()) {
+                        setPotion(throwHarmingPotion.potion);
+                        setTarget(nearbyEnemyUnits.get(0));
+                        break;
+                    }
+                }
+            }
+        }
     }
+
+
 
     @Override
     public void stop() {
         this.stopMoving();
         this.setTarget((LivingEntity) null);
         this.setPotion(null);
-        this.setAbility(null);
     }
 }

@@ -21,8 +21,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -106,7 +104,7 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public boolean getWillRetaliate() {return willRetaliate;}
     public float getAttacksPerSecond() {
         if (bloodlustTicks > 0)
-            return attacksPerSecond * BLOODLUST_MULTIPLIER;
+            return attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER;
         return attacksPerSecond;
     }
     public float getAggroRange() {return aggroRange;}
@@ -124,11 +122,11 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
 
     public int getAttackCooldown() {
         if (bloodlustTicks > 0)
-            return (int) (20 / (attacksPerSecond * BLOODLUST_MULTIPLIER));
+            return (int) (20 / (attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER));
         return (int) (20 / attacksPerSecond);
     }
 
-    final static public float BLOODLUST_MULTIPLIER = 1.5f;
+    final static public float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.6f;
     final static public float SHIELD_MOVE_MULTIPLIER = 0.5f;
 
     final static public float attackDamage = 5.0f;
@@ -194,11 +192,8 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         Unit.tick(this);
         AttackerUnit.tick(this);
 
-        int bloodlustTicksBefore = bloodlustTicks;
         if (bloodlustTicks > 0)
             bloodlustTicks -= 1;
-        if (bloodlustTicksBefore == 1 && bloodlustTicks == 0)
-            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 25 * ResourceCost.TICKS_PER_SECOND));
     }
 
     public void initialiseGoals() {

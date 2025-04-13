@@ -1,9 +1,7 @@
 package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
-import com.solegendary.reignofnether.ability.abilities.ThrowLingeringHarmingPotion;
-import com.solegendary.reignofnether.ability.abilities.ThrowLingeringRegenPotion;
+import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -31,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -123,6 +122,8 @@ public class WitchUnit extends Witch implements Unit {
         super(entityType, level);
         this.abilities.add(new ThrowLingeringHarmingPotion(this));
         this.abilities.add(new ThrowLingeringRegenPotion(this));
+        this.abilities.add(new ThrowHealingPotion(this));
+        this.abilities.add(new ThrowWaterPotion(this));
         updateAbilityButtons();
     }
 
@@ -138,7 +139,10 @@ public class WitchUnit extends Witch implements Unit {
     public void throwPotion(Vec3 targetBp, Potion potion) {
         ThrownPotion thrownPotion = new ThrownPotion(this.level(), this);
 
-        thrownPotion.setItem(PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), potion));
+        if (potion == Potions.STRONG_HARMING || potion == Potions.STRONG_REGENERATION)
+            thrownPotion.setItem(PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), potion));
+        else
+            thrownPotion.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), potion));
 
         Vec3 dMove = targetBp.subtract(this.getEyePosition())
                 .multiply(1,0,1)

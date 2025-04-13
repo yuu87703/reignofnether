@@ -27,6 +27,11 @@ Quality of Life Features
 
 [❌] Colours for different players (with toggle under map options for ally/enemy)
 
+[❌] Command block commands for mapmakers
+    - Set unit owner (by id, by area, by type?)
+    - Win/lose
+    - Destroy/create building
+    - Set building owner
 
 [❌] Added /gamerule for bridges over void
 
