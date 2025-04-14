@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
+import com.solegendary.reignofnether.research.researchItems.*;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.EnchantAbility;
@@ -9,9 +10,6 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchEvokerVexes;
-import com.solegendary.reignofnether.research.researchItems.ResearchGrandLibrary;
-import com.solegendary.reignofnether.research.researchItems.ResearchLingeringPotions;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.TimeClientEvents;
@@ -68,27 +66,29 @@ public class Library extends ProductionBuilding implements RangeIndicator {
 
         this.explodeChance = 0.2f;
 
-        Ability enchantSharpness = new EnchantSharpness(this);
-        this.abilities.add(enchantSharpness);
-        Ability enchantQuickCharge = new EnchantQuickCharge(this);
-        this.abilities.add(enchantQuickCharge);
-        Ability enchantMaiming = new EnchantMaiming(this);
-        this.abilities.add(enchantMaiming);
-        Ability enchantMultishot = new EnchantMultishot(this);
-        this.abilities.add(enchantMultishot);
-        Ability enchantVigor = new EnchantVigor(this);
-        this.abilities.add(enchantVigor);
+        this.abilities.add(new EnchantSharpness(this));
+        this.abilities.add(new EnchantQuickCharge(this));
+        this.abilities.add(new EnchantMaiming(this));
+        this.abilities.add(new EnchantMultishot(this));
+        this.abilities.add(new EnchantVigor(this));
 
+        updateButtons();
+    }
+
+    public void updateButtons() {
         if (level.isClientSide()) {
-            this.abilityButtons.add(enchantMaiming.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(enchantQuickCharge.getButton(Keybindings.keyW));
-            this.abilityButtons.add(enchantSharpness.getButton(Keybindings.keyE));
-            this.abilityButtons.add(enchantMultishot.getButton(Keybindings.keyR));
-            this.abilityButtons.add(enchantVigor.getButton(Keybindings.keyT));
+            this.abilityButtons.clear();
+            this.abilityButtons.add(abilities.get(0).getButton(Keybindings.keyQ));
+            this.abilityButtons.add(abilities.get(1).getButton(Keybindings.keyW));
+            this.abilityButtons.add(abilities.get(2).getButton(Keybindings.keyE));
+            this.abilityButtons.add(abilities.get(3).getButton(Keybindings.keyR));
+            this.abilityButtons.add(abilities.get(4).getButton(Keybindings.keyT));
             this.productionButtons = Arrays.asList(
                 ResearchLingeringPotions.getStartButton(this, Keybindings.keyY),
-                ResearchEvokerVexes.getStartButton(this, Keybindings.keyU),
-                ResearchGrandLibrary.getStartButton(this, Keybindings.keyI)
+                ResearchHealingPotions.getStartButton(this, Keybindings.keyU),
+                ResearchWaterPotions.getStartButton(this, Keybindings.keyI),
+                ResearchEvokerVexes.getStartButton(this, Keybindings.keyO),
+                ResearchGrandLibrary.getStartButton(this, Keybindings.keyP)
             );
         }
     }

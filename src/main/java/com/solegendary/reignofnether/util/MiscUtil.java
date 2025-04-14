@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.tags.BlockTags;
+import org.apache.commons.lang3.text.WordUtils;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.blocks.RTSStartBlock;
@@ -280,8 +281,8 @@ public class MiscUtil {
         for (Building building : buildings) {
             // Check if the building is attackable, taking into account the relationship
             if (isBuildingAttackable(unitMob, building) && !(building instanceof AbstractBridge)) {
-                BlockPos attackPos = building.getClosestGroundPos(unitMob.getOnPos(), 1);
-                double dist = Math.sqrt(unitMob.getOnPos().distSqr(attackPos));
+                BlockPos attackPos = building.getClosestGroundPos(unitMob.blockPosition(), 1);
+                double dist = Math.sqrt(unitMob.blockPosition().distSqr(attackPos));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestBuilding = building;
@@ -331,7 +332,7 @@ public class MiscUtil {
 
             for (Entity entity : entities)
                 if (entity.position().distanceTo(new Vec3(pos.x, pos.y, pos.z)) <= range &&
-                        entity.level().getWorldBorder().isWithinBounds(entity.getOnPos()))
+                        entity.level().getWorldBorder().isWithinBounds(entity.blockPosition()))
                     entitiesInRange.add((T) entity);
 
             return entitiesInRange;
@@ -466,7 +467,7 @@ public class MiscUtil {
                     BlockState bs;
                     do {
                         bottomBp = topBp.offset(0,-y,0);
-                        bs = level.getBlockState(bottomBp); // TODO: infinite loop negative Y
+                        bs = level.getBlockState(bottomBp);
                         y += 1;
                     } while (y < 30 && (bs.getBlock() instanceof LeavesBlock || !bs.isSolid()));
                     if (!level.getBlockState(bottomBp.above()).isSolid())
@@ -602,5 +603,12 @@ public class MiscUtil {
     public static boolean isSolidBlocking(Level level, BlockPos bp) {
         BlockState bs = level.getBlockState(bp);
         return !bs.getCollisionShape(level, bp).isEmpty() && bs.isSolid();
+    }
+
+    public static String capitaliseAndSpace(String str) {
+        String spacedStr = str.replace('_', ' ');
+        spacedStr = spacedStr.replace('-', ' ');
+        spacedStr = spacedStr.replace('.', ' ');
+        return WordUtils.capitalize(spacedStr);
     }
 }

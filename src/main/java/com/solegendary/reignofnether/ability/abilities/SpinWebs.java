@@ -48,7 +48,7 @@ public class SpinWebs extends Ability {
 
     public static final int CD_MAX_SECONDS = 30;
     public static final int RANGE = 8;
-    public static final int DURATION_SECONDS = 5;
+    public static final int DURATION_SECONDS = 6;
 
     private final Spider spider;
 
@@ -63,7 +63,8 @@ public class SpinWebs extends Ability {
             true
         );
         this.spider = spider;
-        this.canAutocast = true;
+        this.autocastEnableAction = UnitAction.SPIN_WEBS_AUTOCAST_ENABLE;
+        this.autocastDisableAction = UnitAction.SPIN_WEBS_AUTOCAST_DISABLE;
     }
 
     @Override
@@ -76,14 +77,14 @@ public class SpinWebs extends Ability {
                 () -> !ResearchClient.hasResearch(ResearchSpiderWebs.itemName),
                 () -> true,
                 () -> CursorClientEvents.setLeftClickAction(UnitAction.SPIN_WEBS),
-                () -> sendUnitCommand(UnitAction.AUTOCAST),
+                this::toggleAutocast,
                 List.of(
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.spin_webs"), Style.EMPTY.withBold(true)),
                         FormattedCharSequence.forward("\uE004  " + CD_MAX_SECONDS + "s  \uE005  " + RANGE, MyRenderer.iconStyle),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.spin_webs.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.spin_webs.tooltip2", DURATION_SECONDS), Style.EMPTY),
                         FormattedCharSequence.forward("", Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("abilities.reignofnether.spin_webs.tooltip4"), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.spin_webs.tooltip3"), Style.EMPTY)
                 ),
                 this

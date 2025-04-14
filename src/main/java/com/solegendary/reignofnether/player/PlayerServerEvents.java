@@ -100,6 +100,7 @@ public class PlayerServerEvents {
     // foodforthought - ignore soft population caps
     // thereisnospoon - allow changing survival wave by clicking the wave indicator and using debug commands
     // slipslopslap - monster units are unaffected by sunlight
+    // wouldyoukindly - allow control of non-unit mobs in RTS mode
     // thebeastofcaerbannog - spawns the Killer Rabbit
     public static final List<String> singleWordCheats = List.of(
         "warpten",
@@ -108,7 +109,8 @@ public class PlayerServerEvents {
         "medievalman",
         "foodforthought",
         "thereisnospoon",
-        "slipslopslap"
+        "slipslopslap",
+        "wouldyoukindly"
     );
 
     public static void saveRTSPlayers() {
@@ -824,14 +826,17 @@ public class PlayerServerEvents {
     public static void resetRTS(boolean hardReset) {
         StartPosServerEvents.cancelStartGameCountdown(true);
 
+        boolean isSandbox = SandboxServer.isAnyoneASandboxPlayer();
+
         synchronized (rtsPlayers) {
             rtsPlayers.clear();
 
             for (LivingEntity entity : UnitServerEvents.getAllUnits())
-                if (hardReset || (entity instanceof Unit unit && !Unit.hasAnchor(unit)))
+                if (hardReset || (entity instanceof Unit unit && !Unit.hasAnchor(unit) && !isSandbox))
                     entity.kill();
 
-            UnitServerEvents.getAllUnits().removeIf(u -> (hardReset || (u instanceof Unit unit && !Unit.hasAnchor(unit))));
+            if (!isSandbox)
+                UnitServerEvents.getAllUnits().removeIf(u -> (hardReset || (u instanceof Unit unit && !Unit.hasAnchor(unit))));
 
             for (LivingEntity entity : UnitServerEvents.getAllUnits())
                 if (entity instanceof Unit unit)
@@ -840,10 +845,11 @@ public class PlayerServerEvents {
             for (Building building : BuildingServerEvents.getBuildings()) {
                 if (building instanceof ProductionBuilding productionBuilding)
                     productionBuilding.productionQueue.clear();
-                if (building.shouldDestroyOnReset || hardReset)
+                if ((building.shouldDestroyOnReset || hardReset) && !isSandbox)
                     building.destroy((ServerLevel) building.getLevel());
             }
-            BuildingServerEvents.getBuildings().removeIf(b -> b.shouldDestroyOnReset || hardReset);
+            if (!isSandbox)
+                BuildingServerEvents.getBuildings().removeIf(b -> b.shouldDestroyOnReset || hardReset);
             for (Building building : BuildingServerEvents.getBuildings())
                 building.ownerName = "";
             ResearchServerEvents.removeAllResearch();

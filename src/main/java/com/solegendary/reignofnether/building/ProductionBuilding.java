@@ -218,6 +218,8 @@ public abstract class ProductionBuilding extends Building {
                 case ResearchStrays.itemName -> prodItem = new ResearchStrays(building);
                 case ResearchSlimeConversion.itemName -> prodItem = new ResearchSlimeConversion(building);
                 case ResearchLingeringPotions.itemName -> prodItem = new ResearchLingeringPotions(building);
+                case ResearchWaterPotions.itemName -> prodItem = new ResearchWaterPotions(building);
+                case ResearchHealingPotions.itemName -> prodItem = new ResearchHealingPotions(building);
                 case ResearchEvokerVexes.itemName -> prodItem = new ResearchEvokerVexes(building);
                 case ResearchGolemSmithing.itemName -> prodItem = new ResearchGolemSmithing(building);
                 case ResearchSilverfish.itemName -> prodItem = new ResearchSilverfish(building);

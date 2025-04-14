@@ -2,7 +2,6 @@ package com.solegendary.reignofnether.building;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraftforge.common.Tags;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
@@ -45,7 +44,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -53,7 +51,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -156,6 +153,8 @@ public abstract class Building {
     public ArrayList<Ability> getAbilities() {
         return abilities;
     }
+
+    public void updateButtons() { }
 
     public int getHighestBlockCountReached() {
         return highestBlockCountReached;
@@ -1055,11 +1054,8 @@ public abstract class Building {
 
         for (BlockPos bp : getRenderChunkOrigins(true)) {
             BlockPos roundedOrigin = bp.offset(-bp.getX() % 16, -bp.getY() % 16, -bp.getZ() % 16);
-            if (bp.getX() % 16 != 0 || bp.getY() % 16 != 0 || bp.getZ() % 16 != 0) {
-                ReignOfNether.LOGGER.warn("attempted to create a FrozenChunk at non-origin pos: " + bp);
-            }
 
-            ReignOfNether.LOGGER.info("Froze chunk at: " + roundedOrigin);
+            //ReignOfNether.LOGGER.info("Froze chunk at: " + roundedOrigin);
 
             FrozenChunk newFrozenChunk = null;
             for (FrozenChunk frozenChunk : FogOfWarClientEvents.frozenChunks) {

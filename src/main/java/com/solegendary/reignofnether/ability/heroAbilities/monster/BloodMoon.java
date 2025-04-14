@@ -6,9 +6,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 
 // play a cave sound and announce "A blood moon rises" in global chat
 
-import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
-import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -16,10 +14,13 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
+import com.solegendary.reignofnether.unit.units.villagers.RoyalGuardUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class BloodMoon extends HeroAbility {
 
+    public static final int CHANNEL_TICKS = 40;
     private static final int CD_MAX_SECONDS = 360 * ResourceCost.TICKS_PER_SECOND;
     private static final int DURATION_SECONDS = 60;
     private static final int BONUS_SECONDS_PER_SOUL = 3;
@@ -65,6 +67,7 @@ public class BloodMoon extends HeroAbility {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.blood_moon"), true),
                 fcsIcons(I18n.get("abilities.reignofnether.blood_moon.stats", CD_MAX_SECONDS / 20)),
+                fcs(""),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip3")),
@@ -83,7 +86,15 @@ public class BloodMoon extends HeroAbility {
         );
     }
 
+    @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
+        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().setAbility(this);
+        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().startCasting();
+    }
 
+    @Override
+    public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
+        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().setAbility(this);
+        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().startCasting();
     }
 }

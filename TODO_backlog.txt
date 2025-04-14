@@ -8,13 +8,12 @@ Features
 
 [❌] Import the Bedrock Minecraft Movie addon piglins
 
-[❌] Add basic controls for non-rts units (so you can control modded units)
-
 [❌] Config to allow changing resource block values, including modded blocks
 
 
 Bugfixes
 --------
+[❌] Kicked for sending too many packets when spam clicking large army (rate-limit in server.properties?)
 
 [❌] Dying in survival puts you in a bugged survival mode
 
@@ -22,9 +21,21 @@ Bugfixes
 
 [❌] Have too-fast mod be built-in
 
+[❌] GUI sometimes still going above size 3 when set to auto
+
+
 
 Quality of Life Features
 ------------------------
+[❌] Added a lot more serverside logging to track player actions
+
+[❌] Colours for different players (with toggle under map options for ally/enemy)
+
+[❌] Command block commands for mapmakers
+    - Set unit owner (by id, by area, by type?)
+    - Win/lose
+    - Destroy/create building
+    - Set building owner
 
 [❌] Added /gamerule for bridges over void
 
@@ -36,6 +47,8 @@ Quality of Life Features
     - auras
     - hero passives
     - enchantments
+
+
 
 Balancing
 ---------

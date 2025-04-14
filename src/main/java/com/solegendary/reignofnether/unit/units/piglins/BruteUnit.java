@@ -7,15 +7,12 @@ import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
-import com.solegendary.reignofnether.building.buildings.piglins.Fortress;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchBruteShields;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -107,7 +104,7 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public boolean getWillRetaliate() {return willRetaliate;}
     public float getAttacksPerSecond() {
         if (bloodlustTicks > 0)
-            return attacksPerSecond * BLOODLUST_MULTIPLIER;
+            return attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER;
         return attacksPerSecond;
     }
     public float getAggroRange() {return aggroRange;}
@@ -125,11 +122,11 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
 
     public int getAttackCooldown() {
         if (bloodlustTicks > 0)
-            return (int) (20 / (attacksPerSecond * BLOODLUST_MULTIPLIER));
+            return (int) (20 / (attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER));
         return (int) (20 / attacksPerSecond);
     }
 
-    final static public float BLOODLUST_MULTIPLIER = 1.5f;
+    final static public float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.6f;
     final static public float SHIELD_MOVE_MULTIPLIER = 0.5f;
 
     final static public float attackDamage = 5.0f;
@@ -154,15 +151,9 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
 
     public BruteUnit(EntityType<? extends PiglinBrute> entityType, Level level) {
         super(entityType, level);
-
-        ToggleShield toggleShield = new ToggleShield(this);
-        this.abilities.add(toggleShield);
-        Bloodlust bloodlust = new Bloodlust(this);
-        this.abilities.add(bloodlust);
-        if (level.isClientSide()) {
-            this.abilityButtons.add(toggleShield.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(bloodlust.getButton(Keybindings.keyW));
-        }
+        this.abilities.add(new ToggleShield(this));
+        this.abilities.add(new Bloodlust(this));
+        updateAbilityButtons();
     }
 
     @Override

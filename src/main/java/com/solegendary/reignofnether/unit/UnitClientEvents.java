@@ -122,12 +122,14 @@ public class UnitClientEvents {
         selectedUnits.sort(Comparator.comparing(HudClientEvents::getSimpleEntityName));
         selectedUnits.sort(Comparator.comparing(Entity::getId));
         BuildingClientEvents.clearSelectedBuildings();
+        NonUnitClientEvents.isMoveCheckpointGreen = true;
     }
     public static void clearPreselectedUnits() {
         preselectedUnits.clear();
     }
     public static void clearSelectedUnits() {
         selectedUnits.clear();
+        NonUnitClientEvents.isMoveCheckpointGreen = true;
     }
 
     private static long lastLeftClickTime = 0; // to track double clicks
@@ -325,13 +327,7 @@ public class UnitClientEvents {
                     int entityId = pair.getFirst();
                     BlockPos targetPos = pair.getSecond();
                     Entity entity = MC.level.getEntity(entityId);
-                    if (entity instanceof Unit unit &&
-                        unit.getMoveGoal() != null) {
-
-                        //sendUnitCommandManual(UnitAction.MOVE, -1, new int[]{entityId}, targetPos, true, false);
-
-                        sendUnitCommandManual(UnitAction.MOVE, -1, new int[]{entityId}, targetPos);
-                    }
+                    sendUnitCommandManual(UnitAction.MOVE, -1, new int[]{entityId}, targetPos);
                 }
                 for (LivingEntity le : selectedUnits)
                     if (le instanceof Unit unit && unit.getMoveGoal() != null)
@@ -574,11 +570,20 @@ public class UnitClientEvents {
                         selectedUnits.get(0).getClass(),
                         MC.level
                 );
-                if (getPlayerToEntityRelationship(selectedUnit) == Relationship.OWNED) {
+                if (getPlayerToEntityRelationship(selectedUnit) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) {
                     clearSelectedUnits();
-                    for (LivingEntity entity : nearbyEntities)
-                        if (getPlayerToEntityRelationship(entity) == Relationship.OWNED)
+                    for (LivingEntity entity : nearbyEntities) {
+                        boolean bothVillagers = entity instanceof VillagerUnit &&
+                                                selectedUnit instanceof VillagerUnit;
+                        boolean sameProfession = entity instanceof VillagerUnit vUnit1 &&
+                                                selectedUnit instanceof VillagerUnit vUnit2 &&
+                                                vUnit1.getUnitProfession() == vUnit2.getUnitProfession();
+
+                        if ((getPlayerToEntityRelationship(entity) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) &&
+                                (!bothVillagers || sameProfession)) {
                             addSelectedUnit(entity);
+                        }
+                    }
                     HudClientEvents.setLowestCdHudEntity();
                 }
             }
@@ -599,8 +604,8 @@ public class UnitClientEvents {
                     deselected = selectedUnits.removeIf(id -> id.equals(preselectedUnits.get(0)));
 
                 if (Keybindings.shiftMod.isDown() && !deselected &&
-                    preselectedUnits.get(0) instanceof Unit &&
-                    getPlayerToEntityRelationship(preselectedUnits.get(0)) == Relationship.OWNED) {
+                    ((preselectedUnits.get(0) instanceof Unit && getPlayerToEntityRelationship(preselectedUnits.get(0)) == Relationship.OWNED) ||
+                    (NonUnitClientEvents.canControlNonUnits()))) {
                         addSelectedUnit(preselectedUnits.get(0));
                 }
                 else if (!deselected) { // select a single unit - this should be the only code path that allows you to select a non-owned unit
@@ -610,8 +615,11 @@ public class UnitClientEvents {
             }
             // deselect any non-owned units if we managed to select them with owned units
             // and disallow selecting > 1 non-owned unit or the client player
-            if (selectedUnits.size() > 1)
-                selectedUnits.removeIf(e -> getPlayerToEntityRelationship(e) != Relationship.OWNED || e.getId() == MC.player.getId());
+            if (selectedUnits.size() > 1) {
+                selectedUnits.removeIf(e ->
+                    (getPlayerToEntityRelationship(e) != Relationship.OWNED && !NonUnitClientEvents.canControlNonUnits()) || e.getId() == MC.player.getId()
+                );
+            }
 
             lastLeftClickTime = System.currentTimeMillis();
         }
@@ -642,6 +650,7 @@ public class UnitClientEvents {
                 // right click -> attack unfriendly unit
                 else if (preselectedUnits.size() == 1 &&
                     !targetingSelf() &&
+                    (hudSelectedEntity instanceof Unit || NonUnitClientEvents.canAttack(hudSelectedEntity)) &&
                     ((GameruleClient.neutralAggro && getPlayerToEntityRelationship(preselectedUnits.get(0)) == Relationship.NEUTRAL) ||
                     getPlayerToEntityRelationship(preselectedUnits.get(0)) == Relationship.HOSTILE ||
                      ResourceSources.isHuntableAnimal(preselectedUnits.get(0)))) {
@@ -694,11 +703,7 @@ public class UnitClientEvents {
     public static void onRenderLevel(RenderLevelStageEvent evt) {
         if (MC.level == null)
             return;
-        /**
-         *  TODO: make these visible to 1st-person players but currently had a visual glitch
-         *  doesnt align to camera very well, sometimes sinks below ground and too thin
-         *  TODO: make this visible behind blocks (but only seems to work if orthoview is creative mode)
-         */
+
         // if orthoview uses creative mode: RenderLevelStageEvent.Stage.AFTER_WEATHER
         // if orthoview uses spectator mode: RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS
 

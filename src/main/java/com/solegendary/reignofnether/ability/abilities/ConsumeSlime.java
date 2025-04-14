@@ -32,7 +32,8 @@ public class ConsumeSlime extends Ability {
     public ConsumeSlime(Slime slime) {
         super(UnitAction.CONSUME_SLIME, slime.level(), CD_MAX, RANGE, 0, true, true);
         this.slime = slime;
-        canAutocast = true;
+        this.autocastEnableAction = UnitAction.CONSUME_SLIME_AUTOCAST_ENABLE;
+        this.autocastDisableAction = UnitAction.CONSUME_SLIME_AUTOCAST_DISABLE;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class ConsumeSlime extends Ability {
             () -> this.slime.getSize() <= 1,
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.CONSUME_SLIME),
-            () -> sendUnitCommand(UnitAction.AUTOCAST),
+            this::toggleAutocast,
             List.of(FormattedCharSequence.forward(I18n.get("abilities.reignofnether.consume"),
                     Style.EMPTY.withBold(true)
                 ),
@@ -54,7 +55,7 @@ public class ConsumeSlime extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.consume.tooltip1"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.consume.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward("", Style.EMPTY),
-                FormattedCharSequence.forward(I18n.get("abilities.reignofnether.consume.tooltip3"), Style.EMPTY)
+                FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"), Style.EMPTY)
             ),
             this
         );

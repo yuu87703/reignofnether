@@ -127,7 +127,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
 
-    final static public float maxHealth = 90.0f;
+    final static public float maxHealth = 100.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.28f;
     public int maxResources = 100;
@@ -140,12 +140,8 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
 
     public WitherSkeletonUnit(EntityType<? extends WitherSkeleton> entityType, Level level) {
         super(entityType, level);
-
-        WitherCloud ab1 = new WitherCloud(this);
-        this.abilities.add(ab1);
-        if (level.isClientSide()) {
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
-        }
+        this.abilities.add(new WitherCloud(this));
+        updateAbilityButtons();
     }
 
     @Override
@@ -242,7 +238,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
     }
 
     public static final int WITHER_SECONDS = 6;
-    public static final int WITHER_MAX_AMPLIFIER = 4; // amplifier starts at 0
+    public static final int WITHER_MAX_AMPLIFIER = 5; // amplifier starts at 0
 
     public static void applyStackingWither(LivingEntity le) {
         int amplifier = 0;

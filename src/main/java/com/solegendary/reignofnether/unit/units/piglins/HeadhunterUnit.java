@@ -9,7 +9,6 @@ import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchHeavyTridents;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -134,7 +133,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         return (int) (20 / attacksPerSecond);
     }
 
-    final static public float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.5f;
+    final static public float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.6f;
 
     final static public float attackDamage = 6.0f;
     final static public float attacksPerSecond = 0.3f;
@@ -160,15 +159,9 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
 
     public HeadhunterUnit(EntityType<? extends PiglinBrute> entityType, Level level) {
         super(entityType, level);
-
-        MountHoglin mountHoglinAbility = new MountHoglin(this);
-        this.abilities.add(mountHoglinAbility);
-        Bloodlust bloodlust = new Bloodlust(this);
-        this.abilities.add(bloodlust);
-        if (level.isClientSide()) {
-            this.abilityButtons.add(mountHoglinAbility.getButton(Keybindings.keyQ));
-            this.abilityButtons.add(bloodlust.getButton(Keybindings.keyW));
-        }
+        this.abilities.add(new MountHoglin(this));
+        this.abilities.add(new Bloodlust(this));
+        updateAbilityButtons();
     }
 
     @Override

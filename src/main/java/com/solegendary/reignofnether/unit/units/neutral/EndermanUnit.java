@@ -128,16 +128,10 @@ public class EndermanUnit extends EnderMan implements Unit, AttackerUnit {
     private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
-    // TODO: prevent random teleport on being wet, damaged or being shot (but keep the damage)
-
     public EndermanUnit(EntityType<? extends EnderMan> entityType, Level level) {
         super(entityType, level);
-
-        Teleport ab1 = new Teleport(this);
-        this.abilities.add(ab1);
-
-        if (level.isClientSide())
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
+        this.abilities.add(new Teleport(this));
+        updateAbilityButtons();
     }
 
     @Override
