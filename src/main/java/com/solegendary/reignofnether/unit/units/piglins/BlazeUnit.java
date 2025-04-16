@@ -114,7 +114,7 @@ public class BlazeUnit extends Blaze implements Unit, AttackerUnit, RangedAttack
 
     // endregion
 
-    final static public float attackDamage = 1.0f;
+    final static public float attackDamage = 0.0f;
     final static public float attacksPerSecond = 1.0f;
     final static public float attackRange = 14; // only used by ranged units or melee building attackers
     final static public float aggroRange = 14;
@@ -142,8 +142,6 @@ public class BlazeUnit extends Blaze implements Unit, AttackerUnit, RangedAttack
         if (level.isClientSide())
             this.abilityButtons.add(ab1.getButton(Keybindings.keyQ, this));
     }
-
-
 
     @Override
     public boolean removeWhenFarAway(double d) { return false; }

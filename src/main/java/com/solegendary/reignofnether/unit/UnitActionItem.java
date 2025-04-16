@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.unit;
 
+import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
@@ -22,7 +23,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -325,16 +328,11 @@ public class UnitActionItem {
                         cUnit.setShouldDiscard(true);
                     }
                 }
-                case AUTOCAST -> {
-                    for (Ability ability : unit.getAbilities())
-                        if (ability.canAutocast)
-                            ability.autocast = !ability.autocast;
-                }
                 // any other Ability not explicitly defined here
                 default -> {
+                    boolean enabledAutocast = false;
                     for (Ability ability : unit.getAbilities()) {
                         if (ability.action == action && (ability.isOffCooldown() || ability.canBypassCooldown())) {
-
                             if (ability.canTargetEntities && this.unitId > 0) {
                                 ability.use(level, unit, (LivingEntity) level.getEntity(unitId));
                                 usedAbility = ability;
@@ -348,8 +346,18 @@ public class UnitActionItem {
                                     break actionableUnitsLoop;
                                 }
                             }
+                        } else if (ability.autocastEnableAction == action) {
+                            ability.autocast = true;
+                            enabledAutocast = true;
+                        } else if (ability.autocastDisableAction == action) {
+                            ability.autocast = false;
                         }
                     }
+                    // turn off all other autocasts
+                    if (enabledAutocast)
+                        for (Ability ability : unit.getAbilities())
+                            if (ability.autocastEnableAction != null && ability.autocastEnableAction != action)
+                                ability.autocast = false;
                 }
             }
         }
@@ -357,8 +365,9 @@ public class UnitActionItem {
             HudClientEvents.setLowestCdHudEntity();
         }
 
-        if (this.selectedBuildingPos.equals(new BlockPos(0, 0, 0))) {
-            return;
+        Building actionableBuilding = null;
+        if (!this.selectedBuildingPos.equals(new BlockPos(0, 0, 0))) {
+            actionableBuilding = BuildingUtils.findBuilding(level.isClientSide(), this.selectedBuildingPos);
         }
 
         BuildingPlacement actionableBuilding = BuildingUtils.findBuilding(level.isClientSide(), this.selectedBuildingPos);
@@ -371,6 +380,54 @@ public class UnitActionItem {
                     } else {
                         ability.use(level, actionableBuilding, preselectedBlockPos);
                     }
+                }
+            }
+        }
+
+        ArrayList<PathfinderMob> actionableNonUnits = new ArrayList<>();
+        for (int id : unitIds) {
+            Entity entity = level.getEntity(id);
+            if (entity instanceof PathfinderMob mob) {
+                actionableNonUnits.add(mob);
+            }
+        }
+
+        if ((level.isClientSide() && NonUnitClientEvents.canControlNonUnits()) ||
+            (!level.isClientSide() && NonUnitServerEvents.canControlNonUnits(level, ownerName))) {
+
+            for (PathfinderMob mob : actionableNonUnits) {
+                if (mob instanceof Unit)
+                    continue;
+
+                mob.getNavigation().stop();
+                mob.setTarget(null);
+                if (!level.isClientSide()) {
+                    synchronized (NonUnitServerEvents.nonUnitMoveTargets) {
+                        NonUnitServerEvents.nonUnitMoveTargets.removeIf(p -> p.getFirst() == mob);
+                    }
+                }
+
+                if (List.of(UnitAction.MOVE, UnitAction.FOLLOW, UnitAction.ATTACK_MOVE).contains(action)) {
+                    BlockPos bp = preselectedBlockPos;
+                    Path path = mob.getNavigation().createPath(bp.getX(), bp.getY(), bp.getZ(), 0);
+                    mob.getNavigation().moveTo(path, 1);
+                    if (!level.isClientSide()) {
+                        synchronized (NonUnitServerEvents.nonUnitMoveTargets) {
+                            NonUnitServerEvents.nonUnitMoveTargets.add(new Pair<>(mob, preselectedBlockPos));
+                        }
+                    }
+                } else if (action == UnitAction.ATTACK) {
+                    if (level.getEntity(unitId) instanceof LivingEntity le) {
+                        mob.setTarget(le);
+                    }
+                }
+                if (!level.isClientSide()) {
+                    if (action != UnitAction.ATTACK_MOVE) {
+                        NonUnitServerEvents.attackSuppressedNonUnits.add(mob);
+                    }
+                    NonUnitServerEvents.moveSuppressedNonUnits.add(mob);
+                } else {
+                    NonUnitClientEvents.isMoveCheckpointGreen = action != UnitAction.ATTACK_MOVE;
                 }
             }
         }

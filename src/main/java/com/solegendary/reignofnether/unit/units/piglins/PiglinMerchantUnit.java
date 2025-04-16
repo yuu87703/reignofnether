@@ -5,8 +5,8 @@ import com.solegendary.reignofnether.ability.heroAbilities.piglin.FancyFeast;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.GreedIsGoodPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.LootExplosion;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.ThrowTNT;
+import com.solegendary.reignofnether.ability.heroAbilities.villager.MaceSlam;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -66,9 +66,17 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
     public int getMaxResources() {return maxResources;}
 
-    public GenericTargetedSpellGoal castFancyFeastGoal;
-    public GenericTargetedSpellGoal castFancyFeastGoal() {
+    private GenericTargetedSpellGoal castFancyFeastGoal;
+    public GenericTargetedSpellGoal getCastFancyFeastGoal() {
         return castFancyFeastGoal;
+    }
+    private GenericTargetedSpellGoal castTNTGoal;
+    public GenericTargetedSpellGoal getCastTNTGoal() {
+        return castTNTGoal;
+    }
+    private GenericUntargetedSpellGoal castLootExplosionGoal;
+    public GenericUntargetedSpellGoal getCastLootExplosionGoal() {
+        return castLootExplosionGoal;
     }
 
     private MoveToTargetBlockGoal moveGoal;
@@ -178,7 +186,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                 activeAnimDef = PiglinMerchantAnimations.ATTACK;
                 activeAnimState = attackAnimState;
                 animateScale = 1.0f;
-                startAnimation(PiglinMerchantAnimations.ATTACK);
+                startAnimation(activeAnimDef);
             }
             case CHARGE_SPELL -> {
                 activeAnimDef = PiglinMerchantAnimations.SPELL_CHARGE;
@@ -197,14 +205,11 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
 
     public PiglinMerchantUnit(EntityType<? extends Piglin> entityType, Level level) {
         super(entityType, level);
-
-        ThrowTNT ab1 = new ThrowTNT(this);
-        FancyFeast ab2 = new FancyFeast(this);
-        GreedIsGoodPassive ab3 = new GreedIsGoodPassive(this);
-        LootExplosion ab4 = new LootExplosion(this);
-        this.abilities.add(ab1);
-        if (level.isClientSide())
-            this.abilityButtons.add(ab1.getButton(Keybindings.keyQ));
+        this.abilities.add(new ThrowTNT(this));
+        this.abilities.add(new FancyFeast(this));
+        this.abilities.add(new GreedIsGoodPassive(this));
+        this.abilities.add(new LootExplosion(this));
+        updateAbilityButtons();
     }
 
     @Override
@@ -239,6 +244,9 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         if (level().isClientSide() && animateTicks > 0) {
             animateTicks -= 1;
         }
+        castTNTGoal.tick();
+        castFancyFeastGoal.tick();
+        castLootExplosionGoal.tick();
     }
 
     public void initialiseGoals() {
@@ -247,6 +255,32 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
         this.attackBuildingGoal = new MeleeAttackBuildingGoal(this);
+        this.castTNTGoal = new GenericTargetedSpellGoal(
+                this,
+                20,
+                ThrowTNT.RANGE,
+                UnitAnimationAction.ATTACK_UNIT,
+                null,
+                this::throwTNT,
+                null
+        );
+        this.castFancyFeastGoal = new GenericTargetedSpellGoal(
+                this,
+                60,
+                FancyFeast.RANGE,
+                UnitAnimationAction.ATTACK_UNIT,
+                null,
+                this::fancyFeast,
+                null
+        );
+        this.castLootExplosionGoal = new GenericUntargetedSpellGoal(
+                this,
+                60,
+                this::lootExplosion,
+                UnitAnimationAction.CHARGE_SPELL,
+                UnitAnimationAction.STOP,
+                UnitAnimationAction.CAST_SPELL
+        );
     }
 
     @Override
@@ -267,12 +301,15 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         return pSpawnData;
     }
 
-    @Override
-    public void setupEquipmentAndUpgradesClient() {
+    public void throwTNT(BlockPos targetBp) {
 
     }
 
-    @Override
-    public void setupEquipmentAndUpgradesServer() {
+    public void fancyFeast(BlockPos targetBp) {
+
+    }
+
+    public void lootExplosion() {
+
     }
 }

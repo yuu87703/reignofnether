@@ -236,10 +236,10 @@ public class WardenUnit extends Warden implements Unit, AttackerUnit {
     }
 
     public void doEntitySonicBoom(LivingEntity targetEntity) {
-        doEntitySonicBoom(targetEntity, this.position().add(0, 1.6, 0));
+        doEntitySonicBoom(targetEntity, this.position().add(0, 1.6, 0), 1.0f);
     }
 
-    public void doEntitySonicBoom(LivingEntity targetEntity, Vec3 startPos) {
+    public void doEntitySonicBoom(LivingEntity targetEntity, Vec3 startPos, float damageMult) {
         Vec3 targetPos = targetEntity.getEyePosition().subtract(startPos);
         Vec3 normTargetPos = targetPos.normalize();
 
@@ -251,7 +251,7 @@ public class WardenUnit extends Warden implements Unit, AttackerUnit {
                 level.sendParticles(ParticleTypes.SONIC_BOOM, particlePos.x, particlePos.y, particlePos.z, 1, 0,0,0,0);
             }
         }
-        targetEntity.hurt(damageSources().sonicBoom(this), SONIC_BOOM_DAMAGE);
+        targetEntity.hurt(damageSources().sonicBoom(this), SONIC_BOOM_DAMAGE * damageMult);
         double knockbackY = 0.5 * (1.0 - targetEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
         double knockbackXZ = 2.0 * (1.0 - targetEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
         targetEntity.push(normTargetPos.x() * knockbackXZ, normTargetPos.y() * knockbackY, normTargetPos.z() * knockbackXZ);
@@ -280,7 +280,7 @@ public class WardenUnit extends Warden implements Unit, AttackerUnit {
         else
             hasResearch = ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_SCULK_AMPLIFIERS);
 
-        if (hasResearch && targetBuilding instanceof SculkCatalystPlacement) {
+        if (hasResearch && targetBuilding instanceof SculkCatalystPlacement catalyst && catalyst.isBuilt) {
             List<Mob> nearbyEnemies = MiscUtil.getEntitiesWithinRange(
                             new Vector3d(targetBuilding.centrePos.getX(), targetBuilding.centrePos.getY(), targetBuilding.centrePos.getZ()),
                             ResearchSculkAmplifiers.SPLIT_BOOM_RANGE, Mob.class, this.level())
@@ -290,7 +290,7 @@ public class WardenUnit extends Warden implements Unit, AttackerUnit {
 
             for (int i = 0; i < ResearchSculkAmplifiers.SPLIT_BOOM_AMOUNT; i++)
                 if (nearbyEnemies.size() > i)
-                    doEntitySonicBoom(nearbyEnemies.get(i), Vec3.atCenterOf(targetBuilding.centrePos));
+                    doEntitySonicBoom(nearbyEnemies.get(i), Vec3.atCenterOf(targetBuilding.centrePos), ResearchSculkAmplifiers.SPLIT_BOOM_DAMAGE_MULT);
         }
         else {
             int damage = (int) ((SONIC_BOOM_DAMAGE / 2) * targetBuilding.getMagicDamageMult());

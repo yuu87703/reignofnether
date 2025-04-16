@@ -87,7 +87,7 @@ public class BuildingSaveData extends SavedData {
 
     @Override
     public CompoundTag save(CompoundTag tag) {
-        ReignOfNether.LOGGER.info("BuildingSaveData.save");
+        //ReignOfNether.LOGGER.info("BuildingSaveData.save");
 
         ListTag list = new ListTag();
         this.buildings.forEach(b -> {
@@ -112,7 +112,7 @@ public class BuildingSaveData extends SavedData {
             cTag.putInt("zp", b.portalDestination != null ? b.portalDestination.getZ() : 0);
             list.add(cTag);
 
-            ReignOfNether.LOGGER.info("BuildingSaveData.save: " + b.ownerName + "|" + buildingName);
+            //ReignOfNether.LOGGER.info("BuildingSaveData.save: " + b.ownerName + "|" + buildingName);
         });
         tag.put("buildings", list);
         return tag;

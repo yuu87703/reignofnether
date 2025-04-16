@@ -23,7 +23,6 @@ public enum UnitAction {
     RETURN_RESOURCES_TO_CLOSEST, // drops off resources to the nearest building that accepts resources
     DELETE, // instantly kills this unit
     DISCARD, // instantly removes this unit from the level without any death animation/event
-    AUTOCAST, // toggle autocast for a unit's ability
 
     ATTACK_GROUND,
     // special abilities - these can also be assigned to cursor actions
@@ -38,10 +37,18 @@ public enum UnitAction {
     EJECT, // vehicle removes itself from passengers
     PROMOTE_ILLAGER,
     ROAR,
-    THROW_HARMING_POTION,
-    THROW_REGEN_POTION,
+    THROW_HEALING_POTION,
+    THROW_HEALING_POTION_AUTOCAST_ENABLE,
+    THROW_HEALING_POTION_AUTOCAST_DISABLE,
+    THROW_WATER_POTION,
+    THROW_WATER_POTION_AUTOCAST_ENABLE,
+    THROW_WATER_POTION_AUTOCAST_DISABLE,
     THROW_LINGERING_HARMING_POTION,
+    THROW_LINGERING_HARMING_POTION_AUTOCAST_ENABLE,
+    THROW_LINGERING_HARMING_POTION_AUTOCAST_DISABLE,
     THROW_LINGERING_REGEN_POTION,
+    THROW_LINGERING_REGEN_POTION_AUTOCAST_ENABLE,
+    THROW_LINGERING_REGEN_POTION_AUTOCAST_DISABLE,
     SET_FANGS_LINE,
     SET_FANGS_CIRCLE,
     CAST_SUMMON_VEXES,
@@ -54,12 +61,16 @@ public enum UnitAction {
     SACRIFICE,
     WITHER_CLOUD,
     SPIN_WEBS,
+    SPIN_WEBS_AUTOCAST_ENABLE,
+    SPIN_WEBS_AUTOCAST_DISABLE,
     BLOOD_LUST,
     CALL_TO_ARMS_BUILDING,
     CALL_TO_ARMS_UNIT,
     BACK_TO_WORK_BUILDING,
     BACK_TO_WORK_UNIT,
     CONSUME_SLIME,
+    CONSUME_SLIME_AUTOCAST_ENABLE,
+    CONSUME_SLIME_AUTOCAST_DISABLE,
     TOGGLE_SPIDER_CLIMBING,
 
     // hero abilities

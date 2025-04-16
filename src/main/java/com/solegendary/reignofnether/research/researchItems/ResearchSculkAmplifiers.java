@@ -26,6 +26,7 @@ public class ResearchSculkAmplifiers extends ProductionItem {
     public final static String itemName = "Sculk Amplifiers";
     public final static ResourceCost cost = ResourceCosts.RESEARCH_SCULK_AMPLIFIERS;
 
+    public final static float SPLIT_BOOM_DAMAGE_MULT = 0.666f;
     public final static int SPLIT_BOOM_RANGE = 20;
     public final static int SPLIT_BOOM_AMOUNT = 3;
 

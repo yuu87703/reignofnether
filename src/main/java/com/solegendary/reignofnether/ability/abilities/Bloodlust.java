@@ -28,7 +28,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class Bloodlust extends Ability {
 
-    private static final int HEALTH_COST = 10;
+    private static final int HEALTH_COST = 12;
     private static final int DURATION_SECONDS = 10;
 
     public Bloodlust() {
@@ -64,7 +64,7 @@ public class Bloodlust extends Ability {
                 null,
                 List.of(
                         fcs(I18n.get("abilities.reignofnether.bloodlust"), true),
-                        FormattedCharSequence.forward("\uE007  " + DURATION_SECONDS, MyRenderer.iconStyle),
+                        FormattedCharSequence.forward("\uE007  " + HEALTH_COST, MyRenderer.iconStyle),
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY)
@@ -84,10 +84,11 @@ public class Bloodlust extends Ability {
         if (unitUsing instanceof HeadhunterUnit headhunterUnit) {
             headhunterUnit.bloodlustTicks = duration;
             headhunterUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
-
+            headhunterUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
         } else if (unitUsing instanceof BruteUnit bruteUnit) {
             bruteUnit.bloodlustTicks = duration;
             bruteUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
+            bruteUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
         }
     }
 

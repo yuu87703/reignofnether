@@ -139,7 +139,7 @@ public class UnitServerEvents {
         });
         data.save();
         level.getDataStorage().save();
-        ReignOfNether.LOGGER.info("Saved " + getAllUnits().size() + " units");
+        //ReignOfNether.LOGGER.info("Saved " + getAllUnits().size() + " units");
     }
 
     public static void saveGatherTargets(ServerLevel level) {
@@ -161,7 +161,7 @@ public class UnitServerEvents {
         });
         data.save();
         level.getDataStorage().save();
-        ReignOfNether.LOGGER.info("Saved " + numWorkersSaved + " gatherTargets");
+        //ReignOfNether.LOGGER.info("Saved " + numWorkersSaved + " gatherTargets");
     }
 
     @SubscribeEvent
@@ -266,14 +266,13 @@ public class UnitServerEvents {
                                 selectedBuildingPos
                         )
                     );
-                    System.out.println("added item to shiftQueue: " + action.name() + "|" + actionableUnitId + "|" + preselectedBlockPos);
+                    //System.out.println("added item to shiftQueue: " + action.name() + "|" + actionableUnitId + "|" + preselectedBlockPos);
                 }
             }
         } else {
             synchronized(unitActionSlowQueue) {
                 for (int actionableUnitId : unitIds)
-                    if (unitActionSlowQueue.removeIf(uai -> uai.getUnitIds().length > 0 && uai.getUnitIds()[0] == actionableUnitId))
-                        System.out.println("removed item from shiftQueue: " + action.name() + "|" + actionableUnitId + "|" + preselectedBlockPos);
+                    unitActionSlowQueue.removeIf(uai -> uai.getUnitIds().length > 0 && uai.getUnitIds()[0] == actionableUnitId);
             }
             synchronized (unitActionFastQueue) {
                 UnitActionItem uai = new UnitActionItem(ownerName,
@@ -354,8 +353,7 @@ public class UnitServerEvents {
                         UnitSyncClientboundPacket.sendSyncResourcesPacket(unit);
                         UnitSyncClientboundPacket.sendSyncOwnerNamePacket(unit);
                         UnitSyncClientboundPacket.sendSyncAnchorPosPacket(entity, unit.getAnchor());
-                        ReignOfNether.LOGGER.info(
-                                "loaded unit in serverevents: " + su.ownerName + "|" + su.name + "|" + su.uuid);
+                        ReignOfNether.LOGGER.info("loaded unit in serverevents: " + su.ownerName + "|" + su.name + "|" + su.uuid);
                         return true;
                     }
                     return false;
@@ -367,8 +365,7 @@ public class UnitServerEvents {
                         if (sr.unitUUID.equals(entity.getStringUUID())) {
                             wUnit.getGatherResourceGoal().saveData = sr;
                             wUnit.getGatherResourceGoal().loadState();
-                            ReignOfNether.LOGGER.info(
-                                    "loaded gatherTarget in serverevents: " + sr.gatherTarget);
+                            ReignOfNether.LOGGER.info("loaded gatherTarget in serverevents: " + sr.gatherTarget);
                             return true;
                         }
                         return false;
@@ -639,13 +636,13 @@ public class UnitServerEvents {
                     if (entity instanceof Unit unit && unit.isIdle()) {
                         uai.action(evt.level);
                         actionedItem = uai;
-                        System.out.println("actioned item from queue: " + uai.getAction().name() + "|" + uai.getUnitIds()[0] + "|" + uai.getPreselectedBlockPos());
+                        //System.out.println("actioned item from queue: " + uai.getAction().name() + "|" + uai.getUnitIds()[0] + "|" + uai.getPreselectedBlockPos());
                         break;
                     }
                 }
             }
-            if (actionedItem != null && unitActionSlowQueue.remove(actionedItem))
-                System.out.println("removed item from queue: " + actionedItem.getAction().name() + "|" + actionedItem.getUnitIds()[0] + "|" + actionedItem.getPreselectedBlockPos());
+            if (actionedItem != null)
+                unitActionSlowQueue.remove(actionedItem);
         }
         synchronized (unitActionFastQueue) {
             for (UnitActionItem actionItem : unitActionFastQueue)

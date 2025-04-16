@@ -1,5 +1,7 @@
 package com.solegendary.reignofnether.ability;
 
+import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
@@ -8,6 +10,7 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -44,8 +47,23 @@ public class EnchantAbilityServerboundPacket {
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         final var success = new AtomicBoolean(false);
         ctx.get().enqueueWork(() -> {
+
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) {
+                ReignOfNether.LOGGER.warn("EnchantAbilityServerboundPacket: Sender was null");
+                success.set(false);
+                return;
+            }
+
             BuildingPlacement building = BuildingUtils.findBuilding(false, buildingPos);
             if (building instanceof LibraryPlacement library) {
+
+                if (!player.getName().getString().equals(library.ownerName)) {
+                    ReignOfNether.LOGGER.warn("EnchantAbilityServerboundPacket: Tried to process packet from " + player.getName() + " for: " + library.ownerName);
+                    success.set(false);
+                    return;
+                }
+
                 Ability ability = null;
                 for (Ability abl : library.getAbilities())
                     if (abl.action == abilityAction)

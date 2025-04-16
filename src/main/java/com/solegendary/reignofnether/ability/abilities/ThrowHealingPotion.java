@@ -1,0 +1,82 @@
+package com.solegendary.reignofnether.ability.abilities;
+
+import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
+import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.research.ResearchClient;
+import com.solegendary.reignofnether.research.researchItems.ResearchHealingPotions;
+import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.villagers.WitchUnit;
+import com.solegendary.reignofnether.util.MiscUtil;
+import com.solegendary.reignofnether.util.MyRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
+
+import java.util.List;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
+import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
+
+public class ThrowHealingPotion extends Ability {
+
+    public static final int CD_MAX_SECONDS = 10;
+
+    public final Potion potion = Potions.STRONG_HEALING;
+
+    //TODO Fix potionThrowRange for Witches gathering on a building
+    public ThrowHealingPotion(int potionThrowRange) {
+        super(UnitAction.THROW_HEALING_POTION,
+            CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
+                potionThrowRange,
+            0,
+            true,
+            true
+        );
+        this.autocastEnableAction = UnitAction.THROW_HEALING_POTION_AUTOCAST_ENABLE;
+        this.autocastDisableAction = UnitAction.THROW_HEALING_POTION_AUTOCAST_DISABLE;
+    }
+
+    @Override
+    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
+        WitchUnit witchUnit = (WitchUnit) unit;
+        return new AbilityButton("Healing Potion",
+            new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/splash_potion_healing.png"),
+            hotkey,
+            () -> CursorClientEvents.getLeftClickAction() == UnitAction.THROW_HEALING_POTION || autocast,
+            () -> !ResearchClient.hasResearch(ResearchHealingPotions.itemName),
+            () -> true,
+            () -> CursorClientEvents.setLeftClickAction(UnitAction.THROW_HEALING_POTION),
+            this::toggleAutocast,
+            List.of(
+                fcs(I18n.get("abilities.reignofnether.healing_potion"), true),
+                fcsIcons(I18n.get("abilities.reignofnether.healing_potion.tooltip1", CD_MAX_SECONDS, witchUnit.getPotionThrowRange())),
+                fcs(I18n.get("abilities.reignofnether.healing_potion.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.autocast"))
+            ),
+            this
+        );
+    }
+
+    @Override
+    public void use(Level level, Unit unitUsing, BlockPos targetBp) {
+        ((WitchUnit) unitUsing).getThrowPotionGoal().setPotion(potion);
+        ((WitchUnit) unitUsing).getThrowPotionGoal().setTarget(targetBp);
+    }
+
+    @Override
+    public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
+        ((WitchUnit) unitUsing).getThrowPotionGoal().setPotion(potion);
+        ((WitchUnit) unitUsing).getThrowPotionGoal().setTarget(targetEntity);
+    }
+}

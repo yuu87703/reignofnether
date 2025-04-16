@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.research.ResearchClient;
@@ -75,7 +76,23 @@ public interface Unit {
     public List<ItemStack> getItems();
     public int getMaxResources();
 
-    default public void updateAbilityButtons() {}
+    List<Keybinding> ABILITY_KEYBINDS = List.of(
+            Keybindings.keyQ,
+            Keybindings.keyW,
+            Keybindings.keyE,
+            Keybindings.keyR,
+            Keybindings.keyT,
+            Keybindings.keyY
+    );
+
+    default public void updateAbilityButtons() {
+        if (((LivingEntity) this).level().isClientSide()) {
+            this.getAbilityButtons().clear();
+            for (int i = 0; i < this.getAbilities().size() && i < ABILITY_KEYBINDS.size(); i++) {
+                this.getAbilityButtons().add(this.getAbilities().get(i).getButton(ABILITY_KEYBINDS.get(i)));
+            }
+        }
+    }
 
     // note that attackGoal is specific to unit types
     public MoveToTargetBlockGoal getMoveGoal();
