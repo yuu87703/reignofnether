@@ -365,12 +365,10 @@ public class UnitActionItem {
             HudClientEvents.setLowestCdHudEntity();
         }
 
-        Building actionableBuilding = null;
+        BuildingPlacement actionableBuilding = null;
         if (!this.selectedBuildingPos.equals(new BlockPos(0, 0, 0))) {
             actionableBuilding = BuildingUtils.findBuilding(level.isClientSide(), this.selectedBuildingPos);
         }
-
-        BuildingPlacement actionableBuilding = BuildingUtils.findBuilding(level.isClientSide(), this.selectedBuildingPos);
 
         if (actionableBuilding != null) {
             for (Ability ability : actionableBuilding.getAbilities()) {

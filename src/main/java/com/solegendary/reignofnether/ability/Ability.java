@@ -43,9 +43,10 @@ public class Ability {
         this.oneClickOneUse = oneClickOneUse;
     }
 
-    protected void toggleAutocast() {
-        if (!level.isClientSide())
-            return;
+    protected void toggleAutocast(/*boolean serverSide*/) {
+        //TODO
+        //if (!level.isClientSide())  // Why? currently its only called by button
+        //    return;
 
         if (autocast && autocastDisableAction != null) {
             sendUnitCommand(autocastDisableAction);

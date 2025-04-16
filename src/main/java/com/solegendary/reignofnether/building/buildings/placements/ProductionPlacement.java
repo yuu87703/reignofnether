@@ -330,4 +330,12 @@ public class ProductionPlacement extends BuildingPlacement{
             }
         }
     }
+
+    @Override
+    public void updateButtons() {
+        super.updateButtons();
+        if (getBuilding() instanceof ProductionBuilding productionBuilding) {
+            productionButtons = productionBuilding.productions.getButtons(this);
+        }
+    }
 }

@@ -44,37 +44,37 @@ import java.util.List;
 
 public interface Unit {
 
-    static int ANCHOR_RETREAT_RANGE = 30;
+    int ANCHOR_RETREAT_RANGE = 30;
 
-    static int PIGLIN_HEALING_TICKS = 8 * ResourceCost.TICKS_PER_SECOND;
-    static int MONSTER_HEALING_TICKS = 12 * ResourceCost.TICKS_PER_SECOND;
+    int PIGLIN_HEALING_TICKS = 8 * ResourceCost.TICKS_PER_SECOND;
+    int MONSTER_HEALING_TICKS = 12 * ResourceCost.TICKS_PER_SECOND;
 
     // used for increasing pathfinding calculation range, default is 16 for most mobs
-    static int FOLLOW_RANGE_IMPROVED = 64;
-    static int FOLLOW_RANGE = 16;
+    int FOLLOW_RANGE_IMPROVED = 64;
+    int FOLLOW_RANGE = 16;
 
     // position that neutral units run back to when past leash range
-    public void setAnchor(BlockPos bp);
-    public BlockPos getAnchor();
+    void setAnchor(BlockPos bp);
+    BlockPos getAnchor();
 
-    public static int getFollowRange() {
+    static int getFollowRange() {
         return UnitServerEvents.improvedPathfinding ? FOLLOW_RANGE_IMPROVED : FOLLOW_RANGE;
     }
 
     // list of positions to draw lines between to indicate unit intents - will fade over time unless shift is held
-    public ArrayList<Checkpoint> getCheckpoints();
+    ArrayList<Checkpoint> getCheckpoints();
 
-    public GarrisonGoal getGarrisonGoal();
-    public boolean canGarrison();
+    GarrisonGoal getGarrisonGoal();
+    boolean canGarrison();
 
-    public MoveToTargetBlockGoal getUsePortalGoal();
-    public boolean canUsePortal();
+    MoveToTargetBlockGoal getUsePortalGoal();
+    boolean canUsePortal();
 
-    public Faction getFaction();
-    public List<AbilityButton> getAbilityButtons();
-    public List<Ability> getAbilities();
-    public List<ItemStack> getItems();
-    public int getMaxResources();
+    Faction getFaction();
+    List<AbilityButton> getAbilityButtons();
+    List<Ability> getAbilities();
+    List<ItemStack> getItems();
+    int getMaxResources();
 
     List<Keybinding> ABILITY_KEYBINDS = List.of(
             Keybindings.keyQ,
@@ -85,33 +85,24 @@ public interface Unit {
             Keybindings.keyY
     );
 
-    default public void updateAbilityButtons() {
-        if (((LivingEntity) this).level().isClientSide()) {
-            this.getAbilityButtons().clear();
-            for (int i = 0; i < this.getAbilities().size() && i < ABILITY_KEYBINDS.size(); i++) {
-                this.getAbilityButtons().add(this.getAbilities().get(i).getButton(ABILITY_KEYBINDS.get(i)));
-            }
-        }
-    }
-
     // note that attackGoal is specific to unit types
-    public MoveToTargetBlockGoal getMoveGoal();
-    public SelectedTargetGoal<?> getTargetGoal();
-    public ReturnResourcesGoal getReturnResourcesGoal();
+    MoveToTargetBlockGoal getMoveGoal();
+    SelectedTargetGoal<?> getTargetGoal();
+    ReturnResourcesGoal getReturnResourcesGoal();
 
-    public float getMovementSpeed();
-    public float getUnitMaxHealth();
-    public float getUnitArmorValue();
-    public ResourceCost getCost();
+    float getMovementSpeed();
+    float getUnitMaxHealth();
+    float getUnitArmorValue();
+    ResourceCost getCost();
 
-    public LivingEntity getFollowTarget();
-    public boolean getHoldPosition();
-    public void setHoldPosition(boolean holdPosition);
+    LivingEntity getFollowTarget();
+    boolean getHoldPosition();
+    void setHoldPosition(boolean holdPosition);
 
-    public String getOwnerName();
-    public void setOwnerName(String name);
+    String getOwnerName();
+    void setOwnerName(String name);
 
-    public static void tick(Unit unit) {
+    static void tick(Unit unit) {
         Mob unitMob = (Mob) unit;
         if (!unitMob.level().isClientSide() && unitMob.level() instanceof ServerLevel serverLevel) {
             ServerChunkCache chunkProvider = serverLevel.getChunkSource();
@@ -231,7 +222,7 @@ public interface Unit {
             checkAndRetreatToAnchor(unit);
     }
 
-    public static boolean hasAnchor(Unit unit) {
+    static boolean hasAnchor(Unit unit) {
         return unit.getAnchor() != null && !unit.getAnchor().equals(new BlockPos(0,0,0));
     }
 
@@ -256,20 +247,20 @@ public interface Unit {
         return hasCarryBags ? 100 : 50;
     }
 
-    public static boolean atMaxResources(Unit unit) {
+    static boolean atMaxResources(Unit unit) {
         return Resources.getTotalResourcesFromItems(unit.getItems()).getTotalValue() >= unit.getMaxResources();
     }
 
-    public static boolean atThresholdResources(Unit unit) {
+    static boolean atThresholdResources(Unit unit) {
         return Resources.getTotalResourcesFromItems(unit.getItems()).getTotalValue() >= getThresholdResources(unit);
     }
 
-    public default boolean hasLivingTarget() {
+    default boolean hasLivingTarget() {
         Mob unitMob = (Mob) this;
         return unitMob.getTarget() != null && unitMob.getTarget().isAlive();
     }
 
-    public static void fullResetBehaviours(Unit unit) {
+    static void fullResetBehaviours(Unit unit) {
         if (((Entity) unit).level().isClientSide() && !Keybindings.shiftMod.isDown())
             unit.getCheckpoints().clear();
         unit.resetBehaviours();
@@ -282,7 +273,7 @@ public interface Unit {
         }
     }
 
-    public static void resetBehaviours(Unit unit) {
+    static void resetBehaviours(Unit unit) {
         unit.getTargetGoal().setTarget(null);
         unit.getMoveGoal().stopMoving();
         if (unit.getReturnResourcesGoal() != null)
@@ -300,18 +291,18 @@ public interface Unit {
     }
 
     // can be overridden in the Unit's class to do additional logic on a reset
-    public default void resetBehaviours() { }
+    default void resetBehaviours() { }
 
     // this setter sets a Unit field and so can't be defaulted
     // move to a block ignoring all else until reaching it
-    public default void setMoveTarget(@Nullable BlockPos bp) {
+    default void setMoveTarget(@Nullable BlockPos bp) {
         this.getMoveGoal().setMoveTarget(bp);
     }
 
     // continuously move to a target until told to do something else
-    public void setFollowTarget(@Nullable LivingEntity target);
+    void setFollowTarget(@Nullable LivingEntity target);
 
-    public void initialiseGoals();
+    void initialiseGoals();
 
     // weapons aren't provided automatically when spawned by custom code
     // also recalculate stats based on upgrades
@@ -320,21 +311,21 @@ public interface Unit {
     // equipment only needs to be done serverside, but mod-specific fields need to be done clientside too
     default void setupEquipmentAndUpgradesClient() { }
 
-    public static float getSpeedModifier(Unit unit) {
+    static float getSpeedModifier(Unit unit) {
         if (unit instanceof BruteUnit brute && brute.isHoldingUpShield) {
             return 0.5f;
         }
         return 1.0f;
     }
 
-    public static Ability getAbility(Unit unit, UnitAction abilityAction) {
+    static Ability getAbility(Unit unit, UnitAction abilityAction) {
         for (Ability ability : unit.getAbilities())
             if (ability.action.equals(abilityAction))
                 return ability;
         return null;
     }
 
-    public default boolean isIdle() {
+    default boolean isIdle() {
         boolean idleAttacker = true;
         if (this instanceof AttackerUnit attackerUnit)
             idleAttacker = attackerUnit.getAttackMoveTarget() == null &&
@@ -348,4 +339,6 @@ public interface Unit {
                 idleAttacker &&
                 idleWorker;
     }
+
+    default void updateAbilityButtons() {}
 }

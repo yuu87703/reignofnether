@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.monster.InsomniaCurse
 import com.solegendary.reignofnether.ability.heroAbilities.monster.RaiseDead;
 import com.solegendary.reignofnether.ability.heroAbilities.monster.SoulSiphonPassive;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
@@ -362,7 +363,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
 
     }
 
-    public void summonPhantomBuilding(Building targetBuilding) {
+    public void summonPhantomBuilding(BuildingPlacement targetBuilding) {
 
     }
 

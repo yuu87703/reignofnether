@@ -144,8 +144,8 @@ public class BuildingPlacement {
     // used to control size of initial foundations while keeping it symmetrical
     public final ArrayList<Block> startingBlockTypes;
 
-    protected final List<AbilityButton> abilityButtons;
-    protected final List<Ability> abilities;
+    protected List<AbilityButton> abilityButtons;
+    protected List<Ability> abilities;
 
     public int captureRange;
     public boolean capturable;
@@ -214,8 +214,7 @@ public class BuildingPlacement {
             FogOfWarClientboundPacket.revealOrHidePlayer(false, this.ownerName);
         }
 
-        abilities = building.getAbilities().get();
-        abilityButtons = building.getAbilities().getButtons(this);
+        updateButtons();
 
         startingBlockTypes = building.startingBlockTypes;
 
@@ -1024,11 +1023,8 @@ public class BuildingPlacement {
 
         for (BlockPos bp : getRenderChunkOrigins(true)) {
             BlockPos roundedOrigin = bp.offset(-bp.getX() % 16, -bp.getY() % 16, -bp.getZ() % 16);
-            if (bp.getX() % 16 != 0 || bp.getY() % 16 != 0 || bp.getZ() % 16 != 0) {
-                ReignOfNether.LOGGER.warn("attempted to create a FrozenChunk at non-origin pos: " + bp);
-            }
 
-            ReignOfNether.LOGGER.info("Froze chunk at: " + roundedOrigin);
+            //ReignOfNether.LOGGER.info("Froze chunk at: " + roundedOrigin);
 
             FrozenChunk newFrozenChunk = null;
             for (FrozenChunk frozenChunk : FogOfWarClientEvents.frozenChunks) {
@@ -1122,5 +1118,10 @@ public class BuildingPlacement {
 
     public float getMagicDamageMult() {
         return getBuilding().getMeleeDamageMult();
+    }
+
+    public void updateButtons() {
+        abilities = building.getAbilities().get();
+        abilityButtons = building.getAbilities().getButtons(this);
     }
 }

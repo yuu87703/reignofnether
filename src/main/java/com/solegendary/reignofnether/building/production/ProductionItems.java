@@ -61,6 +61,8 @@ public class ProductionItems {
     public static final ResearchStrays RESEARCH_STRAYS = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_strays"), new ResearchStrays());
     public static final ResearchSlimeConversion RESEARCH_SLIME_CONVERSION = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_slime_conversion"), new ResearchSlimeConversion());
     public static final ResearchLingeringPotions RESEARCH_LINGERING_POTIONS = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_lingering_potion"), new ResearchLingeringPotions());
+    public static final ResearchWaterPotions RESEARCH_WATER_POTIONS = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_water_potion"), new ResearchWaterPotions());
+    public static final ResearchHealingPotions RESEARCH_HEALING_POTIONS = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_healing_potion"), new ResearchHealingPotions());
     public static final ResearchEvokerVexes RESEARCH_EVOKER_VEXES = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_evoker_vexes"), new ResearchEvokerVexes());
     public static final ResearchGolemSmithing RESEARCH_GOLEM_SMITHING = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_golem_smithing"), new ResearchGolemSmithing());
     public static final ResearchSilverfish RESEARCH_SILVERFISH = register(new ResourceLocation(ReignOfNether.MOD_ID, "research_silverfish"), new ResearchSilverfish());

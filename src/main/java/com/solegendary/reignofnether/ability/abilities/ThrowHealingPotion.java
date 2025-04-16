@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -50,7 +51,7 @@ public class ThrowHealingPotion extends Ability {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/splash_potion_healing.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.THROW_HEALING_POTION || autocast,
-            () -> !ResearchClient.hasResearch(ResearchHealingPotions.itemName),
+            () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_HEALING_POTIONS),
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.THROW_HEALING_POTION),
             this::toggleAutocast,
