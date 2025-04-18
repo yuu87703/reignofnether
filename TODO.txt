@@ -30,6 +30,30 @@ Bugfixes
 [✔] Fixed /gamerule slantedBuilding not working when using the typed command
 [🟡] Fixed the first wave survival wave sometimes being the incorrect faction
 
+[❌] Rework resolveMoveCommand to only send one packet instead of multiple per right click
+    - Calculate the formation equally on both client and server side
+
+[✔] Fix start being able to choose more than 1 start block
+    - only on server?
+
+[✔] on -Y maps, start block capitols are off by 1
+
+[❌] if you kill a huntable animal at the same time as another worker, food is duped
+
+[❌] some ghast fireballs dont do damage sometimes
+    - same for creepers??
+
+[❌] buffs on beacon dont work sometimes?
+
+[🟡] crash on anchor pos null?
+
+[✔] crash on building golem with villager https://github.com/SoLegendary/reignofnether/issues/251
+
+[❌] remove toggle ability actions, instead make it always enable or disable
+
+[❌] default beacon win minutes to 10mins, but in wave survival change it based on difficulty
+
+
 
 Quality of Life
 ---------------

@@ -61,8 +61,13 @@ public class UnitActionServerboundPacket {
         buffer.writeBoolean(this.shiftQueue);
     }
 
+    private static int i = 0;
+
     // server-side packet-consuming functions
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
+        System.out.println("unitActionPacket: " + i);
+        i++;
+
         final var success = new AtomicBoolean(false);
         ctx.get().enqueueWork(() -> {
             if (this.action == UnitAction.DEBUG1) {
