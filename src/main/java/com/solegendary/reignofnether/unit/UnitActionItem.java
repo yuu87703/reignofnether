@@ -346,17 +346,17 @@ public class UnitActionItem {
                                 }
                             }
                         } else if (ability.autocastEnableAction == action) {
-                            ability.autocast = true;
+                            ability.setAutocast(true);
                             enabledAutocast = true;
                         } else if (ability.autocastDisableAction == action) {
-                            ability.autocast = false;
+                            ability.setAutocast(false);
                         }
                     }
                     // turn off all other autocasts
                     if (enabledAutocast)
                         for (Ability ability : unit.getAbilities())
                             if (ability.autocastEnableAction != null && ability.autocastEnableAction != action)
-                                ability.autocast = false;
+                                ability.setAutocast(false);
                 }
             }
         }
