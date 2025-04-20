@@ -451,7 +451,7 @@
     "commands.reignofnether.send_resources": "%s - Send resources to an allied RTS player",
     "commands.reignofnether.camera": "%s - Toggle RTS camera",
     "commands.reignofnether.gamerule.do_log_falling": "Дерева падають при зрубанні",
-    "commands.reignofnether.gamerule.neutral_aggro": "Автоатака нейтральних юнітів/будівель",
+    "commands.reignofnether.gamerule.neutral_aggro": "Auto-attack and be attacked by neutral mobs",
     "commands.reignofnether.gamerule.max_population": "Максимальний ліміт населення",
     "commands.reignofnether.gamerule.unit_griefing": "Вибухові юніти можуть руйнувати блоки",
     "commands.reignofnether.gamerule.player_griefing": "Гравці можуть руйнувати блоки ландшафту",
