@@ -451,7 +451,7 @@
     "commands.reignofnether.send_resources": "%s - Send resources to an allied RTS player",
     "commands.reignofnether.camera": "%s - Toggle RTS camera",
     "commands.reignofnether.gamerule.do_log_falling": "樹木被砍伐時倒下",
-    "commands.reignofnether.gamerule.neutral_aggro": "設定是否自動攻擊中立單位/建築物",
+    "commands.reignofnether.gamerule.neutral_aggro": "Auto-attack and be attacked by neutral mobs",
     "commands.reignofnether.gamerule.max_population": "最大可能的人口限制",
     "commands.reignofnether.gamerule.unit_griefing": "爆破單位打破方塊",
     "commands.reignofnether.gamerule.player_griefing": "玩家可以破壞地形方塊",
