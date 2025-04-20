@@ -451,7 +451,7 @@
     "commands.reignofnether.send_resources": "%s - Send resources to an allied RTS player",
     "commands.reignofnether.camera": "%s - Toggle RTS camera",
     "commands.reignofnether.gamerule.do_log_falling": "Définir si les troncs d'arbres tombent lorsqu'ils sont coupés",
-    "commands.reignofnether.gamerule.neutral_aggro": " Définir si vous attaquez automatiquement les unités/bâtiments neutres",
+    "commands.reignofnether.gamerule.neutral_aggro": "Auto-attack and be attacked by neutral mobs",
     "commands.reignofnether.gamerule.max_population": "Définir la limite de population la plus élevée possible",
     "commands.reignofnether.gamerule.unit_griefing": "Autoriser les unités explosives à détruire des blocs",
     "commands.reignofnether.gamerule.player_griefing": "Autoriser les joueurs en mode survie à casser des blocs de terrain",
