@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.util;
 
 
 import com.mojang.datafixers.util.Pair;
+import com.solegendary.reignofnether.unit.units.monsters.PhantomSummon;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.tags.BlockTags;
 import org.apache.commons.lang3.text.WordUtils;
@@ -262,6 +263,7 @@ public class MiscUtil {
         boolean canAttackNeutral =
                 rs == Relationship.NEUTRAL && neutralAggro &&
                         !(targetEntity instanceof Vex) &&
+                        !(targetEntity instanceof PhantomSummon) &&
                         !isPassiveNonUnit;
 
         return (rs == Relationship.HOSTILE || canAttackNeutral) &&

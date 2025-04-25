@@ -1,5 +1,5 @@
 
-1.19.2-1.1.5b
+1.19.2-1.1.6
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -21,11 +21,68 @@ HEROES (in order of priority)
     - equipment
 
 
+Necromancer
+    - Curse of Insomnia
+        [❌] Charge cooldowns
+        [❌] Summon phantom
+        [❌] Interact with souls
+        [❌] Attack buildings
+
+    - Soul Siphon
+        [❌] Animation similar to exp orbs but purple smoke?
+            - Or maybe just make exp orbs purple
+        [❌] Tooltip
+
+    - Blood moon
+        [❌] Transform day to night with global warning
+        [❌] Summon zombies and skeletons using wave survival code inside and around enemy bases
+            - Neutral, but never aggressive against your own units
+        [❌] Red tint on skybox and in RTS cam
+
+
+Piglin Merchant
+    - TNT Toss
+        [❌] Throws TNT item entity
+            - Parent to hero
+            - When contacting the ground, place primed TNT at the blockPosition()
+            - New TNTBlock required to scale explosion power?
+
+    - Fancy Feast
+        [❌] Throw food entities
+        [❌] All piglin units need an EatFoodItemGoal
+            - If damaged, will stop to pick up food and show an eating animation to heal
+
+    - Loot Explosion
+        [❌] Untargeted, create randomised loot
+        [❌] All piglin units should be able to pick up and equip weapons and armor
+        [❌] Include resistance potions for non-infantry
+            - Pick up instead of splashed?
+
+
+Royal Guard
+    - Mace Slam
+        [❌] AOE damage and knockback in a circle in front of the guard
+        [❌] Raise ground blocks with block displays?
+        [❌] Add 'stun' effect to all units
+            - While active, repeats stop commands and ignores all other commands
+            - Show potion swirling particles, but don't make them move upwards
+
+    - Taunting Cry
+        [❌] Add 'taunt' effect to all units
+            - While active, repeats attack commands on the taunting unit and ignores all other commands
+            - Show angry villager particle effects
+
+    - Avatar of War
+        [❌] Enlarge size smoothly
+
 
 
 Bugfixes
 --------
 
+[❌] Buildings don't sync when rejoining a singleplayer world on essential (no client restart)
+[❌] Vexes attacking friendly units? (neutral aggro on?)
+[✔] Militia aren't showing ability
 
 Quality of Life
 ---------------
@@ -33,3 +90,6 @@ Quality of Life
 
 Balancing
 ---------
+
+Wave survival too easy on most difficulties
+    - Extreme can be beaten ~wave 8-9

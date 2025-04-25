@@ -69,6 +69,8 @@ public class NonUnitServerEvents {
                 pfMobs.addAll(evt.level.getNearbyEntities(PathfinderMob.class, TargetingConditions.forCombat(), unit, aabb));
             }
             for (PathfinderMob pfMob : pfMobs) {
+
+
                 boolean hasAttackGoal = false;
                 for (WrappedGoal wrappedGoal : pfMob.targetSelector.getAvailableGoals())
                     if (wrappedGoal.getGoal() instanceof NearestAttackableTargetGoal)

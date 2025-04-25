@@ -156,6 +156,7 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Villa
     public MilitiaUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
         this.abilities.add(new BackToWorkUnit(level));
+        updateAbilityButtons();
     }
 
     public void updateAbilityButtons() {

@@ -28,6 +28,7 @@ import com.solegendary.reignofnether.unit.goals.MeleeAttackBuildingGoal;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.packets.UnitActionServerboundPacket;
 import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
+import com.solegendary.reignofnether.unit.units.monsters.PhantomSummon;
 import com.solegendary.reignofnether.unit.units.monsters.WardenUnit;
 import com.solegendary.reignofnether.unit.units.monsters.ZoglinUnit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
@@ -514,7 +515,7 @@ public class UnitClientEvents {
 
             addUnitPoofs(evt.getLevel(), entity);
         }
-        if (entity instanceof LivingEntity le && ResourceSources.isHuntableAnimal(le))
+        if (entity instanceof LivingEntity le && (ResourceSources.isHuntableAnimal(le) || le instanceof PhantomSummon))
             addUnitPoofs(evt.getLevel(), entity);
     }
 

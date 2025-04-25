@@ -1,10 +1,11 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.time.NightUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -25,7 +26,12 @@ import javax.annotation.Nullable;
 public class PhantomSummon extends Phantom {
 
     final static public float attackDamage = 5.0f;
-    final static public float maxHealth = 30.0f;
+    final static public float maxHealth = 100.0f;
+    public int attacksLeft = 5; // at 0, dies after a few seconds
+    public int ticksToDie = 60; // starts counting downa after attacksLeft <= 0
+
+    public LivingEntity entityTarget = null;
+    public Building buildingTarget = null;
 
     public PhantomSummon(EntityType<? extends Phantom> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -34,12 +40,42 @@ public class PhantomSummon extends Phantom {
     @Override
     public boolean removeWhenFarAway(double d) { return false; }
 
-
-
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.ATTACK_DAMAGE, PhantomSummon.attackDamage)
                 .add(Attributes.MAX_HEALTH, PhantomSummon.maxHealth);
+    }
+
+    @Override
+    public void setPhantomSize(int pPhantomSize) {
+        this.entityData.set(ID_SIZE, Mth.clamp(pPhantomSize, 0, 64));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (getTarget() != entityTarget)
+            setTarget(entityTarget);
+
+        if (attacksLeft <= 0 || getTarget() == null || getTarget().isDeadOrDying() || getTarget().isRemoved())
+            ticksToDie -= 1;
+        if (ticksToDie <= 0)
+            kill();
+    }
+
+    @Override
+    protected boolean isSunBurnTick() {
+        return NightUtils.isSunBurnTick(this);
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity pEntity) {
+        if (super.doHurtTarget(pEntity)) {
+            attacksLeft -= 1;
+            return true;
+        }
+        return false;
     }
 
     @Override

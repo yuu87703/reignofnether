@@ -359,15 +359,32 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     }
 
     public void summonPhantomEntity(LivingEntity targetEntity) {
-
+        if (this.level().isClientSide())
+            return;
+        PhantomSummon phantom = summonPhantom();
+        if (phantom != null) {
+            phantom.entityTarget = targetEntity;
+        }
     }
 
     public void summonPhantomBuilding(Building targetBuilding) {
-
+        if (this.level().isClientSide())
+            return;
+        PhantomSummon phantom = summonPhantom();
+        if (phantom != null) {
+            phantom.buildingTarget = targetBuilding;
+        }
     }
 
-    public void summonPhantom() {
-
+    public PhantomSummon summonPhantom() {
+        BlockPos blockpos = this.blockPosition().offset(-2 + this.random.nextInt(5), 1, -2 + this.random.nextInt(5));
+        PhantomSummon phantom = EntityRegistrar.PHANTOM_SUMMON.get().create(this.level());
+        if (phantom != null) {
+            phantom.moveTo(blockpos.offset(0,5,0), 0.0F, 0.0F);
+            this.level().addFreshEntity(phantom);
+            return phantom;
+        }
+        return null;
     }
 
     public void bloodMoon() {
