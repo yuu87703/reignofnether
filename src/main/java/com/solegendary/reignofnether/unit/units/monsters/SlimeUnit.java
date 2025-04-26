@@ -5,7 +5,6 @@ import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.ConsumeSlime;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -23,7 +22,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -240,7 +238,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     public boolean autocastingConsume() {
         for (Ability ability : abilities)
             if (ability instanceof ConsumeSlime consume)
-                return consume.autocast;
+                return consume.getAutocast();
         return false;
     }
 
@@ -257,7 +255,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         consumeTarget = null;
         for (Ability ability : abilities)
             if (ability instanceof ConsumeSlime consume)
-                consume.autocast = false;
+                consume.setAutocast(false);
     }
 
     @Override
@@ -292,15 +290,15 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
 
     protected int getMaxHealthForSize(int size) {
         if (size >= 6)
-            return 180;
+            return 200;
         else if (size == 5)
-            return 145;
+            return 160;
         else if (size == 4)
-            return 110;
+            return 120;
         else if (size == 3)
-            return 75;
+            return 80;
         else if (size == 2)
-            return 40;
+            return 45;
         else
             return 15;
     }

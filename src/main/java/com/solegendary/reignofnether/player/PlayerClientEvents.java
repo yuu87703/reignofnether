@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.player;
 
+import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
@@ -155,6 +156,7 @@ public class PlayerClientEvents {
         }
         ResearchClient.removeAllResearch();
         ResearchClient.removeAllCheats();
+        HudClientEvents.controlGroups.clear();
     }
 
     public static void victory(String playerName) {

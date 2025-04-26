@@ -24,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +81,23 @@ public class Beacon extends ProductionBuilding {
         this.productions.add(ProductionItems.RESEARCH_BEACON_LEVEL_5, null);
     }
 
-    public Faction getFaction() {return null;}
+    public void updateButtons() {
+        if (level.isClientSide()) {
+            this.productionButtons = Arrays.asList(
+                    ResearchBeaconLevel1.getStartButton(this, null),
+                    ResearchBeaconLevel2.getStartButton(this, null),
+                    ResearchBeaconLevel3.getStartButton(this, null),
+                    ResearchBeaconLevel4.getStartButton(this, null),
+                    ResearchBeaconLevel5.getStartButton(this, null)
+            );
+            this.abilityButtons.clear();
+            this.abilityButtons.add(abilities.get(0).getButton(Keybindings.keyQ));
+            this.abilityButtons.add(abilities.get(1).getButton(Keybindings.keyW));
+            this.abilityButtons.add(abilities.get(2).getButton(Keybindings.keyE));
+            this.abilityButtons.add(abilities.get(3).getButton(Keybindings.keyR));
+            this.abilityButtons.add(abilities.get(4).getButton(Keybindings.keyT));
+        }
+    }
 
     public ArrayList<BuildingBlock> getRelativeBlockData(LevelAccessor level) {
         return BuildingBlockData.getBuildingBlocks(structureName, level);

@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.world.item.ItemDisplayContext;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;

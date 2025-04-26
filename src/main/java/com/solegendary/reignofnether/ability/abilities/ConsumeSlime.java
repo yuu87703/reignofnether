@@ -38,7 +38,7 @@ public class ConsumeSlime extends Ability {
                     new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/magma_cube.png") :
                     new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/slime.png"),
             hotkey,
-            () -> CursorClientEvents.getLeftClickAction() == UnitAction.CONSUME_SLIME || autocast,
+            () -> CursorClientEvents.getLeftClickAction() == UnitAction.CONSUME_SLIME || getAutocast(),
             () -> slime.getSize() <= 1,
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.CONSUME_SLIME),
