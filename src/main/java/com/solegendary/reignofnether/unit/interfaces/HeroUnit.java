@@ -1,9 +1,12 @@
 package com.solegendary.reignofnether.unit.interfaces;
 
+import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import net.minecraft.world.entity.LivingEntity;
+
+import java.util.List;
 
 public interface HeroUnit {
 
@@ -16,6 +19,8 @@ public interface HeroUnit {
     void showRankUpMenu(boolean show);
     int getExperience();
     void setExperience(int experience);
+    default int getChargesForSaveData() { return 0; } // track stats like necromancer souls in save data
+    default void setChargesFromSaveData(int charges) { }
 
     default void addExperience(int amount) {
         int levelBefore = getHeroLevel();
@@ -67,5 +72,15 @@ public interface HeroUnit {
         if (getHeroLevel() >= MAX_HERO_LEVEL)
             return 0;
         return (getHeroLevel() + 1) * 100;
+    }
+
+    default List<HeroAbility> getHeroAbilities() {
+        if (this instanceof Unit unit) {
+            return unit.getAbilities().stream()
+                    .filter(a -> a instanceof HeroAbility)
+                    .map(a -> (HeroAbility) a)
+                    .toList();
+        }
+        return List.of();
     }
 }

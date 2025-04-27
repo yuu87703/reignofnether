@@ -27,8 +27,6 @@ Necromancer
         [🟡] Summon phantom
         [❌] Interact with souls
         [🟡] Attack buildings
-            - Make phantoms circle higher up
-                - cut line of sight between attacks?
 
     - Soul Siphon
         [❌] Animation similar to exp orbs but purple smoke?

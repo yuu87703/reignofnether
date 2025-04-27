@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.hero;
 
+import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -10,6 +11,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
@@ -18,33 +20,47 @@ public class HeroClientboundPacket {
     HeroAction action;
     int unitId;
     int value;
+    int abilityIndex;
 
     public static void setExperience(int unitId, int value) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new HeroClientboundPacket(HeroAction.SET_EXPERIENCE, unitId, value));
+                new HeroClientboundPacket(HeroAction.SET_EXPERIENCE, unitId, value, 0));
     }
 
     public static void setSkillPoints(int unitId, int value) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new HeroClientboundPacket(HeroAction.SET_SKILL_POINTS, unitId, value));
+                new HeroClientboundPacket(HeroAction.SET_SKILL_POINTS, unitId, value, 0));
     }
 
-    public HeroClientboundPacket(HeroAction action, int unitId, int value) {
+    public static void setCharges(int unitId, int value) {
+        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
+                new HeroClientboundPacket(HeroAction.SET_CHARGES, unitId, value, 0));
+    }
+
+    public static void setAbilityRank(int unitId, int rank, int abilityIndex) {
+        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
+                new HeroClientboundPacket(HeroAction.SET_ABILITY_RANK, unitId, rank, abilityIndex));
+    }
+
+    public HeroClientboundPacket(HeroAction action, int unitId, int value, int abilityIndex) {
         this.action = action;
         this.unitId = unitId;
         this.value = value;
+        this.abilityIndex = abilityIndex;
     }
 
     public HeroClientboundPacket(FriendlyByteBuf buffer) {
         this.action = buffer.readEnum(HeroAction.class);
         this.unitId = buffer.readInt();
         this.value = buffer.readInt();
+        this.abilityIndex = buffer.readInt();
     }
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(this.action);
         buffer.writeInt(this.unitId);
         buffer.writeInt(this.value);
+        buffer.writeInt(this.abilityIndex);
     }
 
     // server-side packet-consuming functions
@@ -64,6 +80,11 @@ public class HeroClientboundPacket {
                         switch (action) {
                             case SET_EXPERIENCE -> hero.setExperience(value);
                             case SET_SKILL_POINTS -> hero.setSkillPoints(value);
+                            case SET_CHARGES -> hero.setChargesFromSaveData(value);
+                            case SET_ABILITY_RANK -> {
+                                List<HeroAbility> abls = hero.getHeroAbilities();
+                                if (abls.size() > abilityIndex) abls.get(abilityIndex).rank = value;
+                            }
                         }
                     }
                     success.set(true);
