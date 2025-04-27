@@ -44,7 +44,8 @@ public class Eject extends Ability {
             List.of(
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.eject"), Style.EMPTY)
             ),
-            this
+            this,
+            unit
         );
     }
 
@@ -54,6 +55,6 @@ public class Eject extends Ability {
 
         for (Ability ability : unitUsing.getAbilities())
             if (ability instanceof SpinWebs spinWebs)
-                spinWebs.setCooldown(spinWebs.getCooldown() / 4f, unitUsing);
+                spinWebs.setCooldown(spinWebs.getCooldown(unitUsing) / 4f, unitUsing);
     }
 }

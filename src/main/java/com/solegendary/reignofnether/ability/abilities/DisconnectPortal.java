@@ -53,7 +53,8 @@ public class DisconnectPortal extends Ability {
             List.of(
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.disconnect_portal"), Style.EMPTY.withBold(true))
             ),
-            this
+            this,
+            placement
         );
     }
 

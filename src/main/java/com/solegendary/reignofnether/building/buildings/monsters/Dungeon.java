@@ -74,7 +74,8 @@ public class Dungeon extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.dungeon.tooltip2"), Style.EMPTY)
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 

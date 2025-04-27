@@ -47,7 +47,8 @@ public class LootExplosion extends HeroAbility {
                 () -> sendUnitCommand(UnitAction.LOOT_EXPLOSION),
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

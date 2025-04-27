@@ -48,7 +48,8 @@ public class MountRavager extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.mount_ravager"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.mount_ravager.tooltip1"), Style.EMPTY)
             ),
-            this
+            this,
+            unit
         );
     }
 

@@ -59,7 +59,8 @@ public class ThrowLingeringHarmingPotion extends Ability {
                 fcs(I18n.get("abilities.reignofnether.lingering_harming_potion.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.autocast"))
             ),
-            this
+            this,
+            unit
         );
     }
 

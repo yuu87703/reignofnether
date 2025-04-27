@@ -49,7 +49,8 @@ public class Sacrifice extends Ability {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sacrifice.tooltip2"), Style.EMPTY)
             ),
-            this
+            this,
+            placement
         );
     }
 

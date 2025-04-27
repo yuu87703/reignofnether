@@ -5,7 +5,7 @@ import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import net.minecraft.world.entity.LivingEntity;
 
-public interface HeroUnit {
+public interface HeroUnit extends Unit{
 
     int MAX_HERO_LEVEL = 10;
 

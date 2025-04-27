@@ -60,7 +60,8 @@ public class SetFangsCircle extends Ability {
                                 Style.EMPTY
                         )
                 ),
-                this
+                this,
+                unit
         );
     }
 

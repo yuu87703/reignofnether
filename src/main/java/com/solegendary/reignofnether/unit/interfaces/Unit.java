@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.time.NightUtils;
+import com.solegendary.reignofnether.tps.TPSClientEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
@@ -20,6 +21,7 @@ import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -37,6 +39,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // Defines method bodies for Units
 // workaround for trying to have units inherit from both their base vanilla Mob class and a Unit class
@@ -53,6 +56,12 @@ public interface Unit {
     // used for increasing pathfinding calculation range, default is 16 for most mobs
     int FOLLOW_RANGE_IMPROVED = 64;
     int FOLLOW_RANGE = 16;
+
+    static Object2ObjectArrayMap<Class<? extends Ability>, Float> createCooldownMap() {
+        Object2ObjectArrayMap<Class<? extends Ability>, Float> map = new Object2ObjectArrayMap<>();
+        map.defaultReturnValue(0F);
+        return map;
+    }
 
     // position that neutral units run back to when past leash range
     void setAnchor(BlockPos bp);
@@ -119,8 +128,14 @@ public interface Unit {
                 }
             }
         }
-        for (Ability ability : unit.getAbilities())
-            ability.tickCooldown(unitMob.level());
+        for (Map.Entry<Class<? extends Ability>, Float> cooldownEntry : unit.getCooldowns().entrySet()) {
+            if (cooldownEntry.getValue() > 0) {
+                if (unitMob.level().isClientSide())
+                    unit.getCooldowns().put(cooldownEntry.getKey(), cooldownEntry.getValue() - (float)(TPSClientEvents.getCappedTPS() / 20D));
+                else
+                    unit.getCooldowns().put(cooldownEntry.getKey(), cooldownEntry.getValue() - 1);
+            }
+        }
 
         // ------------- CHECKPOINT LOGIC ------------- //
         if (unitMob.level().isClientSide()) {
@@ -343,4 +358,14 @@ public interface Unit {
 
     void updateAbilityButtons();
     Level level();
+
+    default void setCooldown(Class<? extends Ability> abilityClass, float cooldown) {
+        getCooldowns().put(abilityClass, cooldown);
+    }
+
+    default float getCooldown(Class<? extends Ability> abilityClass) {
+        return getCooldowns().get(abilityClass);
+    }
+
+    Object2ObjectArrayMap<Class<? extends Ability>,Float> getCooldowns();
 }

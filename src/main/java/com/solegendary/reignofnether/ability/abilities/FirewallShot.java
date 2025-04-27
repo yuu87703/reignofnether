@@ -53,7 +53,8 @@ public class FirewallShot extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.fire_wall_shot.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.fire_wall_shot.tooltip3"), Style.EMPTY)
             ),
-            this
+            this,
+            unit
         );
     }
 

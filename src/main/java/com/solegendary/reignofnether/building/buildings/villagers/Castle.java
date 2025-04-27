@@ -103,7 +103,8 @@ public class Castle extends ProductionBuilding {
                     Style.EMPTY
                 )
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 

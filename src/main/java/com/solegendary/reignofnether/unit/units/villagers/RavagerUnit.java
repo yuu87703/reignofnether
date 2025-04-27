@@ -18,6 +18,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -55,6 +56,8 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
         ABILITIES.add(new Roar(), Keybindings.keyQ);
         ABILITIES.add(new Eject(), Keybindings.keyW);
     }
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
 
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
@@ -296,5 +299,10 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

@@ -21,6 +21,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -51,6 +52,9 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         ABILITIES.add(new ToggleShield(), Keybindings.keyQ);
         ABILITIES.add(new Bloodlust(), Keybindings.keyW);
     }
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
+
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -273,5 +277,10 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

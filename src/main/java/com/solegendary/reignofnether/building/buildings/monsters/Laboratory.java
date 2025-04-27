@@ -121,7 +121,8 @@ public class Laboratory extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.laboratory.tooltip3"), Style.EMPTY)
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 }

@@ -13,6 +13,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -40,6 +41,8 @@ import java.util.List;
 
 public class ZombieUnit extends Zombie implements Unit, AttackerUnit, ConvertableUnit {
     public static final Abilities ABILITIES = new Abilities();
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
 
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
@@ -215,5 +218,10 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

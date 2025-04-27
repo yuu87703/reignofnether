@@ -48,7 +48,8 @@ public class Roar extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.roar.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.roar.tooltip3"), Style.EMPTY)
             ),
-            this
+            this,
+            unit
         );
     }
 

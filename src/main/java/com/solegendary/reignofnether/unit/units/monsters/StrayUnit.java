@@ -15,6 +15,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -49,6 +50,8 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
     static {
         ABILITIES.add(new MountSpider(), Keybindings.keyQ);
     }
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
 
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
@@ -254,5 +257,10 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

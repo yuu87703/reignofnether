@@ -61,13 +61,14 @@ public class SpinWebs extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.spin_webs.tooltip3"), Style.EMPTY)
                 ),
-                this
+                this,
+                unit
         );
     }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        if (!isOffCooldown())
+        if (!isOffCooldown(unitUsing))
             return;
         if (unitUsing instanceof SpiderUnit spiderUnit) {
             spiderUnit.getWebGoal().setAbility(this);
@@ -77,7 +78,7 @@ public class SpinWebs extends Ability {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        if (!isOffCooldown())
+        if (!isOffCooldown(unitUsing))
             return;
         if (unitUsing instanceof SpiderUnit spiderUnit) {
             spiderUnit.getWebGoal().setAbility(this);

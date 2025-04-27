@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -38,29 +39,80 @@ import java.util.List;
 public class PandaUnit extends Panda implements Unit, AttackerUnit {
     public static final Abilities ABILITIES = new Abilities();
 
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
+
     // region
-    private BlockPos anchorPos = new BlockPos(0,0,0);
-    public void setAnchor(BlockPos bp) { anchorPos = bp; }
-    public BlockPos getAnchor() { return anchorPos; }
+    private BlockPos anchorPos = new BlockPos(0, 0, 0);
+
+    public void setAnchor(BlockPos bp) {
+        anchorPos = bp;
+    }
+
+    public BlockPos getAnchor() {
+        return anchorPos;
+    }
 
     private final ArrayList<Checkpoint> checkpoints = new ArrayList<>();
-    public ArrayList<Checkpoint> getCheckpoints() { return checkpoints; };
 
-    public GarrisonGoal getGarrisonGoal() { return null; }
-    public boolean canGarrison() { return getGarrisonGoal() != null; }
+    public ArrayList<Checkpoint> getCheckpoints() {
+        return checkpoints;
+    }
+
+    ;
+
+    public GarrisonGoal getGarrisonGoal() {
+        return null;
+    }
+
+    public boolean canGarrison() {
+        return getGarrisonGoal() != null;
+    }
 
     UsePortalGoal usePortalGoal;
-    public UsePortalGoal getUsePortalGoal() { return usePortalGoal; }
-    public boolean canUsePortal() { return getUsePortalGoal() != null; }
 
-    public Faction getFaction() {return Faction.NONE;}
-    public List<AbilityButton> getAbilityButtons() {return abilityButtons;};
-    public List<Ability> getAbilities() {return abilities;}
-    public List<ItemStack> getItems() {return items;};
-    public MoveToTargetBlockGoal getMoveGoal() {return moveGoal;}
-    public SelectedTargetGoal<? extends LivingEntity> getTargetGoal() {return targetGoal;}
-    public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
-    public int getMaxResources() {return maxResources;}
+    public UsePortalGoal getUsePortalGoal() {
+        return usePortalGoal;
+    }
+
+    public boolean canUsePortal() {
+        return getUsePortalGoal() != null;
+    }
+
+    public Faction getFaction() {
+        return Faction.NONE;
+    }
+
+    public List<AbilityButton> getAbilityButtons() {
+        return abilityButtons;
+    }
+
+    ;
+
+    public List<Ability> getAbilities() {
+        return abilities;
+    }
+
+    public List<ItemStack> getItems() {
+        return items;
+    }
+
+    ;
+
+    public MoveToTargetBlockGoal getMoveGoal() {
+        return moveGoal;
+    }
+
+    public SelectedTargetGoal<? extends LivingEntity> getTargetGoal() {
+        return targetGoal;
+    }
+
+    public ReturnResourcesGoal getReturnResourcesGoal() {
+        return returnResourcesGoal;
+    }
+
+    public int getMaxResources() {
+        return maxResources;
+    }
 
     private MoveToTargetBlockGoal moveGoal;
     private SelectedTargetGoal<? extends LivingEntity> targetGoal;
@@ -68,9 +120,17 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     private AbstractMeleeAttackUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    public LivingEntity getFollowTarget() { return followTarget; }
-    public boolean getHoldPosition() { return holdPosition; }
-    public void setHoldPosition(boolean holdPosition) { this.holdPosition = holdPosition; }
+    public LivingEntity getFollowTarget() {
+        return followTarget;
+    }
+
+    public boolean getHoldPosition() {
+        return holdPosition;
+    }
+
+    public void setHoldPosition(boolean holdPosition) {
+        this.holdPosition = holdPosition;
+    }
 
     // if true causes moveGoal and attackGoal to work together to allow attack moving
     // moves to a block but will chase/attack nearby monsters in range up to a certain distance away
@@ -79,8 +139,14 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     private BlockPos attackMoveTarget = null;
 
     // which player owns this unit? this format ensures its synched to client without having to use packets
-    public String getOwnerName() { return this.entityData.get(ownerDataAccessor); }
-    public void setOwnerName(String name) { this.entityData.set(ownerDataAccessor, name); }
+    public String getOwnerName() {
+        return this.entityData.get(ownerDataAccessor);
+    }
+
+    public void setOwnerName(String name) {
+        this.entityData.set(ownerDataAccessor, name);
+    }
+
     public static final EntityDataAccessor<String> ownerDataAccessor =
             SynchedEntityData.defineId(PandaUnit.class, EntityDataSerializers.STRING);
 
@@ -91,24 +157,74 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     }
 
     // combat stats
-    public float getMovementSpeed() {return movementSpeed;}
-    public float getUnitMaxHealth() {return maxHealth;}
-    public float getUnitArmorValue() {return armorValue;}
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public float getUnitMaxHealth() {
+        return maxHealth;
+    }
+
+    public float getUnitArmorValue() {
+        return armorValue;
+    }
+
     @Nullable
-    public ResourceCost getCost() {return ResourceCosts.PANDA;}
-    public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
-    public float getAttacksPerSecond() {return attacksPerSecond;}
-    public float getAggroRange() {return aggroRange;}
-    public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
-    public float getAttackRange() {return attackRange;}
-    public float getUnitAttackDamage() {return attackDamage;}
-    public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
-    public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
-    public Goal getAttackGoal() { return attackGoal; }
-    public Goal getAttackBuildingGoal() { return attackBuildingGoal; }
-    public void setAttackMoveTarget(@Nullable BlockPos bp) { this.attackMoveTarget = bp; }
-    public void setFollowTarget(@Nullable LivingEntity target) { this.followTarget = target; }
+    public ResourceCost getCost() {
+        return ResourceCosts.PANDA;
+    }
+
+    public boolean getWillRetaliate() {
+        return willRetaliate;
+    }
+
+    public int getAttackCooldown() {
+        return (int) (20 / attacksPerSecond);
+    }
+
+    public float getAttacksPerSecond() {
+        return attacksPerSecond;
+    }
+
+    public float getAggroRange() {
+        return aggroRange;
+    }
+
+    public boolean getAggressiveWhenIdle() {
+        return aggressiveWhenIdle && !isVehicle();
+    }
+
+    public float getAttackRange() {
+        return attackRange;
+    }
+
+    public float getUnitAttackDamage() {
+        return attackDamage;
+    }
+
+    public BlockPos getAttackMoveTarget() {
+        return attackMoveTarget;
+    }
+
+    public boolean canAttackBuildings() {
+        return getAttackBuildingGoal() != null;
+    }
+
+    public Goal getAttackGoal() {
+        return attackGoal;
+    }
+
+    public Goal getAttackBuildingGoal() {
+        return attackBuildingGoal;
+    }
+
+    public void setAttackMoveTarget(@Nullable BlockPos bp) {
+        this.attackMoveTarget = bp;
+    }
+
+    public void setFollowTarget(@Nullable LivingEntity target) {
+        this.followTarget = target;
+    }
 
     // endregion
 
@@ -135,7 +251,9 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     }
 
     @Override
-    public boolean removeWhenFarAway(double d) { return false; }
+    public boolean removeWhenFarAway(double d) {
+        return false;
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
@@ -147,9 +265,13 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     }
 
     @Override // prevent vanilla logic for picking up items
-    protected void pickUpItem(ItemEntity pItemEntity) { }
+    protected void pickUpItem(ItemEntity pItemEntity) {
+    }
+
     @Override
-    protected void customServerAiStep() { }
+    protected void customServerAiStep() {
+    }
+
     @Override
     public LivingEntity getTarget() {
         return this.targetGoal.getTarget();
@@ -192,5 +314,10 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

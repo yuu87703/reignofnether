@@ -24,6 +24,7 @@ import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.modelling.animations.NecromancerAnimations;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -59,6 +60,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         ABILITIES.add(new SoulSiphonPassive());
         ABILITIES.add(new BloodMoon());
     }
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
 
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
@@ -389,5 +392,10 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

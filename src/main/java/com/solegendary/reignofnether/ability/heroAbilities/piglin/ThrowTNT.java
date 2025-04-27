@@ -63,7 +63,8 @@ public class ThrowTNT extends HeroAbility {
                 () -> CursorClientEvents.setLeftClickAction(UnitAction.THROW_TNT),
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

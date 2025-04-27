@@ -61,7 +61,8 @@ public class ThrowHealingPotion extends Ability {
                 fcs(I18n.get("abilities.reignofnether.healing_potion.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.autocast"))
             ),
-            this
+            this,
+            unit
         );
     }
 

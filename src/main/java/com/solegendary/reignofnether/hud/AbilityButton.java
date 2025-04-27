@@ -1,7 +1,9 @@
 package com.solegendary.reignofnether.hud;
 
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
@@ -16,10 +18,12 @@ public class AbilityButton extends Button {
     // can be null for stuff like production buttons (handled separately)
     // or simple abilities with no cooldown and the logic can be handled entirely in onLeftClick()
     public Ability ability;
+    @Nullable private Unit unit;
+    @Nullable private BuildingPlacement placement;
 
     public AbilityButton(String name, ResourceLocation rl, Keybinding hotkey, Supplier<Boolean> isSelected,
                          Supplier<Boolean> isHidden, Supplier<Boolean> isEnabled, Runnable onLeftClick, Runnable onRightClick,
-                         List<FormattedCharSequence> tooltipLines, @Nullable Ability ability) {
+                         List<FormattedCharSequence> tooltipLines, @Nullable Ability ability, Unit unit) {
 
         // generate x/y based on given position (starting at 0 which is bottom left 1 row above generic action buttons)
         super(name, Button.itemIconSize, rl, hotkey, isSelected, isHidden, isEnabled, onLeftClick, onRightClick, tooltipLines);
@@ -28,17 +32,46 @@ public class AbilityButton extends Button {
 
         Runnable originalOnLeftClick = this.onLeftClick;
         this.onLeftClick = () -> {
-            if (this.ability != null && (this.ability.getCooldown() > 0 && !this.ability.canBypassCooldown()))
+            if (this.ability != null && (this.ability.getCooldown(unit) > 0 && !this.ability.canBypassCooldown()))
                 HudClientEvents.showTemporaryMessage(I18n.get("hud.buttons.reignofnether.on_cooldown"));
             else if (originalOnLeftClick != null)
                 originalOnLeftClick.run();
         };
+        this.unit = unit;
+    }
+
+    public AbilityButton(String name, ResourceLocation rl, Keybinding hotkey, Supplier<Boolean> isSelected,
+                         Supplier<Boolean> isHidden, Supplier<Boolean> isEnabled, Runnable onLeftClick, Runnable onRightClick,
+                         List<FormattedCharSequence> tooltipLines, @Nullable Ability ability, BuildingPlacement placement) {
+
+        // generate x/y based on given position (starting at 0 which is bottom left 1 row above generic action buttons)
+        super(name, Button.itemIconSize, rl, hotkey, isSelected, isHidden, isEnabled, onLeftClick, onRightClick, tooltipLines);
+
+        this.ability = ability;
+
+        Runnable originalOnLeftClick = this.onLeftClick;
+        this.onLeftClick = () -> {
+            if (this.ability != null && (this.ability.getCooldown(placement) > 0 && !this.ability.canBypassCooldown()))
+                HudClientEvents.showTemporaryMessage(I18n.get("hud.buttons.reignofnether.on_cooldown"));
+            else if (originalOnLeftClick != null)
+                originalOnLeftClick.run();
+        };
+
+        this.placement = placement;
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-        if (this.ability != null && ability.cooldownMax > 0)
-            this.greyPercent = 1.0f - ((float) ability.getCooldown() / (float) ability.cooldownMax);
+        float cooldown;
+
+        if (this.ability != null && ability.cooldownMax > 0) {
+            if (unit != null) {
+                cooldown = ability.getCooldown(unit);
+            }else {
+                cooldown = ability.getCooldown(placement);
+            }
+            this.greyPercent = 1.0f - (cooldown / (float) ability.cooldownMax);
+        }
         super.render(guiGraphics, x, y, mouseX, mouseY);
     }
 }

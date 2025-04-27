@@ -120,7 +120,8 @@ public class Portal extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.portal.tooltip3"), Style.EMPTY)
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 

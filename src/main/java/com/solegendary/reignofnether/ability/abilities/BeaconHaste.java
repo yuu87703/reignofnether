@@ -43,7 +43,8 @@ public class BeaconHaste extends BeaconAbility {
                         fcs(LanguageUtil.getTranslation("ability.reignofnether.beacon_aura.haste.tooltip1")),
                         fcs(LanguageUtil.getTranslation("ability.reignofnether.beacon_aura.one_aura"))
                 ),
-                this
+                this,
+                placement
         );
     }
 }

@@ -62,7 +62,8 @@ public class WheatFarm extends AbstractFarm {
                         FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.wheat_farm.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.wheat_farm.tooltip3"), Style.EMPTY)
                 ),
-                null
+                null,
+                (BuildingPlacement) null
         );
     }
 }

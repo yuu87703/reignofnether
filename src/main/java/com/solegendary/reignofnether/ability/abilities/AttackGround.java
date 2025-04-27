@@ -48,7 +48,8 @@ public class AttackGround extends Ability {
                 List.of(
                         FormattedCharSequence.forward(LanguageUtil.getTranslation("abilities.reignofnether.attack_ground"), Style.EMPTY)
                 ),
-                this
+                this,
+                unit
         );
     }
 

@@ -22,6 +22,7 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -60,6 +61,8 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
         ABILITIES.add(new Eject(), Keybindings.keyW);
         ABILITIES.add(new SpinWebs(), Keybindings.keyE);
     }
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
 
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
@@ -329,5 +332,10 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

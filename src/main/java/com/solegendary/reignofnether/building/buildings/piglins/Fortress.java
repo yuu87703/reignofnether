@@ -83,7 +83,8 @@ public class Fortress extends ProductionBuilding {
                     FormattedCharSequence.forward("", Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.fortress.tooltip3"), Style.EMPTY)
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 }

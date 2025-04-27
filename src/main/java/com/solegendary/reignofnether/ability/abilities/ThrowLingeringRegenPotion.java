@@ -60,7 +60,8 @@ public class ThrowLingeringRegenPotion extends Ability {
                 fcs(I18n.get("abilities.reignofnether.lingering_regen_potion.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.autocast"))
             ),
-            this
+            this,
+            unit
         );
     }
 

@@ -60,7 +60,8 @@ public class GreedIsGoodPassive extends HeroAbility {
                 this::toggleAutocast,
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

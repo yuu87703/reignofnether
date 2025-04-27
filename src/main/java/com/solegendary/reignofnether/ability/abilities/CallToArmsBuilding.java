@@ -60,7 +60,8 @@ public class CallToArmsBuilding extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_to_arms_building.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_to_arms_building.tooltip3", TownCentre.MILITIA_RANGE), Style.EMPTY)
                 ),
-                this
+                this,
+                placement
         );
     }
 

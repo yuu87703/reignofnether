@@ -69,23 +69,25 @@ public class Ability {
 
     public boolean isChanneling(Unit unit) { return false; }
 
-    public float getCooldown() { return this.cooldown; }
+    public float getCooldown(Unit unit) { return unit.getCooldown(getClass()); }
+    public float getCooldown(BuildingPlacement placement) { return placement.getCooldown(getClass()); }
 
-    public boolean isOffCooldown() { return this.cooldown <= 0; }
+    public boolean isOffCooldown(Unit unit) { return getCooldown(unit) <= 0; }
+    public boolean isOffCooldown(BuildingPlacement placement) { return getCooldown(placement) <= 0; }
 
     public void setToMaxCooldown(Unit unit) {
-        this.cooldown = cooldownMax;
+        unit.setCooldown(getClass(), cooldownMax);
     }
 
     public void setToMaxCooldown(BuildingPlacement building) {
-        this.cooldown = cooldownMax;
+        building.setCooldown(getClass(), cooldownMax);
     }
 
     public void setCooldown(float cooldown, Unit unit) {
         if (unit.level().isClientSide() && cooldown > 0) {
             HudClientEvents.setLowestCdHudEntity();
         }
-        this.cooldown = Math.min(cooldown, cooldownMax);
+        unit.setCooldown(this.getClass(), Math.min(cooldown, cooldownMax));
     }
 
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) { }

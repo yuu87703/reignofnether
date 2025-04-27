@@ -44,7 +44,8 @@ public class MountHoglin extends Ability {
             () -> CursorClientEvents.setLeftClickAction(UnitAction.MOUNT_HOGLIN),
             () -> UnitClientEvents.sendUnitCommand(UnitAction.MOUNT_HOGLIN),
             List.of(FormattedCharSequence.forward(I18n.get("abilities.reignofnether.mount_hoglin"), Style.EMPTY)),
-            this
+            this,
+            unit
         );
     }
 

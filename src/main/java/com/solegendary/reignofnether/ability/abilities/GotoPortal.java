@@ -56,7 +56,8 @@ public class GotoPortal extends Ability {
                 List.of(
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.go_to_portal"), Style.EMPTY.withBold(true))
                 ),
-                this
+                this,
+                placement
         );
     }
 

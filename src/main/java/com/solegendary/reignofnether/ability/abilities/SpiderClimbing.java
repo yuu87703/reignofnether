@@ -49,7 +49,8 @@ public class SpiderClimbing extends Ability {
                         fcs(I18n.get("abilities.reignofnether.spider_climbing_on")) :
                         fcs(I18n.get("abilities.reignofnether.spider_climbing_off"))
                 ),
-                this
+                this,
+                unit
         );
         if (!spiderUnit.isWallClimbing())
             ab.bgIconResource = rlLadder;

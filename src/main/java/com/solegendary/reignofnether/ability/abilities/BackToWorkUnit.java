@@ -51,7 +51,8 @@ public class BackToWorkUnit extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.back_to_work_unit.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.back_to_work_unit.tooltip2"), Style.EMPTY)
                 ),
-                this
+                this,
+                unit
         );
     }
 

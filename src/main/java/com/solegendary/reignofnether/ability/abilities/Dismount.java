@@ -44,7 +44,8 @@ public class Dismount extends Ability {
             List.of(
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.dismount"), Style.EMPTY)
             ),
-            this
+            this,
+            unit
         );
     }
 

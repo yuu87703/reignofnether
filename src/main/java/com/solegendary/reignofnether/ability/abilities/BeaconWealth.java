@@ -43,7 +43,8 @@ public class BeaconWealth extends BeaconAbility {
                         fcs(I18n.get("ability.reignofnether.beacon_aura.wealth.tooltip1")),
                         fcs(I18n.get("ability.reignofnether.beacon_aura.one_aura"))
                 ),
-                this
+                this,
+                placement
         );
     }
 }

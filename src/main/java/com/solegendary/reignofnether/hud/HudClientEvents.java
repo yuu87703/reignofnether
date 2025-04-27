@@ -131,7 +131,7 @@ public class HudClientEvents {
             float totalCd = 0;
             if (le instanceof Unit unit) {
                 for (Ability ability : unit.getAbilities()) {
-                    totalCd += ability.getCooldown();
+                    totalCd += ability.getCooldown(unit);
                     if (ability.isChanneling(unit))
                         totalCd += 10;
                 }

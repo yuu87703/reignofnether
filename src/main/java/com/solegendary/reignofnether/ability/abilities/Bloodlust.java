@@ -69,7 +69,8 @@ public class Bloodlust extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY)
                 ),
-                this
+                this,
+                unit
         );
     }
 

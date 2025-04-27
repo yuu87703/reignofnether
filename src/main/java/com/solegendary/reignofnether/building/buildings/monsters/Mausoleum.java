@@ -93,7 +93,8 @@ public class Mausoleum extends ProductionBuilding {
                 ), Style.EMPTY),
                 FormattedCharSequence.forward("", Style.EMPTY)
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 }

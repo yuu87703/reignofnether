@@ -74,7 +74,8 @@ public class FancyFeast extends HeroAbility {
                 () -> CursorClientEvents.setLeftClickAction(UnitAction.FANCY_FEAST),
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

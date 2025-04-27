@@ -45,7 +45,8 @@ public class MountSpider extends Ability {
             () -> CursorClientEvents.setLeftClickAction(UnitAction.MOUNT_SPIDER),
             () -> UnitClientEvents.sendUnitCommand(UnitAction.MOUNT_SPIDER),
             List.of(FormattedCharSequence.forward(I18n.get("abilities.reignofnether.mount_spider"), Style.EMPTY)),
-            this
+            this,
+            unit
         );
     }
 

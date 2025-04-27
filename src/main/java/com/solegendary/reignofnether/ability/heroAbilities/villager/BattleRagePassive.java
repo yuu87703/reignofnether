@@ -68,7 +68,8 @@ public class BattleRagePassive extends HeroAbility {
                 null,
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

@@ -49,7 +49,8 @@ public class ConnectPortal extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.connect_portal.tooltip1"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.connect_portal.tooltip2"), Style.EMPTY)
             ),
-            this
+            this,
+            placement
         );
     }
 

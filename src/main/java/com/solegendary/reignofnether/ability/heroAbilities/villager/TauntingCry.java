@@ -62,7 +62,8 @@ public class TauntingCry extends HeroAbility {
                 () -> sendUnitCommand(UnitAction.TAUNTING_CRY),
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

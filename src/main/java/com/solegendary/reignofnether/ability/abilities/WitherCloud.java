@@ -56,7 +56,8 @@ public class WitherCloud extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.wither_cloud.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.wither_cloud.tooltip2", DURATION_SECONDS), Style.EMPTY)
                 ),
-                this
+                this,
+                unit
         );
     }
 

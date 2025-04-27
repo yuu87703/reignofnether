@@ -109,7 +109,8 @@ public class Library extends ProductionBuilding {
                     Style.EMPTY
                 )
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 

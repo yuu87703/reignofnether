@@ -50,7 +50,8 @@ public class BloodMoon extends HeroAbility {
             () -> sendUnitCommand(UnitAction.BLOOD_MOON),
             null,
             getTooltipLines(hero),
-            this
+            this,
+            hero
         );
     }
 

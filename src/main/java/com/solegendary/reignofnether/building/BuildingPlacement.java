@@ -26,6 +26,7 @@ import com.solegendary.reignofnether.research.researchItems.ResearchSilverfish;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
+import com.solegendary.reignofnether.tps.TPSClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -38,6 +39,7 @@ import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnitProfession;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -152,6 +154,8 @@ public class BuildingPlacement {
     public boolean invulnerable;
     public boolean shouldDestroyOnReset;
 
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = new Object2ObjectArrayMap<>();
+
     public List<AbilityButton> getAbilityButtons() {
         return abilityButtons;
     }
@@ -188,6 +192,8 @@ public class BuildingPlacement {
         this.ownerName = ownerName;
         this.blocks = blocks;
         this.isCapitol = isCapitol;
+
+        cooldowns.defaultReturnValue(0F);
 
         // get min/max/centre positions
         this.minCorner = new BlockPos(
@@ -659,7 +665,7 @@ public class BuildingPlacement {
 
     public boolean isAbilityOffCooldown(UnitAction action) {
         for (Ability ability : abilities)
-            if (ability.action == action && ability.getCooldown() <= 0) {
+            if (ability.action == action && ability.getCooldown(this) <= 0) {
                 return true;
             }
         return false;
@@ -732,8 +738,14 @@ public class BuildingPlacement {
     }
 
     public void tick(Level tickLevel) {
-        for (Ability ability : abilities)
-            ability.tickCooldown(tickLevel);
+        for (Map.Entry<Class<? extends Ability>, Float> cooldownEntry : cooldowns.entrySet()) {
+            if (cooldownEntry.getValue() > 0) {
+                if (level.isClientSide())
+                    cooldowns.put(cooldownEntry.getKey(), cooldownEntry.getValue() - (float)(TPSClientEvents.getCappedTPS() / 20D));
+                else
+                    cooldowns.put(cooldownEntry.getKey(), cooldownEntry.getValue() - 1);
+            }
+        }
 
         for (BuildingBlock block : blocks) {
             BlockPos bp = block.getBlockPos();
@@ -1123,5 +1135,13 @@ public class BuildingPlacement {
     public void updateButtons() {
         abilities = building.getAbilities().get();
         abilityButtons = building.getAbilities().getButtons(this);
+    }
+
+    public void setCooldown(Class<? extends Ability> abilityClass, float cooldown) {
+        cooldowns.put(abilityClass, cooldown);
+    }
+
+    public float getCooldown(Class<? extends Ability> abilityClass) {
+        return cooldowns.get(abilityClass);
     }
 }

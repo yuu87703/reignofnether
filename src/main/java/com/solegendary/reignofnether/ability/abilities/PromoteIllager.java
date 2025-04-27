@@ -100,7 +100,8 @@ public class PromoteIllager extends Ability {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.promote_illager.tooltip4"), Style.EMPTY)
             ),
-            this
+            this,
+            placement
         );
     }
 

@@ -54,7 +54,8 @@ public class BackToWorkBuilding extends Ability {
                         FormattedCharSequence.forward(LanguageUtil.getTranslation("abilities.reignofnether.back_to_work_building.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(LanguageUtil.getTranslation("abilities.reignofnether.back_to_work_building.tooltip2"), Style.EMPTY)
                 ),
-                this
+                this,
+                placement
         );
     }
 

@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sandbox.SandboxAction;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +54,8 @@ public class LlamaProd extends ProductionItem {
             List.of(
                     FormattedCharSequence.forward(I18n.get("units.neutral.reignofnether.llama"), Style.EMPTY.withBold(true))
             ),
-            null
+            null,
+            (Unit) null
         );
     }
 }

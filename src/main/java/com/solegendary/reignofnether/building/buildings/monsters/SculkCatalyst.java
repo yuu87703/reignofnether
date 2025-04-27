@@ -103,7 +103,8 @@ public class SculkCatalyst extends Building {
                     Style.EMPTY
                 )
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 }

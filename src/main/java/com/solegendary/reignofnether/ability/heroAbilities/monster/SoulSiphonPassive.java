@@ -64,7 +64,8 @@ public class SoulSiphonPassive extends HeroAbility {
             this::toggleAutocast,
             null,
             getTooltipLines(hero),
-            this
+            this,
+            hero
         );
     }
 

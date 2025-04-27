@@ -21,6 +21,7 @@ import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.models.VillagerUnitModel;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -59,6 +60,9 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
         ABILITIES.add(new SetFangsCircle());
         ABILITIES.add(new CastSummonVexes(), Keybindings.keyQ);
     }
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
+
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -203,7 +207,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     public void resetBehaviours() {
         this.castFangsGoal.stop();
         this.castSummonVexesGoal.stop();
-        if (attackGoal != null && this.abilities.size() > 0 && this.abilities.get(0).isOffCooldown())
+        if (attackGoal != null && this.abilities.size() > 0 && this.abilities.get(0).isOffCooldown(this))
             this.attackGoal.resetCooldown();
     }
 
@@ -218,7 +222,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
         for (Ability ability : getAbilities()) {
             if (ability instanceof CastSummonVexes castSummonVexes) {
-                if (castSummonVexes.getAutocast() && !isCastingSpell() && castSummonVexes.isOffCooldown() && !level().isClientSide() && isIdle() &&
+                if (castSummonVexes.getAutocast() && !isCastingSpell() && castSummonVexes.isOffCooldown(this) && !level().isClientSide() && isIdle() &&
                     tickCount % 4 == 0 && ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_EVOKER_VEXES)) {
                     this.castSummonVexesGoal.startCasting();
                 }
@@ -265,10 +269,10 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     public boolean isCastingSpell() {
         for (Ability ability : getAbilities())
             if (ability instanceof SetFangsCircle || ability instanceof SetFangsLine) {
-                if (ability.isOffCooldown() && this.getCastFangsGoal() != null && this.getCastFangsGoal().isCasting())
+                if (ability.isOffCooldown(this) && this.getCastFangsGoal() != null && this.getCastFangsGoal().isCasting())
                     return true;
             } else if (ability instanceof CastSummonVexes) {
-                if (ability.isOffCooldown() && this.getCastSummonVexesGoal() != null && this.getCastSummonVexesGoal().isCasting())
+                if (ability.isOffCooldown(this) && this.getCastSummonVexesGoal() != null && this.getCastSummonVexesGoal().isCasting())
                     return true;
             }
         return false;
@@ -386,7 +390,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
         Entity targetEntity = getTargetGoal().getTarget();
         if (this.isCastingSpell() || (targetEntity != null &&
             this.distanceTo(targetEntity) <= getAttackRange()) &&
-            this.getAbilities().get(0).isOffCooldown()) {
+            this.getAbilities().get(0).isOffCooldown(this)) {
             return VillagerUnitModel.ArmPose.SPELLCASTING;
         }
         return VillagerUnitModel.ArmPose.CROSSED;
@@ -431,5 +435,10 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     public void updateAbilityButtons() {
         abilities = ABILITIES.get();
         abilityButtons = ABILITIES.getButtons(this);
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 }

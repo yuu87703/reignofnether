@@ -96,7 +96,8 @@ public class Stronghold extends ProductionBuilding {
                     Style.EMPTY
                 )
             ),
-            null
+            null,
+                (BuildingPlacement) null
         );
     }
 }

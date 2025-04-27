@@ -47,7 +47,8 @@ public class RaiseDead extends HeroAbility {
                 () -> sendUnitCommand(UnitAction.RAISE_DEAD),
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

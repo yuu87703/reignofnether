@@ -60,7 +60,8 @@ public class SetFangsLine extends Ability {
                     Style.EMPTY
                 )
             ),
-            this
+            this,
+            unit
         );
     }
 

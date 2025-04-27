@@ -24,6 +24,7 @@ import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.packets.UnitConvertClientboundPacket;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -69,6 +70,9 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     static {
         ABILITIES.add(new CallToArmsUnit(), Keybindings.keyQ);
     }
+
+    Object2ObjectArrayMap<Class<? extends Ability>, Float> cooldowns = Unit.createCooldownMap();
+
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -487,6 +491,11 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         if (FMLEnvironment.dist == Dist.CLIENT) {
             this.abilityButtons.addAll(getBuildingButtons());
         }
+    }
+
+    @Override
+    public Object2ObjectArrayMap<Class<? extends Ability>, Float> getCooldowns() {
+        return cooldowns;
     }
 
     static {

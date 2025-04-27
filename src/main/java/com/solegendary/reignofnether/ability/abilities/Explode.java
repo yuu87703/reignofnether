@@ -42,7 +42,8 @@ public class Explode extends Ability {
             List.of(
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.explode"), Style.EMPTY)
             ),
-            null
+            null,
+            unit
         );
     }
 

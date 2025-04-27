@@ -50,7 +50,8 @@ public class Avatar extends HeroAbility {
                 () -> sendUnitCommand(UnitAction.AVATAR),
                 null,
                 getTooltipLines(hero),
-                this
+                this,
+                hero
         );
     }
 

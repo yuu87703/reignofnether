@@ -67,7 +67,8 @@ public class SonicBoom extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sonic_boom.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sonic_boom.tooltip3"), Style.EMPTY)
             ),
-            this
+            this,
+            unit
         );
     }
 
