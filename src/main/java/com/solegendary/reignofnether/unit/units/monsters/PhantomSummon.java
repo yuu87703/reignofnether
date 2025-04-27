@@ -1,6 +1,6 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.ability.heroAbilities.monster.InsomniaCurse;
 import com.solegendary.reignofnether.time.NightUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -15,6 +15,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nullable;
 
+import static com.solegendary.reignofnether.ability.heroAbilities.monster.InsomniaCurse.PHANTOM_MAX_ATTACKS;
+
 // still not a unit, but has overrides to make
 
 // TODO:
@@ -25,13 +27,13 @@ import javax.annotation.Nullable;
 
 public class PhantomSummon extends Phantom {
 
-    final static public float attackDamage = 5.0f;
     final static public float maxHealth = 100.0f;
-    public int attacksLeft = 5; // at 0, dies after a few seconds
+    public int attacksLeft = PHANTOM_MAX_ATTACKS; // at 0, dies after a few seconds
     public int ticksToDie = 60; // starts counting downa after attacksLeft <= 0
+    public int attackCooldown = 0;
+    public final int ATTACK_COOLDOWN_MAX = 200;
 
     public LivingEntity entityTarget = null;
-    public Building buildingTarget = null;
 
     public PhantomSummon(EntityType<? extends Phantom> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -42,7 +44,7 @@ public class PhantomSummon extends Phantom {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.ATTACK_DAMAGE, PhantomSummon.attackDamage)
+                .add(Attributes.ATTACK_DAMAGE, InsomniaCurse.PHANTOM_DAMAGE)
                 .add(Attributes.MAX_HEALTH, PhantomSummon.maxHealth);
     }
 
@@ -53,6 +55,9 @@ public class PhantomSummon extends Phantom {
 
     @Override
     public void tick() {
+        noPhysics = true;
+        if (entityTarget != null && hasLineOfSight(entityTarget))
+            anchorPoint = entityTarget.blockPosition();
         super.tick();
 
         if (getTarget() != entityTarget)
@@ -62,7 +67,29 @@ public class PhantomSummon extends Phantom {
             ticksToDie -= 1;
         if (ticksToDie <= 0)
             kill();
+
+        if (attackCooldown > 0)
+            attackCooldown -= 1;
     }
+
+    @Override
+    public boolean hasLineOfSight(Entity pEntity) {
+        if (attackCooldown > 0)
+            return false;
+        if (pEntity == entityTarget)
+            return true;
+        return super.hasLineOfSight(pEntity);
+    }
+
+    /*
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new PhantomAttackStrategyGoal());
+        this.goalSelector.addGoal(2, new PhantomSweepAttackGoal());
+        this.goalSelector.addGoal(3, new PhantomCircleAroundAnchorGoal());
+        this.targetSelector.addGoal(1, new PhantomAttackPlayerTargetGoal());
+    }
+     */
 
     @Override
     protected boolean isSunBurnTick() {
@@ -71,7 +98,10 @@ public class PhantomSummon extends Phantom {
 
     @Override
     public boolean doHurtTarget(Entity pEntity) {
+        System.out.println("doHurtTarget: " + pEntity.getName().getString());
         if (super.doHurtTarget(pEntity)) {
+            System.out.println("doHurtTarget success");
+            attackCooldown = ATTACK_COOLDOWN_MAX;
             attacksLeft -= 1;
             return true;
         }

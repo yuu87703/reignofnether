@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.unit.units.monsters.PhantomSummon;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import org.apache.commons.lang3.text.WordUtils;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
@@ -263,6 +264,7 @@ public class MiscUtil {
         boolean canAttackNeutral =
                 rs == Relationship.NEUTRAL && neutralAggro &&
                         !(targetEntity instanceof Vex) &&
+                        !(targetEntity instanceof ArmorStand) &&
                         !(targetEntity instanceof PhantomSummon) &&
                         !isPassiveNonUnit;
 

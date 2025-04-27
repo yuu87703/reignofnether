@@ -24,9 +24,11 @@ HEROES (in order of priority)
 Necromancer
     - Curse of Insomnia
         [❌] Charge cooldowns
-        [❌] Summon phantom
+        [🟡] Summon phantom
         [❌] Interact with souls
-        [❌] Attack buildings
+        [🟡] Attack buildings
+            - Make phantoms circle higher up
+                - cut line of sight between attacks?
 
     - Soul Siphon
         [❌] Animation similar to exp orbs but purple smoke?
@@ -81,7 +83,7 @@ Bugfixes
 --------
 
 [❌] Buildings don't sync when rejoining a singleplayer world on essential (no client restart)
-[❌] Vexes attacking friendly units? (neutral aggro on?)
+[🟡] Vexes attacking friendly units? (neutral aggro on?)
 [✔] Militia aren't showing ability
 
 Quality of Life
@@ -90,6 +92,8 @@ Quality of Life
 
 Balancing
 ---------
+
+Slimes and Magma cubes need more health again
 
 Wave survival too easy on most difficulties
     - Extreme can be beaten ~wave 8-9

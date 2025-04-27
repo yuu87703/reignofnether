@@ -2,6 +2,8 @@ package com.solegendary.reignofnether.building;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import org.joml.Vector3d;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
@@ -45,10 +47,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.level.Level;
@@ -176,6 +174,9 @@ public abstract class Building {
     public boolean capturable = false;
     public boolean invulnerable = false;
     public boolean shouldDestroyOnReset = true;
+
+    private ArmorStand targetStand = null;
+    public ArmorStand getTargetStand() { return targetStand; }
 
     public Building(
         Level level,
@@ -576,6 +577,9 @@ public abstract class Building {
                 }
             }
         }
+
+        if (targetStand != null)
+            targetStand.discard();
     }
 
     // should only be run serverside
@@ -1084,5 +1088,20 @@ public abstract class Building {
 
     public int getUpgradeLevel() {
         return 0;
+    }
+
+    // creates an invisible armour stand that be attacked by non-units to damage the building
+    public void createArmourStandTarget() {
+        if (level.isClientSide())
+            return;
+        if (targetStand != null && !targetStand.isDeadOrDying() && !targetStand.isRemoved() && isPosInsideBuilding(targetStand.blockPosition()))
+            return;
+
+        ArmorStand stand = EntityType.ARMOR_STAND.create(level);
+        if (stand != null) {
+            stand.moveTo(this.centrePos.getCenter());
+            level.addFreshEntity(stand);
+            this.targetStand = stand;
+        }
     }
 }
