@@ -973,16 +973,16 @@ public class UnitClientEvents {
                     entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.AIR));
                     aUnit.setUnitAttackTarget(null);
                 }
-            } else if (entity instanceof VindicatorUnit vUnit && entity.getId() == entityId) {
+            } else if ((entity instanceof VindicatorUnit || entity instanceof MilitiaUnit) && entity.getId() == entityId) {
                 if (startAnimation && MC.level != null) {
                     if (targetId > 0) {
-                        vUnit.setUnitAttackTarget((LivingEntity) MC.level.getEntity(targetId)); // set itself as a target just for animation purposes, doesn't tick clientside anyway
+                        ((AttackerUnit) entity).setUnitAttackTarget((LivingEntity) MC.level.getEntity(targetId)); // set itself as a target just for animation purposes, doesn't tick clientside anyway
                     } else {
-                        vUnit.setAttackBuildingTarget(buildingBp);
+                        ((AttackerUnit) entity).setAttackBuildingTarget(buildingBp);
                     }
                 } else {
-                    vUnit.setUnitAttackTarget(null);
-                    ((MeleeAttackBuildingGoal) vUnit.getAttackBuildingGoal()).stopAttacking();
+                    ((AttackerUnit) entity).setUnitAttackTarget(null);
+                    ((MeleeAttackBuildingGoal) ((AttackerUnit) entity).getAttackBuildingGoal()).stopAttacking();
                 }
             }
         }
