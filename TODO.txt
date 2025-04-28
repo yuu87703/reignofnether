@@ -80,9 +80,13 @@ Royal Guard
 Bugfixes
 --------
 
-[❌] Buildings don't sync when rejoining a singleplayer world on essential (no client restart)
 [🟡] Vexes attacking friendly units? (neutral aggro on?)
 [✔] Militia aren't showing ability
+[❌] Militia don't show swords to other players when attacking
+    - Apply same logic for vindicator attacks
+[✔] Fixed unit highlights not showing up behind blocks
+[🟡] Fixed sometimes not syncing units and buildings in singleplayer when logging in
+    - onPlayerJoin.PlayerServerEvents sometimes doesn't have all units/buildings populated before trying to sync
 
 Quality of Life
 ---------------

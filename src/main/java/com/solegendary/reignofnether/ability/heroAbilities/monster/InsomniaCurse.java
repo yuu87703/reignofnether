@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
+import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -117,7 +118,9 @@ public class InsomniaCurse extends HeroAbility {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        ((NecromancerUnit) unitUsing).getCastPhantomGoal().setAbility(this);
-        ((NecromancerUnit) unitUsing).getCastPhantomGoal().setTarget(targetBp);
+        if (BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), targetBp)) {
+            ((NecromancerUnit) unitUsing).getCastPhantomGoal().setAbility(this);
+            ((NecromancerUnit) unitUsing).getCastPhantomGoal().setTarget(targetBp);
+        }
     }
 }

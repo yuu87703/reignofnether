@@ -74,7 +74,7 @@ import static com.solegendary.reignofnether.building.BuildingClientEvents.getPla
 import static com.solegendary.reignofnether.cursor.CursorClientEvents.getPreselectedBlockPos;
 import static com.solegendary.reignofnether.hud.HudClientEvents.hudSelectedEntity;
 import static com.solegendary.reignofnether.unit.Checkpoint.CHECKPOINT_TICKS_FADE;
-import static net.minecraftforge.client.event.RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS;
+import static net.minecraftforge.client.event.RenderLevelStageEvent.Stage.AFTER_ENTITIES;
 
 public class UnitClientEvents {
 
@@ -335,7 +335,7 @@ public class UnitClientEvents {
     }
 
     public static void syncOwnerName(int entityId, String ownerName) {
-        for(LivingEntity entity : allUnits)
+        for (LivingEntity entity : allUnits)
             if (entity.getId() == entityId && MC.level != null)
                 if (entity instanceof Unit unit)
                     unit.setOwnerName(ownerName);
@@ -690,14 +690,14 @@ public class UnitClientEvents {
         CursorClientEvents.setLeftClickAction(null);
     }
 
-    public static final RenderLevelStageEvent.Stage RENDER_STAGE = AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS;
+    public static RenderLevelStageEvent.Stage stage = AFTER_ENTITIES;
 
     @SubscribeEvent
     public static void onRenderLevel(RenderLevelStageEvent evt) {
         if (MC.level == null)
             return;
 
-        if (evt.getStage() == RENDER_STAGE)
+        if (evt.getStage() == stage)
         {
             ArrayList<LivingEntity> selectedUnits = getSelectedUnits();
             ArrayList<LivingEntity> preselectedUnits = getPreselectedUnits();
@@ -752,7 +752,7 @@ public class UnitClientEvents {
         }
 
         // AFTER_CUTOUT_BLOCKS lets us see checkpoints through leaves
-        if (OrthoviewClientEvents.isEnabled() && evt.getStage() == RENDER_STAGE) {
+        if (OrthoviewClientEvents.isEnabled() && evt.getStage() == stage) {
             // draw unit checkpoints
             for (LivingEntity entity : getSelectedUnits()) {
                 if (entity instanceof Unit unit) {

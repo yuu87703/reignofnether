@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -71,11 +72,10 @@ public class HeroClientboundPacket {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                 () -> () -> {
                     HeroUnit hero = null;
-                    for (LivingEntity entity : UnitClientEvents.getAllUnits()) {
-                        if (entity.getId() == this.unitId && entity instanceof HeroUnit) {
+                    for(LivingEntity entity : UnitClientEvents.getAllUnits())
+                        if (entity.getId() == unitId && entity instanceof HeroUnit)
                             hero = (HeroUnit) entity;
-                        }
-                    }
+
                     if (hero != null) {
                         switch (action) {
                             case SET_EXPERIENCE -> hero.setExperience(value);
@@ -84,6 +84,7 @@ public class HeroClientboundPacket {
                             case SET_ABILITY_RANK -> {
                                 List<HeroAbility> abls = hero.getHeroAbilities();
                                 if (abls.size() > abilityIndex) abls.get(abilityIndex).rank = value;
+                                ((Unit) hero).updateAbilityButtons();
                             }
                         }
                     }

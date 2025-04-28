@@ -388,28 +388,28 @@ public class UnitServerEvents {
                         hero.setSkillPoints(shu.skillPoints);
                         hero.setChargesFromSaveData(shu.charges);
 
-                        HeroClientboundPacket.setExperience(evt.getEntity().getId(), hero.getExperience());
-                        HeroClientboundPacket.setSkillPoints(evt.getEntity().getId(), hero.getSkillPoints());
-                        HeroClientboundPacket.setCharges(evt.getEntity().getId(), hero.getChargesForSaveData());
+                        HeroClientboundPacket.setExperience(entity.getId(), hero.getExperience());
+                        HeroClientboundPacket.setSkillPoints(entity.getId(), hero.getSkillPoints());
+                        HeroClientboundPacket.setCharges(entity.getId(), hero.getChargesForSaveData());
 
                         List<HeroAbility> abls = hero.getHeroAbilities();
                         if (abls.size() > 0) {
                             abls.get(0).rank = shu.ability1Rank;
-                            HeroClientboundPacket.setAbilityRank(evt.getEntity().getId(), shu.ability1Rank, 0);
+                            HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability1Rank, 0);
                         }
                         if (abls.size() > 1) {
                             abls.get(1).rank = shu.ability2Rank;
-                            HeroClientboundPacket.setAbilityRank(evt.getEntity().getId(), shu.ability2Rank, 1);
+                            HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability2Rank, 1);
                         }
                         if (abls.size() > 2) {
                             abls.get(2).rank = shu.ability3Rank;
-                            HeroClientboundPacket.setAbilityRank(evt.getEntity().getId(), shu.ability3Rank, 2);
+                            HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability3Rank, 2);
                         }
                         if (abls.size() > 3) {
                             abls.get(3).rank = shu.ability4Rank;
-                            HeroClientboundPacket.setAbilityRank(evt.getEntity().getId(), shu.ability4Rank, 3);
+                            HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability4Rank, 3);
                         }
-                        ReignOfNether.LOGGER.info("loaded unit in serverevents: " + shu.uuid + "|" + shu.experience + "|" + shu.skillPoints);
+                        ReignOfNether.LOGGER.info("loaded hero unit in serverevents: " + shu.uuid + "|" + shu.experience + "|" + shu.skillPoints);
                         return true;
                     }
                     return false;
