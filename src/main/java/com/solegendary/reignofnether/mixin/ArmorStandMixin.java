@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.mixin;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -27,7 +28,7 @@ public abstract class ArmorStandMixin extends LivingEntity {
     )
     private void hurt(DamageSource pSource, float pAmount, CallbackInfoReturnable<Boolean> cir) {
         Building building = BuildingUtils.findBuilding(level().isClientSide(), blockPosition());
-        if (building != null) {
+        if (building != null && (pSource.is(DamageTypes.MOB_ATTACK) || pSource.is(DamageTypes.MOB_ATTACK_NO_AGGRO))) {
             building.destroyRandomBlocks((int) (pAmount / 2));
             cir.cancel();
             cir.setReturnValue(true);

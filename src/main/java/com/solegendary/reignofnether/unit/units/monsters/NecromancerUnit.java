@@ -372,7 +372,6 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
             return;
         PhantomSummon phantom = summonPhantom();
         if (phantom != null) {
-            targetBuilding.createArmourStandTarget();
             if (targetBuilding.getTargetStand() != null)
                 phantom.entityTarget = targetBuilding.getTargetStand();
         }

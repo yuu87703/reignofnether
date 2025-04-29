@@ -82,7 +82,7 @@ Bugfixes
 
 [🟡] Vexes attacking friendly units? (neutral aggro on?)
 [✔] Militia aren't showing ability
-[❌] Militia don't show swords to other players when attacking
+[✔] Militia don't show swords to other players when attacking
     - Apply same logic for vindicator attacks
 [✔] Fixed unit highlights not showing up behind blocks
 [🟡] Fixed sometimes not syncing units and buildings in singleplayer when logging in
