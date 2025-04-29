@@ -123,8 +123,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
     public float getMovementSpeed() {return movementSpeed;}
-    public float getUnitAttackDamage() {return attackDamage;}
-    public float getUnitMaxHealth() {return maxHealth;}
+    public float getUnitAttackDamage() {return attackDamage + (attackBonusPerLevel * getHeroLevel());}
+    public float getUnitMaxHealth() {return maxHealth + (maxHealthBonusPerLevel * getHeroLevel());}
     public float getUnitArmorValue() {return armorValue;}
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.NECROMANCER;}
@@ -143,11 +143,16 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     @Override public boolean isRankUpMenuOpen() { return rankUpMenuOpen; }
     @Override public void showRankUpMenu(boolean show) { rankUpMenuOpen = show; }
     @Override public int getExperience() { return experience; }
-    @Override public void setExperience(int amount) { experience = amount; }
+    @Override public void setExperience(int amount) {
+        experience = amount;
+        setStatsForLevel();
+    }
 
     final static public float attackDamage = 4.0f;
+    final static public float attackBonusPerLevel = 0.4f;
     final static public float attacksPerSecond = 0.35f;
     final static public float maxHealth = 100.0f;
+    final static public float maxHealthBonusPerLevel = 12.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.25f;
     final static public float attackRange = 12.0F; // only used by ranged units or melee building attackers
@@ -155,6 +160,11 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
     public int maxResources = 100;
+
+    @Override public float getHealthBonusPerLevel() { return maxHealthBonusPerLevel; };
+    @Override public float getAttackBonusPerLevel() { return maxHealth; };
+    @Override public float getBaseHealth() { return maxHealth; };
+    @Override public float getBaseAttack() { return attackDamage; };
 
     public int fogRevealDuration = 0; // set > 0 for the client who is attacked by this unit
     public int getFogRevealDuration() { return fogRevealDuration; }
@@ -227,6 +237,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.abilities.add(new SoulSiphonPassive(this));
         this.abilities.add(new BloodMoon(this));
         updateAbilityButtons();
+        setStatsForLevel();
     }
 
     @Override

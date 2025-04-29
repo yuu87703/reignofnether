@@ -1113,6 +1113,8 @@ public abstract class Building {
             ArmorStand stand = EntityType.ARMOR_STAND.create(level);
             if (stand != null) {
                 stand.setInvisible(true);
+                stand.setNoGravity(true);
+                stand.noPhysics = true;
                 stand.moveTo(this.centrePos.getCenter());
                 level.addFreshEntity(stand);
                 this.targetStand = stand;

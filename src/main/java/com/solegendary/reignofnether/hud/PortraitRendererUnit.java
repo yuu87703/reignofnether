@@ -275,18 +275,22 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
                 "textures/icons/items/sparkler.png"
             )); // ATTACK SPEED
             textureStatIcons.add(new ResourceLocation("reignofnether", "textures/icons/items/bow.png")); // RANGE
-            int atkDmg =
-                (int) attackerUnit.getUnitAttackDamage() + (int) AttackerUnit.getWeaponDamageModifier(attackerUnit);
+            double atkDmg = attackerUnit.getUnitAttackDamage() + AttackerUnit.getWeaponDamageModifier(attackerUnit);
             if (unit instanceof CreeperUnit cUnit && cUnit.isPowered()) {
                 atkDmg *= CreeperUnit.CHARGED_DAMAGE_MULT;
             }
             if (unit instanceof WorkerUnit wUnit) {
                 atkDmg = (int) attackerUnit.getUnitAttackDamage();
             }
-
-            statStrings.add(String.valueOf(atkDmg));
-            DecimalFormat df = new DecimalFormat("###.##");
-            statStrings.add(String.valueOf(df.format(attackerUnit.getAttacksPerSecond()))); // attacks per second
+            double atkDmgRounded = Math.round(atkDmg);
+            if (Math.abs(atkDmgRounded - atkDmg) < 0.1d) {
+                statStrings.add(String.valueOf((int) atkDmgRounded)); // attacks per second
+            } else {
+                DecimalFormat df1 = new DecimalFormat("###.#");
+                statStrings.add(String.valueOf(df1.format(atkDmg))); // attacks per second
+            }
+            DecimalFormat df2 = new DecimalFormat("###.##");
+            statStrings.add(String.valueOf(df2.format(attackerUnit.getAttacksPerSecond()))); // attacks per second
 
             GarrisonableBuilding garr = GarrisonableBuilding.getGarrison(unit);
             if (garr != null) {

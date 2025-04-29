@@ -5,6 +5,8 @@ import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.List;
 
@@ -12,15 +14,28 @@ public interface HeroUnit {
 
     int MAX_HERO_LEVEL = 10;
 
+    float getHealthBonusPerLevel();
+    float getAttackBonusPerLevel();
+    float getBaseHealth();
+    float getBaseAttack();
+
     int getSkillPoints();
     void setSkillPoints(int points);
-
     boolean isRankUpMenuOpen();
     void showRankUpMenu(boolean show);
     int getExperience();
     void setExperience(int experience);
     default int getChargesForSaveData() { return 0; } // track stats like necromancer souls in save data
     default void setChargesFromSaveData(int charges) { }
+
+    default void setStatsForLevel() {
+        AttributeInstance aiMaxHealth = ((LivingEntity) this).getAttribute(Attributes.MAX_HEALTH);
+        if (aiMaxHealth != null)
+            aiMaxHealth.setBaseValue(getBaseHealth() + (getHeroLevel() * getHealthBonusPerLevel()));
+        AttributeInstance aiAttackDamage = ((LivingEntity) this).getAttribute(Attributes.ATTACK_DAMAGE);
+        if (aiAttackDamage != null)
+            aiAttackDamage.setBaseValue(getBaseAttack() + (getHeroLevel() * getAttackBonusPerLevel()));
+    }
 
     default void addExperience(int amount) {
         int levelBefore = getHeroLevel();
@@ -35,6 +50,7 @@ public interface HeroUnit {
             setSkillPoints(getSkillPoints() + levelDiff);
             HeroClientboundPacket.setSkillPoints(((LivingEntity) this).getId(), getSkillPoints());
             SoundClientboundPacket.playSoundAtPos(SoundAction.LEVEL_UP, ((LivingEntity) this).getOnPos());
+            setStatsForLevel();
         }
     }
 
