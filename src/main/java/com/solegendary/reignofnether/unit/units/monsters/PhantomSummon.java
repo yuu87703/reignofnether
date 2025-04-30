@@ -98,9 +98,7 @@ public class PhantomSummon extends Phantom {
 
     @Override
     public boolean doHurtTarget(Entity pEntity) {
-        System.out.println("doHurtTarget: " + pEntity.getName().getString());
         if (super.doHurtTarget(pEntity)) {
-            System.out.println("doHurtTarget success");
             attackCooldown = ATTACK_COOLDOWN_MAX;
             attacksLeft -= 1;
             return true;
