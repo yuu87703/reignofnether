@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
+import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -34,9 +35,9 @@ public class InsomniaCurse extends HeroAbility {
     public int charges = 3;
     public int maxCharges = 3;
     public static final int RANGE = 12;
-    private static final float PHANTOM_DAMAGE = 5;
-    private static final float PHANTOM_DAMAGE_BONUS_PER_SOUL = 0.5f;
-    private static final int PHANTOM_MAX_ATTACKS = 3;
+    public static final float PHANTOM_DAMAGE = 7;
+    private static final float PHANTOM_DAMAGE_BONUS_PER_SOUL = 0.75f;
+    public static final int PHANTOM_MAX_ATTACKS = 5;
 
     public InsomniaCurse(HeroUnit hero) {
         super(hero, 3, UnitAction.INSOMNIA_CURSE, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
@@ -117,7 +118,9 @@ public class InsomniaCurse extends HeroAbility {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        ((NecromancerUnit) unitUsing).getCastPhantomGoal().setAbility(this);
-        ((NecromancerUnit) unitUsing).getCastPhantomGoal().setTarget(targetBp);
+        if (BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), targetBp)) {
+            ((NecromancerUnit) unitUsing).getCastPhantomGoal().setAbility(this);
+            ((NecromancerUnit) unitUsing).getCastPhantomGoal().setTarget(targetBp);
+        }
     }
 }

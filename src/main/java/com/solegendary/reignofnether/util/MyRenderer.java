@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderStateShard;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import com.solegendary.reignofnether.ReignOfNether;
@@ -21,10 +22,27 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.OptionalDouble;
+
+import static net.minecraft.client.renderer.RenderStateShard.*;
 
 public class MyRenderer {
 
     private static final Minecraft MC = Minecraft.getInstance();
+
+    private static final RenderType LINES_NO_DEPTH_TEST = RenderType.create(
+            "lines", DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 256, false, false,
+            RenderType.CompositeState.builder().setShaderState(RENDERTYPE_LINES_SHADER)
+                    .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.empty()))
+                    .setLayeringState(VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setOutputState(ITEM_ENTITY_TARGET)
+                    .setWriteMaskState(COLOR_DEPTH_WRITE)
+                    .setCullState(NO_CULL)
+                    .setDepthTestState(NO_DEPTH_TEST)
+                    .createCompositeState(false)
+            );
+
 
     public static final Style iconStyle = Style.EMPTY.withFont(new ResourceLocation(ReignOfNether.MOD_ID, "resource_icons"));
 
@@ -68,7 +86,7 @@ public class MyRenderer {
         double d1 = camEntity.getY() + camEntity.getEyeHeight();
         double d2 = camEntity.getZ();
 
-        VertexConsumer vertexConsumer = MC.renderBuffers().bufferSource().getBuffer(RenderType.lines());
+        VertexConsumer vertexConsumer = MC.renderBuffers().bufferSource().getBuffer(LINES_NO_DEPTH_TEST);
 
         matrixStack.pushPose();
         matrixStack.translate(-d0, -d1, -d2); // because we start at 0,0,0 relative to camera

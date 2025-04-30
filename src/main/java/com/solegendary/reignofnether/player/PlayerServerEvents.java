@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.player;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.alliance.AllyCommand;
 import com.solegendary.reignofnether.building.*;
@@ -11,6 +12,7 @@ import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamemode.GameModeClientboundPacket;
 import com.solegendary.reignofnether.guiscreen.TopdownGuiContainer;
+import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.research.ResearchClientboundPacket;
@@ -25,6 +27,7 @@ import com.solegendary.reignofnether.time.TimeUtils;
 import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
+import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
@@ -34,6 +37,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -56,10 +60,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.NetworkHooks;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.solegendary.reignofnether.building.BuildingServerEvents.saveBuildings;
 import static com.solegendary.reignofnether.time.TimeUtils.getWaveSurvivalTimeModifier;
+import static net.minecraft.world.level.GameRules.RULE_DISABLE_ELYTRA_MOVEMENT_CHECK;
 
 // this class tracks all available players so that any serverside functions that need to affect the player can be
 // performed here by sending a client->server packet containing MC.player.getId()
@@ -137,6 +144,8 @@ public class PlayerServerEvents {
                 }
             }
             UnitServerEvents.maxPopulation = level.getGameRules().getInt(GameRuleRegistrar.MAX_POPULATION);
+
+            level.getGameRules().getRule(RULE_DISABLE_ELYTRA_MOVEMENT_CHECK).set(true, evt.getServer());
         }
     }
 
@@ -225,6 +234,30 @@ public class PlayerServerEvents {
         }
     }
 
+    private static void syncUnits() {
+        for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
+            if (entity instanceof Unit unit) {
+                UnitSyncClientboundPacket.sendSyncResourcesPacket(unit);
+                UnitSyncClientboundPacket.sendSyncOwnerNamePacket(unit);
+                UnitSyncClientboundPacket.sendSyncAnchorPosPacket(entity, unit.getAnchor());
+            }
+            if (entity instanceof HeroUnit hero) {
+                HeroClientboundPacket.setExperience(entity.getId(), hero.getExperience());
+                HeroClientboundPacket.setSkillPoints(entity.getId(), hero.getSkillPoints());
+                HeroClientboundPacket.setCharges(entity.getId(), hero.getChargesForSaveData());
+                List<HeroAbility> abls = hero.getHeroAbilities();
+                if (abls.size() > 0)
+                    HeroClientboundPacket.setAbilityRank(entity.getId(), abls.get(0).rank, 0);
+                if (abls.size() > 1)
+                    HeroClientboundPacket.setAbilityRank(entity.getId(), abls.get(1).rank, 1);
+                if (abls.size() > 2)
+                    HeroClientboundPacket.setAbilityRank(entity.getId(), abls.get(2).rank, 2);
+                if (abls.size() > 3)
+                    HeroClientboundPacket.setAbilityRank(entity.getId(), abls.get(3).rank, 3);
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent evt) {
         ServerPlayer serverPlayer = (ServerPlayer) evt.getEntity();
@@ -245,9 +278,11 @@ public class PlayerServerEvents {
             }
         }
         if (rtsSyncingEnabled) {
-            for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
-                if (entity instanceof Unit unit)
-                    UnitSyncClientboundPacket.sendSyncResourcesPacket(unit);
+            MinecraftServer server = evt.getEntity().level().getServer();
+            if (server == null || !server.isDedicatedServer()) {
+                CompletableFuture.delayedExecutor(1000, TimeUnit.MILLISECONDS).execute(PlayerServerEvents::syncUnits);
+            } else {
+                syncUnits();
             }
             ResearchServerEvents.syncResearch(playerName);
             ResearchServerEvents.syncCheats(playerName);
