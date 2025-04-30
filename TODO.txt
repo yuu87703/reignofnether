@@ -80,22 +80,39 @@ Royal Guard
 Bugfixes
 --------
 
-[🟡] Vexes attacking friendly units? (neutral aggro on?)
+[✔] Fixed Vexes attacking friendly units
 [✔] Militia aren't showing ability
 [✔] Militia don't show swords to other players when attacking
     - Apply same logic for vindicator attacks
 [✔] Fixed unit highlights not showing up behind blocks
-[🟡] Fixed sometimes not syncing units and buildings in singleplayer when logging in
+[✔] Fixed sometimes not syncing units and buildings in singleplayer when logging in
     - onPlayerJoin.PlayerServerEvents sometimes doesn't have all units/buildings populated before trying to sync
+[✔] Fixed rubberbanding from moving too fast at high camera sensitivity
+    - To do this, the vanilla gamerule disableElytraMovementCheck is now set to true whenever a world starts up
 
 Quality of Life
 ---------------
 
 
+Languages
+---------
+[✔] Updated Russian (ru_ru)
+
 Balancing
 ---------
 
-Slimes and Magma cubes need more health again
+[✔] Slime cost increased back to (40 food, 40 wood, 40 ore)
 
-Wave survival too easy on most difficulties
-    - Extreme can be beaten ~wave 8-9
+Balancing
+---------
+
+[❌] Day cycle times adjusted from: (20, 15, 12, 9, 6) to (14, 12, 10, 8, 6) minutes
+
+[❌] At higher wave survival difficulties, enemy wave populations and beacon build/upgrade costs are increased
+    - Beginner: no change
+    - Easy: +25% beacon costs, +20% wave populations
+    - Medium: +50% beacon costs, +30% wave populations
+    - Hard: +75% beacon costs, +40% wave populations
+    - Extreme: +100% beacon costs, +50% wave populations
+
+[❌] Every third wave now includes an enemy hero unit with level equal to 2/3rds the wave number
