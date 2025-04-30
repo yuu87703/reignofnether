@@ -31,10 +31,10 @@ public interface HeroUnit {
     default void setStatsForLevel() {
         AttributeInstance aiMaxHealth = ((LivingEntity) this).getAttribute(Attributes.MAX_HEALTH);
         if (aiMaxHealth != null)
-            aiMaxHealth.setBaseValue(getBaseHealth() + (getHeroLevel() * getHealthBonusPerLevel()));
+            aiMaxHealth.setBaseValue(getBaseHealth() + ((getHeroLevel() - 1) * getHealthBonusPerLevel()));
         AttributeInstance aiAttackDamage = ((LivingEntity) this).getAttribute(Attributes.ATTACK_DAMAGE);
         if (aiAttackDamage != null)
-            aiAttackDamage.setBaseValue(getBaseAttack() + (getHeroLevel() * getAttackBonusPerLevel()));
+            aiAttackDamage.setBaseValue(getBaseAttack() + ((getHeroLevel() - 1) * getAttackBonusPerLevel()));
     }
 
     default void addExperience(int amount) {
