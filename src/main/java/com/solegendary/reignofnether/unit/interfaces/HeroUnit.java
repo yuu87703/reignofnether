@@ -38,6 +38,8 @@ public interface HeroUnit {
     }
 
     default void addExperience(int amount) {
+        if (((LivingEntity) this).level().isClientSide())
+            return;
         int levelBefore = getHeroLevel();
         if (levelBefore >= MAX_HERO_LEVEL)
             return;
@@ -51,6 +53,7 @@ public interface HeroUnit {
             HeroClientboundPacket.setSkillPoints(((LivingEntity) this).getId(), getSkillPoints());
             SoundClientboundPacket.playSoundAtPos(SoundAction.LEVEL_UP, ((LivingEntity) this).getOnPos());
             setStatsForLevel();
+            ((LivingEntity) this).heal(levelDiff * getHealthBonusPerLevel());
         }
     }
 

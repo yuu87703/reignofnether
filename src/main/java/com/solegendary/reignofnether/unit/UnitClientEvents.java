@@ -517,6 +517,13 @@ public class UnitClientEvents {
         }
         if (entity instanceof LivingEntity le && (ResourceSources.isHuntableAnimal(le) || le instanceof PhantomSummon))
             addUnitPoofs(evt.getLevel(), entity);
+
+        if (evt.getEntity() instanceof HeroUnit heroUnit) {
+            if (ResearchClient.hasCheat("elitetaurenchieftain")) {
+                heroUnit.addExperience(10000);
+                heroUnit.setSkillPoints(10);
+            }
+        }
     }
 
     @SubscribeEvent

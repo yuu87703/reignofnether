@@ -113,7 +113,8 @@ public class PlayerServerEvents {
         "foodforthought",
         "thereisnospoon",
         "slipslopslap",
-        "wouldyoukindly"
+        "wouldyoukindly",
+        "elitetaurenchieftain"
     );
 
     public static void saveRTSPlayers() {
@@ -529,6 +530,18 @@ public class PlayerServerEvents {
 
             if (words.length == 1 && words[0].equalsIgnoreCase("thebeastofcaerbannog")) {
                 UnitServerEvents.spawnMob(EntityRegistrar.getEntityType("Killer Rabbit"), serverLevel, evt.getPlayer().getOnPos(), playerName);
+                sendMessageToAllPlayers("server.reignofnether.used_cheat",false, playerName, words[0]);
+            }
+
+            if (words.length == 1 && words[0].equalsIgnoreCase("elitetaurenchieftain")) {
+                for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
+                    if (entity instanceof HeroUnit heroUnit && ((Unit) heroUnit).getOwnerName().equals(playerName)) {
+                        heroUnit.addExperience(10000);
+                        heroUnit.setSkillPoints(10);
+                        HeroClientboundPacket.setExperience(entity.getId(), heroUnit.getExperience());
+                        HeroClientboundPacket.setSkillPoints(entity.getId(), 10);
+                    }
+                }
                 sendMessageToAllPlayers("server.reignofnether.used_cheat",false, playerName, words[0]);
             }
 

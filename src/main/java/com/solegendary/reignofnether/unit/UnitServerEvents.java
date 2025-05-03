@@ -442,6 +442,13 @@ public class UnitServerEvents {
             );
             forcedUnitChunks.add(new Pair<>(entity.getId(), chunk));
         }
+
+        if (evt.getEntity() instanceof HeroUnit heroUnit) {
+            if (ResearchServerEvents.playerHasCheat(((Unit) heroUnit).getOwnerName(), "elitetaurenchieftain")) {
+                heroUnit.addExperience(10000);
+                heroUnit.setSkillPoints(10);
+            }
+        }
     }
 
     @SubscribeEvent

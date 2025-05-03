@@ -168,11 +168,11 @@ public class TitleScreenMixin extends Screen {
         }
     }
 
-    private static final int titleX = -56;
-    private static final int titleY = 5;
-    private static final int titleWidth = 380;
-    private static final int titleHeight = 127;
-    private static final int editionY = 92;
+    private static final int titleX = -31;
+    private static final int titleY = 12;
+    private static final int titleWidth = 330;
+    private static final int titleHeight = 110;
+    private static final int editionY = 88;
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void render(GuiGraphics guiGraphics, int pMouseX, int pMouseY,
@@ -216,7 +216,7 @@ public class TitleScreenMixin extends Screen {
 
             if (TitleClientEvents.splash != null) {
                 pPoseStack.pushPose();
-                pPoseStack.translate(this.width / 2 + 90, 85.0, 0.0);
+                pPoseStack.translate(this.width / 2 + 90, 82.0, 0.0);
                 pPoseStack.mulPose(Axis.ZP.rotationDegrees(-20.0F));
                 float scale = 1.8F - Mth.abs(Mth.sin((float) (Util.getMillis() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
                 scale = scale * 100.0F / (float) (this.font.width(TitleClientEvents.splash) + 32);

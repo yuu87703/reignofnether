@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -29,6 +30,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,5 +213,14 @@ public class ClientLevelMixin {
     private void onAddDestroyBlockEffect(BlockPos pPos, BlockState pState, CallbackInfo ci) {
         if (!FogOfWarClientEvents.isInBrightChunk(pPos))
             ci.cancel();
+    }
+
+    @Inject(
+            method = "getSkyColor",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void getSkyColor(Vec3 pPos, float pPartialTick, CallbackInfoReturnable<Vec3> cir) {
+        cir.setReturnValue(new Vec3(PlayerClientEvents.red, PlayerClientEvents.green, PlayerClientEvents.blue));
     }
 }

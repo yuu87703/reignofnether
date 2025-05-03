@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
+import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
@@ -44,6 +45,8 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.solegendary.reignofnether.player.PlayerServerEvents.sendMessageToAllPlayers;
 
 public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated {
     // region
@@ -304,7 +307,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.castBloodMoonGoal = new GenericUntargetedSpellGoal(
                 this,
                 BloodMoon.CHANNEL_TICKS,
-                this::bloodMoon,
+                this::doBloodMoon,
                 UnitAnimationAction.CHARGE_SPELL,
                 UnitAnimationAction.STOP,
                 UnitAnimationAction.CAST_SPELL
@@ -400,7 +403,11 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         return null;
     }
 
-    public void bloodMoon() {
+    public void doBloodMoon() {
+        if (level().isClientSide())
+            return;
 
+        TimeServerEvents.startBloodMoon(BloodMoon.DURATION_SECONDS, getOwnerName());
+        sendMessageToAllPlayers("abilities.reignofnether.blood_moon.start");
     }
 }

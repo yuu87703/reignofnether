@@ -16,6 +16,7 @@ import com.solegendary.reignofnether.startpos.StartPosClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -24,10 +25,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -294,6 +297,44 @@ public class PlayerClientEvents {
     }
 
 
+
+    public static double red = 0.0d;
+    public static double green = 0.0d;
+    public static double blue = 0.0d;
+
+    @SubscribeEvent
+    public static void onButtonPress2(ScreenEvent.KeyPressed.Pre evt) {
+        if (Keybindings.shiftMod.isDown()) {
+            if (evt.getKeyCode() == GLFW.GLFW_KEY_LEFT) {
+                red -= 0.02f;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_RIGHT) {
+                red += 0.02f;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_UP) {
+                green -= 0.02f;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_DOWN) {
+                green += 0.02f;
+            }
+        } else {
+            if (evt.getKeyCode() == GLFW.GLFW_KEY_LEFT) {
+                blue -= 0.02f;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_RIGHT) {
+                blue += 0.02f;
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderOverLay(RenderGuiOverlayEvent.Pre evt) {
+        MiscUtil.drawDebugStrings(evt.getGuiGraphics(), MC.font, new String[] {
+                "red: " + red,
+                "green: " + green,
+                "blue: " + blue,
+        });
+    }
 
     /*
     public static int titleX = -56;

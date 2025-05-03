@@ -23,7 +23,7 @@ HEROES (in order of priority)
 
 Necromancer
     - Curse of Insomnia
-        [❌] Charge cooldowns
+        [🟡] Charge cooldowns
         [🟡] Summon phantom
         [❌] Interact with souls
         [🟡] Attack buildings
@@ -35,6 +35,7 @@ Necromancer
 
     - Blood moon
         [❌] Transform day to night with global warning
+        [❌] Change clock symbol and warning with countdown to end
         [❌] Summon zombies and skeletons using wave survival code inside and around enemy bases
             - Neutral, but never aggressive against your own units
         [❌] Red tint on skybox and in RTS cam
