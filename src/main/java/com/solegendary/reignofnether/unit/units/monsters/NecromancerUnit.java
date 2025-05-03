@@ -251,6 +251,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
+                .add(Attributes.ATTACK_DAMAGE, NecromancerUnit.attackDamage)
                 .add(Attributes.MOVEMENT_SPEED, NecromancerUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, NecromancerUnit.maxHealth)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())

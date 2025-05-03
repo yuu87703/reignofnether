@@ -80,28 +80,18 @@ Royal Guard
 Bugfixes
 --------
 
-[✔] Fixed Vexes attacking friendly units
-[✔] Militia aren't showing ability
-[✔] Militia don't show swords to other players when attacking
-    - Apply same logic for vindicator attacks
-[✔] Fixed unit highlights not showing up behind blocks
-[✔] Fixed sometimes not syncing units and buildings in singleplayer when logging in
-    - onPlayerJoin.PlayerServerEvents sometimes doesn't have all units/buildings populated before trying to sync
-[✔] Fixed rubberbanding from moving too fast at high camera sensitivity
-    - To do this, the vanilla gamerule disableElytraMovementCheck is now set to true whenever a world starts up
-
 Quality of Life
 ---------------
 
 
 Languages
 ---------
-[✔] Updated Russian (ru_ru)
+
 
 Balancing
 ---------
 
-[✔] Slime cost increased back to (40 food, 40 wood, 40 ore)
+
 
 Balancing
 ---------

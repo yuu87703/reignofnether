@@ -36,9 +36,35 @@ public class AbilityButton extends Button {
     }
 
     @Override
+    protected void renderHotkey(GuiGraphics guiGraphics, int x, int y) {
+    }
+
+    @Override
     public void render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
         if (this.ability != null && ability.cooldownMax > 0)
             this.greyPercent = 1.0f - ((float) ability.getCooldown() / (float) ability.cooldownMax);
         super.render(guiGraphics, x, y, mouseX, mouseY);
+
+        // charges remaining number
+        if (this.ability != null && this.ability.usesCharges()) {
+            String chargeStr = String.valueOf(this.ability.charges);
+            guiGraphics.pose().translate(0,0,2);
+
+            int colour = 0xFFFFFF;
+            if (this.ability.charges >= this.ability.maxCharges)
+                colour = 0x00FF00;
+            else if (this.ability.charges <= 0)
+                colour = 0xFF0000;
+            else if (this.ability.charges == 1)
+                colour = 0xFFFF00;
+
+            guiGraphics.drawCenteredString(MC.font,
+                    chargeStr,
+                    x + iconSize - 5 - (chargeStr.length() * 4),
+                    y + iconSize - 1,
+                    colour);
+
+            super.renderHotkey(guiGraphics, x, y);
+        }
     }
 }

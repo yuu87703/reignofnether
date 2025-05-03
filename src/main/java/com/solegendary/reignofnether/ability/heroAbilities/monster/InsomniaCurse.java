@@ -32,8 +32,6 @@ public class InsomniaCurse extends HeroAbility {
     // [X] Should be able to curse buildings too
     // [X] Can have set number of charges
 
-    public int charges = 3;
-    public int maxCharges = 3;
     public static final int RANGE = 12;
     public static final float PHANTOM_DAMAGE = 7;
     private static final float PHANTOM_DAMAGE_BONUS_PER_SOUL = 0.75f;
@@ -41,6 +39,8 @@ public class InsomniaCurse extends HeroAbility {
 
     public InsomniaCurse(HeroUnit hero) {
         super(hero, 3, UnitAction.INSOMNIA_CURSE, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+        maxCharges = 3;
+        charges = maxCharges;
     }
 
     @Override
@@ -91,7 +91,9 @@ public class InsomniaCurse extends HeroAbility {
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip2", PHANTOM_DAMAGE, PHANTOM_DAMAGE_BONUS_PER_SOUL)),
-                fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip3", PHANTOM_MAX_ATTACKS))
+                fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip3", PHANTOM_MAX_ATTACKS)),
+                fcs(""),
+                fcs(I18n.get("abilities.reignofnether.charges", maxCharges))
         );
     }
 
@@ -112,6 +114,8 @@ public class InsomniaCurse extends HeroAbility {
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
+        if (targetEntity == unitUsing)
+            return;
         ((NecromancerUnit) unitUsing).getCastPhantomGoal().setAbility(this);
         ((NecromancerUnit) unitUsing).getCastPhantomGoal().setTarget(targetEntity);
     }

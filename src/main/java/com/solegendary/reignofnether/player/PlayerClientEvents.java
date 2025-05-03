@@ -292,4 +292,52 @@ public class PlayerClientEvents {
     public static void syncBeaconOwnerTicks(String playerName, long ticks) {
         beaconOwnerTicks.put(playerName, ticks);
     }
+
+
+
+    /*
+    public static int titleX = -56;
+    public static int titleY = 5;
+    public static int width = 380;
+    public static int height = 127;
+    public static int editionY = 92;
+
+    @SubscribeEvent
+    public static void onButtonPress2(ScreenEvent.KeyPressed.Pre evt) {
+        if (Keybindings.shiftMod.isDown()) {
+            if (evt.getKeyCode() == GLFW.GLFW_KEY_LEFT) {
+                titleX -= 1;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_RIGHT) {
+                titleX += 1;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_UP) {
+                titleY -= 1;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_DOWN) {
+                titleY += 1;
+            }
+        } else if (Keybindings.ctrlMod.isDown()) {
+            if (evt.getKeyCode() == GLFW.GLFW_KEY_UP) {
+                editionY -= 1;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_DOWN) {
+                editionY += 1;
+            }
+        } else {
+            if (evt.getKeyCode() == GLFW.GLFW_KEY_LEFT) {
+                width -= 1;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_RIGHT) {
+                width += 1;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_UP) {
+                height += 1;
+            }
+            else if (evt.getKeyCode() == GLFW.GLFW_KEY_DOWN) {
+                height -= 1;
+            }
+        }
+    }
+     */
 }

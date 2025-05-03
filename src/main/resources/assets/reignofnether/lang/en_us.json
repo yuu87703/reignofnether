@@ -251,6 +251,7 @@
     "abilities.reignofnether.rank": "[Rank %d]",
     "abilities.reignofnether.unlearnt": "[Unlearnt]",
     "abilities.reignofnether.autocast": "Right click to auto-cast",
+    "abilities.reignofnether.charges": "Can store up to %d charges",
 
     "ability.reignofnether.enchant.error1": "Can only enchant your own units",
     "ability.reignofnether.enchant.error2": "Unit is out of range",
