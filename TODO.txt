@@ -36,10 +36,9 @@ Necromancer
     - Blood moon
         [✔] Transform day to night with global warning
         [✔] Change clock symbol and warning with countdown to end
-        [❌] Summon zombies and skeletons using wave survival code inside and around enemy bases
-            - Neutral, but never aggressive against your own units
+        [✔] Summon zombies and skeletons inside and around enemy bases
         [✔] Red tint on skybox and in RTS cam
-        [❌] Change music to night
+        [✔] Change music to night
 
 
 
@@ -82,11 +81,11 @@ Royal Guard
 
 Bugfixes
 --------
-[❌] Enemy wave mobs aggro against fish
+[✔] Enemy wave mobs aggro against fish
 
 Quality of Life
 ---------------
-
+[❌] Shift-clicking the "Select all Military units" button now only selects the units on screen
 
 Languages
 ---------

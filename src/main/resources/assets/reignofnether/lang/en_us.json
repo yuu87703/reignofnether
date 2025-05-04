@@ -530,6 +530,7 @@
     "hud.helperbuttons.reignofnether.chat": "Chat (enter)",
     "hud.helperbuttons.reignofnether.idle_workers": "Idle Workers",
     "hud.helperbuttons.reignofnether.select_all_military_units": "Select all military units",
+    "hud.helperbuttons.reignofnether.select_all_military_units_shift": "(Shift-click to select only on screen)",
     "hud.helperbuttons.reignofnether.cancel": "Cancel",
 
     "hud.helperbuttons.reignofnether.beacon.beacon_level_title": "Beacon Level: %d/%d",
