@@ -313,13 +313,11 @@ public class SandboxClientEvents {
                         ResearchServerboundPacket.removeCheat(playerName, "medievalman");
                         ResearchServerboundPacket.removeCheat(playerName, "foodforthought");
                         ResearchServerboundPacket.removeCheat(playerName, "slipslopslap");
-                        ResearchServerboundPacket.removeCheat(playerName, "elitetaurenchieftain");
                     } else {
                         ResearchServerboundPacket.addCheat(playerName, "operationcwal");
                         ResearchServerboundPacket.addCheat(playerName, "medievalman");
                         ResearchServerboundPacket.addCheat(playerName, "foodforthought");
                         ResearchServerboundPacket.addCheat(playerName, "slipslopslap");
-                        ResearchServerboundPacket.addCheat(playerName, "elitetaurenchieftain");
                     }
                 },
                 null,

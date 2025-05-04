@@ -105,6 +105,7 @@ public class PlayerServerEvents {
     // slipslopslap - monster units are unaffected by sunlight
     // wouldyoukindly - allow control of non-unit mobs in RTS mode
     // thebeastofcaerbannog - spawns the Killer Rabbit
+    // elitetaurenchieftain - levels all owned heroes to 10
     public static final List<String> singleWordCheats = List.of(
         "warpten",
         "operationcwal",
@@ -113,8 +114,7 @@ public class PlayerServerEvents {
         "foodforthought",
         "thereisnospoon",
         "slipslopslap",
-        "wouldyoukindly",
-        "elitetaurenchieftain"
+        "wouldyoukindly"
     );
 
     public static void saveRTSPlayers() {
@@ -705,16 +705,22 @@ public class PlayerServerEvents {
         sendMessageToAllPlayers(msg, false);
     }
 
-    public static void sendMessageToAllPlayers(String msg, boolean bold, Object... formatArgs) {
+    public static void sendMessageToAllPlayers(String msg, int color, boolean bold, Object... formatArgs) {
         for (ServerPlayer player : players) {
             player.sendSystemMessage(Component.literal(""));
             if (bold) {
-                player.sendSystemMessage(Component.translatable(msg, formatArgs).withStyle(Style.EMPTY.withBold(true)));
+                player.sendSystemMessage(Component.translatable(msg, formatArgs)
+                        .withStyle(Style.EMPTY.withBold(true).withColor(color)));
             } else {
-                player.sendSystemMessage(Component.translatable(msg, formatArgs));
+                player.sendSystemMessage(Component.translatable(msg, formatArgs)
+                        .withStyle(Style.EMPTY.withBold(false).withColor(color)));
             }
             player.sendSystemMessage(Component.literal(""));
         }
+    }
+
+    public static void sendMessageToAllPlayers(String msg, boolean bold,  Object... formatArgs) {
+        sendMessageToAllPlayers(msg, 0xFFFFFF, bold, formatArgs);
     }
 
     public static void sendMessageToAllPlayersNoNewlines(String msg) {

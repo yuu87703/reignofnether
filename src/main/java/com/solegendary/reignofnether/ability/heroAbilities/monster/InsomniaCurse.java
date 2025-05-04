@@ -46,19 +46,23 @@ public class InsomniaCurse extends HeroAbility {
     @Override
     public boolean rankUp() {
         if (super.rankUp()) {
-            if (rank == 1) {
-                maxCharges = 3;
-                cooldownMax = 20 * ResourceCost.TICKS_PER_SECOND;
-            } else if (rank == 2) {
-                maxCharges = 4;
-                cooldownMax = 17 * ResourceCost.TICKS_PER_SECOND;
-            } else if (rank == 3) {
-                maxCharges = 5;
-                cooldownMax= 14 * ResourceCost.TICKS_PER_SECOND;
-            }
+            updateStatsForRank();
             return true;
         }
         return false;
+    }
+
+    public void updateStatsForRank() {
+        if (rank == 1) {
+            maxCharges = 3;
+            cooldownMax = 20 * ResourceCost.TICKS_PER_SECOND;
+        } else if (rank == 2) {
+            maxCharges = 4;
+            cooldownMax = 17 * ResourceCost.TICKS_PER_SECOND;
+        } else if (rank == 3) {
+            maxCharges = 5;
+            cooldownMax= 14 * ResourceCost.TICKS_PER_SECOND;
+        }
     }
 
     @Override

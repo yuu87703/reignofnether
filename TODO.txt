@@ -34,11 +34,13 @@ Necromancer
         [❌] Tooltip
 
     - Blood moon
-        [❌] Transform day to night with global warning
-        [❌] Change clock symbol and warning with countdown to end
+        [✔] Transform day to night with global warning
+        [✔] Change clock symbol and warning with countdown to end
         [❌] Summon zombies and skeletons using wave survival code inside and around enemy bases
             - Neutral, but never aggressive against your own units
-        [❌] Red tint on skybox and in RTS cam
+        [✔] Red tint on skybox and in RTS cam
+        [❌] Change music to night
+
 
 
 Piglin Merchant
@@ -80,6 +82,7 @@ Royal Guard
 
 Bugfixes
 --------
+[❌] Enemy wave mobs aggro against fish
 
 Quality of Life
 ---------------

@@ -6,7 +6,6 @@ import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
-import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -221,6 +220,7 @@ public class ClientLevelMixin {
             cancellable = true
     )
     public void getSkyColor(Vec3 pPos, float pPartialTick, CallbackInfoReturnable<Vec3> cir) {
-        cir.setReturnValue(new Vec3(PlayerClientEvents.red, PlayerClientEvents.green, PlayerClientEvents.blue));
+        if (TimeClientEvents.isBloodMoonActive())
+            cir.setReturnValue(new Vec3(0.25f, 0f, 0f));
     }
 }

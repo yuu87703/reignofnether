@@ -26,36 +26,42 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class SoulSiphonPassive extends HeroAbility {
 
-    public int souls = 0;
-    public int soulsPerCast = 4;
-    public int soulsMax = 20;
+    public static int RANGE = 16;
+    public float souls = 0;
+    public float soulsPerCast = 0;
+    public float soulsMax = 0;
 
     public SoulSiphonPassive(HeroUnit hero) {
         super(hero, 3, UnitAction.NONE, 0, 0, 0, false);
         this.autocastEnableAction = UnitAction.ENABLE_SOUL_SIPHON_PASSIVE;
         this.autocastDisableAction = UnitAction.DISBLE_SOUL_SIPHON_PASSIVE;
+        this.setAutocast(true);
     }
 
     public boolean rankUp() {
         if (super.rankUp()) {
-            if (rank == 1) {
-                soulsPerCast = 4;
-                soulsMax = 20;
-            } else if (rank == 2) {
-                soulsPerCast = 7;
-                soulsMax = 30;
-            } else if (rank == 3) {
-                soulsPerCast = 10;
-                soulsMax = 40;
-            }
+            updateStatsForRank();
             return true;
         }
         return false;
     }
 
+    public void updateStatsForRank() {
+        if (rank == 1) {
+            soulsPerCast = 4;
+            soulsMax = 20;
+        } else if (rank == 2) {
+            soulsPerCast = 7;
+            soulsMax = 30;
+        } else if (rank == 3) {
+            soulsPerCast = 10;
+            soulsMax = 40;
+        }
+    }
+
     @Override
     public AbilityButton getButton(Keybinding hotkey) {
-        return new AbilityButton("Soul Siphon",
+        AbilityButton button = new AbilityButton("Soul Siphon",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png"),
             hotkey,
             this::getAutocast,
@@ -66,6 +72,14 @@ public class SoulSiphonPassive extends HeroAbility {
             getTooltipLines(),
             this
         );
+        button.extraLabel = String.valueOf((int) souls);
+        if (((int) souls) <= 0)
+            button.extraLabelColour = 0xFF0000;
+        else if (((int) souls) >= ((int) soulsMax))
+            button.extraLabelColour = 0x00FF00;
+        else if (((int) souls) <= ((int) soulsPerCast))
+            button.extraLabelColour = 0xFFFF00;
+        return button;
     }
 
     @Override
@@ -106,23 +120,28 @@ public class SoulSiphonPassive extends HeroAbility {
     }
 
     // returns amount of souls consumed
-    public int consumeSouls() {
+    public float consumeSouls() {
         if (getAutocast() && souls > 0) {
-            int soulsConsumed = Math.min(soulsPerCast, souls);
+            float soulsConsumed = Math.min(soulsPerCast, souls);
             souls -= soulsConsumed;
             return soulsConsumed;
         }
         return 0;
     }
 
-    public void checkAndGainSouls(LivingEntity entityKilled) {
-        if (getAutocast() && souls > 0) {
+    private int lastEntityKilledId = -1; // LivingDeathEvent sometimes fires twice
+
+    public void checkAndGainSouls(LivingEntity entityKilled, int splitAmount) {
+        if (soulsMax > 0 && entityKilled.getId() != lastEntityKilledId) {
             if (entityKilled instanceof Unit unit)
                 souls += unit.getCost().population;
             else
                 souls += 1;
+            lastEntityKilledId = entityKilled.getId();
         }
         if (souls > soulsMax)
             souls = soulsMax;
+        if (((LivingEntity) hero).level().isClientSide())
+            ((Unit) hero).updateAbilityButtons();
     }
 }

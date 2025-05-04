@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.heroAbilities.monster.BloodMoon;
 import com.solegendary.reignofnether.ability.heroAbilities.monster.InsomniaCurse;
 import com.solegendary.reignofnether.ability.heroAbilities.monster.RaiseDead;
@@ -14,6 +15,7 @@ import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
@@ -45,8 +47,6 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.solegendary.reignofnether.player.PlayerServerEvents.sendMessageToAllPlayers;
 
 public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated {
     // region
@@ -247,6 +247,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public void resetBehaviours() {
         animateScaleReducing = true;
         this.castRaiseDeadGoal.stop();
+        this.castPhantomGoal.stop();
+        this.castBloodMoonGoal.stop();
     }
 
     @Override
@@ -273,6 +275,13 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.castRaiseDeadGoal.tick();
         this.castPhantomGoal.tick();
         this.castBloodMoonGoal.tick();
+    }
+
+    public SoulSiphonPassive getSoulSiphon() {
+        for (Ability ability : abilities)
+            if (ability instanceof SoulSiphonPassive)
+                return (SoulSiphonPassive) ability;
+        return null;
     }
 
     @Override
@@ -407,7 +416,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         if (level().isClientSide())
             return;
 
-        TimeServerEvents.startBloodMoon(BloodMoon.DURATION_SECONDS, getOwnerName());
-        sendMessageToAllPlayers("abilities.reignofnether.blood_moon.start");
+        TimeServerEvents.startBloodMoon(BloodMoon.DURATION, this);
+        AbilityClientboundPacket.doAbility(this.getId(), UnitAction.BLOOD_MOON, BloodMoon.DURATION);
     }
 }

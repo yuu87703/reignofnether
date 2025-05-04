@@ -67,7 +67,7 @@ public class Ability {
     }
 
     public void tickCooldown() {
-        if (this.cooldown > 0) {
+        if (this.cooldown > 0 || charges < maxCharges) {
             if (this.level.isClientSide())
                 this.cooldown -= (TPSClientEvents.getCappedTPS() / 20D);
             else
