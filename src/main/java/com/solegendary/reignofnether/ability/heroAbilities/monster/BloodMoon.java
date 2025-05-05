@@ -34,7 +34,7 @@ public class BloodMoon extends HeroAbility {
     public static final int CHANNEL_TICKS = 40;
     private static final int CD_MAX = 360 * ResourceCost.TICKS_PER_SECOND;
     public static final int DURATION = 60 * ResourceCost.TICKS_PER_SECOND;
-    public static final int BONUS_DURATION_PER_SOUL = 3 * ResourceCost.TICKS_PER_SECOND;
+    public static final int BONUS_DURATION_PER_SOUL_RANK = 10 * ResourceCost.TICKS_PER_SECOND;
 
     public BloodMoon(HeroUnit hero) {
         super(hero, 1, UnitAction.BLOOD_MOON, CD_MAX, 0, 0, false);
@@ -71,7 +71,7 @@ public class BloodMoon extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip3")),
-                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip4", DURATION / 20, BONUS_DURATION_PER_SOUL / 20))
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip4", DURATION / 20, BONUS_DURATION_PER_SOUL_RANK / 20))
         );
     }
 

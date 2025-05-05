@@ -82,6 +82,7 @@ Royal Guard
 Bugfixes
 --------
 [✔] Enemy wave mobs aggro against fish
+[❌] Armour on units doesn't do anything against other mob projectiles?
 
 Quality of Life
 ---------------

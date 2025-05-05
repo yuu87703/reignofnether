@@ -1,12 +1,5 @@
 package com.solegendary.reignofnether.ability.heroAbilities.monster;
 
-//The necromancer begins to collect the souls of nearby units that die
-//Whenever another spell is cast, all souls up to a maximum are consumed to empower that spell
-//Higher levels increase the maximum number of souls held
-//can be toggled on and off
-
-// starts at 4/20 souls, raises to 7/30, 10/40 at higher ranks
-
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -120,23 +113,20 @@ public class SoulSiphonPassive extends HeroAbility {
     }
 
     // returns amount of souls consumed
-    public float consumeSouls() {
-        if (getAutocast() && souls > 0) {
-            float soulsConsumed = Math.min(soulsPerCast, souls);
-            souls -= soulsConsumed;
-            return soulsConsumed;
+    public boolean consumeSouls() {
+        if (getAutocast() && souls >= soulsPerCast) {
+            souls -= soulsPerCast;
+            return true;
         }
-        return 0;
+        return false;
     }
 
     private int lastEntityKilledId = -1; // LivingDeathEvent sometimes fires twice
 
     public void checkAndGainSouls(LivingEntity entityKilled, int splitAmount) {
         if (soulsMax > 0 && entityKilled.getId() != lastEntityKilledId) {
-            if (entityKilled instanceof Unit unit)
+            if (entityKilled instanceof Unit unit && !unit.getOwnerName().equals(((Unit) hero).getOwnerName()))
                 souls += unit.getCost().population;
-            else
-                souls += 1;
             lastEntityKilledId = entityKilled.getId();
         }
         if (souls > soulsMax)

@@ -33,8 +33,8 @@ public class InsomniaCurse extends HeroAbility {
     // [X] Can have set number of charges
 
     public static final int RANGE = 12;
-    public static final float PHANTOM_DAMAGE = 7;
-    private static final float PHANTOM_DAMAGE_BONUS_PER_SOUL = 0.75f;
+    public static final float PHANTOM_DAMAGE = 6;
+    public static final float PHANTOM_DAMAGE_BONUS_PER_SOUL_RANK = 2f;
     public static final int PHANTOM_MAX_ATTACKS = 5;
 
     public InsomniaCurse(HeroUnit hero) {
@@ -94,7 +94,7 @@ public class InsomniaCurse extends HeroAbility {
                 fcsIcons(I18n.get("abilities.reignofnether.insomnia_curse.stats", PHANTOM_DAMAGE, cooldownMax / 20, RANGE)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip2", PHANTOM_DAMAGE, PHANTOM_DAMAGE_BONUS_PER_SOUL)),
+                fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip2", PHANTOM_DAMAGE, PHANTOM_DAMAGE_BONUS_PER_SOUL_RANK)),
                 fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip3", PHANTOM_MAX_ATTACKS)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.charges", maxCharges))
@@ -107,7 +107,7 @@ public class InsomniaCurse extends HeroAbility {
             fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
             fcs(""),
             fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip1")),
-            fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip2", PHANTOM_DAMAGE, PHANTOM_DAMAGE_BONUS_PER_SOUL)),
+            fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip2", PHANTOM_DAMAGE, PHANTOM_DAMAGE_BONUS_PER_SOUL_RANK)),
             fcs(I18n.get("abilities.reignofnether.insomnia_curse.tooltip3", PHANTOM_MAX_ATTACKS)),
             fcs(""),
             fcs(I18n.get("abilities.reignofnether.insomnia_curse.rank1"), rank == 0),
