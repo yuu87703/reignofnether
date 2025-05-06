@@ -1,5 +1,5 @@
 
-1.19.2-1.1.5c
+1.19.2-1.1.6
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -83,6 +83,7 @@ Bugfixes
 --------
 [✔] Enemy wave mobs aggro against fish
 [❌] Armour on units doesn't do anything against other mob projectiles?
+    - Check on latest forge version?
 
 Quality of Life
 ---------------
