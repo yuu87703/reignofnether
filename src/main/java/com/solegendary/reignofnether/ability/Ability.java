@@ -75,7 +75,8 @@ public class Ability {
 
             if (this.cooldown <= 0 && usesCharges() && charges < maxCharges) {
                 charges += 1;
-                cooldown = cooldownMax;
+                if (charges < maxCharges)
+                    cooldown = cooldownMax;
                 if (charges > maxCharges)
                     charges = maxCharges;
             }

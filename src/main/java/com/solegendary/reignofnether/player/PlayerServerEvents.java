@@ -270,7 +270,8 @@ public class PlayerServerEvents {
         // if a player is looking directly at a frozenchunk on login, they may load in the real blocks before
         // they are frozen so move them away then BuildingClientEvents.placeBuilding moves them to their base later
         // don't do this if they don't own any buildings
-        if (isRTSPlayer(playerName) && rtsSyncingEnabled) {
+        /*
+        if (isRTSPlayer(playerName) && rtsSyncingEnabled && FogOfWarServerEvents.isEnabled()) {
             for (Building building : BuildingServerEvents.getBuildings()) {
                 if (building.ownerName.equals(playerName)) {
                     movePlayer(serverPlayer.getId(), 0, ORTHOVIEW_PLAYER_BASE_Y, 0);
@@ -278,6 +279,7 @@ public class PlayerServerEvents {
                 }
             }
         }
+         */
         if (rtsSyncingEnabled) {
             MinecraftServer server = evt.getEntity().level().getServer();
             if (server == null || !server.isDedicatedServer()) {

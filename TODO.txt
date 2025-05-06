@@ -86,6 +86,7 @@ Bugfixes
 
 Quality of Life
 ---------------
+[✔] Players are no longer teleported to their capitol when logging in
 [❌] Shift-clicking the "Select all Military units" button now only selects the units on screen
 
 Languages
