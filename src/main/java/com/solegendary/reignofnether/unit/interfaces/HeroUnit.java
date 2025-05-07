@@ -94,12 +94,9 @@ public interface HeroUnit extends Unit{
     }
 
     default List<HeroAbility> getHeroAbilities() {
-        if (this instanceof Unit unit) {
-            return unit.getAbilities().stream()
-                    .filter(a -> a instanceof HeroAbility)
-                    .map(a -> (HeroAbility) a)
-                    .toList();
-        }
-        return List.of();
+        return getAbilities().stream()
+                .filter(a -> a instanceof HeroAbility)
+                .map(a -> (HeroAbility) a)
+                .toList();
     }
 }

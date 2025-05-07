@@ -47,7 +47,7 @@ public class SpinWebs extends Ability {
                 "Spin Webs",
                 new ResourceLocation("minecraft", "textures/block/cobweb.png"),
                 hotkey,
-                () -> CursorClientEvents.getLeftClickAction() == UnitAction.SPIN_WEBS || getAutocast(),
+                () -> CursorClientEvents.getLeftClickAction() == UnitAction.SPIN_WEBS || getAutocast(unit),
                 () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_SPIDER_WEBS),
                 () -> true,
                 () -> CursorClientEvents.setLeftClickAction(UnitAction.SPIN_WEBS),

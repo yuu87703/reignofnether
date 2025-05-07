@@ -55,6 +55,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -64,6 +65,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.world.ForgeChunkManager;
@@ -174,6 +176,13 @@ public class BuildingPlacement {
 
     public void setLevel(Level level) {
         this.level = level;
+    }
+
+    private ArmorStand targetStand = null;
+    public ArmorStand getTargetStand() {
+        if (targetStand == null)
+            createArmourStandTarget();
+        return targetStand;
     }
 
     public BuildingPlacement(
@@ -594,7 +603,10 @@ public class BuildingPlacement {
                 }
             }
         }
+        if (targetStand != null)
+            targetStand.discard();
     }
+
 
     // should only be run serverside
     public void onBlockBreak(ServerLevel level, BlockPos pos, boolean breakBlocks) {
@@ -1143,5 +1155,30 @@ public class BuildingPlacement {
 
     public float getCooldown(Class<? extends Ability> abilityClass) {
         return cooldowns.get(abilityClass);
+    }
+
+    // creates an invisible armour stand that be attacked by non-units to damage the building
+    public void createArmourStandTarget() {
+        if (targetStand != null && !targetStand.isDeadOrDying() && !targetStand.isRemoved() && isPosInsideBuilding(targetStand.blockPosition()))
+            return;
+
+        // find any existing stands
+        List<ArmorStand> entities = level.getEntitiesOfClass(ArmorStand.class,
+                new AABB(minCorner.getX(), minCorner.getY(), minCorner.getZ(),
+                        maxCorner.getX(), maxCorner.getY(), maxCorner.getZ())
+        );
+        if (!entities.isEmpty()) {
+            this.targetStand = entities.get(0);
+        } else if (!level.isClientSide()) {
+            ArmorStand stand = EntityType.ARMOR_STAND.create(level);
+            if (stand != null) {
+                //stand.setInvisible(true);
+                stand.setNoGravity(true);
+                stand.noPhysics = true;
+                stand.moveTo(this.centrePos.getCenter());
+                level.addFreshEntity(stand);
+                this.targetStand = stand;
+            }
+        }
     }
 }

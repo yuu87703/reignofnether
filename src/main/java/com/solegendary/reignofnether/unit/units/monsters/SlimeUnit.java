@@ -243,7 +243,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     public boolean autocastingConsume() {
         for (Ability ability : abilities)
             if (ability instanceof ConsumeSlime consume)
-                return consume.getAutocast();
+                return consume.getAutocast(this);
         return false;
     }
 

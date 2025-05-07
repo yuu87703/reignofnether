@@ -58,7 +58,7 @@ public class GreedIsGoodPassive extends HeroAbility {
         return new AbilityButton("Greed is Good",
                 new ResourceLocation("minecraft", "textures/block/gold_block.png"),
                 hotkey,
-                this::getAutocast,
+                () -> getAutocast(hero),
                 () -> rank == 0,
                 () -> true,
                 this::toggleAutocast,
@@ -108,7 +108,7 @@ public class GreedIsGoodPassive extends HeroAbility {
     public int checkAndSpendResources(ResourceName resName, HeroUnit hero) {
         int totalSpent = 0;
         String ownerName = ((Unit) hero).getOwnerName();
-        if (getAutocast() && !((LivingEntity) hero).level().isClientSide()) {
+        if (getAutocast(hero) && !((LivingEntity) hero).level().isClientSide()) {
             for (Resources resources : ResourcesServerEvents.resourcesList) {
                 if (resources.ownerName.equals(ownerName)) {
                     for (int i = 0; i < rank; i++) {

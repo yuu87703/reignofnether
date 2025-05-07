@@ -27,8 +27,9 @@ public class Ability {
     public int charges = 1;
 
     private boolean autocast = false;
+    private boolean defaultAutocast = false;
     public void setAutocast(boolean value, Unit unit) { autocast = value; }
-    public boolean getAutocast() { return autocast; }
+    public boolean getAutocast(Unit unit) { return autocast; }
 
     public Ability(UnitAction action, int cooldownMax, float range, float radius, boolean canTargetEntities) {
         this.action = action;
@@ -132,4 +133,8 @@ public class Ability {
     public boolean canBypassCooldown() { return usesCharges() && charges > 0; }
 
     public boolean shouldResetBehaviours() { return true; }
+
+    protected void setDefaultAutocast(boolean b) {
+        defaultAutocast = b;
+    }
 }

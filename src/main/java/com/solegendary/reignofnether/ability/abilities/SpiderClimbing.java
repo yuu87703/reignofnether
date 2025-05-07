@@ -62,8 +62,8 @@ public class SpiderClimbing extends Ability {
     public void setAutocast(boolean value, Unit unit) {
         super.setAutocast(value, unit);
         SpiderUnit spiderUnit = (SpiderUnit) unit;
-        if ((getAutocast() && !spiderUnit.isWallClimbing()) ||
-            (!getAutocast() && spiderUnit.isWallClimbing()))
+        if ((getAutocast(unit) && !spiderUnit.isWallClimbing()) ||
+            (!getAutocast(unit) && spiderUnit.isWallClimbing()))
             spiderUnit.toggleWallClimbing();
         spiderUnit.updateAbilityButtons();
     }

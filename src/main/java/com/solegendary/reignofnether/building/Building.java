@@ -14,6 +14,8 @@ import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractStockpile;
 import com.solegendary.reignofnether.building.buildings.villagers.Watchtower;
 import com.solegendary.reignofnether.fogofwar.*;
+import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
@@ -30,6 +32,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -75,13 +78,6 @@ public abstract class Building {
     public boolean capturable = false;
     public boolean invulnerable = false;
     public boolean shouldDestroyOnReset = true;
-
-    private ArmorStand targetStand = null;
-    public ArmorStand getTargetStand() {
-        if (targetStand == null)
-            createArmourStandTarget();
-        return targetStand;
-    }
 
     public ResourceCost cost;
     public boolean selfBuilding = false;

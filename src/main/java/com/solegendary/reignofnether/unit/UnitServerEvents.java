@@ -610,7 +610,7 @@ public class UnitServerEvents {
             for (NecromancerUnit necromancerUnit : necromancers) {
                 SoulSiphonPassive soulSiphon = necromancerUnit.getSoulSiphon();
                 if (soulSiphon != null) {
-                    soulSiphon.checkAndGainSouls(evt.getEntity(), necromancers.size());
+                    soulSiphon.checkAndGainSouls(evt.getEntity(), necromancers.size(), necromancerUnit);
                     AbilityClientboundPacket.doAbility(necromancerUnit.getId(), UnitAction.SOUL_SIPHON_UPDATE, soulSiphon.souls);
                 }
             }
