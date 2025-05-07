@@ -22,25 +22,8 @@ HEROES (in order of priority)
 
 
 Necromancer
-    - Curse of Insomnia
-        [🟡] Charge cooldowns
-        [🟡] Summon phantom
-        [❌] Interact with souls
-        [🟡] Attack buildings
-
-    - Soul Siphon
-        [❌] Animation similar to exp orbs but purple smoke?
-            - Or maybe just make exp orbs purple
-        [❌] Tooltip
-
-    - Blood moon
-        [✔] Transform day to night with global warning
-        [✔] Change clock symbol and warning with countdown to end
-        [✔] Summon zombies and skeletons inside and around enemy bases
-        [✔] Red tint on skybox and in RTS cam
-        [✔] Change music to night
-
-
+    [❌] Purple particles on soul usage and soul gain
+    [❌] Magical projectile model and sound
 
 Piglin Merchant
     - TNT Toss
@@ -81,21 +64,20 @@ Royal Guard
 
 Bugfixes
 --------
-[✔] Enemy wave mobs aggro against fish
 [❌] Armour on units doesn't do anything against other mob projectiles?
     - Check on latest forge version?
 
 Quality of Life
 ---------------
-[✔] Players are no longer teleported to their capitol when logging in
 [❌] Shift-clicking the "Select all Military units" button now only selects the units on screen
 
 Languages
 ---------
 
 
-Balancing
----------
+
+Quality of Life
+---------------
 
 
 

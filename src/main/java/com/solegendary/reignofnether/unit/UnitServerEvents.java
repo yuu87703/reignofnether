@@ -414,7 +414,6 @@ public class UnitServerEvents {
                         }
                         for (HeroAbility abl : abls)
                             abl.updateStatsForRank();
-
                         ReignOfNether.LOGGER.info("loaded hero unit in serverevents: " + shu.uuid + "|" + shu.experience + "|" + shu.skillPoints);
                         return true;
                     }
