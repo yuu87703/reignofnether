@@ -47,7 +47,8 @@ public class ResearchSaveData extends SavedData {
                     researchKey = ResourceLocation.tryParse(btag.getString("researchKey"));
                 }else {
                     String researchName = btag.getString("researchName");
-                    researchKey = new ResourceLocation(ReignOfNether.MOD_ID, "research_" + researchName.toLowerCase().replace(' ', '_'));
+                    researchKey = translateOldData(researchName);
+//                    researchKey = new ResourceLocation(ReignOfNether.MOD_ID, researchName.toLowerCase().replace(' ', '_'));
                 }
                 data.researchItems.add(new Pair<>(ownerName, researchKey));
                 ReignOfNether.LOGGER.info("ResearchSaveData.load: " + ownerName + "|" + researchKey.toString());
@@ -74,5 +75,37 @@ public class ResearchSaveData extends SavedData {
 
     public void save() {
         this.setDirty();
+    }
+
+    private static ResourceLocation translateOldData(String researchName) {
+        String newName = switch (researchName) {
+            case "Iron Beacon": yield "beacon_level_1";
+            case "Gold Beacon": yield "beacon_level_2";
+            case "Emerald Beacon": yield "beacon_level_3";
+            case "Diamond Beacon": yield "beacon_level_4";
+            case "Netherite Beacon": yield "beacon_level_5";
+            case "Walls of Fire": yield "blaze_firewall";
+            case "Shield Tactics": yield "brute_shields";
+            case "Officer's Quarters": yield "castle_flag";
+            case "Drowned Zombies": yield "drowned";
+            case "Vexing Summons": yield "evoker_vexes";
+            case "Husk Zombies": yield "husks";
+            case "Lightning Rod": yield "lab_lightning_rod";
+            case "Multishot Crossbows": yield "pillager_crossbows";
+            case "Civilian Portal": yield "portal_for_civilian";
+            case "Military Portal": yield "portal_for_military";
+            case "Transport Portal": yield "portal_for_transport";
+            case "Ravager Artillery": yield "ravager_cavalry";
+            case "Worker Carry Bags": yield "resource_capacity";
+            case "Infested Defences": yield "silverfish";
+            case "Slimy Conversion": yield "slime_conversion";
+            case "Sticky Webbing": yield "spider_webs";
+            case "Stray Skeletons": yield "strays";
+            case "Diamond Axes": yield "vindicator_axes";
+            case "Wither Death Clouds": yield "wither_clouds";
+            default: yield researchName.toLowerCase().replace(' ', '_');
+        };
+
+        return new ResourceLocation(ReignOfNether.MOD_ID, newName);
     }
 }
