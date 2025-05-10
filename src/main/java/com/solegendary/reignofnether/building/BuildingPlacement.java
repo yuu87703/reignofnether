@@ -117,7 +117,6 @@ public class BuildingPlacement {
     private final int MAX_ANIMALS = 8;
     private final int ANIMAL_SPAWN_BLOCK_RANGE = 70; // block range to check and spawn animals in
     private final int ANIMAL_SPAWN_RANGE_MIN = 15;
-    private final int ANIMAL_SPAWN_RANGE_MAX = 80;
 
     protected long tickAgeAfterBuilt = 0; // not saved
     protected long tickAge = 0; // not saved
