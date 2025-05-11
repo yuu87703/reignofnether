@@ -877,9 +877,7 @@ public class BuildingPlacement {
             checkIfCaptured(serverLevel);
         }
     }
-
-
-
+    
     // if there aren't already too many animals nearby, spawn some random huntable animals
     private void spawnHuntableAnimalsNearby(int range) {
         if (level.isClientSide()) {

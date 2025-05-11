@@ -896,7 +896,7 @@ public class HudClientEvents {
                     }
                 }
                 List<AbilityButton> unitAbilities = abilityButtons.stream()
-                        .filter(ab -> !(ab.ability instanceof CallToArmsUnit))
+                        .filter(ab -> ab != null && !(ab.ability instanceof CallToArmsUnit))
                         .toList();
 
                 int rowsUp = (int) Math.floor((float) (unitAbilities.size() - 1) / MAX_BUTTONS_PER_ROW);
