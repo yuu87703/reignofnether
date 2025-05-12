@@ -99,8 +99,8 @@ public class BuildingServerEvents {
 
         getBuildings().forEach(b -> {
             PortalPlacement.PortalType portalType = null;
-            if (b instanceof PortalPlacement portal && portal.portalType != PortalPlacement.PortalType.BASIC) {
-                portalType = portal.portalType;
+            if (b instanceof PortalPlacement portal) {
+                portalType = portal.getPortalType();
             }
             buildingData.buildings.add(new BuildingSave(b.originPos,
                 level,
@@ -453,7 +453,7 @@ public class BuildingServerEvents {
                     building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                     building.getUpgradeLevel(),
                     building.isBuilt,
-                    building instanceof PortalPlacement p ? p.portalType : PortalPlacement.PortalType.BASIC,
+                    building instanceof PortalPlacement p ? p.getPortalType() : PortalPlacement.PortalType.BASIC,
                     building instanceof PortalPlacement p && p.hasDestination() ? p.destination : new BlockPos(0, 0, 0),
                     true
             );
@@ -678,8 +678,8 @@ public class BuildingServerEvents {
                     building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                     building.getUpgradeLevel(),
                     building.isBuilt,
-                    building instanceof PortalPlacement p ? p.portalType : PortalPlacement.PortalType.BASIC,
-                    building instanceof PortalPlacement p && p.portalType == PortalPlacement.PortalType.TRANSPORT ? p.destination : new BlockPos(0,0,0),
+                    building instanceof PortalPlacement p ? p.getPortalType() : PortalPlacement.PortalType.BASIC,
+                    building instanceof PortalPlacement p && p.getPortalType() == PortalPlacement.PortalType.TRANSPORT ? p.destination : new BlockPos(0,0,0),
                     false
                 );
                 return;

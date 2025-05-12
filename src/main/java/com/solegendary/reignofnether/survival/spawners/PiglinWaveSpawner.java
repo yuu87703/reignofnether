@@ -151,7 +151,7 @@ public class PiglinWaveSpawner {
 
             if (spawnBp != null) {
                 portalBps.add(spawnBp);
-                BuildingPlacement building = BuildingServerEvents.placeBuilding(Buildings.PORTAL,
+                BuildingPlacement building = BuildingServerEvents.placeBuilding(Buildings.PORTAL_MILITARY,
                         new BlockPos(spawnBp).above(),
                         Rotation.NONE,
                         ENEMY_OWNER_NAME,
