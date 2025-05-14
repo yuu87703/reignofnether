@@ -3,11 +3,11 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
-import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
+import com.solegendary.reignofnether.research.researchItems.ResearchBlazeFirewall;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -28,17 +28,20 @@ public class FirewallShot extends Ability {
     public static final int CD_MAX_SECONDS = 20;
     public static final int RANGE = 15;
 
-    public FirewallShot() {
-        super(UnitAction.SHOOT_FIREWALL, CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true, true);
+    private final BlazeUnit blazeUnit;
+
+    public FirewallShot(BlazeUnit blazeUnit) {
+        super(UnitAction.SHOOT_FIREWALL, blazeUnit.level(),CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true, true);
+        this.blazeUnit = blazeUnit;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton("Fire Wall Shot",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/fire.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.SHOOT_FIREWALL,
-            () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLAZE_FIREWALL),
+            () -> !ResearchClient.hasResearch(ResearchBlazeFirewall.itemName),
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.SHOOT_FIREWALL),
             null,
@@ -53,8 +56,7 @@ public class FirewallShot extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.fire_wall_shot.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.fire_wall_shot.tooltip3"), Style.EMPTY)
             ),
-            this,
-            unit
+            this
         );
     }
 
@@ -66,11 +68,10 @@ public class FirewallShot extends Ability {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        BlazeUnit blazeUnit = (BlazeUnit) unitUsing;
-        blazeUnit.shootFirewallShot(targetBp);
-        this.setToMaxCooldown(unitUsing);
+        this.blazeUnit.shootFirewallShot(targetBp);
+        this.setToMaxCooldown();
         if (!level.isClientSide()) {
-            AbilityClientboundPacket.sendSetCooldownPacket(blazeUnit.getId(), this.action, this.cooldownMax);
+            AbilityClientboundPacket.sendSetCooldownPacket(this.blazeUnit.getId(), this.action, this.cooldownMax);
         }
     }
 }

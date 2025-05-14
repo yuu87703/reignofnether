@@ -1,12 +1,11 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import org.joml.Vector3d;
-import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -31,9 +30,10 @@ public class CallToArmsBuilding extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE;
 
-    public CallToArmsBuilding() {
+    public CallToArmsBuilding(Level level) {
         super(
                 UnitAction.CALL_TO_ARMS_BUILDING,
+                level,
                 0,
                 RANGE,
                 0,
@@ -43,7 +43,7 @@ public class CallToArmsBuilding extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Call To Arms (Building)",
                 new ResourceLocation("minecraft", "textures/item/bell.png"),
@@ -60,13 +60,12 @@ public class CallToArmsBuilding extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_to_arms_building.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_to_arms_building.tooltip3", TownCentre.MILITIA_RANGE), Style.EMPTY)
                 ),
-                this,
-                placement
+                this
         );
     }
 
     @Override
-    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
+    public void use(Level level, Building buildingUsing, BlockPos targetBp) {
         List<VillagerUnit> nearbyUnits = MiscUtil.getEntitiesWithinRange(
                         new Vector3d(buildingUsing.centrePos.getX(), buildingUsing.centrePos.getY(), buildingUsing.centrePos.getZ()),
                         range, VillagerUnit.class, buildingUsing.getLevel())

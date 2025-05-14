@@ -8,12 +8,7 @@ import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -29,21 +24,24 @@ public class ToggleShield extends Ability {
 
     private static final int CD_MAX_SECONDS = 0;
 
-    public ToggleShield() {
+    private final BruteUnit bruteUnit;
+
+    public ToggleShield(BruteUnit bruteUnit) {
         super(
                 UnitAction.NONE,
+                bruteUnit.level(),
                 CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
                 0,
                 0,
                 false
         );
+        this.bruteUnit = bruteUnit;
         this.autocastEnableAction = UnitAction.ENABLE_SHIELD_RAISE;
         this.autocastDisableAction = UnitAction.DISABLE_SHIELD_RAISE;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        BruteUnit bruteUnit = (BruteUnit) unit;
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Shield Stance",
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/shield.png"),
@@ -52,7 +50,7 @@ public class ToggleShield extends Ability {
                 () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BRUTE_SHIELDS) ||
                         bruteUnit.getItemBySlot(EquipmentSlot.OFFHAND).getItem() != Items.SHIELD,
                 () -> true,
-                () -> toggleAutocast(unit),
+                this::toggleAutocast,
                 null,
                 List.of(
                         fcs(I18n.get("abilities.reignofnether.shield_stance"), true),
@@ -62,18 +60,18 @@ public class ToggleShield extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.shield_stance.tooltip3"), Style.EMPTY)
                 ),
                 this,
-                unit
+                bruteUnit
         );
     }
 
     @Override
-    public void setAutocast(boolean value, Unit unit) {
-        super.setAutocast(value, unit);
-        BruteUnit bruteUnit = (BruteUnit) unit;
-        if ((getAutocast(unit) && !bruteUnit.isHoldingUpShield) ||
-            (!getAutocast(unit) && bruteUnit.isHoldingUpShield))
+    public void setAutocast(boolean value) {
+        super.setAutocast(value);
+        if ((getAutocast() && !bruteUnit.isHoldingUpShield) ||
+            (!getAutocast() && bruteUnit.isHoldingUpShield))
             bruteUnit.toggleShield();
-        bruteUnit.updateAbilityButtons();
+        if (level.isClientSide())
+            bruteUnit.updateAbilityButtons();
     }
 
     @Override

@@ -38,11 +38,11 @@ public class PortalBasic extends AbstractPortal {
         this.icon = new ResourceLocation("minecraft", "textures/block/gray_glazed_terracotta.png");
         this.canSetRallyPoint = false;
 
-        Ability connectPortal = new ConnectPortal();
+        Ability connectPortal = new ConnectPortal(this);
         this.abilities.add(connectPortal, Keybindings.keyQ);
-        Ability gotoPortal = new GotoPortal();
+        Ability gotoPortal = new GotoPortal(this);
         this.abilities.add(gotoPortal, Keybindings.keyW);
-        Ability disconnectPortal = new DisconnectPortal();
+        Ability disconnectPortal = new DisconnectPortal(this);
         this.abilities.add(disconnectPortal, Keybindings.keyE);
 
         this.productions.add(ProductionItems.RESEARCH_PORTAL_FOR_CIVILIAN, Keybindings.keyQ);

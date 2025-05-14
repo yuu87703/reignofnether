@@ -1,14 +1,14 @@
 package com.solegendary.reignofnether.ability.abilities;
 
+import net.minecraft.client.resources.language.I18n;
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -18,18 +18,23 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class Explode extends Ability {
-    public Explode() {
+
+    private final CreeperUnit creeperUnit;
+
+    public Explode(CreeperUnit creeperUnit) {
         super(
             UnitAction.EXPLODE,
+            creeperUnit.level(),
             0,
             0,
             0,
             false
         );
+        this.creeperUnit = creeperUnit;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
             "Explode",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/tnt.png"),
@@ -42,13 +47,12 @@ public class Explode extends Ability {
             List.of(
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.explode"), Style.EMPTY)
             ),
-            null,
-            unit
+            null
         );
     }
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        ((CreeperUnit)unitUsing).startToExplode();
+        creeperUnit.startToExplode();
     }
 }

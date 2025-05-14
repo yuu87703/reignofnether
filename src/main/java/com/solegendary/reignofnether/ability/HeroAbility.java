@@ -24,11 +24,13 @@ public abstract class HeroAbility extends Ability {
     // can be ranked up when the hero levels up
     // requires a HeroUnit to be passed
 
+    public final HeroUnit hero;
     public int rank = 0; // 0 == not learnt
     public final int maxRank;
 
-    public HeroAbility(int maxRank, UnitAction action, int cooldownMax, float range, float radius, boolean canTargetEntities) {
-        super(action, cooldownMax, range, radius, canTargetEntities);
+    public HeroAbility(HeroUnit hero, int maxRank, UnitAction action, int cooldownMax, float range, float radius, boolean canTargetEntities) {
+        super(action, ((Entity) hero).level(), cooldownMax, range, radius, canTargetEntities);
+        this.hero = hero;
         this.maxRank = maxRank;
     }
 
@@ -40,7 +42,7 @@ public abstract class HeroAbility extends Ability {
         }
     }
 
-    public boolean rankUp(HeroUnit hero) {
+    public boolean rankUp() {
         if (rank < maxRank && hero.getSkillPoints() > 0 && hero.getHeroLevel() >= getLevelRequirement()) {
             rank += 1;
             hero.setSkillPoints(hero.getSkillPoints() - 1);
@@ -57,24 +59,24 @@ public abstract class HeroAbility extends Ability {
         return rank > 0 ? I18n.get("abilities.reignofnether.rank", rank) : I18n.get("abilities.reignofnether.unlearnt");
     }
 
-    public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of();
     }
 
-    public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getTooltipLines() {
         return List.of();
     }
 
-    public AbilityButton getButton(Keybinding hotkey, Unit hero) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return null;
     }
 
     // rank up button for this specific ability
-    public Button getRankUpButton(HeroUnit hero) {
+    public Button getRankUpButton() {
         return null;
     }
 
-    protected Button getRankUpButtonProtected(String name, ResourceLocation resourceLocation, HeroUnit hero) {
+    protected Button getRankUpButtonProtected(String name, ResourceLocation resourceLocation) {
         Button button = new Button(name,
             14,
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/level_up_skill.png"),
@@ -83,7 +85,7 @@ public abstract class HeroAbility extends Ability {
             () -> !hero.isRankUpMenuOpen() || rank >= maxRank,
             () -> hero.getSkillPoints() > 0 && hero.getHeroLevel() >= getLevelRequirement(),
             () -> {
-                if (rankUp(hero)) {
+                if (rankUp()) {
                     AbilityServerboundPacket.rankUpAbility(((Entity) hero).getId(), action);
                     ((Unit) hero).updateAbilityButtons();
                 }
@@ -91,7 +93,7 @@ public abstract class HeroAbility extends Ability {
                     hero.showRankUpMenu(false);
             },
             null,
-            getRankUpTooltipLines(hero)
+            getRankUpTooltipLines()
         );
         button.bgIconResource = resourceLocation;
         return button;
@@ -116,7 +118,7 @@ public abstract class HeroAbility extends Ability {
         return menuButton;
     }
 
-    public Style getLevelReqStyle(HeroUnit hero) {
+    public Style getLevelReqStyle() {
         return Style.EMPTY.withColor(hero.getHeroLevel() >= getLevelRequirement() ? 0x00FF00 : 0xFF0000);
     }
 }

@@ -30,7 +30,7 @@ public class AbilityClientboundPacket {
             if (entity.getId() == unitId && entity instanceof Unit unit)
                 for (Ability ability : unit.getAbilities())
                     if (ability.action == unitAction) {
-                        ability.setCooldown(cooldown, unit);
+                        ability.setCooldown(cooldown);
                         return;
                     }
     }
@@ -91,7 +91,7 @@ public class AbilityClientboundPacket {
                     if (isSettingCooldown && unit != null) {
                         for (Ability ability : unit.getAbilities()) {
                             if (ability.action == this.unitAction) {
-                                ability.setCooldown(this.value, unit);
+                                ability.setCooldown(this.value);
                                 return;
                             }
                         }

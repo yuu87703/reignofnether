@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.ability;
 
-import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.Resources;
@@ -18,21 +19,24 @@ public abstract class EnchantAbility extends Ability {
 
     public static final int CD_MAX = 1;
     public static final int RANGE = 12;
+    public final Library library;
     public final ResourceCost cost;
 
-    public EnchantAbility(UnitAction action, ResourceCost cost) {
+    public EnchantAbility(UnitAction action, Library library, ResourceCost cost) {
         super(
                 action,
+                library.getLevel(),
                 CD_MAX,
                 RANGE,
                 0,
                 true,
                 true
         );
+        this.library = library;
         this.cost = cost;
     }
 
-    public boolean canAfford(BuildingPlacement buildingUsing) {
+    public boolean canAfford(Building buildingUsing) {
         Resources res = null;
         if (buildingUsing.getLevel().isClientSide()) {
             res = ResourcesClientEvents.getOwnResources();
@@ -67,7 +71,7 @@ public abstract class EnchantAbility extends Ability {
     }
 
     @Override
-    public void use(Level level, BuildingPlacement buildingUsing, LivingEntity te) {
+    public void use(Level level, Building buildingUsing, LivingEntity te) {
 
         if (!level.isClientSide() &&
             te instanceof Unit unit &&
@@ -78,8 +82,8 @@ public abstract class EnchantAbility extends Ability {
             te.distanceToSqr(Vec3.atCenterOf(buildingUsing.centrePos)) < RANGE * RANGE) {
 
             doEnchant(te);
-            ResourcesServerEvents.addSubtractResources(new Resources(buildingUsing.ownerName, -cost.food, -cost.wood, -cost.ore));
-            setToMaxCooldown(buildingUsing);
+            ResourcesServerEvents.addSubtractResources(new Resources(library.ownerName, -cost.food, -cost.wood, -cost.ore));
+            setToMaxCooldown();
             playSound(level, te);
 
         } else if (level.isClientSide()) {
@@ -95,7 +99,7 @@ public abstract class EnchantAbility extends Ability {
             } else if (!canAfford(buildingUsing)) {
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error5"));
             } else {
-                setToMaxCooldown(buildingUsing);
+                setToMaxCooldown();
                 playSound(level, te);
             }
         }

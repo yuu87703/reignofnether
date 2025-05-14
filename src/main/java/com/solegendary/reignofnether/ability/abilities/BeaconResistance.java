@@ -1,8 +1,7 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.BeaconAbility;
-import com.solegendary.reignofnether.building.BuildingPlacement;
-import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
+import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -20,14 +19,12 @@ public class BeaconResistance extends BeaconAbility {
 
     public final static MobEffect AURA_EFFECT = MobEffects.DAMAGE_RESISTANCE;
 
-    public BeaconResistance() {
-        super(UnitAction.BEACON_RESISTANCE, AURA_EFFECT);
+    public BeaconResistance(Beacon beacon) {
+        super(UnitAction.BEACON_RESISTANCE, AURA_EFFECT, beacon);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
-        if (!(placement instanceof BeaconPlacement beacon)) return null;
-
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Resistance Aura",
                 new ResourceLocation("minecraft", "textures/mob_effect/resistance.png"),
@@ -43,8 +40,7 @@ public class BeaconResistance extends BeaconAbility {
                         fcs(I18n.get("ability.reignofnether.beacon_aura.resistance.tooltip1")),
                         fcs(I18n.get("ability.reignofnether.beacon_aura.one_aura"))
                 ),
-                this,
-                placement
+                this
         );
     }
 }
