@@ -63,7 +63,7 @@ public class GotoPortal extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, BlockPos targetBp) {
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
         if (level.isClientSide() && building instanceof Portal portal &&
             portal.hasDestination()) {
             Building targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), portal.destination);

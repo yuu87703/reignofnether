@@ -1,7 +1,7 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.BeaconAbility;
-import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
+import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -19,7 +19,7 @@ public class BeaconStrength extends BeaconAbility {
 
     public final static MobEffect AURA_EFFECT = MobEffects.DAMAGE_BOOST;
 
-    public BeaconStrength(Beacon beacon) {
+    public BeaconStrength(BeaconPlacement beacon) {
         super(UnitAction.BEACON_STRENGTH, AURA_EFFECT, beacon);
     }
 

@@ -1,11 +1,10 @@
 package com.solegendary.reignofnether.ability.abilities;
 
-import org.joml.Vector3d;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -19,6 +18,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.Level;
+import org.joml.Vector3d;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -65,7 +65,7 @@ public class CallToArmsBuilding extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, BlockPos targetBp) {
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
         List<VillagerUnit> nearbyUnits = MiscUtil.getEntitiesWithinRange(
                         new Vector3d(buildingUsing.centrePos.getX(), buildingUsing.centrePos.getY(), buildingUsing.centrePos.getZ()),
                         range, VillagerUnit.class, buildingUsing.getLevel())

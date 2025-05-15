@@ -36,7 +36,7 @@ public abstract class EnchantAbility extends Ability {
         this.cost = cost;
     }
 
-    public boolean canAfford(Building buildingUsing) {
+    public boolean canAfford(BuildingPlacement buildingUsing) {
         Resources res = null;
         if (buildingUsing.getLevel().isClientSide()) {
             res = ResourcesClientEvents.getOwnResources();
@@ -71,7 +71,7 @@ public abstract class EnchantAbility extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, LivingEntity te) {
+    public void use(Level level, BuildingPlacement buildingUsing, LivingEntity te) {
 
         if (!level.isClientSide() &&
             te instanceof Unit unit &&

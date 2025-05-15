@@ -2,12 +2,12 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchHoglinCavalry;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.goals.MountGoal;
@@ -42,7 +42,7 @@ public class MountHoglin extends Ability {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/hoglin.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.MOUNT_HOGLIN,
-            () -> entity.isPassenger() || !ResearchClient.hasResearch(ResearchHoglinCavalry.itemName),
+            () -> entity.isPassenger() || !ResearchClient.hasResearch(ProductionItems.RESEARCH_HOGLIN_CAVALRY),
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.MOUNT_HOGLIN),
             () -> UnitClientEvents.sendUnitCommand(UnitAction.MOUNT_HOGLIN),

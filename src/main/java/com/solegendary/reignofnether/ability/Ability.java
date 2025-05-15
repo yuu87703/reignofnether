@@ -1,6 +1,6 @@
 package com.solegendary.reignofnether.ability;
 
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -112,11 +112,11 @@ public class Ability {
 
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) { }
 
-    public void use(Level level, Building buildingUsing, LivingEntity targetEntity) { }
+    public void use(Level level, BuildingPlacement buildingUsing, LivingEntity targetEntity) { }
 
     public void use(Level level, Unit unitUsing, BlockPos targetBp) { }
 
-    public void use(Level level, Building buildingUsing, BlockPos targetBp) { }
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) { }
 
     public AbilityButton getButton(Keybinding hotkey) {
         return null;

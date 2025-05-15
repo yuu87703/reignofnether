@@ -54,7 +54,7 @@ public class Sacrifice extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, LivingEntity targetEntity) {
+    public void use(Level level, BuildingPlacement buildingUsing, LivingEntity targetEntity) {
 
         if (!level.isClientSide() && buildingUsing instanceof SculkCatalyst && targetEntity instanceof Unit unit
             && unit.getOwnerName().equals(buildingUsing.ownerName) && !level.getBlockState(targetEntity.getOnPos())

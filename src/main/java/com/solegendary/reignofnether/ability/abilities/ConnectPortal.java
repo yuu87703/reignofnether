@@ -3,9 +3,12 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.neutral.NeutralTransportPortal;
+import com.solegendary.reignofnether.building.buildings.piglins.AbstractPortal;
 import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.HudClientEvents;
@@ -25,11 +28,11 @@ public class ConnectPortal extends Ability {
     private static final int CD_MAX = 0;
     private static final int RANGE = 0;
 
-    Building building;
+    PortalPlacement portalPlacement;
 
-    public ConnectPortal(Building building) {
-        super(UnitAction.CONNECT_PORTAL, building.getLevel(), CD_MAX, RANGE, 0, true);
-        this.building = building;
+    public ConnectPortal(PortalPlacement portalPlacement) {
+        super(UnitAction.CONNECT_PORTAL, portalPlacement.getLevel(), CD_MAX, RANGE, 0, true);
+        this.portalPlacement = portalPlacement;
     }
 
     @Override
@@ -38,12 +41,7 @@ public class ConnectPortal extends Ability {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png"),
             hotkey,
             () -> false,
-            () -> {
-                if (building instanceof Portal portal) {
-                    return portal.portalType != Portal.PortalType.TRANSPORT;
-                }
-                return true;
-            },
+            () -> portalPlacement.getPortalType() != PortalPlacement.PortalType.TRANSPORT,
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.CONNECT_PORTAL),
             null,
@@ -55,13 +53,12 @@ public class ConnectPortal extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.connect_portal.tooltip1"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.connect_portal.tooltip2"), Style.EMPTY)
             ),
-            this,
-            building
+            this
         );
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, BlockPos targetBp) {
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
 
         if (building instanceof Portal portal && portal.portalType == Portal.PortalType.TRANSPORT) {
             portal.disconnectPortal();

@@ -2,10 +2,10 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchWitherClouds;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -48,7 +48,7 @@ public class WitherCloud extends Ability {
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/wither_skeleton.png"),
                 hotkey,
                 () -> witherSkeletonUnit.deathCloudTicks > 0,
-                () -> !ResearchClient.hasResearch(ResearchWitherClouds.itemName),
+                () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_WITHER_CLOUDS),
                 () -> true,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.WITHER_CLOUD),
                 null,

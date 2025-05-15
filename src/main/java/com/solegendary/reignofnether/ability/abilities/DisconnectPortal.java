@@ -63,7 +63,7 @@ public class DisconnectPortal extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, BlockPos targetBp) {
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
         if (building instanceof Portal portal)
             portal.disconnectPortal();
     }

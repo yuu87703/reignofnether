@@ -107,7 +107,7 @@ public class PromoteIllager extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, LivingEntity targetEntity) {
+    public void use(Level level, BuildingPlacement buildingUsing, LivingEntity targetEntity) {
         Vec3 pos = targetEntity.getEyePosition();
         if (buildingUsing.centrePos.distToCenterSqr(pos.x, pos.y, pos.z) > RANGE * RANGE) {
             if (level.isClientSide()) {

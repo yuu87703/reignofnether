@@ -137,10 +137,6 @@ public class BuildingPlacement {
     Object2ObjectArrayMap<Ability, Float> cooldowns = new Object2ObjectArrayMap<>();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
 
-    public List<AbilityButton> getAbilityButtons() {
-        return abilityButtons;
-    }
-
     public List<Ability> getAbilities() {
         return abilities;
     }

@@ -1,13 +1,13 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.monsters.Laboratory;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
-import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
@@ -28,9 +28,9 @@ public class CallLightning extends Ability {
     private static final int CD_MAX = 60 * ResourceCost.TICKS_PER_SECOND;
     public static final int RANGE = 25;
 
-    private final Laboratory lab;
+    private final BuildingPlacement bpl;
 
-    public CallLightning(Laboratory lab) {
+    public CallLightning(BuildingPlacement lab) {
         super(
             UnitAction.CALL_LIGHTNING,
             lab.getLevel(),
@@ -40,7 +40,7 @@ public class CallLightning extends Ability {
             false,
             true
         );
-        this.lab = lab;
+        this.bpl = lab;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class CallLightning extends Ability {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/lightbulb_on.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.CALL_LIGHTNING,
-            () -> lab.getUpgradeLevel() == 0,
-            () -> lab.getLightningRodPos() != null,
+            () -> bpl.getUpgradeLevel() == 0,
+            () -> bpl.getBuilding() instanceof Laboratory lab && lab.getLightningRodPos(bpl) != null,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.CALL_LIGHTNING),
             null,
             List.of(
@@ -66,12 +66,12 @@ public class CallLightning extends Ability {
     }
 
     @Override
-    public void use(Level level, Building buildingUsing, BlockPos targetBp) {
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
 
-        if (!level.isClientSide() && buildingUsing instanceof Laboratory lab) {
-            BlockPos rodPos = lab.getLightningRodPos();
+        if (!level.isClientSide() && bpl.getBuilding() instanceof Laboratory lab) {
+            BlockPos rodPos = lab.getLightningRodPos(bpl);
 
-            if (lab.isAbilityOffCooldown(UnitAction.CALL_LIGHTNING) && rodPos != null) {
+            if (bpl.isAbilityOffCooldown(UnitAction.CALL_LIGHTNING) && rodPos != null) {
                 BlockPos limitedBp = MyMath.getXZRangeLimitedBlockPos(buildingUsing.centrePos, targetBp, range);
                 // getXZRangeLimitedBlockPos' Y value is always the same as rodPos, but we want the first sky-exposed block
                 limitedBp = MiscUtil.getHighestNonAirBlock(level, limitedBp);

@@ -3,11 +3,11 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchBlazeFirewall;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -41,7 +41,7 @@ public class FirewallShot extends Ability {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/fire.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.SHOOT_FIREWALL,
-            () -> !ResearchClient.hasResearch(ResearchBlazeFirewall.itemName),
+            () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLAZE_FIREWALL),
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.SHOOT_FIREWALL),
             null,

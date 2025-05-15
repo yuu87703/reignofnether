@@ -1,10 +1,10 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.researchItems.ResearchBloodlust;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -63,7 +63,7 @@ public class Bloodlust extends Ability {
                 new ResourceLocation("minecraft", "textures/block/redstone_block.png"),
                 hotkey,
                 () -> getDurationLeft(unit) > 0,
-                () -> !ResearchClient.hasResearch(ResearchBloodlust.itemName),
+                () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLOODLUST),
                 () -> true,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BLOOD_LUST),
                 null,
