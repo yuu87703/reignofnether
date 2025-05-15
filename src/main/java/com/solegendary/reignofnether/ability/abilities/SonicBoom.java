@@ -1,7 +1,7 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -86,7 +86,7 @@ public class SonicBoom extends Ability {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        Building targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), targetBp);
+        BuildingPlacement targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), targetBp);
         if (targetBuilding != null) {
             ((WardenUnit) unitUsing).getSonicBoomGoal().setAbility(this);
             ((WardenUnit) unitUsing).getSonicBoomGoal().setTarget(targetBuilding);

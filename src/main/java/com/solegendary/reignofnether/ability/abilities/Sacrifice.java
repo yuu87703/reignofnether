@@ -1,9 +1,9 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.buildings.monsters.SculkCatalyst;
+import com.solegendary.reignofnether.building.buildings.placements.SculkCatalystPlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.HudClientEvents;
@@ -56,7 +56,7 @@ public class Sacrifice extends Ability {
     @Override
     public void use(Level level, BuildingPlacement buildingUsing, LivingEntity targetEntity) {
 
-        if (!level.isClientSide() && buildingUsing instanceof SculkCatalyst && targetEntity instanceof Unit unit
+        if (!level.isClientSide() && buildingUsing instanceof SculkCatalystPlacement && targetEntity instanceof Unit unit
             && unit.getOwnerName().equals(buildingUsing.ownerName) && !level.getBlockState(targetEntity.getOnPos())
             .isAir() && !BuildingUtils.isWithinRangeOfMaxedCatalyst(targetEntity)
             && !BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), targetEntity.getOnPos().above())) {

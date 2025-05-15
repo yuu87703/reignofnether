@@ -1,7 +1,7 @@
 package com.solegendary.reignofnether.ability;
 
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.buildings.villagers.Library;
+import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.Resources;
@@ -19,10 +19,10 @@ public abstract class EnchantAbility extends Ability {
 
     public static final int CD_MAX = 1;
     public static final int RANGE = 12;
-    public final Library library;
+    public final LibraryPlacement library;
     public final ResourceCost cost;
 
-    public EnchantAbility(UnitAction action, Library library, ResourceCost cost) {
+    public EnchantAbility(UnitAction action, LibraryPlacement library, ResourceCost cost) {
         super(
                 action,
                 library.getLevel(),

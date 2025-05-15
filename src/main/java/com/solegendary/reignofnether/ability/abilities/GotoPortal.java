@@ -1,16 +1,16 @@
 package com.solegendary.reignofnether.ability.abilities;
 
-import net.minecraft.client.resources.language.I18n;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -24,18 +24,18 @@ public class GotoPortal extends Ability {
     private static final int CD_MAX = 0;
     private static final int RANGE = 0;
 
-    Building building;
+    PortalPlacement portalPlacement;
 
-    public GotoPortal(Building building) {
+    public GotoPortal(PortalPlacement portalPlacement) {
         super(
             UnitAction.GOTO_PORTAL,
-            building.getLevel(),
+            portalPlacement.getLevel(),
             CD_MAX,
             RANGE,
             0,
             true
         );
-        this.building = building;
+        this.portalPlacement = portalPlacement;
     }
 
     @Override
@@ -45,13 +45,7 @@ public class GotoPortal extends Ability {
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/map.png"),
                 hotkey,
                 () -> false,
-                () -> {
-                    // hidden if the portal does not have a connection Or isn't a transport portal
-                    if (building instanceof Portal portal) {
-                        return !portal.hasDestination();
-                    }
-                    return true;
-                },
+                () -> !portalPlacement.hasDestination(),
                 () -> true,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.GOTO_PORTAL),
                 null,
@@ -64,10 +58,9 @@ public class GotoPortal extends Ability {
 
     @Override
     public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
-        if (level.isClientSide() && building instanceof Portal portal &&
-            portal.hasDestination()) {
-            Building targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), portal.destination);
-            if (targetBuilding instanceof Portal targetPortal && portal.portalType == Portal.PortalType.TRANSPORT)
+        if (level.isClientSide() && buildingUsing == portalPlacement && portalPlacement.hasDestination()) {
+            BuildingPlacement targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), portalPlacement.destination);
+            if (targetBuilding instanceof PortalPlacement targetPortal && targetPortal.getPortalType() == PortalPlacement.PortalType.TRANSPORT)
                 OrthoviewClientEvents.centreCameraOnPos(targetPortal.centrePos);
         }
     }

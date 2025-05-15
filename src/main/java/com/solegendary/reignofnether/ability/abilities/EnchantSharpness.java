@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
+import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -30,7 +31,7 @@ public class EnchantSharpness extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.SHARPNESS;
     public static final int enchantLevel = 2;
 
-    public EnchantSharpness(Library library) {
+    public EnchantSharpness(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_SHARPNESS);
     }
 

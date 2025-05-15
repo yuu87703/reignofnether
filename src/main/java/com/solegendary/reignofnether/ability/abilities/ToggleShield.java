@@ -59,8 +59,7 @@ public class ToggleShield extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.shield_stance.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.shield_stance.tooltip3"), Style.EMPTY)
                 ),
-                this,
-                bruteUnit
+                this
         );
     }
 

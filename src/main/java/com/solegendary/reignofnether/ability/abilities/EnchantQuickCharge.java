@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
+import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -30,7 +31,7 @@ public class EnchantQuickCharge extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.QUICK_CHARGE;
     public static final int enchantLevel = 2;
 
-    public EnchantQuickCharge(Library library) {
+    public EnchantQuickCharge(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_QUICK_CHARGE);
     }
 

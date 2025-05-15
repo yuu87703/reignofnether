@@ -1,14 +1,14 @@
 package com.solegendary.reignofnether.ability.abilities;
 
-import net.minecraft.client.resources.language.I18n;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.buildings.piglins.Portal;
+import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -22,18 +22,18 @@ public class DisconnectPortal extends Ability {
     private static final int CD_MAX = 0;
     private static final int RANGE = 0;
 
-    Building building;
+    PortalPlacement portalPlacement;
 
-    public DisconnectPortal(Building building) {
+    public DisconnectPortal(PortalPlacement portalPlacement) {
         super(
             UnitAction.DISCONNECT_PORTAL,
-            building.getLevel(),
+            portalPlacement.getLevel(),
             CD_MAX,
             RANGE,
             0,
             true
         );
-        this.building = building;
+        this.portalPlacement = portalPlacement;
     }
 
     @Override
@@ -43,15 +43,7 @@ public class DisconnectPortal extends Ability {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/barrier.png"),
             hotkey,
             () -> false,
-            () -> {
-                // hidden if the portal does not have a connection Or isn't a transport portal
-                if (building instanceof Portal portal) {
-                    if (portal.portalType != Portal.PortalType.TRANSPORT)
-                        return true;
-                    return !portal.hasDestination();
-                }
-                return true;
-            },
+            () -> !portalPlacement.hasDestination(),
             () -> true,
             () -> UnitClientEvents.sendUnitCommand(UnitAction.DISCONNECT_PORTAL),
             null,
@@ -64,7 +56,7 @@ public class DisconnectPortal extends Ability {
 
     @Override
     public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
-        if (building instanceof Portal portal)
-            portal.disconnectPortal();
+        if (buildingUsing == portalPlacement)
+            portalPlacement.disconnectPortal();
     }
 }
