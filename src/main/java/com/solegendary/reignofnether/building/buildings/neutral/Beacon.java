@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.building.buildings.neutral;
 
-import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
@@ -8,7 +7,6 @@ import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -66,12 +64,6 @@ public class Beacon extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.CHISELED_STONE_BRICKS);
 
         this.explodeChance = 0.2f;
-
-        this.abilities.add(new BeaconWealth(), Keybindings.keyQ);
-        this.abilities.add(new BeaconHaste(), Keybindings.keyW);
-        this.abilities.add(new BeaconRegeneration(), Keybindings.keyE);
-        this.abilities.add(new BeaconResistance(), Keybindings.keyR);
-        this.abilities.add(new BeaconStrength(), Keybindings.keyT);
 
         this.productions.add(ProductionItems.RESEARCH_BEACON_LEVEL_1, null);
         this.productions.add(ProductionItems.RESEARCH_BEACON_LEVEL_2, null);

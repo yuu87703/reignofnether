@@ -1118,7 +1118,9 @@ public class BuildingPlacement {
         return getBuilding().getMeleeDamageMult();
     }
 
-    public void updateButtons() { }
+    public void updateButtons() {
+
+    }
 
     public void setCooldown(Ability abilityClass, float cooldown) {
         cooldowns.put(abilityClass, cooldown);
