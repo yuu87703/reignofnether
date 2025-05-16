@@ -51,8 +51,7 @@ public class Castle extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.SPRUCE_PLANKS);
         this.startingBlockTypes.add(Blocks.DARK_OAK_PLANKS);
 
-        Ability promoteIllager = new PromoteIllager();
-        this.abilities.add(promoteIllager, Keybindings.keyE);
+
 
         this.productions.add(ProductionItems.RAVAGER, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_RAVAGER_CAVALRY, Keybindings.keyW);
@@ -65,7 +64,10 @@ public class Castle extends ProductionBuilding {
 
     @Override
     public BuildingPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        return new CastlePlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        CastlePlacement castlePlacement = new CastlePlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        Ability promoteIllager = new PromoteIllager(castlePlacement);
+        castlePlacement.getAbilities().add(promoteIllager);
+        return castlePlacement;
     }
 
     public AbilityButton getBuildButton(Keybinding hotkey) {
@@ -103,8 +105,7 @@ public class Castle extends ProductionBuilding {
                     Style.EMPTY
                 )
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 

@@ -80,8 +80,7 @@ public class SpruceBridge extends AbstractBridge {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.spruce_bridge.tooltip4"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

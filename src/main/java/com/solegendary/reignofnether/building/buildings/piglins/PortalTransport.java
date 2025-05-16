@@ -5,11 +5,17 @@ import com.solegendary.reignofnether.ability.abilities.ConnectPortal;
 import com.solegendary.reignofnether.ability.abilities.DisconnectPortal;
 import com.solegendary.reignofnether.ability.abilities.GotoPortal;
 import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+
+import static com.solegendary.reignofnether.building.BuildingUtils.getAbsoluteBlockData;
 
 public class PortalTransport extends AbstractPortal {
 
@@ -25,13 +31,18 @@ public class PortalTransport extends AbstractPortal {
         this.icon = new ResourceLocation("minecraft", "textures/block/blue_glazed_terracotta.png");
         this.canSetRallyPoint = false;
         this.startingBlockTypes.add(Blocks.LAPIS_BLOCK);
+    }
 
-        Ability connectPortal = new ConnectPortal();
-        this.abilities.add(connectPortal, Keybindings.keyQ);
-        Ability gotoPortal = new GotoPortal();
-        this.abilities.add(gotoPortal, Keybindings.keyW);
-        Ability disconnectPortal = new DisconnectPortal();
-        this.abilities.add(disconnectPortal, Keybindings.keyE);
+    @Override
+    public PortalPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
+        PortalPlacement portalPlacement = new PortalPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        Ability connectPortal = new ConnectPortal(portalPlacement);
+        portalPlacement.getAbilities().add(connectPortal);
+        Ability gotoPortal = new GotoPortal(portalPlacement);
+        portalPlacement.getAbilities().add(gotoPortal);
+        Ability disconnectPortal = new DisconnectPortal(portalPlacement);
+        portalPlacement.getAbilities().add(disconnectPortal);
+        return portalPlacement;
     }
 
     @Override

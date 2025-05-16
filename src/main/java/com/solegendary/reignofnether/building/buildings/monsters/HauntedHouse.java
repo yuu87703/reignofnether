@@ -59,8 +59,7 @@ public class HauntedHouse extends Building {
                     FormattedCharSequence.forward("", Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.haunted_house.tooltip1"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

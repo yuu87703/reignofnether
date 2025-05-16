@@ -65,8 +65,7 @@ public class Graveyard extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.graveyard.tooltip1"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

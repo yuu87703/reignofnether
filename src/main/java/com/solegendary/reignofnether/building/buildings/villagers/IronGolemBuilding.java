@@ -85,8 +85,7 @@ public class IronGolemBuilding extends Building {
                     Style.EMPTY
                 )
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

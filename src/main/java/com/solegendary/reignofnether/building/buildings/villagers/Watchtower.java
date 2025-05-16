@@ -73,8 +73,7 @@ public class Watchtower extends Building {
                     FormattedCharSequence.forward("", Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.watchtower.tooltip3", WatchTowerPlacement.MAX_OCCUPANTS), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

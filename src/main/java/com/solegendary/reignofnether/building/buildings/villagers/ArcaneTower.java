@@ -71,8 +71,7 @@ public class ArcaneTower extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.arcane_tower.tooltip2"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 

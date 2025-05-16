@@ -68,8 +68,7 @@ public class SlimePit extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.slime_pit.tooltip3"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 

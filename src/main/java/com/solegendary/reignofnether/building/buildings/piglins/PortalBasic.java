@@ -7,8 +7,8 @@ import com.solegendary.reignofnether.ability.abilities.DisconnectPortal;
 import com.solegendary.reignofnether.ability.abilities.GotoPortal;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
-import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.Buildings;
+import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -17,12 +17,17 @@ import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 
 import java.util.List;
+
+import static com.solegendary.reignofnether.building.BuildingUtils.getAbsoluteBlockData;
 
 public class PortalBasic extends AbstractPortal {
 
@@ -38,16 +43,21 @@ public class PortalBasic extends AbstractPortal {
         this.icon = new ResourceLocation("minecraft", "textures/block/gray_glazed_terracotta.png");
         this.canSetRallyPoint = false;
 
-        Ability connectPortal = new ConnectPortal(this);
-        this.abilities.add(connectPortal, Keybindings.keyQ);
-        Ability gotoPortal = new GotoPortal(this);
-        this.abilities.add(gotoPortal, Keybindings.keyW);
-        Ability disconnectPortal = new DisconnectPortal(this);
-        this.abilities.add(disconnectPortal, Keybindings.keyE);
-
         this.productions.add(ProductionItems.RESEARCH_PORTAL_FOR_CIVILIAN, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_PORTAL_FOR_MILITARY, Keybindings.keyW);
         this.productions.add(ProductionItems.RESEARCH_PORTAL_FOR_TRANSPORT, Keybindings.keyE);
+    }
+
+    @Override
+    public PortalPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
+        PortalPlacement portalPlacement = new PortalPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        Ability connectPortal = new ConnectPortal(portalPlacement);
+        portalPlacement.getAbilities().add(connectPortal);
+        Ability gotoPortal = new GotoPortal(portalPlacement);
+        portalPlacement.getAbilities().add(gotoPortal);
+        Ability disconnectPortal = new DisconnectPortal(portalPlacement);
+        portalPlacement.getAbilities().add(disconnectPortal);
+        return portalPlacement;
     }
 
     @Override
@@ -73,8 +83,7 @@ public class PortalBasic extends AbstractPortal {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.portal_basic.tooltip3"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

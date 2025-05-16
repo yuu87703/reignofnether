@@ -71,8 +71,7 @@ public class EndPortal extends ProductionBuilding {
                         FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.end_portal.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.end_portal.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

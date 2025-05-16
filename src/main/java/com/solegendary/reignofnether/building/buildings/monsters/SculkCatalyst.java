@@ -10,7 +10,6 @@ import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.placements.SculkCatalystPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -49,9 +48,6 @@ public class SculkCatalyst extends Building {
         this.buildTimeModifier = 2.5f;
 
         this.startingBlockTypes.add(Blocks.POLISHED_BLACKSTONE);
-
-        Ability sacrifice = new Sacrifice();
-        this.abilities.add(sacrifice, Keybindings.keyQ);
     }
 
     public float getMagicDamageMult() {
@@ -64,7 +60,10 @@ public class SculkCatalyst extends Building {
 
     @Override
     public BuildingPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        return new SculkCatalystPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        SculkCatalystPlacement sculkPlacement = new SculkCatalystPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        Ability sacrifice = new Sacrifice(sculkPlacement.getLevel());
+        sculkPlacement.getAbilities().add(sacrifice);
+        return sculkPlacement;
     }
 
     public AbilityButton getBuildButton(Keybinding hotkey) {
@@ -103,8 +102,7 @@ public class SculkCatalyst extends Building {
                     Style.EMPTY
                 )
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

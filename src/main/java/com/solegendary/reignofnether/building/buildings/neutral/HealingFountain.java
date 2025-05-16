@@ -76,8 +76,7 @@ public class HealingFountain extends Building {
                 FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.healing_fountain.tooltip1"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.healing_fountain.tooltip2"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

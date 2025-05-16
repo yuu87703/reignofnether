@@ -57,8 +57,7 @@ public class NetherwartFarm extends AbstractFarm {
                         FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.netherwart_farm.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.netherwart_farm.tooltip3"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

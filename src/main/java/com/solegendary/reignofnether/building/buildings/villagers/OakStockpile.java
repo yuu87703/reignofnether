@@ -58,8 +58,7 @@ public class OakStockpile extends AbstractStockpile {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.oak_stockpile.tooltip1"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

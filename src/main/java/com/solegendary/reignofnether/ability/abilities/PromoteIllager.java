@@ -1,9 +1,8 @@
 package com.solegendary.reignofnether.ability.abilities;
 
-import org.joml.Vector3d;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -32,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 import java.util.List;
 
@@ -42,11 +42,11 @@ public class PromoteIllager extends Ability {
     private static final int BUFF_RANGE = 10;
 
     LivingEntity promotedIllager = null;
-    Building building;
+    BuildingPlacement buildingPlacement;
 
-    public PromoteIllager(Building building) {
-        super(UnitAction.PROMOTE_ILLAGER, building.getLevel(), CD_MAX, RANGE, 0, true, true);
-        this.building = building;
+    public PromoteIllager(BuildingPlacement buildingPlacement) {
+        super(UnitAction.PROMOTE_ILLAGER, buildingPlacement.getLevel(), CD_MAX, RANGE, 0, true, true);
+        this.buildingPlacement = buildingPlacement;
     }
 
     // checks that the unit has a banner and applies the speed buff to nearby friendly units if it is
@@ -76,8 +76,8 @@ public class PromoteIllager extends Ability {
             hotkey,
             () -> false,
             () -> {
-                if (building instanceof Castle castle) {
-                    return castle.getUpgradeLevel() == 0;
+                if (buildingPlacement.getBuilding() instanceof Castle castle) {
+                    return buildingPlacement.getUpgradeLevel() == 0;
                 }
                 return true;
             },
@@ -124,7 +124,7 @@ public class PromoteIllager extends Ability {
                 }
                 return;
             }
-            if (!unit.getOwnerName().equals(this.building.ownerName)) {
+            if (!unit.getOwnerName().equals(this.buildingPlacement.ownerName)) {
                 if (level.isClientSide()) {
                     HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.promote_illager.error3"));
                 }

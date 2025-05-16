@@ -67,8 +67,7 @@ public class WitherShrine extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.wither_shrine.tooltip3"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

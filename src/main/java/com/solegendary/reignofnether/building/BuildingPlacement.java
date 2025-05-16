@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.building;
 
-import com.ibm.icu.impl.Assert;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
@@ -137,6 +136,9 @@ public class BuildingPlacement {
     Object2ObjectArrayMap<Ability, Float> cooldowns = new Object2ObjectArrayMap<>();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
 
+    public List<AbilityButton> getAbilityButtons() {
+        return abilityButtons;
+    }
     public List<Ability> getAbilities() {
         return abilities;
     }
@@ -641,7 +643,7 @@ public class BuildingPlacement {
 
     public boolean isAbilityOffCooldown(UnitAction action) {
         for (Ability ability : abilities)
-            if (ability.action == action && ability.getCooldown(this) <= 0) {
+            if (ability.action == action && ability.getCooldown() <= 0) {
                 return true;
             }
         return false;
@@ -1116,10 +1118,7 @@ public class BuildingPlacement {
         return getBuilding().getMeleeDamageMult();
     }
 
-    public void updateButtons() {
-        abilities = building.getAbilities().get();
-        abilityButtons = building.getAbilities().getButtons(this);
-    }
+    public void updateButtons() { }
 
     public void setCooldown(Ability abilityClass, float cooldown) {
         cooldowns.put(abilityClass, cooldown);
