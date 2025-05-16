@@ -1,9 +1,9 @@
 package com.solegendary.reignofnether.ability;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.buildings.villagers.Library;
+import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.unit.UnitAction;
 import net.minecraft.client.Minecraft;
@@ -54,17 +54,17 @@ public class EnchantAbilityServerboundPacket {
                 return;
             }
 
-            Building building = BuildingUtils.findBuilding(false, buildingPos);
-            if (building instanceof Library library) {
+            BuildingPlacement building = BuildingUtils.findBuilding(false, buildingPos);
+            if (building instanceof LibraryPlacement library) {
 
-                if (!player.getName().getString().equals(library.ownerName)) {
+                if (!player.getName().getString().equals(building.ownerName)) {
                     ReignOfNether.LOGGER.warn("EnchantAbilityServerboundPacket: Tried to process packet from " + player.getName() + " for: " + library.ownerName);
                     success.set(false);
                     return;
                 }
 
                 Ability ability = null;
-                for (Ability abl : library.getAbilities())
+                for (Ability abl : building.getAbilities())
                     if (abl.action == abilityAction)
                         ability = abl;
                 if (ability instanceof EnchantAbility enchantAbility) {

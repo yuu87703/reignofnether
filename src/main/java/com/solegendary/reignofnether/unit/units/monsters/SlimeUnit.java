@@ -1,12 +1,10 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
-import net.minecraft.tags.DamageTypeTags;
-import org.joml.Vector3d;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.ConsumeSlime;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchSlimeConversion;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
@@ -23,6 +21,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -45,6 +44,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -467,7 +467,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
             return true;
         }
         if (result && getSize() >= 2 && pEntity instanceof LivingEntity && !(this instanceof MagmaCubeUnit) && !this.level().isClientSide())
-            if (ResearchServerEvents.playerHasResearch(getOwnerName(), ResearchSlimeConversion.itemName))
+            if (ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_SLIME_CONVERSION))
                 ((LivingEntity)pEntity).addEffect(new MobEffectInstance(MobEffects.CONFUSION, CONVERT_DEBUFF_DURATION_SECONDS * 20, 0), this);
         return result;
     }
