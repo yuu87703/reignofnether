@@ -5,15 +5,16 @@ import com.mojang.serialization.Dynamic;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
-import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
-import com.solegendary.reignofnether.building.buildings.villagers.*;
+import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
-import com.solegendary.reignofnether.research.researchItems.ResearchResourceCapacity;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -41,7 +42,10 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Vindicator;
-import net.minecraft.world.entity.npc.*;
+import net.minecraft.world.entity.npc.VillagerData;
+import net.minecraft.world.entity.npc.VillagerDataHolder;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -275,21 +279,21 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     }
 
     public static List<AbilityButton> getBuildingButtons() {
-        return List.of(
-            TownCentre.getBuildButton(Keybindings.keyQ),
-            OakStockpile.getBuildButton(Keybindings.keyW),
-            VillagerHouse.getBuildButton(Keybindings.keyE),
-            WheatFarm.getBuildButton(Keybindings.keyR),
-            Watchtower.getBuildButton(Keybindings.keyT),
-            Barracks.getBuildButton(Keybindings.keyY),
-            Blacksmith.getBuildButton(Keybindings.keyU),
-            ArcaneTower.getBuildButton(Keybindings.keyI),
-            Library.getBuildButton(Keybindings.keyO),
-            Castle.getBuildButton(Keybindings.keyP),
-            IronGolemBuilding.getBuildButton(Keybindings.keyL),
-            OakBridge.getBuildButton(Keybindings.keyC),
-            Beacon.getBuildButton(null)
-        );
+        List<AbilityButton> buildingButtons = new ArrayList<>();
+
+        List<Keybinding> keybindings = BuildingUtils.keybindings;
+        int index = 0;
+
+        for (Building building : ReignOfNetherRegistries.BUILDING) {
+            if (building.getFaction() == Faction.VILLAGERS || building.getFaction() == null) {
+                AbilityButton button = building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index));
+                if (button != null) {
+                    buildingButtons.add(button);
+                    index++;
+                }
+            }
+        }
+        return buildingButtons;
     }
 
     public VillagerUnit(EntityType<? extends Vindicator> entityType, Level level) {
@@ -401,7 +405,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
 
     @Override
     public void setupEquipmentAndUpgradesClient() {
-        if (ResearchClient.hasResearch(ResearchResourceCapacity.itemName))
+        if (ResearchClient.hasResearch(ProductionItems.RESEARCH_RESOURCE_CAPACITY))
             this.maxResources = 200;
     }
 
