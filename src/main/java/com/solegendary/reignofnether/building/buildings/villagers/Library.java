@@ -1,9 +1,6 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.research.researchItems.*;
-import org.joml.Vector3d;
-import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingBlock;
@@ -56,17 +53,6 @@ public class Library extends ProductionBuilding {
 
         this.explodeChance = 0.2f;
 
-        Ability enchantSharpness = new EnchantSharpness();
-        this.abilities.add(enchantSharpness, Keybindings.keyE);
-        Ability enchantQuickCharge = new EnchantQuickCharge();
-        this.abilities.add(enchantQuickCharge, Keybindings.keyW);
-        Ability enchantMaiming = new EnchantMaiming();
-        this.abilities.add(enchantMaiming, Keybindings.keyQ);
-        Ability enchantMultishot = new EnchantMultishot();
-        this.abilities.add(enchantMultishot, Keybindings.keyR);
-        Ability enchantVigor = new EnchantVigor();
-        this.abilities.add(enchantVigor, Keybindings.keyT);
-
         this.productions.add(ProductionItems.RESEARCH_LINGERING_POTIONS, Keybindings.keyY);
         this.productions.add(ProductionItems.RESEARCH_EVOKER_VEXES, Keybindings.keyU);
         this.productions.add(ProductionItems.RESEARCH_GRAND_LIBRARY, Keybindings.keyI);
@@ -78,7 +64,18 @@ public class Library extends ProductionBuilding {
 
     @Override
     public BuildingPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        return new LibraryPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        LibraryPlacement bp = new LibraryPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
+        Ability enchantSharpness = new EnchantSharpness(bp);
+        bp.getAbilities().add(enchantSharpness);
+        Ability enchantQuickCharge = new EnchantQuickCharge(bp);
+        bp.getAbilities().add(enchantQuickCharge);
+        Ability enchantMaiming = new EnchantMaiming(bp);
+        bp.getAbilities().add(enchantMaiming);
+        Ability enchantMultishot = new EnchantMultishot(bp);
+        bp.getAbilities().add(enchantMultishot);
+        Ability enchantVigor = new EnchantVigor(bp);
+        bp.getAbilities().add(enchantVigor);
+        return bp;
     }
 
     public AbilityButton getBuildButton(Keybinding hotkey) {

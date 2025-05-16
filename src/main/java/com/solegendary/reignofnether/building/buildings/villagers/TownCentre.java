@@ -54,11 +54,6 @@ public class TownCentre extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.GRASS_BLOCK);
         this.startingBlockTypes.add(Blocks.POLISHED_ANDESITE_STAIRS);
 
-        Ability callToArms = new CallToArmsBuilding();
-        this.abilities.add(callToArms, Keybindings.keyV);
-        BackToWorkBuilding backToWork = new BackToWorkBuilding();
-        this.abilities.add(backToWork, Keybindings.build);
-
         this.productions.add(ProductionItems.VILLAGER, Keybindings.keyQ);
     }
 
@@ -66,7 +61,12 @@ public class TownCentre extends ProductionBuilding {
 
     @Override
     public BuildingPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        return new RangeIndicatorProductionPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), true, MILITIA_RANGE, true, false);
+        BuildingPlacement bp = new RangeIndicatorProductionPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), true, MILITIA_RANGE, true, false);
+        Ability callToArms = new CallToArmsBuilding(level);
+        bp.getAbilities().add(callToArms);
+        BackToWorkBuilding backToWork = new BackToWorkBuilding(level);
+        bp.getAbilities().add(backToWork);
+        return bp;
     }
 
     public AbilityButton getBuildButton(Keybinding hotkey) {
