@@ -1,8 +1,8 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
-import com.solegendary.reignofnether.building.production.ProductionItem;
+import com.solegendary.reignofnether.building.ProductionBuilding;
+import com.solegendary.reignofnether.building.ProductionItem;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
@@ -10,7 +10,6 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sandbox.SandboxAction;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -25,20 +24,24 @@ public class ZoglinProd extends ProductionItem {
     public final static String itemName = "Zoglin";
     public final static ResourceCost cost = ResourceCosts.ZOGLIN;
 
-    public ZoglinProd() {
-        super(cost);
-        this.onComplete = (Level level, ProductionPlacement placement) -> {
+    public ZoglinProd(ProductionBuilding building) {
+        super(building, cost.ticks);
+        this.onComplete = (Level level) -> {
             if (!level.isClientSide()) {
-                placement.produceUnit((ServerLevel) level, EntityRegistrar.ZOGLIN_UNIT.get(), placement.ownerName, true);
+                building.produceUnit((ServerLevel) level, EntityRegistrar.ZOGLIN_UNIT.get(), building.ownerName, true);
             }
         };
+        this.foodCost = cost.food;
+        this.woodCost = cost.wood;
+        this.oreCost = cost.ore;
+        this.popCost = cost.population;
     }
 
     public String getItemName() {
         return ZoglinProd.itemName;
     }
 
-    public AbilityButton getPlaceButton() {
+    public static AbilityButton getPlaceButton() {
         return new AbilityButton(
                 itemName,
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/zoglin.png"),
@@ -54,8 +57,7 @@ public class ZoglinProd extends ProductionItem {
                 List.of(
                         FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.zoglin"), Style.EMPTY.withBold(true))
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 }

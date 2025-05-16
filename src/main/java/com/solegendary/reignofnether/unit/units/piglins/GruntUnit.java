@@ -1,18 +1,16 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
-import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
+import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
+import com.solegendary.reignofnether.building.buildings.piglins.*;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
+import com.solegendary.reignofnether.research.researchItems.ResearchResourceCapacity;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -22,7 +20,6 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.util.Faction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -40,20 +37,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit, ArmSwingingUnit {
-    public static final Abilities ABILITIES = new Abilities();
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
 
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
@@ -149,8 +138,8 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     final static public float movementSpeed = 0.25f;
     public int maxResources = 100;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
-    private List<Ability> abilities = new ArrayList<>();
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     private boolean isSwingingArmOnce = false;
@@ -175,26 +164,31 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     }
 
     public static List<AbilityButton> getBuildingButtons() {
-        List<AbilityButton> buildingButtons = new ArrayList<>();
-        List<Keybinding> keybindings = BuildingUtils.keybindings;
-        int index = 0;
-
-        for (Building building : ReignOfNetherRegistries.BUILDING) {
-            if (building.getFaction() == Faction.PIGLINS || building.getFaction() == null) {
-                AbilityButton button = building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index));
-                if (button != null) {
-                    buildingButtons.add(button);
-                    index++;
-                }
-            }
-        }
-        return buildingButtons;
+        return List.of(
+            CentralPortal.getBuildButton(Keybindings.keyQ),
+            Portal.getBuildButton(Keybindings.keyW),
+            NetherwartFarm.getBuildButton(Keybindings.keyE),
+            Bastion.getBuildButton(Keybindings.keyR),
+            HoglinStables.getBuildButton(Keybindings.keyT),
+            FlameSanctuary.getBuildButton(Keybindings.keyY),
+            WitherShrine.getBuildButton(Keybindings.keyU),
+            BasaltSprings.getBuildButton(Keybindings.keyI),
+            Fortress.getBuildButton(Keybindings.keyO),
+            BlackstoneBridge.getBuildButton(Keybindings.keyC),
+            Beacon.getBuildButton(null)
+        );
     }
 
     public GruntUnit(EntityType<? extends Piglin> entityType, Level level) {
         super(entityType, level);
-
         updateAbilityButtons();
+    }
+
+    public void updateAbilityButtons() {
+        if (level().isClientSide()) {
+            this.abilityButtons.clear();
+            this.abilityButtons.addAll(getBuildingButtons());
+        }
     }
 
     @Override
@@ -249,9 +243,8 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     @Override
     protected void registerGoals() {
         initialiseGoals();
-        this.goalSelector.addGoal(2, usePortalGoal);
-
         this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, usePortalGoal);
         this.goalSelector.addGoal(2, attackGoal);
         this.goalSelector.addGoal(2, buildRepairGoal);
         this.goalSelector.addGoal(2, gatherResourcesGoal);
@@ -264,7 +257,7 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
 
     @Override
     public void setupEquipmentAndUpgradesClient() {
-        if (ResearchClient.hasResearch(ProductionItems.RESEARCH_RESOURCE_CAPACITY))
+        if (ResearchClient.hasResearch(ResearchResourceCapacity.itemName))
             this.maxResources = 200;
     }
 
@@ -276,38 +269,7 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
 
     @Override
     public boolean fireImmune() {
-        BuildingPlacement building = BuildingUtils.findBuilding(level().isClientSide(), getOnPos());
-        return super.fireImmune() || (building != null &&(building.getBuilding() instanceof FlameSanctuary || building.getBuilding() instanceof BasaltSprings));
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        this.abilities = ABILITIES.get();
-        this.abilityButtons = ABILITIES.getButtons(this);
-        //TODO Remove need for I18n
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            this.abilityButtons.addAll(getBuildingButtons());
-        }
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
+        Building building = BuildingUtils.findBuilding(level().isClientSide(), getOnPos());
+        return super.fireImmune() || building instanceof FlameSanctuary || building instanceof BasaltSprings;
     }
 }

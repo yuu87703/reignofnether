@@ -24,7 +24,7 @@ public class LibraryPlacement extends ProductionPlacement{
         super.tick(tickLevel);
 
         if (tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 15 == 0 && isBuilt && autoCastEnchant != null
-                && autoCastEnchant.isOffCooldown(this)) {
+                && autoCastEnchant.isOffCooldown()) {
 
             List<Mob> mobs = MiscUtil.getEntitiesWithinRange(new Vector3d(
                             this.centrePos.getX(),

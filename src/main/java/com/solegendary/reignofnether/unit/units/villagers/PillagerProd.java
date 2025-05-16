@@ -1,21 +1,19 @@
 package com.solegendary.reignofnether.unit.units.villagers;
 
-import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.BuildingServerboundPacket;
-import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
-import com.solegendary.reignofnether.building.production.ProductionItem;
-import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.sandbox.SandboxAction;
+import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
+import net.minecraft.client.resources.language.I18n;
+import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.building.BuildingServerboundPacket;
+import com.solegendary.reignofnether.building.ProductionBuilding;
+import com.solegendary.reignofnether.building.ProductionItem;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.sandbox.SandboxAction;
-import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -30,19 +28,23 @@ public class PillagerProd extends ProductionItem {
     public final static String itemName = "Pillager";
     public final static ResourceCost cost = ResourceCosts.PILLAGER;
 
-    public PillagerProd() {
-        super(cost);
-        this.onComplete = (Level level, ProductionPlacement placement) -> {
+    public PillagerProd(ProductionBuilding building) {
+        super(building, cost.ticks);
+        this.onComplete = (Level level) -> {
             if (!level.isClientSide())
-                placement.produceUnit((ServerLevel) level, EntityRegistrar.PILLAGER_UNIT.get(), placement.ownerName, true);
+                building.produceUnit((ServerLevel) level, EntityRegistrar.PILLAGER_UNIT.get(), building.ownerName, true);
         };
+        this.foodCost = cost.food;
+        this.woodCost = cost.wood;
+        this.oreCost = cost.ore;
+        this.popCost = cost.population;
     }
 
     public String getItemName() {
         return PillagerProd.itemName;
     }
 
-    public AbilityButton getPlaceButton() {
+    public static AbilityButton getPlaceButton() {
         return new AbilityButton(
                 itemName,
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/pillager.png"),
@@ -60,12 +62,11 @@ public class PillagerProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.pillager.tooltip1"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 
-    public Button getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
+    public static Button getStartButton(ProductionBuilding prodBuilding, Keybinding hotkey) {
         List<FormattedCharSequence> tooltipLines = new ArrayList<>(List.of(
             FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.pillager"), Style.EMPTY.withBold(true)),
             ResourceCosts.getFormattedCost(cost),
@@ -81,13 +82,13 @@ public class PillagerProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.PILLAGER),
+            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, itemName),
             null,
             tooltipLines
         );
     }
 
-    public Button getCancelButton(ProductionPlacement prodBuilding, boolean first) {
+    public Button getCancelButton(ProductionBuilding prodBuilding, boolean first) {
         return new Button(
             PillagerProd.itemName,
             14,
@@ -96,7 +97,7 @@ public class PillagerProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, ProductionItems.PILLAGER, first),
+            () -> BuildingServerboundPacket.cancelProduction(prodBuilding.originPos, itemName, first),
             null,
             null
         );

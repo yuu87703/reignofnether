@@ -282,7 +282,7 @@ public class UnitClientEvents {
                     .filter(u -> {
                         if (u instanceof Unit unit)
                             for (Ability ability : unit.getAbilities())
-                                if (ability.isChanneling(unit) && ability.oneClickOneUse && ability.action == action)
+                                if (ability.isChanneling() && ability.oneClickOneUse && ability.action == action)
                                     return false;
                         return true;
                     })
