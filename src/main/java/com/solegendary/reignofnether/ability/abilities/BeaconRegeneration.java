@@ -20,10 +20,9 @@ public class BeaconRegeneration extends BeaconAbility {
 
     public final static MobEffect AURA_EFFECT = MobEffects.REGENERATION;
 
-    protected Keybinding defaultHotkey = Keybindings.keyE;
-
     public BeaconRegeneration(BeaconPlacement beacon) {
         super(UnitAction.BEACON_REGENERATION, AURA_EFFECT, beacon);
+        this.defaultHotkey = Keybindings.keyE;
     }
 
     @Override

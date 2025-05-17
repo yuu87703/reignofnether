@@ -9,8 +9,11 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.time.TimeClientEvents;
+import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -88,13 +91,28 @@ public class BloodMoon extends HeroAbility {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().setAbility(this);
-        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().startCasting();
+        use(level, unitUsing);
     }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().setAbility(this);
-        ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().startCasting();
+        use(level, unitUsing);
+    }
+
+    private void use(Level level, Unit unitUsing) {
+        boolean isBloodMoonActive;
+        if (level.isClientSide()) {
+            isBloodMoonActive = TimeClientEvents.isBloodMoonActive();
+            if (isBloodMoonActive) {
+                HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.blood_moon.already_active"));
+            }
+        } else {
+            isBloodMoonActive = TimeServerEvents.isBloodMoonActive();
+        }
+
+        if (!isBloodMoonActive) {
+            ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().setAbility(this);
+            ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().startCasting();
+        }
     }
 }

@@ -33,10 +33,9 @@ public class EnchantMaiming extends EnchantAbility {
     public static final int SLOWNESS_DURATION = 5 * ResourceCost.TICKS_PER_SECOND;
     public static final int enchantLevel = 1;
 
-    protected Keybinding defaultHotkey = Keybindings.keyE;
-
     public EnchantMaiming(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_MAIMING);
+        this.defaultHotkey = Keybindings.keyQ;
     }
 
     @Override

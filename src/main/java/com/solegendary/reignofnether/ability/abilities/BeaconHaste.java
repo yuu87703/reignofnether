@@ -20,10 +20,9 @@ public class BeaconHaste extends BeaconAbility {
 
     public final static MobEffect AURA_EFFECT = MobEffects.DIG_SPEED;
 
-    protected Keybinding defaultHotkey = Keybindings.keyW;
-
     public BeaconHaste(BeaconPlacement beacon) {
         super(UnitAction.BEACON_HASTE, AURA_EFFECT, beacon);
+        this.defaultHotkey = Keybindings.keyW;
     }
 
     @Override

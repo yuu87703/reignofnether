@@ -27,8 +27,6 @@ public class BackToWorkBuilding extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE + 5;
 
-    protected Keybinding defaultHotkey = Keybindings.build;
-
     public BackToWorkBuilding(Level level) {
         super(
                 UnitAction.BACK_TO_WORK_BUILDING,
@@ -39,6 +37,7 @@ public class BackToWorkBuilding extends Ability {
                 false,
                 false
         );
+        this.defaultHotkey = Keybindings.build;
     }
 
     @Override

@@ -468,6 +468,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public void doBloodMoon() {
         if (level().isClientSide())
             return;
+        if (TimeServerEvents.isBloodMoonActive())
+            return;
 
         int soulRank = consumeSoulsAndGetSoulRank();
         int bonusDuration = BloodMoon.BONUS_DURATION_PER_SOUL_RANK * soulRank;
