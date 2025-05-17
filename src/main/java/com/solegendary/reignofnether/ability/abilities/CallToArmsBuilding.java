@@ -31,8 +31,6 @@ public class CallToArmsBuilding extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE;
 
-    protected Keybinding defaultHotkey = Keybindings.keyV;
-
     public CallToArmsBuilding(Level level) {
         super(
                 UnitAction.CALL_TO_ARMS_BUILDING,
@@ -43,6 +41,7 @@ public class CallToArmsBuilding extends Ability {
                 false,
                 false
         );
+        this.defaultHotkey = Keybindings.keyV;
     }
 
     @Override

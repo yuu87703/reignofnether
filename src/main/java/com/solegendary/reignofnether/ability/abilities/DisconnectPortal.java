@@ -25,8 +25,6 @@ public class DisconnectPortal extends Ability {
 
     PortalPlacement portalPlacement;
 
-    protected Keybinding defaultHotkey = Keybindings.keyE;
-
     public DisconnectPortal(PortalPlacement portalPlacement) {
         super(
             UnitAction.DISCONNECT_PORTAL,
@@ -37,6 +35,7 @@ public class DisconnectPortal extends Ability {
             true
         );
         this.portalPlacement = portalPlacement;
+        this.defaultHotkey = Keybindings.keyE;
     }
 
     @Override

@@ -20,12 +20,12 @@ public class LibraryPlacement extends ProductionPlacement{
     public LibraryPlacement(Building building, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(building, level, originPos, rotation, ownerName, blocks, isCapitol);
 
-        Ability enchantSharpness = new EnchantSharpness(this);
-        getAbilities().add(enchantSharpness);
-        Ability enchantQuickCharge = new EnchantQuickCharge(this);
-        getAbilities().add(enchantQuickCharge);
         Ability enchantMaiming = new EnchantMaiming(this);
         getAbilities().add(enchantMaiming);
+        Ability enchantQuickCharge = new EnchantQuickCharge(this);
+        getAbilities().add(enchantQuickCharge);
+        Ability enchantSharpness = new EnchantSharpness(this);
+        getAbilities().add(enchantSharpness);
         Ability enchantMultishot = new EnchantMultishot(this);
         getAbilities().add(enchantMultishot);
         Ability enchantVigor = new EnchantVigor(this);

@@ -32,10 +32,9 @@ public class EnchantVigor extends EnchantAbility {
     public static final int enchantLevel = 1;
     public static final float cooldownMultiplier = 0.70f;
 
-    protected Keybinding defaultHotkey = Keybindings.keyT;
-
     public EnchantVigor(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_VIGOR);
+        this.defaultHotkey = Keybindings.keyT;
     }
 
     @Override

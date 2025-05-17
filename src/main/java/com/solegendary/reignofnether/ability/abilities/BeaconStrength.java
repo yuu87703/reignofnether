@@ -20,10 +20,9 @@ public class BeaconStrength extends BeaconAbility {
 
     public final static MobEffect AURA_EFFECT = MobEffects.DAMAGE_BOOST;
 
-    protected Keybinding defaultHotkey = Keybindings.keyT;
-
     public BeaconStrength(BeaconPlacement beacon) {
         super(UnitAction.BEACON_STRENGTH, AURA_EFFECT, beacon);
+        this.defaultHotkey = Keybindings.keyT;
     }
 
     @Override

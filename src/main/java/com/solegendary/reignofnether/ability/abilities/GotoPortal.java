@@ -27,8 +27,6 @@ public class GotoPortal extends Ability {
 
     PortalPlacement portalPlacement;
 
-    protected Keybinding defaultHotkey = Keybindings.keyW;
-
     public GotoPortal(PortalPlacement portalPlacement) {
         super(
             UnitAction.GOTO_PORTAL,
@@ -39,6 +37,7 @@ public class GotoPortal extends Ability {
             true
         );
         this.portalPlacement = portalPlacement;
+        this.defaultHotkey = Keybindings.keyW;
     }
 
     @Override

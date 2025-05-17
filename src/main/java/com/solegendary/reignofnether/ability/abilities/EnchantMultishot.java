@@ -31,10 +31,9 @@ public class EnchantMultishot extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.MULTISHOT;
     public static final int enchantLevel = 1;
 
-    protected Keybinding defaultHotkey = Keybindings.keyR;
-
     public EnchantMultishot(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_MULTISHOT);
+        this.defaultHotkey = Keybindings.keyR;
     }
 
     @Override

@@ -3,10 +3,10 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
-import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.units.villagers.VindicatorUnit;
@@ -33,6 +33,7 @@ public class EnchantSharpness extends EnchantAbility {
 
     public EnchantSharpness(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_SHARPNESS);
+        this.defaultHotkey = Keybindings.keyE;
     }
 
     @Override

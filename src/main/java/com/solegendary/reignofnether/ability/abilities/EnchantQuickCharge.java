@@ -31,10 +31,9 @@ public class EnchantQuickCharge extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.QUICK_CHARGE;
     public static final int enchantLevel = 2;
 
-    protected Keybinding defaultHotkey = Keybindings.keyW;
-
     public EnchantQuickCharge(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_QUICK_CHARGE);
+        this.defaultHotkey = Keybindings.keyW;
     }
 
     @Override

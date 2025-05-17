@@ -28,7 +28,6 @@ public class CallLightning extends Ability {
 
     private static final int CD_MAX = 60 * ResourceCost.TICKS_PER_SECOND;
     public static final int RANGE = 25;
-    protected Keybinding defaultHotkey = Keybindings.keyL;
 
     private final BuildingPlacement bpl;
 
@@ -43,6 +42,7 @@ public class CallLightning extends Ability {
             true
         );
         this.bpl = lab;
+        this.defaultHotkey = Keybindings.keyL;
     }
 
     @Override
