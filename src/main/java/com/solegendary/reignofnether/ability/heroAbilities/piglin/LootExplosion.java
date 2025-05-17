@@ -32,12 +32,12 @@ public class LootExplosion extends HeroAbility {
     private static final int NUM_ITEMS = 10;
     private static final int NUM_ITEMS_PER_100_RESOURCES = 3;
 
-    public LootExplosion() {
-        super(1, UnitAction.LOOT_EXPLOSION, CD_MAX_SECONDS, 0, 0, false);
+    public LootExplosion(HeroUnit hero) {
+        super(hero, 1, UnitAction.LOOT_EXPLOSION, CD_MAX_SECONDS, 0, 0, false);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit hero) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton("Loot Explosion",
                 new ResourceLocation("minecraft", "textures/item/iron_chestplate.png"),
                 hotkey,
@@ -46,22 +46,20 @@ public class LootExplosion extends HeroAbility {
                 () -> true,
                 () -> sendUnitCommand(UnitAction.LOOT_EXPLOSION),
                 null,
-                getTooltipLines((HeroUnit) hero),
-                this,
-                hero
+                getTooltipLines(),
+                this
         );
     }
 
     @Override
-    public Button getRankUpButton(HeroUnit hero) {
+    public Button getRankUpButton() {
         return super.getRankUpButtonProtected(
                 "Loot Explosion",
-                new ResourceLocation("minecraft", "textures/item/iron_chestplate.png"),
-                hero
+                new ResourceLocation("minecraft", "textures/item/iron_chestplate.png")
         );
     }
 
-    public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.loot_explosion") + " " + rankString(), true),
                 fcsIcons(I18n.get("abilities.reignofnether.loot_explosion.stats", CD_MAX_SECONDS / 20)),
@@ -72,10 +70,10 @@ public class LootExplosion extends HeroAbility {
         );
     }
 
-    public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.loot_explosion"), true),
-                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle(hero)),
+                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.loot_explosion.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.loot_explosion.tooltip2")),

@@ -63,8 +63,7 @@ public class MagmaCubeProd extends ProductionItem {
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.magma_cube.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.magma_cube.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

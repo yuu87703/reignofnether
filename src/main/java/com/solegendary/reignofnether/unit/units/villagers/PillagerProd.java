@@ -60,8 +60,7 @@ public class PillagerProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.pillager.tooltip1"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

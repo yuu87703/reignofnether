@@ -62,8 +62,7 @@ public class PumpkinFarm extends AbstractFarm {
                         FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.pumpkin_farm.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.pumpkin_farm.tooltip3"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

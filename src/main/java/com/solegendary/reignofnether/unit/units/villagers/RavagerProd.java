@@ -61,8 +61,7 @@ public class RavagerProd extends ProductionItem {
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.ravager.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.ravager.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

@@ -27,26 +27,30 @@ public class SonicBoom extends Ability {
 
     public static final int CD_MAX_SECONDS = 60;
 
-    public SonicBoom() {
+    private final WardenUnit wardenUnit;
+
+    public SonicBoom(WardenUnit wardenUnit) {
         super(UnitAction.CAST_SONIC_BOOM,
+            wardenUnit.level(),
             CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
             WardenUnit.SONIC_BOOM_RANGE,
             0,
             true,
             true
         );
+        this.wardenUnit = wardenUnit;
     }
 
     @Override
-    public boolean isChanneling(Unit unit) {
-        SonicBoomGoal goal = ((WardenUnit)unit).getSonicBoomGoal();
+    public boolean isChanneling() {
+        SonicBoomGoal goal = this.wardenUnit.getSonicBoomGoal();
         if (goal == null)
             return false;
         return goal.isCasting() || goal.getMoveTarget() != null || goal.getTargetEntity() != null;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton("Sonic Boom",
             new ResourceLocation("minecraft", "textures/block/note_block.png"),
             hotkey,
@@ -67,14 +71,13 @@ public class SonicBoom extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sonic_boom.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sonic_boom.tooltip3"), Style.EMPTY)
             ),
-            this,
-            unit
+            this
         );
     }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        if (targetEntity instanceof Unit unit && unit.equals(unitUsing)) {
+        if (targetEntity instanceof Unit unit && unit.equals(this.wardenUnit)) {
             return;
         }
         ((WardenUnit) unitUsing).getSonicBoomGoal().setAbility(this);

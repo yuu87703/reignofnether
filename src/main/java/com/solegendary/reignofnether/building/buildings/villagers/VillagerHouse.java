@@ -62,8 +62,7 @@ public class VillagerHouse extends Building {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.villager_house.tooltip1"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

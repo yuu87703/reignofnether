@@ -1,11 +1,9 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.ConsumeSlime;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -18,7 +16,6 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.MagmaCubeUnit;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -55,16 +52,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SlimeUnit extends Slime implements Unit, AttackerUnit {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new ConsumeSlime(), Keybindings.keyQ);
-    }
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
-
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -164,8 +151,8 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     private MeleeAttackSlimeUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    private List<AbilityButton> abilityButtons;
-    private List<Ability> abilities;
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     public SlimeUnit consumeTarget = null;
@@ -173,7 +160,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     public SlimeUnit(EntityType<? extends Slime> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new SlimeUnitMoveControl(this);
-
+        this.abilities.add(new ConsumeSlime(this));
         updateAbilityButtons();
     }
 
@@ -246,7 +233,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     public boolean autocastingConsume() {
         for (Ability ability : abilities)
             if (ability instanceof ConsumeSlime consume)
-                return consume.getAutocast(this);
+                return consume.getAutocast();
         return false;
     }
 
@@ -263,7 +250,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         consumeTarget = null;
         for (Ability ability : abilities)
             if (ability instanceof ConsumeSlime consume)
-                consume.setAutocast(false, this);
+                consume.setAutocast(false);
     }
 
     @Override
@@ -507,32 +494,5 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
             setSize(newSize, false);
 
         return result;
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.get();
-        abilityButtons = ABILITIES.getButtons(this);
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
     }
 }

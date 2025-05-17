@@ -60,8 +60,7 @@ public class EndermanProd extends ProductionItem {
                         FormattedCharSequence.forward(I18n.get("units.neutral.reignofnether.enderman.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.neutral.reignofnether.enderman.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

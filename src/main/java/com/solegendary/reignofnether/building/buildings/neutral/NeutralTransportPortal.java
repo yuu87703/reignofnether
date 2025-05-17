@@ -60,8 +60,7 @@ public class NeutralTransportPortal extends PortalTransport {
                         FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.neutral_transport_portal.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.neutral.reignofnether.neutral_transport_portal.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

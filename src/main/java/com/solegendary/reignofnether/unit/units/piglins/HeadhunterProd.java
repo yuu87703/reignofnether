@@ -62,8 +62,7 @@ public class HeadhunterProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.head_hunter.tooltip1"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

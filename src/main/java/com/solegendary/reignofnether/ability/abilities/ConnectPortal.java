@@ -25,19 +25,20 @@ public class ConnectPortal extends Ability {
     private static final int CD_MAX = 0;
     private static final int RANGE = 0;
 
-    public ConnectPortal() {
-        super(UnitAction.CONNECT_PORTAL, CD_MAX, RANGE, 0, true);
+    PortalPlacement portalPlacement;
+
+    public ConnectPortal(PortalPlacement portalPlacement) {
+        super(UnitAction.CONNECT_PORTAL, portalPlacement.getLevel(), CD_MAX, RANGE, 0, true);
+        this.portalPlacement = portalPlacement;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
-        if (!(placement instanceof PortalPlacement)) return null;
-        PortalPlacement portal = (PortalPlacement) placement;
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton("Connect Portal",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png"),
             hotkey,
             () -> false,
-            () -> portal.getPortalType() != PortalPlacement.PortalType.TRANSPORT,
+            () -> portalPlacement.getPortalType() != PortalPlacement.PortalType.TRANSPORT,
             () -> true,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.CONNECT_PORTAL),
             null,
@@ -49,27 +50,26 @@ public class ConnectPortal extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.connect_portal.tooltip1"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.connect_portal.tooltip2"), Style.EMPTY)
             ),
-            this,
-            placement
+            this
         );
     }
 
     @Override
-    public void use(Level level, BuildingPlacement building, BlockPos targetBp) {
+    public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
 
-        if (building instanceof PortalPlacement portal && portal.getPortalType() == PortalPlacement.PortalType.TRANSPORT) {
-            portal.disconnectPortal();
+        if (buildingUsing == portalPlacement) {
+            portalPlacement.disconnectPortal();
 
             BuildingPlacement targetBuilding = BuildingUtils.findBuilding(level.isClientSide(), targetBp);
             if (targetBuilding instanceof PortalPlacement targetPortal && targetPortal.getPortalType() == PortalPlacement.PortalType.TRANSPORT &&
-                targetBuilding != building && targetBuilding.isBuilt &&
-                (targetBuilding.ownerName.equals(building.ownerName) ||
+                targetBuilding != portalPlacement && targetBuilding.isBuilt &&
+                (targetBuilding.ownerName.equals(portalPlacement.ownerName) ||
                 (targetBuilding.getBuilding() instanceof NeutralTransportPortal &&
-                    building.getBuilding() instanceof NeutralTransportPortal))) {
+                    portalPlacement.getBuilding() instanceof NeutralTransportPortal))) {
 
                 targetPortal.disconnectPortal();
-                targetPortal.destination = portal.centrePos;
-                portal.destination = targetPortal.centrePos;
+                targetPortal.destination = portalPlacement.centrePos;
+                portalPlacement.destination = targetPortal.centrePos;
             } else if (level.isClientSide()) {
                 HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.connect_portal.error1"));
             }

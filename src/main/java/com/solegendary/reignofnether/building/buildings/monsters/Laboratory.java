@@ -55,9 +55,6 @@ public class Laboratory extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.SPRUCE_PLANKS);
         this.startingBlockTypes.add(Blocks.BLACKSTONE);
 
-        Ability callLightning = new CallLightning();
-        this.abilities.add(callLightning, Keybindings.keyL);
-
         this.productions.add(ProductionItems.RESEARCH_HUSKS, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_DROWNED, Keybindings.keyW);
         this.productions.add(ProductionItems.RESEARCH_STRAYS, Keybindings.keyE);
@@ -75,7 +72,7 @@ public class Laboratory extends ProductionBuilding {
     // return the lightning rod is built based on existing placed blocks
     // returns null if it is not build or is damaged
     // also will return null if outside of render range, but shouldn't matter since it'd be out of ability range anyway
-    public BlockPos getLightningRodPos(RangeIndicatorProductionPlacement placement) {
+    public BlockPos getLightningRodPos(BuildingPlacement placement) {
         for (BuildingBlock block : placement.getBlocks()) {
             if (placement.getLevel().getBlockState(block.getBlockPos()).getBlock() == Blocks.LIGHTNING_ROD &&
                 placement.getLevel().getBlockState(block.getBlockPos().below()).getBlock() == Blocks.WAXED_COPPER_BLOCK)
@@ -95,7 +92,10 @@ public class Laboratory extends ProductionBuilding {
 
     @Override
     public BuildingPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        return new RangeIndicatorProductionPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false, CallLightning.RANGE, true, true);
+        BuildingPlacement bp = new RangeIndicatorProductionPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false, CallLightning.RANGE, true, true);
+        Ability callLightning = new CallLightning(bp);
+        bp.getAbilities().add(callLightning);
+        return bp;
     }
 
     public AbilityButton getBuildButton(Keybinding hotkey) {
@@ -121,8 +121,7 @@ public class Laboratory extends ProductionBuilding {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.laboratory.tooltip3"), Style.EMPTY)
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

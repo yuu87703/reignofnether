@@ -63,8 +63,7 @@ public class HoglinProd extends ProductionItem {
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.hoglin.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.hoglin.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

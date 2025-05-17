@@ -49,7 +49,7 @@ public class BlazeMixin extends Monster {
                 entity instanceof BlazeUnit blazeUnit &&
                 !blazeUnit.getAbilities().isEmpty() &&
                 blazeUnit.getAbilities().get(0) instanceof FirewallShot firewallShot &&
-                !firewallShot.isOffCooldown(blazeUnit))
+                !firewallShot.isOffCooldown())
                 return true;
         }
         return false;

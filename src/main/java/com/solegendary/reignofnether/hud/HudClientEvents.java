@@ -131,8 +131,8 @@ public class HudClientEvents {
             float totalCd = 0;
             if (le instanceof Unit unit) {
                 for (Ability ability : unit.getAbilities()) {
-                    totalCd += ability.getCooldown(unit);
-                    if (ability.isChanneling(unit))
+                    totalCd += ability.getCooldown();
+                    if (ability.isChanneling())
                         totalCd += 10;
                 }
             }
@@ -851,7 +851,7 @@ public class HudClientEvents {
             if (hudSelectedEntity instanceof VillagerUnit vUnit)
                 for (Ability ability : vUnit.getAbilities())
                     if (ability instanceof CallToArmsUnit callToArmsUnit)
-                        actionButtons.add(callToArmsUnit.getButton(Keybindings.keyV, vUnit));
+                        actionButtons.add(callToArmsUnit.getButton(Keybindings.keyV));
 
             for (Button actionButton : actionButtons) {
                 // GATHER button does not have a static icon
@@ -908,7 +908,7 @@ public class HudClientEvents {
 
                     if (abilityButton.ability instanceof HeroAbility heroAbility &&
                             ((HeroUnit)unit).isRankUpMenuOpen()) {
-                        Button rankUpButton = heroAbility.getRankUpButton((HeroUnit)unit);
+                        Button rankUpButton = heroAbility.getRankUpButton();
                         if (!rankUpButton.isHidden.get()) {
                             i += 1;
                             rankUpButton.render(evt.getGuiGraphics(), blitX, blitY, mouseX, mouseY);

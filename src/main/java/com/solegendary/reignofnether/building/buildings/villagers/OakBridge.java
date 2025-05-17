@@ -94,8 +94,7 @@ public class OakBridge extends AbstractBridge {
                     Style.EMPTY
                 )
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

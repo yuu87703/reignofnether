@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.unit.units.villagers;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.BackToWorkUnit;
 import com.solegendary.reignofnether.building.BuildingPlacement;
@@ -21,7 +20,6 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.unit.packets.UnitConvertClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -46,8 +44,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -57,16 +53,6 @@ import java.util.UUID;
 import static com.solegendary.reignofnether.survival.SurvivalServerEvents.ENEMY_OWNER_NAME;
 
 public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, VillagerDataHolder, ConvertableUnit {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new BackToWorkUnit(), Keybindings.build);
-    }
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
-
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -165,13 +151,21 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Villa
     final static public float movementSpeed = 0.28f;
     public int maxResources = 100;
 
-    private List<AbilityButton> abilityButtons;
-    private List<Ability> abilities;
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     public MilitiaUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
+        this.abilities.add(new BackToWorkUnit(level));
         updateAbilityButtons();
+    }
+
+    public void updateAbilityButtons() {
+        if (level().isClientSide()) {
+            this.abilityButtons.clear();
+            this.abilityButtons.add(this.abilities.get(0).getButton(Keybindings.build));
+        }
     }
 
     @Override
@@ -330,33 +324,6 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Villa
     public void setVillagerData(VillagerData p_35437_) {
         VillagerData villagerdata = this.getVillagerData();
         this.entityData.set(VILLAGER_DATA, p_35437_);
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.get();
-        abilityButtons = ABILITIES.getButtons(this);
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
     }
 
     static {

@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
@@ -31,15 +32,19 @@ public class Bloodlust extends Ability {
     private static final int HEALTH_COST = 12;
     private static final int DURATION_SECONDS = 10;
 
-    public Bloodlust() {
+    private final Unit unit;
+
+    public Bloodlust(Unit unit) {
         super(
                 UnitAction.BLOOD_LUST,
+                ((Entity) unit).level(),
                 0,
                 0,
                 0,
                 false,
                 false
         );
+        this.unit = unit;
     }
 
     private static int getDurationLeft(Unit unit) {
@@ -52,7 +57,7 @@ public class Bloodlust extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Bloodlust",
                 new ResourceLocation("minecraft", "textures/block/redstone_block.png"),
@@ -69,24 +74,23 @@ public class Bloodlust extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY)
                 ),
-                this,
-                unit
+                this
         );
     }
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
         int duration = DURATION_SECONDS * ResourceCost.TICKS_PER_SECOND;
-        if (((LivingEntity) unitUsing).getHealth() <= HEALTH_COST)
+        if (((LivingEntity) unit).getHealth() <= HEALTH_COST)
             return;
         else
-            ((LivingEntity) unitUsing).hurt(level.damageSources().magic(), HEALTH_COST);
+            ((LivingEntity) unit).hurt(level.damageSources().magic(), HEALTH_COST);
 
-        if (unitUsing instanceof HeadhunterUnit headhunterUnit) {
+        if (unit instanceof HeadhunterUnit headhunterUnit) {
             headhunterUnit.bloodlustTicks = duration;
             headhunterUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
             headhunterUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
-        } else if (unitUsing instanceof BruteUnit bruteUnit) {
+        } else if (unit instanceof BruteUnit bruteUnit) {
             bruteUnit.bloodlustTicks = duration;
             bruteUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
             bruteUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));

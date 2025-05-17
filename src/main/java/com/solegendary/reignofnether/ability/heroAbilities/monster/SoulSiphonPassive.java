@@ -24,15 +24,15 @@ public class SoulSiphonPassive extends HeroAbility {
     public float soulsPerCast = 0;
     public float soulsMax = 0;
 
-    public SoulSiphonPassive() {
-        super(3, UnitAction.NONE, 0, 0, 0, false);
+    public SoulSiphonPassive(HeroUnit hero) {
+        super(hero, 3, UnitAction.NONE, 0, 0, 0, false);
         this.autocastEnableAction = UnitAction.ENABLE_SOUL_SIPHON_PASSIVE;
         this.autocastDisableAction = UnitAction.DISBLE_SOUL_SIPHON_PASSIVE;
-        this.setDefaultAutocast(true);
+        this.setAutocast(true);
     }
 
-    public boolean rankUp(HeroUnit hero) {
-        if (super.rankUp(hero)) {
+    public boolean rankUp() {
+        if (super.rankUp()) {
             updateStatsForRank();
             return true;
         }
@@ -53,18 +53,17 @@ public class SoulSiphonPassive extends HeroAbility {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit hero) {
+    public AbilityButton getButton(Keybinding hotkey) {
         AbilityButton button = new AbilityButton("Soul Siphon",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png"),
             hotkey,
-            () -> this.getAutocast(hero),
+            this::getAutocast,
             () -> rank == 0,
             () -> true,
-            () -> toggleAutocast(hero),
+            this::toggleAutocast,
             null,
-            getTooltipLines((HeroUnit) hero),
-            this,
-            hero
+            getTooltipLines(),
+            this
         );
         button.extraLabel = String.valueOf((int) souls);
         if (((int) souls) <= 0)
@@ -77,15 +76,14 @@ public class SoulSiphonPassive extends HeroAbility {
     }
 
     @Override
-    public Button getRankUpButton(HeroUnit hero) {
+    public Button getRankUpButton() {
         return super.getRankUpButtonProtected(
             "Soul Siphon",
-            new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png"),
-            hero
+            new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png")
         );
     }
 
-    public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.soul_siphon") + " " + rankString(), true),
                 fcs(""),
@@ -97,10 +95,10 @@ public class SoulSiphonPassive extends HeroAbility {
         );
     }
 
-    public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.soul_siphon"), true),
-                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle(hero)),
+                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.soul_siphon.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.soul_siphon.tooltip2")),
@@ -115,8 +113,8 @@ public class SoulSiphonPassive extends HeroAbility {
     }
 
     // returns amount of souls consumed
-    public boolean consumeSouls(HeroUnit unit) {
-        if (getAutocast(unit) && souls >= soulsPerCast) {
+    public boolean consumeSouls() {
+        if (getAutocast() && souls >= soulsPerCast) {
             souls -= soulsPerCast;
             return true;
         }
@@ -125,15 +123,15 @@ public class SoulSiphonPassive extends HeroAbility {
 
     private int lastEntityKilledId = -1; // LivingDeathEvent sometimes fires twice
 
-    public void checkAndGainSouls(LivingEntity entityKilled, int splitAmount, HeroUnit hero) {
+    public void checkAndGainSouls(LivingEntity entityKilled, int splitAmount) {
         if (soulsMax > 0 && entityKilled.getId() != lastEntityKilledId) {
-            if (entityKilled instanceof Unit unit && !unit.getOwnerName().equals(hero.getOwnerName()))
+            if (entityKilled instanceof Unit unit && !unit.getOwnerName().equals(((Unit) hero).getOwnerName()))
                 souls += unit.getCost().population;
             lastEntityKilledId = entityKilled.getId();
         }
         if (souls > soulsMax)
             souls = soulsMax;
         if (((LivingEntity) hero).level().isClientSide())
-            hero.updateAbilityButtons();
+            ((Unit) hero).updateAbilityButtons();
     }
 }

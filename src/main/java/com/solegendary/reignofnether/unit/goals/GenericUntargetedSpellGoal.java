@@ -63,7 +63,7 @@ public class GenericUntargetedSpellGoal extends Goal {
                     if (!this.mob.level().isClientSide())
                         AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
                     else if (mob instanceof Unit unit) // Can it be a non-unit entity?
-                        this.ability.setToMaxCooldown(unit);
+                        this.ability.setToMaxCooldown();
                 }
                 this.ticksCasting = 0;
                 this.isCasting = false;

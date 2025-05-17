@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.abilities;
 
+import net.minecraft.client.resources.language.I18n;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
@@ -8,7 +9,6 @@ import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -19,33 +19,36 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class Eject extends Ability {
-    public Eject() {
+
+    private final LivingEntity entity;
+
+    public Eject(LivingEntity entity) {
         super(
             UnitAction.EJECT,
+            entity.level(),
             0,
             0,
             0,
             false
         );
+        this.entity = entity;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        LivingEntity entity = (LivingEntity) unit;
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
             "Eject",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/barrier.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.EJECT,
-            () -> entity.getPassengers().isEmpty(),
+            () -> entity.getPassengers().size() == 0,
             () -> true,
             () -> UnitClientEvents.sendUnitCommand(UnitAction.EJECT),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.eject"), Style.EMPTY)
             ),
-            this,
-            unit
+            this
         );
     }
 
@@ -55,6 +58,6 @@ public class Eject extends Ability {
 
         for (Ability ability : unitUsing.getAbilities())
             if (ability instanceof SpinWebs spinWebs)
-                spinWebs.setCooldown(spinWebs.getCooldown(unitUsing) / 4f, unitUsing);
+                spinWebs.setCooldown(spinWebs.getCooldown() / 4f);
     }
 }

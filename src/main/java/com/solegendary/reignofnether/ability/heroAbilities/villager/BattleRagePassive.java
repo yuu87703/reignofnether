@@ -11,7 +11,6 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
@@ -27,12 +26,12 @@ public class BattleRagePassive extends HeroAbility {
     public float maxHpRegen = 1.2f;
     public float maxBonusDamage = 4;
 
-    public BattleRagePassive() {
-        super(3, UnitAction.NONE, 0, 0, 0, false);
+    public BattleRagePassive(HeroUnit hero) {
+        super(hero, 3, UnitAction.NONE, 0, 0, 0, false);
     }
 
-    public boolean rankUp(HeroUnit hero) {
-        if (super.rankUp(hero)) {
+    public boolean rankUp() {
+        if (super.rankUp()) {
             updateStatsForRank();
             return true;
         }
@@ -52,18 +51,18 @@ public class BattleRagePassive extends HeroAbility {
         }
     }
 
-    public double getHpRegen(HeroUnit hero) {
+    public double getHpRegen() {
         float healthRatio = 1f - (((LivingEntity) hero).getHealth() / ((LivingEntity) hero).getMaxHealth());
         return MyMath.round(healthRatio * maxHpRegen, 1);
     }
 
-    public double getBonusDamage(HeroUnit hero) {
+    public double getBonusDamage() {
         float healthRatio = 1f - (((LivingEntity) hero).getHealth() / ((LivingEntity) hero).getMaxHealth());
         return MyMath.round(healthRatio * maxBonusDamage, 1);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit hero) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton("Battle Rage",
                 new ResourceLocation("minecraft", "textures/block/redstone_block.png"),
                 hotkey,
@@ -72,35 +71,33 @@ public class BattleRagePassive extends HeroAbility {
                 () -> true,
                 null,
                 null,
-                getTooltipLines((HeroUnit) hero),
-                this,
-                hero
+                getTooltipLines(),
+                this
         );
     }
 
     @Override
-    public Button getRankUpButton(HeroUnit hero) {
+    public Button getRankUpButton() {
         return super.getRankUpButtonProtected(
                 "Battle Rage",
-                new ResourceLocation("minecraft", "textures/block/redstone_block.png"),
-                hero
+                new ResourceLocation("minecraft", "textures/block/redstone_block.png")
         );
     }
 
-    public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.battle_rage") + " " + rankString(), true),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip1", maxBonusDamage, maxHpRegen)),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip3", getBonusDamage(hero), getHpRegen(hero)))
+                fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip3", getBonusDamage(), getHpRegen()))
         );
     }
 
-    public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.battle_rage"), true),
-                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle(hero)),
+                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip1", maxBonusDamage, maxHpRegen)),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip2")),

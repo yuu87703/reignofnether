@@ -54,8 +54,7 @@ public class PolarBearProd extends ProductionItem {
                 List.of(
                         FormattedCharSequence.forward(I18n.get("units.neutral.reignofnether.polar_bear"), Style.EMPTY.withBold(true))
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 }

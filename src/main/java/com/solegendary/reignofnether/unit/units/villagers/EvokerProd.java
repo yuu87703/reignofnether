@@ -16,7 +16,6 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sandbox.SandboxAction;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -61,8 +60,7 @@ public class EvokerProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.evoker.tooltip1"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

@@ -1,13 +1,13 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.BeaconAbility;
-import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
-import com.solegendary.reignofnether.util.LanguageUtil;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -20,14 +20,14 @@ public class BeaconRegeneration extends BeaconAbility {
 
     public final static MobEffect AURA_EFFECT = MobEffects.REGENERATION;
 
-    public BeaconRegeneration() {
-        super(UnitAction.BEACON_REGENERATION, AURA_EFFECT);
+    protected Keybinding defaultHotkey = Keybindings.keyE;
+
+    public BeaconRegeneration(BeaconPlacement beacon) {
+        super(UnitAction.BEACON_REGENERATION, AURA_EFFECT, beacon);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
-        if (!(placement instanceof BeaconPlacement beacon)) return null;
-
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Regeneration Aura",
                 new ResourceLocation("minecraft", "textures/mob_effect/regeneration.png"),
@@ -38,13 +38,12 @@ public class BeaconRegeneration extends BeaconAbility {
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BEACON_REGENERATION),
                 null,
                 List.of(
-                        fcs(LanguageUtil.getTranslation("ability.reignofnether.beacon_aura.regeneration"), true),
+                        fcs(I18n.get("ability.reignofnether.beacon_aura.regeneration"), true),
                         fcs(""),
-                        fcs(LanguageUtil.getTranslation("ability.reignofnether.beacon_aura.regeneration.tooltip1")),
-                        fcs(LanguageUtil.getTranslation("ability.reignofnether.beacon_aura.one_aura"))
+                        fcs(I18n.get("ability.reignofnether.beacon_aura.regeneration.tooltip1")),
+                        fcs(I18n.get("ability.reignofnether.beacon_aura.one_aura"))
                 ),
-                this,
-                placement
+                this
         );
     }
 }

@@ -103,7 +103,7 @@ public class WaveEnemy {
         if (unit instanceof SpiderUnit spiderUnit &&
             ResearchServerEvents.playerHasResearch(spiderUnit.getOwnerName(), ProductionItems.RESEARCH_SPIDER_WEBS) &&
             spiderUnit.getWebAbility() != null) {
-            spiderUnit.getWebAbility().setAutocast(true, spiderUnit);
+            spiderUnit.getWebAbility().setAutocast(true);
         }
         attackMoveNearestBuilding();
     }
@@ -112,7 +112,7 @@ public class WaveEnemy {
     public void periodicCommand() {
         if (unit instanceof RavagerUnit ravagerUnit) {
             for (Ability ability : ravagerUnit.getAbilities()) {
-                if (ability instanceof Roar roar && roar.isOffCooldown(unit) &&
+                if (ability instanceof Roar roar && roar.isOffCooldown() &&
                         ravagerUnit.getHealth() < ravagerUnit.getMaxHealth() / 2) {
                     Unit.fullResetBehaviours(ravagerUnit);
                     roar.use(getEntity().level(), unit, (BlockPos) null);
@@ -122,7 +122,7 @@ public class WaveEnemy {
         if (unit instanceof WardenUnit wardenUnit) {
             LivingEntity target = getNearestAttackableUnit();
             for (Ability ability : wardenUnit.getAbilities()) {
-                if (ability instanceof SonicBoom boom && boom.isOffCooldown(unit) && target != null &&
+                if (ability instanceof SonicBoom boom && boom.isOffCooldown() && target != null &&
                         wardenUnit.distanceToSqr(target) <= (boom.range * boom.range)) {
                     Unit.fullResetBehaviours(wardenUnit);
                     boom.use(getEntity().level(), unit, target);
@@ -132,7 +132,7 @@ public class WaveEnemy {
         if (unit instanceof EvokerUnit evokerUnit) {
             LivingEntity target = getNearestAttackableUnit();
             for (Ability ability : evokerUnit.getAbilities()) {
-                if (ability instanceof CastSummonVexes summon && summon.isOffCooldown(unit) && target != null &&
+                if (ability instanceof CastSummonVexes summon && summon.isOffCooldown() && target != null &&
                         evokerUnit.distanceToSqr(target) <= (evokerUnit.getAttackRange() * evokerUnit.getAttackRange())) {
                     Unit.fullResetBehaviours(evokerUnit);
                     summon.use(getEntity().level(), unit, target);
@@ -159,7 +159,7 @@ public class WaveEnemy {
             LivingEntity target = wsUnit.getTarget();
             for (Ability ability : wsUnit.getAbilities()) {
                 LivingEntity nearestAlly = getNearestNonWitherAllyUnit();
-                if (ability instanceof WitherCloud cloud && cloud.isOffCooldown(unit) && target != null &&
+                if (ability instanceof WitherCloud cloud && cloud.isOffCooldown() && target != null &&
                     wsUnit.distanceToSqr(target) <= 16 && (nearestAlly == null || wsUnit.distanceToSqr(nearestAlly) > 16)) {
                     cloud.use(getEntity().level(), unit, (BlockPos) null);
                 }

@@ -1,11 +1,7 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.abilities.Bloodlust;
-import com.solegendary.reignofnether.ability.abilities.ToggleShield;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
@@ -14,7 +10,6 @@ import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -41,17 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DrownedUnit extends Drowned implements Unit, AttackerUnit {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new ToggleShield(), Keybindings.keyQ);
-        ABILITIES.add(new Bloodlust(), Keybindings.keyW);
-    }
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
-
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -141,8 +125,8 @@ public class DrownedUnit extends Drowned implements Unit, AttackerUnit {
     private AbstractMeleeAttackUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
-    private List<Ability> abilities = new ArrayList<>();
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     public DrownedUnit(EntityType<? extends Drowned> entityType, Level level) {
@@ -234,32 +218,5 @@ public class DrownedUnit extends Drowned implements Unit, AttackerUnit {
         } else {
             return false;
         }
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.get();
-        abilityButtons = ABILITIES.getButtons(this);
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
     }
 }

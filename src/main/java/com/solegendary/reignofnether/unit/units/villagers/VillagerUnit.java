@@ -3,7 +3,6 @@ package com.solegendary.reignofnether.unit.units.villagers;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
@@ -24,7 +23,6 @@ import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.packets.UnitConvertClientboundPacket;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -55,8 +53,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -66,16 +62,6 @@ import java.util.List;
 import static com.solegendary.reignofnether.unit.units.villagers.VillagerUnitProfession.*;
 
 public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, AttackerUnit, ArmSwingingUnit, VillagerDataHolder, ConvertableUnit {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new CallToArmsUnit(), Keybindings.keyQ);
-    }
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
-
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -267,8 +253,8 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
             makeVeteran();
     }
 
-    private List<AbilityButton> abilityButtons;
-    private List<Ability> abilities;
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     private boolean isSwingingArmOnce = false;
@@ -312,8 +298,16 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
 
     public VillagerUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
-
+        this.abilities.add(new CallToArmsUnit(level));
         updateAbilityButtons();
+    }
+
+    public void updateAbilityButtons() {
+        if (level().isClientSide()) {
+            this.abilityButtons.clear();
+            this.abilityButtons.addAll(getBuildingButtons());
+            this.abilityButtons.add(abilities.get(0).getButton(Keybindings.keyV));
+        }
     }
 
     @Override
@@ -487,37 +481,6 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         this.hunterExp = pCompound.getInt("hunterExp");
         if (!level().isClientSide() && pCompound.getBoolean("isVeteran"))
             makeVeteran();
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        this.abilities = ABILITIES.get();
-        this.abilityButtons = ABILITIES.getButtons(this);
-        //TODO Remove need for I18n
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            this.abilityButtons.addAll(getBuildingButtons());
-        }
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
     }
 
     static {

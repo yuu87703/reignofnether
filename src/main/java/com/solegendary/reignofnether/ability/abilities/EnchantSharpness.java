@@ -2,8 +2,8 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
-import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
+import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -31,14 +31,12 @@ public class EnchantSharpness extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.SHARPNESS;
     public static final int enchantLevel = 2;
 
-    public EnchantSharpness() {
-        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_SHARPNESS);
+    public EnchantSharpness(LibraryPlacement library) {
+        super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_SHARPNESS);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
-        if (!(placement instanceof LibraryPlacement)) return null;
-        LibraryPlacement library = (LibraryPlacement) placement;
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Sharpness Enchantment",
                 new ResourceLocation("minecraft", "textures/item/diamond_axe.png"),
@@ -64,8 +62,7 @@ public class EnchantSharpness extends EnchantAbility {
                         FormattedCharSequence.forward(I18n.get("ability.reignofnether.enchant.sharpness.tooltip3"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"), Style.EMPTY)
                 ),
-                this,
-                placement
+                this
         );
     }
 

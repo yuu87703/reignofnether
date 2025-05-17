@@ -65,8 +65,7 @@ public class DrownedProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(LanguageUtil.getTranslation("units.monsters.reignofnether.drowned.tooltip4"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

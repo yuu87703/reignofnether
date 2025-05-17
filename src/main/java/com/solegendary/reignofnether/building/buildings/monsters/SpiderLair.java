@@ -65,8 +65,7 @@ public class SpiderLair extends ProductionBuilding {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.monsters.reignofnether.spider_lair.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

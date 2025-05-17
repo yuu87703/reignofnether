@@ -10,33 +10,34 @@ import net.minecraft.world.level.Level;
 import static com.solegendary.reignofnether.resources.ResourceCost.TICKS_PER_SECOND;
 
 public abstract class BeaconAbility extends Ability {
+
+    protected final BeaconPlacement beacon;
     protected final MobEffect effect;
 
     public static final int CD_MAX = 5 * TICKS_PER_SECOND;
 
-    public BeaconAbility(UnitAction action, MobEffect effect) {
+    public BeaconAbility(UnitAction action, MobEffect effect, BeaconPlacement beacon) {
         super(
                 action,
+                beacon.getLevel(),
                 CD_MAX,
                 0,
                 0,
                 false,
                 true
         );
+        this.beacon = beacon;
         this.effect = effect;
     }
 
-    private void setToMaxCooldownAllAbiltities(BeaconPlacement beacon) {
+    private void setToMaxCooldownAllAbiltities() {
         for (Ability ability : beacon.getAbilities())
-            ability.setToMaxCooldown(beacon);
+            ability.setToMaxCooldown();
     }
 
     @Override
     public void use(Level level, BuildingPlacement buildingUsing, BlockPos bp) {
-        if (!(buildingUsing instanceof BeaconPlacement)) return;
-        BeaconPlacement beacon = (BeaconPlacement) buildingUsing;
-
         beacon.setAuraEffect(effect);
-        setToMaxCooldownAllAbiltities(beacon);
+        setToMaxCooldownAllAbiltities();
     }
 }

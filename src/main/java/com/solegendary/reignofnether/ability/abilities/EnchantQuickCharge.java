@@ -2,11 +2,11 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
-import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
@@ -31,14 +31,14 @@ public class EnchantQuickCharge extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.QUICK_CHARGE;
     public static final int enchantLevel = 2;
 
-    public EnchantQuickCharge() {
-        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_QUICK_CHARGE);
+    protected Keybinding defaultHotkey = Keybindings.keyW;
+
+    public EnchantQuickCharge(LibraryPlacement library) {
+        super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_QUICK_CHARGE);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
-        if (!(placement instanceof LibraryPlacement)) return null;
-        LibraryPlacement library = (LibraryPlacement) placement;
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Quick Charge Enchantment",
                 new ResourceLocation("minecraft", "textures/item/crossbow_standby.png"),
@@ -64,8 +64,7 @@ public class EnchantQuickCharge extends EnchantAbility {
                         FormattedCharSequence.forward(I18n.get("ability.reignofnether.enchant.quickshot.tooltip3"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"), Style.EMPTY)
                 ),
-                this,
-                placement
+                this
         );
     }
 

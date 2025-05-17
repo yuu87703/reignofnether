@@ -63,8 +63,7 @@ public class WitherSkeletonProd extends ProductionItem {
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.wither_skeleton.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.wither_skeleton.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

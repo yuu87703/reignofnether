@@ -23,9 +23,10 @@ public class BackToWorkUnit extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE;
 
-    public BackToWorkUnit() {
+    public BackToWorkUnit(Level level) {
         super(
                 UnitAction.BACK_TO_WORK_UNIT,
+                level,
                 0,
                 RANGE,
                 0,
@@ -35,7 +36,7 @@ public class BackToWorkUnit extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Back to Work (Building)",
                 new ResourceLocation("minecraft", "textures/item/iron_pickaxe.png"),
@@ -51,8 +52,7 @@ public class BackToWorkUnit extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.back_to_work_unit.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.back_to_work_unit.tooltip2"), Style.EMPTY)
                 ),
-                this,
-                unit
+                this
         );
     }
 

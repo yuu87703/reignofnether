@@ -54,8 +54,7 @@ public class LlamaProd extends ProductionItem {
             List.of(
                     FormattedCharSequence.forward(I18n.get("units.neutral.reignofnether.llama"), Style.EMPTY.withBold(true))
             ),
-            null,
-            (Unit) null
+            null
         );
     }
 }

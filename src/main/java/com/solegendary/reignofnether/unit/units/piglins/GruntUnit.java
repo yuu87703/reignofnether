@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.Building;
@@ -22,7 +21,6 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.util.Faction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -40,20 +38,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit, ArmSwingingUnit {
-    public static final Abilities ABILITIES = new Abilities();
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
 
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
@@ -149,8 +139,8 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     final static public float movementSpeed = 0.25f;
     public int maxResources = 100;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
-    private List<Ability> abilities = new ArrayList<>();
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     private boolean isSwingingArmOnce = false;
@@ -176,6 +166,7 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
 
     public static List<AbilityButton> getBuildingButtons() {
         List<AbilityButton> buildingButtons = new ArrayList<>();
+
         List<Keybinding> keybindings = BuildingUtils.keybindings;
         int index = 0;
 
@@ -193,8 +184,14 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
 
     public GruntUnit(EntityType<? extends Piglin> entityType, Level level) {
         super(entityType, level);
-
         updateAbilityButtons();
+    }
+
+    public void updateAbilityButtons() {
+        if (level().isClientSide()) {
+            this.abilityButtons.clear();
+            this.abilityButtons.addAll(getBuildingButtons());
+        }
     }
 
     @Override
@@ -249,9 +246,8 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     @Override
     protected void registerGoals() {
         initialiseGoals();
-        this.goalSelector.addGoal(2, usePortalGoal);
-
         this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, usePortalGoal);
         this.goalSelector.addGoal(2, attackGoal);
         this.goalSelector.addGoal(2, buildRepairGoal);
         this.goalSelector.addGoal(2, gatherResourcesGoal);
@@ -276,38 +272,7 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
 
     @Override
     public boolean fireImmune() {
-        BuildingPlacement building = BuildingUtils.findBuilding(level().isClientSide(), getOnPos());
-        return super.fireImmune() || (building != null &&(building.getBuilding() instanceof FlameSanctuary || building.getBuilding() instanceof BasaltSprings));
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        this.abilities = ABILITIES.get();
-        this.abilityButtons = ABILITIES.getButtons(this);
-        //TODO Remove need for I18n
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            this.abilityButtons.addAll(getBuildingButtons());
-        }
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
+        BuildingPlacement bpl = BuildingUtils.findBuilding(level().isClientSide(), getOnPos());
+        return super.fireImmune() || (bpl != null && (bpl.getBuilding() instanceof FlameSanctuary || bpl.getBuilding() instanceof BasaltSprings));
     }
 }

@@ -32,13 +32,13 @@ public class MaceSlam extends HeroAbility {
     private static float damage = 15;
     private static float stunDuration = 2 * ResourceCost.TICKS_PER_SECOND;
 
-    public MaceSlam() {
-        super(3, UnitAction.MACE_SLAM, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+    public MaceSlam(HeroUnit hero) {
+        super(hero, 3, UnitAction.MACE_SLAM, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
     }
 
     @Override
-    public boolean rankUp(HeroUnit hero) {
-        if (super.rankUp(hero)) {
+    public boolean rankUp() {
+        if (super.rankUp()) {
             updateStatsForRank();
             return true;
         }
@@ -59,7 +59,7 @@ public class MaceSlam extends HeroAbility {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit hero) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton("Mace Slam",
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/mace.png"),
                 hotkey,
@@ -68,22 +68,20 @@ public class MaceSlam extends HeroAbility {
                 () -> true,
                 () -> CursorClientEvents.setLeftClickAction(UnitAction.MACE_SLAM),
                 null,
-                getTooltipLines((HeroUnit) hero),
-                this,
-                hero
+                getTooltipLines(),
+                this
         );
     }
 
     @Override
-    public Button getRankUpButton(HeroUnit hero) {
+    public Button getRankUpButton() {
         return super.getRankUpButtonProtected(
                 "Mace Slam",
-                new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/mace.png"),
-                hero
+                new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/mace.png")
         );
     }
 
-    public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.mace_slam") + " " + rankString(), true),
                 fcsIcons(I18n.get("abilities.reignofnether.mace_slam.stats", damage, cooldownMax / 20)),
@@ -93,10 +91,10 @@ public class MaceSlam extends HeroAbility {
         );
     }
 
-    public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {
+    public List<FormattedCharSequence> getRankUpTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.mace_slam"), true),
-                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle(hero)),
+                fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.mace_slam.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.mace_slam.tooltip2", stunDuration / 20)),

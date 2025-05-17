@@ -77,8 +77,7 @@ public class BlackstoneBridge extends AbstractBridge {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.blackstone_bridge.tooltip3"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

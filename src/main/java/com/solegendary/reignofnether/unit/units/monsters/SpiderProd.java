@@ -83,8 +83,7 @@ public class SpiderProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.spider.tooltip3"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

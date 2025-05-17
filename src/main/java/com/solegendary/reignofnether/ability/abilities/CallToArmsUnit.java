@@ -25,9 +25,10 @@ import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitComman
 
 public class CallToArmsUnit extends Ability {
 
-    public CallToArmsUnit() {
+    public CallToArmsUnit(Level level) {
         super(
                 UnitAction.CALL_TO_ARMS_UNIT,
+                level,
                 0,
                 0,
                 0,
@@ -37,7 +38,7 @@ public class CallToArmsUnit extends Ability {
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Call To Arms (Building)",
                 new ResourceLocation("minecraft", "textures/item/bell.png"),
@@ -54,8 +55,7 @@ public class CallToArmsUnit extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_to_arms_unit.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_to_arms_unit.tooltip3", TownCentre.MILITIA_RANGE), Style.EMPTY)
                 ),
-                this,
-                unit
+                this
         );
     }
 

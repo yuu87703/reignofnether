@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.building;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -44,12 +43,6 @@ public abstract class Building {
     // blocks types that are placed automatically when the building is placed
     // used to control size of initial foundations while keeping it symmetrical
     public final ArrayList<Block> startingBlockTypes = new ArrayList();
-
-    protected final Abilities abilities = new Abilities();
-
-    public Abilities getAbilities() {
-        return this.abilities;
-    }
 
     public Building(String structureName, ResourceCost cost, boolean isCapitol) {
         this.structureName = structureName;

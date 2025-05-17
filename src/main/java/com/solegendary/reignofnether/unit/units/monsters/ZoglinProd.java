@@ -54,8 +54,7 @@ public class ZoglinProd extends ProductionItem {
                 List.of(
                         FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.zoglin"), Style.EMPTY.withBold(true))
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 }

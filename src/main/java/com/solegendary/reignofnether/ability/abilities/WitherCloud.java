@@ -26,20 +26,23 @@ public class WitherCloud extends Ability {
     private static final int CD_MAX_SECONDS = 50;
     private static final int DURATION_SECONDS = 15;
 
-    public WitherCloud() {
+    private final WitherSkeletonUnit witherSkeletonUnit;
+
+    public WitherCloud(WitherSkeletonUnit witherSkeletonUnit) {
         super(
                 UnitAction.WITHER_CLOUD,
+                witherSkeletonUnit.level(),
                 CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
                 0,
                 0,
                 false,
                 true
         );
+        this.witherSkeletonUnit = witherSkeletonUnit;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        WitherSkeletonUnit witherSkeletonUnit = (WitherSkeletonUnit) unit;
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Death Cloud",
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/wither_skeleton.png"),
@@ -56,15 +59,13 @@ public class WitherCloud extends Ability {
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.wither_cloud.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.wither_cloud.tooltip2", DURATION_SECONDS), Style.EMPTY)
                 ),
-                this,
-                unit
+                this
         );
     }
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        WitherSkeletonUnit witherSkeletonUnit = (WitherSkeletonUnit) unitUsing;
         witherSkeletonUnit.deathCloudTicks = DURATION_SECONDS * ResourceCost.TICKS_PER_SECOND;
-        this.setToMaxCooldown(unitUsing);
+        this.setToMaxCooldown();
     }
 }

@@ -1,7 +1,5 @@
 package com.solegendary.reignofnether.building.buildings.monsters;
 
-import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.abilities.Sacrifice;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
@@ -10,7 +8,6 @@ import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.placements.SculkCatalystPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -49,9 +46,6 @@ public class SculkCatalyst extends Building {
         this.buildTimeModifier = 2.5f;
 
         this.startingBlockTypes.add(Blocks.POLISHED_BLACKSTONE);
-
-        Ability sacrifice = new Sacrifice();
-        this.abilities.add(sacrifice, Keybindings.keyQ);
     }
 
     public float getMagicDamageMult() {
@@ -103,8 +97,7 @@ public class SculkCatalyst extends Building {
                     Style.EMPTY
                 )
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 }

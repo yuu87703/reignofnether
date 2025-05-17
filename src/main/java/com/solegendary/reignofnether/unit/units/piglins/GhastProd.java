@@ -64,8 +64,7 @@ public class GhastProd extends ProductionItem {
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.ghast.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.ghast.tooltip3"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

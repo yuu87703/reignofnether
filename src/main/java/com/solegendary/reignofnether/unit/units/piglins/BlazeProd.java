@@ -63,8 +63,7 @@ public class BlazeProd extends ProductionItem {
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.blaze.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.blaze.tooltip2"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

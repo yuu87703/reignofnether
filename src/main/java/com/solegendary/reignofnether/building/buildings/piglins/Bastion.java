@@ -84,8 +84,7 @@ public class Bastion extends ProductionBuilding {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.piglins.reignofnether.bastion.tooltip4"), Style.EMPTY)
                 ),
-                null,
-                (BuildingPlacement) null
+                null
         );
     }
 }

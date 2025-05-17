@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.building;
 
-import com.ibm.icu.impl.Assert;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
@@ -131,8 +130,8 @@ public class BuildingPlacement {
 
     public boolean selfBuilding = false; // if set to true, will build itself quickly without workers (but not repair)
 
-    protected List<AbilityButton> abilityButtons;
-    protected List<Ability> abilities;
+    protected List<AbilityButton> abilityButtons = new ArrayList<>();
+    protected List<Ability> abilities = new ArrayList<>();
 
     Object2ObjectArrayMap<Ability, Float> cooldowns = new Object2ObjectArrayMap<>();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
@@ -140,7 +139,6 @@ public class BuildingPlacement {
     public List<AbilityButton> getAbilityButtons() {
         return abilityButtons;
     }
-
     public List<Ability> getAbilities() {
         return abilities;
     }
@@ -645,7 +643,7 @@ public class BuildingPlacement {
 
     public boolean isAbilityOffCooldown(UnitAction action) {
         for (Ability ability : abilities)
-            if (ability.action == action && ability.getCooldown(this) <= 0) {
+            if (ability.action == action && ability.getCooldown() <= 0) {
                 return true;
             }
         return false;
@@ -1121,8 +1119,9 @@ public class BuildingPlacement {
     }
 
     public void updateButtons() {
-        abilities = building.getAbilities().get();
-        abilityButtons = building.getAbilities().getButtons(this);
+        abilityButtons.clear();
+        for (Ability ability : abilities)
+            abilityButtons.add(ability.getButton());
     }
 
     public void setCooldown(Ability abilityClass, float cooldown) {

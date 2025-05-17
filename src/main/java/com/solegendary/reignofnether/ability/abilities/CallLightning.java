@@ -4,10 +4,10 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.monsters.Laboratory;
-import com.solegendary.reignofnether.building.buildings.placements.RangeIndicatorProductionPlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.util.MiscUtil;
@@ -28,35 +28,32 @@ public class CallLightning extends Ability {
 
     private static final int CD_MAX = 60 * ResourceCost.TICKS_PER_SECOND;
     public static final int RANGE = 25;
+    protected Keybinding defaultHotkey = Keybindings.keyL;
 
-    public CallLightning() {
+    private final BuildingPlacement bpl;
+
+    public CallLightning(BuildingPlacement lab) {
         super(
             UnitAction.CALL_LIGHTNING,
+            lab.getLevel(),
             CD_MAX,
             RANGE,
             0,
             false,
             true
         );
+        this.bpl = lab;
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
-        if (!(placement instanceof RangeIndicatorProductionPlacement)) return null;
-        RangeIndicatorProductionPlacement lab = (RangeIndicatorProductionPlacement) placement;
-
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
             "Call Lightning",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/lightbulb_on.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.CALL_LIGHTNING,
-            () -> lab.getUpgradeLevel() == 0,
-            () -> {
-                if (lab.getBuilding() instanceof Laboratory laboratory)
-                    return laboratory.getLightningRodPos(lab) != null;
-                else
-                    return false;
-            },
+            () -> bpl.getUpgradeLevel() == 0,
+            () -> bpl.getBuilding() instanceof Laboratory lab && lab.getLightningRodPos(bpl) != null,
             () -> CursorClientEvents.setLeftClickAction(UnitAction.CALL_LIGHTNING),
             null,
             List.of(
@@ -66,18 +63,17 @@ public class CallLightning extends Ability {
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_lightning.tooltip2"), Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.call_lightning.tooltip3"), Style.EMPTY)
             ),
-            this,
-            placement
+            this
         );
     }
 
     @Override
     public void use(Level level, BuildingPlacement buildingUsing, BlockPos targetBp) {
 
-        if (!level.isClientSide() && buildingUsing.getBuilding() instanceof Laboratory lab && buildingUsing instanceof RangeIndicatorProductionPlacement placement) {
-            BlockPos rodPos = lab.getLightningRodPos(placement);
+        if (!level.isClientSide() && bpl.getBuilding() instanceof Laboratory lab) {
+            BlockPos rodPos = lab.getLightningRodPos(bpl);
 
-            if (placement.isAbilityOffCooldown(UnitAction.CALL_LIGHTNING) && rodPos != null) {
+            if (bpl.isAbilityOffCooldown(UnitAction.CALL_LIGHTNING) && rodPos != null) {
                 BlockPos limitedBp = MyMath.getXZRangeLimitedBlockPos(buildingUsing.centrePos, targetBp, range);
                 // getXZRangeLimitedBlockPos' Y value is always the same as rodPos, but we want the first sky-exposed block
                 limitedBp = MiscUtil.getHighestNonAirBlock(level, limitedBp);
@@ -94,6 +90,6 @@ public class CallLightning extends Ability {
                 }
             }
         }
-        this.setToMaxCooldown(buildingUsing);
+        this.setToMaxCooldown();
     }
 }

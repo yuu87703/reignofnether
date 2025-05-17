@@ -26,12 +26,12 @@ public class Sacrifice extends Ability {
     private static final int CD_MAX = 0;
     private static final int RANGE = 8;
 
-    public Sacrifice() {
-        super(UnitAction.SACRIFICE, CD_MAX, RANGE, 0, true, true);
+    public Sacrifice(Level level) {
+        super(UnitAction.SACRIFICE, level, CD_MAX, RANGE, 0, true, true);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton("Sacrifice",
             new ResourceLocation("minecraft", "textures/item/iron_hoe.png"),
             hotkey,
@@ -49,8 +49,7 @@ public class Sacrifice extends Ability {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sacrifice.tooltip2"), Style.EMPTY)
             ),
-            this,
-            placement
+            this
         );
     }
 

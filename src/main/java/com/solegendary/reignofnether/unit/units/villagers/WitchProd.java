@@ -59,8 +59,7 @@ public class WitchProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.witch.tooltip1"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

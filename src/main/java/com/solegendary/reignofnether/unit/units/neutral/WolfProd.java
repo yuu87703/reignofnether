@@ -54,8 +54,7 @@ public class WolfProd extends ProductionItem {
                 List.of(
                         FormattedCharSequence.forward(I18n.get("units.neutral.reignofnether.wolf"), Style.EMPTY.withBold(true))
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 }

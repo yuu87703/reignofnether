@@ -1,7 +1,5 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
-import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingBlock;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
@@ -51,8 +49,7 @@ public class Castle extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.SPRUCE_PLANKS);
         this.startingBlockTypes.add(Blocks.DARK_OAK_PLANKS);
 
-        Ability promoteIllager = new PromoteIllager();
-        this.abilities.add(promoteIllager, Keybindings.keyE);
+
 
         this.productions.add(ProductionItems.RAVAGER, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_RAVAGER_CAVALRY, Keybindings.keyW);
@@ -103,8 +100,7 @@ public class Castle extends ProductionBuilding {
                     Style.EMPTY
                 )
             ),
-            null,
-                (BuildingPlacement) null
+            null
         );
     }
 

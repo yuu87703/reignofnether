@@ -67,8 +67,7 @@ public class ZombieVillagerProd extends ProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.zombie_villager.tooltip3"), Style.EMPTY)
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 

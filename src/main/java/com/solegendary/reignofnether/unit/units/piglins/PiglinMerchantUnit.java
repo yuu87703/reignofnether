@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.FancyFeast;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.GreedIsGoodPassive;
@@ -18,7 +17,6 @@ import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.PiglinMerchantAnimations;
 import com.solegendary.reignofnether.util.Faction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -43,19 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new ThrowTNT());
-        ABILITIES.add(new FancyFeast());
-        ABILITIES.add(new GreedIsGoodPassive());
-        ABILITIES.add(new LootExplosion());
-    }
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
-
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -174,8 +159,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     @Override public float getBaseHealth() { return maxHealth; };
     @Override public float getBaseAttack() { return attackDamage; };
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
-    private List<Ability> abilities = new ArrayList<>();
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     public final AnimationState idleAnimState = new AnimationState();
@@ -228,7 +213,10 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
 
     public PiglinMerchantUnit(EntityType<? extends Piglin> entityType, Level level) {
         super(entityType, level);
-
+        this.abilities.add(new ThrowTNT(this));
+        this.abilities.add(new FancyFeast(this));
+        this.abilities.add(new GreedIsGoodPassive(this));
+        this.abilities.add(new LootExplosion(this));
         updateAbilityButtons();
         setStatsForLevel();
     }
@@ -332,32 +320,5 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
 
     public void lootExplosion() {
 
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.get();
-        abilityButtons = ABILITIES.getButtons(this);
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
     }
 }

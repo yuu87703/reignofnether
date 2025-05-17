@@ -1,10 +1,10 @@
 package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ability.BeaconAbility;
-import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import net.minecraft.client.resources.language.I18n;
@@ -20,14 +20,14 @@ public class BeaconStrength extends BeaconAbility {
 
     public final static MobEffect AURA_EFFECT = MobEffects.DAMAGE_BOOST;
 
-    public BeaconStrength() {
-        super(UnitAction.BEACON_STRENGTH, AURA_EFFECT);
+    protected Keybinding defaultHotkey = Keybindings.keyT;
+
+    public BeaconStrength(BeaconPlacement beacon) {
+        super(UnitAction.BEACON_STRENGTH, AURA_EFFECT, beacon);
     }
 
     @Override
-    public AbilityButton getButton(Keybinding hotkey, BuildingPlacement placement) {
-        if (!(placement instanceof BeaconPlacement beacon)) return null;
-
+    public AbilityButton getButton(Keybinding hotkey) {
         return new AbilityButton(
                 "Strength Aura",
                 new ResourceLocation("minecraft", "textures/mob_effect/strength.png"),
@@ -43,8 +43,7 @@ public class BeaconStrength extends BeaconAbility {
                         fcs(I18n.get("ability.reignofnether.beacon_aura.strength.tooltip1")),
                         fcs(I18n.get("ability.reignofnether.beacon_aura.one_aura"))
                 ),
-                this,
-                placement
+                this
         );
     }
 }

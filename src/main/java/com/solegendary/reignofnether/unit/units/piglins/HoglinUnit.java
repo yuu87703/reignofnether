@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
-import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Eject;
 import com.solegendary.reignofnether.building.BuildingPlacement;
@@ -8,7 +7,6 @@ import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -16,7 +14,6 @@ import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -49,16 +46,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class HoglinUnit extends Hoglin implements Unit, AttackerUnit {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new Eject(), Keybindings.keyQ);
-    }
-
-    Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
-    Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
-
-    Ability autocast;
-
     // region
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
@@ -147,13 +134,13 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit {
 
     final static public float BUILDING_DAMAGE_MULTIPLIER = 1.5f;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
-    private List<Ability> abilities = new ArrayList<>();
+    private final List<AbilityButton> abilityButtons = new ArrayList<>();
+    private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     public HoglinUnit(EntityType<? extends Hoglin> entityType, Level level) {
         super(entityType, level);
-
+        this.abilities.add(new Eject(this));
         updateAbilityButtons();
     }
 
@@ -252,34 +239,7 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit {
 
     @Override
     public boolean fireImmune() {
-        BuildingPlacement building = BuildingUtils.findBuilding(level().isClientSide(), getOnPos());
-        return super.fireImmune() || (building != null &&(building.getBuilding() instanceof FlameSanctuary || building.getBuilding() instanceof BasaltSprings));
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.get();
-        abilityButtons = ABILITIES.getButtons(this);
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
+        BuildingPlacement bpl = BuildingUtils.findBuilding(level().isClientSide(), getOnPos());
+        return super.fireImmune() || (bpl != null && (bpl.getBuilding() instanceof FlameSanctuary || bpl.getBuilding() instanceof BasaltSprings));
     }
 }

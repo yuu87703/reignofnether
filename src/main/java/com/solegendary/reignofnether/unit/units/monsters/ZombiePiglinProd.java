@@ -54,8 +54,7 @@ public class ZombiePiglinProd extends ProductionItem {
                 List.of(
                         FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.zombie_piglin"), Style.EMPTY.withBold(true))
                 ),
-                null,
-                (Unit) null
+                null
         );
     }
 }
