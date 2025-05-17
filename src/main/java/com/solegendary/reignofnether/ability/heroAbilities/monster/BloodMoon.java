@@ -104,7 +104,7 @@ public class BloodMoon extends HeroAbility {
         if (level.isClientSide()) {
             isBloodMoonActive = TimeClientEvents.isBloodMoonActive();
             if (isBloodMoonActive) {
-                HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.sacrifice.out_of_range"));
+                HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.blood_moon.already_active"));
             }
         } else {
             isBloodMoonActive = TimeServerEvents.isBloodMoonActive();
