@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.building.buildings.monsters.Laboratory;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.util.MiscUtil;
@@ -27,6 +28,7 @@ public class CallLightning extends Ability {
 
     private static final int CD_MAX = 60 * ResourceCost.TICKS_PER_SECOND;
     public static final int RANGE = 25;
+    protected Keybinding defaultHotkey = Keybindings.keyL;
 
     private final BuildingPlacement bpl;
 

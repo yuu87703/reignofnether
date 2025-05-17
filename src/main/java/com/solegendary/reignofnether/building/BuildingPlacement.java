@@ -1119,7 +1119,9 @@ public class BuildingPlacement {
     }
 
     public void updateButtons() {
-
+        abilityButtons.clear();
+        for (Ability ability : abilities)
+            abilityButtons.add(ability.getButton());
     }
 
     public void setCooldown(Ability abilityClass, float cooldown) {

@@ -1,7 +1,5 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
-import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingBlock;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
@@ -64,10 +62,7 @@ public class Castle extends ProductionBuilding {
 
     @Override
     public BuildingPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        CastlePlacement castlePlacement = new CastlePlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
-        Ability promoteIllager = new PromoteIllager(castlePlacement);
-        castlePlacement.getAbilities().add(promoteIllager);
-        return castlePlacement;
+        return new CastlePlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
     }
 
     public AbilityButton getBuildButton(Keybinding hotkey) {

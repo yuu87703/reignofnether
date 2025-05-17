@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.solegendary.reignofnether.building.BuildingUtils.getMinCorner;
 
-public class ProductionPlacement extends BuildingPlacement{
+public class ProductionPlacement extends BuildingPlacement {
     private BlockPos rallyPoint;
     private LivingEntity rallyPointEntity;
     public List<Button> productionButtons;

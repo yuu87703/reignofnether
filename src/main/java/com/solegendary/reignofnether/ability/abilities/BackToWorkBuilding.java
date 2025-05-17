@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.villagers.MilitiaUnit;
@@ -25,6 +26,8 @@ import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitComman
 public class BackToWorkBuilding extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE + 5;
+
+    protected Keybinding defaultHotkey = Keybindings.build;
 
     public BackToWorkBuilding(Level level) {
         super(

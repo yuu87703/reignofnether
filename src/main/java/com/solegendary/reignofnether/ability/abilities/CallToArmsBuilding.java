@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -29,6 +30,8 @@ import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitComman
 public class CallToArmsBuilding extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE;
+
+    protected Keybinding defaultHotkey = Keybindings.keyV;
 
     public CallToArmsBuilding(Level level) {
         super(

@@ -1,7 +1,5 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
-import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingBlock;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
@@ -64,18 +62,7 @@ public class Library extends ProductionBuilding {
 
     @Override
     public BuildingPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        LibraryPlacement bp = new LibraryPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
-        Ability enchantSharpness = new EnchantSharpness(bp);
-        bp.getAbilities().add(enchantSharpness);
-        Ability enchantQuickCharge = new EnchantQuickCharge(bp);
-        bp.getAbilities().add(enchantQuickCharge);
-        Ability enchantMaiming = new EnchantMaiming(bp);
-        bp.getAbilities().add(enchantMaiming);
-        Ability enchantMultishot = new EnchantMultishot(bp);
-        bp.getAbilities().add(enchantMultishot);
-        Ability enchantVigor = new EnchantVigor(bp);
-        bp.getAbilities().add(enchantVigor);
-        return bp;
+        return new LibraryPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
     }
 
     public AbilityButton getBuildButton(Keybinding hotkey) {

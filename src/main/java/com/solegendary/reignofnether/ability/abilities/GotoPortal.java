@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -25,6 +26,8 @@ public class GotoPortal extends Ability {
     private static final int RANGE = 0;
 
     PortalPlacement portalPlacement;
+
+    protected Keybinding defaultHotkey = Keybindings.keyW;
 
     public GotoPortal(PortalPlacement portalPlacement) {
         super(

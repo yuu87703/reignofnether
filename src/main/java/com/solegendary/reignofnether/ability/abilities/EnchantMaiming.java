@@ -3,10 +3,10 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
-import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -32,6 +32,8 @@ public class EnchantMaiming extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.UNBREAKING;
     public static final int SLOWNESS_DURATION = 5 * ResourceCost.TICKS_PER_SECOND;
     public static final int enchantLevel = 1;
+
+    protected Keybinding defaultHotkey = Keybindings.keyE;
 
     public EnchantMaiming(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_MAIMING);

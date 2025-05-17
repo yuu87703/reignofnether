@@ -3,10 +3,10 @@ package com.solegendary.reignofnether.ability.abilities;
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
-import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
@@ -31,6 +31,8 @@ public class EnchantVigor extends EnchantAbility {
     public static final Enchantment actualEnchantment = Enchantments.UNBREAKING;
     public static final int enchantLevel = 1;
     public static final float cooldownMultiplier = 0.70f;
+
+    protected Keybinding defaultHotkey = Keybindings.keyT;
 
     public EnchantVigor(LibraryPlacement library) {
         super(ENCHANT_ACTION, library, ResourceCosts.ENCHANT_VIGOR);
