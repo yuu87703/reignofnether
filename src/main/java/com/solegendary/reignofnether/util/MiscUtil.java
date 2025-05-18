@@ -295,6 +295,11 @@ public class MiscUtil {
         return closestBuilding;
     }
 
+    // neutral -> neutral ❌
+    // owned -> neutral ✔ (if neutral aggro on)
+    // neutral -> owned ✔ (if neutral aggro on)
+    // owned -> owned ✔ (if hostile)
+
     private static boolean isBuildingAttackable(Mob unitMob, BuildingPlacement building) {
         // Get the relationship between the unit and the building's owner
         Relationship relationship = UnitServerEvents.getUnitToBuildingRelationship((Unit) unitMob, building);
@@ -303,9 +308,10 @@ public class MiscUtil {
         if (relationship == Relationship.FRIENDLY) {
             return false;
         }
-
         boolean neutralAggro = unitMob.level().getGameRules().getRule(GameRuleRegistrar.NEUTRAL_AGGRO).get();
-        if (relationship == Relationship.NEUTRAL && neutralAggro)
+        boolean neutralUnit = ((Unit) unitMob).getOwnerName().isBlank();
+
+        if (relationship == Relationship.NEUTRAL && neutralAggro && !neutralUnit)
             return true;
 
         // Additional attack conditions for hostile or neutral relationships can be added here

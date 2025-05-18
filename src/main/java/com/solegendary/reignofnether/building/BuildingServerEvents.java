@@ -598,13 +598,16 @@ public class BuildingServerEvents {
                 int atkDmg = 0;
                 if (ghastUnit != null) {
                     atkDmg = (int) ghastUnit.getUnitAttackDamage();
+                    building.lastAttacker = ghastUnit;
                 } else if (creeperUnit != null) {
                     atkDmg = (int) creeperUnit.getUnitAttackDamage();
                     if (creeperUnit.isPowered()) {
                         atkDmg *= CreeperUnit.CHARGED_DAMAGE_MULT;
                     }
+                    building.lastAttacker = creeperUnit;
                 } else if (pillagerUnit != null) {
                     atkDmg = (int) pillagerUnit.getUnitAttackDamage() / 2;
+                    building.lastAttacker = pillagerUnit;
                 } else if (exp.getExploder() instanceof PrimedTnt) {
                     atkDmg = TNT_BUILDING_BASE_DAMAGE;
                 }

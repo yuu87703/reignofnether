@@ -1,15 +1,9 @@
 
-1.19.2-1.1.6
+1.19.2-1.1.6a
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
 [❌] Not done, including unmerged PRs
-
-
-
-Building rework
----------------
-ProductionPlacement
 
 
 
@@ -75,22 +69,28 @@ Bugfixes
 
 [❌] gatherTarget save data doesn't work
 
-[❌] Bastion and Flame Sanctuary stuck building?
+[🟡] Neutral units now correctly attack non-neutral buildings when /gamerule neutralAggro is enabled
 
-Quality of Life
----------------
-[❌] Shift-clicking the "Select all Military units" button now only selects the units on screen
+[🟡] Cheats are no longer disabled whenever rejoining a world in sandbox mode
 
-[❌] Skirmish mode command
+[🟡] Fixed crash related to converting nether blocks
 
-Languages
----------
-
-
+[🟡] Fixed crash when using a Militia spawn egg on a spawner
 
 Quality of Life
 ---------------
 
+[🟡] Mob spawners are now active whenever any non-neutral unit or survival player is near them
+    - Creative and Spectator players no longer activate spawners
+
+[🟡] Added spawn eggs for all neutral animal units
+
+[🟡] You can now shift-click the "Select all Military units" button to only select units on screen
+
+[🟡] Added a button to toggle full unit control in sandbox mode
+    - This is the same as toggling the 'wouldyoukindly' cheatcode
+
+[🟡] Neutral buildings now award resources equal to 25% of their cost when destroyed
 
 
 Balancing

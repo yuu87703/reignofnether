@@ -139,6 +139,7 @@ public class PlayerServerEvents {
             for (RTSPlayer rtsPlayer : rtsPlayers) {
                 if (rtsPlayer.faction == Faction.NONE) {
                     GameModeClientboundPacket.setAndLockAllClientGameModes(GameMode.SANDBOX);
+                    enableAllCheats(rtsPlayer.name);
                     break;
                 }
             }

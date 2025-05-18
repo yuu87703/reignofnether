@@ -33,6 +33,11 @@
     "item.reignofnether.royal_guard_unit_spawn_egg": "Spawn Royal Guard Unit",
     "item.reignofnether.necromancer_unit_spawn_egg": "Spawn Necromancer Unit",
     "item.reignofnether.piglin_merchant_unit_spawn_egg": "Spawn Piglin Merchant Unit",
+    "item.reignofnether.wolf_unit_spawn_egg": "Spawn Wolf Unit",
+    "item.reignofnether.polar_bear_unit_spawn_egg": "Spawn Polar Bear Unit",
+    "item.reignofnether.grizzly_bear_unit_spawn_egg": "Spawn Grizzly Bear Unit",
+    "item.reignofnether.panda_unit_spawn_egg": "Spawn Panda Unit",
+    "item.reignofnether.llama_unit_spawn_egg": "Spawn Llama Unit",
 
     "sounds.reignofnether.under_attack": "Under attack!",
     "sounds.reignofnether.victory": "Victory!",
@@ -1178,6 +1183,10 @@
     "sandbox.reignofnether.unit_cheats1": "All upgrades, ignore population cap, ",
     "sandbox.reignofnether.unit_cheats2": "fast resource gathering, sunlight immunity",
     "sandbox.reignofnether.unit_cheats3": "(Click to toggle)",
+    "sandbox.reignofnether.nonunit_control_cheat_on": "Full unit control: ON",
+    "sandbox.reignofnether.nonunit_control_cheat_off": "Full unit control: OFF",
+    "sandbox.reignofnether.nonunit_control_cheat1": "Control all mobs even if you don't own them",
+    "sandbox.reignofnether.nonunit_control_cheat2": "(Click to toggle)",
     "sandbox.reignofnether.exit1": "Exit Sandbox Mode",
     "sandbox.reignofnether.exit2": "(Sets all units and buildings neutral)",
 

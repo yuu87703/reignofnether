@@ -102,6 +102,8 @@ public class UnitClientEvents {
     // tracking of all existing units
     private static final ArrayList<LivingEntity> allUnits = new ArrayList<>();
 
+    public static final ArrayList<LivingEntity> militaryUnitsOnScreen = new ArrayList<>();
+
     @Nullable private static UnitActionItem lastClientUAIActioned = null;
 
     public static ArrayList<LivingEntity> getPreselectedUnits() { return preselectedUnits; }

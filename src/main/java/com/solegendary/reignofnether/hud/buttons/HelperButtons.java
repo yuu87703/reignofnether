@@ -142,10 +142,16 @@ public class HelperButtons {
                 },
                 () -> true,
                 () -> {
-                    List<LivingEntity> militaryUnits = UnitClientEvents.getAllUnits().stream()
-                            .filter(u -> !(u instanceof WorkerUnit) &&
-                                    GarrisonableBuilding.getGarrison((Unit) u) == null &&
-                                    getPlayerToEntityRelationship(u) == Relationship.OWNED).toList();
+                    List<LivingEntity> militaryUnits = new ArrayList<>();
+
+                    if (Keybindings.shiftMod.isDown()) {
+                        militaryUnits.addAll(UnitClientEvents.militaryUnitsOnScreen);
+                    } else {
+                        militaryUnits.addAll(UnitClientEvents.getAllUnits().stream()
+                                .filter(u -> !(u instanceof WorkerUnit) &&
+                                        GarrisonableBuilding.getGarrison((Unit) u) == null &&
+                                        getPlayerToEntityRelationship(u) == Relationship.OWNED).toList());
+                    }
                     UnitClientEvents.clearSelectedUnits();
                     for (LivingEntity militaryUnit : militaryUnits)
                         UnitClientEvents.addSelectedUnit(militaryUnit);

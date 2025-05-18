@@ -77,6 +77,7 @@ import java.util.*;
 import static com.solegendary.reignofnether.building.BuildingUtils.*;
 import static com.solegendary.reignofnether.player.PlayerServerEvents.isRTSPlayer;
 import static com.solegendary.reignofnether.player.PlayerServerEvents.sendMessageToAllPlayers;
+import static com.solegendary.reignofnether.resources.ResourcesServerEvents.NEUTRAL_BUILDING_BOUNTY_PERCENT;
 import static com.solegendary.reignofnether.survival.SurvivalServerEvents.ENEMY_OWNER_NAME;
 
 public class BuildingPlacement {
@@ -154,6 +155,8 @@ public class BuildingPlacement {
     public void setLevel(Level level) {
         this.level = level;
     }
+
+    public Mob lastAttacker = null;
 
     private ArmorStand targetStand = null;
     public ArmorStand getTargetStand() {
@@ -571,8 +574,26 @@ public class BuildingPlacement {
         }
         if (targetStand != null)
             targetStand.discard();
+
+        if (ownerName.isEmpty()) {
+            awardBounty();
+        }
     }
 
+    private void awardBounty() {
+        if (lastAttacker instanceof Unit unit && !unit.getOwnerName().isEmpty()) {
+            ResourceCost cost = building.cost;
+            Resources resources = new Resources(unit.getOwnerName(),
+                    (int) (cost.food * NEUTRAL_BUILDING_BOUNTY_PERCENT),
+                    (int) (cost.wood * NEUTRAL_BUILDING_BOUNTY_PERCENT),
+                    (int) (cost.ore * NEUTRAL_BUILDING_BOUNTY_PERCENT)
+            );
+            if (resources.getTotalValue() > 0) {
+                ResourcesClientboundPacket.showFloatingText(resources, centrePos);
+                ResourcesServerEvents.addSubtractResources(resources);
+            }
+        }
+    }
 
     // should only be run serverside
     public void onBlockBreak(ServerLevel level, BlockPos pos, boolean breakBlocks) {

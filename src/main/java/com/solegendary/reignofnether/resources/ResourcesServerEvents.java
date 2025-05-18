@@ -3,7 +3,6 @@ package com.solegendary.reignofnether.resources;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.building.BuildingUtils;
@@ -57,6 +56,7 @@ public class ResourcesServerEvents {
     public static final int STARTING_ORE = 250;
 
     public static final float NEUTRAL_UNIT_BOUNTY_PERCENT = 0.25f;
+    public static final float NEUTRAL_BUILDING_BOUNTY_PERCENT = 0.25f;
 
     // to avoid having to save units too often add on all unit resources here too and just add directly on load
     public static void saveResources(ServerLevel serverLevel) {

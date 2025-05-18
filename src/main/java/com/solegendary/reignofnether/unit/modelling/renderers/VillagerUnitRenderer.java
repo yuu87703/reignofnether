@@ -26,10 +26,10 @@ public class VillagerUnitRenderer extends AbstractVillagerUnitRenderer<AbstractI
                 if (unit instanceof VillagerUnit vUnit &&
                         (vUnit.getBuildRepairGoal().isBuilding() ||
                         vUnit.getGatherResourceGoal().isGathering() ||
-                        vUnit.getTargetGoal().getTarget() != null)) {
+                        (vUnit.getTargetGoal() != null && vUnit.getTargetGoal().getTarget() != null))) {
                     super.render(pose, mbs, p_116354_, unit, p_116356_, p_116357_, p_116358_, p_116359_, p_116360_, p_116361_);
                 } else if (unit instanceof MilitiaUnit mUnit &&
-                        (mUnit.getTargetGoal().getTarget() != null ||
+                        ((mUnit.getTargetGoal() != null && mUnit.getTargetGoal().getTarget() != null) ||
                         (mUnit.getAttackBuildingGoal() instanceof MeleeAttackBuildingGoal mabg &&
                         mabg.getBuildingTarget() != null))) {
                     super.render(pose, mbs, p_116354_, unit, p_116356_, p_116357_, p_116358_, p_116359_, p_116360_, p_116361_);

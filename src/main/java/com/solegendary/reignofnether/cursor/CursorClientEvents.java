@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -47,6 +48,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.solegendary.reignofnether.unit.UnitClientEvents.getPlayerToEntityRelationship;
 import static net.minecraft.util.Mth.floor;
 import static net.minecraft.world.level.BlockGetter.traverseBlocks;
 
@@ -72,6 +74,7 @@ public class CursorClientEvents {
     // action that is performed on the next left click
     private static UnitAction leftClickAction = null;
     private static SandboxAction leftClickSandboxAction = null;
+
 
     public static Vector3d getCursorWorldPos() {
         return cursorWorldPos;
@@ -256,21 +259,38 @@ public class CursorClientEvents {
             // instead, improvise our own quad
             // https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
 
+            List<LivingEntity> entitiesInRange = MiscUtil.getEntitiesWithinRange(cursorWorldPos, 100, LivingEntity.class, MC.level);
+
             ArrayList<Vec3> uvwp = MyMath.prepIsPointInsideRect3d(MC,
                     (int) cursorLeftClickDownPos.x, (int) cursorLeftClickDownPos.y, // top left
                     (int) cursorLeftClickDownPos.x, (int) cursorLeftClickDragPos.y, // bottom left
                     (int) cursorLeftClickDragPos.x, (int) cursorLeftClickDragPos.y // bottom right
             );
-            for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(cursorWorldPos, 100, LivingEntity.class, MC.level)) {
+            for (LivingEntity entity : entitiesInRange) {
                 if (MyMath.isPointInsideRect3d(uvwp, entity.getBoundingBox().getCenter()) &&
                         entity.getId() != MC.player.getId() &&
                         !UnitClientEvents.getPreselectedUnits().contains(entity))
                     UnitClientEvents.addPreselectedUnit(entity);
             }
+
+            UnitClientEvents.militaryUnitsOnScreen.clear();
+            ArrayList<Vec3> uvwpFull = MyMath.prepIsPointInsideRect3d(MC,
+                    0, 0, // top left
+                    0, MC.getWindow().getGuiScaledHeight(), // bottom left
+                    MC.getWindow().getGuiScaledWidth(), 0 // bottom right
+            );
+            for (LivingEntity entity : entitiesInRange) {
+                if (MyMath.isPointInsideRect3d(uvwpFull, entity.getBoundingBox().getCenter()) &&
+                        entity.getId() != MC.player.getId() &&
+                        !(entity instanceof WorkerUnit) &&
+                        entity instanceof AttackerUnit &&
+                        GarrisonableBuilding.getGarrison((Unit) entity) == null &&
+                        getPlayerToEntityRelationship(entity) == Relationship.OWNED
+                )
+                    UnitClientEvents.militaryUnitsOnScreen.add(entity);
+            }
         }
     }
-
-    public static ArrayList<LivingEntity> militaryUnitsOnScreen = new ArrayList<>();
 
     public static boolean isBoxSelecting() {
         return cursorLeftClickDownPos.x >= 0 &&
