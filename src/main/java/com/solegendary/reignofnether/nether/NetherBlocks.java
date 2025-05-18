@@ -65,16 +65,20 @@ public class NetherBlocks {
 
     // returns the first block in the list of overworld blocks for a nether block mapping
     public static BlockState getOverworldBlock(Level level, BlockPos overworldBp) {
-        BlockState netherBs = level.getBlockState(overworldBp);
-        if (!netherBs.isAir()) {
-            for (Map.Entry<Block, List<Block>> entrySet : MAPPINGS.entrySet()) {
-                if (netherBs.getBlock() == Blocks.OBSIDIAN)
-                    return Blocks.WATER.defaultBlockState();
-                else if (netherBs.getBlock() == Blocks.NETHERRACK)
-                    return Blocks.DIRT.defaultBlockState();
-                else if (entrySet.getKey().getName().getString().equals(netherBs.getBlock().getName().getString()))
-                    return entrySet.getValue().get(0).defaultBlockState();
+        try {
+            BlockState netherBs = level.getBlockState(overworldBp);
+            if (!netherBs.isAir()) {
+                for (Map.Entry<Block, List<Block>> entrySet : MAPPINGS.entrySet()) {
+                    if (netherBs.getBlock() == Blocks.OBSIDIAN)
+                        return Blocks.WATER.defaultBlockState();
+                    else if (netherBs.getBlock() == Blocks.NETHERRACK)
+                        return Blocks.DIRT.defaultBlockState();
+                    else if (entrySet.getKey().getName().getString().equals(netherBs.getBlock().getName().getString()))
+                        return entrySet.getValue().get(0).defaultBlockState();
+                }
             }
+        } catch (NullPointerException e) {
+            return null;
         }
         return null;
     }

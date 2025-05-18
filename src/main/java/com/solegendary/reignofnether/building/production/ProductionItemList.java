@@ -6,13 +6,10 @@ import com.solegendary.reignofnether.keybinds.Keybinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProductionItemList {
-    Map<ProductionItem, Keybinding> productions = new HashMap<>();
+    Map<ProductionItem, Keybinding> productions = new LinkedHashMap<>();
 
     public ProductionItemList() {
 
@@ -24,7 +21,6 @@ public class ProductionItemList {
 
     public List<Button> getButtons(ProductionPlacement placement) {
         List<Button> buttons = new ArrayList<>();
-        //TODO Remove need for I18n
         if (FMLEnvironment.dist == Dist.CLIENT) {
             for (Map.Entry<ProductionItem, Keybinding> production : productions.entrySet()) {
                 buttons.add(production.getKey().getStartButton(placement, production.getValue()));

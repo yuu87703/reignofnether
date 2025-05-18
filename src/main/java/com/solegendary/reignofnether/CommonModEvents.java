@@ -213,6 +213,11 @@ public class CommonModEvents {
             event.accept(ItemRegistrar.ROYAL_GUARD_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.NECROMANCER_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.PIGLIN_MERCHANT_UNIT_SPAWN_EGG);
+            event.accept(ItemRegistrar.WOLF_UNIT_SPAWN_EGG);
+            event.accept(ItemRegistrar.LLAMA_UNIT_SPAWN_EGG);
+            event.accept(ItemRegistrar.PANDA_UNIT_SPAWN_EGG);
+            event.accept(ItemRegistrar.GRIZZLY_BEAR_UNIT_SPAWN_EGG);
+            event.accept(ItemRegistrar.POLAR_BEAR_UNIT_SPAWN_EGG);
         }
     }
 }

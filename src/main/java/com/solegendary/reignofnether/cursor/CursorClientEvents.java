@@ -73,6 +73,7 @@ public class CursorClientEvents {
     private static UnitAction leftClickAction = null;
     private static SandboxAction leftClickSandboxAction = null;
 
+
     public static Vector3d getCursorWorldPos() {
         return cursorWorldPos;
     }
@@ -256,12 +257,14 @@ public class CursorClientEvents {
             // instead, improvise our own quad
             // https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
 
+            List<LivingEntity> entitiesInRange = MiscUtil.getEntitiesWithinRange(cursorWorldPos, 100, LivingEntity.class, MC.level);
+
             ArrayList<Vec3> uvwp = MyMath.prepIsPointInsideRect3d(MC,
                     (int) cursorLeftClickDownPos.x, (int) cursorLeftClickDownPos.y, // top left
                     (int) cursorLeftClickDownPos.x, (int) cursorLeftClickDragPos.y, // bottom left
                     (int) cursorLeftClickDragPos.x, (int) cursorLeftClickDragPos.y // bottom right
             );
-            for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(cursorWorldPos, 100, LivingEntity.class, MC.level)) {
+            for (LivingEntity entity : entitiesInRange) {
                 if (MyMath.isPointInsideRect3d(uvwp, entity.getBoundingBox().getCenter()) &&
                         entity.getId() != MC.player.getId() &&
                         !UnitClientEvents.getPreselectedUnits().contains(entity))
@@ -270,7 +273,6 @@ public class CursorClientEvents {
         }
     }
 
-    public static ArrayList<LivingEntity> militaryUnitsOnScreen = new ArrayList<>();
 
     public static boolean isBoxSelecting() {
         return cursorLeftClickDownPos.x >= 0 &&

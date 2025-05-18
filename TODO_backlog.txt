@@ -6,14 +6,27 @@
 Features
 --------
 
+[❌] Walls
+    - Connect to garrisonable towers
+    - 3 layers that are broken starting from where the unit attacking it is positioned
+    - Able to be walked along as battlements
+    - Variable height across terrain
+
+[❌] More serverside logging for major player actions
+    - Building creation
+    - Start/complete research
+    - Created unit
+    - Used ability
+
+[❌] Custom structure block to register new buildings
+    - That are also saved to the level
+
 [❌] Import the Bedrock Minecraft Movie addon piglins
 
 [❌] Config to allow changing resource block values, including modded blocks
 
 [❌] AoE2-style markets
-
-[❌] Workers can repair iron golems
-    - Also contributes to mason exp and masons can repair faster
+    - Start as neutral building
 
 [❌] let modded/vanilla mobs attack buildings by making them attack an indestructible invisible armor stand
 

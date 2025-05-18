@@ -77,7 +77,7 @@ public class BuildingServerEvents {
 
     public static final Random random = new Random();
 
-    private static final int SAVE_TICKS_MAX = 1200;
+    private static final int SAVE_TICKS_MAX = 600;
     private static int saveTicks = 0;
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent evt) {
@@ -598,13 +598,16 @@ public class BuildingServerEvents {
                 int atkDmg = 0;
                 if (ghastUnit != null) {
                     atkDmg = (int) ghastUnit.getUnitAttackDamage();
+                    building.lastAttacker = ghastUnit;
                 } else if (creeperUnit != null) {
                     atkDmg = (int) creeperUnit.getUnitAttackDamage();
                     if (creeperUnit.isPowered()) {
                         atkDmg *= CreeperUnit.CHARGED_DAMAGE_MULT;
                     }
+                    building.lastAttacker = creeperUnit;
                 } else if (pillagerUnit != null) {
                     atkDmg = (int) pillagerUnit.getUnitAttackDamage() / 2;
+                    building.lastAttacker = pillagerUnit;
                 } else if (exp.getExploder() instanceof PrimedTnt) {
                     atkDmg = TNT_BUILDING_BASE_DAMAGE;
                 }

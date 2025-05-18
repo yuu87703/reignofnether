@@ -93,6 +93,7 @@ public class MeleeAttackBuildingGoal extends MoveToTargetBlockGoal {
                     if (new Random().nextDouble(1.0f) < damageFloat - damageFloor)
                         damageInt += 1;
                     buildingTarget.destroyRandomBlocks(damageInt);
+                    buildingTarget.lastAttacker = this.mob;
 
                     if (mob instanceof Slime slime && slime.onGround())
                         slime.jumpFromGround();

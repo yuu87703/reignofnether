@@ -953,6 +953,7 @@ public class HudClientEvents {
             } else {
                 actionButtons.add(SandboxClientEvents.getToggleUnitCheatsButton());
             }
+            actionButtons.add(SandboxClientEvents.getToggleNonUnitControlButton());
 
             for (Button actionButton : actionButtons) {
                 actionButton.render(evt.getGuiGraphics(), blitX, blitY, mouseX, mouseY);
