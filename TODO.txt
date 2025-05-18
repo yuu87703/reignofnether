@@ -85,6 +85,9 @@ Bugfixes
 Quality of Life
 ---------------
 
+[✔] RTS Players are now in Spectator mode instead of Creative while RTS camera is active
+    - This will reduce the ability for players to cheat by spawning in items
+
 [✔] Mob spawners are now active whenever any non-neutral unit or survival player is near them
     - Creative players no longer activate spawners
 

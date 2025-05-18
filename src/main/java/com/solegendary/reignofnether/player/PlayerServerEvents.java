@@ -664,7 +664,7 @@ public class PlayerServerEvents {
             playerGuiOpenStatus.put(playerName, true);
 
             // Set game mode to CREATIVE for GUI interaction
-            serverPlayer.setGameMode(GameType.CREATIVE);
+            serverPlayer.setGameMode(GameType.SPECTATOR);
         } else {
             ReignOfNether.LOGGER.warn("serverPlayer is null, cannot open topdown GUI");
         }
