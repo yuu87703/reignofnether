@@ -7,7 +7,6 @@
 
 
 
-
 Features
 --------
 HEROES (in order of priority)
@@ -78,6 +77,8 @@ Bugfixes
 
 [✔] Fixed worker gather targets not saving between server restarts
 
+[✔] Necromancers can no longer cast blood moon if one is currently active
+
 [❌] ServerStoppingEvent doesn't run on dedicated servers
 
 
@@ -109,4 +110,4 @@ Balancing
     - Hard: +75% beacon costs, +30% wave populations
     - Extreme: +100% beacon costs, +40% wave populations
 
-[❌] Every third wave now includes an enemy hero unit with level equal to 2/3rds the wave number
+[❌] Every 3rd wave now includes an enemy hero unit with level equal to 2/3rds the wave number
