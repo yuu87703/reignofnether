@@ -14,9 +14,9 @@ import com.solegendary.reignofnether.building.buildings.monsters.SculkCatalyst;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.SculkCatalystPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.IronGolemBuilding;
-import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -106,7 +106,7 @@ public class UnitServerEvents {
     public static final ArrayList<HeroUnitSave> savedHeroUnits = new ArrayList<>();
     public static final ArrayList<TargetResourcesSave> savedTargetResources = new ArrayList<>();
 
-    private static final int SAVE_TICKS_MAX = 1200;
+    private static final int SAVE_TICKS_MAX = 600;
     private static int saveTicks = 0;
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent evt) {
@@ -118,6 +118,7 @@ public class UnitServerEvents {
             if (level != null) {
                 saveUnits(level);
                 saveHeroUnits(level);
+                saveGatherTargets(level);
                 saveTicks = 0;
             }
         }

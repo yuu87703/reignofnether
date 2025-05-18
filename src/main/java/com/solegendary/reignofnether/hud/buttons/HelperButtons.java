@@ -145,7 +145,7 @@ public class HelperButtons {
                     List<LivingEntity> militaryUnits = new ArrayList<>();
 
                     if (Keybindings.shiftMod.isDown()) {
-                        militaryUnits.addAll(UnitClientEvents.militaryUnitsOnScreen);
+                        militaryUnits.addAll(UnitClientEvents.getMilitaryUnitsOnScreen());
                     } else {
                         militaryUnits.addAll(UnitClientEvents.getAllUnits().stream()
                                 .filter(u -> !(u instanceof WorkerUnit) &&

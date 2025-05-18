@@ -116,7 +116,7 @@ public class ResourcesServerEvents {
         }
     }
 
-    private static final int SAVE_TICKS_MAX = 1200;
+    private static final int SAVE_TICKS_MAX = 600;
     private static int saveTicks = 0;
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent evt) {

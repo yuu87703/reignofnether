@@ -184,6 +184,8 @@ public class PlayerClientEvents {
         // LOG OUT FROM SINGLEPLAYER WORLD ONLY
         if (MC.player != null && evt.getEntity().getId() == MC.player.getId()) {
             resetRTS(true);
+            UnitClientEvents.getAllUnits().clear();
+            BuildingClientEvents.getBuildings().clear();
             FogOfWarClientEvents.movedToCapitol = false;
             FogOfWarClientEvents.frozenChunks.clear();
             FogOfWarClientEvents.semiFrozenChunks.clear();
@@ -204,6 +206,8 @@ public class PlayerClientEvents {
         // LOG OUT FROM SERVER WORLD ONLY
         if (MC.player != null && evt.getPlayer() != null && evt.getPlayer().getId() == MC.player.getId()) {
             resetRTS(true);
+            UnitClientEvents.getAllUnits().clear();
+            BuildingClientEvents.getBuildings().clear();
             FogOfWarClientEvents.movedToCapitol = false;
             FogOfWarClientEvents.frozenChunks.clear();
             FogOfWarClientEvents.semiFrozenChunks.clear();

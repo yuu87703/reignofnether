@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -48,7 +47,6 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.solegendary.reignofnether.unit.UnitClientEvents.getPlayerToEntityRelationship;
 import static net.minecraft.util.Mth.floor;
 import static net.minecraft.world.level.BlockGetter.traverseBlocks;
 
@@ -272,25 +270,9 @@ public class CursorClientEvents {
                         !UnitClientEvents.getPreselectedUnits().contains(entity))
                     UnitClientEvents.addPreselectedUnit(entity);
             }
-
-            UnitClientEvents.militaryUnitsOnScreen.clear();
-            ArrayList<Vec3> uvwpFull = MyMath.prepIsPointInsideRect3d(MC,
-                    0, 0, // top left
-                    0, MC.getWindow().getGuiScaledHeight(), // bottom left
-                    MC.getWindow().getGuiScaledWidth(), 0 // bottom right
-            );
-            for (LivingEntity entity : entitiesInRange) {
-                if (MyMath.isPointInsideRect3d(uvwpFull, entity.getBoundingBox().getCenter()) &&
-                        entity.getId() != MC.player.getId() &&
-                        !(entity instanceof WorkerUnit) &&
-                        entity instanceof AttackerUnit &&
-                        GarrisonableBuilding.getGarrison((Unit) entity) == null &&
-                        getPlayerToEntityRelationship(entity) == Relationship.OWNED
-                )
-                    UnitClientEvents.militaryUnitsOnScreen.add(entity);
-            }
         }
     }
+
 
     public static boolean isBoxSelecting() {
         return cursorLeftClickDownPos.x >= 0 &&

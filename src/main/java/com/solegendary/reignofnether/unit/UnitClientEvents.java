@@ -102,8 +102,6 @@ public class UnitClientEvents {
     // tracking of all existing units
     private static final ArrayList<LivingEntity> allUnits = new ArrayList<>();
 
-    public static final ArrayList<LivingEntity> militaryUnitsOnScreen = new ArrayList<>();
-
     @Nullable private static UnitActionItem lastClientUAIActioned = null;
 
     public static ArrayList<LivingEntity> getPreselectedUnits() { return preselectedUnits; }
@@ -1067,6 +1065,28 @@ public class UnitClientEvents {
             return true;
         return false;
     }
+
+    public static List<LivingEntity> getMilitaryUnitsOnScreen() {
+        ArrayList<Vec3> uvwpFull = MyMath.prepIsPointInsideRect3d(MC,
+                0, 0, // top left
+                0, MC.getWindow().getGuiScaledHeight(), // bottom left
+                MC.getWindow().getGuiScaledWidth(), MC.getWindow().getGuiScaledHeight() // bottom right
+        );
+
+        ArrayList<LivingEntity> units = new ArrayList<>();
+        for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(CursorClientEvents.getCursorWorldPos(), 100, LivingEntity.class, MC.level)) {
+            if (MyMath.isPointInsideRect3d(uvwpFull, entity.getBoundingBox().getCenter()) &&
+                    entity.getId() != MC.player.getId() &&
+                    !(entity instanceof WorkerUnit) &&
+                    entity instanceof AttackerUnit &&
+                    GarrisonableBuilding.getGarrison((Unit) entity) == null &&
+                    getPlayerToEntityRelationship(entity) == Relationship.OWNED
+            )
+                units.add(entity);
+        }
+        return units;
+    }
+
 
     /*
     @SubscribeEvent
