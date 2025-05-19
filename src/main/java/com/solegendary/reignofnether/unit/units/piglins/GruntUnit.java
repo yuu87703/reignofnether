@@ -1,15 +1,14 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
-import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -165,21 +164,19 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     }
 
     public static List<AbilityButton> getBuildingButtons() {
-        List<AbilityButton> buildingButtons = new ArrayList<>();
-
-        List<Keybinding> keybindings = BuildingUtils.keybindings;
-        int index = 0;
-
-        for (Building building : ReignOfNetherRegistries.BUILDING) {
-            if (building.getFaction() == Faction.PIGLINS || building.getFaction() == null) {
-                AbilityButton button = building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index));
-                if (button != null) {
-                    buildingButtons.add(button);
-                    index++;
-                }
-            }
-        }
-        return buildingButtons;
+        return List.of(
+                Buildings.CENTRAL_PORTAL.getBuildButton(Keybindings.keyQ),
+                Buildings.PORTAL_BASIC.getBuildButton(Keybindings.keyW),
+                Buildings.NETHERWART_FARM.getBuildButton(Keybindings.keyE),
+                Buildings.BASTION.getBuildButton(Keybindings.keyR),
+                Buildings.HOGLIN_STABLES.getBuildButton(Keybindings.keyT),
+                Buildings.FLAME_SANCTUARY.getBuildButton(Keybindings.keyY),
+                Buildings.WITHER_SHRINE.getBuildButton(Keybindings.keyU),
+                Buildings.BASALT_SPRINGS.getBuildButton(Keybindings.keyI),
+                Buildings.FORTRESS.getBuildButton(Keybindings.keyO),
+                Buildings.BLACKSTONE_BRIDGE.getBuildButton(Keybindings.keyC),
+                Buildings.BEACON.getBuildButton(null)
+        );
     }
 
     public GruntUnit(EntityType<? extends Piglin> entityType, Level level) {

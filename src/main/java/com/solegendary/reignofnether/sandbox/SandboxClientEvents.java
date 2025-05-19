@@ -1,9 +1,7 @@
 package com.solegendary.reignofnether.sandbox;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
@@ -31,7 +29,6 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
@@ -61,20 +58,12 @@ public class SandboxClientEvents {
     }
 
     public static List<AbilityButton> getNeutralBuildingButtons() {
-        List<AbilityButton> buildingButtons = new ArrayList<>();
-        List<Keybinding> keybindings = BuildingUtils.keybindings;
-        int index = 0;
-
-        for (Building building : ReignOfNetherRegistries.BUILDING) {
-            if (building.getFaction() == Faction.NONE) {
-                AbilityButton button = building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index));
-                if (button != null) {
-                    buildingButtons.add(button);
-                    index++;
-                }
-            }
-        }
-        return buildingButtons;
+        return List.of(
+                Buildings.CAPTURABLE_BEACON.getBuildButton(Keybindings.keyQ),
+                Buildings.HEALING_FOUNTAIN.getBuildButton(Keybindings.keyW),
+                Buildings.END_PORTAL.getBuildButton(Keybindings.keyE),
+                Buildings.NEUTRAL_TRANSPORT_PORTAL.getBuildButton(Keybindings.keyR)
+        );
     }
 
     public static List<AbilityButton> getBuildingButtons() {
