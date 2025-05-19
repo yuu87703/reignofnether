@@ -5,12 +5,9 @@ import com.mojang.serialization.Dynamic;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
-import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
-import com.solegendary.reignofnether.building.Building;
-import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
@@ -279,21 +276,21 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     }
 
     public static List<AbilityButton> getBuildingButtons() {
-        List<AbilityButton> buildingButtons = new ArrayList<>();
-
-        List<Keybinding> keybindings = BuildingUtils.keybindings;
-        int index = 0;
-
-        for (Building building : ReignOfNetherRegistries.BUILDING) {
-            if (building.getFaction() == Faction.VILLAGERS || building.getFaction() == null) {
-                AbilityButton button = building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index));
-                if (button != null) {
-                    buildingButtons.add(button);
-                    index++;
-                }
-            }
-        }
-        return buildingButtons;
+        return List.of(
+                Buildings.TOWN_CENTRE.getBuildButton(Keybindings.keyQ),
+                Buildings.OAK_STOCKPILE.getBuildButton(Keybindings.keyW),
+                Buildings.VILLAGER_HOUSE.getBuildButton(Keybindings.keyE),
+                Buildings.WHEAT_FARM.getBuildButton(Keybindings.keyR),
+                Buildings.WATCHTOWER.getBuildButton(Keybindings.keyT),
+                Buildings.BARRACKS.getBuildButton(Keybindings.keyY),
+                Buildings.BLACKSMITH.getBuildButton(Keybindings.keyU),
+                Buildings.ARCANE_TOWER.getBuildButton(Keybindings.keyI),
+                Buildings.LIBRARY.getBuildButton(Keybindings.keyO),
+                Buildings.CASTLE.getBuildButton(Keybindings.keyP),
+                Buildings.IRON_GOLEM_BUILDING.getBuildButton(Keybindings.keyL),
+                Buildings.OAK_BRIDGE.getBuildButton(Keybindings.keyC),
+                Buildings.BEACON.getBuildButton(null)
+        );
     }
 
     public VillagerUnit(EntityType<? extends Vindicator> entityType, Level level) {
