@@ -182,6 +182,7 @@ public class ZombieVillagerUnit extends Vindicator implements Unit, WorkerUnit, 
                 Buildings.SLIME_PIT.getBuildButton(Keybindings.keyO),
                 Buildings.LABORATORY.getBuildButton(Keybindings.keyP),
                 Buildings.STRONGHOLD.getBuildButton(Keybindings.keyL),
+                Buildings.ALTAR_OF_DARKNESS.getBuildButton(Keybindings.keyF),
                 Buildings.SPRUCE_BRIDGE.getBuildButton(Keybindings.keyC),
                 Buildings.SCULK_CATALYST.getBuildButton(Keybindings.keyV),
                 Buildings.BEACON.getBuildButton(null)

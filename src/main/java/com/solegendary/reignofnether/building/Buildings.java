@@ -53,6 +53,10 @@ public class Buildings {
     public static final EndPortal END_PORTAL = register(new ResourceLocation(ReignOfNether.MOD_ID, "end_portal"), new EndPortal());
     public static final HealingFountain HEALING_FOUNTAIN = register(new ResourceLocation(ReignOfNether.MOD_ID, "healing_fountain"), new HealingFountain());
     public static final NeutralTransportPortal NEUTRAL_TRANSPORT_PORTAL = register(new ResourceLocation(ReignOfNether.MOD_ID, "neutral_transport_portal"), new NeutralTransportPortal());
+    public static final AltarOfDarkness ALTAR_OF_DARKNESS = register(new ResourceLocation(ReignOfNether.MOD_ID, "altar_of_darkness"), new AltarOfDarkness());
+    public static final ShrineOfProsperity SHRINE_OF_PROSPERITY = register(new ResourceLocation(ReignOfNether.MOD_ID, "shrine_of_prosperity"), new ShrineOfProsperity());
+    public static final InfernalPortal INFERNAL_PORTAL = register(new ResourceLocation(ReignOfNether.MOD_ID, "infernal_portal"), new InfernalPortal());
+
 
     private static <T extends Building> T register(ResourceLocation id, T building) {
         return Registry.register(ReignOfNetherRegistries.BUILDING, id, building);

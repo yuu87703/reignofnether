@@ -80,6 +80,7 @@ public class ReignOfNetherCommonConfigs {
         BuildingCosts.DARK_WATCHTOWER.define(BUILDER);
         BuildingCosts.SLIME_PIT.define(BUILDER);
         BuildingCosts.STRONGHOLD.define(BUILDER);
+        BuildingCosts.ALTAR_OF_DARKNESS.define(BUILDER);
         //Villagers
         BUILDER.comment("Villagers");
         BuildingCosts.TOWN_CENTRE.define(BUILDER);
@@ -92,6 +93,7 @@ public class ReignOfNetherCommonConfigs {
         BuildingCosts.WATCHTOWER.define(BUILDER);
         BuildingCosts.CASTLE.define(BUILDER);
         BuildingCosts.IRON_GOLEM_BUILDING.define(BUILDER);
+        BuildingCosts.SHRINE_OF_PROSPERITY.define(BUILDER);
         //Piglins
         BUILDER.comment("Piglins");
         BuildingCosts.CENTRAL_PORTAL.define(BUILDER);
@@ -104,6 +106,7 @@ public class ReignOfNetherCommonConfigs {
         BuildingCosts.WITHER_SHRINE.define(BUILDER);
         BuildingCosts.BASALT_SPRINGS.define(BUILDER);
         BuildingCosts.FORTRESS.define(BUILDER);
+        BuildingCosts.INFERNAL_PORTAL.define(BUILDER);
 
         //*Research*
         BUILDER.comment("Research Cost Configurations");
@@ -222,6 +225,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry DARK_WATCHTOWER = ResourceCostConfigEntry.Building(0,100,75, 0, ResourceCosts.DARK_WATCHTOWER, "Dark Watchtower Config");
         public static final ResourceCostConfigEntry SLIME_PIT = ResourceCostConfigEntry.Building(0,175, 125, 0, ResourceCosts.SLIME_PIT, "Slime Pit Config");
         public static final ResourceCostConfigEntry STRONGHOLD = ResourceCostConfigEntry.Building(0,400,300, 0, ResourceCosts.STRONGHOLD, "Stronghold Config");
+        public static final ResourceCostConfigEntry ALTAR_OF_DARKNESS = ResourceCostConfigEntry.Building(0,125,50, 0, ResourceCosts.ALTAR_OF_DARKNESS, "Altar of Darkness Config");
 
         // Villagers
         public static final ResourceCostConfigEntry TOWN_CENTRE = ResourceCostConfigEntry.Building(0,350,250, 10, ResourceCosts.TOWN_CENTRE, "Town Centre Config");
@@ -234,6 +238,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry WATCHTOWER = ResourceCostConfigEntry.Building(0,100,75, 0, ResourceCosts.WATCHTOWER, "Watchtower Config");
         public static final ResourceCostConfigEntry CASTLE = ResourceCostConfigEntry.Building(0,400,300, 0, ResourceCosts.CASTLE, "Castle Config");
         public static final ResourceCostConfigEntry IRON_GOLEM_BUILDING = ResourceCostConfigEntry.Building(0,50,250, 0, ResourceCosts.IRON_GOLEM_BUILDING, "Iron Golem Building Config");
+        public static final ResourceCostConfigEntry SHRINE_OF_PROSPERITY = ResourceCostConfigEntry.Building(0,125,50, 0, ResourceCosts.SHRINE_OF_PROSPERITY, "Shrine of Prosperity Config");
 
         // Piglins
         public static final ResourceCostConfigEntry CENTRAL_PORTAL = ResourceCostConfigEntry.Building(0,350,250, 10, ResourceCosts.CENTRAL_PORTAL, "Central Portal Config");
@@ -246,6 +251,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry WITHER_SHRINE = ResourceCostConfigEntry.Building(0, 350, 200, 0, ResourceCosts.WITHER_SHRINE, "Wither Shrine Config");
         public static final ResourceCostConfigEntry BASALT_SPRINGS = ResourceCostConfigEntry.Building(0, 200, 200, 0, ResourceCosts.BASALT_SPRINGS, "Basalt Springs Config");
         public static final ResourceCostConfigEntry FORTRESS = ResourceCostConfigEntry.Building(0, 400, 300, 0, ResourceCosts.FORTRESS, "Fortress Config");
+        public static final ResourceCostConfigEntry INFERNAL_PORTAL = ResourceCostConfigEntry.Building(0,125,75, 0, ResourceCosts.INFERNAL_PORTAL, "Infernal Portal Config");
     }
     public static class ResearchCosts implements Costs {
         public static final ResourceCostConfigEntry RESEARCH_GOLEM_SMITHING = ResourceCostConfigEntry.Research(0, 150,200, 90, ResourceCosts.RESEARCH_GOLEM_SMITHING, "Golem Smithing Research Config");

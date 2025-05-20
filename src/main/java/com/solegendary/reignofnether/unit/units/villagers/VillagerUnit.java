@@ -287,6 +287,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
                 Buildings.ARCANE_TOWER.getBuildButton(Keybindings.keyI),
                 Buildings.LIBRARY.getBuildButton(Keybindings.keyO),
                 Buildings.CASTLE.getBuildButton(Keybindings.keyP),
+                Buildings.SHRINE_OF_PROSPERITY.getBuildButton(Keybindings.keyF),
                 Buildings.IRON_GOLEM_BUILDING.getBuildButton(Keybindings.keyL),
                 Buildings.OAK_BRIDGE.getBuildButton(Keybindings.keyC),
                 Buildings.BEACON.getBuildButton(null)
