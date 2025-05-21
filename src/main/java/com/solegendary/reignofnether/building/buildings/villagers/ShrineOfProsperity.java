@@ -4,10 +4,8 @@ import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
-import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -33,10 +31,9 @@ public class ShrineOfProsperity extends ProductionBuilding {
         this.portraitBlock = Blocks.ACACIA_LOG;
         this.icon = new ResourceLocation("minecraft", "textures/block/acacia_log_top.png");
 
-        this.startingBlockTypes.add(Blocks.POLISHED_ANDESITE_STAIRS);
+        this.startingBlockTypes.add(Blocks.COBBLESTONE);
 
-        this.productions.add(ProductionItems.VINDICATOR, Keybindings.keyQ);
-        this.productions.add(ProductionItems.PILLAGER, Keybindings.keyW);
+
     }
 
     public Faction getFaction() {return Faction.VILLAGERS;}
@@ -55,7 +52,7 @@ public class ShrineOfProsperity extends ProductionBuilding {
                 () -> BuildingClientEvents.setBuildingToPlace(Buildings.SHRINE_OF_PROSPERITY),
                 null,
                 List.of(
-                        fcs(I18n.get("buildings.villagers.reignofnether.barracks"), true),
+                        fcs(I18n.get("buildings.villagers.reignofnether.shrine_of_prosperity"), true),
                         ResourceCosts.getFormattedCost(cost),
                         fcs(""),
                         fcs(I18n.get("buildings.villagers.reignofnether.shrine_of_prosperity.tooltip1")),

@@ -4,10 +4,8 @@ import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
-import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -30,11 +28,12 @@ public class AltarOfDarkness extends ProductionBuilding {
         super(structureName, cost, false);
         this.name = buildingName;
         this.portraitBlock = Blocks.END_PORTAL;
-        this.icon = new ResourceLocation("minecraft", "textures/block/mossy_stone_bricks.png");
+        this.icon = new ResourceLocation("minecraft", "textures/block/dark_prismarine.png");
 
-        this.startingBlockTypes.add(Blocks.STONE_BRICKS);
+        this.startingBlockTypes.add(Blocks.DARK_PRISMARINE);
+        this.startingBlockTypes.add(Blocks.TINTED_GLASS);
 
-        this.productions.add(ProductionItems.SKELETON, Keybindings.keyQ);
+
     }
 
     public Faction getFaction() {return Faction.MONSTERS;}
@@ -44,7 +43,7 @@ public class AltarOfDarkness extends ProductionBuilding {
         String name = I18n.get("buildings." + getFaction().name().toLowerCase() + "." + key.getNamespace() + "." + key.getPath());
         return new AbilityButton(
                 name,
-                new ResourceLocation("minecraft", "textures/block/mossy_stone_bricks.png"),
+                new ResourceLocation("minecraft", "textures/block/dark_prismarine.png"),
                 hotkey,
                 () -> BuildingClientEvents.getBuildingToPlace() == Buildings.ALTAR_OF_DARKNESS,
                 () -> false,
