@@ -4,8 +4,10 @@ import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -33,7 +35,8 @@ public class AltarOfDarkness extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.DARK_PRISMARINE);
         this.startingBlockTypes.add(Blocks.TINTED_GLASS);
 
-
+        this.productions.add(ProductionItems.NECROMANCER, Keybindings.keyQ);
+        this.productions.add(ProductionItems.NECROMANCER_REVIVE, Keybindings.keyQ);
     }
 
     public Faction getFaction() {return Faction.MONSTERS;}

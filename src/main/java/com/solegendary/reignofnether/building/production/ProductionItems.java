@@ -39,10 +39,13 @@ public class ProductionItems {
     public static final MagmaCubeProd MAGMA_CUBE = register(new ResourceLocation(ReignOfNether.MOD_ID, "magma_cube"), new MagmaCubeProd());
     public static final GhastProd GHAST = register(new ResourceLocation(ReignOfNether.MOD_ID, "ghast"), new GhastProd());
     public static final RoyalGuardProd ROYAL_GUARD = register(new ResourceLocation(ReignOfNether.MOD_ID, "royal_guard"), new RoyalGuardProd());
+    public static final RoyalGuardReviveProd ROYAL_GUARD_REVIVE = register(new ResourceLocation(ReignOfNether.MOD_ID, "royal_guard_revive"), new RoyalGuardReviveProd());
     public static final NecromancerProd NECROMANCER = register(new ResourceLocation(ReignOfNether.MOD_ID, "necromancer"), new NecromancerProd());
+    public static final NecromancerReviveProd NECROMANCER_REVIVE = register(new ResourceLocation(ReignOfNether.MOD_ID, "necromancer_revive"), new NecromancerReviveProd());
+    public static final PiglinMerchantProd PIGLIN_MERCHANT = register(new ResourceLocation(ReignOfNether.MOD_ID, "piglin_merchant"), new PiglinMerchantProd());
+    public static final PiglinMerchantReviveProd PIGLIN_MERCHANT_REVIVE = register(new ResourceLocation(ReignOfNether.MOD_ID, "piglin_merchant_revive"), new PiglinMerchantReviveProd());
     public static final ZombiePiglinProd ZOMBIE_PIGLIN = register(new ResourceLocation(ReignOfNether.MOD_ID, "zombie_piglin"), new ZombiePiglinProd());
     public static final ZoglinProd ZOGLIN = register(new ResourceLocation(ReignOfNether.MOD_ID, "zoglin"), new ZoglinProd());
-    public static final PiglinMerchantProd PIGLIN_MERCHANT = register(new ResourceLocation(ReignOfNether.MOD_ID, "piglin_merchant"), new PiglinMerchantProd());
     public static final EndermanProd ENDERMAN = register(new ResourceLocation(ReignOfNether.MOD_ID, "enderman"), new EndermanProd());
     public static final PolarBearProd POLAR_BEAR = register(new ResourceLocation(ReignOfNether.MOD_ID, "polar_bear"), new PolarBearProd());
     public static final GrizzlyBearProd GRIZZLY_BEAR = register(new ResourceLocation(ReignOfNether.MOD_ID, "grizzly_bear"), new GrizzlyBearProd());

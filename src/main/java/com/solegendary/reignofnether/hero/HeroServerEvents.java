@@ -9,7 +9,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.ArrayList;
+
 public class HeroServerEvents {
+
+    public static ArrayList<HeroUnit> fallenHeroes = new ArrayList<>();
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent evt) {
@@ -39,6 +43,10 @@ public class HeroServerEvents {
                     }
                 }
             }
+        }
+        // save killed hero unit for revival
+        if (evt.getEntity() instanceof HeroUnit heroUnit) {
+            fallenHeroes.add(heroUnit);
         }
     }
 }

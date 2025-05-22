@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.interfaces;
 
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,6 +12,20 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import java.util.List;
 
 public interface HeroUnit extends Unit{
+
+    int FOOD_REVIVE_COST_BASE = 100;
+    int FOOD_REVIVE_COST_PER_LEVEL = 50;
+    int REVIVE_SECONDS_BASE = 30;
+    int REVIVE_SECONDS_PER_LEVEL = 5;
+    int POP_COST = 5;
+
+    public static ResourceCost getReviveCost(HeroUnit heroUnit) {
+        return ResourceCost.Unit(
+                FOOD_REVIVE_COST_BASE + (heroUnit.getHeroLevel() * FOOD_REVIVE_COST_PER_LEVEL),
+                0,0,
+                REVIVE_SECONDS_BASE + (heroUnit.getHeroLevel() * REVIVE_SECONDS_PER_LEVEL),
+                POP_COST);
+    }
 
     int MAX_HERO_LEVEL = 10;
 
