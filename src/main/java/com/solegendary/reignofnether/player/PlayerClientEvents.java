@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
+import com.solegendary.reignofnether.hero.HeroClientEvents;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -190,6 +191,7 @@ public class PlayerClientEvents {
             FogOfWarClientEvents.frozenChunks.clear();
             FogOfWarClientEvents.semiFrozenChunks.clear();
             OrthoviewClientEvents.unlockCam();
+            HeroClientEvents.fallenHeroes.clear();
         }
     }
 
@@ -211,6 +213,7 @@ public class PlayerClientEvents {
             FogOfWarClientEvents.movedToCapitol = false;
             FogOfWarClientEvents.frozenChunks.clear();
             FogOfWarClientEvents.semiFrozenChunks.clear();
+            HeroClientEvents.fallenHeroes.clear();
         }
     }
 
@@ -283,6 +286,7 @@ public class PlayerClientEvents {
         PlayerClientEvents.beaconOwnerTicks.clear();
         SurvivalClientEvents.reset();
         StartPosClientEvents.resetAll();
+        HeroClientEvents.fallenHeroes.clear();
     }
 
     public static void setRTSLock(boolean lock) {

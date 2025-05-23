@@ -49,7 +49,7 @@ public class HeroUnitSaveData extends SavedData {
                 int ability3Rank = htag.getInt("ability3Rank");
                 int ability4Rank = htag.getInt("ability4Rank");
 
-                data.heroUnits.add(new HeroUnitSave(uuid, experience, skillPoints, charges, ability1Rank, ability2Rank, ability3Rank, ability4Rank));
+                data.heroUnits.add(new HeroUnitSave(uuid, "", "", experience, skillPoints, charges, ability1Rank, ability2Rank, ability3Rank, ability4Rank));
                 ReignOfNether.LOGGER.info("HeroUnitSaveData.load: " + uuid + "|" + experience + "|" + skillPoints + "|" + charges + "|" + ability1Rank + "|" + ability2Rank + "|" + ability3Rank + "|" + ability4Rank);
             }
         }

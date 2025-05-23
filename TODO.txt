@@ -5,7 +5,7 @@
 [🟡] Partially done and/or needs testing
 [❌] Not done, including unmerged PRs
 
-
+cghange productionItem.cost to getCost() instead so that reviveProds can have variable costs
 
 Features
 --------
@@ -18,6 +18,11 @@ HEROES (in order of priority)
     - spell levelling and requirements
     - mana?
     - equipment
+
+Hero Revives
+    [🟡] Sync with client when logging in/out of server
+    [❌] Save to world (add field isDead)
+    [❌] enforce entityType field in ReviveHeroProductionItem
 
 
 Necromancer

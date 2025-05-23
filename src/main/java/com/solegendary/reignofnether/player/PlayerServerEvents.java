@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.building.buildings.placements.ProductionPla
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamemode.GameModeClientboundPacket;
 import com.solegendary.reignofnether.guiscreen.TopdownGuiContainer;
+import com.solegendary.reignofnether.hero.HeroClientEvents;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
@@ -929,6 +930,7 @@ public class PlayerServerEvents {
             AlliancesServerEvents.resetAllAlliances();
             SurvivalServerEvents.reset();
         }
+        HeroClientEvents.fallenHeroes.clear();
     }
 
     public static void setRTSLock(boolean lock) {

@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.List;
 
-public interface HeroUnit extends Unit{
+public interface HeroUnit extends Unit {
 
     int FOOD_REVIVE_COST_BASE = 100;
     int FOOD_REVIVE_COST_PER_LEVEL = 50;
@@ -19,11 +19,11 @@ public interface HeroUnit extends Unit{
     int REVIVE_SECONDS_PER_LEVEL = 5;
     int POP_COST = 5;
 
-    public static ResourceCost getReviveCost(HeroUnit heroUnit) {
+    public static ResourceCost getReviveCost(int heroLevel) {
         return ResourceCost.Unit(
-                FOOD_REVIVE_COST_BASE + (heroUnit.getHeroLevel() * FOOD_REVIVE_COST_PER_LEVEL),
+                FOOD_REVIVE_COST_BASE + (Math.min(1, heroLevel) * FOOD_REVIVE_COST_PER_LEVEL),
                 0,0,
-                REVIVE_SECONDS_BASE + (heroUnit.getHeroLevel() * REVIVE_SECONDS_PER_LEVEL),
+                REVIVE_SECONDS_BASE + (Math.min(1, heroLevel) * REVIVE_SECONDS_PER_LEVEL),
                 POP_COST);
     }
 
@@ -74,9 +74,12 @@ public interface HeroUnit extends Unit{
 
     // we always track total exp and then reduce down for the UI
     default int getHeroLevel() {
+        return getHeroLevel(getExperience());
+    }
+
+    static int getHeroLevel(int exp) {
         int level = 0;
         int expToNextLevel = 200;
-        int exp = getExperience();
         do {
             level += 1;
             exp -= expToNextLevel;

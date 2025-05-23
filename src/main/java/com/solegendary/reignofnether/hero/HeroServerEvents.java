@@ -1,19 +1,22 @@
 package com.solegendary.reignofnether.hero;
 
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
+import com.solegendary.reignofnether.unit.HeroUnitSave;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
 public class HeroServerEvents {
 
-    public static ArrayList<HeroUnit> fallenHeroes = new ArrayList<>();
+    public static ArrayList<HeroUnitSave> fallenHeroes = new ArrayList<>();
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent evt) {
@@ -46,7 +49,26 @@ public class HeroServerEvents {
         }
         // save killed hero unit for revival
         if (evt.getEntity() instanceof HeroUnit heroUnit) {
-            fallenHeroes.add(heroUnit);
+            fallenHeroes.add(new HeroUnitSave(
+                    ((Entity) heroUnit).getStringUUID(),
+                    heroUnit.getOwnerName(),
+                    ((LivingEntity) heroUnit).getName().getString(),
+                    heroUnit.getExperience(),
+                    heroUnit.getSkillPoints(),
+                    0,
+                    heroUnit.getHeroAbilities().size() > 0 ? heroUnit.getHeroAbilities().get(0).rank : 0,
+                    heroUnit.getHeroAbilities().size() > 1 ? heroUnit.getHeroAbilities().get(1).rank : 0,
+                    heroUnit.getHeroAbilities().size() > 2 ? heroUnit.getHeroAbilities().get(2).rank : 0,
+                    heroUnit.getHeroAbilities().size() > 3 ? heroUnit.getHeroAbilities().get(3).rank : 0
+            ));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent evt) {
+        for (HeroUnitSave fallenHero : fallenHeroes) {
+            if (fallenHero.ownerName.equals(evt.getEntity().getName().getString()))
+                FallenHeroClientboundPacket.addFallenHero(fallenHero);
         }
     }
 }

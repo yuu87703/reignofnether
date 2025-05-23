@@ -157,6 +157,8 @@ public class UnitServerEvents {
                 List<HeroAbility> abls = hero.getHeroAbilities();
                 data.heroUnits.add(new HeroUnitSave(
                     e.getStringUUID(),
+                    e.getName().getString(),
+                    hero.getOwnerName(),
                     hero.getExperience(),
                     hero.getSkillPoints(),
                     hero.getChargesForSaveData(),
