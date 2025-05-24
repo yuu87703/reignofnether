@@ -64,53 +64,13 @@ Royal Guard
 Bugfixes
 --------
 
-[❌] Armour on units doesn't do anything against other mob projectiles?
-    - Check on latest forge version?
-
-[✔] Neutral units now correctly attack non-neutral buildings when /gamerule neutralAggro is enabled
-
-[✔] Cheats are no longer disabled whenever rejoining a world in sandbox mode
-
-[✔] Fixed crash related to converting nether blocks
-
-[✔] Fixed crash when using a Militia spawn egg on a spawner
-
-[✔] Fixed worker gather targets not saving between server restarts
-
-[✔] Necromancers can no longer cast blood moon if one is currently active
-
-[❌] ServerStoppingEvent doesn't run on dedicated servers
+[✔] Readded water and healing potions to witches
 
 
 Quality of Life
 ---------------
-
-[✔] RTS Players are now in Spectator mode instead of Creative while RTS camera is active
-    - This will reduce the ability for players to cheat by spawning in items
-
-[✔] Mob spawners are now active whenever any non-neutral unit or survival player is near them
-    - Creative players no longer activate spawners
-
-[✔] Added spawn eggs for all neutral animal units
-
-[✔] You can now shift-click the "Select all Military units" button to only select units on screen
-
-[✔] Added a button to toggle full unit control in sandbox mode
-    - This is the same as toggling the 'wouldyoukindly' cheatcode
-
-[✔] Neutral buildings now award resources equal to 25% of their cost when destroyed
-
+[❌] Witch lingering potions no longer collide with mobs
+    - This means they will more accurately spread across the ground
 
 Balancing
 ---------
-
-[❌] Day cycle times adjusted from: (20, 15, 12, 9, 6) to (14, 12, 10, 8, 6) minutes
-
-[❌] At higher wave survival difficulties, enemy wave populations and beacon build/upgrade costs are increased
-    - Beginner: no change
-    - Easy: +25% beacon costs, +10% wave populations
-    - Medium: +50% beacon costs, +20% wave populations
-    - Hard: +75% beacon costs, +30% wave populations
-    - Extreme: +100% beacon costs, +40% wave populations
-
-[❌] Every 3rd wave now includes an enemy hero unit with level equal to 2/3rds the wave number
