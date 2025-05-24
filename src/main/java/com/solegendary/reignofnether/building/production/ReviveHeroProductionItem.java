@@ -75,7 +75,7 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
     private HeroUnitSave getFallenHero(boolean isClientSide, String ownerName) {
         ArrayList<HeroUnitSave> heroUnits = isClientSide ? HeroClientEvents.fallenHeroes : HeroServerEvents.fallenHeroes;
         for (HeroUnitSave heroUnit : heroUnits) {
-            if (heroUnit.ownerName.equals(ownerName))
+            if (heroUnit.ownerName.equals(ownerName) && heroUnit.name.equals(entityType.getBaseClass().getName()))
                 return heroUnit;
         }
         return null;

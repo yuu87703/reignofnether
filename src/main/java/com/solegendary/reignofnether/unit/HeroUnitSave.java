@@ -3,8 +3,8 @@ package com.solegendary.reignofnether.unit;
 public class HeroUnitSave {
 
     public String uuid;
-    public String name;
-    public String ownerName; // only actually used for revive data, since UnitSave handles this
+    public String name; // only used for revive data,
+    public String ownerName; // only used for revive data, since UnitSave handles this
     public int experience;
     public int skillPoints;
     public int charges; // tracks specific hero states like necromancer souls

@@ -71,7 +71,7 @@ public class FallenHeroClientboundPacket {
         ctx.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                 () -> () -> {
-                    HeroClientEvents.fallenHeroes.add(new HeroUnitSave(
+                    HeroClientEvents.addFallenHero(new HeroUnitSave(
                         uuid,
                         name,
                         ownerName,
