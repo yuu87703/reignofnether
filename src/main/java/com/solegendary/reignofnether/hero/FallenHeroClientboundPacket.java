@@ -75,6 +75,7 @@ public class FallenHeroClientboundPacket {
                         uuid,
                         name,
                         ownerName,
+                        true,
                         experience,
                         skillPoints,
                         0,

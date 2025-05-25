@@ -15,7 +15,7 @@ import org.joml.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryPlacement extends ProductionPlacement{
+public class LibraryPlacement extends ProductionPlacement {
     public EnchantAbility autoCastEnchant = null;
     public LibraryPlacement(Building building, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(building, level, originPos, rotation, ownerName, blocks, isCapitol);

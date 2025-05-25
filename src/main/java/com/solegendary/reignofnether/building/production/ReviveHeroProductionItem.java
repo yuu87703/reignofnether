@@ -31,17 +31,18 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
 
     private final ResourceLocation iconRl;
     private final String tooltipI18n;
-    private final EntityType<? extends HeroUnit> entityType;
 
-    public ReviveHeroProductionItem(ResourceLocation iconRl, String tooltipI18n, EntityType<? extends HeroUnit> entityType) {
+    public ReviveHeroProductionItem(ResourceLocation iconRl, String tooltipI18n) {
         super(ResourceCost.Unit(0,0,0,0,0));
         this.iconRl = iconRl;
         this.tooltipI18n = tooltipI18n;
-        this.entityType = entityType;
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide()) {
                 HeroUnitSave oldHero = getFallenHero(false, placement.ownerName);
-                Entity entity = placement.produceUnit((ServerLevel) level, entityType, placement.ownerName, true);
+                EntityType<? extends HeroUnit> entityType = getHeroEntityType();
+                Entity entity = null;
+                if (entityType != null)
+                    entity = placement.produceUnit((ServerLevel) level, entityType, placement.ownerName, true);
                 if (entity instanceof HeroUnit newHero && oldHero != null) {
                     newHero.setExperience(oldHero.experience);
                     newHero.setSkillPoints(oldHero.skillPoints);
@@ -63,6 +64,11 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
         };
     }
 
+    // can't make this a member as we can't refer to other registered objects at init time
+    protected EntityType<? extends HeroUnit> getHeroEntityType() {
+        return null;
+    }
+
     private String getTooltip(String ownerName) {
         HeroUnitSave heroSave = getFallenHero(true, ownerName);
         if (heroSave != null) {
@@ -75,7 +81,7 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
     private HeroUnitSave getFallenHero(boolean isClientSide, String ownerName) {
         ArrayList<HeroUnitSave> heroUnits = isClientSide ? HeroClientEvents.fallenHeroes : HeroServerEvents.fallenHeroes;
         for (HeroUnitSave heroUnit : heroUnits) {
-            if (heroUnit.ownerName.equals(ownerName) && heroUnit.name.equals(entityType.getBaseClass().getName()))
+            if (heroUnit.ownerName.equals(ownerName) && heroUnit.name.equals(getHeroEntityType().getDescriptionId()))
                 return heroUnit;
         }
         return null;

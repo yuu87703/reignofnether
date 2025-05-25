@@ -53,6 +53,7 @@ public class HeroServerEvents {
                     ((Entity) heroUnit).getStringUUID(),
                     heroUnit.getOwnerName(),
                     ((LivingEntity) heroUnit).getName().getString(),
+                    true,
                     heroUnit.getExperience(),
                     heroUnit.getSkillPoints(),
                     0,

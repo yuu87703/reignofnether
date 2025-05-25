@@ -21,8 +21,8 @@ HEROES (in order of priority)
 
 Hero Revives
     [🟡] Sync with client when logging in/out of server
-    [❌] Save to world (add field isDead)
-    [❌] enforce entityType field in ReviveHeroProductionItem
+    [🟡] Save to world (add field isDead)
+    [🟡] enforce entityType field in ReviveHeroProductionItem
 
 
 Necromancer
@@ -68,27 +68,23 @@ Royal Guard
 
 Bugfixes
 --------
-
 [❌] Armour on units doesn't do anything against other mob projectiles?
     - Check on latest forge version?
 
 [❌] ServerStoppingEvent doesn't run on dedicated servers
 
+[✔] Readded water and healing potions to witches
+
+[❌] A Hero dying on its own should not leave exp
+    - and hero exp should have a limited lifespan
+
+[❌] flyingYMax gamerule stuck at 0
+
 
 Quality of Life
 ---------------
-
+[❌] Witch lingering potions no longer collide with mobs
+    - This means they will more accurately spread across the ground
 
 Balancing
 ---------
-
-[❌] Day cycle times adjusted from: (20, 15, 12, 9, 6) to (14, 12, 10, 8, 6) minutes
-
-[❌] At higher wave survival difficulties, enemy wave populations and beacon build/upgrade costs are increased
-    - Beginner: no change
-    - Easy: +25% beacon costs, +10% wave populations
-    - Medium: +50% beacon costs, +20% wave populations
-    - Hard: +75% beacon costs, +30% wave populations
-    - Extreme: +100% beacon costs, +40% wave populations
-
-[❌] Every 3rd wave now includes an enemy hero unit with level equal to 2/3rds the wave number
