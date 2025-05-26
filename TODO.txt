@@ -75,15 +75,15 @@ Bugfixes
 
 [✔] Readded water and healing potions to witches
 
-[❌] A Hero dying on its own should not leave exp
+[🟡] A Hero dying on its own should not leave exp
     - and hero exp should have a limited lifespan
 
-[❌] flyingYMax gamerule stuck at 0
+[❌] flyingMaxYLevel gamerule stuck at 0
 
 
 Quality of Life
 ---------------
-[❌] Witch lingering potions no longer collide with mobs
+[✔] Witch lingering potions no longer collide with mobs
     - This means they will more accurately spread across the ground
 
 Balancing

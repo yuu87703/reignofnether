@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.hero;
 
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.unit.HeroUnitSave;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -13,6 +14,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HeroServerEvents {
 
@@ -24,13 +26,15 @@ public class HeroServerEvents {
         if (evt.getEntity() instanceof Unit deadUnit) {
             for (LivingEntity unit : UnitServerEvents.getAllUnits()) {
                 boolean inRange = unit.distanceToSqr((LivingEntity) deadUnit) < HeroExperienceOrb.RANGE * HeroExperienceOrb.RANGE;
-                if (unit instanceof HeroUnit heroUnit && inRange) {
+                if (unit instanceof HeroUnit heroUnit && inRange && heroUnit != evt.getEntity()) {
                     String heroOwner = ((Unit) heroUnit).getOwnerName();
                     String deadOwner = deadUnit.getOwnerName();
 
                     if (!AlliancesServerEvents.isAllied(heroOwner, deadOwner) && !heroOwner.equals(deadOwner) &&
                         heroUnit.getHeroLevel() < HeroUnit.MAX_HERO_LEVEL) {
                         int expValue = (deadUnit.getCost().population + 1) * 5;
+                        if (evt.getEntity() instanceof HeroUnit killedHero)
+                            expValue += killedHero.getHeroLevel() * 5;
 
                         while (expValue > 0) {
                             HeroExperienceOrb expOrb = HeroExperienceOrb.newOrb(level,

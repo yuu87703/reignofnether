@@ -158,6 +158,9 @@ public class ResourceCosts {
             str += "\uE001  " + resCost.wood + "     ";
         if (resCost.ore > 0)
             str += "\uE002  " + resCost.ore + "     ";
+
+        if (str.isEmpty())
+            str += "\uE000  0     ";
         str = str.trim();
         return FormattedCharSequence.forward(str, MyRenderer.iconStyle);
     }

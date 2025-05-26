@@ -5,6 +5,8 @@ import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -25,6 +27,28 @@ public interface HeroUnit extends Unit {
                 0,0,
                 REVIVE_SECONDS_BASE + (Math.min(1, heroLevel) * REVIVE_SECONDS_PER_LEVEL),
                 POP_COST);
+    }
+
+    public static List<HeroUnit> getHeroes(boolean isClientside) {
+        List<LivingEntity> units = isClientside ? UnitClientEvents.getAllUnits() : UnitServerEvents.getAllUnits();
+        return units.stream()
+                .filter(e -> e instanceof HeroUnit)
+                .map(e -> (HeroUnit) e)
+                .toList();
+    }
+
+    public static List<HeroUnit> getHeroes(boolean isClientside, String ownerName) {
+        return getHeroes(isClientside, ownerName, "");
+    }
+
+    public static List<HeroUnit> getHeroes(boolean isClientside, String ownerName, String unitName) {
+        List<LivingEntity> units = isClientside ? UnitClientEvents.getAllUnits() : UnitServerEvents.getAllUnits();
+        return units.stream()
+                .filter(e -> e instanceof HeroUnit heroUnit &&
+                        heroUnit.getOwnerName().equals(ownerName) &&
+                        (e.getName().getString().equals(unitName) || unitName.isBlank()))
+                .map(e -> (HeroUnit) e)
+                .toList();
     }
 
     int MAX_HERO_LEVEL = 10;

@@ -36,7 +36,7 @@ public class ShrineOfProsperity extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.COBBLESTONE);
 
         this.productions.add(ProductionItems.ROYAL_GUARD, Keybindings.keyQ);
-        //this.productions.add(ProductionItems.ROYAL_GUARD_REVIVE, Keybindings.keyQ);
+        this.productions.add(ProductionItems.ROYAL_GUARD_REVIVE, Keybindings.keyQ);
     }
 
     public Faction getFaction() {return Faction.VILLAGERS;}

@@ -106,7 +106,7 @@ public abstract class ProductionItem {
     }
 
     // check if this is being produced at one particular building
-    public boolean itemIsBeingProduced(ProductionPlacement placement) {
+    public boolean itemIsBeingProducedAt(ProductionPlacement placement) {
         for (BuildingPlacement building : BuildingClientEvents.getBuildings())
             if (building == placement)
                 for (ActiveProduction prodItem : placement.productionQueue)

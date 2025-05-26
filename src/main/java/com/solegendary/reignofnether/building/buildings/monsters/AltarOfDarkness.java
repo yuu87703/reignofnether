@@ -29,7 +29,7 @@ public class AltarOfDarkness extends ProductionBuilding {
     public AltarOfDarkness() {
         super(structureName, cost, false);
         this.name = buildingName;
-        this.portraitBlock = Blocks.END_PORTAL;
+        this.portraitBlock = Blocks.DARK_PRISMARINE;
         this.icon = new ResourceLocation("minecraft", "textures/block/dark_prismarine.png");
 
         this.startingBlockTypes.add(Blocks.DARK_PRISMARINE);
