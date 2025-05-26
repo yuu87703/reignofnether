@@ -2,7 +2,6 @@ package com.solegendary.reignofnether.hero;
 
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.unit.HeroUnitSave;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -14,7 +13,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HeroServerEvents {
 
@@ -53,10 +51,12 @@ public class HeroServerEvents {
         }
         // save killed hero unit for revival
         if (evt.getEntity() instanceof HeroUnit heroUnit) {
-            fallenHeroes.add(new HeroUnitSave(
+            String heroName = ((LivingEntity) heroUnit).getName().getString();
+            fallenHeroes.removeIf(fHero -> fHero.ownerName.equals(heroUnit.getOwnerName()) && fHero.name.equals(heroName));
+            HeroUnitSave fallenHero = new HeroUnitSave(
                     ((Entity) heroUnit).getStringUUID(),
+                    heroName,
                     heroUnit.getOwnerName(),
-                    ((LivingEntity) heroUnit).getName().getString(),
                     true,
                     heroUnit.getExperience(),
                     heroUnit.getSkillPoints(),
@@ -65,7 +65,9 @@ public class HeroServerEvents {
                     heroUnit.getHeroAbilities().size() > 1 ? heroUnit.getHeroAbilities().get(1).rank : 0,
                     heroUnit.getHeroAbilities().size() > 2 ? heroUnit.getHeroAbilities().get(2).rank : 0,
                     heroUnit.getHeroAbilities().size() > 3 ? heroUnit.getHeroAbilities().get(3).rank : 0
-            ));
+            );
+            fallenHeroes.add(fallenHero);
+            FallenHeroClientboundPacket.addFallenHero(fallenHero);
         }
     }
 

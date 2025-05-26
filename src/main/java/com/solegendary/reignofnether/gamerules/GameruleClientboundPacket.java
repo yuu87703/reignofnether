@@ -102,7 +102,7 @@ public class GameruleClientboundPacket {
                             case SET_IMPROVED_PATHFINDING -> GameruleClient.improvedPathfinding = value == 1L;
                             case SET_GROUND_Y_LEVEL -> {
                                 GameruleClient.groundYLevel = value;
-                                OrthoviewClientEvents.setMinOrthoviewY(value);
+                                OrthoviewClientEvents.setMinOrthoviewY(value + 30);
                             }
                             case SET_FLYING_MAX_Y_LEVEL -> GameruleClient.flyingMaxYLevel = value;
                             case SET_ALLOW_BEACONS -> GameruleClient.allowBeacons = value == 1L;

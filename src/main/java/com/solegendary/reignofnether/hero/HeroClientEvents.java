@@ -12,7 +12,9 @@ public class HeroClientEvents {
     public static ArrayList<HeroUnitSave> fallenHeroes = new ArrayList<>();
 
     public static void addFallenHero(HeroUnitSave heroUnitSave) {
-        if (MC.player != null && heroUnitSave.ownerName.equals(MC.player.getName().getString()))
+        if (MC.player != null && heroUnitSave.ownerName.equals(MC.player.getName().getString())) {
+            fallenHeroes.removeIf(fHero -> fHero.ownerName.equals(heroUnitSave.ownerName) && fHero.name.equals(heroUnitSave.name));
             fallenHeroes.add(heroUnitSave);
+        }
     }
 }

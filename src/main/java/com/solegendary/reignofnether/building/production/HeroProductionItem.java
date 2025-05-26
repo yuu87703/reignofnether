@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +21,8 @@ public abstract class HeroProductionItem extends ProductionItem {
         super(cost);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide() && !heroOwned(level.isClientSide(), placement.ownerName))
-                placement.produceUnit((ServerLevel) level, getHeroEntityType(), placement.ownerName, true);
+                placement.produceUnit((ServerLevel) level, getHeroEntityType(), placement.ownerName,
+                        getHeroEntityType() != EntityRegistrar.PIGLIN_MERCHANT_UNIT.get());
         };
         this.itemName = itemName;
         this.iconRl = iconRl;
@@ -31,7 +33,9 @@ public abstract class HeroProductionItem extends ProductionItem {
     }
 
     protected boolean heroOwned(boolean isClientside, String ownerName) {
-        return !HeroUnit.getHeroes(isClientside, ownerName, getHeroEntityType().getDescriptionId()).isEmpty();
+        String heroName = getHeroEntityType().getDescriptionId();
+        return !HeroUnit.getHeroes(isClientside, ownerName, heroName).isEmpty() ||
+                HeroUnit.getFallenHero(isClientside, ownerName, heroName) != null;
     }
 
     // can't make this a member as we can't refer to other registered objects at init time

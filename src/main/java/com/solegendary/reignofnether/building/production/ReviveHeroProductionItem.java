@@ -3,10 +3,11 @@ package com.solegendary.reignofnether.building.production;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.hero.HeroClientEvents;
+import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.research.ResearchClient;
+import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.resources.Resources;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,27 +38,35 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
         this.tooltipI18n = tooltipI18n;
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide()) {
-                HeroUnitSave oldHero = getFallenHero(false, placement.ownerName);
+                HeroUnitSave oldHero = HeroUnit.getFallenHero(false, placement.ownerName, getHeroEntityType().getDescriptionId());
                 EntityType<? extends HeroUnit> entityType = getHeroEntityType();
                 Entity entity = null;
                 if (entityType != null)
-                    entity = placement.produceUnit((ServerLevel) level, entityType, placement.ownerName, true);
+                    entity = placement.produceUnit((ServerLevel) level, entityType, placement.ownerName,
+                            getHeroEntityType() != EntityRegistrar.PIGLIN_MERCHANT_UNIT.get());
                 if (entity instanceof HeroUnit newHero && oldHero != null) {
                     newHero.setExperience(oldHero.experience);
+                    HeroClientboundPacket.setExperience(entity.getId(), oldHero.experience);
                     newHero.setSkillPoints(oldHero.skillPoints);
-                    newHero.setStatsForLevel();
-                    if (newHero.getHeroAbilities().size() > 0)
+                    HeroClientboundPacket.setSkillPoints(entity.getId(), oldHero.skillPoints);
+                    newHero.setStatsForLevel(true);
+                    if (newHero.getHeroAbilities().size() > 0) {
                         newHero.getHeroAbilities().get(0).rank = oldHero.ability1Rank;
-                    if (newHero.getHeroAbilities().size() > 1)
+                        HeroClientboundPacket.setAbilityRank(entity.getId(), oldHero.ability1Rank, 0);
+                    } if (newHero.getHeroAbilities().size() > 1) {
                         newHero.getHeroAbilities().get(1).rank = oldHero.ability2Rank;
-                    if (newHero.getHeroAbilities().size() > 2)
+                        HeroClientboundPacket.setAbilityRank(entity.getId(), oldHero.ability2Rank, 1);
+                    } if (newHero.getHeroAbilities().size() > 2) {
                         newHero.getHeroAbilities().get(2).rank = oldHero.ability3Rank;
-                    if (newHero.getHeroAbilities().size() > 3)
+                        HeroClientboundPacket.setAbilityRank(entity.getId(), oldHero.ability3Rank, 2);
+                    } if (newHero.getHeroAbilities().size() > 3) {
                         newHero.getHeroAbilities().get(3).rank = oldHero.ability4Rank;
+                        HeroClientboundPacket.setAbilityRank(entity.getId(), oldHero.ability4Rank, 3);
+                    }
                 }
                 HeroServerEvents.fallenHeroes.remove(oldHero);
             } else {
-                HeroUnitSave oldHero = getFallenHero(true, placement.ownerName);
+                HeroUnitSave oldHero = HeroUnit.getFallenHero(true, placement.ownerName, getHeroEntityType().getDescriptionId());
                 HeroClientEvents.fallenHeroes.remove(oldHero);
             }
         };
@@ -70,26 +78,16 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
     }
 
     private String getTooltip(String ownerName) {
-        HeroUnitSave heroSave = getFallenHero(true, ownerName);
+        HeroUnitSave heroSave = HeroUnit.getFallenHero(true, ownerName, getHeroEntityType().getDescriptionId());
         if (heroSave != null) {
             return I18n.get(tooltipI18n, HeroUnit.getHeroLevel(heroSave.experience));
         }
         return I18n.get(tooltipI18n);
     }
 
-    @Nullable
-    private HeroUnitSave getFallenHero(boolean isClientSide, String ownerName) {
-        ArrayList<HeroUnitSave> heroUnits = isClientSide ? HeroClientEvents.fallenHeroes : HeroServerEvents.fallenHeroes;
-        for (HeroUnitSave heroUnit : heroUnits) {
-            if (heroUnit.ownerName.equals(ownerName) && heroUnit.name.equals(getHeroEntityType().getDescriptionId()))
-                return heroUnit;
-        }
-        return null;
-    }
-
     private ResourceCost getReviveCost(boolean isClientSide, String ownerName) {
         ArrayList<HeroUnitSave> heroSaves = isClientSide ? HeroClientEvents.fallenHeroes : HeroServerEvents.fallenHeroes;
-        HeroUnitSave heroSave = getFallenHero(isClientSide, ownerName);
+        HeroUnitSave heroSave = HeroUnit.getFallenHero(isClientSide, ownerName, getHeroEntityType().getDescriptionId());
         if (heroSave != null)
             return HeroUnit.getReviveCost(HeroUnit.getHeroLevel(heroSave.experience));
         return HeroUnit.getReviveCost(1);
@@ -103,13 +101,12 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
                 hotkey,
                 () -> false,
                 () -> this.itemIsBeingProduced(prodBuilding.ownerName) ||
-                        ResearchClient.hasResearch(this) ||
-                        getFallenHero(true, prodBuilding.ownerName) == null,
+                        HeroUnit.getFallenHero(true, prodBuilding.ownerName, getHeroEntityType().getDescriptionId()) == null,
                 () -> true,
                 () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, this),
                 null,
                 List.of(
-                        fcs(getTooltip(prodBuilding.ownerName)),
+                        fcs(getTooltip(prodBuilding.ownerName), true),
                         ResourceCosts.getFormattedCost(getReviveCost(prodBuilding.level.isClientSide(), prodBuilding.ownerName)),
                         ResourceCosts.getFormattedPopAndTime(getReviveCost(prodBuilding.level.isClientSide(), prodBuilding.ownerName))
                 )

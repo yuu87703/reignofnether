@@ -23,7 +23,8 @@ Hero Revives
     [🟡] Sync with client when logging in/out of server
     [🟡] Save to world (add field isDead)
     [🟡] enforce entityType field in ReviveHeroProductionItem
-
+        [❌] Revival cost is not being enforced, including tick time
+        [❌] Save ability and ranks correctly
 
 Necromancer
     [❌] Purple particles on soul usage and soul gain
@@ -78,13 +79,15 @@ Bugfixes
 [🟡] A Hero dying on its own should not leave exp
     - and hero exp should have a limited lifespan
 
-[❌] flyingMaxYLevel gamerule stuck at 0
+[✔] Fixed a bug where the gamerules flyingMaxYLevel and groundYLevel didn't match the menu number when updated via command
 
 
 Quality of Life
 ---------------
 [✔] Witch lingering potions no longer collide with mobs
     - This means they will more accurately spread across the ground
+
+
 
 Balancing
 ---------
