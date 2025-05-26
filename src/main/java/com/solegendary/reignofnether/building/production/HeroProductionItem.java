@@ -26,6 +26,10 @@ public abstract class HeroProductionItem extends ProductionItem {
         this.iconRl = iconRl;
     }
 
+    public String getItemName() {
+        return itemName;
+    }
+
     protected boolean heroOwned(boolean isClientside, String ownerName) {
         return !HeroUnit.getHeroes(isClientside, ownerName, getHeroEntityType().getDescriptionId()).isEmpty();
     }

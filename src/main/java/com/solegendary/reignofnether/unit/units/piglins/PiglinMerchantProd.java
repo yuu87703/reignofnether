@@ -64,7 +64,7 @@ public class PiglinMerchantProd extends HeroProductionItem {
 
     public Button getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new Button(
-                PiglinMerchantProd.itemName,
+                itemName,
                 14,
                 iconRl,
                 hotkey,

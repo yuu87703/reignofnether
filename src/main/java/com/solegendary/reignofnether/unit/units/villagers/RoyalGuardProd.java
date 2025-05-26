@@ -64,7 +64,7 @@ public class RoyalGuardProd extends HeroProductionItem {
 
     public Button getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new Button(
-                RoyalGuardProd.itemName,
+                itemName,
                 14,
                 iconRl,
                 hotkey,
