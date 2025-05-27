@@ -9,10 +9,9 @@ import net.minecraft.world.entity.EntityType;
 
 public class RoyalGuardReviveProd extends ReviveHeroProductionItem {
 
-    public final static String itemName = "Revive Royal Guard";
-
     public RoyalGuardReviveProd() {
         super(
+            "Revive Royal Guard",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/royal_guard.png"),
             "units.villagers.reignofnether.royal_guard.revive"
         );
@@ -21,9 +20,5 @@ public class RoyalGuardReviveProd extends ReviveHeroProductionItem {
     @Override
     protected EntityType<? extends HeroUnit> getHeroEntityType() {
         return EntityRegistrar.ROYAL_GUARD_UNIT.get();
-    }
-
-    public String getItemName() {
-        return itemName;
     }
 }

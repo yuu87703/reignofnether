@@ -86,9 +86,9 @@ public class ResourcesServerEvents {
             for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                 if (building instanceof ProductionPlacement pBuilding) {
                     for (ActiveProduction item : pBuilding.productionQueue) {
-                        prodFood += item.item.cost.food;
-                        prodWood += item.item.cost.wood;
-                        prodOre += item.item.cost.ore;
+                        prodFood += item.item.getCost(false, pBuilding.ownerName).food;
+                        prodWood += item.item.getCost(false, pBuilding.ownerName).wood;
+                        prodOre += item.item.getCost(false, pBuilding.ownerName).ore;
                     }
                 }
             }

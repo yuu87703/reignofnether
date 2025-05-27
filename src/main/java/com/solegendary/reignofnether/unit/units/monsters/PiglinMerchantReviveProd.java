@@ -9,10 +9,9 @@ import net.minecraft.world.entity.EntityType;
 
 public class PiglinMerchantReviveProd extends ReviveHeroProductionItem {
 
-    public final static String itemName = "Revive Piglin Merchant";
-
     public PiglinMerchantReviveProd() {
         super(
+            "Revive Piglin Merchant",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/piglin_merchant.png"),
             "units.piglins.reignofnether.piglin_merchant.revive"
         );
@@ -21,9 +20,5 @@ public class PiglinMerchantReviveProd extends ReviveHeroProductionItem {
     @Override
     protected EntityType<? extends HeroUnit> getHeroEntityType() {
         return EntityRegistrar.PIGLIN_MERCHANT_UNIT.get();
-    }
-
-    public String getItemName() {
-        return itemName;
     }
 }

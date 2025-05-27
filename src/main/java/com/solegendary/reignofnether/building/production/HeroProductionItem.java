@@ -4,7 +4,6 @@ import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
-import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import net.minecraft.resources.ResourceLocation;
@@ -21,8 +20,7 @@ public abstract class HeroProductionItem extends ProductionItem {
         super(cost);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide() && !heroOwned(level.isClientSide(), placement.ownerName))
-                placement.produceUnit((ServerLevel) level, getHeroEntityType(), placement.ownerName,
-                        getHeroEntityType() != EntityRegistrar.PIGLIN_MERCHANT_UNIT.get());
+                placement.produceUnit((ServerLevel) level, getHeroEntityType(), placement.ownerName, true);
         };
         this.itemName = itemName;
         this.iconRl = iconRl;

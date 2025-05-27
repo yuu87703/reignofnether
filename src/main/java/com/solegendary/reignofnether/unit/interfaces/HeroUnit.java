@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.HeroUnitSave;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -28,9 +29,9 @@ public interface HeroUnit extends Unit {
 
     public static ResourceCost getReviveCost(int heroLevel) {
         return ResourceCost.Unit(
-                FOOD_REVIVE_COST_BASE + (Math.min(1, heroLevel) * FOOD_REVIVE_COST_PER_LEVEL),
+                FOOD_REVIVE_COST_BASE + (Mth.clamp(heroLevel, 1, 10) * FOOD_REVIVE_COST_PER_LEVEL),
                 0,0,
-                REVIVE_SECONDS_BASE + (Math.min(1, heroLevel) * REVIVE_SECONDS_PER_LEVEL),
+                REVIVE_SECONDS_BASE + (Mth.clamp(heroLevel, 1, 10) * REVIVE_SECONDS_PER_LEVEL),
                 POP_COST);
     }
 

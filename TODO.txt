@@ -81,6 +81,7 @@ Bugfixes
 
 [✔] Fixed a bug where the gamerules flyingMaxYLevel and groundYLevel didn't match the menu number when updated via command
 
+[❌] Wheat that is now transformed into fully-grown netherwart instead of
 
 Quality of Life
 ---------------

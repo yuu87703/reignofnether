@@ -9,10 +9,9 @@ import net.minecraft.world.entity.EntityType;
 
 public class NecromancerReviveProd extends ReviveHeroProductionItem {
 
-    public final static String itemName = "Revive Necromancer";
-
     public NecromancerReviveProd() {
         super(
+            "Revive Necromancer",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/necromancer.png"),
             "units.monsters.reignofnether.necromancer.revive"
         );
@@ -21,9 +20,5 @@ public class NecromancerReviveProd extends ReviveHeroProductionItem {
     @Override
     protected EntityType<? extends HeroUnit> getHeroEntityType() {
         return EntityRegistrar.NECROMANCER_UNIT.get();
-    }
-
-    public String getItemName() {
-        return itemName;
     }
 }
