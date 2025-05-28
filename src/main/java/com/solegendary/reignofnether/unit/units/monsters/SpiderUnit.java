@@ -269,7 +269,7 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
     @Override
     public boolean doHurtTarget(@NotNull Entity pEntity) {
         if (super.doHurtTarget(pEntity)) {
-            if (getWebAbility() != null)
+            if (getWebAbility() != null && getWebAbility().getAutocast())
                 getWebAbility().use(this.level(), this, pEntity.getOnPos());
             return true;
         } else {

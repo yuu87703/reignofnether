@@ -76,18 +76,25 @@ Bugfixes
 
 [✔] Readded water and healing potions to witches
 
-[🟡] A Hero dying on its own should not leave exp
-    - and hero exp should have a limited lifespan
+[✔] Experience for heroes no longer drops from a lone hero dying and now decays after 2mins
 
 [✔] Fixed a bug where the gamerules flyingMaxYLevel and groundYLevel didn't match the menu number when updated via command
 
-[❌] Wheat that is now transformed into fully-grown netherwart instead of
+[🟡] Wheat that is now transformed netherwart is now fully grown and harvestable
+
+[🟡] Units hit by blaze fireballs no longer delay their fire tick damage
+    - This was causing a weird situation where shooting one unit with too many fireballs made them take LESS damage
+        TODO: check all setRemainingFireTicks() calls
+
+[🟡] Mounted units now attack with melee when right-clicking enemy units
+    - This previously only commanded the riding ranged unit to attack
+
+[🟡] Spiders no longer use webs automatically unless autocasted
 
 Quality of Life
 ---------------
 [✔] Witch lingering potions no longer collide with mobs
     - This means they will more accurately spread across the ground
-
 
 
 Balancing
