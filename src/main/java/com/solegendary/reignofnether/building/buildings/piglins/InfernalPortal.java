@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -58,7 +59,7 @@ public class InfernalPortal extends ProductionBuilding {
                 new ResourceLocation("minecraft", "textures/block/crying_obsidian.png"),
                 hotkey,
                 () -> BuildingClientEvents.getBuildingToPlace() == Buildings.INFERNAL_PORTAL,
-                () -> false,
+                () -> !SandboxClientEvents.isSandboxPlayer(), // false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.CENTRAL_PORTAL) ||
                         ResearchClient.hasCheat("modifythephasevariance"),
                 () -> BuildingClientEvents.setBuildingToPlace(Buildings.INFERNAL_PORTAL),

@@ -89,13 +89,22 @@ Bugfixes
 [🟡] Mounted units now attack with melee when right-clicking enemy units
     - This previously only commanded the riding ranged unit to attack
 
-[🟡] Spiders no longer use webs automatically unless autocasted
+[🟡] Spiders no longer use webs when autocast is disabled
+
+
+
 
 Quality of Life
 ---------------
 [✔] Witch lingering potions no longer collide with mobs
     - This means they will more accurately spread across the ground
 
+[🟡] Vanilla mob spawners loaded with Reign of Nether units now have custom spawn rules:
+    - They now spawn mobs at any light level (except monster units)
+    - They always spawn 3 mobs at a time and only if there are no nearby mobs of the same type
+    - They don't need any nearby players to be active
+    - Spawn delay is always 30 seconds, instead of a random time between 10-40 seconds
+    - Mobs are anchored to their spawns (they will retreat back there if you run away)
 
 Balancing
 ---------

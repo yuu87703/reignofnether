@@ -20,6 +20,9 @@ public class HeroServerEvents {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent evt) {
+        if (evt.getEntity().level().isClientSide())
+            return;
+
         Level level = evt.getEntity().level();
         if (evt.getEntity() instanceof Unit deadUnit) {
             for (LivingEntity unit : UnitServerEvents.getAllUnits()) {

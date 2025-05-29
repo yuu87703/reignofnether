@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
@@ -49,7 +50,7 @@ public class AltarOfDarkness extends ProductionBuilding {
                 new ResourceLocation("minecraft", "textures/block/dark_prismarine.png"),
                 hotkey,
                 () -> BuildingClientEvents.getBuildingToPlace() == Buildings.ALTAR_OF_DARKNESS,
-                () -> false,
+                () -> !SandboxClientEvents.isSandboxPlayer(), // false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.MAUSOLEUM) ||
                         ResearchClient.hasCheat("modifythephasevariance"),
                 () -> BuildingClientEvents.setBuildingToPlace(Buildings.ALTAR_OF_DARKNESS),

@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -163,7 +162,7 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
     public boolean removeWhenFarAway(double d) { return false; }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, RavagerUnit.maxHealth)
                 .add(Attributes.MOVEMENT_SPEED, RavagerUnit.movementSpeed)
                 .add(Attributes.ATTACK_DAMAGE, RavagerUnit.attackDamage)
