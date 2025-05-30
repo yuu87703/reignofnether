@@ -170,6 +170,11 @@ public class DrownedUnit extends Drowned implements Unit, AttackerUnit {
     }
 
     @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.FIRE;
+    }
+
+    @Override
     protected void registerGoals() {
         initialiseGoals();
         this.goalSelector.addGoal(2, usePortalGoal);

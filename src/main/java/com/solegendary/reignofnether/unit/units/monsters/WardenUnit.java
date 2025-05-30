@@ -11,7 +11,6 @@ import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchSculkAmplifiers;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
@@ -28,8 +27,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -186,12 +183,11 @@ public class WardenUnit extends Warden implements Unit, AttackerUnit {
         Unit.tick(this);
         AttackerUnit.tick(this);
         this.sonicBoomGoal.tick();
+    }
 
-        // apply slowness level 2 during daytime for a short time repeatedly
-        if (tickCount % 10 == 0 && !this.level().isClientSide() && this.level().isDay() &&
-                !NightUtils.isInRangeOfNightSource(this.getEyePosition(), false) &&
-                !ResearchServerEvents.playerHasCheat(getOwnerName(), "slipslopslap"))
-            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 1));
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.MOVEMENT_SLOWDOWN;
     }
 
     public void initialiseGoals() {

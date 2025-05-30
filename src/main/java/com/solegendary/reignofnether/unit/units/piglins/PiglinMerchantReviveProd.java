@@ -1,4 +1,4 @@
-package com.solegendary.reignofnether.unit.units.monsters;
+package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.production.ReviveHeroProductionItem;

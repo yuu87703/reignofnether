@@ -3,7 +3,6 @@ package com.solegendary.reignofnether.mixin;
 import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -177,7 +176,7 @@ public class BaseSpawnerMixin {
                     entity.moveTo(pair.getSecond().x, pair.getSecond().y, pair.getSecond().z, randomsource.nextFloat() * 360.0F, 0.0F);
                     if (entity instanceof Mob mob) {
                         // if the mob is classed as a monster, this will check for light levels
-                        if (entity instanceof Unit unit && unit.getFaction() == Faction.MONSTERS) {
+                        if (entity instanceof Unit unit && unit.getSunlightEffect() == Unit.SunlightEffect.FIRE) {
                             if (!ForgeEventFactory.checkSpawnPositionSpawner(mob, pServerLevel, MobSpawnType.SPAWNER, spawndata, (BaseSpawner)(Object)this)) {
                                 continue;
                             }

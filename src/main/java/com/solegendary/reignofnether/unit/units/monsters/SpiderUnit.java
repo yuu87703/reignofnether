@@ -8,10 +8,8 @@ import com.solegendary.reignofnether.ability.abilities.SpinWebs;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.HudClientEvents;
-import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -28,8 +26,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -219,15 +215,14 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
             Unit.tick(this);
             AttackerUnit.tick(this);
 
-            // apply slowness level 2 during daytime for a short time repeatedly
-            if (tickCount % 10 == 0 && !this.level().isClientSide() && this.level().isDay() &&
-                    !NightUtils.isInRangeOfNightSource(this.getEyePosition(), false) &&
-                    !ResearchServerEvents.playerHasCheat(getOwnerName(), "slipslopslap"))
-                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 1));
-
             if (getWebGoal() != null)
                 getWebGoal().tick();
         }
+    }
+
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.MOVEMENT_SLOWDOWN;
     }
 
     @Override

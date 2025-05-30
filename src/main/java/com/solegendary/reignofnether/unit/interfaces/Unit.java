@@ -24,6 +24,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -229,6 +231,24 @@ public interface Unit {
 
         if (unitMob.tickCount % 20 == 0)
             checkAndRetreatToAnchor(unit);
+
+        if (unit.getSunlightEffect() == SunlightEffect.MOVEMENT_SLOWDOWN) {
+            // apply slowness level 2 during daytime for a short time repeatedly
+            if (unitMob.tickCount % 10 == 0 && !unitMob.level().isClientSide() && unitMob.level().isDay() &&
+                    !NightUtils.isInRangeOfNightSource(unitMob.getEyePosition(), false) &&
+                    !ResearchServerEvents.playerHasCheat(unit.getOwnerName(), "slipslopslap"))
+                unitMob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 1));
+        }
+    }
+
+    public enum SunlightEffect {
+        NONE,
+        MOVEMENT_SLOWDOWN,
+        FIRE
+    }
+
+    public default SunlightEffect getSunlightEffect() {
+        return SunlightEffect.NONE;
     }
 
     public static boolean hasAnchor(Unit unit) {

@@ -1,23 +1,19 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
+import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.abilities.Explode;
 import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.ability.abilities.Explode;
-import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.unit.goals.*;
-import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -181,12 +177,11 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
             this.setSwellDir(1);
         else if (!canExplodeOnTarget())
             this.setSwellDir(-1);
+    }
 
-        // apply slowness level 2 during daytime for a short time repeatedly
-        if (tickCount % 10 == 0 && !this.level().isClientSide() && this.level().isDay() &&
-            !NightUtils.isInRangeOfNightSource(this.getEyePosition(), false) &&
-            !ResearchServerEvents.playerHasCheat(getOwnerName(), "slipslopslap"))
-            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 1));
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.MOVEMENT_SLOWDOWN;
     }
 
     @Override
