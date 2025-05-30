@@ -70,7 +70,16 @@ public class BaseSpawnerMixin {
     @Unique
     private boolean reignofnether$isValidNeutralUnitSpawner(Level level, BlockPos pPos) {
         return !(BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), pPos) &&
+                nextSpawnData != null &&
                 nextSpawnData.getEntityToSpawn().getAsString().contains("reignofnether"));
+    }
+
+    @Unique
+    private int reignofnether$getMaxNearbyNeutralUnits(Entity entity, int nearbySameTypeSpawners) {
+        if (entity instanceof Unit unit && unit.getCost().population >= 5)
+            return MAX_NEARBY_NEUTRAL_UNITS + nearbySameTypeSpawners;
+        else
+            return MAX_NEARBY_NEUTRAL_UNITS + (nearbySameTypeSpawners * SPAWN_COUNT);
     }
 
     @Inject(
@@ -101,6 +110,7 @@ public class BaseSpawnerMixin {
                             if (x == 0 && y == 0 && z == 0)
                                 continue;
                             if (pServerLevel.getBlockEntity(pPos.offset(x,y,z)) instanceof SpawnerBlockEntity sbe &&
+                                    sbe.getSpawner().nextSpawnData != null &&
                                     sbe.getSpawner().nextSpawnData.getEntityToSpawn().getAsString()
                                             .equals(nextSpawnData.getEntityToSpawn().getAsString())) {
                                 nearbySameTypeSpawners += 1;
@@ -108,8 +118,6 @@ public class BaseSpawnerMixin {
                         }
                     }
                 }
-
-                int maxNearbyNeutralUnits = MAX_NEARBY_NEUTRAL_UNITS + (nearbySameTypeSpawners * SPAWN_COUNT);
 
                 List<Unit> nearbyUnits = MiscUtil.getEntitiesWithinRange(new Vector3d(pPos.getX(), pPos.getY(), pPos.getZ()),
                                 ACTIVATION_RANGE, Mob.class, pServerLevel)
@@ -170,7 +178,7 @@ public class BaseSpawnerMixin {
                                     .filter(u -> !u.getOwnerName().isBlank())
                                     .toList();
 
-                            if (nearbyNeutralUnitsOfType.size() >= maxNearbyNeutralUnits ||
+                            if (nearbyNeutralUnitsOfType.size() >= reignofnether$getMaxNearbyNeutralUnits(entity, nearbySameTypeSpawners) ||
                                     !nearbyNonNeutralUnits.isEmpty()) {
                                 this.delay(pServerLevel, pPos);
                                 return;
@@ -199,12 +207,10 @@ public class BaseSpawnerMixin {
                                 unit.setAnchor(entity.getOnPos());
                         }
                     }
-
                     if (!pServerLevel.tryAddFreshEntityWithPassengers(entity)) {
                         this.delay(pServerLevel, pPos);
                         return;
                     }
-
                     pServerLevel.levelEvent(2004, pPos, 0);
                     pServerLevel.gameEvent(entity, GameEvent.ENTITY_PLACE, blockpos);
 
