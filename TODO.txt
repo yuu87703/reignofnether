@@ -100,11 +100,11 @@ Quality of Life
     - This means they will more accurately spread across the ground
 
 [🟡] Vanilla mob spawners loaded with Reign of Nether units now have custom spawn rules:
-    - They now spawn mobs at any light level (except monster units)
-    - They always spawn 3 mobs at a time and only if there are no nearby mobs of the same type
-    - They don't need any nearby players to be active
+    - They now spawn mobs at any light level (but won't spawn monster units during the day)
+    - Max 3 mobs per spawner, or 1 if they're a castle-tier unit (ghasts, ravagers, wardens)
+    - They can spawn without any nearby players, but only if there are no nearby units in a 30 block range
     - Spawn delay is always 30 seconds, instead of a random time between 10-40 seconds
-    - Mobs are anchored to their spawns (they will retreat back there if you run away)
+    - Mobs are anchored to their spawns (ie. they will retreat back there if you run away)
 
 Balancing
 ---------

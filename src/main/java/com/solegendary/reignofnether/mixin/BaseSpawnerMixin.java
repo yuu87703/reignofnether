@@ -1,8 +1,10 @@
 package com.solegendary.reignofnether.mixin;
 
+import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -14,9 +16,9 @@ import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,6 +28,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Mixin(BaseSpawner.class)
@@ -36,11 +40,12 @@ public class BaseSpawnerMixin {
     @Shadow private void delay(Level pLevel, BlockPos pPos) { }
     @Shadow private SpawnData getOrCreateNextSpawnData(@Nullable Level pLevel, RandomSource pRandom, BlockPos pPos) { return null; }
     @Shadow private boolean isNearPlayer(Level pLevel, BlockPos pPos) { return true; }
-    @Shadow private int spawnRange;
 
+    private static final int SPAWN_RANGE = 6;
     private static final int SPAWN_COUNT = 3;
-    private static final int MAX_NEARBY_ENTITIES = 1;
+    private static final int MAX_NEARBY_NEUTRAL_UNITS = 1;
     private static final int SPAWN_DELAY = 600;
+    private static final int ACTIVATION_RANGE = Unit.ANCHOR_RETREAT_RANGE;
 
     @Inject(
             method = "delay",
@@ -51,6 +56,7 @@ public class BaseSpawnerMixin {
         spawnDelay = SPAWN_DELAY;
     }
 
+    // show spinning entity and flames
     @Inject(
             method = "isNearPlayer",
             at = @At("HEAD"),
@@ -83,20 +89,14 @@ public class BaseSpawnerMixin {
             if (this.spawnDelay > 0) {
                 --this.spawnDelay;
             } else {
-                boolean flag = false;
+                ArrayList<Pair<Entity, Vector3d>> spawnedEntities = new ArrayList<>();
                 RandomSource randomsource = pServerLevel.getRandom();
                 SpawnData spawndata = this.getOrCreateNextSpawnData(pServerLevel, randomsource, pPos);
-                int i = 0;
+                CompoundTag compoundtag = spawndata.getEntityToSpawn();
 
-                while (true) {
-                    if (i >= SPAWN_COUNT) {
-                        if (flag) {
-                            this.delay(pServerLevel, pPos);
-                        }
-                        break;
-                    }
+                for (int i = 0; i < SPAWN_COUNT; i++) {
+                    System.out.println("PREP: " + spawndata.entityToSpawn().getAsString() + " " + i);
 
-                    CompoundTag compoundtag = spawndata.getEntityToSpawn();
                     Optional<EntityType<?>> optional = EntityType.by(compoundtag);
                     if (optional.isEmpty()) {
                         this.delay(pServerLevel, pPos);
@@ -105,15 +105,23 @@ public class BaseSpawnerMixin {
 
                     ListTag listtag = compoundtag.getList("Pos", 6);
                     int j = listtag.size();
-                    double d0 = j >= 1 ? listtag.getDouble(0) : (double) pPos.getX() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) this.spawnRange + 0.5;
-                    double d1 = j >= 2 ? listtag.getDouble(1) : (double) (pPos.getY() + randomsource.nextInt(3) - 1);
-                    double d2 = j >= 3 ? listtag.getDouble(2) : (double) pPos.getZ() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) this.spawnRange + 0.5;
-                    if (pServerLevel.noCollision(((EntityType) optional.get()).getAABB(d0, d1, d2))) {
+                    double d0;
+                    double d1;
+                    double d2;
+                    int collisionRetries = 0;
+                    do {
+                        d0 = j >= 1 ? listtag.getDouble(0) : (double) pPos.getX() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) SPAWN_RANGE + 0.5;
+                        d1 = j >= 2 ? listtag.getDouble(1) : (double) (pPos.getY() + randomsource.nextInt(3) - 1);
+                        d2 = j >= 3 ? listtag.getDouble(2) : (double) pPos.getZ() + (randomsource.nextDouble() - randomsource.nextDouble()) * (double) SPAWN_RANGE + 0.5;
+                        collisionRetries += 1;
+                    } while (!pServerLevel.noCollision(optional.get().getAABB(d0, d1, d2)) && collisionRetries < 5);
+
+                    if (pServerLevel.noCollision(optional.get().getAABB(d0, d1, d2))) {
                         label105:
                         {
                             BlockPos blockpos = BlockPos.containing(d0, d1, d2);
                             if (spawndata.getCustomSpawnRules().isPresent()) {
-                                if (!((EntityType) optional.get()).getCategory().isFriendly() && pServerLevel.getDifficulty() == Difficulty.PEACEFUL) {
+                                if (!(optional.get()).getCategory().isFriendly() && pServerLevel.getDifficulty() == Difficulty.PEACEFUL) {
                                     break label105;
                                 }
 
@@ -125,57 +133,75 @@ public class BaseSpawnerMixin {
                                 break label105;
                             }
 
-                            Entity entity = EntityType.loadEntityRecursive(compoundtag, pServerLevel, (p_151310_) -> {
-                                p_151310_.moveTo(d0, d1, d2, p_151310_.getYRot(), p_151310_.getXRot());
-                                return p_151310_;
+                            Entity entity = EntityType.loadEntityRecursive(compoundtag, pServerLevel, (e) -> {
+                                e.moveTo(e.getX(), e.getY(), e.getZ(), e.getYRot(), e.getXRot());
+                                return e;
                             });
                             if (entity == null) {
                                 this.delay(pServerLevel, pPos);
                                 return;
                             }
 
-                            int k = pServerLevel.getEntitiesOfClass(entity.getClass(), (new AABB(pPos.getX(), pPos.getY(), pPos.getZ(), pPos.getX() + 1, pPos.getY() + 1, pPos.getZ() + 1))
-                                    .inflate(Unit.ANCHOR_RETREAT_RANGE)).size();
-                            if (k >= MAX_NEARBY_ENTITIES) {
+                            List<Unit> nearbyUnits = MiscUtil.getEntitiesWithinRange(new Vector3d(pPos.getX(), pPos.getY(), pPos.getZ()),
+                                            ACTIVATION_RANGE, Mob.class, pServerLevel)
+                                    .stream()
+                                    .filter(mob -> mob instanceof Unit unit)
+                                    .map(mob -> (Unit) mob)
+                                    .toList();
+
+                            List<Unit> nearbyNeutralUnitsOfType = nearbyUnits
+                                    .stream()
+                                    .filter(u -> u.getOwnerName().isBlank() && entity.getName().equals(((Entity) u).getName()))
+                                    .toList();
+
+                            List<Unit> nearbyNonNeutralUnits = nearbyUnits
+                                    .stream()
+                                    .filter(u -> !u.getOwnerName().isBlank())
+                                    .toList();
+
+                            if (nearbyNeutralUnitsOfType.size() >= MAX_NEARBY_NEUTRAL_UNITS ||
+                                    !nearbyNonNeutralUnits.isEmpty()) {
                                 this.delay(pServerLevel, pPos);
                                 return;
                             }
 
-                            entity.moveTo(entity.getX(), entity.getY(), entity.getZ(), randomsource.nextFloat() * 360.0F, 0.0F);
-                            if (entity instanceof Mob) {
-                                Mob mob = (Mob) entity;
+                            spawnedEntities.add(new Pair<>(entity, new Vector3d(d0, d1, d2)));
+                        }
+                    }
+                }
+                for (Pair<Entity, Vector3d> pair : spawnedEntities) {
 
-                                // if the mob is classed as a monster, this will check for light levels
-                                if (entity instanceof Unit unit && unit.getFaction() == Faction.MONSTERS) {
-                                    if (!ForgeEventFactory.checkSpawnPositionSpawner(mob, pServerLevel, MobSpawnType.SPAWNER, spawndata, (BaseSpawner)(Object)this)) {
-                                        break label105;
-                                    }
-                                }
-                                MobSpawnEvent.FinalizeSpawn event = ForgeEventFactory.onFinalizeSpawnSpawner(mob, pServerLevel, pServerLevel.getCurrentDifficultyAt(entity.blockPosition()), (SpawnGroupData) null, compoundtag, (BaseSpawner)(Object)this);
-                                if (event != null && spawndata.getEntityToSpawn().size() == 1 && spawndata.getEntityToSpawn().contains("id", 8)) {
-                                    ((Mob) entity).finalizeSpawn(pServerLevel, event.getDifficulty(), event.getSpawnType(), event.getSpawnData(), event.getSpawnTag());
-                                    if (entity instanceof Unit unit)
-                                        unit.setAnchor(entity.getOnPos());
-                                }
+                    Entity entity = pair.getFirst();
+                    BlockPos blockpos = BlockPos.containing(pair.getSecond().x, pair.getSecond().y, pair.getSecond().z);
+
+                    entity.moveTo(pair.getSecond().x, pair.getSecond().y, pair.getSecond().z, randomsource.nextFloat() * 360.0F, 0.0F);
+                    if (entity instanceof Mob mob) {
+                        // if the mob is classed as a monster, this will check for light levels
+                        if (entity instanceof Unit unit && unit.getFaction() == Faction.MONSTERS) {
+                            if (!ForgeEventFactory.checkSpawnPositionSpawner(mob, pServerLevel, MobSpawnType.SPAWNER, spawndata, (BaseSpawner)(Object)this)) {
+                                continue;
                             }
-
-                            if (!pServerLevel.tryAddFreshEntityWithPassengers(entity)) {
-                                this.delay(pServerLevel, pPos);
-                                return;
-                            }
-
-                            pServerLevel.levelEvent(2004, pPos, 0);
-                            pServerLevel.gameEvent(entity, GameEvent.ENTITY_PLACE, blockpos);
-                            if (entity instanceof Mob) {
-                                ((Mob) entity).spawnAnim();
-                            }
-
-                            flag = true;
+                        }
+                        MobSpawnEvent.FinalizeSpawn event = ForgeEventFactory.onFinalizeSpawnSpawner(mob, pServerLevel, pServerLevel.getCurrentDifficultyAt(entity.blockPosition()), (SpawnGroupData) null, compoundtag, (BaseSpawner)(Object)this);
+                        if (event != null && spawndata.getEntityToSpawn().size() == 1 && spawndata.getEntityToSpawn().contains("id", 8)) {
+                            ((Mob) entity).finalizeSpawn(pServerLevel, event.getDifficulty(), event.getSpawnType(), event.getSpawnData(), event.getSpawnTag());
+                            if (entity instanceof Unit unit)
+                                unit.setAnchor(entity.getOnPos());
                         }
                     }
 
-                    ++i;
+                    if (!pServerLevel.tryAddFreshEntityWithPassengers(entity)) {
+                        this.delay(pServerLevel, pPos);
+                        return;
+                    }
+
+                    pServerLevel.levelEvent(2004, pPos, 0);
+                    pServerLevel.gameEvent(entity, GameEvent.ENTITY_PLACE, blockpos);
+
+                    if (entity instanceof Unit unit && unit.getCost().population >= 5)
+                        break;
                 }
+                this.delay(pServerLevel, pPos);
             }
         }
     }
