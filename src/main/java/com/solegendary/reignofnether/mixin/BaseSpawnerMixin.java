@@ -14,6 +14,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
@@ -93,8 +94,31 @@ public class BaseSpawnerMixin {
                 SpawnData spawndata = this.getOrCreateNextSpawnData(pServerLevel, randomsource, pPos);
                 CompoundTag compoundtag = spawndata.getEntityToSpawn();
 
+                int nearbySameTypeSpawners = 0;
+                for (int x = -3; x <= 3; x++) {
+                    for (int y = -3; y <= 3; y++) {
+                        for (int z = -3; z <= 3; z++) {
+                            if (x == 0 && y == 0 && z == 0)
+                                continue;
+                            if (pServerLevel.getBlockEntity(pPos.offset(x,y,z)) instanceof SpawnerBlockEntity sbe &&
+                                    sbe.getSpawner().nextSpawnData.getEntityToSpawn().getAsString()
+                                            .equals(nextSpawnData.getEntityToSpawn().getAsString())) {
+                                nearbySameTypeSpawners += 1;
+                            }
+                        }
+                    }
+                }
+
+                int maxNearbyNeutralUnits = MAX_NEARBY_NEUTRAL_UNITS + (nearbySameTypeSpawners * SPAWN_COUNT);
+
+                List<Unit> nearbyUnits = MiscUtil.getEntitiesWithinRange(new Vector3d(pPos.getX(), pPos.getY(), pPos.getZ()),
+                                ACTIVATION_RANGE, Mob.class, pServerLevel)
+                        .stream()
+                        .filter(mob -> mob instanceof Unit unit)
+                        .map(mob -> (Unit) mob)
+                        .toList();
+
                 for (int i = 0; i < SPAWN_COUNT; i++) {
-                    System.out.println("PREP: " + spawndata.entityToSpawn().getAsString() + " " + i);
 
                     Optional<EntityType<?>> optional = EntityType.by(compoundtag);
                     if (optional.isEmpty()) {
@@ -123,11 +147,6 @@ public class BaseSpawnerMixin {
                                 if (!(optional.get()).getCategory().isFriendly() && pServerLevel.getDifficulty() == Difficulty.PEACEFUL) {
                                     break label105;
                                 }
-
-                                //SpawnData.CustomSpawnRules spawndata$customspawnrules = (SpawnData.CustomSpawnRules) spawndata.getCustomSpawnRules().get();
-                                //if (!spawndata$customspawnrules.blockLightLimit().isValueInRange(pServerLevel.getBrightness(LightLayer.BLOCK, blockpos)) || !spawndata$customspawnrules.skyLightLimit().isValueInRange(pServerLevel.getBrightness(LightLayer.SKY, blockpos))) {
-                                //    break label105;
-                                //}
                             } else if (!SpawnPlacements.checkSpawnRules((EntityType) optional.get(), pServerLevel, MobSpawnType.SPAWNER, blockpos, pServerLevel.getRandom())) {
                                 break label105;
                             }
@@ -141,13 +160,6 @@ public class BaseSpawnerMixin {
                                 return;
                             }
 
-                            List<Unit> nearbyUnits = MiscUtil.getEntitiesWithinRange(new Vector3d(pPos.getX(), pPos.getY(), pPos.getZ()),
-                                            ACTIVATION_RANGE, Mob.class, pServerLevel)
-                                    .stream()
-                                    .filter(mob -> mob instanceof Unit unit)
-                                    .map(mob -> (Unit) mob)
-                                    .toList();
-
                             List<Unit> nearbyNeutralUnitsOfType = nearbyUnits
                                     .stream()
                                     .filter(u -> u.getOwnerName().isBlank() && entity.getName().equals(((Entity) u).getName()))
@@ -158,12 +170,11 @@ public class BaseSpawnerMixin {
                                     .filter(u -> !u.getOwnerName().isBlank())
                                     .toList();
 
-                            if (nearbyNeutralUnitsOfType.size() >= MAX_NEARBY_NEUTRAL_UNITS ||
+                            if (nearbyNeutralUnitsOfType.size() >= maxNearbyNeutralUnits ||
                                     !nearbyNonNeutralUnits.isEmpty()) {
                                 this.delay(pServerLevel, pPos);
                                 return;
                             }
-
                             spawnedEntities.add(new Pair<>(entity, new Vector3d(d0, d1, d2)));
                         }
                     }

@@ -5,8 +5,6 @@
 [🟡] Partially done and/or needs testing
 [❌] Not done, including unmerged PRs
 
-cghange productionItem.cost to getCost() instead so that reviveProds can have variable costs
-
 Features
 --------
 HEROES (in order of priority)
@@ -101,10 +99,11 @@ Quality of Life
 
 [🟡] Vanilla mob spawners loaded with Reign of Nether units now have custom spawn rules:
     - They now spawn mobs at any light level (but won't spawn monster units during the day)
-    - Max 3 mobs per spawner, or 1 if they're a castle-tier unit (ghasts, ravagers, wardens)
-    - They can spawn without any nearby players, but only if there are no nearby units in a 30 block range
+    - Max 3 mobs per spawner, or 1 if for castle-tier units (ghasts, ravagers, wardens)
+    - They can spawn without any nearby players, but only if there are no player units in a 30 block range
     - Spawn delay is always 30 seconds, instead of a random time between 10-40 seconds
-    - Mobs are anchored to their spawns (ie. they will retreat back there if you run away)
+    - Mobs are anchored to their spawns (ie. they retreat back there if you run away)
+
 
 Balancing
 ---------
