@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.nether.NetherBlocks;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.*;
@@ -21,6 +22,8 @@ import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
@@ -38,6 +41,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 // Defines method bodies for Units
 // workaround for trying to have units inherit from both their base vanilla Mob class and a Unit class
@@ -239,6 +243,14 @@ public interface Unit {
                     !ResearchServerEvents.playerHasCheat(unit.getOwnerName(), "slipslopslap"))
                 unitMob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 1));
         }
+
+        if (unitMob.tickCount % 20 == 0) {
+            if (unitMob.hasEffect(MobEffectRegistrar.STUN.get())) {
+                addParticlesAroundSelf(unit, ParticleTypes.ENTITY_EFFECT);
+            } else if (unitMob.hasEffect(MobEffectRegistrar.UNCONTROLLABLE.get()) && unit.getTargetGoal().getTarget() != null) {
+                addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
+            }
+        }
     }
 
     public enum SunlightEffect {
@@ -367,5 +379,17 @@ public interface Unit {
                 this.getFollowTarget() == null &&
                 idleAttacker &&
                 idleWorker;
+    }
+
+    static Random RANDOM = new Random();
+
+    public static void addParticlesAroundSelf(Unit unit, ParticleOptions pParticleOption) {
+        for(int i = 0; i < 5; ++i) {
+            double d0 = RANDOM.nextGaussian() * 0.02;
+            double d1 = RANDOM.nextGaussian() * 0.02;
+            double d2 = RANDOM.nextGaussian() * 0.02;
+            Entity entity = (Entity) unit;
+            entity.level().addParticle(pParticleOption, entity.getRandomX(1.0), entity.getRandomY() + 1.0, entity.getRandomZ(1.0), d0, d1, d2);
+        }
     }
 }

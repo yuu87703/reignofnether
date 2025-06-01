@@ -324,6 +324,10 @@ public class MiscUtil {
                 (mob instanceof Unit unit && GarrisonableBuilding.getGarrison((Unit) mob) != null);
     }
 
+    public static <T extends Entity> List<T> getEntitiesWithinRange(Vec3 pos, float range, Class<T> entityType, Level level) {
+        return getEntitiesWithinRange(new Vector3d(pos.x, pos.y, pos.z), range, entityType, level);
+    }
+
     public static <T extends Entity> List<T> getEntitiesWithinRange(Vector3d pos, float range, Class<T> entityType, Level level) {
         AABB aabb = new AABB(
                 pos.x - range,

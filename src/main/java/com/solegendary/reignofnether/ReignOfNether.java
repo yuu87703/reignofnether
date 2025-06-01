@@ -67,6 +67,7 @@ public class ReignOfNether {
         GameRuleRegistrar.init();
         Buildings.init();
         ProductionItems.init();
+        MobEffectRegistrar.init();
         final ClientEventRegistrar clientRegistrar = new ClientEventRegistrar();
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientRegistrar::registerClientEvents);
 

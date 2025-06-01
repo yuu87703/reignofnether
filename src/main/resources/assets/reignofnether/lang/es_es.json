@@ -219,7 +219,7 @@
     "abilities.reignofnether.mace_slam.rank2": "Rango 2: 20 daño, 3s de aturdimiento",
     "abilities.reignofnether.mace_slam.rank3": "Rango 3: 25 daño, 4s de aturdimiento",
     "abilities.reignofnether.taunting_cry": "Grito de Provocación",
-    "abilities.reignofnether.taunting_cry.stats": "\uE004  %ds",
+    "abilities.reignofnether.taunting_cry.stats": "\uE004  %ds   \uE005  %d",
     "abilities.reignofnether.taunting_cry.tooltip1": "Emite un grito burlón que obliga a las unidades enemigas cercanas a ",
     "abilities.reignofnether.taunting_cry.tooltip2": "perder el control y las fuerza a atacar al guardia durante %ds.",
     "abilities.reignofnether.taunting_cry.tooltip3": "Mientras está activo, el Guardia Real obtiene Resistencia y Lentitud.",

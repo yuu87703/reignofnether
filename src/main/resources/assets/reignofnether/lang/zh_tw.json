@@ -214,7 +214,7 @@
   "abilities.reignofnether.mace_slam.rank2": "等級2：造成20點傷害，昏迷3秒",
   "abilities.reignofnether.mace_slam.rank3": "等級3：造成25點傷害，昏迷4秒",
   "abilities.reignofnether.taunting_cry": "挑釁怒吼",
-  "abilities.reignofnether.taunting_cry.stats": "\uE004  %ds",
+  "abilities.reignofnether.taunting_cry.stats": "\uE004  %ds   \uE005  %d",
   "abilities.reignofnether.taunting_cry.tooltip1": "發出嘲諷怒吼，強迫附近的敵方單位",
   "abilities.reignofnether.taunting_cry.tooltip2": "失去控制並迫使他們攻擊護衛，持續%d秒。",
   "abilities.reignofnether.taunting_cry.tooltip3": "啟用狀態下，皇家護衛擁有抗性和緩慢效果。",

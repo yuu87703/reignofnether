@@ -68,7 +68,8 @@ Bugfixes
 
 
 
-
+[❌] vanilla mob spawners keep spawning regular mobs with no limit
+[❌] nether conversion around a neutral fountain messed up??
 
 Quality of Life
 ---------------

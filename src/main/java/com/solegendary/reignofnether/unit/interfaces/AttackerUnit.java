@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.unit.interfaces;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.*;
@@ -140,6 +141,11 @@ public interface AttackerUnit {
         }
 
         if (!unitMob.level().isClientSide && unitMob.tickCount % 4 == 0) {
+            if (((LivingEntity) unit).getEffect(MobEffectRegistrar.STUN.get()) != null) {
+                Unit.fullResetBehaviours(unit);
+                return;
+            }
+
             boolean isAttackingBuilding = isAttackingBuilding(attackerUnit);
 
             // enact attack moving

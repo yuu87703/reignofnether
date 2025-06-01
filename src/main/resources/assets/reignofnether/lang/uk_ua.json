@@ -236,7 +236,7 @@
     "abilities.reignofnether.mace_slam.rank2": "Ранг 2: 20 шкоди, 3с оглушення",
     "abilities.reignofnether.mace_slam.rank3": "Ранг 3: 25 шкоди, 4с оглушення",
     "abilities.reignofnether.taunting_cry": "Насмішливий Крик",
-    "abilities.reignofnether.taunting_cry.stats": "\uE004  %ds",
+    "abilities.reignofnether.taunting_cry.stats": "\uE004  %ds   \uE005  %d",
     "abilities.reignofnether.taunting_cry.tooltip1": "Видає насмішливий крик, який змушує ворогів",
     "abilities.reignofnether.taunting_cry.tooltip2": "втратити контроль та атакувати гвардійця протягом %ds.",
     "abilities.reignofnether.taunting_cry.tooltip3": "Під час дії гвардієць отримує Стійкість та Повільність.",
