@@ -30,7 +30,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Ghast;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -170,7 +169,7 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
     public boolean removeWhenFarAway(double d) { return false; }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.ATTACK_DAMAGE, GhastUnit.attackDamage)
                 .add(Attributes.MOVEMENT_SPEED, GhastUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, GhastUnit.maxHealth)

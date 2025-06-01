@@ -187,6 +187,11 @@ public class ZoglinUnit extends Zoglin implements Unit, AttackerUnit {
         return NightUtils.isSunBurnTick(this);
     }
 
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.FIRE;
+    }
+
     public void tick() {
         this.setCanPickUpLoot(false);
         super.tick();
@@ -194,7 +199,7 @@ public class ZoglinUnit extends Zoglin implements Unit, AttackerUnit {
         AttackerUnit.tick(this);
 
         if (isSunBurnTick())
-            this.setSecondsOnFire(8);
+            this.setSecondsOnFire(8); // zoglins dont normally burn so do this manually
     }
 
     public void initialiseGoals() {

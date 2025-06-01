@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.unit.units.villagers;
 
+import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.EnchantMaiming;
 import com.solegendary.reignofnether.ability.abilities.EnchantSharpness;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
@@ -11,7 +12,6 @@ import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -168,7 +167,7 @@ public class VindicatorUnit extends Vindicator implements Unit, AttackerUnit {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, VindicatorUnit.movementSpeed)
                 .add(Attributes.ATTACK_DAMAGE, VindicatorUnit.attackDamage)
                 .add(Attributes.ARMOR, VindicatorUnit.armorValue)

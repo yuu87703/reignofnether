@@ -23,7 +23,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -134,7 +133,7 @@ public class LlamaUnit extends Llama implements Unit, AttackerUnit, RangedAttack
     public boolean removeWhenFarAway(double d) { return false; }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.ATTACK_DAMAGE, LlamaUnit.attackDamage)
                 .add(Attributes.MOVEMENT_SPEED, LlamaUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, LlamaUnit.maxHealth)

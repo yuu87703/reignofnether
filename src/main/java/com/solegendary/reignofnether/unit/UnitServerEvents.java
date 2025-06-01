@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.building.buildings.villagers.IronGolemBuild
 import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -157,6 +158,9 @@ public class UnitServerEvents {
                 List<HeroAbility> abls = hero.getHeroAbilities();
                 data.heroUnits.add(new HeroUnitSave(
                     e.getStringUUID(),
+                    e.getName().getString(),
+                    hero.getOwnerName(),
+                    false,
                     hero.getExperience(),
                     hero.getSkillPoints(),
                     hero.getChargesForSaveData(),
@@ -205,6 +209,13 @@ public class UnitServerEvents {
                 ReignOfNether.LOGGER.info("Loaded " + data.units.size() + " units in serverevents");
             }
             synchronized (savedHeroUnits) {
+                savedHeroUnits.removeIf(shu -> {
+                    if (shu.isDead) {
+                        HeroServerEvents.fallenHeroes.add(shu);
+                        return true;
+                    }
+                    return false;
+                });
                 HeroUnitSaveData data = HeroUnitSaveData.getInstance(level);
                 savedHeroUnits.addAll(data.heroUnits);
                 ReignOfNether.LOGGER.info("Loaded " + data.heroUnits.size() + " hero units in serverevents");
@@ -258,7 +269,7 @@ public class UnitServerEvents {
             if (building.ownerName.equals(ownerName)) {
                 if (building instanceof ProductionPlacement prodPlacement) {
                     for (ActiveProduction prodItem : prodPlacement.productionQueue)
-                        currentPopulation += prodItem.item.cost.population;
+                        currentPopulation += prodItem.item.getCost(false, ownerName).population;
                 } else if (building.getBuilding() instanceof IronGolemBuilding) {
                     currentPopulation += ResourceCosts.IRON_GOLEM.population;
                 }
@@ -394,7 +405,7 @@ public class UnitServerEvents {
             }
             synchronized (savedHeroUnits) {
                 savedHeroUnits.removeIf(shu -> {
-                    if (shu.uuid.equals(entity.getStringUUID()) && unit instanceof HeroUnit hero) {
+                    if (shu.isDead && shu.uuid.equals(entity.getStringUUID()) && unit instanceof HeroUnit hero) {
                         hero.setExperience(shu.experience);
                         hero.setSkillPoints(shu.skillPoints);
                         hero.setChargesFromSaveData(shu.charges);

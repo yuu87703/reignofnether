@@ -166,6 +166,11 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
         return NightUtils.isSunBurnTick(this);
     }
 
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.FIRE;
+    }
+
     public void initialiseGoals() {
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);

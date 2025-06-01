@@ -166,7 +166,7 @@ public class UnitClientEvents {
                 if (building.ownerName.equals(playerName))
                     if (building instanceof ProductionPlacement prodBuilding) {
                         for (ActiveProduction prodItem : prodBuilding.productionQueue)
-                            currentPopulation += prodItem.item.cost.population;
+                            currentPopulation += prodItem.item.getCost(true, playerName).population;
                     } else if (building instanceof IronGolemPlacement) {
                         currentPopulation += ResourceCosts.IRON_GOLEM.population;
                     }

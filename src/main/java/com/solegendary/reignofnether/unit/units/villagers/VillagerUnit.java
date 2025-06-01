@@ -287,6 +287,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
                 Buildings.ARCANE_TOWER.getBuildButton(Keybindings.keyI),
                 Buildings.LIBRARY.getBuildButton(Keybindings.keyO),
                 Buildings.CASTLE.getBuildButton(Keybindings.keyP),
+                Buildings.SHRINE_OF_PROSPERITY.getBuildButton(Keybindings.keyF),
                 Buildings.IRON_GOLEM_BUILDING.getBuildButton(Keybindings.keyL),
                 Buildings.OAK_BRIDGE.getBuildButton(Keybindings.keyC),
                 Buildings.BEACON.getBuildButton(null)
@@ -316,7 +317,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     public boolean removeWhenFarAway(double d) { return false; }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.ATTACK_DAMAGE, VillagerUnit.attackDamage)
                 .add(Attributes.MOVEMENT_SPEED, VillagerUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, VillagerUnit.maxHealth)

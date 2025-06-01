@@ -9,7 +9,6 @@ import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.ArmSwingingUnit;
@@ -26,8 +25,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -182,6 +179,7 @@ public class ZombieVillagerUnit extends Vindicator implements Unit, WorkerUnit, 
                 Buildings.SLIME_PIT.getBuildButton(Keybindings.keyO),
                 Buildings.LABORATORY.getBuildButton(Keybindings.keyP),
                 Buildings.STRONGHOLD.getBuildButton(Keybindings.keyL),
+                Buildings.ALTAR_OF_DARKNESS.getBuildButton(Keybindings.keyF),
                 Buildings.SPRUCE_BRIDGE.getBuildButton(Keybindings.keyC),
                 Buildings.SCULK_CATALYST.getBuildButton(Keybindings.keyV),
                 Buildings.BEACON.getBuildButton(null)
@@ -254,12 +252,11 @@ public class ZombieVillagerUnit extends Vindicator implements Unit, WorkerUnit, 
         Unit.tick(this);
         AttackerUnit.tick(this);
         WorkerUnit.tick(this);
+    }
 
-        // apply slowness level 2 during daytime for a short time repeatedly
-        if (tickCount % 10 == 0 && !this.level().isClientSide() && this.level().isDay() &&
-                !NightUtils.isInRangeOfNightSource(this.getEyePosition(), false) &&
-                !ResearchServerEvents.playerHasCheat(getOwnerName(), "slipslopslap"))
-            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 1));
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.MOVEMENT_SLOWDOWN;
     }
 
     public void initialiseGoals() {

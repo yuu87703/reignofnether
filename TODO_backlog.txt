@@ -12,6 +12,10 @@ Features
     - Able to be walked along as battlements
     - Variable height across terrain
 
+[❌] Nydus worm-style ability for transport portals
+    - Because without Fog of war, transport portals are too weak
+    - Includes minimap and sound warning
+
 [❌] More serverside logging for major player actions
     - Building creation
     - Start/complete research

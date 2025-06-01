@@ -182,6 +182,11 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
         return NightUtils.isSunBurnTick(this);
     }
 
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.FIRE;
+    }
+
     public void initialiseGoals() {
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);

@@ -360,6 +360,9 @@
     "buildings.monsters.reignofnether.sculk_catalyst.tooltip2": "Distorts time to midnight within a %d block radius.",
     "buildings.monsters.reignofnether.sculk_catalyst.tooltip3": "Nearby sculk extends this range up to %d and ",
     "buildings.monsters.reignofnether.sculk_catalyst.tooltip4": "gives the catalyst absorption health.",
+    "buildings.monsters.reignofnether.altar_of_darkness": "Altar of Darkness",
+    "buildings.monsters.reignofnether.altar_of_darkness.tooltip1": "A font of dark energy to manifest horrors of the dark.",
+    "buildings.monsters.reignofnether.altar_of_darkness.tooltip2": "Trains new and revives fallen Monster heroes.",
 
     "buildings.piglins.reignofnether.bastion": "Bastion",
     "buildings.piglins.reignofnether.bastion.tooltip1": "A fortified barracks to house Headhunter piglins, ",
@@ -404,6 +407,9 @@
     "buildings.piglins.reignofnether.wither_shrine.tooltip1": "A dark shrine dedicated to the power of Withers.",
     "buildings.piglins.reignofnether.wither_shrine.tooltip2": "Enables wither skeletons production at military portals.",
     "buildings.piglins.reignofnether.wither_shrine.tooltip3": "Requires a Bastion.",
+    "buildings.piglins.reignofnether.infernal_portal": "Infernal Portal",
+    "buildings.piglins.reignofnether.infernal_portal.tooltip1": "A decorated portal reserved for champions of the Nether.",
+    "buildings.piglins.reignofnether.infernal_portal.tooltip2": "Trains new and revives fallen Piglin heroes.",
 
     "buildings.villagers.reignofnether.arcane_tower": "Arcane Tower",
     "buildings.villagers.reignofnether.arcane_tower.tooltip1": "A magical tower that is home to Witches and Evokers.",
@@ -445,6 +451,10 @@
     "buildings.villagers.reignofnether.wheat_farm.tooltip1": "\uE001  %d  +  %d  per  crop  planted",
     "buildings.villagers.reignofnether.wheat_farm.tooltip2": "A wheat field that be can tilled to collect food.",
     "buildings.villagers.reignofnether.wheat_farm.tooltip3": "Workers automatically use wood to replant seeds while working.",
+    "buildings.villagers.reignofnether.shrine_of_prosperity": "Shrine of Prosperity",
+    "buildings.villagers.reignofnether.shrine_of_prosperity.tooltip1": "A symbol of the alliance of Villagers and Pillagers.",
+    "buildings.villagers.reignofnether.shrine_of_prosperity.tooltip2": "Trains new and revives fallen Villager heroes.",
+
     "buildings.neutral.reignofnether.upgraded_beacon": "Beacon",
     "buildings.neutral.reignofnether.upgraded_beacon.tooltip1": "A pyramid that grants a variety of powerful auras.",
     "buildings.neutral.reignofnether.upgraded_beacon.tooltip2": "Controlling it for long enough grants victory.",
@@ -1012,10 +1022,11 @@
     "units.monsters.reignofnether.zombie_villager.tooltip3": "Zombie villagers are slowed under sunlight.",
     "units.monsters.reignofnether.zombie_piglin": "Zombie Piglin",
     "units.monsters.reignofnether.zoglin": "Zoglin",
-    "units.monsters.reignofnether.necromancer": "Necromancer (WIP)",
+    "units.monsters.reignofnether.necromancer": "The Necromancer",
     "units.monsters.reignofnether.necromancer.tooltip1": "A dark mage adept in summoning other monsters and ",
     "units.monsters.reignofnether.necromancer.tooltip2": "manipulating the night using the souls of the dead. ",
     "units.monsters.reignofnether.necromancer.tooltip3": "The Necromancer will burn under sunlight.",
+    "units.monsters.reignofnether.necromancer.revive": "Revive the Necromancer (Level %d)",
 
     "units.piglins.reignofnether.blaze": "Blaze",
     "units.piglins.reignofnether.blaze.tooltip1": "A fiery elemental that shoots fireballs from afar.",
@@ -1049,6 +1060,7 @@
     "units.piglins.reignofnether.piglin_merchant": "Piglin Merchant (Coming soon!)",
     "units.piglins.reignofnether.piglin_merchant.tooltip1": "A jolly piglin trader with endless supplies of food, ",
     "units.piglins.reignofnether.piglin_merchant.tooltip2": "loot and explosives, as long as you have the money.",
+    "units.piglins.reignofnether.piglin_merchant.revive": "Revive the Piglin Merchant (Level %d)",
 
     "units.villagers.reignofnether.evoker": "Evoker",
     "units.villagers.reignofnether.evoker.tooltip1": "A learned wizard that can cast combat spells.",
@@ -1075,6 +1087,7 @@
     "units.villagers.reignofnether.royal_guard": "Royal Guard (Coming soon!)",
     "units.villagers.reignofnether.royal_guard.tooltip1": "A heavily armoured illager ready for war, smashing ",
     "units.villagers.reignofnether.royal_guard.tooltip2": "through front lines and empowering themselves in battle.",
+    "units.villagers.reignofnether.royal_guard.revive": "Revive the Royal Guard (Level %d)",
 
     "units.neutral.reignofnether.enderman": "Enderman",
     "units.neutral.reignofnether.enderman.tooltip1": "An enigmatic creature from the end. Can teleport ",

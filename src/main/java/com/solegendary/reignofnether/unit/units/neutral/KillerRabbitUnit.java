@@ -23,7 +23,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -135,7 +134,7 @@ public class KillerRabbitUnit extends Rabbit implements Unit, AttackerUnit {
     public boolean removeWhenFarAway(double d) { return false; }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.ATTACK_DAMAGE, KillerRabbitUnit.attackDamage)
                 .add(Attributes.MOVEMENT_SPEED, KillerRabbitUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, KillerRabbitUnit.maxHealth)

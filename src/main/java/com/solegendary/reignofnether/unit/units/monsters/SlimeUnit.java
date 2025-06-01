@@ -7,7 +7,6 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.controls.SlimeUnitMoveControl;
 import com.solegendary.reignofnether.unit.goals.*;
@@ -364,12 +363,11 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
                 setUnitAttackTarget(closestTarget);
             }
         }
-        // apply slowness level 2 during daytime for a short time repeatedly
-        if (!(this instanceof MagmaCubeUnit) &&
-                tickCount % 10 == 0 && !this.level().isClientSide() && this.level().isDay() &&
-                !NightUtils.isInRangeOfNightSource(this.getEyePosition(), false) &&
-                !ResearchServerEvents.playerHasCheat(getOwnerName(), "slipslopslap"))
-            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 1));
+    }
+
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        return SunlightEffect.MOVEMENT_SLOWDOWN;
     }
 
     // break leaves that are touched

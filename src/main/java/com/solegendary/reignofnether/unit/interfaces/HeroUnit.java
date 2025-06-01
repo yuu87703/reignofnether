@@ -1,16 +1,71 @@
 package com.solegendary.reignofnether.unit.interfaces;
 
 import com.solegendary.reignofnether.ability.HeroAbility;
+import com.solegendary.reignofnether.hero.HeroClientEvents;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hero.HeroServerEvents;
+import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
+import com.solegendary.reignofnether.unit.HeroUnitSave;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
-public interface HeroUnit extends Unit{
+public interface HeroUnit extends Unit {
+
+    int FOOD_REVIVE_COST_BASE = 100;
+    int FOOD_REVIVE_COST_PER_LEVEL = 50;
+    int REVIVE_SECONDS_BASE = 30;
+    int REVIVE_SECONDS_PER_LEVEL = 5;
+    int POP_COST = 5;
+
+    public static ResourceCost getReviveCost(int heroLevel) {
+        return ResourceCost.Unit(
+                FOOD_REVIVE_COST_BASE + (Mth.clamp(heroLevel, 1, 10) * FOOD_REVIVE_COST_PER_LEVEL),
+                0,0,
+                REVIVE_SECONDS_BASE + (Mth.clamp(heroLevel, 1, 10) * REVIVE_SECONDS_PER_LEVEL),
+                POP_COST);
+    }
+
+    public static List<HeroUnit> getHeroes(boolean isClientside) {
+        List<LivingEntity> units = isClientside ? UnitClientEvents.getAllUnits() : UnitServerEvents.getAllUnits();
+        return units.stream()
+                .filter(e -> e instanceof HeroUnit)
+                .map(e -> (HeroUnit) e)
+                .toList();
+    }
+
+    public static List<HeroUnit> getHeroes(boolean isClientside, String ownerName) {
+        return getHeroes(isClientside, ownerName, "");
+    }
+
+    public static List<HeroUnit> getHeroes(boolean isClientside, String ownerName, String unitName) {
+        List<LivingEntity> units = isClientside ? UnitClientEvents.getAllUnits() : UnitServerEvents.getAllUnits();
+        return units.stream()
+                .filter(e -> e instanceof HeroUnit heroUnit &&
+                        heroUnit.getOwnerName().equals(ownerName) &&
+                        (e.getName().getString().equals(unitName) || unitName.isBlank()))
+                .map(e -> (HeroUnit) e)
+                .toList();
+    }
+
+    @Nullable
+    public static HeroUnitSave getFallenHero(boolean isClientSide, String ownerName, String heroName) {
+        ArrayList<HeroUnitSave> heroUnits = isClientSide ? HeroClientEvents.fallenHeroes : HeroServerEvents.fallenHeroes;
+        for (HeroUnitSave heroUnit : heroUnits) {
+            if (heroUnit.ownerName.equals(ownerName) && heroUnit.name.equals(heroName))
+                return heroUnit;
+        }
+        return null;
+    }
 
     int MAX_HERO_LEVEL = 10;
 
@@ -29,12 +84,18 @@ public interface HeroUnit extends Unit{
     default void setChargesFromSaveData(int charges) { }
 
     default void setStatsForLevel() {
+        setStatsForLevel(false);
+    }
+
+    default void setStatsForLevel(boolean heal) {
         AttributeInstance aiMaxHealth = ((LivingEntity) this).getAttribute(Attributes.MAX_HEALTH);
         if (aiMaxHealth != null)
             aiMaxHealth.setBaseValue(getBaseHealth() + ((getHeroLevel() - 1) * getHealthBonusPerLevel()));
         AttributeInstance aiAttackDamage = ((LivingEntity) this).getAttribute(Attributes.ATTACK_DAMAGE);
         if (aiAttackDamage != null)
             aiAttackDamage.setBaseValue(getBaseAttack() + ((getHeroLevel() - 1) * getAttackBonusPerLevel()));
+        if (heal)
+            ((LivingEntity) this).setHealth(((LivingEntity) this).getMaxHealth());
     }
 
     default void addExperience(int amount) {
@@ -59,9 +120,12 @@ public interface HeroUnit extends Unit{
 
     // we always track total exp and then reduce down for the UI
     default int getHeroLevel() {
+        return getHeroLevel(getExperience());
+    }
+
+    static int getHeroLevel(int exp) {
         int level = 0;
         int expToNextLevel = 200;
-        int exp = getExperience();
         do {
             level += 1;
             exp -= expToNextLevel;
