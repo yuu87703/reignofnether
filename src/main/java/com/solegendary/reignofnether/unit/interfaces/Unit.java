@@ -233,7 +233,7 @@ public interface Unit {
         if (!le.level().getWorldBorder().isWithinBounds(le.getOnPos()))
             le.kill();
 
-        if (unitMob.tickCount % 20 == 0)
+        if (unitMob.tickCount % 50 == 0)
             checkAndRetreatToAnchor(unit);
 
         if (unit.getSunlightEffect() == SunlightEffect.MOVEMENT_SLOWDOWN) {
@@ -247,7 +247,7 @@ public interface Unit {
         if (unitMob.tickCount % 20 == 0) {
             if (unitMob.hasEffect(MobEffectRegistrar.STUN.get())) {
                 addParticlesAroundSelf(unit, ParticleTypes.ENTITY_EFFECT);
-            } else if (unitMob.hasEffect(MobEffectRegistrar.UNCONTROLLABLE.get()) && unit.getTargetGoal().getTarget() != null) {
+            } else if (unitMob.hasEffect(MobEffectRegistrar.UNCONTROLLABLE.get())) {
                 addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
             }
         }
@@ -368,14 +368,24 @@ public interface Unit {
 
     public default boolean isIdle() {
         boolean idleAttacker = true;
-        if (this instanceof AttackerUnit attackerUnit)
+        boolean idleBuildingAttacker = true;
+        if (this instanceof AttackerUnit attackerUnit) {
             idleAttacker = attackerUnit.getAttackMoveTarget() == null &&
-                    !((Unit) attackerUnit).hasLivingTarget();
+                    !((Unit) attackerUnit).hasLivingTarget() &&
+                    !AttackerUnit.isAttackingBuilding(attackerUnit);
+        }
         boolean idleWorker = true;
         if (this instanceof WorkerUnit)
             idleWorker = WorkerUnit.isIdle((WorkerUnit) this);
 
-        return this.getMoveGoal().getMoveTarget() == null &&
+        // some larger mobs like bears get stuck near their movetarget so nav won't be done but it also won't be null
+        boolean stationaryNearMoveTarget = false;
+        if (this.getMoveGoal().getMoveTarget() != null) {
+            double distToMoveTarget = ((LivingEntity) this).distanceToSqr(this.getMoveGoal().getMoveTarget().getCenter());
+            boolean stationary = ((Mob) this).getDeltaMovement().x == 0 || ((Mob) this).getDeltaMovement().z == 0;
+            stationaryNearMoveTarget = stationary && distToMoveTarget < 4;
+        }
+        return (this.getMoveGoal().getMoveTarget() == null || stationaryNearMoveTarget) &&
                 this.getFollowTarget() == null &&
                 idleAttacker &&
                 idleWorker;

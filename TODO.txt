@@ -43,16 +43,18 @@ Piglin Merchant
 
 Royal Guard
     - Mace Slam
-        [❌] AOE damage and knockback in a circle in front of the guard
+        [🟡] AOE damage and knockback in a circle in front of the guard
         [❌] Raise ground blocks with block displays?
-        [❌] Add 'stun' effect to all units
+        [🟡] Add 'stun' effect to all units
             - While active, repeats stop commands and ignores all other commands
-            - Show potion swirling particles, but don't make them move upwards
 
     - Taunting Cry
-        [❌] Add 'taunt' effect to all units
+        [🟡] Add 'taunt' effect to all units
             - While active, repeats attack commands on the taunting unit and ignores all other commands
             - Show angry villager particle effects
+
+    - Battle Rage
+        [❌] Change damage bonus to damage resist
 
     - Avatar of War
         [❌] Enlarge size smoothly
@@ -68,8 +70,13 @@ Bugfixes
 
 
 
-[❌] vanilla mob spawners keep spawning regular mobs with no limit
-[❌] nether conversion around a neutral fountain messed up??
+[❌] vanilla mob spawners keep spawning regular mobs with no limit ?
+    -  can't recreate? maybe only naturally spawning ones?
+[🟡] Nether conversion no longer turns Healing Fountain water into lava
+[🟡] Neutral mobs don't aggro onto buildings even with /gamerule neutralAggro on
+    - because when they retreat to an anchor, they aren't considered idle because they still have a move target
+[❌] units still attack neutrals with neutralaggro false
+
 
 Quality of Life
 ---------------
