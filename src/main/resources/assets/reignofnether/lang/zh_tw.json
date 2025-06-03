@@ -232,7 +232,7 @@
   "abilities.reignofnether.avatar.stats": "\uE004  %d 秒",
   "abilities.reignofnether.avatar.tooltip1": "體型和力量增長，成為戰爭本身的化身。",
   "abilities.reignofnether.avatar.tooltip2": "啟動時賦予 +%d 最大健康值和 +%d 傷害。",
-  "abilities.reignofnether.avatar.tooltip3": "持續 %d 秒，每受到敵人 %d 傷害延長 1 秒。",
+  "abilities.reignofnether.avatar.tooltip3": "持續 %d 秒",
   "abilities.reignofnether.can_be_toggled": "可以開啟或關閉",
   "abilities.reignofnether.level_req": "[需要等級 %d]",
   "abilities.reignofnether.rank_up_menu": "升級 (%d)",

@@ -254,7 +254,7 @@
     "abilities.reignofnether.avatar.stats": "\uE004  %ds",
     "abilities.reignofnether.avatar.tooltip1": "Grow in size and strength, becoming an embodient of war itself.",
     "abilities.reignofnether.avatar.tooltip2": "Grants +%d max health and +%d damage while active.",
-    "abilities.reignofnether.avatar.tooltip3": "Lasts %ds +1s per %d damage taken from an enemy.",
+    "abilities.reignofnether.avatar.tooltip3": "Lasts %ds",
 
     "abilities.reignofnether.can_be_toggled": "Can be toggled on or off",
     "abilities.reignofnether.level_req": "[Requires Level %d]",

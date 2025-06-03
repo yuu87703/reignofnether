@@ -395,6 +395,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
             AttributeInstance ai = getAttribute(Attributes.ATTACK_DAMAGE);
             if (ai != null)
                 ai.setBaseValue(RoyalGuardUnit.attackDamage + (percentRage * battleRage.maxBonusDamage));
+            updateAbilityButtons();
         }
     }
 

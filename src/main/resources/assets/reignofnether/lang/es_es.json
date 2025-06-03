@@ -237,7 +237,7 @@
     "abilities.reignofnether.avatar.stats": "\uE004  %ds",
     "abilities.reignofnether.avatar.tooltip1": "Crece en tamaño y fuerza, convirtiéndose en la encarnación de la guerra misma.",
     "abilities.reignofnether.avatar.tooltip2": "Otorga +%d de salud máxima y +%d de daño mientras está activo.",
-    "abilities.reignofnether.avatar.tooltip3": "Dura %ds +1s por cada %d de daño recibido de un enemigo.",
+    "abilities.reignofnether.avatar.tooltip3": "Dura %ds",
 
     "abilities.reignofnether.can_be_toggled": "Puedes activarlo o desactivarlo.",
     "abilities.reignofnether.level_req": "[Necesita Nivel %d]",

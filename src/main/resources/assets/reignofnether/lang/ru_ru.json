@@ -243,7 +243,7 @@
     "abilities.reignofnether.avatar.stats": "\uE004  %dс",
     "abilities.reignofnether.avatar.tooltip1": "Увеличивается в размере и силе, воплощая саму войну.",
     "abilities.reignofnether.avatar.tooltip2": "Даёт +%d макс. здоровья и +%d урона пока активно.",
-    "abilities.reignofnether.avatar.tooltip3": "Длится %dс +1с за каждые %d полученного урона.",
+    "abilities.reignofnether.avatar.tooltip3": "Длится %dс",
 
     "abilities.reignofnether.can_be_toggled": "Можно включать/выключать",
     "abilities.reignofnether.level_req": "[Требуется уровень %d]",

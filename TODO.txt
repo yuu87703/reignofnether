@@ -58,6 +58,7 @@ Royal Guard
 
     - Avatar of War
         [❌] Enlarge size smoothly
+        [❌] When active, cause a tiny explosion and splash damage on regular attacks
 
 
 
@@ -73,9 +74,7 @@ Bugfixes
 [❌] vanilla mob spawners keep spawning regular mobs with no limit ?
     -  can't recreate? maybe only naturally spawning ones?
 [🟡] Nether conversion no longer turns Healing Fountain water into lava
-[🟡] Neutral mobs don't aggro onto buildings even with /gamerule neutralAggro on
-    - because when they retreat to an anchor, they aren't considered idle because they still have a move target
-[❌] units still attack neutrals with neutralaggro false
+[🟡] Fixed neutral unit aggro to buildings when neutralAggro is enabled (again)
 
 
 Quality of Life

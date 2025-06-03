@@ -254,7 +254,7 @@
     "abilities.reignofnether.avatar.stats": "\uE004  %ds",
     "abilities.reignofnether.avatar.tooltip1": "Зростання у розмірі та силі, втілюючи саму суть війни.",
     "abilities.reignofnether.avatar.tooltip2": "Надає +%d макс. здоров'я та +%d шкоди під час дії.",
-    "abilities.reignofnether.avatar.tooltip3": "Триває %ds +1c за кожні %d отриманої шкоди від ворога.",
+    "abilities.reignofnether.avatar.tooltip3": "Триває %dc",
 
     "abilities.reignofnether.can_be_toggled": "Можна увімкнути/вимкнути",
     "abilities.reignofnether.level_req": "[Вимагає рівня %d]",

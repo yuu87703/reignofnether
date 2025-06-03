@@ -237,7 +237,7 @@
   "abilities.reignofnether.avatar.stats": "\uE004  %ds",
   "abilities.reignofnether.avatar.tooltip1": "体型与力量不断增长，成为战争本身的化身。",
   "abilities.reignofnether.avatar.tooltip2": "技能期间，所选皇家守卫 +%d 最大生命值，+%d 伤害值。",
-  "abilities.reignofnether.avatar.tooltip3": "持续 %d 秒，每承受 %d 敌方伤害，技能再延长 1 秒。",
+  "abilities.reignofnether.avatar.tooltip3": "持续 %d 秒",
 
   "abilities.reignofnether.can_be_toggled": "可以切换启用/禁用状态",
   "abilities.reignofnether.level_req": "[需要至少 %d 级]",
