@@ -1,5 +1,5 @@
 
-1.19.2-1.1.7a
+1.19.2-1.1.7b
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -64,21 +64,21 @@ Royal Guard
 
 Bugfixes
 --------
-[❌] Armour on units doesn't do anything against other mob projectiles?
-    - Check on latest forge version?
-
-[❌] ServerStoppingEvent doesn't run on dedicated servers
-
-
-
-[❌] vanilla mob spawners keep spawning regular mobs with no limit ?
-    -  can't recreate? maybe only naturally spawning ones?
-[🟡] Nether conversion no longer turns Healing Fountain water into lava
-[🟡] Fixed neutral unit aggro to buildings when neutralAggro is enabled (again)
+[❌] Crash when putting a worker in a spawner
+[❌] Save ownerName to entity instead of level to fix intermittent data loss issue
+    - See slime size data for example
+[❌] Mounted ravagers no longer attack your own buildings
 
 
 Quality of Life
 ---------------
+
+[❌] Exiting RTS camera while in sandbox will now always put you into creative mode instead of spectator
+
+
+Languages
+---------
+[❌] Updated Ukrainian
 
 
 Balancing

@@ -146,7 +146,7 @@ public class UnitServerEvents {
         });
         data.save();
         level.getDataStorage().save();
-        //ReignOfNether.LOGGER.info("Saved " + getAllUnits().size() + " units");
+        ReignOfNether.LOGGER.info("Saved " + getAllUnits().size() + " units");
     }
 
     public static void saveHeroUnits(ServerLevel level) {
