@@ -154,6 +154,18 @@ public class DrownedUnit extends Drowned implements Unit, AttackerUnit {
         AttackerUnit.tick(this);
     }
 
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        this.addUnitSaveData(pCompound);
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.readUnitSaveData(pCompound);
+    }
+
     public void initialiseGoals() {
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);

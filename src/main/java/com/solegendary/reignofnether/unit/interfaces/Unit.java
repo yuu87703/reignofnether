@@ -24,6 +24,7 @@ import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
@@ -37,6 +38,7 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -251,6 +253,33 @@ public interface Unit {
                 addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
             }
         }
+    }
+
+    // call from addAdditionalSaveData
+    public default void addUnitSaveData(@NotNull CompoundTag pCompound) {
+        pCompound.putString("ownerName", getOwnerName());
+        if (getAnchor() != null) {
+            pCompound.putInt("anchorPosX", getAnchor().getX());
+            pCompound.putInt("anchorPosY", getAnchor().getY());
+            pCompound.putInt("anchorPosZ", getAnchor().getZ());
+        }
+        if (this instanceof HeroUnit heroUnit)
+            heroUnit.addHeroUnitSaveData(pCompound);
+    }
+
+    // call from readAdditionalSaveData
+    public default void readUnitSaveData(@NotNull CompoundTag pCompound) {
+        setOwnerName(pCompound.getString("ownerName"));
+        BlockPos anchorPos = new BlockPos(
+            pCompound.getInt("anchorPosX"),
+            pCompound.getInt("anchorPosY"),
+            pCompound.getInt("anchorPosZ")
+        );
+        if (!anchorPos.equals(new BlockPos(0,0,0))) {
+            setAnchor(anchorPos);
+        }
+        if (this instanceof HeroUnit heroUnit)
+            heroUnit.readHeroUnitSaveData(pCompound);
     }
 
     public enum SunlightEffect {

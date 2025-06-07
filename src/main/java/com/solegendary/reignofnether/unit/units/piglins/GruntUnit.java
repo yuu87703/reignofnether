@@ -21,6 +21,7 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -37,6 +38,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -160,7 +162,8 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
     }
 
     public boolean isSwingingArmRepeatedly() {
-        return (this.getGatherResourceGoal().isGathering() || this.getBuildRepairGoal().isBuilding());
+        return ((this.getGatherResourceGoal() != null && this.getGatherResourceGoal().isGathering()) ||
+                (this.getBuildRepairGoal() != null && this.getBuildRepairGoal().isBuilding()));
     }
 
     public static List<AbilityButton> getBuildingButtons() {
@@ -228,6 +231,18 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
         Unit.tick(this);
         AttackerUnit.tick(this);
         WorkerUnit.tick(this);
+    }
+
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        this.addUnitSaveData(pCompound);
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.readUnitSaveData(pCompound);
     }
 
     public void initialiseGoals() {

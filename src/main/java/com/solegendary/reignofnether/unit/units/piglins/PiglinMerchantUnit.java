@@ -34,6 +34,7 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -255,6 +256,18 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         castTNTGoal.tick();
         castFancyFeastGoal.tick();
         castLootExplosionGoal.tick();
+    }
+
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        this.addUnitSaveData(pCompound);
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.readUnitSaveData(pCompound);
     }
 
     public void initialiseGoals() {

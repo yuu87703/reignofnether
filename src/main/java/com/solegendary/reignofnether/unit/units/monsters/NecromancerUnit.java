@@ -23,6 +23,7 @@ import com.solegendary.reignofnether.unit.modelling.animations.NecromancerAnimat
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -45,6 +46,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -277,6 +279,18 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.castRaiseDeadGoal.tick();
         this.castPhantomGoal.tick();
         this.castBloodMoonGoal.tick();
+    }
+
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        this.addUnitSaveData(pCompound);
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.readUnitSaveData(pCompound);
     }
 
     public RaiseDead getRaiseDead() {

@@ -221,6 +221,18 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
     }
 
     @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        this.addUnitSaveData(pCompound);
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.readUnitSaveData(pCompound);
+    }
+
+    @Override
     public SunlightEffect getSunlightEffect() {
         return SunlightEffect.MOVEMENT_SLOWDOWN;
     }

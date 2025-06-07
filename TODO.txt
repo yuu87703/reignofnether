@@ -64,22 +64,23 @@ Royal Guard
 
 Bugfixes
 --------
-[❌] Crash when putting a worker in a spawner
-[❌] Save ownerName to entity instead of level to fix intermittent data loss issue
-    - See slime size data for example
-[❌] Mounted ravagers no longer attack your own buildings
+[✔] Unit owners are now saved much more reliably between server restarts
+[✔] Fixed a crash when putting a worker unit in a spawner
+[✔] Mob spawners for vanilla units no longer have uncapped spawns at any range
+    - This was causing significant lag in generated worlds with dungeons
 
 
 Quality of Life
 ---------------
-
-[❌] Exiting RTS camera while in sandbox will now always put you into creative mode instead of spectator
-
-
-Languages
----------
-[❌] Updated Ukrainian
+[✔] Exiting RTS camera while in sandbox will now always put you into creative mode instead of spectator
+[✔] /rts-reset now puts everyone into spectator mode
+    - ops can still manually change player gamemodes during a match if they want to
+[🟡] Double-clicking ungarrisoned units no longer selects garrisoned units and vice versa
 
 
 Balancing
 ---------
+
+[❌] check evoker vexes again
+    - should be able to 2v1 a ghast at least
+    - should attack on their own?

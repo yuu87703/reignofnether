@@ -574,9 +574,12 @@ public class UnitClientEvents {
                         boolean sameProfession = entity instanceof VillagerUnit vUnit1 &&
                                                 selectedUnit instanceof VillagerUnit vUnit2 &&
                                                 vUnit1.getUnitProfession() == vUnit2.getUnitProfession();
+                        boolean garrisoned1 = selectedUnit instanceof Unit unit1 && GarrisonableBuilding.getGarrison(unit1) != null;
+                        boolean garrisoned2 = entity instanceof Unit unit2 && GarrisonableBuilding.getGarrison(unit2) != null;
+                        boolean garrionStatusMatches = (garrisoned1 && garrisoned2) || (!garrisoned1 && !garrisoned2);
 
                         if ((getPlayerToEntityRelationship(entity) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) &&
-                                (!bothVillagers || sameProfession)) {
+                                (!bothVillagers || sameProfession) && garrionStatusMatches) {
                             addSelectedUnit(entity);
                         }
                     }

@@ -366,6 +366,18 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     }
 
     @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        this.addUnitSaveData(pCompound);
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.readUnitSaveData(pCompound);
+    }
+
+    @Override
     public SunlightEffect getSunlightEffect() {
         return SunlightEffect.MOVEMENT_SLOWDOWN;
     }
