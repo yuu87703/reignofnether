@@ -2,7 +2,9 @@ package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
+import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import net.minecraft.world.entity.LivingEntity;
@@ -60,10 +62,15 @@ public class GenericUntargetedSpellGoal extends Goal {
                     onCast.run();
                 }
                 if (this.ability != null && !this.mob.level().isClientSide()) {
-                    if (!this.mob.level().isClientSide())
+                    if (!this.mob.level().isClientSide()) {
                         AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
-                    else if (mob instanceof Unit unit) // Can it be a non-unit entity?
+                        if (mob instanceof HeroUnit heroUnit && this.ability instanceof HeroAbility heroAbility) {
+                            heroUnit.setMana(heroUnit.getMana() - heroAbility.manaCost);
+                        }
+                    }
+                    else if (mob instanceof Unit unit) {
                         this.ability.setToMaxCooldown();
+                    }
                 }
                 this.ticksCasting = 0;
                 this.isCasting = false;

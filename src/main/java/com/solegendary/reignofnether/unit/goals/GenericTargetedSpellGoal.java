@@ -2,9 +2,12 @@ package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
+import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.core.BlockPos;
@@ -132,8 +135,17 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
                         else if (onGroundCast != null)
                             onGroundCast.accept(castTarget);
                     }
-                    if (this.ability != null && !this.mob.level().isClientSide())
-                        AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
+                    if (this.ability != null && !this.mob.level().isClientSide()) {
+                        if (!this.mob.level().isClientSide()) {
+                            AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
+                            if (mob instanceof HeroUnit heroUnit && this.ability instanceof HeroAbility heroAbility) {
+                                heroUnit.setMana(heroUnit.getMana() - heroAbility.manaCost);
+                            }
+                        }
+                        else if (mob instanceof Unit unit) {
+                            this.ability.setToMaxCooldown();
+                        }
+                    }
                     this.stopExceptAnimations();
                 }
             }

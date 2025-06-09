@@ -34,7 +34,7 @@ public class ThrowTNT extends HeroAbility {
     private static int LESS_COOLDOWN_PER_100_RESOURCES = 5 * ResourceCost.TICKS_PER_SECOND;
 
     public ThrowTNT(HeroUnit hero) {
-        super(hero, 3, UnitAction.THROW_TNT, 25 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+        super(hero, 3, 40, UnitAction.THROW_TNT, 25 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ThrowTNT extends HeroAbility {
     public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.throw_tnt") + " " + rankString(), true),
-                fcsIcons(I18n.get("abilities.reignofnether.throw_tnt.stats", Math.round(explosionPower * 6.67f), cooldownMax / 20, RANGE)),
+                fcsIcons(I18n.get("abilities.reignofnether.throw_tnt.stats", Math.round(explosionPower * 6.67f), cooldownMax / 20, RANGE, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip2", LESS_COOLDOWN_PER_100_RESOURCES / 20))

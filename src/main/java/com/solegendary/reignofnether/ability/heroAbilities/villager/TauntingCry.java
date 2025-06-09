@@ -34,7 +34,7 @@ public class TauntingCry extends HeroAbility {
     public int duration = 4 * ResourceCost.TICKS_PER_SECOND;
 
     public TauntingCry(HeroUnit hero) {
-        super(hero, 3, UnitAction.TAUNTING_CRY, CD_MAX_SECONDS, 0, 0, false);
+        super(hero, 3, 75, UnitAction.TAUNTING_CRY, CD_MAX_SECONDS, 0, 0, false);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class TauntingCry extends HeroAbility {
     public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.taunting_cry") + " " + rankString(), true),
-                fcsIcons(I18n.get("abilities.reignofnether.taunting_cry.stats", CD_MAX_SECONDS / 20, range)),
+                fcsIcons(I18n.get("abilities.reignofnether.taunting_cry.stats", CD_MAX_SECONDS / 20, range, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.taunting_cry.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.taunting_cry.tooltip2", duration / 20)),

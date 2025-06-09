@@ -64,18 +64,17 @@ Royal Guard
 
 Bugfixes
 --------
-[✔] Unit owners are now saved much more reliably between server restarts
-[✔] Fixed a crash when putting a worker unit in a spawner
-[✔] Mob spawners for vanilla units no longer have uncapped spawns at any range
-    - This was causing significant lag in generated worlds with dungeons
+[❌] Periodically check if there are invalid StartPos positions (ie. the position isn't actually a starting block)
+[❌] GUI autoscaling is weird on 2560x1440
+
+[❌] Hero meleeattack animation is not playing when attacking buildings
+[❌] Mace slam should damage buildings
+[❌] dont allow regular attack during ability animations
 
 
 Quality of Life
 ---------------
-[✔] Exiting RTS camera while in sandbox will now always put you into creative mode instead of spectator
-[✔] /rts-reset now puts everyone into spectator mode
-    - ops can still manually change player gamemodes during a match if they want to
-[🟡] Double-clicking ungarrisoned units no longer selects garrisoned units and vice versa
+
 
 
 Balancing

@@ -42,7 +42,8 @@ Bugfixes
 
 [❌] Villagers with professions don't use the correct texture for their arms, esp. farmers
 
-
+[❌] [Code issue] ResearchHoglinCavalry doesn't overwrite the getItemName method of the base ProductionItem class, resulting in a null name when calling the method
+    - Same with FireResistance, SoulFireball, LabLightningRod, WaterPotions, HealingPotions
 
 
 Quality of Life Features

@@ -25,7 +25,7 @@ public class SoulSiphonPassive extends HeroAbility {
     public float soulsMax = 0;
 
     public SoulSiphonPassive(HeroUnit hero) {
-        super(hero, 3, UnitAction.NONE, 0, 0, 0, false);
+        super(hero, 3, 0, UnitAction.NONE, 0, 0, 0, false);
         this.autocastEnableAction = UnitAction.ENABLE_SOUL_SIPHON_PASSIVE;
         this.autocastDisableAction = UnitAction.DISBLE_SOUL_SIPHON_PASSIVE;
         this.setAutocast(true);

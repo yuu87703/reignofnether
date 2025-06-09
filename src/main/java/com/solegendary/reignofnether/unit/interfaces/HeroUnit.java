@@ -29,6 +29,12 @@ public interface HeroUnit extends Unit {
     int REVIVE_SECONDS_PER_LEVEL = 5;
     int POP_COST = 5;
 
+    public static void tick(HeroUnit heroUnit) {
+        if (((LivingEntity) heroUnit).tickCount % 20 == 0) {
+            heroUnit.setMana(heroUnit.getMana() + heroUnit.getManaRegenPerSecond());
+        }
+    }
+
     public static ResourceCost getReviveCost(int heroLevel) {
         return ResourceCost.Unit(
                 FOOD_REVIVE_COST_BASE + (Mth.clamp(heroLevel, 1, 10) * FOOD_REVIVE_COST_PER_LEVEL),
@@ -75,6 +81,13 @@ public interface HeroUnit extends Unit {
     float getAttackBonusPerLevel();
     float getBaseHealth();
     float getBaseAttack();
+
+    float getMana();
+    void setMana(float amount);
+    float getMaxMana();
+    void setMaxMana(float amount);
+    float getManaRegenPerSecond();
+    float getManaBonusPerLevel();
 
     int getSkillPoints();
     void setSkillPoints(int points);
@@ -171,6 +184,8 @@ public interface HeroUnit extends Unit {
         pCompound.putInt("experience", getExperience());
         pCompound.putInt("skillPoints", getSkillPoints());
         pCompound.putInt("charges", getChargesForSaveData());
+        pCompound.putFloat("mana", getMana());
+        pCompound.putFloat("maxMana", getMaxMana());
 
         List<HeroAbility> abls = getHeroAbilities();
         pCompound.putInt("ability1Rank", abls.size() > 0 ? abls.get(0).rank : 0);
@@ -185,10 +200,8 @@ public interface HeroUnit extends Unit {
         setExperience(pCompound.getInt("experience"));
         setSkillPoints(pCompound.getInt("skillPoints"));
         setChargesFromSaveData(pCompound.getInt("charges"));
-
-        //HeroClientboundPacket.setExperience(le.getId(), getExperience());
-        //HeroClientboundPacket.setSkillPoints(le.getId(), getSkillPoints());
-        //HeroClientboundPacket.setCharges(le.getId(), getChargesForSaveData());
+        setMana(pCompound.getFloat("mana"));
+        setMaxMana(pCompound.getFloat("maxMana"));
 
         List<HeroAbility> abls = getHeroAbilities();
         if (abls.size() > 0) {

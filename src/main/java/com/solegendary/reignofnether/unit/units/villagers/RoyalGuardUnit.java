@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.villager.Avatar;
 import com.solegendary.reignofnether.ability.heroAbilities.villager.BattleRagePassive;
 import com.solegendary.reignofnether.ability.heroAbilities.villager.MaceSlam;
 import com.solegendary.reignofnether.ability.heroAbilities.villager.TauntingCry;
+import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -33,7 +34,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -143,6 +143,24 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         experience = amount;
         setStatsForLevel();
     }
+    private float maxMana = 100;
+    private float mana = maxMana;
+    private float manaRegenPerSecond = 1;
+    private float manaBonusPerLevel = 10;
+    @Override public float getMaxMana() { return maxMana; }
+    @Override public void setMaxMana(float amount) {
+        this.maxMana = amount;
+        if (!level().isClientSide())
+            HeroClientboundPacket.setMaxMana(getId(), amount);
+    }
+    @Override public float getMana() { return mana; }
+    @Override public void setMana(float amount) {
+        this.mana = Math.min(maxMana, amount);
+        if (!level().isClientSide())
+            HeroClientboundPacket.setMana(getId(), this.mana);
+    }
+    @Override public float getManaRegenPerSecond() { return manaRegenPerSecond; }
+    @Override public float getManaBonusPerLevel() { return manaBonusPerLevel; }
 
     final static public float attackDamage = 6.0f;
     final static public float attackBonusPerLevel = 0.6f;
@@ -241,6 +259,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         super.tick();
         Unit.tick(this);
         AttackerUnit.tick(this);
+        HeroUnit.tick(this);
         PromoteIllager.checkAndApplyBuff(this);
 
         if (level().isClientSide() && animateTicks > 0) {
@@ -405,9 +424,6 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         if (battleRage != null && battleRage.rank > 0) {
             float percentRage = 1 - (getHealth() / getMaxHealth());
             heal(percentRage * battleRage.maxHpRegen);
-            AttributeInstance ai = getAttribute(Attributes.ATTACK_DAMAGE);
-            if (ai != null)
-                ai.setBaseValue(RoyalGuardUnit.attackDamage + (percentRage * battleRage.maxBonusDamage));
             updateAbilityButtons();
         }
     }

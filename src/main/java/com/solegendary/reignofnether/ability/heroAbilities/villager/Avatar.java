@@ -34,7 +34,7 @@ public class Avatar extends HeroAbility {
     private static final float BONUS_HEALTH = 150;
 
     public Avatar(HeroUnit hero) {
-        super(hero, 1, UnitAction.AVATAR, CD_MAX_SECONDS, 0, 0, false);
+        super(hero, 1, 100, UnitAction.AVATAR, CD_MAX_SECONDS, 0, 0, false);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Avatar extends HeroAbility {
     public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.avatar"), true),
-                fcsIcons(I18n.get("abilities.reignofnether.avatar.stats", CD_MAX_SECONDS / 20)),
+                fcsIcons(I18n.get("abilities.reignofnether.avatar.stats", CD_MAX_SECONDS / 20, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.avatar.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.avatar.tooltip2", BONUS_HEALTH)),

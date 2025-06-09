@@ -30,7 +30,7 @@ public class GreedIsGoodPassive extends HeroAbility {
     public int maxResourcesPerCast = 100;
 
     public GreedIsGoodPassive(HeroUnit hero) {
-        super(hero, 3, UnitAction.NONE, 0, 0, 0, false);
+        super(hero, 3, 0, UnitAction.NONE, 0, 0, 0, false);
         this.autocastEnableAction = UnitAction.ENABLE_GREED_IS_GOOD_PASSIVE;
         this.autocastDisableAction = UnitAction.DISABLE_GREED_IS_GOOD_PASSIVE;
     }

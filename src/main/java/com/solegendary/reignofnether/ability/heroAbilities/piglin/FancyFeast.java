@@ -42,7 +42,7 @@ public class FancyFeast extends HeroAbility {
 
 
     public FancyFeast(HeroUnit hero) {
-        super(hero, 3, UnitAction.FANCY_FEAST, CD_MAX_SECONDS, RANGE, 0, false);
+        super(hero, 3, 70, UnitAction.FANCY_FEAST, CD_MAX_SECONDS, RANGE, 0, false);
     }
 
     private ResourceLocation getIcon(int plusRank) {
@@ -89,7 +89,7 @@ public class FancyFeast extends HeroAbility {
     public List<FormattedCharSequence> getTooltipLines() {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.fancy_feast") + " " + rankString(), true),
-                fcsIcons(I18n.get("abilities.reignofnether.fancy_feast.stats", getHealAmount(), CD_MAX_SECONDS / 20)),
+                fcsIcons(I18n.get("abilities.reignofnether.fancy_feast.stats", getHealAmount(), CD_MAX_SECONDS / 20, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.fancy_feast.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.fancy_feast.tooltip2", BASE_ITEMS, BONUS_ITEMS_PER_RESOURCES))

@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.piglin.FancyFeast;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.GreedIsGoodPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.LootExplosion;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.ThrowTNT;
+import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -140,6 +141,24 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         experience = amount;
         setStatsForLevel();
     }
+    private float maxMana = 100;
+    private float mana = maxMana;
+    private float manaRegenPerSecond = 1;
+    private float manaBonusPerLevel = 10;
+    @Override public float getMaxMana() { return maxMana; }
+    @Override public void setMaxMana(float amount) {
+        this.maxMana = amount;
+        if (!level().isClientSide())
+            HeroClientboundPacket.setMaxMana(getId(), amount);
+    }
+    @Override public float getMana() { return mana; }
+    @Override public void setMana(float amount) {
+        this.mana = Math.min(maxMana, amount);
+        if (!level().isClientSide())
+            HeroClientboundPacket.setMana(getId(), amount);
+    }
+    @Override public float getManaRegenPerSecond() { return manaRegenPerSecond; }
+    @Override public float getManaBonusPerLevel() { return manaBonusPerLevel; }
 
     final static public float attackDamage = 6.0f;
     final static public float attackBonusPerLevel = 0.5f;
@@ -249,6 +268,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         super.tick();
         Unit.tick(this);
         AttackerUnit.tick(this);
+        HeroUnit.tick(this);
 
         if (level().isClientSide() && animateTicks > 0) {
             animateTicks -= 1;
