@@ -82,6 +82,7 @@ public interface HeroUnit extends Unit {
     float getBaseHealth();
     float getBaseAttack();
 
+    float getBaseMaxMana();
     float getMana();
     void setMana(float amount);
     float getMaxMana();
@@ -109,6 +110,7 @@ public interface HeroUnit extends Unit {
         AttributeInstance aiAttackDamage = ((LivingEntity) this).getAttribute(Attributes.ATTACK_DAMAGE);
         if (aiAttackDamage != null)
             aiAttackDamage.setBaseValue(getBaseAttack() + ((getHeroLevel() - 1) * getAttackBonusPerLevel()));
+        this.setMaxMana(getBaseMaxMana() + ((getHeroLevel() - 1) * getManaBonusPerLevel()));
         if (heal)
             ((LivingEntity) this).setHealth(((LivingEntity) this).getMaxHealth());
     }

@@ -141,10 +141,12 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         experience = amount;
         setStatsForLevel();
     }
-    private float maxMana = 100;
+    private float baseMaxMana = 125;
+    private float maxMana = baseMaxMana;
     private float mana = maxMana;
-    private float manaRegenPerSecond = 1;
-    private float manaBonusPerLevel = 10;
+    private float manaRegenPerSecond = 0.8f;
+    private float manaBonusPerLevel = 8;
+    @Override public float getBaseMaxMana() { return baseMaxMana; }
     @Override public float getMaxMana() { return maxMana; }
     @Override public void setMaxMana(float amount) {
         this.maxMana = amount;

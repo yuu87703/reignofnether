@@ -69,7 +69,10 @@ Bugfixes
 
 [❌] Hero meleeattack animation is not playing when attacking buildings
 [❌] Mace slam should damage buildings
-[❌] dont allow regular attack during ability animations
+[❌] Mace slam should immediately change entity facing
+[❌] Don't allow regular attack during ability animations'
+    - set windup ticks to 0 repeatedly
+[❌]
 
 
 Quality of Life

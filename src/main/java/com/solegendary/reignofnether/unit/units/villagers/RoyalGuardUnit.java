@@ -143,10 +143,12 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         experience = amount;
         setStatsForLevel();
     }
-    private float maxMana = 100;
+    private float baseMaxMana = 100;
+    private float maxMana = baseMaxMana;
     private float mana = maxMana;
-    private float manaRegenPerSecond = 1;
-    private float manaBonusPerLevel = 10;
+    private float manaRegenPerSecond = 0.5f;
+    private float manaBonusPerLevel = 6;
+    @Override public float getBaseMaxMana() { return baseMaxMana; }
     @Override public float getMaxMana() { return maxMana; }
     @Override public void setMaxMana(float amount) {
         this.maxMana = amount;
