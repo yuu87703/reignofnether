@@ -31,6 +31,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -178,7 +179,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public int maxResources = 100;
 
     @Override public float getHealthBonusPerLevel() { return maxHealthBonusPerLevel; };
-    @Override public float getAttackBonusPerLevel() { return maxHealth; };
+    @Override public float getAttackBonusPerLevel() { return attackBonusPerLevel; };
     @Override public float getBaseHealth() { return maxHealth; };
     @Override public float getBaseAttack() { return attackDamage; };
 
@@ -193,6 +194,8 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public final AnimationState attackAnimState = new AnimationState();
 
     final static private int ATTACK_WINDUP_TICKS = 3;
+
+    private int avatarTicksLeft = 0;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -245,6 +248,19 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     }
 
     @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        boolean result = super.hurt(pSource, pAmount);
+        BattleRagePassive battleRage = getBattleRage();
+        if (result && battleRage.rank > 0 &&
+            pSource.getEntity() instanceof Unit unit &&
+            !List.of(Relationship.OWNED, Relationship.FRIENDLY)
+                    .contains(UnitServerEvents.getUnitToEntityRelationship(unit, this))) {
+            setMana(mana + pAmount * battleRage.manaPerDmgTaken);
+        }
+        return result;
+    }
+
+    @Override
     public boolean removeWhenFarAway(double d) { return false; }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -270,6 +286,13 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.castMaceSlamGoal.tick();
         this.castTauntingCryGoal.tick();
         this.tickBattleRage();
+
+        if (avatarTicksLeft > 0) {
+            avatarTicksLeft -= 1;
+            if (avatarTicksLeft <= 0) {
+                disableAvatar();
+            }
+        }
     }
 
     @Override
@@ -430,8 +453,22 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         }
     }
 
-    public void avatar() {
+    @Override
+    public EntityDimensions getDimensions(Pose pPose) {
+        if (avatarTicksLeft > 0)
+            return super.getDimensions(pPose).scale(1.5f);
+        return super.getDimensions(pPose);
+    }
 
+    public void disableAvatar() {
+        this.reapplyPosition();
+        this.refreshDimensions();
+    }
+
+    public void enableAvatar() {
+        avatarTicksLeft = Avatar.DURATION;
+        this.reapplyPosition();
+        this.refreshDimensions();
     }
 }
 

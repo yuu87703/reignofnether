@@ -24,7 +24,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 public class BattleRagePassive extends HeroAbility {
 
     public float maxHpRegen = 1.2f;
-    public float manaPerDmgTaken = 0.5f;
+    public float manaPerDmgTaken = 0.4f;
 
     public BattleRagePassive(HeroUnit hero) {
         super(hero, 3, 0, UnitAction.NONE, 0, 0, 0, false);
@@ -41,13 +41,13 @@ public class BattleRagePassive extends HeroAbility {
     public void updateStatsForRank() {
         if (rank == 1) {
             maxHpRegen = 1.2f;
-            manaPerDmgTaken = 0.5f;
+            manaPerDmgTaken = 0.4f;
         } else if (rank == 2) {
             maxHpRegen = 1.8f;
-            manaPerDmgTaken = 0.75f;
+            manaPerDmgTaken = 0.6f;
         } else if (rank == 3) {
             maxHpRegen = 2.4f;
-            manaPerDmgTaken = 1f;
+            manaPerDmgTaken = 0.8f;
         }
     }
 
@@ -84,7 +84,7 @@ public class BattleRagePassive extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.battle_rage") + " " + rankString(), true),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip1", maxHpRegen)),
-                fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip2", manaPerDmgTaken)),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip3", getHpRegen()))
         );
     }
@@ -95,7 +95,7 @@ public class BattleRagePassive extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip1", maxHpRegen)),
-                fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.battle_rage.tooltip2", manaPerDmgTaken)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.rank1"), rank == 0),
                 fcs(I18n.get("abilities.reignofnether.battle_rage.rank2"), rank == 1),

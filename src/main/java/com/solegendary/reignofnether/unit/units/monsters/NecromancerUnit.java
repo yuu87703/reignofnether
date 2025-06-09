@@ -190,7 +190,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public int maxResources = 100;
 
     @Override public float getHealthBonusPerLevel() { return maxHealthBonusPerLevel; };
-    @Override public float getAttackBonusPerLevel() { return maxHealth; };
+    @Override public float getAttackBonusPerLevel() { return attackBonusPerLevel; };
     @Override public float getBaseHealth() { return maxHealth; };
     @Override public float getBaseAttack() { return attackDamage; };
 

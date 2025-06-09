@@ -64,10 +64,10 @@ Royal Guard
 
 Bugfixes
 --------
-[❌] Periodically check if there are invalid StartPos positions (ie. the position isn't actually a starting block)
+[🟡] RTS Start Blocks that are removed via command are no longer retained
 [❌] GUI autoscaling is weird on 2560x1440
 
-[❌] Hero meleeattack animation is not playing when attacking buildings
+[❌] Hero melee attack animation is not playing when attacking buildings
 [❌] Mace slam should damage buildings
 [❌] Mace slam should immediately change entity facing
 [❌] Don't allow regular attack during ability animations'
