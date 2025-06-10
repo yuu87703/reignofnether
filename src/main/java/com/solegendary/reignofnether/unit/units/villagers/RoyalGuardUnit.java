@@ -6,6 +6,8 @@ import com.solegendary.reignofnether.ability.heroAbilities.villager.Avatar;
 import com.solegendary.reignofnether.ability.heroAbilities.villager.BattleRagePassive;
 import com.solegendary.reignofnether.ability.heroAbilities.villager.MaceSlam;
 import com.solegendary.reignofnether.ability.heroAbilities.villager.TauntingCry;
+import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
@@ -49,7 +51,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
     // region
@@ -342,6 +346,32 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.tickTauntingCry();
         this.tickBattleRage();
         this.tickAvatar();
+
+        if (getAnimateTicksLeft() > 0 && activeAnimDef == RoyalGuardAnimations.ATTACK) {
+            BlockPos maceSlamBp = castMaceSlamGoal.getCastTarget();
+            if (maceSlamBp != null) {
+                double x0 = maceSlamBp.getX() - this.getX();
+                double z0 = maceSlamBp.getZ() - this.getZ();
+                float f = (float) (Mth.atan2(z0, x0) * 57.2957763671875) - 90.0F;
+                this.setYRot(this.rotlerp(this.getYRot(), f, 90f));
+            } else if (getTarget() != null) {
+                double x0 = getTarget().getX() - this.getX();
+                double z0 = getTarget().getZ() - this.getZ();
+                float f = (float) (Mth.atan2(z0, x0) * 57.2957763671875) - 90.0F;
+                this.setYRot(this.rotlerp(this.getYRot(), f, 90f));
+            }
+        }
+    }
+
+    private float rotlerp(float pAngle, float pTargetAngle, float pMaxIncrease) {
+        float f = Mth.wrapDegrees(pTargetAngle - pAngle);
+        if (f > pMaxIncrease) {
+            f = pMaxIncrease;
+        }
+        if (f < -pMaxIncrease) {
+            f = -pMaxIncrease;
+        }
+        return pAngle + f;
     }
 
     @Override
@@ -467,6 +497,21 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         if (maceSlam != null && maceSlam.rank > 0) {
             level().explode(null, null, null, blockPos.getX(), blockPos.getY(), blockPos.getZ(),
                     2.0f, false, Level.ExplosionInteraction.NONE);
+
+            Set<BuildingPlacement> buildings = new HashSet<>();
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        BuildingPlacement building = BuildingUtils.findBuilding(level().isClientSide(), blockPos.above().offset(x,y,z));
+                        if (building != null)
+                            buildings.add(building);
+                    }
+                }
+            }
+            for (BuildingPlacement building : buildings) {
+                building.destroyRandomBlocks((int) (maceSlam.damage / 2));
+            }
+
             for (LivingEntity hitEntity : hitEntities) {
                 if (hitEntity instanceof Unit unit) {
                     Unit.fullResetBehaviours(unit);

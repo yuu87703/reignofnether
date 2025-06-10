@@ -43,21 +43,14 @@ Piglin Merchant
 
 Royal Guard
     - Mace Slam
-        [🟡] AOE damage and knockback in a circle in front of the guard
         [❌] Raise ground blocks with block displays?
-        [🟡] Add 'stun' effect to all units
-            - While active, repeats stop commands and ignores all other commands
+        [🟡] Enforce stun on non-units too
 
     - Taunting Cry
         [🟡] Add 'taunt' effect to all units
-            - While active, repeats attack commands on the taunting unit and ignores all other commands
             - Show angry villager particle effects
 
-    - Battle Rage
-        [❌] Change damage bonus to damage resist
-
     - Avatar of War
-        [❌] Enlarge size smoothly
         [❌] When active, cause a tiny explosion and splash damage on regular attacks
 
 
@@ -68,11 +61,10 @@ Bugfixes
 [❌] GUI autoscaling is weird on 2560x1440
 
 [❌] Hero melee attack animation is not playing when attacking buildings
-[❌] Mace slam should damage buildings
+[🟡] Mace slam should damage buildings
 [❌] Mace slam should immediately change entity facing
 [❌] Don't allow regular attack during ability animations'
-    - set windup ticks to 0 repeatedly
-[❌]
+    - set windup ticks to 0 repeatedly during channelling
 
 
 Quality of Life
