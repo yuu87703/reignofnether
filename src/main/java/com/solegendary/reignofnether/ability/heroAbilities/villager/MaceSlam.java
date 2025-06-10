@@ -34,7 +34,7 @@ public class MaceSlam extends HeroAbility {
     public int stunDuration = 2 * ResourceCost.TICKS_PER_SECOND;
 
     public MaceSlam(HeroUnit hero) {
-        super(hero, 3, 50, UnitAction.MACE_SLAM, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+        super(hero, 3, 30, UnitAction.MACE_SLAM, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
     }
 
     @Override

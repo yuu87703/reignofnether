@@ -32,10 +32,9 @@ public class Avatar extends HeroAbility {
 
     private static final int CD_MAX_SECONDS = 5 * ResourceCost.TICKS_PER_SECOND;
     public static final int DURATION = 10 * ResourceCost.TICKS_PER_SECOND;
-    public static final float ATTACK_SPLASH_RADIUS = 1.5f;
-    public static final float ATTACK_SPLASH_MULT = 0.25f;
-
-    private static final float BONUS_HEALTH = 100;
+    public static final float ATTACK_SPLASH_RADIUS = 2.5f;
+    public static final float ATTACK_SPLASH_MULT = 0.5f;
+    public static final float BONUS_HEALTH = 100;
 
     public Avatar(HeroUnit hero) {
         super(hero, 1, 100, UnitAction.AVATAR, CD_MAX_SECONDS, 0, 0, false);

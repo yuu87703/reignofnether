@@ -35,10 +35,10 @@ public class InsomniaCurse extends HeroAbility {
     public static final int RANGE = 12;
     public static final float PHANTOM_DAMAGE = 6;
     public static final float PHANTOM_DAMAGE_BONUS_PER_SOUL_RANK = 2f;
-    public static final int PHANTOM_MAX_ATTACKS = 5;
+    public static final int PHANTOM_MAX_ATTACKS = 6;
 
     public InsomniaCurse(HeroUnit hero) {
-        super(hero, 3, 30, UnitAction.INSOMNIA_CURSE, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+        super(hero, 3, 20, UnitAction.INSOMNIA_CURSE, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
         maxCharges = 3;
         charges = maxCharges;
     }

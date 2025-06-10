@@ -35,7 +35,7 @@ public class TauntingCry extends HeroAbility {
     public static final float DAMAGE_MULT = 0.5f;
 
     public TauntingCry(HeroUnit hero) {
-        super(hero, 3, 75, UnitAction.TAUNTING_CRY, CD_MAX_SECONDS, RANGE, 0, false);
+        super(hero, 3, 50, UnitAction.TAUNTING_CRY, CD_MAX_SECONDS, RANGE, 0, false);
     }
 
     @Override

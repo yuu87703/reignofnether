@@ -264,6 +264,24 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     }
 
     @Override
+    public void setStatsForLevel(boolean heal) {
+        AttributeInstance aiMaxHealth = this.getAttribute(Attributes.MAX_HEALTH);
+        float newHealth = getBaseHealth() + ((getHeroLevel() - 1) * getHealthBonusPerLevel());
+        if (avatarTicksLeft > 0)
+            newHealth += Avatar.BONUS_HEALTH;
+        if (aiMaxHealth != null)
+            aiMaxHealth.setBaseValue(newHealth);
+        AttributeInstance aiAttackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (aiAttackDamage != null)
+            aiAttackDamage.setBaseValue(getBaseAttack() + ((getHeroLevel() - 1) * getAttackBonusPerLevel()));
+        this.setMaxMana(getBaseMaxMana() + ((getHeroLevel() - 1) * getManaBonusPerLevel()));
+        if (heal)
+            this.setHealth(this.getMaxHealth());
+        if (getHealth() > getMaxHealth())
+            setHealth(getMaxHealth());
+    }
+
+    @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
         if (tauntingCryTicksLeft > 0)
             pAmount *= TauntingCry.DAMAGE_MULT;
@@ -476,6 +494,10 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.castAvatarGoal.stop();
         if (avatarTicksLeft <= 0 && avatarScalingStarted) {
             disableAvatar();
+            AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+            if (ai != null) {
+                ai.setBaseValue(KNOCKBACK_RESISTANCE);
+            }
         }
     }
 
@@ -590,6 +612,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
             avatarTicksLeft -= 1;
             if (avatarTicksLeft <= 0) {
                 disableAvatar();
+                setStatsForLevel();
             }
         }
         if (avatarScalingStarted && avatarScaleTicks < AVATAR_SCALE_TICKS_MAX) {
@@ -612,6 +635,12 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     public void enableAvatar() {
         avatarTicksLeft = Avatar.DURATION;
+        AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+        if (ai != null) {
+            ai.setBaseValue(1.0d);
+        }
+        setStatsForLevel();
+        heal(Avatar.BONUS_HEALTH);
         if (!level().isClientSide()) {
             HeroClientboundPacket.activateAbilityClientside(getId(), 3);
         }
