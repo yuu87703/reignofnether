@@ -32,6 +32,7 @@ public class TauntingCry extends HeroAbility {
     public static final int RANGE = 6;
     private static final int CD_MAX_SECONDS = 5 * ResourceCost.TICKS_PER_SECOND;
     public int duration = 4 * ResourceCost.TICKS_PER_SECOND;
+    public static final float DAMAGE_MULT = 0.5f;
 
     public TauntingCry(HeroUnit hero) {
         super(hero, 3, 75, UnitAction.TAUNTING_CRY, CD_MAX_SECONDS, RANGE, 0, false);

@@ -225,6 +225,10 @@ public interface HeroUnit extends Unit {
         for (HeroAbility abl : abls)
             abl.updateStatsForRank();
     }
+
+    public default void activateAbilityClientside(int abilityIndex) { }
+
+    public default void deactivateAbilityClientside(int abilityIndex) { }
 }
 
 

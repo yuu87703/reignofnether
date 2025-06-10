@@ -239,7 +239,7 @@
     "abilities.reignofnether.taunting_cry.stats": "\uE004  %ds   \uE005  %d   \uE008  %d",
     "abilities.reignofnether.taunting_cry.tooltip1": "Let out a mocking cry that forces nearby enemy units to ",
     "abilities.reignofnether.taunting_cry.tooltip2": "lose control and force them to attack the guard for %ds.",
-    "abilities.reignofnether.taunting_cry.tooltip3": "While active, the Royal Guard has Resistance and Slowness.",
+    "abilities.reignofnether.taunting_cry.tooltip3": "While active, the Guard has knockback immunity, resistance and slowness.",
     "abilities.reignofnether.taunting_cry.rank1": "Rank 1: 4s duration",
     "abilities.reignofnether.taunting_cry.rank2": "Rank 2: 6s duration",
     "abilities.reignofnether.taunting_cry.rank3": "Rank 3: 8s duration",
@@ -254,7 +254,7 @@
     "abilities.reignofnether.avatar.already_active": "Avatar is already active",
     "abilities.reignofnether.avatar.stats": "\uE004  %ds   \uE008  %d",
     "abilities.reignofnether.avatar.tooltip1": "Grow in size and strength, becoming an embodient of war itself.",
-    "abilities.reignofnether.avatar.tooltip2": "Grants +%d max health and a stunning explosive attack.",
+    "abilities.reignofnether.avatar.tooltip2": "Grants +%d max health and an explosive splash attack.",
     "abilities.reignofnether.avatar.tooltip3": "Lasts %ds",
 
     "abilities.reignofnether.can_be_toggled": "Can be toggled on or off",

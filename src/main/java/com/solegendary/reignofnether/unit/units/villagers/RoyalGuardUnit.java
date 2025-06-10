@@ -35,6 +35,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -197,11 +198,15 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     final static private int ATTACK_WINDUP_TICKS = 3;
 
+    public int tauntingCryTicksLeft = 0;
+
     public boolean avatarScalingStarted = false;
     public int avatarTicksLeft = 0;
     private int avatarScaleTicks = 0; // at max, will be full sized
     private int AVATAR_SCALE_TICKS_MAX = 40;
-    private float AVATAR_MAX_BONUS_SCALE = 0.75f;
+    private float AVATAR_MAX_BONUS_SCALE = 0.6f;
+
+    private static final double KNOCKBACK_RESISTANCE = 0.5d;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -256,6 +261,9 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
+        if (tauntingCryTicksLeft > 0)
+            pAmount *= TauntingCry.DAMAGE_MULT;
+
         boolean result = super.hurt(pSource, pAmount);
         BattleRagePassive battleRage = getBattleRage();
         if (result && battleRage.rank > 0 &&
@@ -263,6 +271,43 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
             !List.of(Relationship.OWNED, Relationship.FRIENDLY)
                     .contains(UnitServerEvents.getUnitToEntityRelationship(unit, this))) {
             setMana(mana + pAmount * battleRage.manaPerDmgTaken);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity pEntity) {
+        boolean result = super.doHurtTarget(pEntity);
+        if (result && avatarTicksLeft > 0) {
+
+            List<LivingEntity> hitEntities = MiscUtil.getEntitiesWithinRange(pEntity.getEyePosition(), Avatar.ATTACK_SPLASH_RADIUS, LivingEntity.class, level())
+                    .stream()
+                    .filter(e -> {
+                        if (e instanceof Unit unit) {
+                            return !List.of(Relationship.OWNED, Relationship.FRIENDLY)
+                                    .contains(UnitServerEvents.getUnitToEntityRelationship(unit, this));
+                        }
+                        return true;
+                    })
+                    .toList();
+
+            level().explode(null, null, null, pEntity.getX(), pEntity.getY(), pEntity.getZ(),
+                    1.0f, false, Level.ExplosionInteraction.NONE);
+            AttributeInstance ai = getAttribute(Attributes.ATTACK_DAMAGE);
+
+            if (ai != null) {
+                for (LivingEntity hitEntity : hitEntities) {
+                    if (hitEntity == pEntity)
+                        continue;
+                    boolean hurt = hitEntity.hurt(this.damageSources().mobAttack(this), (float) ai.getValue() * Avatar.ATTACK_SPLASH_MULT);
+                    if (hurt) {
+                        float kb = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+                        hitEntity.knockback(kb * 0.5F, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
+                        this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+                        this.setLastHurtMob(hitEntity);
+                    }
+                }
+            }
         }
         return result;
     }
@@ -276,6 +321,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
                 .add(Attributes.ATTACK_DAMAGE, RoyalGuardUnit.attackDamage)
                 .add(Attributes.ARMOR, RoyalGuardUnit.armorValue)
                 .add(Attributes.MAX_HEALTH, RoyalGuardUnit.maxHealth)
+                .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange());
     }
 
@@ -293,6 +339,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.castMaceSlamGoal.tick();
         this.castTauntingCryGoal.tick();
         this.castAvatarGoal.tick();
+        this.tickTauntingCry();
         this.tickBattleRage();
         this.tickAvatar();
     }
@@ -457,8 +504,24 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
                 unit.setUnitAttackTargetForced(this);
                 ((LivingEntity) unit).addEffect(new MobEffectInstance(MobEffectRegistrar.UNCONTROLLABLE.get(), tauntingCry.duration));
             }
-            this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, tauntingCry.duration, 2));
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, tauntingCry.duration, 2));
+            tauntingCryTicksLeft = tauntingCry.duration;
+            AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+            if (ai != null) {
+                ai.setBaseValue(1.0d);
+            }
+        }
+    }
+
+    public void tickTauntingCry() {
+        if (tauntingCryTicksLeft > 0) {
+            tauntingCryTicksLeft -= 1;
+        }
+        if (tauntingCryTicksLeft == 1) {
+            AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+            if (ai != null) {
+                ai.setBaseValue(KNOCKBACK_RESISTANCE);
+            }
         }
     }
 
@@ -504,6 +567,16 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     public void enableAvatar() {
         avatarTicksLeft = Avatar.DURATION;
+        if (!level().isClientSide()) {
+            HeroClientboundPacket.activateAbilityClientside(getId(), 3);
+        }
+    }
+
+    @Override
+    public void activateAbilityClientside(int abilityIndex) {
+        if (level().isClientSide() && abilityIndex == 3) {
+            enableAvatar();
+        }
     }
 }
 

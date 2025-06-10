@@ -53,6 +53,11 @@ public class HeroClientboundPacket {
                 new HeroClientboundPacket(HeroAction.SET_MAX_MANA, unitId, value, 0));
     }
 
+    public static void activateAbilityClientside(int unitId, int abilityIndex) {
+        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
+                new HeroClientboundPacket(HeroAction.ACTIVATE_ABILITY_CLIENTSIDE, unitId, 0, abilityIndex));
+    }
+
     public HeroClientboundPacket(HeroAction action, int unitId, float value, int abilityIndex) {
         this.action = action;
         this.unitId = unitId;
@@ -100,6 +105,8 @@ public class HeroClientboundPacket {
                             }
                             case SET_MANA -> hero.setMana(value);
                             case SET_MAX_MANA -> hero.setMaxMana(value);
+                            case ACTIVATE_ABILITY_CLIENTSIDE -> hero.activateAbilityClientside(abilityIndex);
+                            case DEACTIVATE_ABILITY_CLIENTSIDE -> hero.deactivateAbilityClientside(abilityIndex);
                         }
                     }
                     success.set(true);
