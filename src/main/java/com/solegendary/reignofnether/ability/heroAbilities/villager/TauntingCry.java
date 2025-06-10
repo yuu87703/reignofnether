@@ -34,7 +34,7 @@ public class TauntingCry extends HeroAbility {
     public int duration = 4 * ResourceCost.TICKS_PER_SECOND;
 
     public TauntingCry(HeroUnit hero) {
-        super(hero, 3, 75, UnitAction.TAUNTING_CRY, CD_MAX_SECONDS, 0, 0, false);
+        super(hero, 3, 75, UnitAction.TAUNTING_CRY, CD_MAX_SECONDS, RANGE, 0, false);
     }
 
     @Override

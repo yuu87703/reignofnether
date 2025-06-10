@@ -82,6 +82,8 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public GenericUntargetedSpellGoal getCastTauntingCryGoal() { return castTauntingCryGoal; }
     private GenericTargetedSpellGoal castMaceSlamGoal;
     public GenericTargetedSpellGoal getCastMaceSlamGoal() { return castMaceSlamGoal; }
+    private GenericUntargetedSpellGoal castAvatarGoal;
+    public GenericUntargetedSpellGoal getCastAvatarGoal() { return castAvatarGoal; }
 
     private MoveToTargetBlockGoal moveGoal;
     private SelectedTargetGoal<? extends LivingEntity> targetGoal;
@@ -195,7 +197,11 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     final static private int ATTACK_WINDUP_TICKS = 3;
 
-    private int avatarTicksLeft = 0;
+    public boolean avatarScalingStarted = false;
+    public int avatarTicksLeft = 0;
+    private int avatarScaleTicks = 0; // at max, will be full sized
+    private int AVATAR_SCALE_TICKS_MAX = 40;
+    private float AVATAR_MAX_BONUS_SCALE = 0.75f;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -215,6 +221,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public int getAnimateTicksLeft() { return animateTicks; }
 
     public void playSingleAnimation(UnitAnimationAction animAction) {
+        animateScaleReducing = false;
         switch (animAction) {
             case ATTACK_UNIT, ATTACK_BUILDING -> {
                 activeAnimDef = RoyalGuardAnimations.ATTACK;
@@ -285,14 +292,9 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         }
         this.castMaceSlamGoal.tick();
         this.castTauntingCryGoal.tick();
+        this.castAvatarGoal.tick();
         this.tickBattleRage();
-
-        if (avatarTicksLeft > 0) {
-            avatarTicksLeft -= 1;
-            if (avatarTicksLeft <= 0) {
-                disableAvatar();
-            }
-        }
+        this.tickAvatar();
     }
 
     @Override
@@ -356,9 +358,17 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
                 this,
                 0,
                 this::tauntingCry,
-                UnitAnimationAction.CHARGE_SPELL,
+                null,
                 UnitAnimationAction.STOP,
                 UnitAnimationAction.CAST_SPELL
+        );
+        this.castAvatarGoal = new GenericUntargetedSpellGoal(
+                this,
+                40,
+                this::enableAvatar,
+                UnitAnimationAction.CHARGE_SPELL,
+                UnitAnimationAction.STOP,
+                null
         );
     }
 
@@ -381,6 +391,16 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         return pSpawnData;
     }
 
+    @Override
+    public void resetBehaviours() {
+        animateScaleReducing = true;
+        this.castMaceSlamGoal.stop();
+        this.castTauntingCryGoal.stop();
+        this.castAvatarGoal.stop();
+        if (avatarTicksLeft <= 0 && avatarScalingStarted) {
+            disableAvatar();
+        }
+    }
 
     public void maceSlam(BlockPos blockPos) {
         if (level().isClientSide())
@@ -453,22 +473,37 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         }
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose pPose) {
-        if (avatarTicksLeft > 0)
-            return super.getDimensions(pPose).scale(1.5f);
-        return super.getDimensions(pPose);
+    public float getScale() {
+        return 1 + (AVATAR_MAX_BONUS_SCALE * ((float) avatarScaleTicks / AVATAR_SCALE_TICKS_MAX));
+    }
+
+    private void tickAvatar() {
+        if (avatarTicksLeft > 0) {
+            avatarTicksLeft -= 1;
+            if (avatarTicksLeft <= 0) {
+                disableAvatar();
+            }
+        }
+        if (avatarScalingStarted && avatarScaleTicks < AVATAR_SCALE_TICKS_MAX) {
+            avatarScaleTicks += 1;
+            if (avatarScaleTicks == AVATAR_SCALE_TICKS_MAX * 0.75f) {
+                animateScaleReducing = true;
+            }
+            this.reapplyPosition();
+            this.refreshDimensions();
+        } else if (!avatarScalingStarted && avatarScaleTicks > 0) {
+            avatarScaleTicks -= 1;
+            this.reapplyPosition();
+            this.refreshDimensions();
+        }
     }
 
     public void disableAvatar() {
-        this.reapplyPosition();
-        this.refreshDimensions();
+        avatarScalingStarted = false;
     }
 
     public void enableAvatar() {
         avatarTicksLeft = Avatar.DURATION;
-        this.reapplyPosition();
-        this.refreshDimensions();
     }
 }
 

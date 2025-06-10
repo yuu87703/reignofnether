@@ -85,7 +85,7 @@ public class GenericUntargetedSpellGoal extends Goal {
 
     public void startCasting() {
         this.isCasting = true;
-        if (!this.mob.level().isClientSide()) {
+        if (!this.mob.level().isClientSide() && startAnimation != null) {
             UnitAnimationClientboundPacket.sendBasicPacket(startAnimation, this.mob);
         }
     }
@@ -94,7 +94,7 @@ public class GenericUntargetedSpellGoal extends Goal {
     public void stop() {
         this.ticksCasting = 0;
         this.isCasting = false;
-        if (!this.mob.level().isClientSide())
+        if (!this.mob.level().isClientSide() && stopAnimation != null)
             UnitAnimationClientboundPacket.sendBasicPacket(stopAnimation, this.mob);
     }
 }

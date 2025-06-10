@@ -157,7 +157,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     @Override public void setMana(float amount) {
         this.mana = Math.min(maxMana, amount);
         if (!level().isClientSide())
-            HeroClientboundPacket.setMana(getId(), amount);
+            HeroClientboundPacket.setMana(getId(), this.mana);
     }
     @Override public float getManaRegenPerSecond() { return manaRegenPerSecond; }
     @Override public float getManaBonusPerLevel() { return manaBonusPerLevel; }
@@ -210,6 +210,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     public int getAnimateTicksLeft() { return animateTicks; }
 
     public void playSingleAnimation(UnitAnimationAction animAction) {
+        animateScaleReducing = false;
         switch (animAction) {
             case ATTACK_UNIT, ATTACK_BUILDING -> {
                 activeAnimDef = PiglinMerchantAnimations.ATTACK;

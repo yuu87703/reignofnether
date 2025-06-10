@@ -251,6 +251,7 @@
     "abilities.reignofnether.battle_rage.rank2": "Rank 2: Up to +1.8hp/s regen, +0.75 mana per dmg taken",
     "abilities.reignofnether.battle_rage.rank3": "Rank 3: Up to +2.4hp/s regen, +1.0 mana per dmg taken",
     "abilities.reignofnether.avatar": "Avatar of War (Ultimate)",
+    "abilities.reignofnether.avatar.already_active": "Avatar is already active",
     "abilities.reignofnether.avatar.stats": "\uE004  %ds   \uE008  %d",
     "abilities.reignofnether.avatar.tooltip1": "Grow in size and strength, becoming an embodient of war itself.",
     "abilities.reignofnether.avatar.tooltip2": "Grants +%d max health and a stunning explosive attack.",
