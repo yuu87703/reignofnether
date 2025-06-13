@@ -190,7 +190,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 4;
+    final static private int ATTACK_WINDUP_TICKS = 32;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;

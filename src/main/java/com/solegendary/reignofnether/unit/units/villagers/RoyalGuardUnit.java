@@ -200,7 +200,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 3;
+    final static private int ATTACK_WINDUP_TICKS = 12;
 
     public int tauntingCryTicksLeft = 0;
 
@@ -279,6 +279,16 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
             this.setHealth(this.getMaxHealth());
         if (getHealth() > getMaxHealth())
             setHealth(getMaxHealth());
+    }
+
+    private void updateKnockbackResistance() {
+        AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+        if (ai != null) {
+            if (avatarTicksLeft > 0 || tauntingCryTicksLeft > 0)
+                ai.setBaseValue(KNOCKBACK_RESISTANCE);
+            else
+                ai.setBaseValue(0.5f);
+        }
     }
 
     @Override
@@ -365,19 +375,20 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.tickBattleRage();
         this.tickAvatar();
 
-        if (getAnimateTicksLeft() > 0 && activeAnimDef == RoyalGuardAnimations.ATTACK) {
-            BlockPos maceSlamBp = castMaceSlamGoal.getCastTarget();
-            if (maceSlamBp != null) {
-                double x0 = maceSlamBp.getX() - this.getX();
-                double z0 = maceSlamBp.getZ() - this.getZ();
-                float f = (float) (Mth.atan2(z0, x0) * 57.2957763671875) - 90.0F;
-                this.setYRot(this.rotlerp(this.getYRot(), f, 90f));
-            } else if (getTarget() != null) {
-                double x0 = getTarget().getX() - this.getX();
-                double z0 = getTarget().getZ() - this.getZ();
-                float f = (float) (Mth.atan2(z0, x0) * 57.2957763671875) - 90.0F;
-                this.setYRot(this.rotlerp(this.getYRot(), f, 90f));
-            }
+        if (tickCount % 100 == 0)
+            updateKnockbackResistance();
+
+        BlockPos maceSlamBp = castMaceSlamGoal.getCastTarget();
+        if (maceSlamBp != null && distanceToSqr(Vec3.atCenterOf(maceSlamBp)) < 3) {
+            double x0 = maceSlamBp.getX() - this.getX();
+            double z0 = maceSlamBp.getZ() - this.getZ();
+            float f = (float) (Mth.atan2(z0, x0) * 57.2957763671875) - 90.0F;
+            this.setYRot(this.rotlerp(this.getYRot(), f, 10f));
+        } else if (getTarget() != null && distanceToSqr(getTarget().position()) < 3) {
+            double x0 = getTarget().getX() - this.getX();
+            double z0 = getTarget().getZ() - this.getZ();
+            float f = (float) (Mth.atan2(z0, x0) * 57.2957763671875) - 90.0F;
+            this.setYRot(this.rotlerp(this.getYRot(), f, 10f));
         }
     }
 
@@ -494,10 +505,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.castAvatarGoal.stop();
         if (avatarTicksLeft <= 0 && avatarScalingStarted) {
             disableAvatar();
-            AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
-            if (ai != null) {
-                ai.setBaseValue(KNOCKBACK_RESISTANCE);
-            }
+            updateKnockbackResistance();
         }
     }
 
@@ -573,10 +581,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
             }
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, tauntingCry.duration, 2));
             tauntingCryTicksLeft = tauntingCry.duration;
-            AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
-            if (ai != null) {
-                ai.setBaseValue(1.0d);
-            }
+            updateKnockbackResistance();
         }
     }
 
@@ -585,10 +590,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
             tauntingCryTicksLeft -= 1;
         }
         if (tauntingCryTicksLeft == 1) {
-            AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
-            if (ai != null) {
-                ai.setBaseValue(KNOCKBACK_RESISTANCE);
-            }
+            updateKnockbackResistance();
         }
     }
 
@@ -635,10 +637,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     public void enableAvatar() {
         avatarTicksLeft = Avatar.DURATION;
-        AttributeInstance ai = getAttribute(Attributes.KNOCKBACK_RESISTANCE);
-        if (ai != null) {
-            ai.setBaseValue(1.0d);
-        }
+        updateKnockbackResistance();
         setStatsForLevel();
         heal(Avatar.BONUS_HEALTH);
         if (!level().isClientSide()) {

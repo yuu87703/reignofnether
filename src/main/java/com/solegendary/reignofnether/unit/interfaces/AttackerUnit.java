@@ -126,6 +126,8 @@ public interface AttackerUnit {
                 // doesn't tick on its own for some reason?
                 if (((Mob) attackerUnit).isVehicle())
                     meleeAttackUnitGoal.tick();
+                if (meleeAttackUnitGoal instanceof MeleeWindupAttackUnitGoal goal)
+                    goal.checkAndPerformAttackAlt();
             }
             else if (attackerUnit.getAttackGoal() instanceof UnitRangedAttackGoal rangedAttackGoal)
                 rangedAttackGoal.tickAttackCooldown();
