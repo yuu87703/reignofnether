@@ -5,8 +5,10 @@ import com.solegendary.reignofnether.ability.heroAbilities.piglin.FancyFeast;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.GreedIsGoodPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.LootExplosion;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.ThrowTNT;
+import com.solegendary.reignofnether.entities.ThrowableTntProjectile;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.registrars.ItemRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -35,6 +37,7 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -162,8 +165,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     @Override public float getManaRegenPerSecond() { return manaRegenPerSecond; }
     @Override public float getManaBonusPerLevel() { return manaBonusPerLevel; }
 
-    final static public float attackDamage = 6.0f;
-    final static public float attackBonusPerLevel = 0.5f;
+    final static public float attackDamage = 8.0f;
+    final static public float attackBonusPerLevel = 0.7f;
     final static public float attacksPerSecond = 0.35f;
     final static public float maxHealth = 150.0f;
     final static public float maxHealthBonusPerLevel = 10.0f;
@@ -301,7 +304,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         this.attackBuildingGoal = new MeleeAttackBuildingGoal(this);
         this.castTNTGoal = new GenericTargetedSpellGoal(
                 this,
-                20,
+                32,
                 ThrowTNT.RANGE,
                 UnitAnimationAction.ATTACK_UNIT,
                 null,
@@ -310,7 +313,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         );
         this.castFancyFeastGoal = new GenericTargetedSpellGoal(
                 this,
-                60,
+                32,
                 FancyFeast.RANGE,
                 UnitAnimationAction.ATTACK_UNIT,
                 null,
@@ -345,8 +348,43 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         return pSpawnData;
     }
 
-    public void throwTNT(BlockPos targetBp) {
+    public ThrowTNT getThrowTNT() {
+        for (Ability ability : abilities)
+            if (ability instanceof ThrowTNT)
+                return (ThrowTNT) ability;
+        return null;
+    }
 
+    public FancyFeast getFancyFeast() {
+        for (Ability ability : abilities)
+            if (ability instanceof FancyFeast)
+                return (FancyFeast) ability;
+        return null;
+    }
+
+    public GreedIsGoodPassive getGreedIsGood() {
+        for (Ability ability : abilities)
+            if (ability instanceof GreedIsGoodPassive)
+                return (GreedIsGoodPassive) ability;
+        return null;
+    }
+
+    public LootExplosion getLootExplosion() {
+        for (Ability ability : abilities)
+            if (ability instanceof LootExplosion)
+                return (LootExplosion) ability;
+        return null;
+    }
+
+    public void throwTNT(BlockPos targetBp) {
+        ThrowableTntProjectile tnt = new ThrowableTntProjectile(level(), this);
+        tnt.setItem(new ItemStack(ItemRegistrar.THROWABLE_TNT.get()));
+        Vec3 dMove = Vec3.atCenterOf(targetBp).subtract(this.getEyePosition())
+                .multiply(1,0,1)
+                .scale(0.05)
+                .add(0,0.5,0);
+        tnt.setDeltaMovement(dMove);
+        level().addFreshEntity(tnt);
     }
 
     public void fancyFeast(BlockPos targetBp) {

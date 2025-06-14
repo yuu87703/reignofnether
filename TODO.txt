@@ -69,8 +69,8 @@ Bugfixes
 
 Quality of Life
 ---------------
-
-
+[❌] Allow editing of relationships of existing units
+[❌] Allow full toolbar for neutral/enemy units instead of just attack/stop
 
 Balancing
 ---------
