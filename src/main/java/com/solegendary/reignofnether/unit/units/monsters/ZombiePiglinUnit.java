@@ -35,6 +35,9 @@ import java.util.List;
 
 public class ZombiePiglinUnit extends ZombifiedPiglin implements Unit, AttackerUnit {
     // region
+    private int eatingTicksLeft = 0;
+    public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
+    public int getEatingTicksLeft() { return eatingTicksLeft; }
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
     public BlockPos getAnchor() { return anchorPos; }

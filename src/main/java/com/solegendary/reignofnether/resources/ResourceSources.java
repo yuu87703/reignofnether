@@ -271,33 +271,11 @@ public class ResourceSources {
                     120,
                     ResourceName.FOOD
             ),
-            new ResourceSource("Extra large food item",
+            new ResourceSource("Misc food item",
                     List.of(),
-                    List.of(Items.COOKED_BEEF,  Items.COOKED_CHICKEN, Items.COOKED_PORKCHOP, Items.COOKED_RABBIT, Items.CHICKEN,
-                            Items.COOKED_MUTTON, Items.CAKE, Items.PUMPKIN_PIE, Items.RABBIT_STEW, Items.ENCHANTED_GOLDEN_APPLE),
-                    0,
-                    75,
-                    ResourceName.FOOD
-            ),
-            new ResourceSource("Large food item",
-                    List.of(),
-                    List.of(Items.BEEF, Items.PORKCHOP, Items.MUTTON, Items.RABBIT, Items.MUSHROOM_STEW, Items.BEETROOT_SOUP, Items.GOLDEN_APPLE, Items.GOLDEN_CARROT),
-                    0,
-                    50,
-                    ResourceName.FOOD
-            ),
-            new ResourceSource("Medium food item",
-                    List.of(),
-                    List.of(Items.LEATHER, Items.EGG, Items.APPLE, Items.BREAD, Items.HONEY_BOTTLE, Items.COD, Items.COOKED_COD, Items.SALMON, Items.COOKED_SALMON, Items.GLOW_BERRIES),
+                    List.of(Items.LEATHER, Items.EGG, Items.HONEY_BOTTLE),
                     0,
                     25,
-                    ResourceName.FOOD
-            ),
-            new ResourceSource("Small food item",
-                    List.of(),
-                    List.of(Items.ROTTEN_FLESH, Items.MELON_SLICE, Items.SPIDER_EYE, Items.POISONOUS_POTATO),
-                    0,
-                    5,
                     ResourceName.FOOD
             )
     );

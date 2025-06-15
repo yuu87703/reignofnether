@@ -48,6 +48,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -381,7 +382,7 @@ public class UnitClientEvents {
         for(LivingEntity entity : allUnits) {
             if (entity.getId() == entityId && MC.level != null) {
                 if (entity instanceof Unit unit) {
-                    unit.getItems().clear();
+                    unit.getItems().removeIf(i -> !i.getItem().isEdible());
                     unit.getItems().add(new ItemStack(Items.SUGAR, res.food));
                     unit.getItems().add(new ItemStack(Items.STICK, res.wood));
                     unit.getItems().add(new ItemStack(Items.STONE, res.ore));
@@ -757,6 +758,12 @@ public class UnitClientEvents {
                     }
                 }
             }
+            for (LivingEntity entity : getAllUnits()) {
+                if (entity instanceof Unit unit && unit.isEatingFood()) {
+                    System.out.println(unit.getEatingTicksLeft() + " " + unit.getFoodBeingEaten().getDescriptionId());
+                    MyRenderer.renderItemInFrontOfEntityFace(evt.getPoseStack(), entity, evt.getPartialTick(), new ItemStack(unit.getFoodBeingEaten()));
+                }
+            }
         }
 
         // AFTER_CUTOUT_BLOCKS lets us see checkpoints through leaves
@@ -1090,6 +1097,15 @@ public class UnitClientEvents {
         return units;
     }
 
+    public static void syncUnitEatingFood(int unitId, int itemId) {
+        for (LivingEntity entity : getAllUnits()) {
+            if (unitId == entity.getId() && entity instanceof Unit unit) {
+                System.out.println("added porkchop on client");
+                unit.getItems().add(new ItemStack(BuiltInRegistries.ITEM.byId(itemId)));
+                break;
+            }
+        }
+    }
 
     /*
     @SubscribeEvent

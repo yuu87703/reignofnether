@@ -43,6 +43,9 @@ import java.util.UUID;
 
 public class WitherSkeletonUnit extends WitherSkeleton implements Unit, AttackerUnit {
     // region
+    private int eatingTicksLeft = 0;
+    public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
+    public int getEatingTicksLeft() { return eatingTicksLeft; }
     private BlockPos anchorPos = new BlockPos(0,0,0);
     public void setAnchor(BlockPos bp) { anchorPos = bp; }
     public BlockPos getAnchor() { return anchorPos; }

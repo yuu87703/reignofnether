@@ -24,15 +24,12 @@ Necromancer
 
 Piglin Merchant
     - TNT Toss
-        [❌] Throws TNT item entity
-            - Parent to hero
-            - When contacting the ground, place primed TNT at the blockPosition()
-            - New TNTBlock required to scale explosion power?
+        [❌] Improve accuracy
 
     - Fancy Feast
         [❌] Throw food entities
         [❌] All piglin units need an EatFoodItemGoal
-            - If damaged, will stop to pick up food and show an eating animation to heal
+            - If damaged, will stop to eat food on the ground to heal
 
     - Loot Explosion
         [❌] Untargeted, create randomised loot
@@ -47,11 +44,10 @@ Royal Guard
         [🟡] Enforce stun on non-units too
 
     - Taunting Cry
-        [🟡] Add 'taunt' effect to all units
-            - Show angry villager particle effects
+        [❌] Show angry villager particle effects
 
     - Avatar of War
-        [❌] When active, cause a tiny explosion and splash damage on regular attacks
+        [❌] Fix portrait scale/yoffset
 
 
 
