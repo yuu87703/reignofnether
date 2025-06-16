@@ -10,6 +10,7 @@
         "BlazeMixin",
         "EntityMixin",
         "EvokerFangsMixin",
+        "ItemEntityMixin",
         "LeavesBlockMixin",
         "LivingEntityMixin",
         "MixinNetworkFilters",

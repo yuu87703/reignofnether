@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.registrars.ItemRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
@@ -26,6 +27,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -384,14 +387,49 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         tnt.setItem(new ItemStack(ItemRegistrar.THROWABLE_TNT.get()));
         Vec3 dMove = Vec3.atCenterOf(targetBp).subtract(this.getEyePosition())
                 .multiply(1,0,1)
-                .scale(0.05)
+                .scale(0.04)
                 .add(0,0.5,0);
         tnt.setDeltaMovement(dMove);
         level().addFreshEntity(tnt);
+        level().playSound(null, getX(), getY(), getZ(), SoundEvents.EGG_THROW,
+                SoundSource.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+
+        GreedIsGoodPassive greedIsGood = getGreedIsGood();
+        int resourceBonus = 0;
+        if (greedIsGood.isAutocasting())
+            resourceBonus = greedIsGood.spendResourcesAndGet100sSpent(ResourceName.WOOD);
+
+        ThrowTNT throwTNT = getThrowTNT();
+        throwTNT.setCooldown(throwTNT.getCooldown() - (resourceBonus * ThrowTNT.LESS_COOLDOWN_PER_100_RESOURCES));
+        setMana(getMana() + (resourceBonus * ThrowTNT.LESS_MANA_PER_100_RESOURCES));
     }
 
     public void fancyFeast(BlockPos targetBp) {
+        Vec3 pos = getEyePosition();
 
+        GreedIsGoodPassive greedIsGood = getGreedIsGood();
+        int resourceBonus = 0;
+        if (greedIsGood.isAutocasting())
+            resourceBonus = greedIsGood.spendResourcesAndGet100sSpent(ResourceName.FOOD);
+
+        int numItems = FancyFeast.BASE_ITEMS + (FancyFeast.BONUS_ITEMS_PER_RESOURCES * resourceBonus);
+
+        for (int i = 0; i < numItems; i++) {
+            ItemEntity foodEntity = new ItemEntity(level(), pos.x, pos.y, pos.z, new ItemStack(getFancyFeast().getFoodItem()));
+            foodEntity.setThrower(getUUID());
+            Vec3 dMove = Vec3.atCenterOf(targetBp).subtract(pos)
+                    .multiply(1,0,1)
+                    .scale(0.04)
+                    .add(
+                            (random.nextFloat() - 0.5f) / 4,
+                            0.5,
+                            (random.nextFloat() - 0.5f) / 4
+                    );
+            foodEntity.setDeltaMovement(dMove);
+            level().addFreshEntity(foodEntity);
+            level().playSound(null, getX(), getY(), getZ(), SoundEvents.EGG_THROW,
+                    SoundSource.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+        }
     }
 
     public void lootExplosion() {

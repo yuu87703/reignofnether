@@ -57,7 +57,7 @@ public class SoulSiphonPassive extends HeroAbility {
         AbilityButton button = new AbilityButton("Soul Siphon",
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png"),
             hotkey,
-            this::getAutocast,
+            this::isAutocasting,
             () -> rank == 0,
             () -> true,
             this::toggleAutocast,
@@ -114,7 +114,7 @@ public class SoulSiphonPassive extends HeroAbility {
 
     // returns amount of souls consumed
     public boolean consumeSouls() {
-        if (getAutocast() && souls >= soulsPerCast) {
+        if (isAutocasting() && souls >= soulsPerCast) {
             souls -= soulsPerCast;
             return true;
         }

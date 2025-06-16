@@ -92,11 +92,16 @@ public interface Unit {
     public int getMaxResources();
 
     public default boolean isEatingFood() { return getEatingTicksLeft() > 0; };
+    public default boolean isHoldingFood() {
+        for (ItemStack itemStack : getItems())
+            if (itemStack.getItem().isEdible())
+                return true;
+        return false;
+    };
     public default Item getFoodBeingEaten() {
-        for (ItemStack itemStack : getItems()) {
+        for (ItemStack itemStack : getItems())
             if (itemStack.getItem().isEdible())
                 return itemStack.getItem();
-        }
         return Items.AIR;
     }
     public void setEatingTicksLeft(int amount);
@@ -308,7 +313,7 @@ public interface Unit {
 
     private static void checkAndPickupEdibleFood(Unit unit) {
         Mob unitMob = (Mob) unit;
-        if (unitMob.canPickUpLoot()) {
+        if (!unit.isHoldingFood() && unitMob.getHealth() < unitMob.getMaxHealth()) {
             for (ItemEntity itementity : unitMob.level().getEntitiesOfClass(ItemEntity.class, unitMob.getBoundingBox().inflate(1, 0, 1))) {
                 if (!itementity.isRemoved() && !itementity.getItem().isEmpty() && !itementity.hasPickUpDelay() && unitMob.isAlive()) {
                     ItemStack itemstack = itementity.getItem();
@@ -322,6 +327,7 @@ public interface Unit {
                         itemstack.setCount(itemstack.getCount() - 1);
                         if (itemstack.getCount() <= 0)
                             itementity.discard();
+                        break;
                     }
                 }
             }

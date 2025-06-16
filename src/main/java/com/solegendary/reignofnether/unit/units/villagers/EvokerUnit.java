@@ -215,7 +215,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
         for (Ability ability : getAbilities()) {
             if (ability instanceof CastSummonVexes castSummonVexes) {
-                if (castSummonVexes.getAutocast() && !isCastingSpell() && castSummonVexes.isOffCooldown() && !level().isClientSide() && isIdle() &&
+                if (castSummonVexes.isAutocasting() && !isCastingSpell() && castSummonVexes.isOffCooldown() && !level().isClientSide() && isIdle() &&
                     tickCount % 4 == 0 && ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_EVOKER_VEXES)) {
                     this.castSummonVexesGoal.startCasting();
                 }

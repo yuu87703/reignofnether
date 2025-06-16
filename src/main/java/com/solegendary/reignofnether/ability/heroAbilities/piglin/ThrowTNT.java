@@ -31,7 +31,8 @@ public class ThrowTNT extends HeroAbility {
 
     public static final int RANGE = 12;
     public float explosionPower = 2;
-    private static int LESS_COOLDOWN_PER_100_RESOURCES = 5 * ResourceCost.TICKS_PER_SECOND;
+    public static int LESS_COOLDOWN_PER_100_RESOURCES = 5 * ResourceCost.TICKS_PER_SECOND;
+    public static int LESS_MANA_PER_100_RESOURCES = 5;
 
     public ThrowTNT(HeroUnit hero) {
         super(hero, 3, 40, UnitAction.THROW_TNT, 25 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
@@ -85,7 +86,7 @@ public class ThrowTNT extends HeroAbility {
                 fcsIcons(I18n.get("abilities.reignofnether.throw_tnt.stats", Math.round(explosionPower * 6.67f), cooldownMax / 20, RANGE, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip2", LESS_COOLDOWN_PER_100_RESOURCES / 20))
+                fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip2", LESS_COOLDOWN_PER_100_RESOURCES / 20, LESS_MANA_PER_100_RESOURCES))
         );
     }
 
@@ -95,7 +96,7 @@ public class ThrowTNT extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement()), getLevelReqStyle()),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip2", LESS_COOLDOWN_PER_100_RESOURCES / 20)),
+                fcs(I18n.get("abilities.reignofnether.throw_tnt.tooltip2", LESS_COOLDOWN_PER_100_RESOURCES / 20, LESS_MANA_PER_100_RESOURCES)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.throw_tnt.rank1"), rank == 0),
                 fcs(I18n.get("abilities.reignofnether.throw_tnt.rank2"), rank == 1),
