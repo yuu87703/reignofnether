@@ -21,15 +21,15 @@ HEROES (in order of priority)
 Necromancer
     [❌] Purple particles on soul usage and soul gain
     [❌] Magical projectile model and sound
+    [❌] Allow consumption of souls for healing/mana
 
 Piglin Merchant
-    - TNT Toss
-        [❌] Improve accuracy
+    [❌] Building attack animation not sycned
+    [❌] Allow cancelling all abilities
 
     - Fancy Feast
-        [❌] Throw food entities
-        [❌] All piglin units need an EatFoodItemGoal
-            - If damaged, will stop to eat food on the ground to heal
+        [🟡] Test all piglin units work
+        [❌] Only allow friendly units to pick up the thrown food
 
     - Loot Explosion
         [❌] Untargeted, create randomised loot
@@ -40,6 +40,7 @@ Piglin Merchant
 
 Royal Guard
     - Mace Slam
+        [❌] Add hammer throw alternate
         [❌] Raise ground blocks with block displays?
         [🟡] Enforce stun on non-units too
 
@@ -56,9 +57,6 @@ Bugfixes
 [🟡] RTS Start Blocks that are removed via command are no longer retained
 [❌] GUI autoscaling is weird on 2560x1440
 
-[❌] Hero melee attack animation is not playing when attacking buildings
-[🟡] Mace slam should damage buildings
-[❌] Attack animation sometimes doesn't play when under attack
 [❌] Don't allow regular attack during ability animations'
     - set windup ticks to 0 repeatedly during channelling
 
@@ -67,6 +65,7 @@ Quality of Life
 ---------------
 [❌] Allow editing of relationships of existing units
 [❌] Allow full toolbar for neutral/enemy units instead of just attack/stop
+
 
 Balancing
 ---------

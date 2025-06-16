@@ -307,7 +307,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeAttackBuildingGoal(this);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
         this.castTNTGoal = new GenericTargetedSpellGoal(
                 this,
                 32,

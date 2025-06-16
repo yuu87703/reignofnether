@@ -24,7 +24,7 @@ public class MeleeWindupAttackUnitGoal extends AbstractMeleeAttackUnitGoal {
     }
 
     // ensure that animation syncs with actual attack ticks by calling this from mob.tick()
-    public void checkAndPerformAttackAlt() {
+    public void checkAndPerformAttackWithWindup() {
         LivingEntity target = mob.getTarget();
         if (target != null) {
             this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);

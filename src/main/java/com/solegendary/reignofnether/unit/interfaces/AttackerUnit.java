@@ -127,7 +127,7 @@ public interface AttackerUnit {
                 if (((Mob) attackerUnit).isVehicle())
                     meleeAttackUnitGoal.tick();
                 if (meleeAttackUnitGoal instanceof MeleeWindupAttackUnitGoal goal)
-                    goal.checkAndPerformAttackAlt();
+                    goal.checkAndPerformAttackWithWindup();
             }
             else if (attackerUnit.getAttackGoal() instanceof UnitRangedAttackGoal rangedAttackGoal)
                 rangedAttackGoal.tickAttackCooldown();

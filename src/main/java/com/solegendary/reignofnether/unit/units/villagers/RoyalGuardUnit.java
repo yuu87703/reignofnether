@@ -452,7 +452,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.garrisonGoal = new GarrisonGoal(this);
         this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeAttackBuildingGoal(this);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.castMaceSlamGoal = new GenericTargetedSpellGoal(
                 this,
