@@ -121,23 +121,33 @@ public class SandboxActionButtons {
                 () -> false,
                 () -> true,
                 () -> {
-                    if (MC.player != null && HudClientEvents.hudSelectedEntity instanceof Unit unit) {
-                        switch (getRelationshipToHudSelectedUnit()) {
-                            default -> unit.setOwnerName("");
-                            case NEUTRAL -> unit.setOwnerName("Enemy");
-                            case HOSTILE -> unit.setOwnerName(MC.player.getName().getString());
+                    if (MC.player != null) {
+                        for (LivingEntity entity : UnitClientEvents.getSelectedUnits()) {
+                            if (entity instanceof Unit unit) {
+                                switch (UnitClientEvents.getPlayerToEntityRelationship(entity)) {
+                                    default -> unit.setOwnerName("");
+                                    case NEUTRAL -> unit.setOwnerName("Enemy");
+                                    case HOSTILE -> unit.setOwnerName(MC.player.getName().getString());
+                                }
+                                SandboxServerboundPacket.setOwner(entity.getId(), unit.getOwnerName());
+                                updateButtons();
+                            }
                         }
-                        updateButtons();
                     }
                 },
                 () -> {
-                    if (MC.player != null && HudClientEvents.hudSelectedEntity instanceof Unit unit) {
-                        switch (getRelationshipToHudSelectedUnit()) {
-                            default -> unit.setOwnerName("Enemy");
-                            case NEUTRAL -> unit.setOwnerName(MC.player.getName().getString());
-                            case HOSTILE -> unit.setOwnerName("");
+                    if (MC.player != null) {
+                        for (LivingEntity entity : UnitClientEvents.getSelectedUnits()) {
+                            if (entity instanceof Unit unit) {
+                                switch (getRelationshipToHudSelectedUnit()) {
+                                    default -> unit.setOwnerName("Enemy");
+                                    case NEUTRAL -> unit.setOwnerName(MC.player.getName().getString());
+                                    case HOSTILE -> unit.setOwnerName("");
+                                }
+                                SandboxServerboundPacket.setOwner(entity.getId(), unit.getOwnerName());
+                                updateButtons();
+                            }
                         }
-                        updateButtons();
                     }
                 },
                 List.of(
