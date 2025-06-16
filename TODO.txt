@@ -29,7 +29,6 @@ Piglin Merchant
 
     - Fancy Feast
         [🟡] Test all piglin units work
-        [❌] Only allow friendly units to pick up the thrown food
 
     - Loot Explosion
         [❌] Untargeted, create randomised loot

@@ -46,6 +46,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Fireball;
@@ -286,7 +287,9 @@ public class UnitServerEvents {
         String ownerName1 = unit.getOwnerName();
         String ownerName2 = "";
 
-        if (entity instanceof Player player) {
+        if (entity instanceof ItemEntity item && item.getOwner() instanceof Unit unitItemOwner) {
+            ownerName2 = unitItemOwner.getOwnerName();
+        } else if (entity instanceof Player player) {
             ownerName2 = player.getName().getString();
         } else if (entity instanceof Unit) {
             ownerName2 = ((Unit) entity).getOwnerName();

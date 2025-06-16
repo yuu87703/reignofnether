@@ -28,7 +28,6 @@ public class SandboxActionButtons {
     public static Button setAnchor;
     public static Button resetToAnchor;
     public static Button removeAnchor;
-    public static Button setRelationship;
 
     private static boolean neutralUnitsSelected() {
         for (LivingEntity entity : UnitClientEvents.getSelectedUnits())
@@ -107,7 +106,10 @@ public class SandboxActionButtons {
                         fcs(I18n.get("hud.actionbuttons.reignofnether.remove_anchor"), true)
                 )
         );
-        setRelationship = new Button(
+    }
+
+    public static Button getSetRelationshipButton() {
+        return new Button(
                 "Toggle Relationship",
                 Button.itemIconSize,
                 switch (getRelationshipToHudSelectedUnit()) {

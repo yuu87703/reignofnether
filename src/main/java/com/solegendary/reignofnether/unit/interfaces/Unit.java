@@ -14,6 +14,7 @@ import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.*;
@@ -315,7 +316,10 @@ public interface Unit {
         Mob unitMob = (Mob) unit;
         if (!unit.isHoldingFood() && unitMob.getHealth() < unitMob.getMaxHealth()) {
             for (ItemEntity itementity : unitMob.level().getEntitiesOfClass(ItemEntity.class, unitMob.getBoundingBox().inflate(1, 0, 1))) {
-                if (!itementity.isRemoved() && !itementity.getItem().isEmpty() && !itementity.hasPickUpDelay() && unitMob.isAlive()) {
+
+                Relationship rl = UnitServerEvents.getUnitToEntityRelationship(unit, itementity);
+                if (!itementity.isRemoved() && !itementity.getItem().isEmpty() && !itementity.hasPickUpDelay() && unitMob.isAlive() &&
+                    (rl == Relationship.OWNED || rl == Relationship.FRIENDLY)) {
                     ItemStack itemstack = itementity.getItem();
                     if (itemstack.getItem().isEdible() &&
                             unitMob.getHealth() < unitMob.getMaxHealth() &&

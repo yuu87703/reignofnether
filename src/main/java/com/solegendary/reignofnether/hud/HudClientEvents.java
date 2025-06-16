@@ -855,7 +855,7 @@ public class HudClientEvents {
                         actionButtons.add(callToArmsUnit.getButton(Keybindings.keyV));
 
             if (SandboxClientEvents.isSandboxPlayer()) {
-                actionButtons.add(SandboxActionButtons.setRelationship);
+                actionButtons.add(SandboxActionButtons.getSetRelationshipButton());
             }
 
             for (Button actionButton : actionButtons) {
