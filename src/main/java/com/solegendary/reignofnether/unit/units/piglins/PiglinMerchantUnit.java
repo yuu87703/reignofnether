@@ -227,14 +227,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            case CHARGE_SPELL -> {
-                activeAnimDef = PiglinMerchantAnimations.SPELL_CHARGE;
-                activeAnimState = spellChargeAnimState;
-                animateScale = 1.0f;
-                startAnimation(activeAnimDef);
-            }
             case CAST_SPELL -> {
-                activeAnimDef = PiglinMerchantAnimations.SPELL_ACT;
+                activeAnimDef = PiglinMerchantAnimations.SPELL_FULL;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
@@ -330,9 +324,9 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                 this,
                 60,
                 this::lootExplosion,
-                UnitAnimationAction.CHARGE_SPELL,
+                UnitAnimationAction.CAST_SPELL,
                 UnitAnimationAction.STOP,
-                UnitAnimationAction.CAST_SPELL
+                null
         );
     }
 
@@ -352,6 +346,14 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
+    }
+
+    @Override
+    public void resetBehaviours() {
+        animateScaleReducing = true;
+        this.castTNTGoal.stop();
+        this.castFancyFeastGoal.stop();
+        this.castLootExplosionGoal.stop();
     }
 
     public ThrowTNT getThrowTNT() {

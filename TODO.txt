@@ -33,7 +33,7 @@ Piglin Merchant
     - Loot Explosion
         [❌] Untargeted, create randomised loot
         [❌] All piglin units should be able to pick up and equip weapons and armor
-        [❌] Include resistance potions for non-infantry
+        [❌] Include absorb potions for non-infantry
             - Pick up instead of splashed?
 
 
@@ -53,7 +53,7 @@ Royal Guard
 
 Bugfixes
 --------
-[🟡] RTS Start Blocks that are removed via command are no longer retained
+[🟡] RTS Start Blocks that are removed via command are no longer tracked
 [❌] GUI autoscaling is weird on 2560x1440
 
 [❌] Don't allow regular attack during ability animations'
