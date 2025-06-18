@@ -1,5 +1,5 @@
 
-1.19.2-1.1.7b
+1.19.2-1.1.7c
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -57,7 +57,7 @@ Royal Guard
 Bugfixes
 --------
 [🟡] RTS Start Blocks that are removed via command are no longer tracked
-[🟡] Fixed Ravager Artillery not damaging buildings
+[🟡] Fixed Ravager Artillery arrows not damaging buildings
 [🟡] Fixed the Drowned production button not working correctly
 
 [❌] Don't allow regular attack during ability animations'
