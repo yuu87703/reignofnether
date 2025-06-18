@@ -385,7 +385,7 @@ public class ResourceSources {
             ),
             new ResourceSource("Tier 4 Nether Ores",
                     List.of(Blocks.ANCIENT_DEBRIS),
-                    List.of(Items.ANCIENT_DEBRIS),
+                    List.of(Items.ANCIENT_DEBRIS, Items.NETHERITE_SCRAP),
                     TICKS_PER_SECOND * 45,
                     120,
                     ResourceName.ORE
@@ -399,14 +399,14 @@ public class ResourceSources {
             ),
             new ResourceSource("Tier 2 Ores",
                     List.of(Blocks.COPPER_ORE, Blocks.DEEPSLATE_COPPER_ORE, Blocks.IRON_ORE, Blocks.LAPIS_ORE, Blocks.REDSTONE_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.DEEPSLATE_LAPIS_ORE, Blocks.DEEPSLATE_REDSTONE_ORE),
-                    List.of(Items.RAW_IRON, Items.RAW_COPPER, Items.LAPIS_LAZULI, Items.REDSTONE),
+                    List.of(Items.RAW_IRON, Items.RAW_COPPER, Items.LAPIS_LAZULI, Items.REDSTONE, Items.IRON_INGOT),
                     TICKS_PER_SECOND * 45,
                     65,
                     ResourceName.ORE
             ),
             new ResourceSource("Tier 3 Ores",
                     List.of(Blocks.GOLD_ORE, Blocks.EMERALD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE_EMERALD_ORE),
-                    List.of(Items.RAW_GOLD, Items.EMERALD),
+                    List.of(Items.RAW_GOLD, Items.EMERALD, Items.GOLD_INGOT),
                     TICKS_PER_SECOND * 45,
                     80,
                     ResourceName.ORE

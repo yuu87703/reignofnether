@@ -25,16 +25,19 @@ Necromancer
 
 Piglin Merchant
     [❌] Building attack animation not sycned
-    [❌] Allow cancelling all abilities
 
     - Fancy Feast
         [🟡] Test all piglin units work
+        [❌] Prioritise giving items to more hurt units
 
     - Loot Explosion
-        [❌] Untargeted, create randomised loot
+        [❌] Untargeted, create loot based on current army composition
         [❌] All piglin units should be able to pick up and equip weapons and armor
-        [❌] Include absorb potions for non-infantry
+        [❌] Use the armor stat and change it override vanilla mechanics, instead be % based
+        [❌] Hoglins convert into armored hoglins
+        [❌] Include absorb potions for blazes and magma cubes
             - Pick up instead of splashed?
+        [❌] All upgrades should be temporary only and revert after some time
 
 
 Royal Guard
@@ -65,6 +68,10 @@ Bugfixes
 
 Quality of Life
 ---------------
+[🟡] Hurt units automatically pick up and eat food items to heal at a rate of 5hp per hunger point
+    - Eg. cooked beef is worth 4 hunger points for players, and heals units for 20 hp
+    - This does not impede movement or attacks
+[🟡] Items that are edible or worth resources are now much more visible in RTS camera
 [🟡] Placed units can now have their relationship modified in sandbox mode
 [🟡] RTS Units are no longer permanently stuck in powder snow
     - Instead, they fall a max of 1 block into it, then it converts into regular snow so they can escape

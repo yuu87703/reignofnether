@@ -69,6 +69,8 @@ public interface Unit {
     static int FOLLOW_RANGE_IMPROVED = 64;
     static int FOLLOW_RANGE = 16;
 
+    static float HEAL_PER_NUTRITION = 2.5f;
+
     // position that neutral units run back to when past leash range
     public void setAnchor(BlockPos bp);
     public BlockPos getAnchor();
@@ -253,14 +255,14 @@ public interface Unit {
         if (unit.isEatingFood()) {
             unit.setEatingTicksLeft(unit.getEatingTicksLeft() - 1);
             if (!unit.isEatingFood()) {
-                unitMob.heal(10);
-                unitMob.level().playSound(null, unitMob.getX(), unitMob.getY(), unitMob.getZ(),
-                        SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F,
-                        unitMob.getRandom().nextFloat() * 0.1F + 0.9F
-                );
                 for (ItemStack itemStack : unit.getItems()) {
                     if (itemStack.getItem().isEdible()) {
-                        System.out.println("Discarded food item");
+                        unitMob.level().playSound(null, unitMob.getX(), unitMob.getY(), unitMob.getZ(),
+                                SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F,
+                                unitMob.getRandom().nextFloat() * 0.1F + 0.9F
+                        );
+                        int nutrition = itemStack.getItem().getFoodProperties(itemStack, (LivingEntity) unit).getNutrition();
+                        unitMob.heal(nutrition * HEAL_PER_NUTRITION);
                         itemStack.setCount(itemStack.getCount() - 1);
                         break;
                     }
@@ -319,7 +321,7 @@ public interface Unit {
 
                 Relationship rl = UnitServerEvents.getUnitToEntityRelationship(unit, itementity);
                 if (!itementity.isRemoved() && !itementity.getItem().isEmpty() && !itementity.hasPickUpDelay() && unitMob.isAlive() &&
-                    (rl == Relationship.OWNED || rl == Relationship.FRIENDLY)) {
+                    (rl != Relationship.HOSTILE)) {
                     ItemStack itemstack = itementity.getItem();
                     if (itemstack.getItem().isEdible() &&
                             unitMob.getHealth() < unitMob.getMaxHealth() &&

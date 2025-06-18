@@ -760,7 +760,6 @@ public class UnitClientEvents {
             }
             for (LivingEntity entity : getAllUnits()) {
                 if (entity instanceof Unit unit && unit.isEatingFood()) {
-                    System.out.println(unit.getEatingTicksLeft() + " " + unit.getFoodBeingEaten().getDescriptionId());
                     MyRenderer.renderItemInFrontOfEntityFace(evt.getPoseStack(), entity, evt.getPartialTick(), new ItemStack(unit.getFoodBeingEaten()));
                 }
             }
@@ -1100,7 +1099,6 @@ public class UnitClientEvents {
     public static void syncUnitEatingFood(int unitId, int itemId) {
         for (LivingEntity entity : getAllUnits()) {
             if (unitId == entity.getId() && entity instanceof Unit unit) {
-                System.out.println("added porkchop on client");
                 unit.getItems().add(new ItemStack(BuiltInRegistries.ITEM.byId(itemId)));
                 break;
             }

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.resources.ResourceSources;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
@@ -51,7 +52,8 @@ public abstract class ItemEntityRendererMixin {
             return;
         }
 
-        if (OrthoviewClientEvents.isEnabled()) {
+        if (OrthoviewClientEvents.isEnabled() &&
+                (pEntity.getItem().isEdible() || ResourceSources.getFromItem(pEntity.getItem().getItem()) != null)) {
             ci.cancel();
 
             pPoseStack.pushPose();
