@@ -17,6 +17,7 @@
         "MixinNetworkManager",
         "MobMixin",
         "PlayerMixin",
+        "PowderSnowBlockMixin",
         "SculkCatalystBlockEntityMixin",
         "ServerLevelMixin",
         "ThrownPotionMixin",

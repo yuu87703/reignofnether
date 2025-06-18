@@ -54,17 +54,20 @@ Royal Guard
 Bugfixes
 --------
 [🟡] RTS Start Blocks that are removed via command are no longer tracked
-[❌] GUI autoscaling is weird on 2560x1440
+[🟡] Fixed Ravager Artillery not damaging buildings
+[🟡] Fixed the Drowned production button not working correctly
 
 [❌] Don't allow regular attack during ability animations'
     - set windup ticks to 0 repeatedly during channelling
 
+[❌] Transition smoothly back into walk animation if moving to cancel a hero ability
+
 
 Quality of Life
 ---------------
-[🟡] Allow editing of relationships of existing units
-[🟡] Allow full toolbar for neutral/enemy units instead of just attack/stop
-
+[🟡] Placed units can now have their relationship modified in sandbox mode
+[🟡] RTS Units are no longer permanently stuck in powder snow
+    - Instead, they fall a max of 1 block into it, then it converts into regular snow so they can escape
 
 Balancing
 ---------
