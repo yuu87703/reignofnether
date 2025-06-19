@@ -61,7 +61,8 @@ Features
 [🟡] All Hero units now have and use mana for their spells
     - This works pretty much like mana in any other game
 
-[🟡] Hurt units automatically pick up and eat food items to heal at a rate of 5hp per hunger point
+[🟡] Hurt units automatically pick up and eat food to heal
+    - Heals at a rate of 5hp per hunger point
     - Eg. cooked beef is worth 4 hunger points for players, and heals units for 20 hp
     - This does not impede movement or attacks
 
