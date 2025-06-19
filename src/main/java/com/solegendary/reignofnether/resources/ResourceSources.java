@@ -295,7 +295,7 @@ public class ResourceSources {
                     120,
                     ResourceName.FOOD
             ),
-            new ResourceSource("Extra large food item",
+            new ResourceSource("Misc food item",
                     List.of(),
                     List.of(Items.CHICKEN),
                     0,
@@ -314,13 +314,6 @@ public class ResourceSources {
                     List.of(Items.LEATHER, Items.EGG, Items.APPLE, Items.HONEY_BOTTLE, Items.COD, Items.SALMON, Items.GLOW_BERRIES),
                     0,
                     25,
-                    ResourceName.FOOD
-            ),
-            new ResourceSource("Small food item",
-                    List.of(),
-                    List.of(Items.ROTTEN_FLESH, Items.MELON_SLICE, Items.SPIDER_EYE, Items.POISONOUS_POTATO),
-                    0,
-                    5,
                     ResourceName.FOOD
             )
     );
