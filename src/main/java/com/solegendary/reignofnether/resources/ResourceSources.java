@@ -153,7 +153,7 @@ public class ResourceSources {
     );
 
     public static boolean isPreparedFood(Item item) {
-        return edibleFoods.contains(item);
+        return item.isEdible() && edibleFoods.contains(item);
     }
 
     public static final int REPLANT_TICKS_MAX = 10;
@@ -311,7 +311,7 @@ public class ResourceSources {
             ),
             new ResourceSource("Medium food item",
                     List.of(),
-                    List.of(Items.LEATHER, Items.EGG, Items.APPLE, Items.BREAD, Items.HONEY_BOTTLE, Items.COD, Items.SALMON, Items.GLOW_BERRIES),
+                    List.of(Items.LEATHER, Items.EGG, Items.APPLE, Items.HONEY_BOTTLE, Items.COD, Items.SALMON, Items.GLOW_BERRIES),
                     0,
                     25,
                     ResourceName.FOOD
