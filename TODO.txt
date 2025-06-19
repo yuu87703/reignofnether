@@ -1,5 +1,5 @@
 
-1.19.2-1.1.7c
+1.19.2-1.1.7d
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -53,25 +53,8 @@ Royal Guard
         [❌] Fix portrait scale/yoffset
 
 
-Features
---------
-[🟡] Enabled the Royal Guard hero in sandbox
-    - See #sneak-peeks for details of their abilities
-
-[🟡] All Hero units now have and use mana for their spells
-    - This works pretty much like mana in any other game
-
-[🟡] Hurt units automatically pick up and eat food to heal
-    - Heals at a rate of 5hp per hunger point
-    - Eg. cooked beef is worth 4 hunger points for players, and heals units for 20 hp
-    - This does not impede movement or attacks
-
 Bugfixes
 --------
-[🟡] RTS Start Blocks that are removed via command are no longer tracked
-[🟡] Fixed Ravager Artillery arrows not damaging buildings
-[🟡] Fixed the Drowned production button not working correctly
-
 [❌] Don't allow regular attack during ability animations'
     - set windup ticks to 0 repeatedly during channelling
 
@@ -81,10 +64,6 @@ Bugfixes
 Quality of Life
 ---------------
 
-[🟡] Items that are edible or worth resources are now much more visible in RTS camera
-[🟡] Placed units can now have their relationship modified in sandbox mode
-[🟡] RTS Units are no longer permanently stuck in powder snow
-    - Instead, they fall a max of 1 block into it, then it converts into regular snow so they can escape
 
 Balancing
 ---------

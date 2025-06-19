@@ -132,6 +132,30 @@ public class ResourceSources {
         return List.of();
     }
 
+    private static List<Item> edibleFoods = List.of(
+        Items.COOKED_BEEF,
+        Items.COOKED_CHICKEN,
+        Items.COOKED_COD,
+        Items.COOKED_PORKCHOP,
+        Items.COOKED_RABBIT,
+        Items.COOKED_SALMON,
+        Items.COOKED_MUTTON,
+        Items.COOKIE,
+        Items.BREAD,
+        Items.PUMPKIN_PIE,
+        Items.MUSHROOM_STEW,
+        Items.RABBIT_STEW,
+        Items.BEETROOT_SOUP,
+        Items.BAKED_POTATO,
+        Items.GOLDEN_APPLE,
+        Items.ENCHANTED_GOLDEN_APPLE,
+        Items.GOLDEN_CARROT
+    );
+
+    public static boolean isPreparedFood(Item item) {
+        return edibleFoods.contains(item);
+    }
+
     public static final int REPLANT_TICKS_MAX = 10;
 
     public static final ResourceSource GENERIC_LOG_BLOCK = new ResourceSource("Unknown Logs",
@@ -271,11 +295,32 @@ public class ResourceSources {
                     120,
                     ResourceName.FOOD
             ),
-            new ResourceSource("Misc food item",
+            new ResourceSource("Extra large food item",
                     List.of(),
-                    List.of(Items.LEATHER, Items.EGG, Items.HONEY_BOTTLE),
+                    List.of(Items.CHICKEN),
+                    0,
+                    75,
+                    ResourceName.FOOD
+            ),
+            new ResourceSource("Large food item",
+                    List.of(),
+                    List.of(Items.BEEF, Items.PORKCHOP, Items.MUTTON, Items.RABBIT),
+                    0,
+                    50,
+                    ResourceName.FOOD
+            ),
+            new ResourceSource("Medium food item",
+                    List.of(),
+                    List.of(Items.LEATHER, Items.EGG, Items.APPLE, Items.BREAD, Items.HONEY_BOTTLE, Items.COD, Items.SALMON, Items.GLOW_BERRIES),
                     0,
                     25,
+                    ResourceName.FOOD
+            ),
+            new ResourceSource("Small food item",
+                    List.of(),
+                    List.of(Items.ROTTEN_FLESH, Items.MELON_SLICE, Items.SPIDER_EYE, Items.POISONOUS_POTATO),
+                    0,
+                    5,
                     ResourceName.FOOD
             )
     );

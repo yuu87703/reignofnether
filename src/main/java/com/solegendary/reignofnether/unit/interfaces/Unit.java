@@ -180,8 +180,8 @@ public interface Unit {
                     cp.startFading();
             }
         } else {
-            checkAndPickupResources(unit);
             checkAndPickupEdibleFood(unit);
+            checkAndPickupResources(unit);
 
             // sync target variables between goals and Mob
             if (unit.getTargetGoal().getTarget() == null || !unit.getTargetGoal().getTarget().isAlive() ||
@@ -321,7 +321,7 @@ public interface Unit {
 
                 Relationship rl = UnitServerEvents.getUnitToEntityRelationship(unit, itementity);
                 if (!itementity.isRemoved() && !itementity.getItem().isEmpty() && !itementity.hasPickUpDelay() && unitMob.isAlive() &&
-                    (rl != Relationship.HOSTILE)) {
+                    (rl != Relationship.HOSTILE) && ResourceSources.isPreparedFood(itementity.getItem().getItem())) {
                     ItemStack itemstack = itementity.getItem();
                     if (itemstack.getItem().isEdible() &&
                             unitMob.getHealth() < unitMob.getMaxHealth() &&
