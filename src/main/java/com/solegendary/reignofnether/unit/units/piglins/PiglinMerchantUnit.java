@@ -14,6 +14,7 @@ import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
@@ -437,31 +439,52 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     }
 
     // give at least one rare item per unit
-    private ItemStack getLootForUnit(Unit unit) {
-        int i = random.nextInt(100);
-        if (unit instanceof BruteUnit) {
-            if (i >= 50)
-                return new ItemStack(Items.NETHERITE_CHESTPLATE);
-            else if (i > 0) {
-                ItemStack itemStack = new ItemStack(Items.NETHERITE_SWORD);
-                itemStack.enchant(Enchantments.FIRE_ASPECT, 1);
-                return itemStack;
+    private List<ItemStack> getRandomLoot(int amount) {
+        ArrayList<ItemStack> items = new ArrayList<>();
+        ArrayList<LivingEntity> units = new ArrayList<>(UnitServerEvents.getAllUnits()
+                .stream()
+                .filter(u -> u instanceof Unit unit &&
+                        unit.getOwnerName().equals(this.getOwnerName()) &&
+                        unit instanceof AttackerUnit attackerUnit &&
+                        !(unit instanceof GhastUnit))
+                .toList());
+        Collections.shuffle(units);
+
+        for (int n = 0; n < amount; n++) {
+            if (units.size() > n) {
+                int i = random.nextInt(100);
+                LivingEntity unit = units.get(n);
+
+                if (unit instanceof BruteUnit) {
+                    if (i >= 50)
+                        items.add( new ItemStack(Items.NETHERITE_CHESTPLATE));
+                    else if (i > 0) {
+                        ItemStack itemStack = new ItemStack(Items.NETHERITE_SWORD);
+                        itemStack.enchant(Enchantments.FIRE_ASPECT, 1);
+                        items.add(itemStack);
+                    }
+                }
+                else if (unit instanceof HeadhunterUnit) {
+                    if (i >= 50)
+                        items.add(new ItemStack(Items.NETHERITE_CHESTPLATE));
+                    else if (i > 0) {
+                        ItemStack itemStack = new ItemStack(Items.TRIDENT);
+                        itemStack.enchant(Enchantments.FIRE_ASPECT, 1);
+                        itemStack.enchant(Enchantments.UNBREAKING, 1);
+                        items.add(itemStack);
+                    }
+                }
+                else if (unit instanceof HoglinUnit ||
+                        unit instanceof WitherSkeletonUnit) {
+                    items.add(new ItemStack(Items.NETHERITE_CHESTPLATE));
+                } else {
+                    items.add(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE));
+                }
+            } else {
+                items.add(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE));
             }
         }
-        else if (unit instanceof HeadhunterUnit) {
-            if (i >= 50)
-                return new ItemStack(Items.NETHERITE_CHESTPLATE);
-            else if (i > 0) {
-                ItemStack itemStack = new ItemStack(Items.TRIDENT);
-                itemStack.enchant(Enchantments.FIRE_ASPECT, 1);
-                return itemStack;
-            }
-        }
-        else if (unit instanceof HoglinUnit ||
-            unit instanceof WitherSkeletonUnit) {
-            return new ItemStack(Items.NETHERITE_CHESTPLATE);
-        }
-        return new ItemStack(Items.ENCHANTED_GOLDEN_APPLE);
+        return items;
     }
 
     public void lootExplosion() {
@@ -476,9 +499,10 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
             resourceBonus = greedIsGood.spendResourcesAndGet100sSpent(ResourceName.ORE);
 
         int numItems = LootExplosion.BASE_ITEMS + (LootExplosion.BONUS_ITEMS_PER_100_RESOURCES * resourceBonus);
+        List<ItemStack> items = getRandomLoot(numItems);
 
-        for (int i = 0; i < numItems; i++) {
-            ItemEntity item = new ItemEntity(level(), pos.x, pos.y, pos.z, new ItemStack(Items.GOLDEN_CHESTPLATE));
+        for (ItemStack itemStack : items) {
+            ItemEntity item = new ItemEntity(level(), pos.x, pos.y, pos.z, itemStack);
             item.setThrower(getUUID());
             Vec3 dMove = new Vec3(
                     (random.nextFloat() - 0.5f) / 2,

@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.player;
 
 import com.solegendary.reignofnether.registrars.PacketHandler;
+import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;

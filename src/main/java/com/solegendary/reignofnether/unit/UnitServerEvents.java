@@ -849,6 +849,11 @@ public class UnitServerEvents {
 
         if (evt.getEntity().getAbsorptionAmount() > 0)
             UnitSyncClientboundPacket.sendSyncStatsPacket(evt.getEntity());
+
+        if (evt.getSource().getEntity() instanceof HeadhunterUnit headhunterUnit &&
+                headhunterUnit.hasFireAspectTrident() &&
+                evt.getAmount() > 0)
+            evt.getEntity().setSecondsOnFire(4);
     }
 
     @SubscribeEvent

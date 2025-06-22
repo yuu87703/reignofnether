@@ -272,16 +272,16 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     @Override
     public boolean canPickUpEquipment(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return (item == Items.NETHERITE_CHESTPLATE &&
+        return item == Items.NETHERITE_CHESTPLATE &&
                 !hasItemInSlot(EquipmentSlot.CHEST) &&
-                !(this instanceof ArmouredHoglinUnit));
+                !(this.getName().getString().contains("armoured"));
     }
 
     @Override
     public void onPickupEquipment(ItemStack itemStack) {
         Item item = itemStack.getItem();
         if (item == Items.NETHERITE_CHESTPLATE &&
-            !(this instanceof ArmouredHoglinUnit) &&
+            !(this.getName().getString().contains("armoured")) &&
             !level().isClientSide()) {
             LivingEntity newEntity = this.convertToUnit(EntityRegistrar.ARMOURED_HOGLIN_UNIT.get());
             UnitConvertClientboundPacket.syncConvertedUnits(getOwnerName(), List.of(getId()), List.of(newEntity.getId()));

@@ -340,9 +340,7 @@ public interface Unit {
                 unitMob.onItemPickup(itementity);
                 unitMob.take(itementity, 1);
                 unit.onPickupEquipment(itemstack);
-                itemstack.setCount(itemstack.getCount() - 1);
-                if (itemstack.getCount() <= 0)
-                    itementity.discard();
+                itementity.discard();
                 break;
             }
         }

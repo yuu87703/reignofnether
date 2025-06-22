@@ -30,14 +30,6 @@ Piglin Merchant
         [🟡] Test all piglin units work
         [❌] Prioritise giving items to more hurt units
 
-    - Loot Explosion
-        [❌] Untargeted, create loot based on current army composition
-        [❌] All piglin units should be able to pick up and equip weapons and armor
-        [❌] Use the armor stat and change it override vanilla mechanics, instead be % based
-        [❌] Hoglins convert into armored hoglins
-        [❌] Include absorb potions for blazes and magma cubes
-            - Pick up instead of splashed?
-        [❌] All upgrades should be temporary only and revert after some time
 
 
 Royal Guard
@@ -68,21 +60,17 @@ Bugfixes
 --------
 [❌] Don't allow regular attack during ability animations'
     - set windup ticks to 0 repeatedly during channelling
+    - don't aggro during ability channelling either
 
 [❌] Transition smoothly back into walk animation if moving to cancel a hero ability
 
-[❌] Piglins aren't rendering armor layers
-    - something to do with the equip code (zombies also dont show it when equipped from a picked up item)
-
+[❌] Absorption status isn't saving between server restarts
 
 
 Quality of Life
 ---------------
 
-[🟡] Items that are edible or worth resources are now much more visible in RTS camera
-[🟡] Placed units can now have their relationship modified in sandbox mode
-[🟡] RTS Units are no longer permanently stuck in powder snow
-    - Instead, they fall a max of 1 block into it, then it converts into regular snow so they can escape
+[❌] Heroes should always be first in group lists
 
 Balancing
 ---------

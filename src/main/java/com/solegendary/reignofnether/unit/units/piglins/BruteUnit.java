@@ -282,23 +282,32 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         return super.fireImmune() || (bpl != null && (bpl.getBuilding() instanceof FlameSanctuary || bpl.getBuilding() instanceof BasaltSprings));
     }
 
+    public boolean hasEnchantedNetheriteSword() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getItem() == Items.NETHERITE_SWORD && itemStack.isEnchanted();
+    }
+
     @Override
     public boolean canPickUpEquipment(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return ((item == Items.GOLDEN_CHESTPLATE ||
+        return (item == Items.GOLDEN_CHESTPLATE ||
                 item == Items.GOLDEN_LEGGINGS ||
                 item == Items.GOLDEN_BOOTS ||
                 item == Items.GOLDEN_HELMET ||
                 item == Items.NETHERITE_CHESTPLATE ||
                 item == Items.NETHERITE_LEGGINGS ||
                 item == Items.NETHERITE_BOOTS ||
-                item == Items.NETHERITE_HELMET) &&
-                !hasItemInSlot(getEquipmentSlotForItem(itemStack))) ||
-                item == Items.NETHERITE_SWORD;
+                item == Items.NETHERITE_HELMET ||
+                item == Items.NETHERITE_SWORD) &&
+                getItemBySlot(getEquipmentSlotForItem(itemStack)).getItem() != item;
     }
 
     @Override
     public void onPickupEquipment(ItemStack itemStack) {
+        if (itemStack.getItem() == Items.NETHERITE_SWORD) {
+            AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), 2, AttributeModifier.Operation.ADDITION);
+            itemStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
+        }
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
     }
 }

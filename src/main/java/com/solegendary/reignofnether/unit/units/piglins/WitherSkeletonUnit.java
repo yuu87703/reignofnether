@@ -286,7 +286,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
     @Override
     public boolean canPickUpEquipment(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return ((item == Items.GOLDEN_CHESTPLATE ||
+        return (item == Items.GOLDEN_CHESTPLATE ||
                 item == Items.GOLDEN_LEGGINGS ||
                 item == Items.GOLDEN_BOOTS ||
                 item == Items.GOLDEN_HELMET ||
@@ -294,8 +294,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
                 item == Items.NETHERITE_LEGGINGS ||
                 item == Items.NETHERITE_BOOTS ||
                 item == Items.NETHERITE_HELMET) &&
-                !hasItemInSlot(getEquipmentSlotForItem(itemStack))) ||
-                (item == Items.NETHERITE_SWORD && itemStack.isEnchanted());
+                getItemBySlot(getEquipmentSlotForItem(itemStack)).getItem() != item;
     }
 
     @Override

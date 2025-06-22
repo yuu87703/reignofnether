@@ -290,9 +290,15 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         return super.fireImmune() || (bpl != null && (bpl.getBuilding() instanceof FlameSanctuary || bpl.getBuilding() instanceof BasaltSprings));
     }
 
+    public boolean hasFireAspectTrident() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getAllEnchantments().containsKey(Enchantments.FIRE_ASPECT);
+    }
+
     @Override
     public boolean canPickUpEquipment(ItemStack itemStack) {
         Item item = itemStack.getItem();
+        ItemStack currentItemStack = getItemBySlot(getEquipmentSlotForItem(itemStack));
         return ((item == Items.GOLDEN_CHESTPLATE ||
                 item == Items.GOLDEN_LEGGINGS ||
                 item == Items.GOLDEN_BOOTS ||
@@ -300,13 +306,16 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
                 item == Items.NETHERITE_CHESTPLATE ||
                 item == Items.NETHERITE_LEGGINGS ||
                 item == Items.NETHERITE_BOOTS ||
-                item == Items.NETHERITE_HELMET) &&
-                !hasItemInSlot(getEquipmentSlotForItem(new ItemStack(item)))) ||
-                (item == Items.TRIDENT && itemStack.isEnchanted());
+                item == Items.NETHERITE_HELMET ||
+                item == Items.TRIDENT) &&
+                (currentItemStack.getItem() != item ||
+                        (!hasFireAspectTrident() && itemStack.isEnchanted())));
     }
 
     @Override
     public void onPickupEquipment(ItemStack itemStack) {
+        AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), 0, AttributeModifier.Operation.ADDITION);
+        itemStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
     }
 }

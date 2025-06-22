@@ -28,7 +28,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 public class LootExplosion extends HeroAbility {
 
     private static final int CD_MAX_SECONDS = 100;// 240 * ResourceCost.TICKS_PER_SECOND; // and 120 mana cost
-    public static final int BASE_ITEMS = 10;
+    public static final int BASE_ITEMS = 12;
     public static final int BONUS_ITEMS_PER_100_RESOURCES = 3;
 
     public LootExplosion(HeroUnit hero) {

@@ -24,6 +24,7 @@ import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
 import com.solegendary.reignofnether.unit.units.monsters.ZombieUnit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
+import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
 import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VindicatorUnit;
@@ -192,6 +193,10 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         guiGraphics.pose().translate(0,0,2000);
         name = WordUtils.capitalize(name);
 
+        if ((entity instanceof BruteUnit bUnit && bUnit.hasEnchantedNetheriteSword()) ||
+            (entity instanceof HeadhunterUnit hUnit && hUnit.hasFireAspectTrident())) {
+            name += " (FA)";
+        }
         if (entity instanceof VindicatorUnit pUnit && pUnit.getEnchant() == Enchantments.SHARPNESS) {
             name += " (S)";
         }
