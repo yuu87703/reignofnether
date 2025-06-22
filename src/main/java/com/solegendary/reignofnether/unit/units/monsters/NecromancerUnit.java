@@ -136,7 +136,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public float getMovementSpeed() {return movementSpeed;}
     public float getUnitAttackDamage() {return attackDamage + (attackBonusPerLevel * getHeroLevel());}
     public float getUnitMaxHealth() {return maxHealth + (maxHealthBonusPerLevel * getHeroLevel());}
-    public float getUnitArmorValue() {return armorValue;}
+
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.NECROMANCER;}
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}

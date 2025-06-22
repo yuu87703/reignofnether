@@ -228,7 +228,7 @@
     "abilities.reignofnether.loot_explosion.stats": "\uE004  %ds   \uE008  %d",
     "abilities.reignofnether.loot_explosion.tooltip1": "Share a hoard of powerful but fragile ",
     "abilities.reignofnether.loot_explosion.tooltip2": "equipment that piglins can auto-equip.",
-    "abilities.reignofnether.loot_explosion.tooltip3": "Throws %d items + %d per 100 ore spent.",
+    "abilities.reignofnether.loot_explosion.tooltip3": "Throws +%d% items per 100 ore spent.",
 
     "abilities.reignofnether.mace_slam": "Mace Slam",
     "abilities.reignofnether.mace_slam.stats": "\uE006  %d   \uE004  %ds   \uE008  %d",

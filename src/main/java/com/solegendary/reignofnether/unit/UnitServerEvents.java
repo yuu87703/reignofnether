@@ -789,8 +789,14 @@ public class UnitServerEvents {
         }
 
         // ensure projectiles from units do the damage of the unit, not the item
-        if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE) && evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
-            evt.setAmount(attackerUnit.getUnitAttackDamage());
+        if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE) &&
+            evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
+            float dmg = attackerUnit.getUnitAttackDamage();
+            if (evt.getAmount() > dmg) {
+                if (evt.getEntity() instanceof Unit unit)
+                    dmg *= (1 - unit.getUnitArmorPercentage());
+                evt.setAmount(dmg);
+            }
         }
 
         // ignore added weapon damage for workers
@@ -840,6 +846,9 @@ public class UnitServerEvents {
                 evt.setCanceled(true);
             }
         }
+
+        if (evt.getEntity().getAbsorptionAmount() > 0)
+            UnitSyncClientboundPacket.sendSyncStatsPacket(evt.getEntity());
     }
 
     @SubscribeEvent

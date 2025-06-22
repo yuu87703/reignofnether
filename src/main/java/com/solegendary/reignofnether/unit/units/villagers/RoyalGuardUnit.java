@@ -132,7 +132,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public float getMovementSpeed() {return movementSpeed;}
     public float getUnitAttackDamage() {return attackDamage + (attackBonusPerLevel * getHeroLevel());}
     public float getUnitMaxHealth() {return maxHealth + (maxHealthBonusPerLevel * getHeroLevel());}
-    public float getUnitArmorValue() {return armorValue;}
+
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.VINDICATOR;}
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}

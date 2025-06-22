@@ -71,6 +71,10 @@ Bugfixes
 
 [❌] Transition smoothly back into walk animation if moving to cancel a hero ability
 
+[❌] Piglins aren't rendering armor layers
+    - something to do with the equip code (zombies also dont show it when equipped from a picked up item)
+
+
 
 Quality of Life
 ---------------

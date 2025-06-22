@@ -31,6 +31,8 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -618,5 +620,13 @@ public class MiscUtil {
         spacedStr = spacedStr.replace('-', ' ');
         spacedStr = spacedStr.replace('.', ' ');
         return WordUtils.capitalize(spacedStr);
+    }
+
+    public static float getMaxAbsorptionAmount(LivingEntity entity) {
+        MobEffectInstance mei = entity.getEffect(MobEffects.ABSORPTION);
+        if (mei != null) {
+            return (mei.getAmplifier() + 1) * 4.0f;
+        }
+        return 0;
     }
 }

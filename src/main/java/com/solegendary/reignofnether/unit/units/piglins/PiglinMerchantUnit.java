@@ -39,6 +39,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -121,7 +122,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     public float getMovementSpeed() {return movementSpeed;}
     public float getUnitAttackDamage() {return attackDamage + (attackBonusPerLevel * getHeroLevel());}
     public float getUnitMaxHealth() {return maxHealth + (maxHealthBonusPerLevel * getHeroLevel());}
-    public float getUnitArmorValue() {return armorValue;}
+
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.PIGLIN_MERCHANT;}
     public boolean getWillRetaliate() {return willRetaliate;}
@@ -435,7 +436,38 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         }
     }
 
+    // give at least one rare item per unit
+    private ItemStack getLootForUnit(Unit unit) {
+        int i = random.nextInt(100);
+        if (unit instanceof BruteUnit) {
+            if (i >= 50)
+                return new ItemStack(Items.NETHERITE_CHESTPLATE);
+            else if (i > 0) {
+                ItemStack itemStack = new ItemStack(Items.NETHERITE_SWORD);
+                itemStack.enchant(Enchantments.FIRE_ASPECT, 1);
+                return itemStack;
+            }
+        }
+        else if (unit instanceof HeadhunterUnit) {
+            if (i >= 50)
+                return new ItemStack(Items.NETHERITE_CHESTPLATE);
+            else if (i > 0) {
+                ItemStack itemStack = new ItemStack(Items.TRIDENT);
+                itemStack.enchant(Enchantments.FIRE_ASPECT, 1);
+                return itemStack;
+            }
+        }
+        else if (unit instanceof HoglinUnit ||
+            unit instanceof WitherSkeletonUnit) {
+            return new ItemStack(Items.NETHERITE_CHESTPLATE);
+        }
+        return new ItemStack(Items.ENCHANTED_GOLDEN_APPLE);
+    }
+
     public void lootExplosion() {
+        if (level().isClientSide())
+            return;
+
         Vec3 pos = getEyePosition();
 
         GreedIsGoodPassive greedIsGood = getGreedIsGood();
@@ -444,7 +476,6 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
             resourceBonus = greedIsGood.spendResourcesAndGet100sSpent(ResourceName.ORE);
 
         int numItems = LootExplosion.BASE_ITEMS + (LootExplosion.BONUS_ITEMS_PER_100_RESOURCES * resourceBonus);
-
 
         for (int i = 0; i < numItems; i++) {
             ItemEntity item = new ItemEntity(level(), pos.x, pos.y, pos.z, new ItemStack(Items.GOLDEN_CHESTPLATE));

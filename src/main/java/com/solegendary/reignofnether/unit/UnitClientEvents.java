@@ -351,7 +351,7 @@ public class UnitClientEvents {
      * Update data on a unit from serverside, mainly to ensure unit HUD data is up-to-date
      * Only try to update health and pos if out of view
      */
-    public static void syncUnitStats(int entityId, float health, Vec3 pos, String ownerName) {
+    public static void syncUnitStats(int entityId, float health, float absorb, Vec3 pos, String ownerName) {
         for (LivingEntity entity : allUnits) {
             if (entity.getId() == entityId && MC.level != null) {
                 boolean isLoadedClientside = MC.level.getEntity(entityId) != null;
@@ -359,6 +359,7 @@ public class UnitClientEvents {
                     entity.setHealth(health);
                     entity.setPos(pos);
                 }
+                entity.setAbsorptionAmount(absorb);
                 MinimapClientEvents.removeMinimapUnit(entityId);
                 return;
             }

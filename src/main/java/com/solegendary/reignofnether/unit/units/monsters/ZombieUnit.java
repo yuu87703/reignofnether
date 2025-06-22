@@ -103,7 +103,6 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
     public float getMovementSpeed() {return movementSpeed;}
     public float getUnitAttackDamage() {return attackDamage;}
     public float getUnitMaxHealth() {return maxHealth;}
-    public float getUnitArmorValue() {return armorValue;}
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.ZOMBIE;}
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}

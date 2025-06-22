@@ -184,6 +184,12 @@ public class EntityRegistrar {
                     .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
                     .build(new ResourceLocation(ReignOfNether.MOD_ID, "hoglin_unit").toString()));
 
+    public static final RegistryObject<EntityType<HoglinUnit>> ARMOURED_HOGLIN_UNIT = ENTITIES.register("armoured_hoglin_unit",
+            () -> EntityType.Builder.of(HoglinUnit::new, MobCategory.CREATURE)
+                    .sized(EntityType.HOGLIN.getWidth(), EntityType.HOGLIN.getHeight())
+                    .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
+                    .build(new ResourceLocation(ReignOfNether.MOD_ID, "armoured_hoglin_unit").toString()));
+
     public static final RegistryObject<EntityType<BlazeUnit>> BLAZE_UNIT = ENTITIES.register("blaze_unit",
             () -> EntityType.Builder.of(BlazeUnit::new, MobCategory.CREATURE)
                     .sized(EntityType.BLAZE.getWidth(), EntityType.BLAZE.getHeight())

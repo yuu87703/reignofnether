@@ -2,6 +2,9 @@ package com.solegendary.reignofnether.hud;
 
 import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
+import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
+import com.solegendary.reignofnether.unit.units.piglins.GruntUnit;
+import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
 import com.solegendary.reignofnether.unit.units.piglins.PiglinMerchantUnit;
 import com.solegendary.reignofnether.unit.units.villagers.RoyalGuardUnit;
 import net.minecraft.world.entity.LivingEntity;
@@ -103,6 +106,10 @@ public class PortraitRendererModifiers {
         } else if (entity instanceof RoyalGuardUnit) {
             yOffset = -34;
             scale = -16;
+        } else if (entity instanceof GruntUnit ||
+                    entity instanceof BruteUnit ||
+                    entity instanceof HeadhunterUnit) {
+            yOffset = -6;
         }
 
         return new Pair<>(yOffset, scale);

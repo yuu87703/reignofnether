@@ -113,7 +113,7 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
     public float getMovementSpeed() {return movementSpeed;}
     public float getUnitAttackDamage() {return attackDamage;}
     public float getUnitMaxHealth() {return maxHealth;}
-    public float getUnitArmorValue() {return armorValue;}
+
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.STRAY;}
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}

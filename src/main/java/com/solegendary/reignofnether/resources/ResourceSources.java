@@ -232,7 +232,7 @@ public class ResourceSources {
             ),
             new ResourceSource("Potatoes",
                     List.of(Blocks.POTATOES),
-                    List.of(Items.POTATO, Items.BAKED_POTATO),
+                    List.of(Items.POTATO),
                     TICKS_PER_SECOND * 2,
                     6,
                     ResourceName.FOOD,
