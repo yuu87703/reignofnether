@@ -226,8 +226,8 @@
     "abilities.reignofnether.greed_is_good.rank3": "Rank 3: Spells spend up to 300 resources",
     "abilities.reignofnether.loot_explosion": "Loot Explosion (Ultimate)",
     "abilities.reignofnether.loot_explosion.stats": "\uE004  %ds   \uE008  %d",
-    "abilities.reignofnether.loot_explosion.tooltip1": "Share a hoard of powerful but fragile ",
-    "abilities.reignofnether.loot_explosion.tooltip2": "equipment that piglins can auto-equip.",
+    "abilities.reignofnether.loot_explosion.tooltip1": "Share a hoard of powerful items that that ",
+    "abilities.reignofnether.loot_explosion.tooltip2": "friendly piglins units can use in battle.",
     "abilities.reignofnether.loot_explosion.tooltip3": "Throws %d items + %d per 100 ore spent.",
 
     "abilities.reignofnether.mace_slam": "Mace Slam",

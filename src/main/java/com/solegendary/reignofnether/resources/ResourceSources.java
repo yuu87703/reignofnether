@@ -100,9 +100,13 @@ public class ResourceSources {
     // used for unit item pickups and player resource deposits
     public static ResourceSource getFromItem(Item item) {
         for (List<ResourceSource> resourceSources : List.of(FOOD_BLOCKS, WOOD_BLOCKS, ORE_BLOCKS))
-            for (ResourceSource resourceSource : resourceSources)
+            for (ResourceSource resourceSource : resourceSources) {
                 if (resourceSource.items.contains(item))
                     return resourceSource;
+                for (Block block : resourceSource.validBlocks)
+                    if (block.asItem() == item)
+                        return resourceSource;
+            }
         return null;
     }
 

@@ -26,7 +26,7 @@ public class AltarOfDarkness extends ProductionBuilding {
 
     public final static String buildingName = "Altar of Darkness";
     public final static String structureName = "altar_of_darkness";
-    public final static ResourceCost cost = ResourceCosts.GRAVEYARD;
+    public final static ResourceCost cost = ResourceCosts.ALTAR_OF_DARKNESS;
 
     public AltarOfDarkness() {
         super(structureName, cost, false);
