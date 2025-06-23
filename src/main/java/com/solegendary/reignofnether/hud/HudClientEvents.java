@@ -1656,8 +1656,19 @@ public class HudClientEvents {
 
         ArrayList<LivingEntity> units = UnitClientEvents.getSelectedUnits();
 
-        // sort and hudSelect the first unit type in the list
+        // sort and hudSelect the first unit type in the list, putting heroes first
         units.sort(Comparator.comparing(HudClientEvents::getSimpleEntityName));
+
+        ArrayList<LivingEntity> heroUnits = new ArrayList<>();
+        units.removeIf(le -> {
+            if (le instanceof HeroUnit heroUnit) {
+                heroUnits.add(le);
+                return true;
+            }
+            return false;
+        });
+        for (LivingEntity heroUnit : heroUnits)
+            units.add(0, heroUnit);
 
         if (units.size() <= 0) {
             HudClientEvents.setHudSelectedEntity(null);

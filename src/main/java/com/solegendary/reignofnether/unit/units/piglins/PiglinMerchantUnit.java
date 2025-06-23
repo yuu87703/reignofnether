@@ -508,7 +508,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                     (random.nextFloat() - 0.5f) / 2,
                     0.5,
                     (random.nextFloat() - 0.5f) / 2
-            );
+            ).scale(1.25f);
             item.setDeltaMovement(dMove);
             level().addFreshEntity(item);
         }

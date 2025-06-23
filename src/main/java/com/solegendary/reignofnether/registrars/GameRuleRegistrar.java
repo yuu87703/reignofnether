@@ -17,6 +17,7 @@ public class GameRuleRegistrar {
     public static GameRules.Key<GameRules.IntegerValue> BEACON_WIN_MINUTES;
     public static GameRules.Key<GameRules.BooleanValue> PVP_MODES_ONLY;
     public static GameRules.Key<GameRules.BooleanValue> SLANTED_BUILDING;
+    public static GameRules.Key<GameRules.BooleanValue> ALLOW_HEROES;
 
     public static void init() {
         // do cut trees convert their logs into falling logs?
@@ -65,6 +66,10 @@ public class GameRuleRegistrar {
         );
         // buildings ignore ground flatness
         SLANTED_BUILDING = GameRules.register("slantedBuilding", GameRules.Category.PLAYER,
+                GameRules.BooleanValue.create(false)
+        );
+        // enable heroes in all gamemodes
+        ALLOW_HEROES = GameRules.register("allowHeroes", GameRules.Category.PLAYER,
                 GameRules.BooleanValue.create(false)
         );
     }

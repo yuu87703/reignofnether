@@ -627,6 +627,6 @@ public class MiscUtil {
         if (mei != null) {
             return (mei.getAmplifier() + 1) * 4.0f;
         }
-        return 0;
+        return entity.getAbsorptionAmount();
     }
 }

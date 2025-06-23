@@ -28,8 +28,7 @@ Piglin Merchant
 
     - Fancy Feast
         [🟡] Test all piglin units work
-        [❌] Prioritise giving items to more hurt units
-
+        [❌] Prioritise giving food items to more hurt units
 
 
 Royal Guard
@@ -70,11 +69,8 @@ Bugfixes
 Quality of Life
 ---------------
 
-[❌] Heroes should always be first in group lists
 
 Balancing
 ---------
 
-[❌] check evoker vexes again
-    - should be able to 2v1 a ghast at least
-    - should attack on their own?
+[❌] vexes should die when their evoker dies
