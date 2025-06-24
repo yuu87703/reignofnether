@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.FancyFeast;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.GreedIsGoodPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.piglin.LootExplosion;
@@ -390,6 +391,9 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     }
 
     public void throwTNT(BlockPos targetBp) {
+        if (level().isClientSide())
+            return;
+
         ThrowableTntProjectile tnt = new ThrowableTntProjectile(level(), this);
         tnt.setItem(new ItemStack(ItemRegistrar.THROWABLE_TNT.get()));
         Vec3 dMove = Vec3.atCenterOf(targetBp).subtract(this.getEyePosition())
@@ -407,7 +411,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
             resourceBonus = greedIsGood.spendResourcesAndGet100sSpent(ResourceName.WOOD);
 
         ThrowTNT throwTNT = getThrowTNT();
-        throwTNT.setCooldown(throwTNT.getCooldown() - (resourceBonus * ThrowTNT.LESS_COOLDOWN_PER_100_RESOURCES));
+        throwTNT.setCooldown(throwTNT.cooldownMax - (resourceBonus * ThrowTNT.LESS_COOLDOWN_PER_100_RESOURCES));
+        AbilityClientboundPacket.sendSetCooldownPacket(getId(), throwTNT.action, throwTNT.getCooldown());
         setMana(getMana() + (resourceBonus * ThrowTNT.LESS_MANA_PER_100_RESOURCES));
     }
 

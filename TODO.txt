@@ -26,8 +26,10 @@ Necromancer
 Piglin Merchant
     [❌] Building attack animation not sycned
 
+    - TNT Throw
+        [🟡] Test damage and radius is correct and balanced
+
     - Fancy Feast
-        [🟡] Test all piglin units work
         [❌] Prioritise giving food items to more hurt units
 
 

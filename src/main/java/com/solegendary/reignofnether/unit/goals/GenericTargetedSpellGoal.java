@@ -139,12 +139,14 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
                     }
                     if (this.ability != null && !this.mob.level().isClientSide()) {
                         if (!this.mob.level().isClientSide()) {
-                            AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
+                            if (this.ability.isOffCooldown()) {
+                                AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
+                            }
                             if (mob instanceof HeroUnit heroUnit && this.ability instanceof HeroAbility heroAbility) {
                                 heroUnit.setMana(heroUnit.getMana() - heroAbility.manaCost);
                             }
                         }
-                        else if (mob instanceof Unit unit) {
+                        else if (mob instanceof Unit unit && this.ability.isOffCooldown()) {
                             this.ability.setToMaxCooldown();
                         }
                     }

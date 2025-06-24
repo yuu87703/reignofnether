@@ -31,7 +31,7 @@ public class MaceSlam extends HeroAbility {
 
     public static final float RADIUS = 2.5f;
     public static final float RANGE = 4;
-    public float damage = 15f;
+    public float damage = 10f;
     public int stunDuration = 2 * ResourceCost.TICKS_PER_SECOND;
 
     public MaceSlam(HeroUnit hero) {
@@ -59,13 +59,13 @@ public class MaceSlam extends HeroAbility {
 
     public void updateStatsForRank() {
         if (rank == 1) {
-            damage = 15;
+            damage = 10;
             stunDuration = 2 * ResourceCost.TICKS_PER_SECOND;
         } else if (rank == 2) {
-            damage = 20;
+            damage = 15;
             stunDuration = 3 * ResourceCost.TICKS_PER_SECOND;
         } else if (rank == 3) {
-            damage = 25;
+            damage = 20;
             stunDuration = 4 * ResourceCost.TICKS_PER_SECOND;
         }
     }
