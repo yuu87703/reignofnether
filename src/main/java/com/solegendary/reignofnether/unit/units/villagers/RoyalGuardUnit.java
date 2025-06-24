@@ -253,6 +253,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
+            default -> animateScaleReducing = true;
         }
     }
 

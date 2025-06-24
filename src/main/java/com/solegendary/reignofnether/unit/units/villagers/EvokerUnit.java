@@ -274,7 +274,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     public boolean isCastingSpell() {
         for (Ability ability : getAbilities())
             if (ability instanceof SetFangsCircle || ability instanceof SetFangsLine) {
-                if (ability.isOffCooldown() && this.getCastFangsGoal() != null && this.getCastFangsGoal().isChannelling())
+                if (ability.isOffCooldown() && this.getCastFangsGoal() != null && this.getCastFangsGoal().isCasting())
                     return true;
             } else if (ability instanceof CastSummonVexes) {
                 if (ability.isOffCooldown() && this.getCastSummonVexesGoal() != null && this.getCastSummonVexesGoal().isCasting())

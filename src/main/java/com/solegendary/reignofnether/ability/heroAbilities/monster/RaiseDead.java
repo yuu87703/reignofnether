@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.goals.GenericUntargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
@@ -34,6 +35,16 @@ public class RaiseDead extends HeroAbility {
 
     public RaiseDead(HeroUnit hero) {
         super(hero, 3, 50, UnitAction.RAISE_DEAD, CD_MAX_SECONDS, 0, 0, false);
+    }
+
+    @Override
+    public boolean isCasting() {
+        if (this.hero instanceof NecromancerUnit necromancerUnit) {
+            GenericUntargetedSpellGoal goal = necromancerUnit.getCastRaiseDeadGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override

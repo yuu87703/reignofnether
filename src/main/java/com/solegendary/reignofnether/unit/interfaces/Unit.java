@@ -557,4 +557,11 @@ public interface Unit {
             entity.level().addParticle(pParticleOption, entity.getRandomX(1.0), entity.getRandomY() + 1.0, entity.getRandomZ(1.0), d0, d1, d2);
         }
     }
+
+    public default boolean isCasting() {
+        for (Ability ability : getAbilities())
+            if (ability.isCasting())
+                return true;
+        return false;
+    }
 }

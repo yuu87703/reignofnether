@@ -237,6 +237,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
+            default -> animateScaleReducing = true;
         }
     }
 

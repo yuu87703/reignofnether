@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.goals.GenericUntargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.villagers.RoyalGuardUnit;
@@ -38,6 +39,16 @@ public class Avatar extends HeroAbility {
 
     public Avatar(HeroUnit hero) {
         super(hero, 1, 100, UnitAction.AVATAR, CD_MAX_SECONDS, 0, 0, false);
+    }
+
+    @Override
+    public boolean isCasting() {
+        if (this.hero instanceof RoyalGuardUnit royalGuardUnit) {
+            GenericUntargetedSpellGoal goal = royalGuardUnit.getCastAvatarGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override

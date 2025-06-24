@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.goals.GenericTargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.PiglinMerchantUnit;
@@ -36,6 +37,16 @@ public class ThrowTNT extends HeroAbility {
 
     public ThrowTNT(HeroUnit hero) {
         super(hero, 3, 40, UnitAction.THROW_TNT, 25 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+    }
+
+    @Override
+    public boolean isCasting() {
+        if (this.hero instanceof PiglinMerchantUnit piglinMerchantUnit) {
+            GenericTargetedSpellGoal goal = piglinMerchantUnit.getCastTNTGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override

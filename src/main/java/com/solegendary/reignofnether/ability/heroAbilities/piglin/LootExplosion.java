@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.goals.GenericUntargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.PiglinMerchantUnit;
@@ -48,6 +49,16 @@ public class LootExplosion extends HeroAbility {
                 getTooltipLines(),
                 this
         );
+    }
+
+    @Override
+    public boolean isCasting() {
+        if (this.hero instanceof PiglinMerchantUnit piglinMerchantUnit) {
+            GenericUntargetedSpellGoal goal = piglinMerchantUnit.getCastLootExplosionGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override

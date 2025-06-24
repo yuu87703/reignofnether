@@ -35,7 +35,6 @@ Royal Guard
     - Mace Slam
         [❌] Add hammer throw alternate
         [❌] Raise ground blocks with block displays?
-        [🟡] Enforce stun on non-units too
 
     - Taunting Cry
         [❌] Show angry villager particle effects
@@ -45,25 +44,12 @@ Royal Guard
 
 Features
 --------
-[🟡] Enabled the Royal Guard hero in sandbox
-    - See #sneak-peeks for details of their abilities
 
-[🟡] All Hero units now have and use mana for their spells
-    - This works pretty much like mana in any other game
 
-[🟡] Hurt units automatically pick up and eat food items to heal at a rate of 5hp per hunger point
-    - Eg. cooked beef is worth 4 hunger points for players, and heals units for 20 hp
-    - This does not impede movement or attacks
 
 Bugfixes
 --------
-[❌] Don't allow regular attack during ability animations'
-    - set windup ticks to 0 repeatedly during channelling
-    - don't aggro during ability channelling either
-
-[❌] Transition smoothly back into walk animation if moving to cancel a hero ability
-
-[❌] Absorption status isn't saving between server restarts
+[❌] keyframe animations are cancelled upon being hit
 
 
 Quality of Life

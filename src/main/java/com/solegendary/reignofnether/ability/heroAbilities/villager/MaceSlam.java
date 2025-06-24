@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.goals.GenericTargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.villagers.RoyalGuardUnit;
@@ -35,6 +36,16 @@ public class MaceSlam extends HeroAbility {
 
     public MaceSlam(HeroUnit hero) {
         super(hero, 3, 30, UnitAction.MACE_SLAM, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+    }
+
+    @Override
+    public boolean isCasting() {
+        if (this.hero instanceof RoyalGuardUnit royalGuardUnit) {
+            GenericTargetedSpellGoal goal = royalGuardUnit.getCastMaceSlamGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.goals.GenericTargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.PiglinMerchantUnit;
@@ -69,6 +70,16 @@ public class FancyFeast extends HeroAbility {
             return HEALTH_PER_CHICKEN;
         else
             return HEALTH_PER_BREAD;
+    }
+
+    @Override
+    public boolean isCasting() {
+        if (this.hero instanceof PiglinMerchantUnit piglinMerchantUnit) {
+            GenericTargetedSpellGoal goal = piglinMerchantUnit.getCastFancyFeastGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.goals.GenericUntargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
@@ -41,6 +42,16 @@ public class BloodMoon extends HeroAbility {
 
     public BloodMoon(HeroUnit hero) {
         super(hero, 1, 150, UnitAction.BLOOD_MOON, CD_MAX, 0, 0, false);
+    }
+
+    @Override
+    public boolean isCasting() {
+        if (this.hero instanceof NecromancerUnit necromancerUnit) {
+            GenericUntargetedSpellGoal goal = necromancerUnit.getCastBloodMoonGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override
