@@ -127,7 +127,7 @@ public class CommonModEvents {
         evt.put(EntityRegistrar.STRAY_UNIT.get(), StrayUnit.createAttributes().build());
         evt.put(EntityRegistrar.CREEPER_UNIT.get(), CreeperUnit.createAttributes().build());
         evt.put(EntityRegistrar.SPIDER_UNIT.get(), SpiderUnit.createAttributes().build());
-        evt.put(EntityRegistrar.POISON_SPIDER_UNIT.get(), PoisonSpiderUnit.createAttributes().build());
+        evt.put(EntityRegistrar.POISON_SPIDER_UNIT.get(), SpiderUnit.createAttributes().build());
         evt.put(EntityRegistrar.VILLAGER_UNIT.get(), VillagerUnit.createAttributes().build());
         evt.put(EntityRegistrar.MILITIA_UNIT.get(), MilitiaUnit.createAttributes().build());
         evt.put(EntityRegistrar.ZOMBIE_VILLAGER_UNIT.get(), ZombieVillagerUnit.createAttributes().build());
@@ -148,7 +148,7 @@ public class CommonModEvents {
         evt.put(EntityRegistrar.BLAZE_UNIT.get(), BlazeUnit.createAttributes().build());
         evt.put(EntityRegistrar.WITHER_SKELETON_UNIT.get(), WitherSkeletonUnit.createAttributes().build());
         evt.put(EntityRegistrar.GHAST_UNIT.get(), GhastUnit.createAttributes().build());
-        evt.put(EntityRegistrar.MAGMA_CUBE_UNIT.get(), MagmaCubeUnit.createAttributes().build());
+        evt.put(EntityRegistrar.MAGMA_CUBE_UNIT.get(), SlimeUnit.createAttributes().build());
         evt.put(EntityRegistrar.SLIME_UNIT.get(), SlimeUnit.createAttributes().build());
         evt.put(EntityRegistrar.ROYAL_GUARD_UNIT.get(), RoyalGuardUnit.createAttributes().build());
         evt.put(EntityRegistrar.NECROMANCER_UNIT.get(), NecromancerUnit.createAttributes().build());
