@@ -251,9 +251,7 @@ public interface Unit {
         }
 
         if (unitMob.tickCount % 20 == 0) {
-            if (unitMob.hasEffect(MobEffectRegistrar.STUN.get())) {
-                addParticlesAroundSelf(unit, ParticleTypes.ENTITY_EFFECT);
-            } else if (unitMob.hasEffect(MobEffectRegistrar.UNCONTROLLABLE.get())) {
+            if (unitMob.hasEffect(MobEffectRegistrar.UNCONTROLLABLE.get())) {
                 addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
             }
         }
@@ -554,7 +552,15 @@ public interface Unit {
             double d1 = RANDOM.nextGaussian() * 0.02;
             double d2 = RANDOM.nextGaussian() * 0.02;
             Entity entity = (Entity) unit;
-            entity.level().addParticle(pParticleOption, entity.getRandomX(1.0), entity.getRandomY() + 1.0, entity.getRandomZ(1.0), d0, d1, d2);
+
+            if (!entity.level().isClientSide) {
+                ((ServerLevel) entity.level()).sendParticles(pParticleOption,
+                        entity.getRandomX(1.0),
+                        entity.getRandomY() + 1.0,
+                        entity.getRandomZ(1.0),
+                        1, d0, d1, d2, 0
+                );
+            }
         }
     }
 

@@ -36,7 +36,7 @@ public class ThrowTNT extends HeroAbility {
     public static int LESS_MANA_PER_100_RESOURCES = 5;
 
     public ThrowTNT(HeroUnit hero) {
-        super(hero, 3, 40, UnitAction.THROW_TNT, 25 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+        super(hero, 3, 40, UnitAction.THROW_TNT, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
     }
 
     @Override

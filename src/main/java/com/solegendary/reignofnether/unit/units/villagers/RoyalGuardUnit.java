@@ -209,9 +209,9 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     public boolean avatarScalingStarted = false;
     public int avatarTicksLeft = 0;
-    private int avatarScaleTicks = 0; // at max, will be full sized
-    private int AVATAR_SCALE_TICKS_MAX = 40;
-    private float AVATAR_MAX_BONUS_SCALE = 0.6f;
+    public int avatarScaleTicks = 0; // at max, will be full sized
+    public final int AVATAR_SCALE_TICKS_MAX = 40;
+    private final float AVATAR_MAX_BONUS_SCALE = 0.6f;
 
     private static final double KNOCKBACK_RESISTANCE = 0.5d;
 

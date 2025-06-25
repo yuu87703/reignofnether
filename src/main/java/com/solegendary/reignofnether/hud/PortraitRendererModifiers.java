@@ -103,9 +103,11 @@ public class PortraitRendererModifiers {
         } else if (entity instanceof PiglinMerchantUnit) {
             yOffset = -35;
             scale = -27;
-        } else if (entity instanceof RoyalGuardUnit) {
+        } else if (entity instanceof RoyalGuardUnit royalGuardUnit) {
             yOffset = -34;
             scale = -16;
+            float avatarPercent = (float) royalGuardUnit.avatarScaleTicks / royalGuardUnit.AVATAR_SCALE_TICKS_MAX;
+            yOffset -= (26 * avatarPercent);
         } else if (entity instanceof GruntUnit ||
                     entity instanceof BruteUnit ||
                     entity instanceof HeadhunterUnit) {

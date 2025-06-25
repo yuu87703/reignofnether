@@ -38,11 +38,6 @@ Royal Guard
         [❌] Add hammer throw alternate
         [❌] Raise ground blocks with block displays?
 
-    - Taunting Cry
-        [❌] Show angry villager particle effects
-
-    - Avatar of War
-        [❌] Fix portrait scale/yoffset
 
 Features
 --------
@@ -56,9 +51,11 @@ Bugfixes
 
 Quality of Life
 ---------------
+[❌] The idle worker button now shows the worker for your specific faction
+
 
 
 Balancing
 ---------
 
-[❌] vexes should die when their evoker dies
+[❌] vexes should die when their evoker dies ?

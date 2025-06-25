@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.hero.HeroClientEvents;
 import com.solegendary.reignofnether.hud.HudClientEvents;
+import com.solegendary.reignofnether.hud.buttons.HelperButtons;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
@@ -17,6 +18,7 @@ import com.solegendary.reignofnether.startpos.StartPosClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -40,8 +42,14 @@ public class PlayerClientEvents {
     private static final Minecraft MC = Minecraft.getInstance();
     public static boolean rtsLocked = false;
     public static boolean canStartRTS = true;
+    public static Faction faction = Faction.NONE;
 
     public static Map<String, Long> beaconOwnerTicks = new HashMap<>();
+
+    private static void setFaction(Faction setFaction) {
+        faction = setFaction;
+        HelperButtons.updateButtons();
+    }
 
     @SubscribeEvent
     public static void onRegisterCommand(RegisterClientCommandsEvent evt) {
@@ -167,16 +175,18 @@ public class PlayerClientEvents {
         MC.player.playSound(SoundRegistrar.VICTORY.get(), 0.5f, 1.0f);
     }
 
-    public static void enableRTS(String playerName) {
+    public static void enableRTS(String playerName, Faction setFaction) {
         if (MC.player != null && MC.player.getName().getString().equals(playerName)) {
             GameruleClient.gamerulesMenuOpen = false;
             isRTSPlayer = true;
+            setFaction(setFaction);
         }
     }
 
     public static void disableRTS(String playerName) {
         if (MC.player != null && MC.player.getName().getString().equals(playerName)) {
             isRTSPlayer = false;
+            setFaction(Faction.NONE);
         }
     }
 
@@ -263,6 +273,7 @@ public class PlayerClientEvents {
     public static void resetRTS(boolean hardReset) {
         boolean isSandbox = SandboxClientEvents.isSandboxPlayer();
         isRTSPlayer = false;
+        setFaction(Faction.NONE);
 
         HudClientEvents.controlGroups.clear();
         UnitClientEvents.getSelectedUnits().clear();
