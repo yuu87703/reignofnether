@@ -46,12 +46,14 @@ Features
 
 Bugfixes
 --------
+[🟡] Fixed poison spiders not having correct stats
+    - Check magma cubes too
 [❌] keyframe animations are cancelled upon being hit
 
 
 Quality of Life
 ---------------
-[❌] The idle worker button now shows the worker for your specific faction
+[✔] The idle worker button now shows the worker for your specific faction
 
 
 
