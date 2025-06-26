@@ -13,6 +13,8 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
@@ -586,6 +588,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, tauntingCry.duration, 2));
             tauntingCryTicksLeft = tauntingCry.duration;
             updateKnockbackResistance();
+            SoundClientboundPacket.playSoundAtPos(SoundAction.HEROISM, this.getOnPos().above());
         }
     }
 

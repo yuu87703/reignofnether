@@ -23,7 +23,7 @@ Royal Guard
         [❌] Add hammer throw alternate
         [❌] Raise ground blocks with block displays?
 
-    [❌] sound effects for taunt and avatar
+    [❌] Proper sound effects for taunt and avatar
 
 Features
 --------

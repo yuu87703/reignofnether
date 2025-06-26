@@ -11,6 +11,8 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.goals.GenericUntargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -117,6 +119,9 @@ public class Avatar extends HeroAbility {
             ((RoyalGuardUnit) unitUsing).getCastAvatarGoal().setAbility(this);
             ((RoyalGuardUnit) unitUsing).getCastAvatarGoal().startCasting();
             ((RoyalGuardUnit) unitUsing).avatarScalingStarted = true;
+            if (!level.isClientSide()) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.BLOODLUST, ((LivingEntity) unitUsing).getOnPos().above());
+            }
         }
     }
 }
