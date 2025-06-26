@@ -34,7 +34,7 @@ public class RaiseDead extends HeroAbility {
     private static final int CD_MAX_SECONDS = 60 * ResourceCost.TICKS_PER_SECOND;
 
     public RaiseDead(HeroUnit hero) {
-        super(hero, 3, 50, UnitAction.RAISE_DEAD, CD_MAX_SECONDS, 0, 0, false);
+        super(hero, 3, 75, UnitAction.RAISE_DEAD, CD_MAX_SECONDS, 0, 0, false);
     }
 
     @Override

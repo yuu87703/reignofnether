@@ -1,21 +1,10 @@
 
-1.19.2-1.1.7d
+1.19.2-1.2.0
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
 [❌] Not done, including unmerged PRs
 
-Features
---------
-HEROES (in order of priority)
-    - spells
-    - spell animations
-    - spell particles
-    - levelling and exp
-        - exp bar/level number above portrait, below name
-    - spell levelling and requirements
-    - mana?
-    - equipment
 
 
 Necromancer
@@ -26,18 +15,15 @@ Necromancer
 Piglin Merchant
     [❌] Building attack animation not sycned
 
-    - TNT Throw
-        [🟡] Test damage and radius is correct and balanced
-
     - Fancy Feast
         [❌] Prioritise giving food items to more hurt units
-
 
 Royal Guard
     - Mace Slam
         [❌] Add hammer throw alternate
         [❌] Raise ground blocks with block displays?
 
+    [❌] sound effects for taunt and avatar
 
 Features
 --------
@@ -49,6 +35,8 @@ Bugfixes
 [🟡] Fixed poison spiders not having correct stats
     - Check magma cubes too
 [❌] keyframe animations are cancelled upon being hit
+
+[❌] on a fresh world (easy) survival wave starts way too early (within 1-2 mins of starting)
 
 
 Quality of Life

@@ -156,7 +156,7 @@ public class GameruleClient {
             () -> GameruleServerboundPacket.setSlantedBuilding(!slantedBuilding),
             I18n.get("commands.reignofnether.gamerule.slanted_buildings")
         ));
-        buttons.add(new GameruleBooleanButton("allowHeroes", allowHeroes,
+        buttons.add(new GameruleBooleanButton("allowHeroes (BETA)", allowHeroes,
             () -> GameruleServerboundPacket.setAllowHeroes(!allowHeroes),
             I18n.get("commands.reignofnether.gamerule.allow_heroes")
         ));
