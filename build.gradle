@@ -158,7 +158,8 @@ mixin {
 jar {
     manifest {
         attributes([
-            "MixinConfigs": "reignofnether.mixins.json",
+            // Declared below due to Essential Partner Mod
+            // "MixinConfigs": "reignofnether.mixins.json",
             "Specification-Title": "reignofnether",
             "Specification-Vendor": "examplemodsareus",
             "Specification-Version": "1", // We are version 1 of ourselves
@@ -199,13 +200,13 @@ tasks.withType(JavaCompile).configureEach {
 
 // ESSENTIAL PARTNER MOD STUFF
 
-var essentialPartnerModPackage = 'com.example.mod.essentialpartnermod'
+var essentialPartnerModPackage = 'com.solegendary.reignofnether.essentialpartnermod'
 
 tasks.jar {
     manifest.attributes(
-            // The main entry point of the Essential Partner mod are its mixins.
-            // Note that you may have to re-declare your own mixin configs here too depending on your build system.
-            'MixinConfigs': "${essentialPartnerModPackage.replace('.', '/')}/mixins.json,mixins.examplemod.json",
+        // The main entry point of the Essential Partner mod are its mixins.
+        // Note that you may have to re-declare your own mixin configs here too depending on your build system.
+        'MixinConfigs': "${essentialPartnerModPackage.replace('.', '/')}/mixins.json,reignofnether.mixins.json",
     )
 }
 
