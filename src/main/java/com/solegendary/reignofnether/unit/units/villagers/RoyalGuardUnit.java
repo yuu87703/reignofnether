@@ -642,6 +642,9 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     public void disableAvatar() {
         avatarScalingStarted = false;
+        if (!level().isClientSide()) {
+            HeroClientboundPacket.deactivateAbilityClientside(getId(), 3);
+        }
     }
 
     public void enableAvatar() {
@@ -668,6 +671,15 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
                 avatarScalingStarted = true;
             } else if (abilityIndex == 4) {
                 enableAvatar();
+            }
+        }
+    }
+
+    @Override
+    public void deactivateAbilityClientside(int abilityIndex) {
+        if (level().isClientSide()) {
+            if (abilityIndex == 3) {
+                avatarScalingStarted = false;
             }
         }
     }

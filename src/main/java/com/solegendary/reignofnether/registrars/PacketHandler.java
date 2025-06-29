@@ -81,6 +81,14 @@ public final class PacketHandler {
                 .encoder(UnitSyncWorkerClientBoundPacket::encode).decoder(UnitSyncWorkerClientBoundPacket::new)
                 .consumerMainThread(UnitSyncWorkerClientBoundPacket::handle).add();
 
+        INSTANCE.messageBuilder(UnitSyncAbilityClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(UnitSyncAbilityClientboundPacket::encode).decoder(UnitSyncAbilityClientboundPacket::new)
+                .consumerMainThread(UnitSyncAbilityClientboundPacket::handle).add();
+
+        INSTANCE.messageBuilder(UnitSyncServerboundPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(UnitSyncServerboundPacket::encode).decoder(UnitSyncServerboundPacket::new)
+                .consumerMainThread(UnitSyncServerboundPacket::handle).add();
+
         INSTANCE.messageBuilder(UnitAnimationClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(UnitAnimationClientboundPacket::encode).decoder(UnitAnimationClientboundPacket::new)
                 .consumerMainThread(UnitAnimationClientboundPacket::handle).add();

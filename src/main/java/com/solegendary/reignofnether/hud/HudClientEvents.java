@@ -154,6 +154,9 @@ public class HudClientEvents {
 
     // not to be used for resource paths
     public static String getModifiedEntityName(LivingEntity entity) {
+        if (entity == null)
+            return "";
+
         String name = MiscUtil.getSimpleEntityName(entity);
 
         if (entity.isBaby())

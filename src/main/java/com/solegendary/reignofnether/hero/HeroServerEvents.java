@@ -84,7 +84,7 @@ public class HeroServerEvents {
                     AlliancesServerEvents.isAllied(rtsPlayer.name, heroUnit.getOwnerName())) {
                     PlayerServerEvents.sendMessageToPlayer(rtsPlayer.name, "hud.hero.reignofnether.death", true,
                             heroUnit.getOwnerName(),
-                            WordUtils.capitalize(MiscUtil.getSimpleEntityName(evt.getEntity())),
+                            WordUtils.capitalize(MiscUtil.getSimpleEntityName(evt.getEntity()).replace("_", " ")),
                             heroUnit.getHeroLevel());
                     SoundClientboundPacket.playSoundForPlayer(SoundAction.ENEMY, rtsPlayer.name);
                 }
