@@ -21,6 +21,7 @@ import com.solegendary.reignofnether.gamerules.GameruleServerboundPacket;
 import com.solegendary.reignofnether.guiscreen.TopdownGuiServerboundPacket;
 import com.solegendary.reignofnether.hero.FallenHeroClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hero.HeroServerboundPacket;
 import com.solegendary.reignofnether.player.PlayerClientboundPacket;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.research.ResearchClientboundPacket;
@@ -240,6 +241,12 @@ public final class PacketHandler {
                 .encoder(HeroClientboundPacket::encode)
                 .decoder(HeroClientboundPacket::new)
                 .consumerMainThread(HeroClientboundPacket::handle)
+                .add();
+
+        INSTANCE.messageBuilder(HeroServerboundPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(HeroServerboundPacket::encode)
+                .decoder(HeroServerboundPacket::new)
+                .consumerMainThread(HeroServerboundPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(FallenHeroClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)

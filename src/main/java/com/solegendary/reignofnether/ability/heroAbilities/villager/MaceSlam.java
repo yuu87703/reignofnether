@@ -29,7 +29,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class MaceSlam extends HeroAbility {
 
-    public static final float RADIUS = 2.5f;
+    public static final float RADIUS = 4.0f;
     public static final float RANGE = 4;
     public float damage = 10f;
     public int stunDuration = 2 * ResourceCost.TICKS_PER_SECOND;

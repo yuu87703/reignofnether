@@ -15,6 +15,7 @@ import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
+import com.solegendary.reignofnether.hero.HeroServerboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
@@ -521,6 +522,9 @@ public class UnitClientEvents {
             unit.setupEquipmentAndUpgradesClient();
 
             addUnitPoofs(evt.getLevel(), entity);
+
+            if (entity instanceof HeroUnit)
+                HeroServerboundPacket.requestHeroSync(entity.getId());
         }
         if (entity instanceof LivingEntity le && (ResourceSources.isHuntableAnimal(le) || le instanceof PhantomSummon))
             addUnitPoofs(evt.getLevel(), entity);

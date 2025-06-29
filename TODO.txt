@@ -1,5 +1,5 @@
 
-1.19.2-1.2.0
+1.19.2-1.2.0a
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -32,20 +32,44 @@ Features
 
 Bugfixes
 --------
-[🟡] Fixed poison spiders not having correct stats
-    - Check magma cubes too
 [❌] keyframe animations are cancelled upon being hit
 
 [❌] on a fresh world (easy) survival wave starts way too early (within 1-2 mins of starting)
 
+[❌] RoN animals are not worth any exp
+
+[🟡] Heroes no longer reset their levels when unloaded
+
+[✔] Fixed a crash that sometimes happens when selecting a name-tagged unit
+
+[🟡] Fixed the Royal Guard not changing size for other players when using Avatar
+
+[🟡] Husks are no longer infectious like drowned are
+
 
 Quality of Life
 ---------------
-[✔] The idle worker button now shows the worker for your specific faction
+[❌] Players now are notified when their hero dies or is revived
 
+[❌] Hero revive cost is now configurable via .toml files
 
 
 Balancing
 ---------
 
-[❌] vexes should die when their evoker dies ?
+[✔] The Necromancer and its zombies no longer burn under sunlight but are instead slowed
+[🟡] Blood Moon enemies now decay after the blood moon ends regardless of time of day
+[🟡] Raise Dead zombies now begin to decay after 1 minute but have been given helmets and a sword
+[✔] Raise Dead cooldown raised from 60s to 75s
+
+[🟡] Avatar now gives the Royal Guard slowness immunity and increased move speed
+[✔] Mace slam radius increased from 2.5 to 3.0
+[❌] Mace slam now has a mace throw alternate cast which is ranged and single target
+[❌] The Royal Guard gains increased range while winding up an attack
+    - This is so it can more reliably hit enemies that are running away
+
+[❌] The Piglin Merchant now glides up 1-block high slopes similar to ravagers
+
+[🟡] All heroes can now only have a max of 3 wither stacks on them (normally 6 stacks against regular units)
+
+[🟡] Exp required for all heroes to level up has been raised by 20%

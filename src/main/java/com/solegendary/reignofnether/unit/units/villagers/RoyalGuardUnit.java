@@ -619,6 +619,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     private void tickAvatar() {
         if (avatarTicksLeft > 0) {
             avatarTicksLeft -= 1;
+            removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             if (avatarTicksLeft <= 0) {
                 disableAvatar();
                 setStatsForLevel();
@@ -644,18 +645,23 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
 
     public void enableAvatar() {
         avatarTicksLeft = Avatar.DURATION;
+        addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, avatarTicksLeft, 0));
         updateKnockbackResistance();
         setStatsForLevel();
         heal(Avatar.BONUS_HEALTH);
         if (!level().isClientSide()) {
-            HeroClientboundPacket.activateAbilityClientside(getId(), 3);
+            HeroClientboundPacket.activateAbilityClientside(getId(), 4);
         }
     }
 
     @Override
     public void activateAbilityClientside(int abilityIndex) {
-        if (level().isClientSide() && abilityIndex == 3) {
-            enableAvatar();
+        if (level().isClientSide()) {
+            if (abilityIndex == 3) {
+                avatarScalingStarted = true;
+            } else if (abilityIndex == 4) {
+                enableAvatar();
+            }
         }
     }
 }

@@ -29,6 +29,8 @@ public interface HeroUnit extends Unit {
     int REVIVE_SECONDS_PER_LEVEL = 5;
     int POP_COST = 5;
 
+    float EXP_REQ_MULTIPLIER = 1.2f;
+
     public static void tick(HeroUnit heroUnit) {
         if (((LivingEntity) heroUnit).tickCount % 20 == 0) {
             heroUnit.setMana(heroUnit.getMana() + heroUnit.getManaRegenPerSecond());
@@ -142,11 +144,11 @@ public interface HeroUnit extends Unit {
 
     static int getHeroLevel(int exp) {
         int level = 0;
-        int expToNextLevel = 200;
+        int expToNextLevel = (int) (200 * EXP_REQ_MULTIPLIER);
         do {
             level += 1;
             exp -= expToNextLevel;
-            expToNextLevel += 100;
+            expToNextLevel += (100 * EXP_REQ_MULTIPLIER);
         } while (exp > 0 && level < MAX_HERO_LEVEL);
         return level;
     }
@@ -155,7 +157,7 @@ public interface HeroUnit extends Unit {
     default int getExpOnCurrentLevel() {
         if (getHeroLevel() >= MAX_HERO_LEVEL)
             return 0;
-        int expToNextLevel = 200;
+        int expToNextLevel = (int) (200 * EXP_REQ_MULTIPLIER);
         int expCount = 0;
         int exp = getExperience();
         while (expCount < exp) {
@@ -163,7 +165,7 @@ public interface HeroUnit extends Unit {
                 return exp - expCount;
             }
             expCount += expToNextLevel;
-            expToNextLevel += 100;
+            expToNextLevel += (100 * EXP_REQ_MULTIPLIER);
         }
         return 0;
     }
@@ -171,7 +173,7 @@ public interface HeroUnit extends Unit {
     default int getExpToNextlevel() {
         if (getHeroLevel() >= MAX_HERO_LEVEL)
             return 0;
-        return (getHeroLevel() + 1) * 100;
+        return (int) ((getHeroLevel() + 1) * (100 * EXP_REQ_MULTIPLIER));
     }
 
     default List<HeroAbility> getHeroAbilities() {

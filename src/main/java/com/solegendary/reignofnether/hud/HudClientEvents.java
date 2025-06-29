@@ -173,9 +173,10 @@ public class HudClientEvents {
                     .replace("_unit", "")
                     .replace(".none", "");
             }
-        } else {
+        } else if (entity != null) {
             return entity.getName().getString().toLowerCase();
         }
+        return "";
     }
 
     // not to be used for resource paths

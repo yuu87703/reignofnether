@@ -6,6 +6,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.villager;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
+import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.HudClientEvents;
@@ -121,6 +122,7 @@ public class Avatar extends HeroAbility {
             ((RoyalGuardUnit) unitUsing).avatarScalingStarted = true;
             if (!level.isClientSide()) {
                 SoundClientboundPacket.playSoundAtPos(SoundAction.BLOODLUST, ((LivingEntity) unitUsing).getOnPos().above());
+                HeroClientboundPacket.activateAbilityClientside(((RoyalGuardUnit) unitUsing).getId(), 3);
             }
         }
     }

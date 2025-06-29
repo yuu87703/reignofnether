@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
+import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.core.BlockPos;
@@ -251,6 +252,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
 
     public static final int WITHER_SECONDS = 6;
     public static final int WITHER_MAX_AMPLIFIER = 5; // amplifier starts at 0
+    public static final int WITHER_MAX_AMPLIFIER_HERO = 2;
 
     public static void applyStackingWither(LivingEntity le) {
         int amplifier = 0;
@@ -260,7 +262,10 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
                 witherEffect = effect;
 
         if (witherEffect != null) {
-            amplifier = Math.min(WITHER_MAX_AMPLIFIER, witherEffect.getAmplifier() + 1);
+            int maxAmp = WITHER_MAX_AMPLIFIER;
+            if (le instanceof HeroUnit heroUnit)
+                maxAmp = WITHER_MAX_AMPLIFIER_HERO;
+            amplifier = Math.min(maxAmp, witherEffect.getAmplifier() + 1);
             le.removeEffect(MobEffects.WITHER);
         }
         le.addEffect(new MobEffectInstance(MobEffects.WITHER, WITHER_SECONDS * 20, amplifier), null);

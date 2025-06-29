@@ -1,10 +1,13 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.heroAbilities.monster.BloodMoon;
+import com.solegendary.reignofnether.ability.heroAbilities.monster.RaiseDead;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
+import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -161,7 +164,24 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
             super.tick();
             Unit.tick(this);
             AttackerUnit.tick(this);
+
+            if (tickCount % 20 == 0 && !level().isClientSide()) {
+                if (getOwnerName().equals(BloodMoon.ENEMY_NAME) && !TimeServerEvents.isBloodMoonActive()) {
+                    hurt(this.damageSources().starve(), 1);
+                }
+                else if (tickCount > RaiseDead.ZOMBIE_TICKS_BEFORE_DECAY && isSummonedByNecromancer()) {
+                    hurt(this.damageSources().starve(), 1);
+                }
+            }
         }
+    }
+
+    private boolean isSummonedByNecromancer() {
+        return hasItemInSlot(EquipmentSlot.HEAD) &&
+                hasItemInSlot(EquipmentSlot.CHEST) &&
+                hasItemInSlot(EquipmentSlot.LEGS) &&
+                hasItemInSlot(EquipmentSlot.FEET) &&
+                hasItemInSlot(EquipmentSlot.MAINHAND);
     }
 
     @Override
@@ -183,7 +203,11 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
 
     @Override
     public SunlightEffect getSunlightEffect() {
-        return SunlightEffect.FIRE;
+        if (hasItemInSlot(EquipmentSlot.HEAD)) {
+            return SunlightEffect.MOVEMENT_SLOWDOWN;
+        } else {
+            return SunlightEffect.FIRE;
+        }
     }
 
     public void initialiseGoals() {

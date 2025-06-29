@@ -31,7 +31,8 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 public class RaiseDead extends HeroAbility {
 
     public static final int CHANNEL_TICKS = 40;
-    private static final int CD_MAX_SECONDS = 60 * ResourceCost.TICKS_PER_SECOND;
+    private static final int CD_MAX_SECONDS = 75 * ResourceCost.TICKS_PER_SECOND;
+    public static final int ZOMBIE_TICKS_BEFORE_DECAY = 60 * ResourceCost.TICKS_PER_SECOND;
 
     public RaiseDead(HeroUnit hero) {
         super(hero, 3, 75, UnitAction.RAISE_DEAD, CD_MAX_SECONDS, 0, 0, false);
@@ -87,6 +88,7 @@ public class RaiseDead extends HeroAbility {
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip3", ZOMBIE_TICKS_BEFORE_DECAY / 20)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.rank1"), rank == 0),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.rank2"), rank == 1),
