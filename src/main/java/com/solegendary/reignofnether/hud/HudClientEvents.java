@@ -151,37 +151,10 @@ public class HudClientEvents {
         hudSelectedEntity = entity;
     }
 
-    // eg. entity.reignofnether.zombie_unit -> zombie
-    public static String getSimpleEntityName(Entity entity) {
-        if (entity instanceof PhantomSummon)
-            return "Phantom";
-
-        if (entity instanceof Unit) {
-            if (entity.hasCustomName()) {
-                return entity.getType()
-                    .getDescription()
-                    .getString()
-                    .replace(" ", "")
-                    .replace("entity.reignofnether.", "")
-                    .replace("_unit", "")
-                    .replace(".none", "");
-            } else {
-                return entity.getName()
-                    .getString()
-                    .replace(" ", "")
-                    .replace("entity.reignofnether.", "")
-                    .replace("_unit", "")
-                    .replace(".none", "");
-            }
-        } else if (entity != null) {
-            return entity.getName().getString().toLowerCase();
-        }
-        return "";
-    }
 
     // not to be used for resource paths
     public static String getModifiedEntityName(LivingEntity entity) {
-        String name = getSimpleEntityName(entity);
+        String name = MiscUtil.getSimpleEntityName(entity);
 
         if (entity.isBaby())
             name = I18n.get("units.neutral.reignofnether.baby") + " " + name;
@@ -209,7 +182,7 @@ public class HudClientEvents {
             }else if (entity instanceof HoglinUnit && passenger instanceof HeadhunterUnit) {
                 name = I18n.get("units.piglins.reignofnether.hoglin_rider");
             } else {
-                String pName = getSimpleEntityName(entity.getPassengers().get(0)).replace("_", " ");
+                String pName = MiscUtil.getSimpleEntityName(entity.getPassengers().get(0)).replace("_", " ");
                 String nameCap = pName.substring(0, 1).toUpperCase() + pName.substring(1);
                 name += " & " + nameCap;
             }
@@ -677,7 +650,7 @@ public class HudClientEvents {
         for (LivingEntity unit : selUnits) {
             if ((getPlayerToEntityRelationship(unit) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) && unitButtons.size() < (buttonsPerRow * 2)) {
                 // mob head icon
-                String unitName = getSimpleEntityName(unit);
+                String unitName = MiscUtil.getSimpleEntityName(unit);
                 String buttonImagePath;
 
                 if (unit.isVehicle()) {
@@ -707,7 +680,7 @@ public class HudClientEvents {
                     List.of(fcs(capitaliseAndSpace(getModifiedEntityName(unit))))
                 );
                 if (unit.isVehicle() && unit instanceof Unit) {
-                    String passengerName = getSimpleEntityName(unit.getFirstPassenger());
+                    String passengerName = MiscUtil.getSimpleEntityName(unit.getFirstPassenger());
                     button.bgIconResource = new ResourceLocation(ReignOfNether.MOD_ID,
                         "textures/mobheads/" + passengerName + ".png"
                     );
@@ -1658,7 +1631,7 @@ public class HudClientEvents {
         ArrayList<LivingEntity> units = UnitClientEvents.getSelectedUnits();
 
         // sort and hudSelect the first unit type in the list, putting heroes first
-        units.sort(Comparator.comparing(HudClientEvents::getSimpleEntityName));
+        units.sort(Comparator.comparing(MiscUtil::getSimpleEntityName));
 
         ArrayList<LivingEntity> heroUnits = new ArrayList<>();
         units.removeIf(le -> {
@@ -1747,7 +1720,7 @@ public class HudClientEvents {
     private static void cycleUnitSubgroups() {
         List<LivingEntity> entities = new ArrayList<>(getSelectedUnits().stream()
                 .filter(e -> e instanceof Unit)
-                .sorted(Comparator.comparing(HudClientEvents::getSimpleEntityName))
+                .sorted(Comparator.comparing(MiscUtil::getSimpleEntityName))
                 .toList());
 
         if (entities.isEmpty())

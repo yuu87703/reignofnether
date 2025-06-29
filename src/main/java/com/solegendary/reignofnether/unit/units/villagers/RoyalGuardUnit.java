@@ -48,6 +48,7 @@ import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -652,6 +653,12 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
         if (!level().isClientSide()) {
             HeroClientboundPacket.activateAbilityClientside(getId(), 4);
         }
+    }
+
+    @Override
+    public void makeStuckInBlock(BlockState pState, Vec3 pMotionMultiplier) {
+        if (avatarTicksLeft <= 0)
+            makeStuckInBlock(pState, pMotionMultiplier);
     }
 
     @Override

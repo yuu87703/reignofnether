@@ -167,10 +167,10 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
 
             if (tickCount % 20 == 0 && !level().isClientSide()) {
                 if (getOwnerName().equals(BloodMoon.ENEMY_NAME) && !TimeServerEvents.isBloodMoonActive()) {
-                    hurt(this.damageSources().starve(), 1);
+                    hurt(this.damageSources().starve(), 1.33f);
                 }
                 else if (tickCount > RaiseDead.ZOMBIE_TICKS_BEFORE_DECAY && isSummonedByNecromancer()) {
-                    hurt(this.damageSources().starve(), 1);
+                    hurt(this.damageSources().starve(), 1.33f);
                 }
             }
         }

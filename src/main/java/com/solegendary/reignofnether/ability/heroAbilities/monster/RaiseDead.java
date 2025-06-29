@@ -77,7 +77,8 @@ public class RaiseDead extends HeroAbility {
                 fcsIcons(I18n.get("abilities.reignofnether.raise_dead.stats", CD_MAX_SECONDS / 20, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip2"))
+                fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip3", ZOMBIE_TICKS_BEFORE_DECAY / 20))
         );
     }
 
@@ -88,7 +89,6 @@ public class RaiseDead extends HeroAbility {
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.raise_dead.tooltip3", ZOMBIE_TICKS_BEFORE_DECAY / 20)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.rank1"), rank == 0),
                 fcs(I18n.get("abilities.reignofnether.raise_dead.rank2"), rank == 1),

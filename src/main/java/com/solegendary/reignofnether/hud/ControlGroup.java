@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.LanguageUtil;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
@@ -93,7 +94,7 @@ public class ControlGroup {
         }
         // assign the icon resource (won't update if the front entity/building dies)
         if (hudSelectedEntity != null) {
-            String unitName = HudClientEvents.getSimpleEntityName(hudSelectedEntity);
+            String unitName = MiscUtil.getSimpleEntityName(hudSelectedEntity);
             iconRl = new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/" + unitName + ".png");
         } else if (hudSelectedPlacement != null) {
             iconRl = hudSelectedPlacement.getBuilding().icon;

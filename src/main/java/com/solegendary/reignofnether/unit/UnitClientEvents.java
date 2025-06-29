@@ -130,7 +130,7 @@ public class UnitClientEvents {
         if (unit.isPassenger())
             return;
         selectedUnits.add(unit);
-        selectedUnits.sort(Comparator.comparing(HudClientEvents::getSimpleEntityName));
+        selectedUnits.sort(Comparator.comparing(MiscUtil::getSimpleEntityName));
         selectedUnits.sort(Comparator.comparing(Entity::getId));
         BuildingClientEvents.clearSelectedBuildings();
         NonUnitClientEvents.isMoveCheckpointGreen = true;
