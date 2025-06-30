@@ -43,6 +43,8 @@ Bugfixes
 Quality of Life
 ---------------
 
+[❌] Convert stairs, slabs, stone bricks and polished blocks to nether/blackstone counterparts
+
 Balancing
 ---------
 
