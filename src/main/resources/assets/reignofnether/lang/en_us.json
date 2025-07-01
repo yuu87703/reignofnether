@@ -41,6 +41,7 @@
 
     "item.reignofnether.throwable_tnt": "Throwable TNT",
 
+
     "sounds.reignofnether.under_attack": "Under attack!",
     "sounds.reignofnether.victory": "Victory!",
     "sounds.reignofnether.defeat": "Defeat",
@@ -1141,6 +1142,7 @@
     "block.reignofnether.falling_warped_stem": "Falling Warped Stem",
     "block.reignofnether.falling_crimson_stem": "Falling Crimson Stem",
     "block.reignofnether.walkable_magma_block": "Walkable Magma",
+    "block.reignofnether.rts_structure_block": "RTS Structure Block",
 
     "block.reignofnether.rts_start_block_black": "Black RTS Start Block",
     "block.reignofnether.rts_start_block_blue": "Blue RTS Start Block",

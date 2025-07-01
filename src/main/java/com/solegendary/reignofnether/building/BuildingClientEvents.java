@@ -684,6 +684,8 @@ public class BuildingClientEvents {
                 MyRenderer.drawLine(evt.getPoseStack(), selBuilding.centrePos, portal.destination, 0, 1, 0, a);
             }
         }
+
+
     }
 
     // on scroll rotate the building placement by 90deg by resorting the blocks list

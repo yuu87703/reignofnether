@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.blocks;
 
+import com.solegendary.reignofnether.building.CustomBuildingClientEvents;
 import com.solegendary.reignofnether.registrars.BlockEntityRegistrar;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import net.minecraft.core.BlockPos;
@@ -51,5 +52,16 @@ public class RTSStructureBlockEntity extends StructureBlockEntity {
                 ((StructureBlockEntity) p_155787_).mode == StructureMode.CORNER &&
                     Objects.equals(this.structureName, ((StructureBlockEntity) p_155787_).structureName)
             ).map(BlockEntity::getBlockPos);
+    }
+
+    @Override
+    public boolean detectSize() {
+        boolean result = super.detectSize();
+        if (result) {
+            if (this.getShowBoundingBox()) {
+                CustomBuildingClientEvents.rtsStructuresToRenderBB.add(this.getBlockPos());
+            }
+        }
+        return result;
     }
 }
