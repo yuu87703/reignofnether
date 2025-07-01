@@ -64,6 +64,7 @@ public class ReignOfNether {
         ContainerRegistrar.init();
         SoundRegistrar.init();
         BlockRegistrar.init();
+        BlockEntityRegistrar.init();
         GameRuleRegistrar.init();
         Buildings.init();
         ProductionItems.init();
