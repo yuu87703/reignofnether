@@ -45,20 +45,9 @@ Bugfixes
 
 [❌] Avatar state is reset when unloaded
 
-[✔] Fixed a crash when the Royal Guard touches a spider web
-
-[✔] Portals losing buttons randomly
-    - only in multiplayer
-    - theory: could be from a login and rerun of structure syncing?
 
 Quality of Life
 ---------------
-
-[🟡] /gamerule groundYLevel now defaults to -320 so it doesn't have issues for maps below y=0
-
-[🟡] Allied unit control
-
-[❌] Selecting any allied unit or building shows you their resources at the top left
 
 [❌] Convert stairs, slabs, stone bricks and polished blocks to nether/blackstone counterparts
 

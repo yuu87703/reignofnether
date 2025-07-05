@@ -1037,8 +1037,6 @@ public class BuildingClientEvents {
                     newBuilding.changeStructure(Laboratory.upgradedStructureName);
                 } else if (newBuilding instanceof PortalPlacement portal) {
                     if (!(newBuilding.getBuilding() instanceof NeutralTransportPortal)) {
-                        System.out.println("structureName (client): " + newBuilding.getBuilding().structureName);
-                        System.out.println("portalType (client): " + portalType.toString());
                         portal.changeStructure(portalType);
                     }
                     if (portalType == PortalPlacement.PortalType.TRANSPORT)
