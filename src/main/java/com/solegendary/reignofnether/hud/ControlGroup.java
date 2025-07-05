@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.hud;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -73,7 +74,7 @@ public class ControlGroup {
     // assigns selected entities/buildings to this control group
     public void saveFromSelected(Keybinding keybinding) {
         int numSaveableUnits = getSelectedUnits().stream().filter(
-                e -> getPlayerToEntityRelationship(e) == Relationship.OWNED).toList().size();
+                e -> getPlayerToEntityRelationship(e) == Relationship.OWNED || AlliancesClient.canControlAlly(e)).toList().size();
         int numSaveableBuildings = getSelectedBuildings().stream().filter(
                 b -> getPlayerToBuildingRelationship(b) == Relationship.OWNED).toList().size();
 
@@ -86,7 +87,7 @@ public class ControlGroup {
         ArrayList<LivingEntity> selUnits = UnitClientEvents.getSelectedUnits();
         ArrayList<BuildingPlacement> selBuildings = BuildingClientEvents.getSelectedBuildings();
 
-        if (selUnits.size() > 0 && getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED) {
+        if (selUnits.size() > 0 && (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED || AlliancesClient.canControlAlly(selUnits.get(0)))) {
             this.entityIds.addAll(selUnits.stream().map(Entity::getId).toList());
         }
         else if (selBuildings.size() > 0 && getPlayerToBuildingRelationship(selBuildings.get(0)) == Relationship.OWNED) {

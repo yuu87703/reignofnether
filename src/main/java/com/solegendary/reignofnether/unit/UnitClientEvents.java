@@ -291,8 +291,12 @@ public class UnitClientEvents {
                     })
                     .mapToInt(Entity::getId).toArray();
 
+            String playerName = MC.player.getName().getString();
+            if (hudSelectedEntity instanceof Unit unit && AlliancesClient.canControlAlly(hudSelectedEntity))
+                playerName = unit.getOwnerName();
+
             UnitActionItem actionItem = new UnitActionItem(
-                MC.player.getName().getString(),
+                playerName,
                 action,
                 preselectedUnits.size() > 0 ? preselectedUnits.get(0).getId() : -1,
                 selUnits,
@@ -302,7 +306,7 @@ public class UnitClientEvents {
             actionItem.action(MC.level);
 
             PacketHandler.INSTANCE.sendToServer(new UnitActionServerboundPacket(
-                MC.player.getName().getString(),
+                playerName,
                 action,
                 preselectedUnits.size() > 0 ? preselectedUnits.get(0).getId() : -1,
                 selUnits,
@@ -575,7 +579,10 @@ public class UnitClientEvents {
                         selectedUnits.get(0).getClass(),
                         MC.level
                 );
-                if (getPlayerToEntityRelationship(selectedUnit) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) {
+                if (getPlayerToEntityRelationship(selectedUnit) == Relationship.OWNED ||
+                        NonUnitClientEvents.canControlAllMobs() ||
+                        AlliancesClient.canControlAlly(selectedUnit)) {
+
                     clearSelectedUnits();
                     for (LivingEntity entity : nearbyEntities) {
                         boolean bothVillagers = entity instanceof VillagerUnit &&
@@ -587,7 +594,9 @@ public class UnitClientEvents {
                         boolean garrisoned2 = entity instanceof Unit unit2 && GarrisonableBuilding.getGarrison(unit2) != null;
                         boolean garrionStatusMatches = (garrisoned1 && garrisoned2) || (!garrisoned1 && !garrisoned2);
 
-                        if ((getPlayerToEntityRelationship(entity) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) &&
+                        if ((getPlayerToEntityRelationship(entity) == Relationship.OWNED ||
+                                NonUnitClientEvents.canControlAllMobs() ||
+                                AlliancesClient.canControlAlly(entity)) &&
                                 (!bothVillagers || sameProfession) && garrionStatusMatches) {
                             addSelectedUnit(entity);
                         }
@@ -613,7 +622,8 @@ public class UnitClientEvents {
 
                 if (Keybindings.shiftMod.isDown() && !deselected &&
                     ((preselectedUnits.get(0) instanceof Unit && getPlayerToEntityRelationship(preselectedUnits.get(0)) == Relationship.OWNED) ||
-                    (NonUnitClientEvents.canControlNonUnits()))) {
+                    AlliancesClient.canControlAlly(preselectedUnits.get(0)) ||
+                    NonUnitClientEvents.canControlAllMobs())) {
                         addSelectedUnit(preselectedUnits.get(0));
                 }
                 else if (!deselected) { // select a single unit - this should be the only code path that allows you to select a non-owned unit
@@ -625,7 +635,8 @@ public class UnitClientEvents {
             // and disallow selecting > 1 non-owned unit or the client player
             if (selectedUnits.size() > 1) {
                 selectedUnits.removeIf(e ->
-                    (getPlayerToEntityRelationship(e) != Relationship.OWNED && !NonUnitClientEvents.canControlNonUnits()) || e.getId() == MC.player.getId()
+                    (getPlayerToEntityRelationship(e) != Relationship.OWNED && !NonUnitClientEvents.canControlAllMobs() && !AlliancesClient.canControlAlly(e)) ||
+                            e.getId() == MC.player.getId()
                 );
             }
 
@@ -688,7 +699,7 @@ public class UnitClientEvents {
                 }
                 // right click -> build or repair preselected building
                 else if (hudSelectedEntity instanceof WorkerUnit && preSelBuilding != null &&
-                        (getPlayerToBuildingRelationship(preSelBuilding) == Relationship.OWNED) ||
+                        (getPlayerToBuildingRelationship(preSelBuilding) == Relationship.OWNED || AlliancesClient.canControlAlly(hudSelectedEntity)) ||
                         preSelBuilding instanceof BridgePlacement) {
 
                     if (preSelBuilding.getBuilding() instanceof AbstractFarm && preSelBuilding.isBuilt)

@@ -754,8 +754,25 @@ public class PlayerServerEvents {
         }
     }
 
+    public static void sendMessageToPlayerNoNewLines(String playerName, String msg) {
+        sendMessageToPlayerNoNewLines(playerName, msg, false);
+    }
+
     public static void sendMessageToPlayer(String playerName, String msg) {
         sendMessageToPlayer(playerName, msg, false);
+    }
+
+    public static void sendMessageToPlayerNoNewLines(String playerName, String msg, boolean bold, Object... formatArgs) {
+        for (ServerPlayer player : players) {
+            if (player.getName().getString().equals(playerName)) {
+                if (bold) {
+                    player.sendSystemMessage(Component.translatable(msg, formatArgs).withStyle(Style.EMPTY.withBold(true)));
+                } else {
+                    player.sendSystemMessage(Component.translatable(msg, formatArgs));
+                }
+                return;
+            }
+        }
     }
 
     public static void sendMessageToPlayer(String playerName, String msg, boolean bold, Object... formatArgs) {
@@ -950,6 +967,7 @@ public class PlayerServerEvents {
             player.setGameMode(GameType.SPECTATOR);
 
         playerDefaultGameModes.replaceAll((key, oldValue) -> GameType.SPECTATOR);
+        AlliancesServerEvents.playersWithAlliedControl.clear();
     }
 
     public static void setRTSLock(boolean lock) {

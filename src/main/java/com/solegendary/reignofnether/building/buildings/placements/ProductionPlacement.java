@@ -42,6 +42,7 @@ public class ProductionPlacement extends BuildingPlacement {
         super(building, level, originPos, rotation, ownerName, blocks, isCapitol);
         if (building instanceof ProductionBuilding productionBuilding) {
             productionButtons = productionBuilding.productions.getButtons(this);
+            System.out.println("added buttons (constructor): " + productionButtons.size() + " name: " + building.name);
         }
     }
 

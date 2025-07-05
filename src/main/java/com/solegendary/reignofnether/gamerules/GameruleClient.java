@@ -28,7 +28,7 @@ public class GameruleClient {
     public static boolean doUnitGriefing = false; // only for GUI
     public static boolean doPlayerGriefing = true; // only for GUI
     public static boolean improvedPathfinding = true; // only for GUI
-    public static double groundYLevel = 0;
+    public static double groundYLevel = -320;
     public static double flyingMaxYLevel = 320;
     public static boolean allowBeacons = true;
     public static boolean pvpModesOnly = false;

@@ -299,6 +299,7 @@ public class HudClientEvents {
             boolean hudSelBuildingOwned =
                 BuildingClientEvents.getPlayerToBuildingRelationship(hudSelectedPlacement) == Relationship.OWNED ||
                         SandboxClientEvents.isSandboxPlayer();
+                        //AlliancesClient.canControlAlly(hudSelectedPlacement.ownerName) ||
 
             // -----------------
             // Building portrait
@@ -613,7 +614,8 @@ public class HudClientEvents {
                     hudZones.add(portraitRendererUnit.renderResourcesHeld(evt.getGuiGraphics(), blitX, blitY, unit));
 
                     // return button
-                    if (getPlayerToEntityRelationship(hudSelectedEntity) == Relationship.OWNED) {
+                    if (getPlayerToEntityRelationship(hudSelectedEntity) == Relationship.OWNED ||
+                        AlliancesClient.canControlAlly(hudSelectedEntity)) {
                         Button returnButton = new Button("Return resources",
                             Button.itemIconSize,
                             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/chest.png"),
@@ -651,7 +653,10 @@ public class HudClientEvents {
         blitY = screenHeight - iconFrameSize * 2 - 10;
 
         for (LivingEntity unit : selUnits) {
-            if ((getPlayerToEntityRelationship(unit) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) && unitButtons.size() < (buttonsPerRow * 2)) {
+            if ((getPlayerToEntityRelationship(unit) == Relationship.OWNED ||
+                    NonUnitClientEvents.canControlAllMobs() ||
+                    AlliancesClient.canControlAlly(unit)) &&
+                unitButtons.size() < (buttonsPerRow * 2)) {
                 // mob head icon
                 String unitName = MiscUtil.getSimpleEntityName(unit);
                 String buttonImagePath;
@@ -778,7 +783,8 @@ public class HudClientEvents {
         // Unit sandbox action buttons
         // ---------------------------
         if (selUnits.size() > 0 && SandboxClientEvents.isSandboxPlayer() && hudSelectedEntity instanceof Unit &&
-            getPlayerToEntityRelationship(selUnits.get(0)) != Relationship.OWNED) {
+            (getPlayerToEntityRelationship(selUnits.get(0)) != Relationship.OWNED &&
+                    !AlliancesClient.canControlAlly(selUnits.get(0)))) {
             blitX = 0;
             blitY = screenHeight - (iconFrameSize * 2);
             ArrayList<Button> actionButtons = new ArrayList<>();
@@ -801,7 +807,8 @@ public class HudClientEvents {
         // Unit action buttons (attack, stop, move, abilities etc.)
         // --------------------------------------------------------
         if (selUnits.size() > 0 &&
-                (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED || NonUnitClientEvents.canControlNonUnits()) &&
+                (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED ||
+                        NonUnitClientEvents.canControlAllMobs() || AlliancesClient.canControlAlly(selUnits.get(0))) &&
                 hudSelectedEntity instanceof Unit unit) {
             blitX = 0;
             blitY = screenHeight - iconFrameSize;
@@ -869,7 +876,9 @@ public class HudClientEvents {
             blitY = screenHeight - (iconFrameSize * 2) - 4;
 
             // includes worker building buttons
-            if (TutorialClientEvents.isAtOrPastStage(TutorialStage.BUILD_INTRO) && getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED) {
+            if (TutorialClientEvents.isAtOrPastStage(TutorialStage.BUILD_INTRO) &&
+                    (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED) ||
+                    AlliancesClient.canControlAlly(selUnits.get(0))) {
                 List<AbilityButton> abilityButtons = List.of();
                 for (LivingEntity livingEntity : selUnits) {
                     if (livingEntity == hudSelectedEntity) {
@@ -975,7 +984,8 @@ public class HudClientEvents {
         // -----------------
         // Non-unit controls
         // -----------------
-        else if (!(hudSelectedEntity instanceof Unit) && !getSelectedUnits().isEmpty() && NonUnitClientEvents.canControlNonUnits()) {
+        else if (!(hudSelectedEntity instanceof Unit) && !getSelectedUnits().isEmpty() &&
+                NonUnitClientEvents.canControlAllMobs()) {
             blitX = 0;
             blitY = screenHeight - iconFrameSize;
             ArrayList<Button> actionButtons = new ArrayList<>();
@@ -1011,7 +1021,7 @@ public class HudClientEvents {
         boolean isSelPlayer = MC.player != null && MC.player.getName().getString().equals(selPlayerName);
 
         // during a match if nothing is selected, then show your own resources by default
-        if (MC.player != null && !isSelPlayer && PlayerClientEvents.isRTSPlayer) {
+        if (MC.player != null && !isSelPlayer && PlayerClientEvents.isRTSPlayer && selPlayerName == null) {
             selPlayerName = MC.player.getName().getString();
             isSelPlayer = true;
         }
@@ -1124,7 +1134,7 @@ public class HudClientEvents {
                     numWorkersAssigned = UnitClientEvents.getAllUnits()
                         .stream()
                         .filter(u -> u instanceof WorkerUnit
-                            && UnitClientEvents.getPlayerToEntityRelationship(u) == Relationship.OWNED)
+                                && ((Unit) u).getOwnerName().equals(finalSelPlayerName))
                         .toList()
                         .size();
                 } else {
@@ -1175,6 +1185,7 @@ public class HudClientEvents {
             }
 
             blitY = resourceBlitYStart;
+            final String finalSelPlayerName = selPlayerName;
             for (String resourceName : new String[] { "food", "wood", "ore", "population" }) {
                 String locName = I18n.get("resources.reignofnether." + resourceName);
                 List<FormattedCharSequence> tooltip;
@@ -1198,7 +1209,7 @@ public class HudClientEvents {
                         int numWorkers = UnitClientEvents.getAllUnits()
                             .stream()
                             .filter(u -> u instanceof WorkerUnit
-                                && UnitClientEvents.getPlayerToEntityRelationship(u) == Relationship.OWNED)
+                                && ((Unit) u).getOwnerName().equals(finalSelPlayerName))
                             .toList()
                             .size();
                         tooltipWorkersAssigned =

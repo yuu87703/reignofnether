@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.player;
 
+import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
@@ -49,6 +50,10 @@ public class PlayerClientEvents {
     private static void setFaction(Faction setFaction) {
         faction = setFaction;
         HelperButtons.updateButtons();
+    }
+
+    public static String getPlayerName() {
+        return MC.player != null ? MC.player.getName().getString() : "";
     }
 
     @SubscribeEvent
@@ -298,6 +303,7 @@ public class PlayerClientEvents {
         SurvivalClientEvents.reset();
         StartPosClientEvents.resetAll();
         HeroClientEvents.fallenHeroes.clear();
+        AlliancesClient.playersWithAlliedControl.clear();
     }
 
     public static void setRTSLock(boolean lock) {

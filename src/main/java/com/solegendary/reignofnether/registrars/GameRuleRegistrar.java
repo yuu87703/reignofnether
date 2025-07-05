@@ -46,7 +46,7 @@ public class GameRuleRegistrar {
         );
         // sets the minimum Y level for the camera so it doesn't fall into the void
         GROUND_Y_LEVEL = GameRules.register("groundYLevel", GameRules.Category.PLAYER,
-                GameRules.IntegerValue.create(0)
+                GameRules.IntegerValue.create(-320)
         );
         // locks the camera to a specific Y level instead of it being calculated dynamically
         FLYING_MAX_Y_LEVEL = GameRules.register("flyingMaxYLevel", GameRules.Category.MOBS,

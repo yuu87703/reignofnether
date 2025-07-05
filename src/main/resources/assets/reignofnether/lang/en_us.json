@@ -1120,6 +1120,10 @@
     "alliance.reignofnether.disband_pending": "\nA disband request for this player is already pending.\n",
     "alliance.reignofnether.now_allied_third_party": "\n%s is now allied with %s.\n",
     "alliance.reignofnether.disbanded_third_party": "\n%s disbanded their alliance with %s.\n",
+    "alliance.reignofnether.ally_control_enabled": "\nYou are sharing unit control with allies.\n",
+    "alliance.reignofnether.ally_control_disabled": "\nYou are NOT sharing unit control with allies.\n",
+    "alliance.reignofnether.ally_control_enable": "\n%s is now sharing unit control with allies.\n",
+    "alliance.reignofnether.ally_control_disable": "\n%s is no longer sharing unit control with allies.\n",
 
     "survival.reignofnether.dawn": "Dawn breaks",
     "survival.reignofnether.dusk": "Night falls...",

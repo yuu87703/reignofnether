@@ -166,6 +166,8 @@ public class BuildingServerEvents {
                             building.changeStructure(Laboratory.upgradedStructureName);
                         } else if (building instanceof PortalPlacement portal) {
                             if (!(building.getBuilding() instanceof NeutralTransportPortal)) {
+                                System.out.println("structureName (server): " + building.getBuilding().structureName);
+                                System.out.println("portalType (server): " + portal.getPortalType().toString());
                                 portal.changeStructure(b.portalType);
                             } if (b.portalDestination != null && !b.portalDestination.equals(new BlockPos(0,0,0))) {
                                 portal.destination = b.portalDestination;

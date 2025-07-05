@@ -661,7 +661,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     @Override
     public void makeStuckInBlock(BlockState pState, Vec3 pMotionMultiplier) {
         if (avatarTicksLeft <= 0)
-            makeStuckInBlock(pState, pMotionMultiplier);
+            super.makeStuckInBlock(pState, pMotionMultiplier);
     }
 
     @Override

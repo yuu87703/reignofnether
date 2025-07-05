@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.AbilityServerboundPacket;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
 import com.solegendary.reignofnether.alliance.AllianceClientboundAddPacket;
+import com.solegendary.reignofnether.alliance.AllianceClientboundControlPacket;
 import com.solegendary.reignofnether.alliance.AllianceClientboundRemovePacket;
 import com.solegendary.reignofnether.attackwarnings.AttackWarningClientboundPacket;
 import com.solegendary.reignofnether.building.BuildingClientboundPacket;
@@ -183,6 +184,12 @@ public final class PacketHandler {
                 .encoder(AllianceClientboundRemovePacket::toBytes)
                 .decoder(AllianceClientboundRemovePacket::new)
                 .consumerMainThread(AllianceClientboundRemovePacket::handle)
+                .add();
+
+        INSTANCE.messageBuilder(AllianceClientboundControlPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(AllianceClientboundControlPacket::toBytes)
+                .decoder(AllianceClientboundControlPacket::new)
+                .consumerMainThread(AllianceClientboundControlPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(GameModeServerboundPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
