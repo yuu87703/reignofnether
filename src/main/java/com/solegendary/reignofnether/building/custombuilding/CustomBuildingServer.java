@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.blocks.RTSStructureBlockEntity;
 import com.solegendary.reignofnether.building.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -40,7 +41,10 @@ public class CustomBuildingServer {
                 }
             }
             if (!buildingExists) {
-                ArrayList<BuildingBlock> blocks = BuildingUtils.getAbsoluteBlockData(BuildingBlockData.getBuildingBlocksFromNbt(structureNbt), level, pos, Rotation.NONE);
+                ArrayList<BuildingBlock> blocks = BuildingUtils.getAbsoluteBlockData(
+                        BuildingBlockData.getBuildingBlocksFromNbt(structureNbt),
+                        level, pos, Rotation.NONE, new Vec3i(1,0,1)
+                );
                 int numSolidBlocks = 0;
                 Block portraitBlock = Blocks.COMMAND_BLOCK;
                 for (BuildingBlock bb : blocks) {
