@@ -7,7 +7,6 @@ import com.solegendary.reignofnether.building.buildings.neutral.*;
 import com.solegendary.reignofnether.building.buildings.piglins.*;
 import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.*;
-import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -93,12 +92,7 @@ public class BuildingSaveData extends SavedData {
 
         ListTag list = new ListTag();
         this.buildings.forEach(b -> {
-            String buildingName;
-            if (b.building instanceof CustomBuilding customBuilding) {
-                buildingName = customBuilding.structureName;
-            } else {
-                buildingName = ReignOfNetherRegistries.BUILDING.getKey(b.building).toString();
-            }
+            String buildingName = ReignOfNetherRegistries.BUILDING.getKey(b.building).toString();
             CompoundTag cTag = new CompoundTag();
             cTag.putString("buildingKey", buildingName);
             cTag.putInt("x", b.originPos.getX());

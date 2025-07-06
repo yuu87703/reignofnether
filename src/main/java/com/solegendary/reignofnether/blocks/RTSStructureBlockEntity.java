@@ -1,7 +1,7 @@
 package com.solegendary.reignofnether.blocks;
 
 import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents;
-import com.solegendary.reignofnether.building.custombuilding.CustomBuildingServer;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingServerEvents;
 import com.solegendary.reignofnether.registrars.BlockEntityRegistrar;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import net.minecraft.core.BlockPos;
@@ -72,7 +72,7 @@ public class RTSStructureBlockEntity extends StructureBlockEntity {
         boolean result = super.saveStructure(pWriteToDisk);
         if (result && level != null) {
             if (!level.isClientSide()) {
-                CustomBuildingServer.createNewCustomBuilding(structureName, getStructureName(), (ServerLevel) this.level, getBlockPos());
+                CustomBuildingServerEvents.createNewCustomBuilding(structureName, getStructureName(), (ServerLevel) this.level, getBlockPos());
             }
         }
         return result;

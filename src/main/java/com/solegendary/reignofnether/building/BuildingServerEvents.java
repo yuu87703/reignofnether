@@ -103,23 +103,25 @@ public class BuildingServerEvents {
         buildingData.buildings.clear();
 
         getBuildings().forEach(b -> {
-            PortalPlacement.PortalType portalType = null;
-            if (b instanceof PortalPlacement portal) {
-                portalType = portal.getPortalType();
+            if (!(b.getBuilding() instanceof CustomBuilding)) {
+                PortalPlacement.PortalType portalType = null;
+                if (b instanceof PortalPlacement portal) {
+                    portalType = portal.getPortalType();
+                }
+                buildingData.buildings.add(new BuildingSave(b.originPos,
+                        level,
+                        b.getBuilding(),
+                        b.ownerName,
+                        b.rotation,
+                        b instanceof ProductionPlacement pb ? pb.getRallyPoint() : b.originPos,
+                        b.isDiagonalBridge,
+                        b.isBuilt,
+                        b.getUpgradeLevel(),
+                        portalType,
+                        b instanceof PortalPlacement portal && portal.hasDestination() ? portal.destination : new BlockPos(0,0,0)
+                ));
+                //ReignOfNether.LOGGER.info("saved buildings/nether in serverevents: " + b.originPos);
             }
-            buildingData.buildings.add(new BuildingSave(b.originPos,
-                level,
-                b.getBuilding(),
-                b.ownerName,
-                b.rotation,
-                b instanceof ProductionPlacement pb ? pb.getRallyPoint() : b.originPos,
-                b.isDiagonalBridge,
-                b.isBuilt,
-                b.getUpgradeLevel(),
-                portalType,
-                b instanceof PortalPlacement portal && portal.hasDestination() ? portal.destination : new BlockPos(0,0,0)
-            ));
-            //ReignOfNether.LOGGER.info("saved buildings/nether in serverevents: " + b.originPos);
         });
         buildingData.save();
         level.getDataStorage().save();
