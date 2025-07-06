@@ -8,6 +8,8 @@ import com.solegendary.reignofnether.building.buildings.neutral.NeutralTransport
 import com.solegendary.reignofnether.building.buildings.placements.*;
 import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientboundPacket;
 import com.solegendary.reignofnether.fogofwar.FrozenChunkClientboundPacket;
 import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
@@ -675,18 +677,22 @@ public class BuildingServerEvents {
         }
         for (BuildingPlacement building : buildings) {
             if (building.originPos.equals(buildingPos)) {
-                BuildingClientboundPacket.placeBuilding(building.originPos,
-                    building.getBuilding(),
-                    building.rotation,
-                    building.ownerName,
-                    building.blockPlaceQueue.size(),
-                    building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
-                    building.getUpgradeLevel(),
-                    building.isBuilt,
-                    building instanceof PortalPlacement p ? p.getPortalType() : PortalPlacement.PortalType.BASIC,
-                    building instanceof PortalPlacement p && p.getPortalType() == PortalPlacement.PortalType.TRANSPORT ? p.destination : new BlockPos(0,0,0),
-                    false
-                );
+                if (building.getBuilding() instanceof CustomBuilding customBuilding) {
+                    CustomBuildingClientboundPacket.registerCustomBuilding(customBuilding.name, buildingPos, customBuilding.structurePos, customBuilding.structureSize);
+                } else {
+                    BuildingClientboundPacket.placeBuilding(building.originPos,
+                            building.getBuilding(),
+                            building.rotation,
+                            building.ownerName,
+                            building.blockPlaceQueue.size(),
+                            building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
+                            building.getUpgradeLevel(),
+                            building.isBuilt,
+                            building instanceof PortalPlacement p ? p.getPortalType() : PortalPlacement.PortalType.BASIC,
+                            building instanceof PortalPlacement p && p.getPortalType() == PortalPlacement.PortalType.TRANSPORT ? p.destination : new BlockPos(0,0,0),
+                            false
+                    );
+                }
                 return;
             }
         }

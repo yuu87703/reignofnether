@@ -1,0 +1,68 @@
+package com.solegendary.reignofnether.building.custombuilding;
+
+import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.blocks.RTSStructureBlockEntity;
+import com.solegendary.reignofnether.building.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
+public class CustomBuildingServer {
+
+    // since every custom building has a different structure, we need to maintain a list of them here
+    private static final ArrayList<CustomBuilding> customBuildings = new ArrayList<>();
+
+    public static void createNewCustomBuilding(ResourceLocation structureRL, String structureName, ServerLevel level, BlockPos pos) {
+        StructureTemplateManager manager = level.getStructureManager();
+        Optional<StructureTemplate> template = manager.get(structureRL);
+        CompoundTag structureNbt = null;
+        if (template.isPresent()) {
+            structureNbt = template.get().save(new CompoundTag());
+        }
+        BlockEntity be = level.getBlockEntity(pos);
+        if (structureNbt != null && be instanceof RTSStructureBlockEntity rtsBe) {
+            boolean buildingExists = false;
+            for (BuildingPlacement existingPlacement : BuildingServerEvents.getBuildings()) {
+                if (existingPlacement.originPos.equals(pos)) {
+                    buildingExists = true;
+                    break;
+                }
+            }
+            if (!buildingExists) {
+                ArrayList<BuildingBlock> blocks = BuildingUtils.getAbsoluteBlockData(BuildingBlockData.getBuildingBlocksFromNbt(structureNbt), level, pos, Rotation.NONE);
+                int numSolidBlocks = 0;
+                Block portraitBlock = Blocks.COMMAND_BLOCK;
+                for (BuildingBlock bb : blocks) {
+                    BlockState bs = bb.getBlockState();
+                    if (!bs.isAir() && bs.getFluidState().isEmpty()) {
+                        numSolidBlocks += 1;
+                        portraitBlock = bs.getBlock();
+                    }
+                }
+                if (numSolidBlocks == 0) {
+                    ReignOfNether.LOGGER.error("ERROR (server): cannot register custom building with no solid blocks");
+                } else {
+                    CustomBuilding building = new CustomBuilding(structureName, rtsBe.getStructurePos(), rtsBe.getStructureSize(), portraitBlock);
+                    customBuildings.add(building);
+                    BuildingPlacement placement = new BuildingPlacement(building, level, pos, Rotation.NONE, "", blocks, false);
+                    BuildingServerEvents.getBuildings().add(placement);
+                    CustomBuildingClientboundPacket.registerCustomBuilding(structureName, pos, rtsBe.getStructurePos(), rtsBe.getStructureSize());
+                }
+            } else {
+                ReignOfNether.LOGGER.error("ERROR (server): cannot register custom building at same origin as another building");
+            }
+            // TODO: allow saving
+        }
+    }
+}
