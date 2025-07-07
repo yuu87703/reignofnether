@@ -30,12 +30,12 @@ import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -45,7 +45,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
@@ -650,14 +649,15 @@ public class BuildingServerEvents {
         if (building != null) {
             evt.setCanceled(true);
 
-            if (evt.getEntity() instanceof Player player &&
+            if (evt.getEntity() instanceof ServerPlayer player &&
                 !player.isSpectator() &&
                 (AlliancesServerEvents.isAllied(player.getName().getString(), building.ownerName) ||
-                building.getBuilding() instanceof NeutralTransportPortal) &&
+                building.getBuilding() instanceof NeutralTransportPortal ||
+                player.getName().getString().equals(building.ownerName)) &&
                 building instanceof PortalPlacement portal &&
                 portal.hasDestination()) {
 
-                player.moveTo(Vec3.atCenterOf(portal.destination));
+                player.teleportTo(portal.destination.getX(), portal.destination.getY(), portal.destination.getZ());
                 building.level.playSound(null, building.centrePos, SoundEvents.ENDERMAN_TELEPORT,
                         player.getSoundSource(), 1.0F, 1.0F);
                 building.level.playSound(null, portal.destination, SoundEvents.ENDERMAN_TELEPORT,

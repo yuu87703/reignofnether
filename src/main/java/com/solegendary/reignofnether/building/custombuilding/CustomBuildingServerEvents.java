@@ -8,7 +8,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -16,9 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -90,6 +86,7 @@ public class CustomBuildingServerEvents {
         return false;
     }
 
+    /*
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent evt) {
         ServerLevel level = evt.getServer().getLevel(Level.OVERWORLD);
@@ -141,4 +138,5 @@ public class CustomBuildingServerEvents {
             });
         }
     }
+     */
 }
