@@ -76,14 +76,9 @@ public class HelperButtons {
                     if (Keybindings.ctrlMod.isDown()) {
                         UnitClientEvents.clearSelectedUnits();
                         for (int id : idleWorkerIds) {
-                            if (idleWorkerIndex < idleWorkerIds.size()) {
-                                Entity entity = MC.level.getEntity(idleWorkerIds.get(idleWorkerIndex));
-                                if (entity instanceof WorkerUnit) {
-                                    UnitClientEvents.addSelectedUnit((LivingEntity) entity);
-                                }
-                                idleWorkerIndex += 1;
-                            } else
-                                idleWorkerIndex = 0; // Reset to zero if out of bounds
+                            Entity entity = MC.level.getEntity(id);
+                            if (entity instanceof WorkerUnit)
+                                UnitClientEvents.addSelectedUnit((LivingEntity) entity);
                         }
                     } else {
                         if (idleWorkerIndex >= idleWorkerIds.size())

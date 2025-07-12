@@ -20,6 +20,23 @@ public class SoundClientEvents {
 
     public static FadeableMusicInstance customSong = null;
 
+    private static final Minecraft MC = Minecraft.getInstance();
+
+    public static void playFadeableMusicInstance(FadeableMusicInstance instance) {
+        MC.getMusicManager().stopPlaying();
+        if (customSong == null) {
+            customSong = instance;
+            MC.getSoundManager().play(instance);
+        }
+    }
+
+    public static void stopFadeableMusicInstance() {
+        if (customSong != null) {
+            customSong.startFadeOut();
+            customSong = null;
+        }
+    }
+
     public static void playSoundAtPos(SoundAction soundAction, BlockPos bp) {
         playSoundAtPos(soundAction, bp, 1.0f);
     }

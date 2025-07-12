@@ -2,7 +2,6 @@ package com.solegendary.reignofnether.time;
 
 import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.NightSource;
@@ -98,15 +97,9 @@ public class TimeClientEvents {
         bloodMoonTicksLeft = tickDuration;
         bloodMoonOwner = ownerName;
         if (tickDuration > 0) {
-            MC.getMusicManager().stopPlaying();
-            if (SoundClientEvents.customSong == null) {
-                FadeableMusicInstance bloodMoonSong = new FadeableMusicInstance(SoundRegistrar.BLOOD_MOON.get());
-                SoundClientEvents.customSong = bloodMoonSong;
-                MC.getSoundManager().play(bloodMoonSong);
-            }
+            SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.BLOOD_MOON.get()));
         } else if (SoundClientEvents.customSong != null) {
-            SoundClientEvents.customSong.startFadeOut();
-            SoundClientEvents.customSong = null;
+            SoundClientEvents.stopFadeableMusicInstance();
         }
     }
 

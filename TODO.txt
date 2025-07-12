@@ -26,7 +26,10 @@ Features
     [❌] new tab in sandbox menu to let you place previously registered custom buildings
 
 [❌] Faction Music
-    - Play on start of RTS game or randomly interspersed with a cooldown
+    - Play once at start of game, that's it
+    - If game is reset, then fade out the track
+
+    - AFTER HOLIDAY: Play on start of RTS game or randomly interspersed with a cooldown
         - Always play both combat and peaceful tracks as FadeableMusicInstances but switch fade based on combat detected on screen
 
 [❌] Research to allow militia to swap to bows
@@ -46,7 +49,7 @@ Bugfixes
 [✔] The piglin merchant's hitbox has been shrunk down to the size of a regular piglin with visual size unchanged
     - This fixes issues of getting stuck constantly and being too fat to use transport portals
 
-
+[✔] Fixed the idle worker button not working to select all when holding ctrl
 
 Quality of Life
 ---------------
@@ -64,12 +67,18 @@ Balancing
 [✔] Creeper movement speed raised from 25 to 28
 [🟡] Creepers now gain +20% move speed for 1min after becoming charged
 
+[✔] Drowned and Slime infection durations reduced from 10s to 3s
+
+[✔] Witch Healing Potion cooldown raised from 10s to 12s
+
 [❌] Give ghasts 50% magic resistance?
 
+[✔] Necromancer's base max mana reduced from 200 to 150
 [🟡] Blood moon spawns now only affect one player per cast
     - To do this, use blood moon on any that player's units or buildings at any range
 [✔] Blood moon cooldown raised from 360s to 420s
 [✔] Blood moon base duration raised from 60s to 75s and mana cost from 150 to 175
 
-[🟡] Heroes cannot level past level 5 from neutral enemies
+[✔] From level 5 onwards, heroes gain no exp from neutral mobs
     - This is borrowed from Warcraft 3's hero exp system
+

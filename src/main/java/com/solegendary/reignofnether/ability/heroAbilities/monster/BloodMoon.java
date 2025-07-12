@@ -9,6 +9,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.monster;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.HudClientEvents;
@@ -30,7 +31,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitCommand;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
@@ -63,10 +63,10 @@ public class BloodMoon extends HeroAbility {
         return new AbilityButton("Blood Moon",
             new ResourceLocation("minecraft", "textures/block/redstone_block.png"),
             hotkey,
-            () -> false,
+            () -> CursorClientEvents.getLeftClickAction() == UnitAction.BLOOD_MOON,
             () -> rank == 0,
             () -> true,
-            () -> sendUnitCommand(UnitAction.BLOOD_MOON),
+            () -> CursorClientEvents.setLeftClickAction(UnitAction.BLOOD_MOON),
             null,
             getTooltipLines(),
             this

@@ -158,7 +158,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         experience = amount;
         setStatsForLevel();
     }
-    private float baseMaxMana = 200;
+    private float baseMaxMana = 150;
     private float maxMana = baseMaxMana;
     private float mana = maxMana;
     private float manaRegenPerSecond = 1;
