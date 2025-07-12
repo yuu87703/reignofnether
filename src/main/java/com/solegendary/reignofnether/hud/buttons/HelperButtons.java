@@ -103,7 +103,10 @@ public class HelperButtons {
                     }
                 },
                 null,
-                List.of(FormattedCharSequence.forward(I18n.get("hud.helperbuttons.reignofnether.idle_workers"), Style.EMPTY))
+                List.of(
+                        FormattedCharSequence.forward(I18n.get("hud.helperbuttons.reignofnether.idle_workers"), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("hud.helperbuttons.reignofnether.idle_workers_shift"), Style.EMPTY)
+                )
         );
         buildingCancelButton = new Button(
                 "Cancel",

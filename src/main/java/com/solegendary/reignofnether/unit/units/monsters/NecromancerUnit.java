@@ -98,8 +98,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public GenericTargetedSpellGoal getCastPhantomGoal() {
         return castPhantomGoal;
     }
-    private GenericUntargetedSpellGoal castBloodMoonGoal;
-    public GenericUntargetedSpellGoal getCastBloodMoonGoal() {
+    private GenericTargetedSpellGoal castBloodMoonGoal;
+    public GenericTargetedSpellGoal getCastBloodMoonGoal() {
         return castBloodMoonGoal;
     }
 
@@ -158,7 +158,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         experience = amount;
         setStatsForLevel();
     }
-    private float baseMaxMana = 150;
+    private float baseMaxMana = 200;
     private float maxMana = baseMaxMana;
     private float mana = maxMana;
     private float manaRegenPerSecond = 1;
@@ -366,14 +366,24 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
                 null,
                 this::summonPhantomBuilding
         );
-        this.castBloodMoonGoal = new GenericUntargetedSpellGoal(
+        this.castBloodMoonGoal = new GenericTargetedSpellGoal(
                 this,
                 BloodMoon.CHANNEL_TICKS,
-                this::doBloodMoon,
-                UnitAnimationAction.CHARGE_SPELL,
-                UnitAnimationAction.STOP,
-                UnitAnimationAction.CAST_SPELL
+                999999,
+                UnitAnimationAction.CAST_SPELL,
+                null,
+                null,
+                this::doBloodMoon
         );
+            /*= new GenericUntargetedSpellGoal(
+            this,
+            BloodMoon.CHANNEL_TICKS,
+            this::doBloodMoon,
+            UnitAnimationAction.CHARGE_SPELL,
+            UnitAnimationAction.STOP,
+            UnitAnimationAction.CAST_SPELL
+           );
+             */
     }
 
     @Override
@@ -519,7 +529,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         return null;
     }
 
-    public void doBloodMoon() {
+    public void doBloodMoon(BuildingPlacement bpl) {
         if (level().isClientSide())
             return;
         if (TimeServerEvents.isBloodMoonActive())
@@ -528,7 +538,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         int soulRank = consumeSoulsAndGetSoulRank();
         int bonusDuration = BloodMoon.BONUS_DURATION_PER_SOUL_RANK * soulRank;
 
-        TimeServerEvents.startBloodMoon(BloodMoon.DURATION + bonusDuration, this);
+        TimeServerEvents.startBloodMoon(BloodMoon.DURATION + bonusDuration, this, bpl.ownerName);
         AbilityClientboundPacket.doAbility(this.getId(), UnitAction.BLOOD_MOON, BloodMoon.DURATION + bonusDuration);
     }
 }

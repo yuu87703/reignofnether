@@ -12,12 +12,6 @@ Necromancer
     [❌] Magical projectile model and sound
     [❌] Allow consumption of souls for healing/mana
 
-Piglin Merchant
-    [❌] Building attack animation not sycned
-
-    - Fancy Feast
-        [❌] Prioritise giving food items to more hurt units
-
 Royal Guard
     - Mace Slam
         [❌] Add hammer throw alternate
@@ -31,6 +25,12 @@ Features
     [❌] test in multiplayer
     [❌] new tab in sandbox menu to let you place previously registered custom buildings
 
+[❌] Faction Music
+    - Play on start of RTS game or randomly interspersed with a cooldown
+        - Always play both combat and peaceful tracks as FadeableMusicInstances but switch fade based on combat detected on screen
+
+[❌] Research to allow militia to swap to bows
+     - If researched, miltia have a 50% chance to auto switch to bows on conversion
 
 Bugfixes
 --------
@@ -40,12 +40,36 @@ Bugfixes
 
 [❌] Avatar state is reset when unloaded
 
+[❌] Use rts-lock from command blocks
+    - and other commands too
+
+[✔] The piglin merchant's hitbox has been shrunk down to the size of a regular piglin with visual size unchanged
+    - This fixes issues of getting stuck constantly and being too fat to use transport portals
+
+
 
 Quality of Life
 ---------------
+[✔] keyboard shortcut to rotate to nearest 90deg camera rotation
+     [✔] Add buttons next to map
 
-[❌] Convert stairs, slabs, stone bricks and polished blocks to nether/blackstone counterparts
+[❌] Ghasts no longer auto-aggro against blood moon spawns due to friendly fire damage to buildings
+
+[🟡] More blocks are now convertible to nether blocks including:
+    - All variations of bricks and stone bricks, mossy blocks, clay and prismarine
 
 Balancing
 ---------
 
+[✔] Creeper movement speed raised from 25 to 28
+[🟡] Creepers now gain +20% move speed for 1min after becoming charged
+
+[❌] Give ghasts 50% magic resistance?
+
+[🟡] Blood moon spawns now only affect one player per cast
+    - To do this, use blood moon on any that player's units or buildings at any range
+[✔] Blood moon cooldown raised from 360s to 420s
+[✔] Blood moon base duration raised from 60s to 75s and mana cost from 150 to 175
+
+[🟡] Heroes cannot level past level 5 from neutral enemies
+    - This is borrowed from Warcraft 3's hero exp system
