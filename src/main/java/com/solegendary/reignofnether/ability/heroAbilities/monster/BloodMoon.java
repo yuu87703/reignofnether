@@ -109,7 +109,7 @@ public class BloodMoon extends HeroAbility {
         BuildingPlacement bpl = BuildingUtils.findBuilding(level.isClientSide(), targetBp);
 
         if (bpl != null && !bpl.ownerName.equals(unitUsing.getOwnerName()))
-            use(level, unitUsing);
+            use(level, unitUsing, bpl);
         else if (level.isClientSide() && (bpl == null || bpl.ownerName.equals(unitUsing.getOwnerName())))
             HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.blood_moon.error"));
     }
@@ -120,7 +120,7 @@ public class BloodMoon extends HeroAbility {
             HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.blood_moon.error"));
     }
 
-    private void use(Level level, Unit unitUsing) {
+    private void use(Level level, Unit unitUsing, BuildingPlacement targetBpl) {
         boolean isBloodMoonActive;
         if (level.isClientSide()) {
             isBloodMoonActive = TimeClientEvents.isBloodMoonActive();
@@ -134,6 +134,7 @@ public class BloodMoon extends HeroAbility {
         if (!isBloodMoonActive) {
             ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().setAbility(this);
             ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().startCasting();
+            ((NecromancerUnit) unitUsing).getCastBloodMoonGoal().setTarget(targetBpl);
         }
     }
 }

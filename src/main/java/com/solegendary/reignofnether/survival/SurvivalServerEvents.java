@@ -234,6 +234,7 @@ public class SurvivalServerEvents {
         Wave.reseedWaves();
         nextWave = Wave.getWave(1);
         SurvivalClientboundPacket.setWaveRandomSeed(Wave.randomSeed);
+        lastTime = -1;
         if (serverLevel != null)
             saveData(serverLevel);
     }
@@ -316,6 +317,8 @@ public class SurvivalServerEvents {
 
     // triggered at nightfall
     public static void startNextWave(ServerLevel level) {
+        if (ticks < 20 * 300) // hack to solve a bug where wave starts immediately after starting
+            return;
         saveData(level);
         currentWave = nextWave;
         System.out.println("starting wave: " + nextWave.faction.name());

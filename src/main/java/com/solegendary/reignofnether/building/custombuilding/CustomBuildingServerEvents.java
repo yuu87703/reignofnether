@@ -133,7 +133,7 @@ public class CustomBuildingServerEvents {
                         b.structureSize
                 );
                 if (result) {
-                    ReignOfNether.LOGGER.info("loaded building in serverevents: " + "" + "|" + b.originPos);
+                    ReignOfNether.LOGGER.info("loaded custom building in serverevents: " + "" + "|" + b.originPos);
                 }
             });
         }

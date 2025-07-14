@@ -48,6 +48,7 @@ import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.units.monsters.*;
 import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HoglinUnit;
+import com.solegendary.reignofnether.unit.units.villagers.MilitiaUnit;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.RavagerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
@@ -228,6 +229,9 @@ public class HudClientEvents {
         }
         if (entity instanceof CreeperUnit cUnit && cUnit.isPowered()) {
             name = I18n.get("units.monsters.reignofnether.charged_creeper");
+        }
+        if (entity instanceof MilitiaUnit militiaUnit && militiaUnit.isUsingBow()) {
+            name = I18n.get("units.villagers.reignofnether.militia_archer");
         }
         return name;
     }
