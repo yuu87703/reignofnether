@@ -317,8 +317,6 @@ public class SurvivalServerEvents {
 
     // triggered at nightfall
     public static void startNextWave(ServerLevel level) {
-        if (ticks < 20 * 300) // hack to solve a bug where wave starts immediately after starting
-            return;
         saveData(level);
         currentWave = nextWave;
         System.out.println("starting wave: " + nextWave.faction.name());
