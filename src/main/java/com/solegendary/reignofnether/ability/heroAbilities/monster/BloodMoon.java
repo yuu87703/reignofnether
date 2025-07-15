@@ -108,7 +108,7 @@ public class BloodMoon extends HeroAbility {
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
         BuildingPlacement bpl = BuildingUtils.findBuilding(level.isClientSide(), targetBp);
 
-        if (bpl != null && !bpl.ownerName.equals(unitUsing.getOwnerName()))
+        if (bpl != null && !bpl.ownerName.isBlank() && !bpl.ownerName.equals(unitUsing.getOwnerName()))
             use(level, unitUsing, bpl);
         else if (level.isClientSide() && (bpl == null || bpl.ownerName.isBlank() || bpl.ownerName.equals(unitUsing.getOwnerName())))
             HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.blood_moon.error"));
