@@ -39,7 +39,7 @@ public class BloodMoon extends HeroAbility {
     public static final String ENEMY_NAME = "Blood Moon";
 
     public static final int SPAWN_INTERVAL_TICKS = 120; // how often to spawn a unit
-    public static final int CHANNEL_TICKS = 40;
+    public static final int CHANNEL_TICKS = 0;
     private static final int CD_MAX = 420 * ResourceCost.TICKS_PER_SECOND;
     public static final int DURATION = 75 * ResourceCost.TICKS_PER_SECOND;
     public static final int BONUS_DURATION_PER_SOUL_RANK = 10 * ResourceCost.TICKS_PER_SECOND;
