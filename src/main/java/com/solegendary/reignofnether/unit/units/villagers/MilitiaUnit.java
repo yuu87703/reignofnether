@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.BackToWorkUnit;
+import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.ability.abilities.WeaponSwapBow;
 import com.solegendary.reignofnether.ability.abilities.WeaponSwapSword;
 import com.solegendary.reignofnether.building.BuildingPlacement;
@@ -45,10 +46,7 @@ import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -171,13 +169,15 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
     final static public float rangedMovementSpeed = 0.25f;
     public int maxResources = 100;
 
+    public boolean isCaptain = false;
+
     private final List<AbilityButton> abilityButtons = new ArrayList<>();
     private final List<Ability> abilities = new ArrayList<>();
     private final List<ItemStack> items = new ArrayList<>();
 
     public MilitiaUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
-        this.abilities.add(new BackToWorkUnit(level));
+        this.abilities.add(new BackToWorkUnit(this));
         this.abilities.add(new WeaponSwapBow(this));
         this.abilities.add(new WeaponSwapSword(this));
         updateAbilityButtons();
@@ -278,8 +278,13 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
             super.tick();
             Unit.tick(this);
             AttackerUnit.tick(this);
+            PromoteIllager.checkAndApplyBuff(this);
 
-            if (this.tickCount > 100 && this.tickCount % 10 == 0 && !converted && !level().isClientSide() && !getOwnerName().equals(ENEMY_OWNER_NAME)) {
+            this.isCaptain = getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BannerItem;
+
+            if (!this.isCaptain && this.tickCount > 100 && this.tickCount % 10 == 0 && !converted &&
+                !level().isClientSide() && !getOwnerName().equals(ENEMY_OWNER_NAME)) {
+
                 BuildingPlacement building = BuildingUtils.findClosestBuilding(level().isClientSide(), this.getEyePosition(),
                         (b) -> b.isBuilt && b.ownerName.equals(getOwnerName()) && b.getBuilding() instanceof TownCentre);
 

@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.sounds;
 
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
+import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -22,8 +23,17 @@ public class SoundClientEvents {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
+    public static void playFactionCalmTheme(Faction faction) {
+        switch (faction) {
+            case VILLAGERS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.VILLAGER_CALM_THEME_SONG.get()));
+            case MONSTERS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.MONSTER_CALM_THEME_SONG.get()));
+            case PIGLINS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.PIGLIN_CALM_THEME_SONG.get()));
+        }
+    }
+
     public static void playFadeableMusicInstance(FadeableMusicInstance instance) {
         MC.getMusicManager().stopPlaying();
+        stopFadeableMusicInstance();
         if (customSong == null) {
             customSong = instance;
             MC.getSoundManager().play(instance);

@@ -67,7 +67,7 @@ public class BeaconPlacement extends ProductionPlacement implements RangeIndicat
 
     @Override
     public String getUpgradedName() {
-        String name = I18n.get("buildings.neutral.reignofnether.upgraded_beacon");
+        String name = I18n.get("buildings.neutral.reignofnether.capturable_beacon");
         if (getAuraEffect() == MobEffects.LUCK)
             return name + " (" + I18n.get("ability.reignofnether.beacon_aura.wealth") + ")";
         else if (getAuraEffect() == MobEffects.DIG_SPEED)

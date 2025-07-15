@@ -15,6 +15,7 @@ import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
+import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.startpos.StartPosClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -185,6 +186,8 @@ public class PlayerClientEvents {
             GameruleClient.gamerulesMenuOpen = false;
             isRTSPlayer = true;
             setFaction(setFaction);
+            if (!SandboxClientEvents.isSandboxPlayer())
+                MC.getMusicManager().stopPlaying();
         }
     }
 
@@ -192,6 +195,7 @@ public class PlayerClientEvents {
         if (MC.player != null && MC.player.getName().getString().equals(playerName)) {
             isRTSPlayer = false;
             setFaction(Faction.NONE);
+            SoundClientEvents.stopFadeableMusicInstance();
         }
     }
 
@@ -279,6 +283,7 @@ public class PlayerClientEvents {
         boolean isSandbox = SandboxClientEvents.isSandboxPlayer();
         isRTSPlayer = false;
         setFaction(Faction.NONE);
+        SoundClientEvents.stopFadeableMusicInstance();
 
         HudClientEvents.controlGroups.clear();
         UnitClientEvents.getSelectedUnits().clear();

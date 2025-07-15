@@ -26,14 +26,16 @@ Features
     [🟡] test saving
     [❌] AFTER HOLIDAY: new tab in sandbox menu to let you place previously registered custom buildings
 
-[❌] Faction Music
-    - Play once at start of game, that's it
-    - If game is reset, then fade out the track
+[✔] Faction Music
+    - Each faction theme plays once when you finish building your first capitol
 
     - AFTER HOLIDAY: Play on start of RTS game or randomly interspersed with a cooldown
         - Always play both combat and peaceful tracks as FadeableMusicInstances but switch fade based on combat detected on screen
 
-[✔] Research to allow militia to swap to bows
+[✔] New Upgrade: Militia Archer Training
+    - Researched at the Blacksmith for (250 food, 500 wood, 160s)
+    - Unlocks the ability for militia to instantly swap between a bow and a sword at any time
+    - Militia Archers have -40% attack speed, -10% move speed and no armour compared to sword wielders
 
 Bugfixes
 --------
@@ -46,22 +48,39 @@ Bugfixes
 
 [❌] When someone relogs, bridges revert to original rotations
 
+
 [✔] The piglin merchant's hitbox has been shrunk down to the size of a regular piglin with visual size unchanged
     - This fixes issues of getting stuck constantly and being too fat to use transport portals
 
-[✔] Fixed the idle worker button not working to select all when holding ctrl
+[✔] Fixed ctrl-clicking the idle worker button to select all idle workers
 
-[🟡] Fixed a bug where the first survival wave would start immediately after completing your capitol
+[✔] Fixed a bug where the first survival wave would start immediately after completing your capitol
+
+[✔] Fixed Neutral Beacons not being fully upgraded when placed in sandbox
+
+
+
 
 Quality of Life
 ---------------
+
+[❌] Handicap command
+
+
+[✔] You can now promote militia to captains using upgraded Castles
+    - a militia captain cannot be converted back into a villager by any means
+
+[✔] Ghasts no longer auto-aggro against blood moon spawns due to friendly fire damage to buildings
+
 [✔] You can now rotate the camera to 90 degree points by pressing alt + left/right arrow keys
     - Also added buttons to the bottom right to do this
 
-[❌] Ghasts no longer auto-aggro against blood moon spawns due to friendly fire damage to buildings
-
-[🟡] More blocks are now convertible to nether blocks including:
+[✔] More blocks are now convertible to nether blocks including:
     - All variations of bricks and stone bricks, mossy blocks, clay and prismarine
+
+[✔] You can now shift click unit icons to deselect individual units
+
+
 
 Balancing
 ---------

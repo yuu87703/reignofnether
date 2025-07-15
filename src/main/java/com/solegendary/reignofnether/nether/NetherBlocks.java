@@ -214,6 +214,7 @@ public class NetherBlocks {
         MAPPINGS.put(Blocks.NETHER_BRICKS,
             List.of(
                 Blocks.STONE_BRICKS,
+                Blocks.CRACKED_STONE_BRICKS,
                 Blocks.MOSSY_STONE_BRICKS,
                 Blocks.PRISMARINE_BRICKS,
                 Blocks.DARK_PRISMARINE

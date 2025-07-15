@@ -167,8 +167,10 @@ public class HudClientEvents {
         if (!(entity instanceof Unit))
             return name.toLowerCase();
 
+        if (entity instanceof MilitiaUnit militiaUnit && militiaUnit.isUsingBow()) {
+            name = I18n.get("units.villagers.reignofnether.militia_archer");
+        }
         ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
-
         if (itemStack.getItem() instanceof BannerItem) {
             name += " " + I18n.get("units.villagers.reignofnether.captain");
         }
@@ -229,9 +231,6 @@ public class HudClientEvents {
         }
         if (entity instanceof CreeperUnit cUnit && cUnit.isPowered()) {
             name = I18n.get("units.monsters.reignofnether.charged_creeper");
-        }
-        if (entity instanceof MilitiaUnit militiaUnit && militiaUnit.isUsingBow()) {
-            name = I18n.get("units.villagers.reignofnether.militia_archer");
         }
         return name;
     }
@@ -692,7 +691,9 @@ public class HudClientEvents {
                     () -> true,
                     () -> {
                         // select this one specific unit
-                        if (getModifiedEntityName(hudSelectedEntity).equals(getModifiedEntityName(unit))) {
+                        if (Keybindings.shiftMod.isDown()) {
+                            UnitClientEvents.getSelectedUnits().remove(hudSelectedEntity);
+                        } else if (getModifiedEntityName(hudSelectedEntity).equals(getModifiedEntityName(unit))) {
                             UnitClientEvents.clearSelectedUnits();
                             UnitClientEvents.addSelectedUnit(unit);
                         } else { // click to select this unit type as a group

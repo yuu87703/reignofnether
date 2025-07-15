@@ -97,7 +97,7 @@ public class TimeClientEvents {
         bloodMoonTicksLeft = tickDuration;
         bloodMoonOwner = ownerName;
         if (tickDuration > 0) {
-            SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.BLOOD_MOON.get()));
+            SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.BLOOD_MOON_SONG.get()));
         } else if (SoundClientEvents.customSong != null) {
             SoundClientEvents.stopFadeableMusicInstance();
         }

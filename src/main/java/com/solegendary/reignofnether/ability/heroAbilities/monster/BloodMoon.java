@@ -110,7 +110,7 @@ public class BloodMoon extends HeroAbility {
 
         if (bpl != null && !bpl.ownerName.equals(unitUsing.getOwnerName()))
             use(level, unitUsing, bpl);
-        else if (level.isClientSide() && (bpl == null || bpl.ownerName.equals(unitUsing.getOwnerName())))
+        else if (level.isClientSide() && (bpl == null || bpl.ownerName.isBlank() || bpl.ownerName.equals(unitUsing.getOwnerName())))
             HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.blood_moon.error"));
     }
 
