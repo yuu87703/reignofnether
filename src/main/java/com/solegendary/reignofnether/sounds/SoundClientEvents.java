@@ -33,11 +33,8 @@ public class SoundClientEvents {
 
     public static void playFadeableMusicInstance(FadeableMusicInstance instance) {
         MC.getMusicManager().stopPlaying();
-        stopFadeableMusicInstance();
-        if (customSong == null) {
-            customSong = instance;
-            MC.getSoundManager().play(instance);
-        }
+        customSong = instance;
+        MC.getSoundManager().play(instance);
     }
 
     public static void stopFadeableMusicInstance() {

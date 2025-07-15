@@ -82,22 +82,6 @@ public class PlayerClientEvents {
             return 0;
         }));
         evt.getDispatcher()
-            .register(Commands.literal("rts-lock").then(Commands.literal("enable").executes((command) -> {
-                if (MC.player != null && MC.player.hasPermissions(4)) {
-                    PlayerServerboundPacket.lockRTS();
-                    return 1;
-                }
-                return 0;
-            })));
-        evt.getDispatcher()
-            .register(Commands.literal("rts-lock").then(Commands.literal("disable").executes((command) -> {
-                if (MC.player != null && MC.player.hasPermissions(4)) {
-                    PlayerServerboundPacket.unlockRTS();
-                    return 1;
-                }
-                return 0;
-            })));
-        evt.getDispatcher()
             .register(Commands.literal("rts-syncing").then(Commands.literal("enable").executes((command) -> {
                 if (MC.player != null && MC.player.hasPermissions(4)) {
                     PlayerServerboundPacket.enableRTSSyncing();

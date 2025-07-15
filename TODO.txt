@@ -43,11 +43,9 @@ Bugfixes
 
 [❌] Avatar state is reset when unloaded
 
-[❌] Use rts-lock from command blocks
-    - and other commands too
-
 [❌] When someone relogs, bridges revert to original rotations
 
+[✔] /rts-lock can now be used from command blocks
 
 [✔] The piglin merchant's hitbox has been shrunk down to the size of a regular piglin with visual size unchanged
     - This fixes issues of getting stuck constantly and being too fat to use transport portals

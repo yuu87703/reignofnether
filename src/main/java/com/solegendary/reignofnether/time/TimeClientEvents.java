@@ -94,11 +94,12 @@ public class TimeClientEvents {
     }
 
     public static void setBloodMoonTicks(int tickDuration, String ownerName) {
+        boolean newBloodMoon = tickDuration > 0 && bloodMoonTicksLeft <= 0;
         bloodMoonTicksLeft = tickDuration;
         bloodMoonOwner = ownerName;
-        if (tickDuration > 0) {
+        if (newBloodMoon) {
             SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.BLOOD_MOON_SONG.get()));
-        } else if (SoundClientEvents.customSong != null) {
+        } else if (tickDuration <= 0) {
             SoundClientEvents.stopFadeableMusicInstance();
         }
     }
