@@ -34,13 +34,13 @@ public class CustomBuildingServerEvents {
     public static boolean createNewCustomBuilding(ResourceLocation structureRL, String structureName, ServerLevel level, BlockPos pos) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof RTSStructureBlockEntity rtsBe) {
-            return createNewCustomBuilding(structureRL, structureName, level, pos, rtsBe.getStructurePos(), rtsBe.getStructureSize());
+            return createNewCustomBuilding(structureRL, structureName, level, pos, rtsBe.getStructurePos(), rtsBe.getStructureSize(), true);
         }
         return true;
     }
 
     public static boolean createNewCustomBuilding(ResourceLocation structureRL, String structureName, ServerLevel level,
-                                                  BlockPos pos, BlockPos structurePos, Vec3i structureSize) {
+                                                  BlockPos pos, BlockPos structurePos, Vec3i structureSize, boolean save) {
         StructureTemplateManager manager = level.getStructureManager();
         Optional<StructureTemplate> template = manager.get(structureRL);
         CompoundTag structureNbt = null;
@@ -77,6 +77,8 @@ public class CustomBuildingServerEvents {
                     BuildingPlacement placement = new BuildingPlacement(building, level, pos, Rotation.NONE, "", blocks, false);
                     BuildingServerEvents.getBuildings().add(placement);
                     CustomBuildingClientboundPacket.registerCustomBuilding(structureName, pos, structurePos, structureSize);
+                    //if (save)
+                    //    saveBuildings(level);
                     return true;
                 }
             } else {
@@ -125,12 +127,13 @@ public class CustomBuildingServerEvents {
             CustomBuildingSaveData customBuildingData = CustomBuildingSaveData.getInstance(level);
             customBuildingData.customBuildings.forEach(b -> {
                 boolean result = createNewCustomBuilding(
-                        new ResourceLocation(b.structureName),
+                        new ResourceLocation(b.structureName.toLowerCase()),
                         b.buildingName,
                         level,
                         b.originPos,
                         b.structurePos,
-                        b.structureSize
+                        b.structureSize,
+                        false
                 );
                 if (result) {
                     ReignOfNether.LOGGER.info("loaded custom building in serverevents: " + "" + "|" + b.originPos);

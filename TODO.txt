@@ -23,8 +23,13 @@ Features
 --------
 [✔] Structure block to register custom buildings
     [❌] test in multiplayer
-    [🟡] test saving
-    [❌] AFTER HOLIDAY: new tab in sandbox menu to let you place previously registered custom buildings
+    [🟡] test saving (concurrent warning with normal building saves)
+    [❌] new tab in sandbox menu to let you place previously registered custom buildings
+    [❌] button to de-register individual building at bottom left
+    [❌] ability to add generic building features:
+        - garrisonable with special entry/exit blocks
+        - nether spread with adjustable range
+        - night warp with adjustable range
 
 [✔] Faction Music
     - Each faction theme plays once when you finish building your first capitol
