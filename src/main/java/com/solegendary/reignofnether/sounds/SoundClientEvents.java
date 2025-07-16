@@ -8,6 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,17 +23,36 @@ public class SoundClientEvents {
 
     public static FadeableMusicInstance customSong = null;
 
+    public static int songTicksLeft = 0;
+
     private static final Minecraft MC = Minecraft.getInstance();
+
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent evt) {
+        if (evt.phase != TickEvent.Phase.END) {
+            return;
+        }
+        if (songTicksLeft > 0) {
+            songTicksLeft -= 1;
+            if (customSong != null && songTicksLeft <= 0)
+                stopFadeableMusicInstance();
+        }
+    }
 
     public static void playFactionCalmTheme(Faction faction) {
         switch (faction) {
-            case VILLAGERS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.VILLAGER_CALM_THEME_SONG.get()));
-            case MONSTERS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.MONSTER_CALM_THEME_SONG.get()));
-            case PIGLINS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.PIGLIN_CALM_THEME_SONG.get()));
+            case VILLAGERS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.VILLAGER_CALM_THEME_SONG.get()), 5200);
+            case MONSTERS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.MONSTER_CALM_THEME_SONG.get()), 5200);
+            case PIGLINS -> SoundClientEvents.playFadeableMusicInstance(new FadeableMusicInstance(SoundRegistrar.PIGLIN_CALM_THEME_SONG.get()), 5200);
         }
     }
 
     public static void playFadeableMusicInstance(FadeableMusicInstance instance) {
+        playFadeableMusicInstance(instance, 0);
+    }
+
+    public static void playFadeableMusicInstance(FadeableMusicInstance instance, int tickLength) {
+        songTicksLeft = tickLength;
         MC.getMusicManager().stopPlaying();
         customSong = instance;
         MC.getSoundManager().play(instance);
@@ -39,6 +60,7 @@ public class SoundClientEvents {
 
     public static void stopFadeableMusicInstance() {
         if (customSong != null) {
+            songTicksLeft = 0;
             customSong.startFadeOut();
             customSong = null;
         }
