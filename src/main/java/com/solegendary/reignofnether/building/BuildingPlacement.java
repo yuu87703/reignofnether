@@ -26,7 +26,9 @@ import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchSilverfish;
 import com.solegendary.reignofnether.resources.*;
+import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
+import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
@@ -689,6 +691,9 @@ public class BuildingPlacement {
             }
         } else {
             TutorialClientEvents.updateStage();
+            if (this.isCapitol && !SandboxClientEvents.isSandboxPlayer() &&
+                getTotalCompletedBuildingsOwned(this.level.isClientSide(), ownerName) == 1)
+                SoundClientEvents.playFactionCalmTheme(this.getFaction());
         }
 
         // prevent showing blocks on minimap unless previously explored

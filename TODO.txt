@@ -1,5 +1,5 @@
 
-1.19.2-1.2.0c
+1.19.2-1.2.1
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -12,12 +12,6 @@ Necromancer
     [❌] Magical projectile model and sound
     [❌] Allow consumption of souls for healing/mana
 
-Piglin Merchant
-    [❌] Building attack animation not sycned
-
-    - Fancy Feast
-        [❌] Prioritise giving food items to more hurt units
-
 Royal Guard
     - Mace Slam
         [❌] Add hammer throw alternate
@@ -29,23 +23,85 @@ Features
 --------
 [✔] Structure block to register custom buildings
     [❌] test in multiplayer
+    [🟡] test saving (concurrent warning with normal building saves)
     [❌] new tab in sandbox menu to let you place previously registered custom buildings
+    [❌] button to de-register individual building at bottom left
+    [❌] ability to add generic building features:
+        - garrisonable with special entry/exit blocks
+        - nether spread with adjustable range
+        - night warp with adjustable range
 
+[✔] Faction Music
+    - Each faction theme plays once when you finish building your first capitol
+
+    - AFTER HOLIDAY: Play on start of RTS game or randomly interspersed with a cooldown
+        - Always play both combat and peaceful tracks as FadeableMusicInstances but switch fade based on combat detected on screen
+
+[✔] New Upgrade: Militia Archer Training
+    - Researched at the Blacksmith for (250 food, 500 wood, 160s)
+    - Unlocks the ability for militia to instantly swap between a bow and a sword at any time
+    - Militia Archers have -40% attack speed, -10% move speed and no armour compared to sword wielders
 
 Bugfixes
 --------
 [❌] keyframe animations are cancelled upon being hit
 
-[❌] on a fresh world (easy) survival wave starts way too early (within 1-2 mins of starting)
-
 [❌] Avatar state is reset when unloaded
+
+[❌] When someone relogs, bridges revert to original rotations
+
+[✔] /rts-lock can now be used from command blocks
+
+[✔] The piglin merchant's hitbox has been shrunk down to the size of a regular piglin with visual size unchanged
+    - This fixes issues of getting stuck constantly and being too fat to use transport portals
+
+[✔] Fixed ctrl-clicking the idle worker button to select all idle workers
+
+[✔] Fixed a bug where the first survival wave would start immediately after completing your capitol
+
+[✔] Fixed Neutral Beacons not being fully upgraded when placed in sandbox
+
+
 
 
 Quality of Life
 ---------------
 
-[❌] Convert stairs, slabs, stone bricks and polished blocks to nether/blackstone counterparts
+[❌] Handicap command
+
+
+[✔] You can now promote militia to captains using upgraded Castles
+    - a militia captain cannot be converted back into a villager by any means
+
+[✔] Ghasts no longer auto-aggro against blood moon spawns due to friendly fire damage to buildings
+
+[✔] You can now rotate the camera to 90 degree points by pressing alt + left/right arrow keys
+    - Also added buttons to the bottom right to do this
+
+[✔] More blocks are now convertible to nether blocks including:
+    - All variations of bricks and stone bricks, mossy blocks, clay and prismarine
+
+[✔] You can now shift click unit icons to deselect individual units
+
+
 
 Balancing
 ---------
 
+[✔] Creeper movement speed raised from 25 to 28
+[✔] Creepers now gain +20% move speed for 1min after becoming charged
+[✔] Drowned and Slime infection durations reduced from 10s to 3s
+
+[✔] Necromancer's base max mana reduced from 200 to 150
+[✔] Blood moon spawns now only affect one player per cast
+    - To do this, use blood moon on any that player's units or buildings at any range
+[✔] Blood moon cooldown raised from 360s to 420s
+[✔] Blood moon base duration raised from 60s to 75s and mana cost from 150 to 175
+
+[✔] Witch Healing Potion cooldown raised from 10s to 12s
+
+[✔] Ghasts now have 50% magic resistance, meaning they will no longer be one-shot by warden sonic booms
+
+[✔] From level 5 onwards, heroes gain no exp from neutral mobs
+    - This is borrowed from Warcraft 3's hero exp system
+    - This means you can't unlock ultimates without fighting an opponent

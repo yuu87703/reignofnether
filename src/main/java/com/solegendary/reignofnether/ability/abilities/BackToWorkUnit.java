@@ -23,16 +23,19 @@ public class BackToWorkUnit extends Ability {
 
     private static final int RANGE = TownCentre.MILITIA_RANGE;
 
-    public BackToWorkUnit(Level level) {
+    private final MilitiaUnit militiaUnit;
+
+    public BackToWorkUnit(MilitiaUnit militiaUnit) {
         super(
                 UnitAction.BACK_TO_WORK_UNIT,
-                level,
+                militiaUnit.level(),
                 0,
                 RANGE,
                 0,
                 false,
                 false
         );
+        this.militiaUnit = militiaUnit;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class BackToWorkUnit extends Ability {
                 new ResourceLocation("minecraft", "textures/item/iron_pickaxe.png"),
                 hotkey,
                 () -> false,
-                () -> false,
+                () -> militiaUnit.isCaptain,
                 () -> true,
                 () -> sendUnitCommand(UnitAction.BACK_TO_WORK_UNIT),
                 null,

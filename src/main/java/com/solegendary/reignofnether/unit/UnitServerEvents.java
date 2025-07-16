@@ -28,6 +28,7 @@ import com.solegendary.reignofnether.unit.packets.UnitIdleWorkerClientBoundPacke
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.unit.packets.UnitSyncWorkerClientBoundPacket;
 import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
+import com.solegendary.reignofnether.unit.units.monsters.DrownedUnit;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
 import com.solegendary.reignofnether.unit.units.monsters.SlimeUnit;
 import com.solegendary.reignofnether.unit.units.piglins.*;
@@ -455,7 +456,7 @@ public class UnitServerEvents {
 
             EntityType<? extends Unit> entityType = null;
 
-            if (drownedInfected) {
+            if (drownedInfected || unit instanceof DrownedUnit) {
                 if (evt.getEntity() instanceof GruntUnit || evt.getEntity() instanceof BruteUnit
                         || evt.getEntity() instanceof HeadhunterUnit) {
                     entityType = EntityRegistrar.ZOMBIE_PIGLIN_UNIT.get();
@@ -468,7 +469,7 @@ public class UnitServerEvents {
                     entityType = EntityRegistrar.DROWNED_UNIT.get();
                 }
             }
-            if (slimeInfected && entityType == null) {
+            if ((slimeInfected || unit instanceof SlimeUnit) && entityType == null) {
                 entityType = EntityRegistrar.SLIME_UNIT.get();
             }
 
