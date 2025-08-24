@@ -1,5 +1,5 @@
 
-1.19.2-1.2.1a
+1.19.2-1.2.1b
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -34,21 +34,43 @@ Features
 Bugfixes
 --------
 [❌] keyframe animations are cancelled upon being hit
-
 [❌] Avatar state is reset when unloaded
-
 [❌] When someone relogs, bridges revert to original rotations
 
+[🟡] Fixed a crash when using a portal
+[🟡] Zombie production time increased from 10s to 18s
+    - This was an error, all other zombies, skeletons and their variants take 18s to build
+[🟡] heroes do not produce in any subsequent game even with /rts-reset
+    - only happens in actual jar
+[🟡] Fixed chestplates not granting armour % to headhunters
 
+[❌] Evokers with vigor just delay their attacks by the same amount of time they saved
+
+[❌] heroes are not resetting when switching worlds until /rts-reset is used
+[❌] population count is messed up when consuming slimes
 
 
 Quality of Life
 ---------------
 
-[❌] Handicap command
-    - Makes all resource costs some % higher than normal
+[❌] add tab to show functionality and centre Daratrix's spectator menu
+
+[🟡] all unit stats can now be hovered over for tooltips
+    [❌] - bonus stats like hoglins bonus damage to buildings are shown here
+    [❌] - movement speed is shown in green or red if they are subject to buffs or debuffs
+    [🟡] - armor is shown in different colours depending on what it is effective against
 
 
 
 Balancing
 ---------
+
+[🟡] Ravagers no longer benefit from the movement speed buff from Captains
+
+[❌] Skeletons are too good earlygame and too bad lategame
+
+[❌] All basic melee units gain 20% armour against ranged attacks
+
+[❌] -1 speed to all basic ranged units (headhunters, skeletons, pillagers)
+
+[🟡] Population cost max-sized (size 6) slimes and magma cubes reduced from 6 to 5

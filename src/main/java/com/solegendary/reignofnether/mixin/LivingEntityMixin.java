@@ -102,8 +102,8 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    @Shadow protected float getDamageAfterArmorAbsorb(DamageSource pDamageSource, float pDamageAmount) { return 0f; }
-    @Shadow protected float getDamageAfterMagicAbsorb(DamageSource pDamageSource, float pDamageAmount) { return 0f; }
+    @Shadow public float getDamageAfterArmorAbsorb(DamageSource pDamageSource, float pDamageAmount) { return 0f; }
+    @Shadow public float getDamageAfterMagicAbsorb(DamageSource pDamageSource, float pDamageAmount) { return 0f; }
     @Shadow public float getAbsorptionAmount() { return 0f; }
     @Shadow public void setAbsorptionAmount(float pAbsorptionAmount) { }
     @Shadow public CombatTracker getCombatTracker() { return null; }

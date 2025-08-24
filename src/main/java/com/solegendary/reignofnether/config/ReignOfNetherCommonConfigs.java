@@ -166,7 +166,7 @@ public class ReignOfNetherCommonConfigs {
     public static class UnitCosts implements Costs {
         //Monsters
         public static final ResourceCostConfigEntry CREEPER = ResourceCostConfigEntry.Unit(50, 0, 100, 35, 2, ResourceCosts.CREEPER, "Creeper Config");
-        public static final ResourceCostConfigEntry ZOMBIE = ResourceCostConfigEntry.Unit(75, 0, 0, 10, 1, ResourceCosts.ZOMBIE, "Zombie Config");
+        public static final ResourceCostConfigEntry ZOMBIE = ResourceCostConfigEntry.Unit(75, 0, 0, 18, 1, ResourceCosts.ZOMBIE, "Zombie Config");
         public static final ResourceCostConfigEntry ZOMBIE_VILLAGER = ResourceCostConfigEntry.Unit(50,0,0,15,1, ResourceCosts.ZOMBIE_VILLAGER, "Zombie Villager Config");
         public static final ResourceCostConfigEntry SKELETON = ResourceCostConfigEntry.Unit(50,45,0,18,1, ResourceCosts.SKELETON, "Skeleton Config");
         public static final ResourceCostConfigEntry STRAY = ResourceCostConfigEntry.Unit(50,45,0,18,1, ResourceCosts.STRAY, "Stray Config");

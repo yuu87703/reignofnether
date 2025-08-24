@@ -10,12 +10,14 @@ import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -35,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
     // region
@@ -239,5 +243,17 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
     public void thunderHit(ServerLevel pLevel, LightningBolt pLightning) {
         super.thunderHit(pLevel, pLightning);
         this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60 * 20, 0));
+    }
+
+    @Override
+    public List<FormattedCharSequence> getAttackDamageStatTooltip() {
+        return List.of(
+                fcs(I18n.get("unitstats.reignofnether.attack_damage"), true),
+                fcs(I18n.get("unitstats.reignofnether.attack_damage_bonus_buildings", "100%"))
+        );
+    }
+    @Override
+    public boolean hasBonusDamage() {
+        return true;
     }
 }

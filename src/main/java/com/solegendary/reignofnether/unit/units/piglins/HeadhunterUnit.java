@@ -314,8 +314,10 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
 
     @Override
     public void onPickupEquipment(ItemStack itemStack) {
-        AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), 0, AttributeModifier.Operation.ADDITION);
-        itemStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
+        if (itemStack.getItem() == Items.TRIDENT) {
+            AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), 0, AttributeModifier.Operation.ADDITION);
+            itemStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
+        }
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
     }
 }
