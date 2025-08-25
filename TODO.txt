@@ -40,17 +40,17 @@ Bugfixes
 [❌] heroes are not resetting when switching worlds until /rts-reset is used
 [❌] population count is messed up when consuming slimes
 
-[🟡] Fixed a crash when using a portal
+[🟡] Fixed a crash when using a transport portal with many units
 [🟡] Zombie production time increased from 10s to 18s
     - This was an error, all other zombies, skeletons and their variants take 18s to build
-[🟡] heroes do not produce in any subsequent game even with /rts-reset
-    - only happens in actual jar
-[🟡] Fixed chestplates not granting armour % to headhunters
+[🟡] Fixed heroes not being produced in new games on the same map even with /rts-reset
+[🟡] Fixed netherite chestplates not granting armour to headhunters
 [🟡] Evokers with vigor just delay their attacks by the same amount of time they saved
+[🟡] Evoker Circle Fangs now correctly do 12 damage instead of 6
 
 [❌] music is overlapping when two players start near each other
 
-[❌] Evoker circle fangs consistently only do 6 damage
+
 
 
 Quality of Life
@@ -61,7 +61,7 @@ Quality of Life
 
 [❌] add tab to show functionality and centre Daratrix's spectator menu
 
-[✔] all unit stats can now be hovered over for tooltips
+[✔] All unit stats can now be hovered over for tooltips
     [🟡] - bonus stats like hoglins bonus damage to buildings are shown here
     [🟡] - stats are shown in green or red when affected by any buffs or debuffs
     [🟡] - armor is shown in different colours depending on what it is effective against
@@ -74,9 +74,7 @@ Balancing
 [❌] Skeletons are too good earlygame and too bad lategame
 
 [❌] Ravagers no longer benefit from the movement speed buff from Captains
-
 [❌] All basic melee units gain 20% armour against ranged attacks
-
 [❌] -1 speed to all basic ranged units (headhunters, skeletons, pillagers)
-
 [❌] Population cost max-sized (size 6) slimes and magma cubes reduced from 6 to 5
+[❌] The Necromancer can now consume souls to heal itself for 1.5hp per soul

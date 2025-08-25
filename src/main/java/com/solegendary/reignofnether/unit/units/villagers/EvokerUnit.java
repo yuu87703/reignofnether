@@ -165,6 +165,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     final static public float movementSpeed = 0.25f;
 
     public boolean isUsingLineFangs = true; // toggle between line and circular fangs
+    public boolean lastCastedCircleFangs = false; // double damage to make up for circle fangs not overlapping
 
     public int maxResources = 100;
 
@@ -320,6 +321,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
             double d2 = 1.25 * (double)(k + 1);
             createEvokerFang(this.getX() + (double)Mth.cos(f) * d2, this.getZ() + (double)Mth.sin(f) * d2, d0, d1, f, k);
         }
+        lastCastedCircleFangs = false;
     }
 
     // based on Evoker.EvokerAttackSpellGoal.performSpellCasting
@@ -334,6 +336,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
             f2 = (float)k * (float) Math.PI * 2.0F / 8.0F + 1.2566371F;
             createEvokerFang(this.getX() + (double)Mth.cos(f2) * 2.5, this.getZ() + (double)Mth.sin(f2) * 2.5, this.getY(), this.getY() + 1, f2, 3);
         }
+        lastCastedCircleFangs = true;
     }
 
     // based on Evoker.EvokerAttackSpellGoal.createSpellEntity
