@@ -46,36 +46,37 @@ Bugfixes
 [🟡] heroes do not produce in any subsequent game even with /rts-reset
     - only happens in actual jar
 [🟡] Fixed chestplates not granting armour % to headhunters
+[🟡] Evokers with vigor just delay their attacks by the same amount of time they saved
 
 [❌] music is overlapping when two players start near each other
 
-[❌] Evokers with vigor just delay their attacks by the same amount of time they saved
-
-
+[❌] Evoker circle fangs consistently only do 6 damage
 
 
 Quality of Life
 ---------------
 
+[❌] players starting at the same colour of RTS Start Blocks are automatically allied at the start of a match
+    - including a tooltip showing who will be on your own team
+
 [❌] add tab to show functionality and centre Daratrix's spectator menu
 
 [✔] all unit stats can now be hovered over for tooltips
-    [❌] - bonus stats like hoglins bonus damage to buildings are shown here
-    [❌] - stats are shown in green or red when affected by any buffs or debuffs
+    [🟡] - bonus stats like hoglins bonus damage to buildings are shown here
+    [🟡] - stats are shown in green or red when affected by any buffs or debuffs
     [🟡] - armor is shown in different colours depending on what it is effective against
 
-[🟡] players starting at the same colour of RTS Start Blocks are automatically allied at the start of a match
-    - including a tooltip showing who will be on your own team
+
 
 Balancing
 ---------
 
-[🟡] Ravagers no longer benefit from the movement speed buff from Captains
-
 [❌] Skeletons are too good earlygame and too bad lategame
+
+[❌] Ravagers no longer benefit from the movement speed buff from Captains
 
 [❌] All basic melee units gain 20% armour against ranged attacks
 
 [❌] -1 speed to all basic ranged units (headhunters, skeletons, pillagers)
 
-[🟡] Population cost max-sized (size 6) slimes and magma cubes reduced from 6 to 5
+[❌] Population cost max-sized (size 6) slimes and magma cubes reduced from 6 to 5
