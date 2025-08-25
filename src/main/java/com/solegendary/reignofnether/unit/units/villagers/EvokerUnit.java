@@ -113,7 +113,9 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
+    public int getAttackCooldown() {
+        return (int) (20 * (hasVigorEnchant() ? EnchantVigor.cooldownMultiplier : 1) / attacksPerSecond);
+    }
     public float getAttacksPerSecond() {return 20f / (getAttackCooldown() + 25);}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
@@ -356,8 +358,10 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
             blockpos = blockpos.below();
         } while(blockpos.getY() >= Mth.floor(pMinY) - 1);
 
-        if (flag)
-            this.level().addFreshEntity(new EvokerFangs(this.level(), pX, (double)blockpos.getY() + d0, pZ, pYRot, pWarmupDelay, this));
+        if (flag) {
+            EvokerFangs fangs = new EvokerFangs(this.level(), pX, (double)blockpos.getY() + d0, pZ, pYRot, pWarmupDelay, this);
+            this.level().addFreshEntity(fangs);
+        }
     }
 
     public int getVexTargetRange() {
@@ -390,7 +394,6 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
             getCastFangsGoal().stopCasting();
     }
 
-    // TODO: when a target is autoacquired serverside this is not updated clientside
     public VillagerUnitModel.ArmPose getEvokerArmPose() {
         Entity targetEntity = getTargetGoal().getTarget();
         if (this.isCastingSpell() || (targetEntity != null &&
@@ -434,5 +437,10 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
+    }
+
+    @Override
+    public boolean hasBonusAttackSpeed() {
+        return hasVigorEnchant();
     }
 }

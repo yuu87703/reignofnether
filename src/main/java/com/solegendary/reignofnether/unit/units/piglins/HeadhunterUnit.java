@@ -320,4 +320,9 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         }
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
     }
+
+    @Override
+    public boolean hasBonusAttackSpeed() {
+        return bloodlustTicks > 0;
+    }
 }

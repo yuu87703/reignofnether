@@ -273,4 +273,9 @@ public class VindicatorUnit extends Vindicator implements Unit, AttackerUnit {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
     }
+
+    @Override
+    public boolean hasBonusDamage() {
+        return hasSharpnessEnchant();
+    }
 }

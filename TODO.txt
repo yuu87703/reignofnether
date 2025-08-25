@@ -37,6 +37,9 @@ Bugfixes
 [❌] Avatar state is reset when unloaded
 [❌] When someone relogs, bridges revert to original rotations
 
+[❌] heroes are not resetting when switching worlds until /rts-reset is used
+[❌] population count is messed up when consuming slimes
+
 [🟡] Fixed a crash when using a portal
 [🟡] Zombie production time increased from 10s to 18s
     - This was an error, all other zombies, skeletons and their variants take 18s to build
@@ -44,10 +47,11 @@ Bugfixes
     - only happens in actual jar
 [🟡] Fixed chestplates not granting armour % to headhunters
 
+[❌] music is overlapping when two players start near each other
+
 [❌] Evokers with vigor just delay their attacks by the same amount of time they saved
 
-[❌] heroes are not resetting when switching worlds until /rts-reset is used
-[❌] population count is messed up when consuming slimes
+
 
 
 Quality of Life
@@ -55,12 +59,13 @@ Quality of Life
 
 [❌] add tab to show functionality and centre Daratrix's spectator menu
 
-[🟡] all unit stats can now be hovered over for tooltips
+[✔] all unit stats can now be hovered over for tooltips
     [❌] - bonus stats like hoglins bonus damage to buildings are shown here
-    [❌] - movement speed is shown in green or red if they are subject to buffs or debuffs
+    [❌] - stats are shown in green or red when affected by any buffs or debuffs
     [🟡] - armor is shown in different colours depending on what it is effective against
 
-
+[🟡] players starting at the same colour of RTS Start Blocks are automatically allied at the start of a match
+    - including a tooltip showing who will be on your own team
 
 Balancing
 ---------

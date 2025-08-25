@@ -115,8 +115,10 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
             if (isInRange()) {
                 if (moveTarget != null)
                     castTarget = moveTarget;
-                if (!isCasting)
+                if (!isCasting) {
+                    System.out.println("1 - start casting");
                     startCasting();
+                }
                 this.stopMoving();
             } else {
                 this.stopCasting();
@@ -124,9 +126,11 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
             }
 
             if (isCasting && castTarget != null) {
+                System.out.println("2 - tick channelling");
                 this.mob.getLookControl().setLookAt(castTarget.getX(), castTarget.getY(), castTarget.getZ());
                 channelTicks += 1;
                 if (channelTicks >= channelTicksMax) {
+                    System.out.println("3 - completed channeling");
                     if (onEntityCast != null && targetEntity != null)
                         onEntityCast.accept(targetEntity);
                     else if (onGroundCast != null || onBuildingCast != null) {
@@ -139,6 +143,7 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
                     }
                     if (this.ability != null && !this.mob.level().isClientSide()) {
                         if (!this.mob.level().isClientSide()) {
+                            System.out.println("4 - send cast packet");
                             if (this.ability.isOffCooldown()) {
                                 AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);
                             }

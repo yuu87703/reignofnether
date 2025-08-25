@@ -589,6 +589,10 @@ public interface Unit {
         return false;
     }
 
+    public default boolean hasBonusAttackSpeed() {
+        return false;
+    }
+
     public default List<FormattedCharSequence> getAttackSpeedStatTooltip() {
         return List.of(fcs(I18n.get("unitstats.reignofnether.attack_speed"), true));
     }

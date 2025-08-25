@@ -399,7 +399,8 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
             renderedStats.add(new RenderedStat(
                     new ResourceLocation("reignofnether","textures/icons/items/sparkler.png"),
                     String.valueOf(df2.format(attackerUnit.getAttacksPerSecond())),
-                    UnitStatType.ATTACK_SPEED
+                    UnitStatType.ATTACK_SPEED,
+                    unit.hasBonusAttackSpeed() ? 0xFF2BFF2B : 0xFFFFFFFF
             ));
             String rangeStr;
             GarrisonableBuilding garr = GarrisonableBuilding.getGarrison(unit);

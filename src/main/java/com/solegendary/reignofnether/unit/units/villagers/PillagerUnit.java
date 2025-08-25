@@ -1,6 +1,8 @@
 package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.abilities.EnchantQuickCharge;
+import com.solegendary.reignofnether.ability.abilities.EnchantVigor;
 import com.solegendary.reignofnether.ability.abilities.MountRavager;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
@@ -116,8 +118,8 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
 
     // combat stats
     public boolean getWillRetaliate() { return willRetaliate; }
-    public int getAttackCooldown() { return (int) (20 / attacksPerSecond); }
-    public float getAttacksPerSecond() { return 20f / (getAttackCooldown() + 25); } // crossbow charge time is 25 ticks
+    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
+    public float getAttacksPerSecond() { return 20f / (getAttackCooldown() + (hasQuickChargeEnchant() ? 15 : 25)); } // crossbow charge time is 25 ticks
     public float getAggroRange() { return aggroRange; }
     public boolean getAggressiveWhenIdle() { return aggressiveWhenIdle && !isVehicle(); }
     public float getAttackRange() { return attackRange; }
@@ -320,5 +322,10 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
+    }
+
+    public boolean hasQuickChargeEnchant() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getAllEnchantments().containsKey(EnchantQuickCharge.actualEnchantment);
     }
 }
