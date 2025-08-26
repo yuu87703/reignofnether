@@ -191,6 +191,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         AttackerUnit.tick(this);
         this.mountGoal.tick();
         PromoteIllager.checkAndApplyBuff(this);
+
     }
 
     @Override
@@ -270,6 +271,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
             this.playSound(SoundEvents.CROSSBOW_SHOOT, 3.0F, 0);
         }
         this.onCrossbowAttackPerformed();
+        getMainHandItem().setDamageValue(0);
     }
 
     @Override

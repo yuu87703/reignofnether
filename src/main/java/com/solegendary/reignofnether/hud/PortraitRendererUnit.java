@@ -433,7 +433,7 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
             armourStr = magicArmourStr;
             armourColor = 0xFF5B5BFC;
         }
-
+        
         renderedStats.add(new RenderedStat(
                 new ResourceLocation("reignofnether", "textures/icons/items/boots.png"),
                 armourStr,

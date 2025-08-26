@@ -271,5 +271,6 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
 
         if (!level().isClientSide() && pTarget instanceof Unit unit)
             FogOfWarClientboundPacket.revealRangedUnit(unit.getOwnerName(), this.getId());
+        getMainHandItem().setDamageValue(0);
     }
 }

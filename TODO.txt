@@ -48,6 +48,7 @@ Bugfixes
 [🟡] Music from your opponents' factions no longer plays when they start their game
 [🟡] Fixed units with absorption from golden apples taking double damage from projectiles
 [🟡] Fixed a crash when using a transport portal with many units
+[ ] Fixed Skeletons and Pillagers being able to break their bows if used too many times
 
 Quality of Life
 ---------------
