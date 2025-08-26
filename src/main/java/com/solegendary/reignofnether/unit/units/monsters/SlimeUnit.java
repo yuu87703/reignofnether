@@ -136,7 +136,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
 
     final public int STARTING_SIZE = 2;
     final public int MAX_SIZE = 6;
-    final static public int MAX_POP_COST = 6;
+    final static public int MAX_POP_COST = 5;
 
     final static public float attackDamagePerSize = 2.0f;
     final static public float attacksPerSecond = 0.5f;

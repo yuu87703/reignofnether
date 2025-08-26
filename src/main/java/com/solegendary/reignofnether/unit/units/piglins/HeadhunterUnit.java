@@ -150,7 +150,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
 
     final static public float maxHealth = 40.0f;
     final static public float armorValue = 0.0f;
-    final static public float movementSpeed = 0.25f;
+    final static public float movementSpeed = 0.24f;
     public int maxResources = 100;
 
     public int bloodlustTicks = 0;

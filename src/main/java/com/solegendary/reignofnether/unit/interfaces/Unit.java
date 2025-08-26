@@ -31,11 +31,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.damagesource.CombatRules;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -52,7 +49,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -150,9 +146,13 @@ public interface Unit {
     public String getOwnerName();
     public void setOwnerName(String name);
 
-    default float getUnitArmorPercentage() {
+    default float getUnitPhysicalArmorPercentage() {
         Mob mob = (Mob) this;
         return 1 - CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+    }
+
+    default float getUnitRangedArmorPercentage() {
+        return 0;
     }
 
     default float getUnitMagicArmorPercentage() {
@@ -604,8 +604,10 @@ public interface Unit {
     public default List<FormattedCharSequence> getArmourStatTooltip() {
         ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
         fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour"), true));
-        if (getUnitArmorPercentage() > 0) {
+        if (getUnitPhysicalArmorPercentage() > 0) {
             fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_melee_and_ranged"), false));
+        } else if (getUnitRangedArmorPercentage() > 0) {
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_ranged"), false));
         } else if (getUnitMagicArmorPercentage() > 0) {
             fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_magic"), false));
         }

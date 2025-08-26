@@ -417,15 +417,23 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         }
 
         int armourColor = 0xFFFFFFFF;
-        String armourStr = (int) (unit.getUnitArmorPercentage() * 100) + "%";
-        if (armourStr.equals("0%")) {
-            armourStr = (int) (unit.getUnitMagicArmorPercentage() * 100) + "%";
-            if (!armourStr.equals("0%")) {
-                armourColor = 0xFF5B5BFC;
-            }
-        } else {
+        String physicalArmourStr = (int) (unit.getUnitPhysicalArmorPercentage() * 100) + "%";
+        String rangedArmourStr = (int) (unit.getUnitRangedArmorPercentage() * 100) + "%";
+        String magicArmourStr = (int) (unit.getUnitMagicArmorPercentage() * 100) + "%";
+
+        String armourStr = physicalArmourStr;
+
+        if (!physicalArmourStr.equals("0%")) {
+            armourStr = physicalArmourStr;
             armourColor = 0xFF2BFF2B;
+        } else if (!rangedArmourStr.equals("0%")) {
+            armourStr = rangedArmourStr;
+            armourColor = 0xFFFCFC2B;
+        } else if (!magicArmourStr.equals("0%")) {
+            armourStr = magicArmourStr;
+            armourColor = 0xFF5B5BFC;
         }
+
         renderedStats.add(new RenderedStat(
                 new ResourceLocation("reignofnether", "textures/icons/items/boots.png"),
                 armourStr,
@@ -440,10 +448,10 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         }
         int msColour = 0xFFFFFFFF;
         double msAttr = ((Mob) unit).getAttributeValue(Attributes.MOVEMENT_SPEED);
-        if (msAttr > unit.getMovementSpeed()) {
-            msColour = 0xFF2BFF2B;
-        } else if (msAttr < unit.getMovementSpeed()) {
+        if (msAttr < unit.getMovementSpeed() || (unit instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield)) {
             msColour = 0xFFFC3838;
+        } else if (msAttr > unit.getMovementSpeed()) {
+            msColour = 0xFF2BFF2B;
         }
         renderedStats.add(new RenderedStat(
                 new ResourceLocation("reignofnether","textures/icons/items/chestplate.png"),

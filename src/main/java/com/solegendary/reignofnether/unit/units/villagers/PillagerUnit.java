@@ -126,7 +126,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     public float getMovementSpeed() { return movementSpeed; }
     public float getUnitAttackDamage() { return attackDamage; }
     public float getUnitMaxHealth() { return maxHealth; }
-    public float getUnitArmorPercentage() { return armorValue; }
+    public float getUnitPhysicalArmorPercentage() { return armorValue; }
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.PILLAGER;}
 
@@ -140,7 +140,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     final static public float attacksPerSecond = 0.8f; // excludes crossbow charge time
     final static public float maxHealth = 45.0f;
     final static public float armorValue = 0.0f;
-    final static public float movementSpeed = 0.25f;
+    final static public float movementSpeed = 0.24f;
     final static public float attackRange = 16.0F; // only used by ranged units or melee building attackers
     final static public float aggroRange = 16;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
