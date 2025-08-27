@@ -618,7 +618,7 @@ public class HudClientEvents {
             blitX += portraitRendererUnit.frameWidth;
 
             if (hudSelectedEntity instanceof Unit unit) {
-                hudZones.add(portraitRendererUnit.renderStats(evt.getGuiGraphics(), nameCap, blitX, blitY, unit));
+                hudZones.add(portraitRendererUnit.renderStats(evt.getGuiGraphics(), nameCap, blitX, blitY, mouseX, mouseY, unit));
 
                 blitX += portraitRendererUnit.statsWidth;
 

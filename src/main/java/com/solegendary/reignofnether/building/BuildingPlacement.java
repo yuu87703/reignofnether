@@ -693,7 +693,7 @@ public class BuildingPlacement {
             TutorialClientEvents.updateStage();
             if (this.isCapitol && !SandboxClientEvents.isSandboxPlayer() &&
                 getTotalCompletedBuildingsOwned(this.level.isClientSide(), ownerName) == 1)
-                SoundClientEvents.playFactionCalmTheme(this.getFaction());
+                SoundClientEvents.playFactionCalmTheme(this.getFaction(), ownerName);
         }
 
         // prevent showing blocks on minimap unless previously explored

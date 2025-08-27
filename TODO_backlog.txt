@@ -38,14 +38,15 @@ Bugfixes
 --------
 [❌] Dying in survival puts you in a bugged survival mode
 
-[❌] Villagers with professions don't use the correct texture for their arms, esp. farmers
-
 [❌] [Code issue] ResearchHoglinCavalry doesn't overwrite the getItemName method of the base ProductionItem class, resulting in a null name when calling the method
     - Same with FireResistance, SoulFireball, LabLightningRod, WaterPotions, HealingPotions
 
 
 Quality of Life Features
 ------------------------
+
+[❌] Handicap command
+    - Makes all resource costs some % higher than normal
 
 [❌] More serverside logging for major player actions
     - Building creation
@@ -65,12 +66,6 @@ Quality of Life Features
 
 [❌] restore ores on /rts-reset
     - Have to track each ore block when it is mined or converted into nether terrain
-
-[❌] buff/debuff icons in vertical list to right of unit stats
-    - potion effects
-    - auras
-    - hero passives
-    - enchantments
 
 
 

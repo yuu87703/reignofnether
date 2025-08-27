@@ -13,16 +13,14 @@ import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.time.NightUtils;
-import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.Relationship;
-import com.solegendary.reignofnether.unit.UnitAction;
-import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.util.Faction;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,6 +31,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -53,6 +52,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 // Defines method bodies for Units
 // workaround for trying to have units inherit from both their base vanilla Mob class and a Unit class
@@ -145,9 +146,18 @@ public interface Unit {
     public String getOwnerName();
     public void setOwnerName(String name);
 
-    default float getUnitArmorPercentage() {
+    default float getUnitPhysicalArmorPercentage() {
         Mob mob = (Mob) this;
         return 1 - CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+    }
+
+    default float getUnitRangedArmorPercentage() {
+        return 0;
+    }
+
+    default float getUnitMagicArmorPercentage() {
+        Mob mob = (Mob) this;
+        return 1 - mob.getDamageAfterMagicAbsorb(mob.damageSources().magic(), 1);
     }
 
     public static void tick(Unit unit) {
@@ -569,5 +579,52 @@ public interface Unit {
             if (ability.isCasting())
                 return true;
         return false;
+    }
+
+    public default List<FormattedCharSequence> getAttackDamageStatTooltip() {
+        return List.of(fcs(I18n.get("unitstats.reignofnether.attack_damage"), true));
+    }
+
+    public default boolean hasBonusDamage() {
+        return false;
+    }
+
+    public default boolean hasBonusAttackSpeed() {
+        return false;
+    }
+
+    public default List<FormattedCharSequence> getAttackSpeedStatTooltip() {
+        return List.of(fcs(I18n.get("unitstats.reignofnether.attack_speed"), true));
+    }
+
+    public default List<FormattedCharSequence> getRangeStatTooltip() {
+        return List.of(fcs(I18n.get("unitstats.reignofnether.range"), true));
+    }
+
+    public default List<FormattedCharSequence> getArmourStatTooltip() {
+        ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
+        fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour"), true));
+        if (getUnitPhysicalArmorPercentage() > 0) {
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_melee_and_ranged"), false));
+        } else if (getUnitRangedArmorPercentage() > 0) {
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_ranged"), false));
+        } else if (getUnitMagicArmorPercentage() > 0) {
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_magic"), false));
+        }
+        return fcsList;
+    }
+
+    public default List<FormattedCharSequence> getMovementSpeedStatTooltip() {
+        return List.of(fcs(I18n.get("unitstats.reignofnether.movement_speed"), true));
+    }
+
+    public default List<FormattedCharSequence> getStatTooltip(UnitStatType unitStatType) {
+        return switch (unitStatType) {
+            case ATTACK_DAMAGE -> getAttackDamageStatTooltip();
+            case ATTACK_SPEED -> getAttackSpeedStatTooltip();
+            case RANGE -> getRangeStatTooltip();
+            case ARMOUR -> getArmourStatTooltip();
+            case MOVEMENT_SPEED -> getMovementSpeedStatTooltip();
+        };
     }
 }

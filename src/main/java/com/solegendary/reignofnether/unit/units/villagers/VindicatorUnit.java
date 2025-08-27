@@ -130,6 +130,7 @@ public class VindicatorUnit extends Vindicator implements Unit, AttackerUnit {
     final static public float aggroRange = 10;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
+    final static public float rangedDamageResist = 0.2f;
 
     public int maxResources = 100;
 
@@ -142,6 +143,11 @@ public class VindicatorUnit extends Vindicator implements Unit, AttackerUnit {
 
     public VindicatorUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    public float getUnitRangedArmorPercentage() {
+        return rangedDamageResist;
     }
 
     @Override
@@ -272,5 +278,10 @@ public class VindicatorUnit extends Vindicator implements Unit, AttackerUnit {
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
+    }
+
+    @Override
+    public boolean hasBonusDamage() {
+        return hasSharpnessEnchant();
     }
 }

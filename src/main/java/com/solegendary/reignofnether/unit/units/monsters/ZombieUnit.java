@@ -129,6 +129,7 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
     final static public float aggroRange = 10;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
+    final static public float rangedDamageResist = 0.2f;
 
     public int maxResources = 100;
 
@@ -141,6 +142,11 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
 
     public ZombieUnit(EntityType<? extends Zombie> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    public float getUnitRangedArmorPercentage() {
+        return rangedDamageResist;
     }
 
     @Override

@@ -434,9 +434,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public int consumeSoulsAndGetSoulRank() {
         SoulSiphonPassive soulSiphon = getSoulSiphon();
         if (soulSiphon != null) {
-            if (soulSiphon.consumeSouls()) {
-                if (!level().isClientSide())
-                    AbilityClientboundPacket.doAbility(getId(), UnitAction.SOUL_SIPHON_UPDATE, soulSiphon.souls);
+            if (soulSiphon.consumeSoulsForCast()) {
                 return soulSiphon.rank;
             }
         }

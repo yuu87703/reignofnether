@@ -796,8 +796,10 @@ public class UnitServerEvents {
         if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE) &&
             evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
             float dmg = attackerUnit.getUnitAttackDamage();
-            if (evt.getEntity() instanceof Unit unit)
-                dmg *= (1 - unit.getUnitArmorPercentage());
+            if (evt.getEntity() instanceof Unit unit) {
+                dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
+                dmg *= (1 - unit.getUnitRangedArmorPercentage());
+            }
             evt.setAmount(dmg);
         }
 

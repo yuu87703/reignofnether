@@ -150,7 +150,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
 
     final static public float maxHealth = 40.0f;
     final static public float armorValue = 0.0f;
-    final static public float movementSpeed = 0.25f;
+    final static public float movementSpeed = 0.24f;
     public int maxResources = 100;
 
     public int bloodlustTicks = 0;
@@ -314,8 +314,15 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
 
     @Override
     public void onPickupEquipment(ItemStack itemStack) {
-        AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), 0, AttributeModifier.Operation.ADDITION);
-        itemStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
+        if (itemStack.getItem() == Items.TRIDENT) {
+            AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), 0, AttributeModifier.Operation.ADDITION);
+            itemStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
+        }
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
+    }
+
+    @Override
+    public boolean hasBonusAttackSpeed() {
+        return bloodlustTicks > 0;
     }
 }
