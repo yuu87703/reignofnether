@@ -36,12 +36,12 @@ Bugfixes
 [❌] When someone relogs, bridges revert to original rotations
 [❌] heroes are not resetting when switching worlds until /rts-reset is used
 
-[❌] Fixed many bugs with Brutes with raised shields:
+[✔] Fixed many bugs with Brutes with raised shields:
     - Armour stat incorrectly showed 0%
     - Ranged damage to absorption wasn't being reduced
     - Moving at 45% speed instead of 50% speed
 
-[❌] Fixed Evoker vexes having too short a cooldown when autocasted
+[✔] Fixed Evoker vexes having too short a cooldown when autocasted
 
 
 Quality of Life
@@ -59,4 +59,4 @@ Balancing
 [❌] Skeletons are too good earlygame and too bad lategame
     - backport bogged?
 
-[🟡] Necromancer daytime slowdown reduced from Slowness II (-36%) to Slowness I (-20%)
+[✔] Necromancer daytime slowdown reduced from Slowness II (-36%) to Slowness I (-20%)
