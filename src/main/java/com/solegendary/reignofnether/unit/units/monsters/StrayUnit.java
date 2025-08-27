@@ -196,7 +196,7 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
     @Override
     public SunlightEffect getSunlightEffect() {
         if (hasItemInSlot(EquipmentSlot.HEAD)) {
-            return SunlightEffect.MOVEMENT_SLOWDOWN;
+            return SunlightEffect.SLOWNESS_II;
         } else {
             return SunlightEffect.FIRE;
         }
