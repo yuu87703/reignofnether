@@ -82,7 +82,7 @@ public class SkeletonProd extends ProductionItem {
             () -> false,
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.SKELETON),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.SKELETON),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.skeleton"), Style.EMPTY.withBold(true)),

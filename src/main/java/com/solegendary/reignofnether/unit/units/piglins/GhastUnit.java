@@ -359,7 +359,7 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
     public List<FormattedCharSequence> getAttackDamageStatTooltip() {
         return List.of(
                 fcs(I18n.get("unitstats.reignofnether.attack_damage"), true),
-                fcs(I18n.get("unitstats.reignofnether.attack_damage_bonus_buildings", "100%"))
+                fcs(I18n.get("unitstats.reignofnether.attack_damage_bonus_buildings", "300%"))
         );
     }
     @Override

@@ -74,7 +74,7 @@ public class RavagerProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RAVAGER),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RAVAGER),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.ravager"), Style.EMPTY.withBold(true)),

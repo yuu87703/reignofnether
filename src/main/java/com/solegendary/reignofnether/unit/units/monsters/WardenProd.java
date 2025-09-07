@@ -75,7 +75,7 @@ public class WardenProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.WARDEN),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.WARDEN),
                 null,
                 List.of(
                         FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.warden"), Style.EMPTY.withBold(true)),

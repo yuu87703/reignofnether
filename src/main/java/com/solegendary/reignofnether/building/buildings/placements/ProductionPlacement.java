@@ -29,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.solegendary.reignofnether.building.BuildingUtils.getMinCorner;
+import static com.solegendary.reignofnether.building.production.ProdDupeRule.*;
 
 public class ProductionPlacement extends BuildingPlacement {
     private BlockPos rallyPoint;
@@ -168,73 +169,9 @@ public class ProductionPlacement extends BuildingPlacement {
     }
 
     // return true if successful
-    public boolean startProductionItem(ProductionItem prodItem, BlockPos pos) {
+    public boolean startProductionItem(ProductionItem prodItem) {
         boolean success = false;
 
-        /*ProductionItem prodItem = null;
-        switch(itemName) {
-            case CreeperProd.itemName -> prodItem = new CreeperProd(this);
-            case SkeletonProd.itemName -> prodItem = new SkeletonProd(this);
-            case ZombieProd.itemName -> prodItem = new ZombieProd(this);
-            case StrayProd.itemName -> prodItem = new StrayProd(this);
-            case HuskProd.itemName -> prodItem = new HuskProd(this);
-            case DrownedProd.itemName -> prodItem = new DrownedProd(this);
-            case SpiderProd.itemName -> prodItem = new SpiderProd(this);
-            case PoisonSpiderProd.itemName -> prodItem = new PoisonSpiderProd(this);
-            case VillagerProd.itemName -> prodItem = new VillagerProd(this);
-            case ZombieVillagerProd.itemName -> prodItem = new ZombieVillagerProd(this);
-            case VindicatorProd.itemName -> prodItem = new VindicatorProd(this);
-            case PillagerProd.itemName -> prodItem = new PillagerProd(this);
-            case IronGolemProd.itemName -> prodItem = new IronGolemProd(this);
-            case WitchProd.itemName -> prodItem = new WitchProd(this);
-            case EvokerProd.itemName -> prodItem = new EvokerProd(this);
-            case SlimeProd.itemName -> prodItem = new SlimeProd(this);
-            case WardenProd.itemName -> prodItem = new WardenProd(this);
-            case RavagerProd.itemName -> prodItem = new RavagerProd(this);
-
-            case GruntProd.itemName -> prodItem = new GruntProd(this);
-            case BruteProd.itemName -> prodItem = new BruteProd(this);
-            case HeadhunterProd.itemName -> prodItem = new HeadhunterProd(this);
-            case HoglinProd.itemName -> prodItem = new HoglinProd(this);
-            case BlazeProd.itemName -> prodItem = new BlazeProd(this);
-            case WitherSkeletonProd.itemName -> prodItem = new WitherSkeletonProd(this);
-            case MagmaCubeProd.itemName -> prodItem = new MagmaCubeProd(this);
-            case GhastProd.itemName -> prodItem = new GhastProd(this);
-
-            case ResearchVindicatorAxes.itemName -> prodItem = new ResearchVindicatorAxes(this);
-            case ResearchPillagerCrossbows.itemName -> prodItem = new ResearchPillagerCrossbows(this);
-            case ResearchLabLightningRod.itemName -> prodItem = new ResearchLabLightningRod(this);
-            case ResearchResourceCapacity.itemName -> prodItem = new ResearchResourceCapacity(this);
-            case ResearchSpiderJockeys.itemName -> prodItem = new ResearchSpiderJockeys(this);
-            case ResearchPoisonSpiders.itemName -> prodItem = new ResearchPoisonSpiders(this);
-            case ResearchHusks.itemName -> prodItem = new ResearchHusks(this);
-            case ResearchDrowned.itemName -> prodItem = new ResearchDrowned(this);
-            case ResearchStrays.itemName -> prodItem = new ResearchStrays(this);
-            case ResearchSlimeConversion.itemName -> prodItem = new ResearchSlimeConversion(this);
-            case ResearchLingeringPotions.itemName -> prodItem = new ResearchLingeringPotions(this);
-            case ResearchEvokerVexes.itemName -> prodItem = new ResearchEvokerVexes(this);
-            case ResearchGolemSmithing.itemName -> prodItem = new ResearchGolemSmithing(this);
-            case ResearchSilverfish.itemName -> prodItem = new ResearchSilverfish(this);
-            case ResearchSculkAmplifiers.itemName -> prodItem = new ResearchSculkAmplifiers(this);
-            case ResearchCastleFlag.itemName -> prodItem = new ResearchCastleFlag(this);
-            case ResearchRavagerCavalry.itemName -> prodItem = new ResearchRavagerCavalry(this);
-            case ResearchBruteShields.itemName -> prodItem = new ResearchBruteShields(this);
-            case ResearchHoglinCavalry.itemName -> prodItem = new ResearchHoglinCavalry(this);
-            case ResearchHeavyTridents.itemName -> prodItem = new ResearchHeavyTridents(this);
-            case ResearchBlazeFirewall.itemName -> prodItem = new ResearchBlazeFirewall(this);
-            case ResearchWitherClouds.itemName -> prodItem = new ResearchWitherClouds(this);
-            case ResearchAdvancedPortals.itemName -> prodItem = new ResearchAdvancedPortals(this);
-            case ResearchFireResistance.itemName -> prodItem = new ResearchFireResistance(this);
-            case ResearchGrandLibrary.itemName -> prodItem = new ResearchGrandLibrary(this);
-            case ResearchSpiderWebs.itemName -> prodItem = new ResearchSpiderWebs(this);
-            case ResearchBloodlust.itemName -> prodItem = new ResearchBloodlust(this);
-            case ResearchCubeMagma.itemName -> prodItem = new ResearchCubeMagma(this);
-            case ResearchSoulFireballs.itemName -> prodItem = new ResearchSoulFireballs(this);
-
-            case ResearchPortalForCivilian.itemName -> prodItem = new ResearchPortalForCivilian(this);
-            case ResearchPortalForMilitary.itemName -> prodItem = new ResearchPortalForMilitary(this);
-            case ResearchPortalForTransport.itemName -> prodItem = new ResearchPortalForTransport(this);
-        }*/
         if (prodItem != null) {
             // only worry about checking affordability on serverside
             if (getLevel().isClientSide()) {
@@ -243,7 +180,13 @@ public class ProductionPlacement extends BuildingPlacement {
                 success = true;
             }
             else {
-                if (prodItem.canAfford(getLevel(), ownerName)) {
+                boolean allow = switch (prodItem.dupeRule) {
+                    case DISALLOW -> !prodItem.itemIsBeingProduced(ownerName);
+                    case DISALLOW_FOR_BUILDING -> !prodItem.itemIsBeingProducedAt(this);
+                    case ALLOW -> true;
+                };
+
+                if (allow && prodItem.canAfford(getLevel(), ownerName)) {
                     ActiveProduction activeProduction = new ActiveProduction(prodItem, false, ownerName);
                     productionQueue.add(activeProduction);
                     ResourcesServerEvents.addSubtractResources(new Resources(

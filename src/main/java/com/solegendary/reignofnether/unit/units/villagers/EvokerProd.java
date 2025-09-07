@@ -73,7 +73,7 @@ public class EvokerProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> BuildingClientEvents.hasFinishedBuilding(Buildings.LIBRARY),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.EVOKER),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.EVOKER),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.evoker"), Style.EMPTY.withBold(true)),

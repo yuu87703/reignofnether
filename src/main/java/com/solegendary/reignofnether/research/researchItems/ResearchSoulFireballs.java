@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.research.researchItems;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -25,7 +26,7 @@ public class ResearchSoulFireballs extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_SOUL_FIREBALLS;
 
     public ResearchSoulFireballs() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(placement.ownerName, ProductionItems.RESEARCH_SOUL_FIREBALLS);
@@ -45,7 +46,7 @@ public class ResearchSoulFireballs extends ProductionItem {
             () -> ProductionItems.RESEARCH_SOUL_FIREBALLS.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_SOUL_FIREBALLS),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_SOUL_FIREBALLS),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_SOUL_FIREBALLS),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.soul_fireballs"),
                     Style.EMPTY.withBold(true)

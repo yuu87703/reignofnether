@@ -577,13 +577,6 @@ public class BuildingServerEvents {
             evt.getAffectedEntities().clear();
         }
 
-        // explosive arrows from mounted pillagers
-        if (exp.getExploder() instanceof PillagerUnit pUnit && pUnit.isPassenger()) {
-            for (Entity entity : evt.getAffectedEntities())
-                if (entity instanceof LivingEntity le)
-                    le.setHealth(le.getHealth() - 1); // for some reason there's still iframes so we cant use hurt()
-        }
-
         // apply creeper, ghast and mounted pillager attack damage as bonus damage to buildings
         // this is dealt in addition to the actual blocks destroyed by the explosion itself
         if (creeperUnit != null || ghastUnit != null || pillagerUnit != null || exp.getExploder() instanceof PrimedTnt) {

@@ -73,7 +73,7 @@ public class NecromancerProd extends HeroProductionItem {
             () -> false,
             () -> itemIsBeingProduced(prodBuilding.ownerName) || heroOwned(prodBuilding.level.isClientSide(), prodBuilding.ownerName),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, this),
+            () -> BuildingServerboundPacket.startProduction(this),
             null,
             List.of(
                     FormattedCharSequence.forward(

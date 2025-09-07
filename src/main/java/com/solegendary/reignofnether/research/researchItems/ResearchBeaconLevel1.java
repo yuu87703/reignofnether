@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -23,7 +24,7 @@ public class ResearchBeaconLevel1 extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_BEACON_LEVEL1;
 
     public ResearchBeaconLevel1() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW_FOR_BUILDING);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (placement instanceof BeaconPlacement beacon) {
                 beacon.changeStructure(1);
@@ -49,7 +50,7 @@ public class ResearchBeaconLevel1 extends ProductionItem {
                 () -> itemIsBeingProducedAt(prodBuilding) ||
                         (prodBuilding instanceof BeaconPlacement beacon && beacon.getUpgradeLevel() != 0),
                 () -> true,
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, this),
+                () -> BuildingServerboundPacket.startProduction(this),
                 null,
                 List.of(
                         FormattedCharSequence.forward(I18n.get("research.reignofnether.beacon_level1"), Style.EMPTY.withBold(true)),

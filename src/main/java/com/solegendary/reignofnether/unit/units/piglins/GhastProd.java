@@ -89,7 +89,7 @@ public class GhastProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.FORTRESS),
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.GHAST),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.GHAST),
                 null,
                 tooltipLines
         );

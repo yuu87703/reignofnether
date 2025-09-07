@@ -40,7 +40,7 @@
     "item.reignofnether.llama_unit_spawn_egg": "Spawn Llama Unit",
 
     "item.reignofnether.throwable_tnt": "Throwable TNT",
-
+    "item.reignofnether.thrown_hero_experience_bottle": "Bottle O'Hero Experience",
 
     "sounds.reignofnether.under_attack": "Under attack!",
     "sounds.reignofnether.victory": "Victory!",
@@ -170,6 +170,7 @@
     "abilities.reignofnether.consume": "Consume",
     "abilities.reignofnether.consume.tooltip1": "Kill a friendly magma cube or slime to grow this one.",
     "abilities.reignofnether.consume.tooltip2": "Adds half of its max health and damage to this one.",
+    "abilities.reignofnether.consume.tooltip3": "(turns off at max size)",
     "abilities.reignofnether.consume.error1": "Already at max size!",
     "abilities.reignofnether.consume.error2": "Can only target Magma Cubes or Slimes you own",
     "abilities.reignofnether.consume.error3": "Can only eat equal or smaller Cubes or Slimes",
@@ -1256,8 +1257,9 @@
     "unitstats.reignofnether.attack_speed": "Attacks per second",
     "unitstats.reignofnether.range": "Range",
     "unitstats.reignofnether.armour": "Armor",
-    "unitstats.reignofnether.armour_melee_and_ranged": "Effective vs melee & ranged",
-    "unitstats.reignofnether.armour_ranged": "Effective vs ranged",
-    "unitstats.reignofnether.armour_magic": "Effective vs magic",
+    "unitstats.reignofnether.armour_melee_and_ranged": "%d%% vs melee & ranged",
+    "unitstats.reignofnether.armour_ranged": "%d%% vs ranged",
+    "unitstats.reignofnether.armour_magic": "%d%% vs magic",
+    "unitstats.reignofnether.armour_all": "%d%% vs everything",
     "unitstats.reignofnether.movement_speed": "Movement speed"
 }

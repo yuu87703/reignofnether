@@ -87,7 +87,7 @@ public class MagmaCubeProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.BASALT_SPRINGS),
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.MAGMA_CUBE),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.MAGMA_CUBE),
                 null,
                 tooltipLines
         );

@@ -23,10 +23,7 @@ import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
 import com.solegendary.reignofnether.unit.interfaces.*;
-import com.solegendary.reignofnether.unit.packets.UnitConvertClientboundPacket;
-import com.solegendary.reignofnether.unit.packets.UnitIdleWorkerClientBoundPacket;
-import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
-import com.solegendary.reignofnether.unit.packets.UnitSyncWorkerClientBoundPacket;
+import com.solegendary.reignofnether.unit.packets.*;
 import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
 import com.solegendary.reignofnether.unit.units.monsters.DrownedUnit;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
@@ -41,6 +38,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
@@ -408,6 +407,8 @@ public class UnitServerEvents {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent evt) {
+        System.out.println("LivingDeathEvent (UnitServerEvents): " + evt.getEntity().getName().getString());
+
         // Convert nearby blocks arond a death into something that is sculk convertible
         // supposed to add to sculk_spreadable.json tag under the data/minecraft/tags/blocks but doesn't work for
         // some reason
@@ -590,6 +591,15 @@ public class UnitServerEvents {
                 if (entity instanceof Unit unit) {
                     UnitSyncClientboundPacket.sendSyncResourcesPacket(unit);
                     UnitSyncClientboundPacket.sendSyncStatsPacket(entity);
+
+                    for (MobEffect me : List.of(MobEffects.DAMAGE_RESISTANCE, MobEffectRegistrar.STUN.get())) {
+                        MobEffectInstance mei = entity.getEffect(me);
+                        if (mei != null)
+                            UnitSyncMobEffectsClientboundPacket.addEffectClientside(entity, mei);
+                        else
+                            UnitSyncMobEffectsClientboundPacket.removeEffectClientside(entity, me);
+                    }
+
                     if (unit.getAnchor() != null)
                         UnitSyncClientboundPacket.sendSyncAnchorPosPacket(entity, unit.getAnchor());
                     else
@@ -799,6 +809,7 @@ public class UnitServerEvents {
             if (evt.getEntity() instanceof Unit unit) {
                 dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
                 dmg *= (1 - unit.getUnitRangedArmorPercentage());
+                dmg *= (1 - unit.getUnitResistPercentage());
             }
             evt.setAmount(dmg);
         }

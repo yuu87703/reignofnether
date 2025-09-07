@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.monsters.Laboratory;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -26,7 +27,7 @@ public class ResearchLabLightningRod extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_LAB_LIGHTNING_ROD;
 
     public ResearchLabLightningRod() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW_FOR_BUILDING);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             placement.changeStructure(Laboratory.upgradedStructureName);
         };
@@ -42,7 +43,7 @@ public class ResearchLabLightningRod extends ProductionItem {
             () -> itemIsBeingProducedAt(prodBuilding) ||
                     (prodBuilding.getBuilding() instanceof Laboratory && prodBuilding.getUpgradeLevel() > 0),
             () -> BuildingClientEvents.hasFinishedBuilding(Buildings.DUNGEON),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_LAB_LIGHTNING_ROD),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_LAB_LIGHTNING_ROD),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.lightning_rod"),
                     Style.EMPTY.withBold(true)

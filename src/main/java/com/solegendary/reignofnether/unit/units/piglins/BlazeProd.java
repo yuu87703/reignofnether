@@ -87,7 +87,7 @@ public class BlazeProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.FLAME_SANCTUARY),
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.BLAZE),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.BLAZE),
                 null,
                 tooltipLines
         );

@@ -33,6 +33,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.damagesource.CombatRules;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -146,18 +147,32 @@ public interface Unit {
     public String getOwnerName();
     public void setOwnerName(String name);
 
+    // SOURCE: armour attribute and armour items
     default float getUnitPhysicalArmorPercentage() {
         Mob mob = (Mob) this;
         return 1 - CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
     }
 
+    // SOURCE: inherent unit stats and abilities
     default float getUnitRangedArmorPercentage() {
         return 0;
     }
 
+    // SOURCE: inherent unit stats and vanilla mechanics (like resistance)
     default float getUnitMagicArmorPercentage() {
         Mob mob = (Mob) this;
         return 1 - mob.getDamageAfterMagicAbsorb(mob.damageSources().magic(), 1);
+    }
+
+    // SOURCE: resistance mob effect
+    default float getUnitResistPercentage() {
+        Mob mob = (Mob) this;
+        MobEffectInstance mei = mob.getEffect(MobEffects.DAMAGE_RESISTANCE);
+        if (mei != null) {
+            return (float) (0.2 * (mei.getAmplifier() + 1));
+        } else {
+            return 0;
+        }
     }
 
     public static void tick(Unit unit) {
@@ -609,11 +624,16 @@ public interface Unit {
         ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
         fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour"), true));
         if (getUnitPhysicalArmorPercentage() > 0) {
-            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_melee_and_ranged"), false));
-        } else if (getUnitRangedArmorPercentage() > 0) {
-            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_ranged"), false));
-        } else if (getUnitMagicArmorPercentage() > 0) {
-            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_magic"), false));
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_melee_and_ranged", (int) (getUnitPhysicalArmorPercentage() * 100)), false));
+        }
+        if (getUnitRangedArmorPercentage() > 0) {
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_ranged", (int) (getUnitRangedArmorPercentage() * 100)), false));
+        }
+        if (getUnitResistPercentage() > 0) {
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_all", (int) (getUnitResistPercentage() * 100)), false));
+        }
+        else if (getUnitMagicArmorPercentage() > 0) {
+            fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_magic", (int) (getUnitMagicArmorPercentage() * 100)), false));
         }
         return fcsList;
     }

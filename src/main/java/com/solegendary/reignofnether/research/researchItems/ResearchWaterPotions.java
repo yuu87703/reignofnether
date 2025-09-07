@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.research.researchItems;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
@@ -26,7 +27,7 @@ public class ResearchWaterPotions extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_WATER_POTIONS;
 
     public ResearchWaterPotions() {
-        super(ResourceCosts.RESEARCH_WATER_POTIONS);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement building) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(building.ownerName, ProductionItems.RESEARCH_WATER_POTIONS);
@@ -46,7 +47,7 @@ public class ResearchWaterPotions extends ProductionItem {
             () -> ProductionItems.RESEARCH_WATER_POTIONS.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_WATER_POTIONS),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_WATER_POTIONS),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_WATER_POTIONS),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.water_potions"),
                     Style.EMPTY.withBold(true)

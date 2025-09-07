@@ -85,7 +85,7 @@ public class HeadhunterProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.BASTION),
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.HEADHUNTER),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.HEADHUNTER),
                 null,
                 tooltipLines
         );

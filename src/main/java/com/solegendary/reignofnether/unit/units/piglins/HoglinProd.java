@@ -87,7 +87,7 @@ public class HoglinProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.HOGLIN_STABLES),
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.HOGLIN),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.HOGLIN),
                 null,
                 tooltipLines
         );

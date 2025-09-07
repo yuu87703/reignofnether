@@ -87,7 +87,7 @@ public class WitherSkeletonProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> BuildingClientEvents.hasFinishedBuilding(Buildings.WITHER_SHRINE),
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.WITHER_SKELETON),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.WITHER_SKELETON),
                 null,
                 tooltipLines
         );

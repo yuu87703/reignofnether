@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.research.researchItems;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -25,7 +26,7 @@ public class ResearchSlimeConversion extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_SLIME_CONVERSION;
 
     public ResearchSlimeConversion() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(placement.ownerName, ProductionItems.RESEARCH_SLIME_CONVERSION);
@@ -49,7 +50,7 @@ public class ResearchSlimeConversion extends ProductionItem {
             () -> ProductionItems.RESEARCH_SLIME_CONVERSION.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_SLIME_CONVERSION),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_SLIME_CONVERSION),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_SLIME_CONVERSION),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.slime_conversion"),
                     Style.EMPTY.withBold(true)

@@ -27,9 +27,16 @@ public abstract class ProductionItem {
 
     public ResourceCost defaultCost;
     public BiConsumer<Level, ProductionPlacement> onComplete;
+    public ProdDupeRule dupeRule;
+
+    public ProductionItem(ResourceCost cost, ProdDupeRule dupeRule) {
+        this.defaultCost = cost;
+        this.dupeRule = dupeRule;
+    }
 
     public ProductionItem(ResourceCost cost) {
         this.defaultCost = cost;
+        this.dupeRule = ProdDupeRule.ALLOW;
     }
 
     // allows for dynamic costs in subclasses
