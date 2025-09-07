@@ -961,7 +961,8 @@ public class BuildingPlacement {
                 || spawnBp.distSqr(centrePos) > range * range
                 || Math.abs(spawnBp.getY() - minCorner.getY()) >= 4
                 || BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), spawnBp)
-                || BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), spawnBp.above()));
+                || BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), spawnBp.above())
+                || !level.getWorldBorder().isWithinBounds(spawnBp));
 
         EntityType<? extends Animal> animalType = null;
         int spawnQty = 1;

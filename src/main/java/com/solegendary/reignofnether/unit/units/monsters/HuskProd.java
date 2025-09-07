@@ -76,7 +76,7 @@ public class HuskProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_HUSKS),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.HUSK),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.HUSK),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.husk"), Style.EMPTY.withBold(true)),

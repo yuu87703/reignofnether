@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingClientboundPacket;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -26,7 +27,7 @@ public class ResearchPortalForTransport extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_TRANSPORT_PORTAL;
 
     public ResearchPortalForTransport() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW_FOR_BUILDING);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (placement instanceof PortalPlacement portal) {
                 if (!level.isClientSide()) {
@@ -54,7 +55,7 @@ public class ResearchPortalForTransport extends ProductionItem {
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_ADVANCED_PORTALS),
             () -> {
                 if (prodBuilding.productionQueue.isEmpty())
-                    BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_PORTAL_FOR_TRANSPORT);
+                    BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_PORTAL_FOR_TRANSPORT);
             },
             null,
             List.of(FormattedCharSequence.forward(

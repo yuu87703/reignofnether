@@ -75,7 +75,7 @@ public class StrayProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.STRAY),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.STRAY),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.stray"), Style.EMPTY.withBold(true)),

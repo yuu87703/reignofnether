@@ -124,7 +124,9 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     public boolean getAggressiveWhenIdle() { return aggressiveWhenIdle && !isVehicle(); }
     public float getAttackRange() { return attackRange; }
     public float getMovementSpeed() { return movementSpeed; }
-    public float getUnitAttackDamage() { return attackDamage; }
+    public float getUnitAttackDamage() {
+        return isPassenger() ? attackDamage + 1 : attackDamage;
+    }
     public float getUnitMaxHealth() { return maxHealth; }
     public float getUnitPhysicalArmorPercentage() { return armorValue; }
     @Nullable

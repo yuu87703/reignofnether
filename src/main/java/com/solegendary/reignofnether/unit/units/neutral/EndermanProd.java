@@ -73,7 +73,7 @@ public class EndermanProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, this),
+                () -> BuildingServerboundPacket.startProduction(this),
                 null,
                 List.of(
                         FormattedCharSequence.forward(I18n.get("units.neutral.reignofnether.enderman"), Style.EMPTY.withBold(true)),

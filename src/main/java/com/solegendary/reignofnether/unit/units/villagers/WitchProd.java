@@ -72,7 +72,7 @@ public class WitchProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.WITCH),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.WITCH),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.witch"), Style.EMPTY.withBold(true)),

@@ -80,7 +80,7 @@ public class ZombieVillagerProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.ZOMBIE_VILLAGER),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.ZOMBIE_VILLAGER),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.zombie_villager"), Style.EMPTY.withBold(true)),

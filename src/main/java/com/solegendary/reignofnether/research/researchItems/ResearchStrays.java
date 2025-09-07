@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -32,7 +33,7 @@ public class ResearchStrays extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_STRAYS;
 
     public ResearchStrays() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(placement.ownerName, ProductionItems.RESEARCH_STRAYS);
@@ -66,7 +67,7 @@ public class ResearchStrays extends ProductionItem {
             () -> ProductionItems.RESEARCH_STRAYS.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS),
             () -> BuildingClientEvents.hasFinishedBuilding(Buildings.GRAVEYARD),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_STRAYS),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_STRAYS),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("research.reignofnether.research_strays"), Style.EMPTY.withBold(true)),

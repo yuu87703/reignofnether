@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -29,7 +30,7 @@ public class ResearchSilverfish extends ProductionItem {
     public final static float SILVERFISH_SPAWN_CHANCE = 0.1f;
 
     public ResearchSilverfish() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(placement.ownerName, ProductionItems.RESEARCH_SILVERFISH);
@@ -53,7 +54,7 @@ public class ResearchSilverfish extends ProductionItem {
             () -> ProductionItems.RESEARCH_SILVERFISH.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_SILVERFISH),
             () -> BuildingClientEvents.hasFinishedBuilding(Buildings.STRONGHOLD),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_SILVERFISH),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_SILVERFISH),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.research_silverfish"),
                     Style.EMPTY.withBold(true)

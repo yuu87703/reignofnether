@@ -75,7 +75,7 @@ public class SlimeProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.SLIME),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.SLIME),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.slime"), Style.EMPTY.withBold(true)),

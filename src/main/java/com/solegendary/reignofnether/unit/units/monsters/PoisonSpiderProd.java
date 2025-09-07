@@ -76,7 +76,7 @@ public class PoisonSpiderProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_POISON_SPIDERS),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.POISON_SPIDER),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.POISON_SPIDER),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.poison_spider"), Style.EMPTY.withBold(true)),

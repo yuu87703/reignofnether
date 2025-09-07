@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.research.researchItems;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -25,7 +26,7 @@ public class ResearchCubeMagma extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_CUBE_MAGMA;
 
     public ResearchCubeMagma() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(placement.ownerName, ProductionItems.RESEARCH_CUBE_MAGMA);
@@ -49,7 +50,7 @@ public class ResearchCubeMagma extends ProductionItem {
             () -> ProductionItems.RESEARCH_CUBE_MAGMA.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_CUBE_MAGMA),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_CUBE_MAGMA),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_CUBE_MAGMA),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.cube_magma"),
                     Style.EMPTY.withBold(true)

@@ -84,7 +84,7 @@ public class GruntProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.GRUNT),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.GRUNT),
             null,
             tooltipLines
         );

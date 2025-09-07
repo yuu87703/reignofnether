@@ -137,7 +137,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
     public float getUnitMaxHealth() {return maxHealth + (maxHealthBonusPerLevel * getHeroLevel());}
 
     @Nullable
-    public ResourceCost getCost() {return ResourceCosts.VINDICATOR;}
+    public ResourceCost getCost() {return ResourceCosts.ROYAL_GUARD;}
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
 
     public void setAttackMoveTarget(@Nullable BlockPos bp) { this.attackMoveTarget = bp; }
@@ -587,6 +587,7 @@ public class RoyalGuardUnit extends Vindicator implements Unit, AttackerUnit, He
                 ((LivingEntity) unit).addEffect(new MobEffectInstance(MobEffectRegistrar.UNCONTROLLABLE.get(), tauntingCry.duration));
             }
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, tauntingCry.duration, 2));
+            //this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, tauntingCry.duration, 2));
             tauntingCryTicksLeft = tauntingCry.duration;
             updateKnockbackResistance();
             SoundClientboundPacket.playSoundAtPos(SoundAction.HEROISM, this.getOnPos().above());

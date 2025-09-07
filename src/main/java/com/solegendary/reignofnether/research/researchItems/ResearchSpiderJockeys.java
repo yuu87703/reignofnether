@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -27,7 +28,7 @@ public class ResearchSpiderJockeys extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_SPIDER_JOCKEYS;
 
     public ResearchSpiderJockeys() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(placement.ownerName, ProductionItems.RESEARCH_SPIDER_JOCKEYS);
@@ -51,7 +52,7 @@ public class ResearchSpiderJockeys extends ProductionItem {
             () -> ProductionItems.RESEARCH_SPIDER_JOCKEYS.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_SPIDER_JOCKEYS),
             () -> BuildingClientEvents.hasFinishedBuilding(Buildings.SPIDER_LAIR),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_SPIDER_JOCKEYS),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_SPIDER_JOCKEYS),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.spider_jockeys"),
                     Style.EMPTY.withBold(true)

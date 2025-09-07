@@ -127,6 +127,7 @@ public abstract class LivingEntityMixin extends Entity {
             if (this instanceof Unit unit) {
                 dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
                 dmg *= (1 - unit.getUnitRangedArmorPercentage());
+                dmg *= (1 - unit.getUnitResistPercentage());
             }
 
             if (!this.isInvulnerableTo(pDamageSource)) {

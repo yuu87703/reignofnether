@@ -73,7 +73,7 @@ public class IronGolemProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.IRON_GOLEM),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.IRON_GOLEM),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.iron_golem"), Style.EMPTY.withBold(true)),

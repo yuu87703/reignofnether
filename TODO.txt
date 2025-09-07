@@ -1,5 +1,5 @@
 
-1.19.2-1.2.1c
+1.19.2-1.2.1d
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -31,32 +31,65 @@ Features
 
 Bugfixes
 --------
-[❌] keyframe animations are cancelled upon being hit
-[❌] Avatar state is reset when unloaded
-[❌] When someone relogs, bridges revert to original rotations
-[❌] heroes are not resetting when switching worlds until /rts-reset is used
-
-[✔] Fixed many bugs with Brutes with raised shields:
-    - Armour stat incorrectly showed 0%
-    - Ranged damage to absorption wasn't being reduced
-    - Moving at 45% speed instead of 50% speed
-
-[✔] Fixed Evoker vexes having too short a cooldown when autocasted
-
+[✔] Endermen can no longer teleport outside the world border
+[✔] Animals can no longer spawn outside the world border
+[✔] Magma cubes are no longer slowed in sunlight
+[✔] Royal guard now correctly uses 5 population (previously was 3 after trained)
+[✔] Spam clicking research buttons with high ping no longer queues up duplicates
+[✔] Resistance effects now correctly reduces ranged damage
+[✔] Fixed soul siphon not working correctly after the Necromancer was revived
+[✔] Fixed Heroes having their levels reset to 1 sometimes when killed by ravager artillery
 
 Quality of Life
 ---------------
+[✔] Mounted units now show the combined damage of the mount and the rider
+[✔] The armour tooltip now shows details when a unit has multiple different armour types
+[✔] Added Bottle O'Hero Experience
+    - Like a Bottle O'Enchanting but gives 100 exp to the nearest hero when thrown
+[✔] Slime and magma cubes' autocast consume will now only eat size 2 slimes and turns off at max size
 
-[❌] players starting at the same colour of RTS Start Blocks are automatically allied at the start of a match
-    - including a tooltip showing who will be on your own team
 
 
 
 
 Balancing
 ---------
+[❌] All Heroes now have 30% magic resistance
+[❌] All mounted units now have a toggle to have them stay at range instead of moving into melee range
 
-[❌] Skeletons are too good earlygame and too bad lategame
-    - backport bogged?
+Piglins
+-------
+[❌] Piglin Merchant
+    - Greed is Good's TNT cooldown reduction per level increased from 5s to 7s (this means the cooldown is 0 at level 3)
+    - Delay before enemies can eat thrown food raised from 5s to 10s
 
-[✔] Necromancer daytime slowdown reduced from Slowness II (-36%) to Slowness I (-20%)
+[❌] All piglin units now gain +10% movement speed while on nether terrain
+[❌] Basic portals under construction can now queue their upgrade so it begins immediately upon completion
+    - This will cost wood up front
+[❌] Wither skeletons can stack +1 wither on heroes (3 to 4)
+[❌] Magma cubes gain 5% physical armor per size above 1 (max size 6 = 25% armor)
+
+Villagers
+---------
+[❌] Royal Guard
+    - Taunting cry now also grants Resistance III for its duration (60% global armour)
+    - Mace slam range and radius reduced from 4 to 3
+
+[❌] Witches can now throw potions while moving
+
+Monsters
+--------
+[❌] Necromancer
+    - Zombie summons are no longer worth experience or population cost
+    - Blood Boon now only spawns units at buildings within 30 blocks of the targeted building
+        - this was previously just spawning units at random buildings owned by the targeted player
+
+[❌] Sculk amplifier sonic boom range reduced from 20 to 15 (reduce animation length by 40%)
+[❌] Sculk catalyst night range per nearby sculk block raised by 20% (max range is still 50)
+[❌] Sculk catalysts can now autocast sacrifice
+    - It will only target the same type of unit you last manually sacrificed
+    - Autocast turns off once at max night range
+
+[❌] Slimes gain 5% physical armor per size above 1 (max size 6 = 25% armor)
+[❌] Spider movement speed raised from 33 to 34 and damage from 4 to 5
+[❌] Silverfish movement speed raised from 25 to 28 and are no longer worth experience

@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.research.researchItems;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -25,7 +26,7 @@ public class ResearchBlazeFirewall extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_BLAZE_FIRE_WALL;
 
     public ResearchBlazeFirewall() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (level.isClientSide()) {
                 ResearchClient.addResearch(placement.ownerName, ProductionItems.RESEARCH_BLAZE_FIREWALL);
@@ -49,7 +50,7 @@ public class ResearchBlazeFirewall extends ProductionItem {
             () -> ProductionItems.RESEARCH_BLAZE_FIREWALL.itemIsBeingProduced(prodBuilding.ownerName)
                 || ResearchClient.hasResearch(ProductionItems.RESEARCH_BLAZE_FIREWALL),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_BLAZE_FIREWALL),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_BLAZE_FIREWALL),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.blaze_firewall"),
                     Style.EMPTY.withBold(true)

@@ -345,7 +345,12 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         if (pushAttackCd > 0)
             pushAttackCd -= 1;
 
-        if (autocastingConsume() && getSize() < MAX_SIZE && getTargetGoal().getTarget() == null) {
+        if (autocastingConsume() && getSize() == MAX_SIZE) {
+            for (Ability ability : abilities)
+                if (ability instanceof ConsumeSlime consume)
+                    consume.setAutocast(false);
+        }
+        else if (autocastingConsume() && getSize() < MAX_SIZE && getTargetGoal().getTarget() == null) {
 
             Vector3d unitPosition = new Vector3d(position().x, position().y, position().z);
             List<SlimeUnit> nearbyEntities = MiscUtil.getEntitiesWithinRange(unitPosition, aggroRange, SlimeUnit.class, level());
@@ -354,7 +359,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
             SlimeUnit closestTarget = null;
 
             for (SlimeUnit slime : nearbyEntities) {
-                if (slime.getOwnerName().equals(getOwnerName()) && slime != this && slime.getSize() <= getSize() && !slime.isTiny()) {
+                if (slime.getOwnerName().equals(getOwnerName()) && slime != this && slime.getSize() == STARTING_SIZE) {
                     double dist = position().distanceTo(slime.position());
                     if (dist < closestDist) {
                         closestDist = dist;

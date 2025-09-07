@@ -80,7 +80,7 @@ public class PillagerProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.PILLAGER),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.PILLAGER),
             null,
             tooltipLines
         );

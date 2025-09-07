@@ -80,7 +80,7 @@ public class VindicatorProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.VINDICATOR),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.VINDICATOR),
             null,
             tooltipLines
         );

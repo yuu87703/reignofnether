@@ -81,7 +81,7 @@ public class BruteProd extends ProductionItem {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.BRUTE),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.BRUTE),
                 null,
                 tooltipLines
         );

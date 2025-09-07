@@ -79,7 +79,7 @@ public class VillagerProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.VILLAGER),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.VILLAGER),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.villager"), Style.EMPTY.withBold(true)),

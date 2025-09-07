@@ -77,7 +77,7 @@ public class CreeperProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.CREEPER),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.CREEPER),
             null,
             List.of(
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.creeper"), Style.EMPTY.withBold(true)),

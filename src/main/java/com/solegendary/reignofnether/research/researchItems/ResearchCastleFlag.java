@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.Castle;
+import com.solegendary.reignofnether.building.production.ProdDupeRule;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
@@ -24,7 +25,7 @@ public class ResearchCastleFlag extends ProductionItem {
     public final static ResourceCost cost = ResourceCosts.RESEARCH_CASTLE_FLAG;
 
     public ResearchCastleFlag() {
-        super(cost);
+        super(cost, ProdDupeRule.DISALLOW_FOR_BUILDING);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (placement.getBuilding() instanceof Castle) {
                 placement.changeStructure(Castle.upgradedStructureName);
@@ -47,7 +48,7 @@ public class ResearchCastleFlag extends ProductionItem {
                 prodBuilding.getBuilding() instanceof Castle castle && prodBuilding.getUpgradeLevel() > 0
             ),
             () -> true,
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.RESEARCH_CASTLE_FLAG),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.RESEARCH_CASTLE_FLAG),
             null,
             List.of(FormattedCharSequence.forward(I18n.get("research.reignofnether.castle_flag"),
                     Style.EMPTY.withBold(true)

@@ -105,7 +105,7 @@ public class ZombieProd extends ProductionItem {
                 () -> false,
                 () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_HUSKS) || ResearchClient.hasResearch(ProductionItems.RESEARCH_DROWNED),
                 () -> true,
-                () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.ZOMBIE),
+                () -> BuildingServerboundPacket.startProduction(ProductionItems.ZOMBIE),
                 null,
                 List.of(
                     FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.zombie"), Style.EMPTY.withBold(true)),

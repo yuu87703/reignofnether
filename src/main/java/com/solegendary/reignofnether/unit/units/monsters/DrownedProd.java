@@ -78,7 +78,7 @@ public class DrownedProd extends ProductionItem {
             () -> false,
             () -> false,
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_DROWNED),
-            () -> BuildingServerboundPacket.startProduction(prodBuilding.originPos, ProductionItems.DROWNED),
+            () -> BuildingServerboundPacket.startProduction(ProductionItems.DROWNED),
             null,
             List.of(
                 FormattedCharSequence.forward(LanguageUtil.getTranslation("units.monsters.reignofnether.drowned"), Style.EMPTY.withBold(true)),

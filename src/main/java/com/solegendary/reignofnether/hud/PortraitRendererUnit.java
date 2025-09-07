@@ -347,17 +347,19 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         public String text;
         public UnitStatType type;
         public int colour = 0xFFFFFF;
+        public int textXOffset = 0;
 
         public RenderedStat(ResourceLocation icon, String text, UnitStatType type) {
             this.icon = icon;
             this.text = text;
             this.type = type;
         }
-        public RenderedStat(ResourceLocation icon, String text, UnitStatType type, int colour) {
+        public RenderedStat(ResourceLocation icon, String text, UnitStatType type, int colour, int xOffset) {
             this.icon = icon;
             this.text = text;
             this.type = type;
             this.colour = colour;
+            this.textXOffset = xOffset;
         }
     }
 
@@ -390,18 +392,23 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
                 DecimalFormat df1 = new DecimalFormat("###.#");
                 atkStr = String.valueOf(df1.format(atkDmg)); // attacks per second
             }
+            if (unit instanceof Mob mob && mob.isVehicle() && mob.getFirstPassenger() instanceof AttackerUnit passenger) {
+                atkStr += "+" + (int) passenger.getUnitAttackDamage();
+            }
             renderedStats.add(new RenderedStat(
                     new ResourceLocation("reignofnether", "textures/icons/items/sword.png"),
                     atkStr,
                     UnitStatType.ATTACK_DAMAGE,
-                    unit.hasBonusDamage() ? 0xFF2BFF2B : 0xFFFFFFFF
+                    unit.hasBonusDamage() ? 0xFF2BFF2B : 0xFFFFFFFF,
+                    0
             ));
             DecimalFormat df2 = new DecimalFormat("###.##");
             renderedStats.add(new RenderedStat(
                     new ResourceLocation("reignofnether","textures/icons/items/sparkler.png"),
                     String.valueOf(df2.format(attackerUnit.getAttacksPerSecond())),
                     UnitStatType.ATTACK_SPEED,
-                    unit.hasBonusAttackSpeed() ? 0xFF2BFF2B : 0xFFFFFFFF
+                    unit.hasBonusAttackSpeed() ? 0xFF2BFF2B : 0xFFFFFFFF,
+                    0
             ));
             String rangeStr;
             GarrisonableBuilding garr = GarrisonableBuilding.getGarrison(unit);
@@ -418,28 +425,50 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         }
 
         int armourColor = 0xFFFFFFFF;
-        String physicalArmourStr = (int) (unit.getUnitPhysicalArmorPercentage() * 100) + "%";
-        String rangedArmourStr = (int) (unit.getUnitRangedArmorPercentage() * 100) + "%";
-        String magicArmourStr = (int) (unit.getUnitMagicArmorPercentage() * 100) + "%";
+        float physicalArmour = unit.getUnitPhysicalArmorPercentage();
+        float rangedArmour = unit.getUnitRangedArmorPercentage();
+        float magicArmour = unit.getUnitMagicArmorPercentage();
+        float resistArmour = unit.getUnitResistPercentage();
+        float avgArmourInv = 1;
 
-        String armourStr = physicalArmourStr;
+        String armourStr = "0%";
+        int nonZeroArmourTypes = 0;
 
-        if (!physicalArmourStr.equals("0%")) {
-            armourStr = physicalArmourStr;
+        if (physicalArmour > 0) {
+            armourStr = (int) (physicalArmour * 100) + "%";
             armourColor = 0xFF2BFF2B;
-        } else if (!rangedArmourStr.equals("0%")) {
-            armourStr = rangedArmourStr;
+            avgArmourInv *= (1 - physicalArmour);
+            nonZeroArmourTypes += 1;
+        }
+        if (rangedArmour > 0) {
+            armourStr = (int) (rangedArmour * 100) + "%";
             armourColor = 0xFFFCFC2B;
-        } else if (!magicArmourStr.equals("0%")) {
-            armourStr = magicArmourStr;
+            avgArmourInv *= (1 - rangedArmour);
+            nonZeroArmourTypes += 1;
+        }
+        if (resistArmour > 0) {
+            armourStr = (int) (resistArmour * 100) + "%";
+            armourColor = 0xFF42DDDD;
+            avgArmourInv *= (1 - resistArmour);
+            nonZeroArmourTypes += 1;
+        }
+        if (magicArmour > 0 && resistArmour <= 0) { // resistArmour includes magicArmour
+            armourStr = (int) (magicArmour * 100) + "%";
             armourColor = 0xFF5B5BFC;
+            avgArmourInv *= (1 - magicArmour);
+            nonZeroArmourTypes += 1;
+        }
+        if (nonZeroArmourTypes > 1) {
+            armourStr = "~" + (int) ((1 - avgArmourInv) * 100) + "%";
+            armourColor = 0xFF42DDDD;
         }
         
         renderedStats.add(new RenderedStat(
-                new ResourceLocation("reignofnether", "textures/icons/items/boots.png"),
+                new ResourceLocation("reignofnether", "textures/icons/items/chestplate.png"),
                 armourStr,
                 UnitStatType.ARMOUR,
-                armourColor
+                armourColor,
+                armourStr.startsWith("~") ? -4 : 0
         ));
         AttributeInstance ms = ((LivingEntity) unit).getAttribute(Attributes.MOVEMENT_SPEED);
         int msInt = ms != null ? (int) (ms.getValue() * 101) : 0;
@@ -457,10 +486,11 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
             msColour = 0xFF2BFF2B;
         }
         renderedStats.add(new RenderedStat(
-                new ResourceLocation("reignofnether","textures/icons/items/chestplate.png"),
+                new ResourceLocation("reignofnether","textures/icons/items/boots.png"),
                 String.valueOf(msInt),
                 UnitStatType.MOVEMENT_SPEED,
-                msColour
+                msColour,
+                0
         ));
 
         if (unit instanceof HeroUnit heroUnit) {
@@ -499,7 +529,7 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
             guiGraphics.drawString(
                 Minecraft.getInstance().font,
                 renderedStat.text,
-                blitXIcon + 13,
+                blitXIcon + 13 + renderedStat.textXOffset,
                 blitYIcon,
                 renderedStat.colour
             );
