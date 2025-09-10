@@ -29,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.solegendary.reignofnether.building.BuildingUtils.getMinCorner;
+import static com.solegendary.reignofnether.building.production.ProdDupeRule.*;
 
 public class ProductionPlacement extends BuildingPlacement {
     private BlockPos rallyPoint;
