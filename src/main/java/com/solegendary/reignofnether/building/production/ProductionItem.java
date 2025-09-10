@@ -18,6 +18,7 @@ import com.solegendary.reignofnether.unit.UnitServerEvents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 // units and/or research tech that a ProductionBuilding can produce
@@ -108,7 +109,13 @@ public abstract class ProductionItem {
 
     // some items (eg. research) are enabled only if the item doesn't exist in any existing clientside queue
     public boolean itemIsBeingProduced(String ownerName) {
-        for (BuildingPlacement building : BuildingClientEvents.getBuildings())
+        return itemIsBeingProduced(true, ownerName);
+    }
+
+    public boolean itemIsBeingProduced(boolean isClientSide, String ownerName) {
+        List<BuildingPlacement> buildings = isClientSide ? BuildingClientEvents.getBuildings() : BuildingServerEvents.getBuildings();
+
+        for (BuildingPlacement building : buildings)
             if (building.ownerName.equals(ownerName) && building instanceof ProductionPlacement prodBuilding)
                 for (ActiveProduction prodItem : prodBuilding.productionQueue)
                     if (prodItem.item == this)
@@ -118,7 +125,13 @@ public abstract class ProductionItem {
 
     // check if this is being produced at one particular building
     public boolean itemIsBeingProducedAt(ProductionPlacement placement) {
-        for (BuildingPlacement building : BuildingClientEvents.getBuildings())
+        return itemIsBeingProducedAt(true, placement);
+    }
+
+    public boolean itemIsBeingProducedAt(boolean isClientSide, ProductionPlacement placement) {
+        List<BuildingPlacement> buildings = isClientSide ? BuildingClientEvents.getBuildings() : BuildingServerEvents.getBuildings();
+
+        for (BuildingPlacement building : buildings)
             if (building == placement)
                 for (ActiveProduction prodItem : placement.productionQueue)
                     if (prodItem.item == this)
