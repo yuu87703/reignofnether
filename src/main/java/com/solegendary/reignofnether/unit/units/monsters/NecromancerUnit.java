@@ -29,6 +29,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -269,6 +271,14 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.abilities.add(new BloodMoon(this));
         updateAbilityButtons();
         setStatsForLevel();
+    }
+
+    @Override
+    public float getDamageAfterMagicAbsorb(DamageSource pSource, float pDamage) {
+        pDamage = super.getDamageAfterMagicAbsorb(pSource, pDamage);
+        if (pSource.is(DamageTypeTags.WITCH_RESISTANT_TO))
+            pDamage *= 0.7F;
+        return pDamage;
     }
 
     @Override
@@ -536,7 +546,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         int soulRank = consumeSoulsAndGetSoulRank();
         int bonusDuration = BloodMoon.BONUS_DURATION_PER_SOUL_RANK * soulRank;
 
-        TimeServerEvents.startBloodMoon(BloodMoon.DURATION + bonusDuration, this, bpl.ownerName);
+        TimeServerEvents.startBloodMoon(BloodMoon.DURATION + bonusDuration, this, bpl.centrePos);
         AbilityClientboundPacket.doAbility(this.getId(), UnitAction.BLOOD_MOON, BloodMoon.DURATION + bonusDuration);
     }
 }

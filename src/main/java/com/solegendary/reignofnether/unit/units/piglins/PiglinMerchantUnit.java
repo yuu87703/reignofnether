@@ -31,8 +31,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -256,6 +258,14 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         this.abilities.add(new LootExplosion(this));
         updateAbilityButtons();
         setStatsForLevel();
+    }
+
+    @Override
+    public float getDamageAfterMagicAbsorb(DamageSource pSource, float pDamage) {
+        pDamage = super.getDamageAfterMagicAbsorb(pSource, pDamage);
+        if (pSource.is(DamageTypeTags.WITCH_RESISTANT_TO))
+            pDamage *= 0.7F;
+        return pDamage;
     }
 
     @Override

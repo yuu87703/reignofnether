@@ -140,7 +140,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
 
     final static public float attackDamagePerSize = 2.0f;
     final static public float attacksPerSecond = 0.5f;
-    final static public float armorValue = 0.0f;
+    final static public float armorPerSize = 1.2f;
     final static public float movementSpeed = 0.6f; // needs to be 2x other units
     final static public float aggroRange = 10;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
@@ -266,6 +266,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(getMovementSpeed());
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(getUnitAttackDamage());
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(getKnockbackResistance());
+        this.getAttribute(Attributes.ARMOR).setBaseValue(pSize == 1 ? 0 : armorPerSize * pSize);
 
         if (pResetHealth)
             this.setHealth(this.getMaxHealth());
@@ -331,7 +332,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MOVEMENT_SPEED, SlimeUnit.movementSpeed)
                 .add(Attributes.ATTACK_DAMAGE, SlimeUnit.attackDamagePerSize)
-                .add(Attributes.ARMOR, SlimeUnit.armorValue)
+                .add(Attributes.ARMOR, SlimeUnit.armorPerSize)
                 .add(Attributes.MAX_HEALTH, 10)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange());
     }

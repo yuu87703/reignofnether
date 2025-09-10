@@ -24,8 +24,8 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
     private final Set<BlockPos> nightBorderBps = new HashSet<>();
 
     private final static int SCULK_SEARCH_RANGE = 30;
-    private final static float HP_PER_SCULK = 0.5f;
-    private final static float RANGE_PER_SCULK = 0.25f;
+    private final static float HP_PER_SCULK = 0.6f;
+    private final static float RANGE_PER_SCULK = 0.30f;
 
     public final ArrayList<BlockPos> sculkBps = new ArrayList<>();
 

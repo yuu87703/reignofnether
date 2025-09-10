@@ -107,7 +107,11 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
     public float getUnitAttackDamage() {return attackDamage;}
     public float getUnitMaxHealth() {return maxHealth;}
     @Nullable
-    public ResourceCost getCost() {return ResourceCosts.ZOMBIE;}
+    public ResourceCost getCost() {
+        return isSummonedByNecromancer() ?
+                ResourceCost.Unit(0,0, 0, 0,0) :
+                ResourceCosts.ZOMBIE;
+    }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
 
     public void setAttackMoveTarget(@Nullable BlockPos bp) { this.attackMoveTarget = bp; }

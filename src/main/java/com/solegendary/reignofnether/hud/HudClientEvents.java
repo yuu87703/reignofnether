@@ -523,54 +523,57 @@ public class HudClientEvents {
             blitX = 0;
             blitY = screenHeight - iconFrameSize;
 
-            if (hudSelectedPlacement != null && (hudSelBuildingOwned) && !hudSelectedPlacement.isBuilt) {
-                if (!buildingCancelButton.isHidden.get()) {
-                    buildingCancelButton.render(evt.getGuiGraphics(), 0, screenHeight - iconFrameSize, mouseX, mouseY);
-                    renderedButtons.add(buildingCancelButton);
+            if (hudSelectedPlacement != null && hudSelBuildingOwned) {
+                if (!hudSelectedPlacement.isBuilt) {
+                    if (!buildingCancelButton.isHidden.get()) {
+                        buildingCancelButton.render(evt.getGuiGraphics(), 0, screenHeight - iconFrameSize, mouseX, mouseY);
+                        renderedButtons.add(buildingCancelButton);
+                    }
                 }
-            } else if (hudSelBuildingOwned) {
+                if (hudSelectedPlacement.isBuilt || hudSelectedPlacement.allowProdWhileBuilding) {
 
-                List<AbilityButton> buildingAbilities = List.of();
-                if (hudSelectedPlacement != null) {
-                    buildingAbilities = hudSelectedPlacement.getAbilityButtons()
-                        .stream()
-                        .filter(b -> !b.isHidden.get())
-                        .toList();
-                }
-                if (buildingAbilities.size() > 0) {
-                    blitY -= Button.DEFAULT_ICON_FRAME_SIZE;
-                }
+                    if (!hudSelectedPlacement.isBuilt)
+                        blitX += Button.DEFAULT_ICON_FRAME_SIZE;
 
-                // production buttons on bottom row
-                if (hudSelectedPlacement instanceof ProductionPlacement selProdPlacement) {
-                    List<Button> visibleProdButtons = selProdPlacement.productionButtons.stream()
-                        .filter(b -> !b.isHidden.get())
-                        .toList();
-                    if (visibleProdButtons.size() > MAX_BUTTONS_PER_ROW) {
+                    List<AbilityButton> buildingAbilities = hudSelectedPlacement.getAbilityButtons()
+                            .stream()
+                            .filter(b -> !b.isHidden.get())
+                            .toList();
+                    if (buildingAbilities.size() > 0) {
                         blitY -= Button.DEFAULT_ICON_FRAME_SIZE;
                     }
 
-                    int rowButtons = 0;
-                    for (Button prodButton : visibleProdButtons) {
-                        rowButtons += 1;
-                        if (rowButtons > MAX_BUTTONS_PER_ROW) {
-                            rowButtons = 0;
-                            blitX = 0;
-                            blitY += Button.DEFAULT_ICON_FRAME_SIZE;
+                    // production buttons on bottom row
+                    if (hudSelectedPlacement instanceof ProductionPlacement selProdPlacement) {
+                        List<Button> visibleProdButtons = selProdPlacement.productionButtons.stream()
+                                .filter(b -> !b.isHidden.get())
+                                .toList();
+                        if (visibleProdButtons.size() > MAX_BUTTONS_PER_ROW) {
+                            blitY -= Button.DEFAULT_ICON_FRAME_SIZE;
                         }
-                        prodButton.render(evt.getGuiGraphics(), blitX, blitY, mouseX, mouseY);
-                        productionButtons.add(prodButton);
-                        renderedButtons.add(prodButton);
-                        blitX += iconFrameSize;
+
+                        int rowButtons = 0;
+                        for (Button prodButton : visibleProdButtons) {
+                            rowButtons += 1;
+                            if (rowButtons > MAX_BUTTONS_PER_ROW) {
+                                rowButtons = 0;
+                                blitX = 0;
+                                blitY += Button.DEFAULT_ICON_FRAME_SIZE;
+                            }
+                            prodButton.render(evt.getGuiGraphics(), blitX, blitY, mouseX, mouseY);
+                            productionButtons.add(prodButton);
+                            renderedButtons.add(prodButton);
+                            blitX += iconFrameSize;
+                        }
                     }
-                }
-                blitY += Button.DEFAULT_ICON_FRAME_SIZE;
-                blitX = 0;
-                for (AbilityButton abilityButton : buildingAbilities) {
-                    if (!abilityButton.isHidden.get()) {
-                        abilityButton.render(evt.getGuiGraphics(), blitX, blitY, mouseX, mouseY);
-                        renderedButtons.add(abilityButton);
-                        blitX += iconFrameSize;
+                    blitY += Button.DEFAULT_ICON_FRAME_SIZE;
+                    blitX = 0;
+                    for (AbilityButton abilityButton : buildingAbilities) {
+                        if (!abilityButton.isHidden.get()) {
+                            abilityButton.render(evt.getGuiGraphics(), blitX, blitY, mouseX, mouseY);
+                            renderedButtons.add(abilityButton);
+                            blitX += iconFrameSize;
+                        }
                     }
                 }
             }
