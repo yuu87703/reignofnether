@@ -40,6 +40,7 @@ Quality of Life
 
 Balancing
 ---------
+[❌] All cancelled buildings now refund unfinished productions
 [🟡] All Heroes now have 30% magic resistance
 [❌] Mounted units no longer automatically go into melee range against buildings
     - To make them auto-attack buildings, use attack-move or right-click
@@ -48,9 +49,11 @@ Piglins
 -------
 [🟡] Piglin Merchant
     - Greed is Good's TNT cooldown reduction per level increased from 5s to 7s (this means the cooldown is 0 at level 3)
+    - Thrown TNT fuse time reduced from 3s to 2.5s
     - Delay before enemies can eat thrown food raised from 5s to 10s
 
 [🟡] All piglin units now gain +10% movement speed while on nether terrain
+[🟡] Wood value of all nether logs raised from 17 to 18
 [🟡] Basic portals under construction can now queue their upgrade so it begins immediately upon completion
     - This will cost wood up front
 [🟡] Military portal upgrade time reduced from 30s to 25s
@@ -65,6 +68,8 @@ Villagers
 [🟡] Royal Guard
     - Taunting cry now also grants Resistance III for its duration (60% global armour)
     - Mace slam range and radius reduced from 4 to 3, and mana cost raised from 30 to 40
+
+[❌] Town Centre construction time reduced by 5s (to match other factions)
 
 [❌] Witches can now throw potions while moving
 
