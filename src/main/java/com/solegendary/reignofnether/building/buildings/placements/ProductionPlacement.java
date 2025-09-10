@@ -29,7 +29,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.solegendary.reignofnether.building.BuildingUtils.getMinCorner;
-import static com.solegendary.reignofnether.building.production.ProdDupeRule.*;
 
 public class ProductionPlacement extends BuildingPlacement {
     private BlockPos rallyPoint;
@@ -181,8 +180,8 @@ public class ProductionPlacement extends BuildingPlacement {
             }
             else {
                 boolean allow = switch (prodItem.dupeRule) {
-                    case DISALLOW -> !prodItem.itemIsBeingProduced(ownerName);
-                    case DISALLOW_FOR_BUILDING -> !prodItem.itemIsBeingProducedAt(this);
+                    case DISALLOW -> !prodItem.itemIsBeingProduced(false, ownerName);
+                    case DISALLOW_FOR_BUILDING -> !prodItem.itemIsBeingProducedAt(false, this);
                     case ALLOW -> true;
                 };
 
