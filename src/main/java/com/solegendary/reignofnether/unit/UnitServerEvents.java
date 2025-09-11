@@ -407,8 +407,6 @@ public class UnitServerEvents {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent evt) {
-        System.out.println("LivingDeathEvent (UnitServerEvents): " + evt.getEntity().getName().getString());
-
         // Convert nearby blocks arond a death into something that is sculk convertible
         // supposed to add to sculk_spreadable.json tag under the data/minecraft/tags/blocks but doesn't work for
         // some reason

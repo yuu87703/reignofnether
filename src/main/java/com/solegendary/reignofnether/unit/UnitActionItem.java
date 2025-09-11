@@ -419,6 +419,10 @@ public class UnitActionItem {
                     } else {
                         ability.use(level, actionableBuilding, preselectedBlockPos);
                     }
+                } else if (ability.autocastEnableAction == action) {
+                    ability.setAutocast(true);
+                } else if (ability.autocastDisableAction == action) {
+                    ability.setAutocast(false);
                 }
             }
         }

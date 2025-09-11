@@ -34,16 +34,12 @@ Bugfixes
 
 Quality of Life
 ---------------
-
-
-
+[🟡] Pressing Shift + number adds a unit or building to an existing control group
+[🟡] Pressing Alt + number adds a unit or building to a new control group and removes it from all other groups
 
 Balancing
 ---------
-[❌] All cancelled buildings now refund unfinished productions
 [🟡] All Heroes now have 30% magic resistance
-[❌] Mounted units no longer automatically go into melee range against buildings
-    - To make them auto-attack buildings, use attack-move or right-click
 
 Piglins
 -------
@@ -70,8 +66,6 @@ Villagers
     - Mace slam range and radius reduced from 4 to 3, and mana cost raised from 30 to 40
 
 [❌] Town Centre construction time reduced by 5s (to match other factions)
-
-[❌] Witches can now throw potions while moving
 
 Monsters
 --------

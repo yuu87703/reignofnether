@@ -38,7 +38,6 @@ public class ProductionPlacement extends BuildingPlacement {
     public final List<ActiveProduction> productionQueue = new ArrayList<>();
     private ActiveProduction active;
 
-
     public ProductionPlacement(Building building, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(building, level, originPos, rotation, ownerName, blocks, isCapitol);
         if (building instanceof ProductionBuilding productionBuilding) {

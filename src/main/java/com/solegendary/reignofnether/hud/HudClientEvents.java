@@ -1751,9 +1751,19 @@ public class HudClientEvents {
         // Access and save to controlGroups if index is within bounds
         for (Keybinding keybinding : Keybindings.nums) {
             int index = Integer.parseInt(keybinding.buttonLabel);
-            if (index >= 0 && index < controlGroups.size()) {  // Bounds check
-                if (Keybindings.ctrlMod.isDown() && evt.getKeyCode() == keybinding.key) {
-                    controlGroups.get(index).saveFromSelected(keybinding);
+            if (index >= 0 && index < controlGroups.size() && evt.getKeyCode() == keybinding.key) {  // Bounds check
+                if (Keybindings.ctrlMod.isDown()) {
+                    controlGroups.get(index).saveFromSelected(keybinding, true);
+                } else if (Keybindings.shiftMod.isDown()) {
+                    controlGroups.get(index).saveFromSelected(keybinding, false);
+                } else if (Keybindings.altMod.isDown()) {
+                    for (ControlGroup controlGroup : controlGroups) {
+                        for (LivingEntity le : getSelectedUnits())
+                            controlGroup.entityIds.removeIf(id -> id == le.getId());
+                        for (BuildingPlacement bpl : BuildingClientEvents.getSelectedBuildings())
+                            controlGroup.buildingBps.removeIf(bp -> bp.equals(bpl.originPos));
+                    }
+                    controlGroups.get(index).saveFromSelected(keybinding, true);
                 }
             }
         }

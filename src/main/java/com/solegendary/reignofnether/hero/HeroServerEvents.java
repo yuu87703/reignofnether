@@ -30,8 +30,6 @@ public class HeroServerEvents {
         if (evt.getEntity().level().isClientSide())
             return;
 
-        System.out.println("LivingDeathEvent (HeroServerEvents): " + evt.getEntity().getName().getString());
-
         Level level = evt.getEntity().level();
         if (evt.getEntity() instanceof Unit deadUnit) {
             int popCost = deadUnit.getCost().population;
