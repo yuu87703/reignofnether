@@ -7,15 +7,11 @@
 
 
 Necromancer
-    [❌] Purple particles on soul usage
     [❌] Magical projectile model and sound
 
 Royal Guard
     - Mace Slam
-        [❌] Add hammer throw alternate
         [❌] Raise ground blocks with block displays?
-
-    [❌] Proper sound effects for taunt and avatar
 
 Features
 --------
