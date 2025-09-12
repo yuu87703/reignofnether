@@ -523,7 +523,7 @@ public class HudClientEvents {
             blitX = 0;
             blitY = screenHeight - iconFrameSize;
 
-            if (hudSelectedPlacement != null && hudSelBuildingOwned) {
+            if (hudSelectedPlacement != null && (hudSelBuildingOwned || !PlayerClientEvents.isRTSPlayer)) {
                 if (!hudSelectedPlacement.isBuilt) {
                     if (!buildingCancelButton.isHidden.get()) {
                         buildingCancelButton.render(evt.getGuiGraphics(), 0, screenHeight - iconFrameSize, mouseX, mouseY);
@@ -827,7 +827,9 @@ public class HudClientEvents {
         // --------------------------------------------------------
         if (selUnits.size() > 0 &&
                 (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED ||
-                        NonUnitClientEvents.canControlAllMobs() || AlliancesClient.canControlAlly(selUnits.get(0))) &&
+                        !PlayerClientEvents.isRTSPlayer ||
+                        NonUnitClientEvents.canControlAllMobs() ||
+                        AlliancesClient.canControlAlly(selUnits.get(0))) &&
                 hudSelectedEntity instanceof Unit unit) {
             blitX = 0;
             blitY = screenHeight - iconFrameSize;
@@ -896,7 +898,7 @@ public class HudClientEvents {
 
             // includes worker building buttons
             if (TutorialClientEvents.isAtOrPastStage(TutorialStage.BUILD_INTRO) &&
-                    (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED) ||
+                    (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED || !PlayerClientEvents.isRTSPlayer) ||
                     AlliancesClient.canControlAlly(selUnits.get(0))) {
                 List<AbilityButton> abilityButtons = List.of();
                 for (LivingEntity livingEntity : selUnits) {

@@ -261,7 +261,7 @@ public class BuildingServerEvents {
                             placeScaffoldingUnder(block, newBuilding);
 
                 newBuilding.blocks.stream()
-                    .filter(block -> block.getBlockPos().getY() == minY
+                    .filter(block -> block.getBlockPos().getY() <= minY + (newBuilding.getBuilding().foundationYLayers - 1)
                         && newBuilding.getBuilding().startingBlockTypes.contains(block.getBlockState().getBlock()))
                     .forEach(newBuilding::addToBlockPlaceQueue);
 

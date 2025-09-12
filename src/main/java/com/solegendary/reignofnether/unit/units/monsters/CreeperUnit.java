@@ -242,7 +242,7 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
     @Override
     public void thunderHit(ServerLevel pLevel, LightningBolt pLightning) {
         super.thunderHit(pLevel, pLightning);
-        this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60 * 20, 0));
+        this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 30 * 20, 0));
     }
 
     @Override

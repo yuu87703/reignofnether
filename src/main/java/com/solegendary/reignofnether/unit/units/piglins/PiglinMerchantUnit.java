@@ -454,7 +454,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
             resourceBonus = greedIsGood.spendResourcesAndGet100sSpent(ResourceName.WOOD);
 
         ThrowTNT throwTNT = getThrowTNT();
-        throwTNT.setCooldown(throwTNT.cooldownMax - (resourceBonus * ThrowTNT.LESS_COOLDOWN_PER_100_RESOURCES));
+        float cooldown = Math.max(0, throwTNT.cooldownMax - (resourceBonus * ThrowTNT.LESS_COOLDOWN_PER_100_RESOURCES));
+        throwTNT.setCooldown(cooldown);
         AbilityClientboundPacket.sendSetCooldownPacket(getId(), throwTNT.action, throwTNT.getCooldown());
         setMana(getMana() + (resourceBonus * ThrowTNT.LESS_MANA_PER_100_RESOURCES));
     }
