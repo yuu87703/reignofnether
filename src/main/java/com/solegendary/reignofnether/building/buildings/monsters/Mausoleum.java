@@ -43,7 +43,7 @@ public class Mausoleum extends ProductionBuilding {
         this.portraitBlock = Blocks.DEEPSLATE_TILES;
         this.icon = new ResourceLocation("minecraft", "textures/block/deepslate_tiles.png");
 
-        this.buildTimeModifier = 0.274f; // 100s total build time with 1 villager
+        this.buildTimeModifier = 0.274f; // 60s total build time with 3 villagers
         this.canAcceptResources = true;
 
         this.startingBlockTypes.add(Blocks.STONE);

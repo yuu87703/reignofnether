@@ -46,6 +46,7 @@ public class BuildingServerboundPacket {
     private final static List<BuildingAction> existingBuildingAuthActions = List.of(
             BuildingAction.DESTROY,
             BuildingAction.SET_RALLY_POINT,
+            BuildingAction.ADD_RALLY_POINT,
             BuildingAction.SET_RALLY_POINT_ENTITY,
             BuildingAction.START_PRODUCTION,
             BuildingAction.CANCEL_PRODUCTION,
@@ -73,6 +74,11 @@ public class BuildingServerboundPacket {
     public static void setRallyPoint(BlockPos buildingPos, BlockPos rallyPos) {
         PacketHandler.INSTANCE.sendToServer(new BuildingServerboundPacket(
                 BuildingAction.SET_RALLY_POINT,
+                "", buildingPos, rallyPos, Rotation.NONE, "", new int[0], false));
+    }
+    public static void addRallyPoint(BlockPos buildingPos, BlockPos rallyPos) {
+        PacketHandler.INSTANCE.sendToServer(new BuildingServerboundPacket(
+                BuildingAction.ADD_RALLY_POINT,
                 "", buildingPos, rallyPos, Rotation.NONE, "", new int[0], false));
     }
     public static void setRallyPointEntity(BlockPos buildingPos, int entityId) {
@@ -180,6 +186,10 @@ public class BuildingServerboundPacket {
                 case SET_RALLY_POINT -> {
                     if (building instanceof ProductionPlacement productionBuilding)
                         productionBuilding.setRallyPoint(rallyPos);
+                }
+                case ADD_RALLY_POINT -> {
+                    if (building instanceof ProductionPlacement productionBuilding)
+                        productionBuilding.addRallyPoint(rallyPos);
                 }
                 case SET_RALLY_POINT_ENTITY -> {
                     if (building instanceof ProductionPlacement productionBuilding) {

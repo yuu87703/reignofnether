@@ -10,9 +10,6 @@ import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientboundPacket;
-import com.solegendary.reignofnether.building.production.ActiveProduction;
-import com.solegendary.reignofnether.building.production.ProductionBuilding;
-import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.fogofwar.FrozenChunkClientboundPacket;
 import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
@@ -31,7 +28,6 @@ import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -116,7 +112,7 @@ public class BuildingServerEvents {
                         b.getBuilding(),
                         b.ownerName,
                         b.rotation,
-                        b instanceof ProductionPlacement pb ? pb.getRallyPoint() : b.originPos,
+                        b instanceof ProductionPlacement pb ? pb.getFinalRallyPoint() : b.originPos,
                         b.isDiagonalBridge,
                         b.isBuilt,
                         b.getUpgradeLevel(),

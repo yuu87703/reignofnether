@@ -65,8 +65,6 @@ Villagers
     - Taunting cry now also grants Resistance III for its duration (60% global armour)
     - Mace slam range and radius reduced from 4 to 3, and mana cost raised from 30 to 40
 
-[❌] Town Centre construction time reduced by 5s (to match other factions)
-
 Monsters
 --------
 Necromancer
@@ -76,10 +74,12 @@ Necromancer
 
 [🟡] Sculk amplifier sonic boom range reduced from 20 to 15 and damage penalty increased from -33% to -40% (45 damage)
 [🟡] Sculk catalyst night range and bonus HP per nearby sculk block raised by 20% (max range is still 50)
-[❌] Sculk catalysts can now autocast sacrifice
+[🟡] Sculk catalysts can now autocast sacrifice
     - It will only target the same type of unit you last manually sacrificed
     - Autocast turns off once at max night range
 
 [🟡] Slimes gain ~5% physical armor per size above 1 (max size 6 = ~25% armor)
 [🟡] Spider movement speed raised from 33 to 34 and damage from 4 to 5
 [🟡] Silverfish movement speed raised from 25 to 28 and are no longer worth experience
+
+[❌] Mausoleum construction time reduced by 5s (to match other factions)
