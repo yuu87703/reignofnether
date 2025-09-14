@@ -156,6 +156,8 @@ public class BuildingPlacement {
 
     public Mob lastAttacker = null;
 
+    public boolean allowProdWhileBuilding = false;
+
     private ArmorStand targetStand = null;
     public ArmorStand getTargetStand() {
         if (targetStand == null)

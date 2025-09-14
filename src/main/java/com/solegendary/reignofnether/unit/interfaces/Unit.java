@@ -20,6 +20,7 @@ import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.util.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -248,10 +249,7 @@ public interface Unit {
                 le.heal(1);
             } else if (unit.getFaction() == Faction.PIGLINS &&
                     le.tickCount % PIGLIN_HEALING_TICKS == 0 &&
-                    !(unit instanceof Slime) &&
-                    ((le.getVehicle() != null && NetherBlocks.isNetherBlock(le.level(), le.getVehicle().getOnPos())) ||
-                            NetherBlocks.isNetherBlock(le.level(), le.getOnPos()) ||
-                            unit instanceof GhastUnit)) {
+                    (MiscUtil.isOnNetherTerrain(le) || unit instanceof GhastUnit)) {
                 le.heal(1);
             }
         }
@@ -320,6 +318,12 @@ public interface Unit {
         }
         if (unitMob.hasEffect(MobEffects.ABSORPTION) && unitMob.getAbsorptionAmount() <= 0)
             unitMob.removeEffect(MobEffects.ABSORPTION);
+
+        if (unitMob.tickCount % 10 == 0 &&
+            unit.getFaction() == Faction.PIGLINS &&
+            MiscUtil.isOnNetherTerrain(unitMob)) {
+            unitMob.addEffect(new MobEffectInstance(MobEffectRegistrar.MINOR_MOVEMENT_SPEED.get(), 15, 1, true, false));
+        }
     }
 
     private static void checkAndPickupResources(Unit unit) {
@@ -376,6 +380,8 @@ public interface Unit {
 
     default void onPickupEquipment(ItemStack itemStack) { }
 
+    static int HOSTILE_FOOD_DELAY_TICKS = 200;
+
     private static void checkAndPickupEdibleFood(Unit unit) {
         Mob unitMob = (Mob) unit;
         if (!unit.isHoldingEdibleFood()) {
@@ -390,7 +396,7 @@ public interface Unit {
                 }
                 Relationship rl = UnitServerEvents.getUnitToEntityRelationship(unit, itementity);
                 if (!itementity.isRemoved() && !itemstack.isEmpty() && !itementity.hasPickUpDelay() && unitMob.isAlive() &&
-                    (rl != Relationship.HOSTILE || itementity.tickCount > 100) && ResourceSources.isPreparedFood(itemstack.getItem())) {
+                    (rl != Relationship.HOSTILE || itementity.tickCount > HOSTILE_FOOD_DELAY_TICKS) && ResourceSources.isPreparedFood(itemstack.getItem())) {
                     if (ResourceSources.isPreparedFood(itemstack.getItem()) &&
                             (unitMob.getHealth() < unitMob.getMaxHealth() || itemstack.getItem() == Items.ENCHANTED_GOLDEN_APPLE)) {
                         unitMob.onItemPickup(itementity);

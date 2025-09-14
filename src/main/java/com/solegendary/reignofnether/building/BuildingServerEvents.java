@@ -112,7 +112,7 @@ public class BuildingServerEvents {
                         b.getBuilding(),
                         b.ownerName,
                         b.rotation,
-                        b instanceof ProductionPlacement pb ? pb.getRallyPoint() : b.originPos,
+                        b instanceof ProductionPlacement pb ? pb.getFinalRallyPoint() : b.originPos,
                         b.isDiagonalBridge,
                         b.isBuilt,
                         b.getUpgradeLevel(),
@@ -261,7 +261,7 @@ public class BuildingServerEvents {
                             placeScaffoldingUnder(block, newBuilding);
 
                 newBuilding.blocks.stream()
-                    .filter(block -> block.getBlockPos().getY() == minY
+                    .filter(block -> block.getBlockPos().getY() <= minY + (newBuilding.getBuilding().foundationYLayers - 1)
                         && newBuilding.getBuilding().startingBlockTypes.contains(block.getBlockState().getBlock()))
                     .forEach(newBuilding::addToBlockPlaceQueue);
 
@@ -413,7 +413,6 @@ public class BuildingServerEvents {
                 ResourcesClientboundPacket.showFloatingText(res, building.centrePos);
             }
         }
-
         building.destroy((ServerLevel) building.getLevel());
     }
 

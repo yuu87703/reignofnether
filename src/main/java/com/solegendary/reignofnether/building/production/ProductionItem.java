@@ -151,7 +151,7 @@ public abstract class ProductionItem {
 
     // return true if the tick finished
     public boolean tick(ProductionPlacement placement, ActiveProduction active) {
-        if (active.ticksLeft > 0 && isBelowPopulationSupply(placement.getLevel(), placement.ownerName)) {
+        if (active.ticksLeft > 0 && isBelowPopulationSupply(placement.getLevel(), placement.ownerName) && placement.isBuilt) {
             if ((placement.getLevel().isClientSide() && ResearchClient.hasCheat("warpten")) ||
                 (!placement.getLevel().isClientSide() && ResearchServerEvents.playerHasCheat(placement.ownerName, "warpten"))) {
                 if (placement.getLevel().isClientSide())

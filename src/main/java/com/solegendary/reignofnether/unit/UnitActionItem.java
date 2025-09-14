@@ -411,7 +411,11 @@ public class UnitActionItem {
             actionableBuilding = BuildingUtils.findBuilding(level.isClientSide(), this.selectedBuildingPos);
         }
 
-        if (actionableBuilding != null) {
+        if (actionableBuilding != null && (
+            actionableBuilding.ownerName.equals(ownerName) ||
+            SandboxServer.isSandboxPlayer(ownerName) ||
+            AlliancesServerEvents.canControlAlly(ownerName, actionableBuilding.ownerName))
+        ) {
             for (Ability ability : actionableBuilding.getAbilities()) {
                 if (ability.action == action && (ability.isOffCooldown() || ability.canBypassCooldown())) {
                     if (ability.canTargetEntities && this.unitId > 0) {
@@ -419,6 +423,10 @@ public class UnitActionItem {
                     } else {
                         ability.use(level, actionableBuilding, preselectedBlockPos);
                     }
+                } else if (ability.autocastEnableAction == action) {
+                    ability.setAutocast(true);
+                } else if (ability.autocastDisableAction == action) {
+                    ability.setAutocast(false);
                 }
             }
         }
