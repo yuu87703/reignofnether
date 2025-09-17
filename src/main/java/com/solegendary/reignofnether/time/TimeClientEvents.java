@@ -203,7 +203,7 @@ public class TimeClientEvents {
                         getTimeUntilStrWithOffset(serverTime, DUSK, isDay ? 0 : timeOffset)), Style.EMPTY));
             }
 
-            if (PlayerClientEvents.isRTSPlayer && !SurvivalClientEvents.isEnabled) {
+            if (PlayerClientEvents.isRTSPlayer() && !SurvivalClientEvents.isEnabled) {
                 FormattedCharSequence gameLengthStr = FormattedCharSequence.forward(
                         I18n.get("time.reignofnether.game_time", getTimeStrFromTicks(PlayerClientEvents.rtsGameTicks)),
                         Style.EMPTY

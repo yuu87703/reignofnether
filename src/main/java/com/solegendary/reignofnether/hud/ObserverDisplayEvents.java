@@ -33,7 +33,7 @@ public class ObserverDisplayEvents {
             return;
         }
 
-        if (PlayerClientEvents.isRTSPlayer) {
+        if (PlayerClientEvents.isRTSPlayer()) {
             return; // only render for spectators
         }
 

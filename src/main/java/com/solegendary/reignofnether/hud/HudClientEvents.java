@@ -435,7 +435,7 @@ public class HudClientEvents {
             // ---------------------------------------------------------------
             // Building production queue (show only if 1 building is selected)
             // ---------------------------------------------------------------
-            else if ((hudSelBuildingOwned || !PlayerClientEvents.isRTSPlayer) && hudSelectedPlacement instanceof ProductionPlacement selProdBuilding) {
+            else if ((hudSelBuildingOwned || !PlayerClientEvents.isRTSPlayer()) && hudSelectedPlacement instanceof ProductionPlacement selProdBuilding) {
                 blitY = screenHeight - iconFrameSize * 2 - 5;
 
                 for (int i = 0; i < selProdBuilding.productionQueue.size(); i++) {
@@ -523,7 +523,7 @@ public class HudClientEvents {
             blitX = 0;
             blitY = screenHeight - iconFrameSize;
 
-            if (hudSelectedPlacement != null && (hudSelBuildingOwned || !PlayerClientEvents.isRTSPlayer)) {
+            if (hudSelectedPlacement != null && (hudSelBuildingOwned || !PlayerClientEvents.isRTSPlayer())) {
                 if (!hudSelectedPlacement.isBuilt) {
                     if (!buildingCancelButton.isHidden.get()) {
                         buildingCancelButton.render(evt.getGuiGraphics(), 0, screenHeight - iconFrameSize, mouseX, mouseY);
@@ -827,7 +827,7 @@ public class HudClientEvents {
         // --------------------------------------------------------
         if (selUnits.size() > 0 &&
                 (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED ||
-                        !PlayerClientEvents.isRTSPlayer ||
+                        !PlayerClientEvents.isRTSPlayer() ||
                         NonUnitClientEvents.canControlAllMobs() ||
                         AlliancesClient.canControlAlly(selUnits.get(0))) &&
                 hudSelectedEntity instanceof Unit unit) {
@@ -898,7 +898,7 @@ public class HudClientEvents {
 
             // includes worker building buttons
             if (TutorialClientEvents.isAtOrPastStage(TutorialStage.BUILD_INTRO) &&
-                    (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED || !PlayerClientEvents.isRTSPlayer) ||
+                    (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED || !PlayerClientEvents.isRTSPlayer()) ||
                     AlliancesClient.canControlAlly(selUnits.get(0))) {
                 List<AbilityButton> abilityButtons = List.of();
                 for (LivingEntity livingEntity : selUnits) {
@@ -1042,19 +1042,19 @@ public class HudClientEvents {
         boolean isSelPlayer = MC.player != null && MC.player.getName().getString().equals(selPlayerName);
 
         // during a match if nothing is selected, then show your own resources by default
-        if (MC.player != null && !isSelPlayer && PlayerClientEvents.isRTSPlayer && selPlayerName == null) {
+        if (MC.player != null && !isSelPlayer && PlayerClientEvents.isRTSPlayer() && selPlayerName == null) {
             selPlayerName = MC.player.getName().getString();
             isSelPlayer = true;
         }
 
-        if (selPlayerName != null && (isSelPlayer || alliedWithSelPlayer || !PlayerClientEvents.isRTSPlayer || SandboxClientEvents.isSandboxPlayer())) {
+        if (selPlayerName != null && (isSelPlayer || alliedWithSelPlayer || !PlayerClientEvents.isRTSPlayer() || SandboxClientEvents.isSandboxPlayer())) {
             resources = ResourcesClientEvents.getResources(selPlayerName);
         }
 
         blitX = 0;
         blitY = 0;
 
-        if ((!PlayerClientEvents.isRTSPlayer || alliedWithSelPlayer || SandboxClientEvents.isSandboxPlayer()) && !isSelPlayer) {
+        if ((!PlayerClientEvents.isRTSPlayer() || alliedWithSelPlayer || SandboxClientEvents.isSandboxPlayer()) && !isSelPlayer) {
             if (resources != null) {
                 evt.getGuiGraphics().drawString(
                     MC.font,
@@ -1378,7 +1378,7 @@ public class HudClientEvents {
         // ------------------------------
         // Start buttons (spectator only)
         // ------------------------------
-        if (!PlayerClientEvents.isRTSPlayer && !PlayerClientEvents.rtsLocked) {
+        if (!PlayerClientEvents.isRTSPlayer() && !PlayerClientEvents.rtsLocked) {
 
             Button startPosButton = StartPosClientEvents.getPositionsButton();
             if (!startPosButton.isHidden.get()) {

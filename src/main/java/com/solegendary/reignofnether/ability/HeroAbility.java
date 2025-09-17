@@ -128,7 +128,7 @@ public abstract class HeroAbility extends Ability {
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/tick.png"),
             Keybindings.keyU,
             () -> false,
-            () -> allSkillsLearnt(hero) || !PlayerClientEvents.isRTSPlayer,
+            () -> allSkillsLearnt(hero) || !PlayerClientEvents.isRTSPlayer(),
             () -> true,
             () -> hero.showRankUpMenu(!hero.isRankUpMenuOpen()),
             null,
