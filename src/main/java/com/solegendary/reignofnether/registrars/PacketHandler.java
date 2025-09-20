@@ -29,6 +29,7 @@ import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.research.ResearchClientboundPacket;
 import com.solegendary.reignofnether.research.ResearchServerboundPacket;
 import com.solegendary.reignofnether.resources.ResourcesClientboundPacket;
+import com.solegendary.reignofnether.resources.ResourcesServerboundPacket;
 import com.solegendary.reignofnether.sandbox.SandboxServerboundPacket;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.startpos.StartPosClientboundPacket;
@@ -142,6 +143,12 @@ public final class PacketHandler {
         INSTANCE.messageBuilder(ResourcesClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(ResourcesClientboundPacket::encode).decoder(ResourcesClientboundPacket::new)
                 .consumerMainThread(ResourcesClientboundPacket::handle).add();
+
+        INSTANCE.messageBuilder(ResourcesServerboundPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ResourcesServerboundPacket::encode)
+                .decoder(ResourcesServerboundPacket::new)
+                .consumerMainThread(ResourcesServerboundPacket::handle)
+                .add();
 
         INSTANCE.messageBuilder(AbilityClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(AbilityClientboundPacket::encode).decoder(AbilityClientboundPacket::new)
