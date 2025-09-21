@@ -1,7 +1,10 @@
 package com.solegendary.reignofnether.hud;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.alliance.AllianceAction;
+import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
+import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.player.RTSPlayer;
@@ -229,7 +232,7 @@ public class RTSPlayerDisplay {
                 () -> false,
                 () -> false,
                 () -> true,
-                this::cancelRequestAlliance,
+                this::cancelAllianceRequest,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.cancel_request_alliance"), Style.EMPTY))
         );
@@ -242,7 +245,7 @@ public class RTSPlayerDisplay {
                 () -> false,
                 () -> false,
                 () -> true,
-                this::acceptAlliance,
+                this::acceptAllianceRequest,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.accept_alliance"), Style.EMPTY))
         );
@@ -316,18 +319,18 @@ public class RTSPlayerDisplay {
     }
 
     private void requestAlliance() {
-
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.REQUEST, rtsPlayer.name);
     }
 
-    private void cancelRequestAlliance() {
-
+    private void cancelAllianceRequest() {
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.CANCEL_REQUEST, rtsPlayer.name);
     }
 
-    private void acceptAlliance() {
-
+    private void acceptAllianceRequest() {
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.ACCEPT_REQUEST, rtsPlayer.name);
     }
 
     private void disbandAlliance() {
-
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.DISBAND, rtsPlayer.name);
     }
 }

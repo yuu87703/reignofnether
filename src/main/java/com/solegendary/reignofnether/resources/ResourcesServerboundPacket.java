@@ -2,11 +2,8 @@ package com.solegendary.reignofnether.resources;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.registrars.PacketHandler;
-import com.solegendary.reignofnether.unit.UnitServerEvents;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -14,7 +11,6 @@ import java.util.function.Supplier;
 
 public class ResourcesServerboundPacket {
 
-    // pos is used to identify the building object serverside
     ResourcesAction action;
     public String senderName;
     public String receiverName;
@@ -67,12 +63,12 @@ public class ResourcesServerboundPacket {
 
             ServerPlayer player = ctx.get().getSender();
             if (player == null) {
-                ReignOfNether.LOGGER.warn("AbilityServerboundPacket: Sender was null");
+                ReignOfNether.LOGGER.warn("ResourcesServerboundPacket: Sender was null");
                 success.set(false);
                 return;
             }
             if (!player.getName().getString().equals(senderName)) {
-                ReignOfNether.LOGGER.warn("AbilityServerboundPacket: Tried to process packet from " + player.getName() + " for: " + senderName);
+                ReignOfNether.LOGGER.warn("ResourcesServerboundPacket: Tried to process packet from " + player.getName() + " for: " + senderName);
                 success.set(false);
                 return;
             }

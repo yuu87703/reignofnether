@@ -4,9 +4,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.AbilityServerboundPacket;
 import com.solegendary.reignofnether.ability.EnchantAbilityServerboundPacket;
-import com.solegendary.reignofnether.alliance.AllianceClientboundAddPacket;
-import com.solegendary.reignofnether.alliance.AllianceClientboundControlPacket;
-import com.solegendary.reignofnether.alliance.AllianceClientboundRemovePacket;
+import com.solegendary.reignofnether.alliance.*;
 import com.solegendary.reignofnether.attackwarnings.AttackWarningClientboundPacket;
 import com.solegendary.reignofnether.building.BuildingClientboundPacket;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
@@ -182,22 +180,17 @@ public final class PacketHandler {
                 .encoder(TutorialServerboundPacket::encode).decoder(TutorialServerboundPacket::new)
                 .consumerMainThread(TutorialServerboundPacket::handle).add();
 
-        INSTANCE.messageBuilder(AllianceClientboundAddPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(AllianceClientboundAddPacket::toBytes)
-                .decoder(AllianceClientboundAddPacket::new)
-                .consumerMainThread(AllianceClientboundAddPacket::handle)
+        INSTANCE.messageBuilder(AllianceClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(AllianceClientboundPacket::encode)
+                .decoder(AllianceClientboundPacket::new)
+                .consumerMainThread(AllianceClientboundPacket::handle)
                 .add();
 
-        INSTANCE.messageBuilder(AllianceClientboundRemovePacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(AllianceClientboundRemovePacket::toBytes)
-                .decoder(AllianceClientboundRemovePacket::new)
-                .consumerMainThread(AllianceClientboundRemovePacket::handle)
-                .add();
 
-        INSTANCE.messageBuilder(AllianceClientboundControlPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(AllianceClientboundControlPacket::toBytes)
-                .decoder(AllianceClientboundControlPacket::new)
-                .consumerMainThread(AllianceClientboundControlPacket::handle)
+        INSTANCE.messageBuilder(AllianceServerboundPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(AllianceServerboundPacket::encode)
+                .decoder(AllianceServerboundPacket::new)
+                .consumerMainThread(AllianceServerboundPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(GameModeServerboundPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
