@@ -1,20 +1,21 @@
 package com.solegendary.reignofnether.hud;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
-import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.player.PlayerColors;
+import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.Resources;
+import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
+import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -23,26 +24,26 @@ public class ObserverPlayerDisplay {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
-    public final Resources resources;
+    public final RTSPlayer rtsPlayer;
     public final AbstractClientPlayer player;
-    public final ResourceLocation defaultIconLocation = new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_back.png");
+    public final Resources resources;
 
-    public ObserverPlayerDisplay(Resources resources) {
-        this.resources = resources;
+    private int color;
+    private int backgroundColor;
+
+    public ObserverPlayerDisplay(RTSPlayer rtsPlayer) {
+        this.rtsPlayer = rtsPlayer;
+        this.resources = ResourcesClientEvents.getResources(rtsPlayer.name);
         var server = MC.getCurrentServer();
         if (server != null) {
-            this.player = MC.level.players().stream().filter(p -> p.getName().getString().equals(this.resources.ownerName)).findFirst().orElse(null);
-        } else if (MC.player.getName().getString().equals(this.resources.ownerName)) {
+            this.player = MC.level.players().stream().filter(p -> p.getName().getString().equals(this.rtsPlayer.name)).findFirst().orElse(null);
+        } else if (MC.player.getName().getString().equals(this.rtsPlayer.name)) {
             this.player = MC.player;
             var loaded = this.player.isSkinLoaded();
         } else {
             this.player = null;
         }
     }
-
-    private final static int iconBgColour = 0x64000000;
-    private final static int frameBgColour = 0xA0000000;
-
 
     private static final int PLAYER_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 5; // frame containing player name + player icon + race icon
     private static final int PLAYER_VALUE_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 4; // name of the player
@@ -51,6 +52,12 @@ public class ObserverPlayerDisplay {
     private static final int SUPPLY_DETAIL_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 4; // frame containing a resource value + icon
     public static final int DISPLAY_WIDTH = PLAYER_FRAME_WIDTH + RESOURCE_FRAME_WIDTH * 4 + SUPPLY_DETAIL_FRAME_WIDTH; // total width of a player display
 
+    public static final ResourceLocation defaultIconLocation = new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_back.png");
+
+    public static final ResourceLocation factionVillagerIconLocation = new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/villager.png");
+    public static final ResourceLocation factionMonsterIconLocation = new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/creeper.png");
+    public static final ResourceLocation factionPiglinIconLocation = new ResourceLocation(ReignOfNether.MOD_ID, "textures/mobheads/grunt.png");
+
     private void renderPlayer(GuiGraphics guiGraphics, int x, int y) {
 
         MyRenderer.renderFrameWithBg(guiGraphics,
@@ -58,9 +65,9 @@ public class ObserverPlayerDisplay {
                 y,
                 PLAYER_FRAME_WIDTH,
                 Button.DEFAULT_ICON_FRAME_SIZE,
-                frameBgColour
+                this.backgroundColor
         );
-        
+
         if (this.player != null && this.player.isSkinLoaded()) {
             var iconLocation = player.getSkinTextureLocation();
             //RenderSystem.setShaderTexture(0, iconLocation);
@@ -88,7 +95,7 @@ public class ObserverPlayerDisplay {
                     Button.DEFAULT_ICON_SIZE
             );
         }
-        
+
         guiGraphics.drawString(
                 MC.font,
                 this.resources.ownerName,
@@ -96,32 +103,50 @@ public class ObserverPlayerDisplay {
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 0xFFFFFF
         );
+
+        ResourceLocation factionIcon;
+        switch (this.rtsPlayer.faction) {
+            case VILLAGERS -> factionIcon = factionVillagerIconLocation;
+            case MONSTERS -> factionIcon = factionMonsterIconLocation;
+            case PIGLINS -> factionIcon = factionPiglinIconLocation;
+            default -> factionIcon = null;
+        }
+        if(factionIcon != null) {
+            MyRenderer.renderIcon(guiGraphics,
+                    factionIcon,
+                    x + 4 + PLAYER_FRAME_WIDTH - Button.DEFAULT_ICON_FRAME_SIZE,
+                    y + 4,
+                    Button.DEFAULT_ICON_SIZE
+            );
+        }
     }
 
+    private final static int frameBgColour = 0xA0000000;
+
     private void renderResource(GuiGraphics guiGraphics, int x, int y, ResourceName resource) {
-        String iconPath;
+        ResourceLocation icon;
         String value;
         int color = 0xFFFFFF;
         switch (resource) {
             case FOOD -> {
-                iconPath = "textures/icons/items/wheat.png";
+                icon = new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/wheat.png");
                 value = String.valueOf(resources.food);
                 color = 0xE8BC5F;
             }
             case WOOD -> {
-                iconPath = "textures/icons/items/wood.png";
+                icon = new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/wood.png");
                 value = String.valueOf(resources.wood);
                 color = 0xA3753B;
             }
             case ORE -> {
-                iconPath = "textures/icons/items/iron_ore.png";
+                icon = new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/iron_ore.png");
                 value = String.valueOf(resources.ore);
                 color = 0xFFF4ED;
             }
             default -> {
-                iconPath = "textures/icons/items/bed.png";
-                var used = UnitClientEvents.getCurrentPopulation(this.resources.ownerName);
-                var produced = BuildingClientEvents.getTotalPopulationSupply(this.resources.ownerName);
+                icon = PlayerColors.getPlayerColorBedIcon(this.rtsPlayer.name);
+                var used = UnitClientEvents.getCurrentPopulation(this.rtsPlayer.name);
+                var produced = BuildingClientEvents.getTotalPopulationSupply(this.rtsPlayer.name);
                 value = used + "/" + produced;
                 color = used > produced
                         ? 0xFF0000
@@ -138,7 +163,7 @@ public class ObserverPlayerDisplay {
         );
 
         MyRenderer.renderIcon(guiGraphics,
-                new ResourceLocation(ReignOfNether.MOD_ID, iconPath),
+                icon,
                 x + 4,
                 y + 4,
                 Button.DEFAULT_ICON_SIZE
@@ -162,7 +187,7 @@ public class ObserverPlayerDisplay {
                 continue;
             }
 
-            if (!this.resources.ownerName.equals(unit.getOwnerName())) {
+            if (!this.rtsPlayer.name.equals(unit.getOwnerName())) {
                 continue;
             }
 
@@ -215,11 +240,25 @@ public class ObserverPlayerDisplay {
     }
 
     public void render(GuiGraphics guiGraphics, int x, int y) {
+        var baseX = x;
+        Integer color = PlayerColors.getPlayerColorHex(this.rtsPlayer.name);
+        this.color = color != null ? 0xFF000000 | color : 0xFF000000;
+        this.backgroundColor = color != null ? 0xA0000000 | color : 0xA0000000;
         this.renderPlayer(guiGraphics, x, y); // icon, name
         this.renderResource(guiGraphics, x += PLAYER_FRAME_WIDTH, y, ResourceName.FOOD);
         this.renderResource(guiGraphics, x += RESOURCE_FRAME_WIDTH, y, ResourceName.WOOD);
         this.renderResource(guiGraphics, x += RESOURCE_FRAME_WIDTH, y, ResourceName.ORE);
         this.renderResource(guiGraphics, x += RESOURCE_FRAME_WIDTH, y, ResourceName.NONE); // supply
         this.renderSupplyDetail(guiGraphics, x += RESOURCE_FRAME_WIDTH, y);
+
+        x = baseX;
+        guiGraphics.fill(x - 2, y + 2, x + 2, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, this.color);
+        guiGraphics.fill((x += PLAYER_FRAME_WIDTH) - 2, y + 2, x + 2, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, this.color);
+        guiGraphics.fill((x += RESOURCE_FRAME_WIDTH) - 2, y + 2, x + 2, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, this.color);
+        guiGraphics.fill((x += RESOURCE_FRAME_WIDTH) - 2, y + 2, x + 2, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, this.color);
+        guiGraphics.fill((x += RESOURCE_FRAME_WIDTH) - 2, y + 2, x + 2, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, this.color);
+        guiGraphics.fill((x += RESOURCE_FRAME_WIDTH) - 2, y + 2, x + 2, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, this.color);
+        guiGraphics.fill((x += SUPPLY_DETAIL_FRAME_WIDTH) - 2, y + 2, x + 2, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, this.color);
+        //guiGraphics.fill(baseX, y + Button.DEFAULT_ICON_FRAME_SIZE - 2, baseX + DISPLAY_WIDTH, y + Button.DEFAULT_ICON_FRAME_SIZE, this.color);
     }
 }

@@ -120,12 +120,12 @@ public class PlayerDisplayClientEvents {
 
         GuiGraphics guiGraphics = evt.getGuiGraphics();
 
-        observerPlayerDisplays.removeIf(r -> !ResourcesClientEvents.resourcesList.contains(r.resources));
+        observerPlayerDisplays.removeIf(r -> !PlayerClientEvents.rtsPlayers.contains(r.rtsPlayer));
 
-        List<Resources> trackedResources = observerPlayerDisplays.stream().map(d -> d.resources).collect(Collectors.toCollection(ArrayList::new));
-        for (Resources resources : ResourcesClientEvents.resourcesList) {
-            if (!trackedResources.contains(resources)) {
-                observerPlayerDisplays.add(new ObserverPlayerDisplay(resources));
+        List<RTSPlayer> trackedPlayers = observerPlayerDisplays.stream().map(d -> d.rtsPlayer).collect(Collectors.toCollection(ArrayList::new));
+        for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
+            if (!trackedPlayers.contains(rtsPlayer)) {// && !rtsPlayer.name.equals(MC.player.getName().getString())) {
+                observerPlayerDisplays.add(new ObserverPlayerDisplay(rtsPlayer));
             }
         }
         for (ObserverPlayerDisplay playerDisplay : observerPlayerDisplays) {
