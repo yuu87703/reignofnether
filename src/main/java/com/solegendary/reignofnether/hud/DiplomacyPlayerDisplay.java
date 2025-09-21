@@ -176,7 +176,12 @@ public class DiplomacyPlayerDisplay {
                     resourcesToSend.wood = Math.max(resourcesToSend.wood, 0);
                     resourcesToSend.ore = Math.max(resourcesToSend.ore, 0);
                 },
-                List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.change_resources"), Style.EMPTY))
+                switch (resourceName) {
+                    case FOOD -> List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.send_food"), Style.EMPTY));
+                    case WOOD -> List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.send_wood"), Style.EMPTY));
+                    case ORE -> List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.send_ore"), Style.EMPTY));
+                    case NONE -> null;
+                }
         );
         changeResourceButton.bgIconResource = new ResourceLocation(ReignOfNether.MOD_ID, iconPath);
         changeResourceButton.render(guiGraphics, x + RESOURCE_FRAME_WIDTH, y, mouseX, mouseY);

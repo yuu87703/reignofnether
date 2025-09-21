@@ -1269,7 +1269,9 @@
     "unitstats.reignofnether.armour_all": "%d%% vs everything",
     "unitstats.reignofnether.movement_speed": "Movement speed",
 
-    "alliances.reignofnether.tooltip.change_resources": "Left/right click to adjust",
+    "alliances.reignofnether.tooltip.send_food": "Send Food",
+    "alliances.reignofnether.tooltip.send_wood": "Send Wood",
+    "alliances.reignofnether.tooltip.send_ore": "Send Ore",
     "alliances.reignofnether.tooltip.confirm_send_resources": "Confirm",
     "alliances.reignofnether.tooltip.cancel_send_resources": "Cancel",
     "alliances.reignofnether.tooltip.request_alliance": "Request Alliance",
