@@ -4,7 +4,6 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AllianceAction;
 import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
-import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.player.RTSPlayer;
@@ -21,9 +20,11 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RTSPlayerDisplay {
+// Dashboard for RTS players to make/break alliances and send resources to each other
+public class DiplomacyPlayerDisplay {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
@@ -32,7 +33,7 @@ public class RTSPlayerDisplay {
     public final ResourceLocation defaultIconLocation = new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_back.png");
     private final Resources resourcesToSend;
 
-    public RTSPlayerDisplay(RTSPlayer rtsPlayer) {
+    public DiplomacyPlayerDisplay(RTSPlayer rtsPlayer) {
         this.rtsPlayer = rtsPlayer;
         var server = MC.getCurrentServer();
         if (server != null) {
@@ -108,7 +109,7 @@ public class RTSPlayerDisplay {
         return false;
     }
 
-    private void renderTradeResources(GuiGraphics guiGraphics, ResourceName resourceName,
+    private Button renderTradeResources(GuiGraphics guiGraphics, ResourceName resourceName,
                                       int x, int y, int mouseX, int mouseY) {
         String iconPath;
         String value;
@@ -179,9 +180,10 @@ public class RTSPlayerDisplay {
         );
         changeResourceButton.bgIconResource = new ResourceLocation(ReignOfNether.MOD_ID, iconPath);
         changeResourceButton.render(guiGraphics, x + RESOURCE_FRAME_WIDTH, y, mouseX, mouseY);
+        return changeResourceButton;
     }
 
-    private void renderTradeConfirms(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+    private List<Button> renderTradeConfirms(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
         Button confirmButton = new Button(
                 "Confirm trade",
                 Button.DEFAULT_ICON_SIZE,
@@ -209,9 +211,11 @@ public class RTSPlayerDisplay {
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.cancel_send_resources"), Style.EMPTY))
         );
         cancelButton.render(guiGraphics, x + Button.DEFAULT_ICON_FRAME_SIZE, y, mouseX, mouseY);
+
+        return List.of(confirmButton, cancelButton);
     }
 
-    private void renderAllianceButtons(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+    private Button renderAllianceButton(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
         Button allyRequestButton = new Button(
                 "Request Alliance",
                 Button.DEFAULT_ICON_SIZE,
@@ -262,19 +266,24 @@ public class RTSPlayerDisplay {
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.disband_alliance"), Style.EMPTY))
         );
 
+        Button renderedButton;
         String allianceStatusStr;
         if (!isAllied() && !allianceRequested() && !allianceReceived()) {
             allianceStatusStr = "Enemy";
             allyRequestButton.render(guiGraphics, x, y, mouseX, mouseY);
+            renderedButton = allyRequestButton;
         } else if (!isAllied() && allianceRequested()) {
             allianceStatusStr = "Requested";
             allyCancelRequestButton.render(guiGraphics, x, y, mouseX, mouseY);
+            renderedButton = allyCancelRequestButton;
         } else if (!isAllied() && allianceReceived()) {
             allianceStatusStr = "Received";
             allyConfirmButton.render(guiGraphics, x, y, mouseX, mouseY);
+            renderedButton = allyConfirmButton;
         } else {
             allianceStatusStr = "Allied";
             disbandButton.render(guiGraphics, x, y, mouseX, mouseY);
+            renderedButton = disbandButton;
         }
         MyRenderer.renderFrameWithBg(
                 guiGraphics,
@@ -291,20 +300,24 @@ public class RTSPlayerDisplay {
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 0xFFFFFF
         );
+        return renderedButton;
     }
 
-    public void render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+    // render and return all relevant buttons
+    public ArrayList<Button> render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+        ArrayList<Button> renderedButtons = new ArrayList<>();
         this.renderPlayer(guiGraphics, x, y); // icon, name
         x += PLAYER_FRAME_WIDTH;
-        this.renderTradeResources(guiGraphics, ResourceName.FOOD, x, y, mouseX, mouseY);
+        renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.FOOD, x, y, mouseX, mouseY));
         x += RESOURCE_FRAME_WIDTH + Button.DEFAULT_ICON_FRAME_SIZE;
-        this.renderTradeResources(guiGraphics, ResourceName.WOOD, x, y, mouseX, mouseY);
+        renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.WOOD, x, y, mouseX, mouseY));
         x += RESOURCE_FRAME_WIDTH + Button.DEFAULT_ICON_FRAME_SIZE;
-        this.renderTradeResources(guiGraphics, ResourceName.ORE, x, y, mouseX, mouseY);
+        renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.ORE, x, y, mouseX, mouseY));
         x += RESOURCE_FRAME_WIDTH + (Button.DEFAULT_ICON_FRAME_SIZE * 1.25f);
-        this.renderTradeConfirms(guiGraphics, x, y, mouseX, mouseY);
+        renderedButtons.addAll(this.renderTradeConfirms(guiGraphics, x, y, mouseX, mouseY));
         x += (Button.DEFAULT_ICON_FRAME_SIZE * 2.25f);
-        this.renderAllianceButtons(guiGraphics, x, y, mouseX, mouseY);
+        renderedButtons.add(this.renderAllianceButton(guiGraphics, x, y, mouseX, mouseY));
+        return renderedButtons;
     }
 
     private void sendResources() {

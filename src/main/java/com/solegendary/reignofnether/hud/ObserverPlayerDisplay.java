@@ -17,6 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.ArrayList;
+
 public class ObserverPlayerDisplay {
 
     private static final Minecraft MC = Minecraft.getInstance();

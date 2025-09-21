@@ -1272,5 +1272,8 @@
     "alliances.reignofnether.tooltip.request_alliance": "Request Alliance",
     "alliances.reignofnether.tooltip.cancel_request_alliance": "Cancel Request",
     "alliances.reignofnether.tooltip.accept_alliance": "Accept Alliance",
-    "alliances.reignofnether.tooltip.disband_alliance": "Disband Alliance"
+    "alliances.reignofnether.tooltip.disband_alliance": "Disband Alliance",
+
+    "alliances.reignofnether.tooltip.toggle_observer_player_displays": "Observer Menu (Tab)",
+    "alliances.reignofnether.tooltip.toggle_diplomacy_player_displays": "Diplomacy Menu (Tab)"
 }
