@@ -26,11 +26,12 @@ Features
         - night warp with adjustable range
 
 
-CODE QUALITY
-[🟡] Add RTSPlayer tracking to clientside
-    [🟡] Including relog and new log syncing
-[🟡] Add RTS Starting block color to RTSPlayer class
-    - When the game is started, assign StartPos.colorId to RTSPlayer.startPosColor
+
+[✔] Alliance Menu
+    [❌] Disable being able to click behind the hud
+    [❌] Fix state control (should be off and button hidden if there's no players to show and toggled off on log out or /rts-reset)
+    [❌] Add in shared ally control button at the top left
+
 
 Bugfixes
 --------
@@ -56,7 +57,14 @@ Quality of Life
 [🟡] Automatically ally players who start with the same colour of starting block
     [❌] Add indicator to the RTS start block helper button for this
 
+[❌] The clock is now clickable to toggle showing the tooltip permanently
+
 Balancing
 ---------
+
+[❌] reduce wither shrine cost
+[❌] reduce hoglin cost by 25
+[❌] raise hoglin HP by 10, remove building damage bonus
+[❌] add hoglin upgrade to triple building damage
 
 [❌] raise witch potion projectile speed?
