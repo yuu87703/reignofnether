@@ -18,11 +18,11 @@ public class ResourcesServerboundPacket {
     public int wood;
     public int ore;
 
-    public static void sendResources(Resources resources, String receiverName) {
+    public static void sendResources(Resources resources, String senderName) {
         PacketHandler.INSTANCE.sendToServer(new ResourcesServerboundPacket(
                 ResourcesAction.SEND_RESOURCES,
+                senderName,
                 resources.ownerName,
-                receiverName,
                 resources.food,
                 resources.wood,
                 resources.ore

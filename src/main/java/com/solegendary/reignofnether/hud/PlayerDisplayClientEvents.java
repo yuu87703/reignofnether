@@ -146,7 +146,7 @@ public class PlayerDisplayClientEvents {
 
         List<RTSPlayer> trackedPlayers = diplomacyPlayerDisplays.stream().map(d -> d.rtsPlayer).collect(Collectors.toCollection(ArrayList::new));
         for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
-            if (!trackedPlayers.contains(rtsPlayer)) {// && !rtsPlayer.name.equals(MC.player.getName().getString())) {
+            if (!trackedPlayers.contains(rtsPlayer) && MC.player != null && !rtsPlayer.name.equals(MC.player.getName().getString())) {
                 diplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(rtsPlayer));
             }
         }

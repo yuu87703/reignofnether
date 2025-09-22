@@ -102,11 +102,11 @@ public class DiplomacyPlayerDisplay {
     }
 
     private boolean allianceRequested() {
-        return false;
+        return AlliancesClient.outboundPendingAlliances.contains(rtsPlayer.name);
     }
 
     private boolean allianceReceived() {
-        return false;
+        return AlliancesClient.inboundPendingAlliances.contains(rtsPlayer.name);
     }
 
     private Button renderTradeResources(GuiGraphics guiGraphics, ResourceName resourceName,
@@ -236,7 +236,7 @@ public class DiplomacyPlayerDisplay {
         Button allyCancelRequestButton = new Button(
                 "Cancel Request Alliance",
                 Button.DEFAULT_ICON_SIZE,
-                new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/barrier.png"),
+                new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/cross.png"),
                 (Keybinding) null,
                 () -> false,
                 () -> false,
@@ -249,7 +249,7 @@ public class DiplomacyPlayerDisplay {
         Button allyConfirmButton = new Button(
                 "Accept Alliance",
                 Button.DEFAULT_ICON_SIZE,
-                new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/cross.png"),
+                new ResourceLocation(ReignOfNether.MOD_ID, "textures/hud/tick.png"),
                 (Keybinding) null,
                 () -> false,
                 () -> false,
@@ -282,7 +282,7 @@ public class DiplomacyPlayerDisplay {
             allyCancelRequestButton.render(guiGraphics, x, y, mouseX, mouseY);
             renderedButton = allyCancelRequestButton;
         } else if (!isAllied() && allianceReceived()) {
-            allianceStatusStr = "Received";
+            allianceStatusStr = "Accept?";
             allyConfirmButton.render(guiGraphics, x, y, mouseX, mouseY);
             renderedButton = allyConfirmButton;
         } else {
@@ -294,7 +294,7 @@ public class DiplomacyPlayerDisplay {
                 guiGraphics,
                 x + Button.DEFAULT_ICON_FRAME_SIZE,
                 y,
-                RESOURCE_FRAME_WIDTH + allianceStatusStr.length() * 2,
+                (int) (Button.DEFAULT_ICON_FRAME_SIZE * 1.5f) + allianceStatusStr.length() * 3,
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );
@@ -326,8 +326,10 @@ public class DiplomacyPlayerDisplay {
     }
 
     private void sendResources() {
-        ResourcesServerboundPacket.sendResources(resourcesToSend, rtsPlayer.name);
-        resetResources();
+        if (MC.player != null) {
+            ResourcesServerboundPacket.sendResources(resourcesToSend, MC.player.getName().getString());
+            resetResources();
+        }
     }
 
     private void resetResources() {
@@ -338,10 +340,12 @@ public class DiplomacyPlayerDisplay {
 
     private void requestAlliance() {
         AllianceServerboundPacket.doAllianceAction(AllianceAction.REQUEST, rtsPlayer.name);
+        AlliancesClient.outboundPendingAlliances.add(rtsPlayer.name);
     }
 
     private void cancelAllianceRequest() {
         AllianceServerboundPacket.doAllianceAction(AllianceAction.CANCEL_REQUEST, rtsPlayer.name);
+        AlliancesClient.outboundPendingAlliances.removeIf(p -> p.equals(rtsPlayer.name));
     }
 
     private void acceptAllianceRequest() {

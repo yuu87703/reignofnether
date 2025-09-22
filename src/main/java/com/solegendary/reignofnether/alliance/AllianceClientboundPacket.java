@@ -34,7 +34,7 @@ public class AllianceClientboundPacket {
 
     public static void cancelPendingAlliance(String toPlayer, String fromPlayer) {
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(),
-                new AllianceClientboundPacket(AllianceAction.REQUEST, toPlayer, fromPlayer, true));
+                new AllianceClientboundPacket(AllianceAction.CANCEL_REQUEST, toPlayer, fromPlayer, true));
     }
 
     public static void removeAlliance(String playerName1, String playerName2) {

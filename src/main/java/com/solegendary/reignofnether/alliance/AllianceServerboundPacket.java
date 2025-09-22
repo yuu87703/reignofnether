@@ -50,7 +50,7 @@ public class AllianceServerboundPacket {
             }
             switch (action) {
                 case REQUEST -> MiscUtil.runPlayerCommand(player, "ally " + targetPlayerName);
-                case CANCEL_REQUEST -> MiscUtil.runPlayerCommand(player, "allycancel " + targetPlayerName);
+                case CANCEL_REQUEST -> MiscUtil.runPlayerCommand(player, "allycancelrequest " + targetPlayerName);
                 case ACCEPT_REQUEST -> MiscUtil.runPlayerCommand(player, "allyconfirm " + targetPlayerName);
                 case DISBAND -> MiscUtil.runPlayerCommand(player, "disband " + targetPlayerName);
             }

@@ -32,6 +32,10 @@ public class AllyCommand {
                 .then(Commands.argument("player", EntityArgument.player())
                         .executes(AllyCommand::allyConfirm)));
 
+        dispatcher.register(Commands.literal("allycancelrequest")
+                .then(Commands.argument("player", EntityArgument.player())
+                        .executes(AllyCommand::allyCancelRequest)));
+
         dispatcher.register(Commands.literal("disband")
                 .then(Commands.argument("player", EntityArgument.player())
                         .executes(AllyCommand::disband)));
@@ -64,6 +68,25 @@ public class AllyCommand {
         return Command.SINGLE_SUCCESS;
     }
 
+    private static int allyCancelRequest(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        ServerPlayer allyPlayer = EntityArgument.getPlayer(context, "player");
+        String playerName = player.getName().getString();
+        String allyPlayerName = allyPlayer.getName().getString();
+
+        if (player.equals(allyPlayer)) {
+            return 0;
+        }
+        AlliancesServerEvents.pendingAlliances.remove(allyPlayerName);
+        AllianceClientboundPacket.cancelPendingAlliance(allyPlayerName, playerName);
+        context.getSource().sendSuccess(()->Component.translatable("alliance.reignofnether.ally_request_cancelled_self", allyPlayerName), false);
+        SoundClientboundPacket.playSoundForPlayer(SoundAction.ENEMY, allyPlayerName);
+        allyPlayer.sendSystemMessage(Component.translatable("alliance.reignofnether.ally_request_cancelled", playerName));
+        SoundClientboundPacket.playSoundForPlayer(SoundAction.ENEMY, playerName);
+
+        return Command.SINGLE_SUCCESS;
+    }
+
     private static int allyConfirm(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ServerPlayer requesterPlayer = EntityArgument.getPlayer(context, "player");
@@ -88,7 +111,6 @@ public class AllyCommand {
         } else {
             context.getSource().sendFailure(Component.translatable("alliance.reignofnether.no_request", requesterPlayerName));
         }
-
         return Command.SINGLE_SUCCESS;
     }
 
