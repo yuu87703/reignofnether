@@ -62,14 +62,6 @@ public abstract class AbstractPlayerDisplay {
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 this.backgroundColor
         );
-        if (!isPlayerLoggedIn()) {
-            guiGraphics.fill(
-                    x, y,
-                    PLAYER_FRAME_WIDTH,
-                    Button.DEFAULT_ICON_FRAME_SIZE,
-                    0x99000000
-            );
-        }
         // render faction icon
         ResourceLocation factionIcon;
         switch (this.rtsPlayer.faction) {
@@ -126,10 +118,18 @@ public abstract class AbstractPlayerDisplay {
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 0xFFFFFF
         );
+        if (!isPlayerLoggedIn()) {
+            guiGraphics.fill(
+                    x, y,
+                    x + PLAYER_FRAME_WIDTH,
+                    y + Button.DEFAULT_ICON_FRAME_SIZE,
+                    0x99000000
+            );
+        }
     }
 
     public void render(GuiGraphics guiGraphics, int x, int y) {
-        int playerColorHex = PlayerColors.getPlayerColorHex(this.rtsPlayer.name);
+        int playerColorHex = PlayerColors.getPlayerDisplayColorHex(this.rtsPlayer.name);
         this.color = 0xFF000000 | playerColorHex;
         this.backgroundColor = 0xA0000000 | playerColorHex;
         this.renderPlayer(guiGraphics, x, y);

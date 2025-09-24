@@ -79,14 +79,6 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );
-        if (!isPlayerLoggedIn()) {
-            guiGraphics.fill(
-                x, y,
-                RESOURCE_FRAME_WIDTH,
-                Button.DEFAULT_ICON_FRAME_SIZE,
-                0x99000000
-            );
-        }
         guiGraphics.drawString(
                 MC.font,
                 value,
@@ -135,6 +127,15 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
         );
         changeResourceButton.bgIconResource = new ResourceLocation(ReignOfNether.MOD_ID, iconPath);
         changeResourceButton.render(guiGraphics, x + RESOURCE_FRAME_WIDTH, y, mouseX, mouseY);
+
+        if (!isPlayerLoggedIn()) {
+            guiGraphics.fill(
+                    x, y,
+                    x + RESOURCE_FRAME_WIDTH,
+                    y + Button.DEFAULT_ICON_FRAME_SIZE,
+                    0x99000000
+            );
+        }
         return changeResourceButton;
     }
 
@@ -248,15 +249,6 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );
-        if (!isPlayerLoggedIn()) {
-            guiGraphics.fill(
-                    x + Button.DEFAULT_ICON_FRAME_SIZE,
-                    y,
-                    Button.DEFAULT_ICON_FRAME_SIZE + 4 + (allianceStatusStr.length() * 4),
-                    Button.DEFAULT_ICON_FRAME_SIZE,
-                    0x99000000
-            );
-        }
         guiGraphics.drawString(
                 MC.font,
                 allianceStatusStr,
@@ -264,6 +256,15 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 0xFFFFFF
         );
+        if (!isPlayerLoggedIn()) {
+            guiGraphics.fill(
+                    x + Button.DEFAULT_ICON_FRAME_SIZE,
+                    y,
+                    x + (Button.DEFAULT_ICON_FRAME_SIZE * 2) + 4 + (allianceStatusStr.length() * 4),
+                    y + Button.DEFAULT_ICON_FRAME_SIZE,
+                    0x99000000
+            );
+        }
         return renderedButton;
     }
 

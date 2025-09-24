@@ -69,29 +69,17 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
         }
 
         MyRenderer.renderFrameWithBg(guiGraphics,
-                x,
-                y,
+                x, y,
                 RESOURCE_FRAME_WIDTH,
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );
-        if (!isPlayerLoggedIn()) {
-            guiGraphics.fill(
-                    x,
-                    y,
-                    RESOURCE_FRAME_WIDTH,
-                    Button.DEFAULT_ICON_FRAME_SIZE,
-                    0x99000000
-            );
-        }
-
         MyRenderer.renderIcon(guiGraphics,
                 icon,
                 x + 4,
                 y + 4,
                 Button.DEFAULT_ICON_SIZE
         );
-
         guiGraphics.drawString(
                 MC.font,
                 value,
@@ -99,6 +87,14 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 color
         );
+        if (!isPlayerLoggedIn()) {
+            guiGraphics.fill(
+                    x, y,
+                    x + RESOURCE_FRAME_WIDTH,
+                    y + Button.DEFAULT_ICON_FRAME_SIZE,
+                    0x99000000
+            );
+        }
     }
 
     private void renderSupplyDetail(GuiGraphics guiGraphics, int x, int y) {
@@ -127,15 +123,6 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );
-        if (!isPlayerLoggedIn()) {
-            guiGraphics.fill(
-                x, y,
-                SUPPLY_DETAIL_FRAME_WIDTH,
-                Button.DEFAULT_ICON_FRAME_SIZE,
-                0x99000000
-            );
-        }
-
         MyRenderer.renderIcon(guiGraphics,
                 //new ResourceLocation(ReignOfNether.MOD_ID, "textures/cursors/customcursor_shovel.png"),
                 //new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/pickaxe.png"),
@@ -144,7 +131,6 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 y + 4,
                 Button.DEFAULT_ICON_SIZE
         );
-
         guiGraphics.drawString(
                 MC.font,
                 "" + civilianSupply,
@@ -152,14 +138,12 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 0xFFFFFF
         );
-
         MyRenderer.renderIcon(guiGraphics,
                 new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/sword_and_bow.png"),
                 x + SUPPLY_DETAIL_FRAME_WIDTH / 2 + 4,
                 y + 4,
                 Button.DEFAULT_ICON_SIZE
         );
-
         guiGraphics.drawString(
                 MC.font,
                 "" + militarySupply,
@@ -167,6 +151,14 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 0xFFFFFF
         );
+        if (!isPlayerLoggedIn()) {
+            guiGraphics.fill(
+                    x, y,
+                    x + SUPPLY_DETAIL_FRAME_WIDTH,
+                    y + Button.DEFAULT_ICON_FRAME_SIZE,
+                    0x99000000
+            );
+        }
     }
 
     public void render(GuiGraphics guiGraphics, int x, int y) {
