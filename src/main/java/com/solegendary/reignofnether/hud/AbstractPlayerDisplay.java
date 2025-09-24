@@ -20,7 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ArrayList;
 
-public class AbstractPlayerDisplay {
+public abstract class AbstractPlayerDisplay {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
