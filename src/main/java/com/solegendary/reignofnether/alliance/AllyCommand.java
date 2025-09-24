@@ -160,7 +160,7 @@ public class AllyCommand {
         else
             AlliancesServerEvents.playersWithAlliedControl.remove(playerName);
 
-        AllianceClientboundPacket.setAllyControl(playerName, true);
+        AllianceClientboundPacket.setAllyControl(playerName, value);
         context.getSource().sendSuccess(()->Component.translatable(msgKey, playerName), false);
         SoundClientboundPacket.playSoundForPlayer(SoundAction.CHAT, playerName);
 

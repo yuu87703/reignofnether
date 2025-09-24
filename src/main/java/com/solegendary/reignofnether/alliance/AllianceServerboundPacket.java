@@ -14,27 +14,40 @@ public class AllianceServerboundPacket {
 
     AllianceAction action;
     public String targetPlayerName;
+    public boolean boolValue;
 
     public static void doAllianceAction(AllianceAction action, String targetPlayerName) {
         PacketHandler.INSTANCE.sendToServer(new AllianceServerboundPacket(
                 action,
-                targetPlayerName
+                targetPlayerName,
+                false
         ));
     }
 
-    public AllianceServerboundPacket(AllianceAction action, String targetPlayerName) {
+    public static void doAllianceAction(AllianceAction action, boolean value) {
+        PacketHandler.INSTANCE.sendToServer(new AllianceServerboundPacket(
+                action,
+                "",
+                value
+        ));
+    }
+
+    public AllianceServerboundPacket(AllianceAction action, String targetPlayerName, boolean boolValue) {
         this.action = action;
         this.targetPlayerName = targetPlayerName;
+        this.boolValue = boolValue;
     }
 
     public AllianceServerboundPacket(FriendlyByteBuf buffer) {
         this.action = buffer.readEnum(AllianceAction.class);
         this.targetPlayerName = buffer.readUtf();
+        this.boolValue = buffer.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(this.action);
         buffer.writeUtf(this.targetPlayerName);
+        buffer.writeBoolean(this.boolValue);
     }
 
     // server-side packet-consuming functions
@@ -53,6 +66,7 @@ public class AllianceServerboundPacket {
                 case CANCEL_REQUEST -> MiscUtil.runPlayerCommand(player, "allycancelrequest " + targetPlayerName);
                 case ACCEPT_REQUEST -> MiscUtil.runPlayerCommand(player, "allyconfirm " + targetPlayerName);
                 case DISBAND -> MiscUtil.runPlayerCommand(player, "disband " + targetPlayerName);
+                case SET_ALLY_CONTROL -> MiscUtil.runPlayerCommand(player, "allycontrol " + boolValue);
             }
             success.set(true);
         });

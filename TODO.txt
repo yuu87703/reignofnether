@@ -28,9 +28,9 @@ Features
 
 
 [✔] Alliance Menu
-    [❌] Disable being able to click behind the hud
-    [❌] Fix state control (should be off and button hidden if there's no players to show and toggled off on log out or /rts-reset)
-    [❌] Add in shared ally control button at the top left
+    [🟡] Disable being able to click behind the hud
+    [🟡] Fix state control (should be off and button hidden if there's no players to show and toggled off on log out or /rts-reset)
+    [🟡] Add in shared ally control button at the top left
 
 
 Bugfixes
@@ -61,6 +61,8 @@ Quality of Life
 
 Balancing
 ---------
+
+[❌] Raise Hero exp requirements from 120 to 160
 
 [❌] reduce wither shrine cost
 [❌] reduce hoglin cost by 25

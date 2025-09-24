@@ -24,81 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Dashboard for RTS players to make/break alliances and send resources to each other
-public class DiplomacyPlayerDisplay {
+public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
 
     private static final Minecraft MC = Minecraft.getInstance();
-
-    public final RTSPlayer rtsPlayer;
-    public final AbstractClientPlayer player;
-    public final ResourceLocation defaultIconLocation = new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_back.png");
     private final Resources resourcesToSend;
 
     public DiplomacyPlayerDisplay(RTSPlayer rtsPlayer) {
-        this.rtsPlayer = rtsPlayer;
-        var server = MC.getCurrentServer();
-        if (server != null) {
-            this.player = MC.level.players().stream().filter(p -> p.getName().getString().equals(this.rtsPlayer.name)).findFirst().orElse(null);
-        } else if (MC.player.getName().getString().equals(this.rtsPlayer.name)) {
-            this.player = MC.player;
-        } else {
-            this.player = null;
-        }
+        super(rtsPlayer);
         resourcesToSend = new Resources(rtsPlayer.name,0,0,0);
     }
     private final static int frameBgColour = 0xA0000000;
 
-    private static final int PLAYER_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 5; // frame containing player name + player icon + race icon
     private static final int RESOURCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 2; // frame containing a resource value + icon
     private static final int ALLIANCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 4; // frame containing a resource value + icon
     public static final int DISPLAY_WIDTH = PLAYER_FRAME_WIDTH + RESOURCE_FRAME_WIDTH * 4 + ALLIANCE_FRAME_WIDTH; // total width of a player display
 
-    private void renderPlayer(GuiGraphics guiGraphics, int x, int y) {
-        MyRenderer.renderFrameWithBg(guiGraphics,
-                x, y,
-                PLAYER_FRAME_WIDTH,
-                Button.DEFAULT_ICON_FRAME_SIZE,
-                frameBgColour
-        );
-        
-        if (this.player != null && this.player.isSkinLoaded()) {
-            var iconLocation = player.getSkinTextureLocation();
-            //RenderSystem.setShaderTexture(0, iconLocation);
-            // draw base layer
-            guiGraphics.blit(iconLocation,
-                    x + 4, y + 4,
-                    Button.DEFAULT_ICON_SIZE, Button.DEFAULT_ICON_SIZE,
-                    8.0f, 8.0f, // where on texture to start drawing from
-                    8, 8, // dimensions of blit texture
-                    64, 64 // size of texture itself (if < dimensions, texture is repeated)
-            );
-            // draw hat
-            guiGraphics.blit(iconLocation,
-                    x + 4, y + 4,
-                    Button.DEFAULT_ICON_SIZE, Button.DEFAULT_ICON_SIZE,
-                    40.0f, 8.0f, // where on texture to start drawing from
-                    8, 8, // dimensions of blit texture
-                    64, 64 // size of texture itself (if < dimensions, texture is repeated)
-            );
-        } else {
-            MyRenderer.renderIcon(guiGraphics,
-                    defaultIconLocation,
-                    x + 4,
-                    y + 4,
-                    Button.DEFAULT_ICON_SIZE
-            );
-        }
-        
-        guiGraphics.drawString(
-                MC.font,
-                this.rtsPlayer.name,
-                x + (Button.DEFAULT_ICON_FRAME_SIZE),
-                y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
-                0xFFFFFF
-        );
-    }
-
     private boolean isAllied() {
-        return AlliancesClient.isAllied(MC.player.getName().getString(), rtsPlayer.name);
+        return MC.player != null && AlliancesClient.isAllied(MC.player.getName().getString(), rtsPlayer.name);
     }
 
     private boolean allianceRequested() {
@@ -137,6 +79,14 @@ public class DiplomacyPlayerDisplay {
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );
+        if (!isPlayerLoggedIn()) {
+            guiGraphics.fill(
+                x, y,
+                RESOURCE_FRAME_WIDTH,
+                Button.DEFAULT_ICON_FRAME_SIZE,
+                0x99000000
+            );
+        }
         guiGraphics.drawString(
                 MC.font,
                 value,
@@ -152,7 +102,7 @@ public class DiplomacyPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                () -> true,// this::isAllied,
+                this::isPlayerLoggedIn,
                 () -> {
                     switch (resourceName) {
                         case FOOD -> resourcesToSend.food += Keybindings.shiftMod.isDown() ? 1000 : 100;
@@ -196,7 +146,7 @@ public class DiplomacyPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                () -> true,// resourcesToSend.getTotalValue() > 0,
+                () -> resourcesToSend.getTotalValue() > 0 && isPlayerLoggedIn(),
                 this::sendResources,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.confirm_send_resources"), Style.EMPTY))
@@ -210,7 +160,7 @@ public class DiplomacyPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                () -> true,// resourcesToSend.getTotalValue() > 0 && isAllied(),
+                () -> resourcesToSend.getTotalValue() > 0,
                 this::resetResources,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.cancel_send_resources"), Style.EMPTY))
@@ -228,7 +178,7 @@ public class DiplomacyPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                () -> true,
+                this::isPlayerLoggedIn,
                 this::requestAlliance,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.request_alliance"), Style.EMPTY))
@@ -294,10 +244,19 @@ public class DiplomacyPlayerDisplay {
                 guiGraphics,
                 x + Button.DEFAULT_ICON_FRAME_SIZE,
                 y,
-                (int) (Button.DEFAULT_ICON_FRAME_SIZE * 1.5f) + allianceStatusStr.length() * 3,
+                Button.DEFAULT_ICON_FRAME_SIZE + 4 + (allianceStatusStr.length() * 4),
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );
+        if (!isPlayerLoggedIn()) {
+            guiGraphics.fill(
+                    x + Button.DEFAULT_ICON_FRAME_SIZE,
+                    y,
+                    Button.DEFAULT_ICON_FRAME_SIZE + 4 + (allianceStatusStr.length() * 4),
+                    Button.DEFAULT_ICON_FRAME_SIZE,
+                    0x99000000
+            );
+        }
         guiGraphics.drawString(
                 MC.font,
                 allianceStatusStr,
@@ -310,8 +269,10 @@ public class DiplomacyPlayerDisplay {
 
     // render and return all relevant buttons
     public ArrayList<Button> render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+
+        int x0 = x;
+        super.render(guiGraphics, x, y);
         ArrayList<Button> renderedButtons = new ArrayList<>();
-        this.renderPlayer(guiGraphics, x, y); // icon, name
         x += PLAYER_FRAME_WIDTH;
         renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.FOOD, x, y, mouseX, mouseY));
         x += RESOURCE_FRAME_WIDTH + Button.DEFAULT_ICON_FRAME_SIZE;
@@ -322,6 +283,7 @@ public class DiplomacyPlayerDisplay {
         renderedButtons.addAll(this.renderTradeConfirms(guiGraphics, x, y, mouseX, mouseY));
         x += (Button.DEFAULT_ICON_FRAME_SIZE * 2.25f);
         renderedButtons.add(this.renderAllianceButton(guiGraphics, x, y, mouseX, mouseY));
+
         return renderedButtons;
     }
 

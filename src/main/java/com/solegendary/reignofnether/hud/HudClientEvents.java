@@ -1579,23 +1579,23 @@ public class HudClientEvents {
             helpButton.render(evt.getGuiGraphics(), xi, yi, mouseX, mouseY);
             renderedButtons.add(helpButton);
         }
-        // -----------------------
-        // Observer Players Toggle
-        // -----------------------
+        // ---------------------------------
+        // Observer/Diplomacy Players Toggle
+        // ---------------------------------
         else if (!observerButton.isHidden.get()) {
             int xi = screenWidth - (observerButton.iconSize * 2);
             int yi = 40;
             observerButton.render(evt.getGuiGraphics(), xi, yi, mouseX, mouseY);
             renderedButtons.add(observerButton);
         }
-        // -----------------------
-        // Diplomacy Screen Toggle
-        // -----------------------
         else if (!diplomacyButton.isHidden.get()) {
             int xi = screenWidth - (diplomacyButton.iconSize * 2);
             int yi = 40;
             diplomacyButton.render(evt.getGuiGraphics(), xi, yi, mouseX, mouseY);
             renderedButtons.add(diplomacyButton);
+        }
+        else {
+            PlayerDisplayClientEvents.resetDisplay();
         }
         // -----------
         // Chat button
@@ -1655,6 +1655,8 @@ public class HudClientEvents {
             if (hudZone.isMouseOver(mouseX, mouseY))
                 return true;
         if (MinimapClientEvents.isPointInsideMinimap(mouseX, mouseY))
+            return true;
+        if (PlayerDisplayClientEvents.isMouseOverHud(mouseX, mouseY))
             return true;
         return isMouseOverAnyButton();
     }

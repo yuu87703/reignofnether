@@ -14,6 +14,9 @@ public class AlliancesClient {
     public static final Set<String> outboundPendingAlliances = new HashSet<>();
     public static final HashSet<String> playersWithAlliedControl = new HashSet<>();
 
+    public static boolean sharingAllyControl() {
+        return MC.player != null && AlliancesClient.playersWithAlliedControl.contains(MC.player.getName().getString());
+    }
     public static boolean canControlAlly(LivingEntity entity) {
         return entity instanceof Unit unit && canControlAlly(unit.getOwnerName());
     }
@@ -65,12 +68,10 @@ public class AlliancesClient {
         return alliances.getOrDefault(owner1, Collections.emptySet()).contains(owner2);
     }
 
-    // New method to retrieve direct allies
     public static Set<String> getAllAllies(String owner) {
         return alliances.getOrDefault(owner, Collections.emptySet());
     }
 
-    // New method to retrieve all connected allies in an alliance
     public static Set<String> getAllConnectedAllies(String owner) {
         Set<String> allAllies = new HashSet<>();
         findAllConnectedAllies(owner, allAllies);

@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.hero.HeroClientEvents;
 import com.solegendary.reignofnether.hud.HudClientEvents;
+import com.solegendary.reignofnether.hud.PlayerDisplayClientEvents;
 import com.solegendary.reignofnether.hud.buttons.HelperButtons;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -230,6 +231,9 @@ public class PlayerClientEvents {
                     MC.getMusicManager().stopPlaying();
             }
         }
+        if (isRTSPlayer()) {
+            PlayerDisplayClientEvents.resetDisplay();
+        }
     }
 
     public static void removeRTSPlayer(String playerName) {
@@ -251,6 +255,7 @@ public class PlayerClientEvents {
             FogOfWarClientEvents.semiFrozenChunks.clear();
             OrthoviewClientEvents.unlockCam();
             HeroClientEvents.fallenHeroes.clear();
+            PlayerDisplayClientEvents.resetDisplay();
         }
     }
 
@@ -273,6 +278,7 @@ public class PlayerClientEvents {
             FogOfWarClientEvents.frozenChunks.clear();
             FogOfWarClientEvents.semiFrozenChunks.clear();
             HeroClientEvents.fallenHeroes.clear();
+            PlayerDisplayClientEvents.resetDisplay();
         }
     }
 
@@ -349,6 +355,7 @@ public class PlayerClientEvents {
         HeroClientEvents.fallenHeroes.clear();
         AlliancesClient.playersWithAlliedControl.clear();
         PlayerColors.reset();
+        PlayerDisplayClientEvents.resetDisplay();
     }
 
     public static void setRTSLock(boolean lock) {
