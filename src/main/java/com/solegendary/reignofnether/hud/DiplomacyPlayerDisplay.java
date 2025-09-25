@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.Resources;
@@ -33,7 +34,6 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
         super(rtsPlayer);
         resourcesToSend = new Resources(rtsPlayer.name,0,0,0);
     }
-    private final static int frameBgColour = 0xA0000000;
 
     private static final int RESOURCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 2; // frame containing a resource value + icon
     private static final int ALLIANCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 4; // frame containing a resource value + icon
@@ -77,7 +77,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 x, y,
                 RESOURCE_FRAME_WIDTH,
                 Button.DEFAULT_ICON_FRAME_SIZE,
-                frameBgColour
+                0xA0000000
         );
         guiGraphics.drawString(
                 MC.font,
@@ -224,6 +224,8 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
 
         Button renderedButton;
         String allianceStatusStr;
+        int frameBgColour = 0xA0000000 | PlayerColors.getPlayerAllianceColorHex(rtsPlayer.name);
+
         if (!isAllied() && !allianceRequested() && !allianceReceived()) {
             allianceStatusStr = "Enemy";
             allyRequestButton.render(guiGraphics, x, y, mouseX, mouseY);

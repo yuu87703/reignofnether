@@ -129,7 +129,7 @@ public abstract class AbstractPlayerDisplay {
     }
 
     public void render(GuiGraphics guiGraphics, int x, int y) {
-        int playerColorHex = PlayerColors.getPlayerDisplayColorHex(this.rtsPlayer.name);
+        int playerColorHex = PlayerColors.getPlayerColorHex(this.rtsPlayer.name);
         this.color = 0xFF000000 | playerColorHex;
         this.backgroundColor = 0xA0000000 | playerColorHex;
         this.renderPlayer(guiGraphics, x, y);

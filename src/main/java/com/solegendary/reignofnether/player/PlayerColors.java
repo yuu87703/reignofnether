@@ -200,6 +200,10 @@ public class PlayerColors {
         }
 
         // fall back on alliance color
+        return getPlayerAllianceColorHex(playerName);
+    }
+
+    public static int getPlayerAllianceColorHex(String playerName) {
         Relationship unitRs = getPlayerToPlayerRelationship(playerName);
         return switch (unitRs) {
             case OWNED -> colors[ReignOfNetherClientConfigs.PLAYER_COLOR_SELF.get() % PLAYER_COLOR_TOTAL_COUNT].hexCode;

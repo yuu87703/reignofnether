@@ -25,12 +25,19 @@ Features
         - nether spread with adjustable range
         - night warp with adjustable range
 
-
-
 [✔] Alliance Menu
     [🟡] Disable being able to click behind the hud
     [🟡] Fix state control (should be off and button hidden if there's no players to show and toggled off on log out or /rts-reset)
     [🟡] Add in shared ally control button at the top left
+
+
+3 player test cases
+    - colour consistency between logins
+    - alliance colour consistency between players
+    - observer colour consistency between players
+    - allying/disbanding players
+    - sending resources
+    - disabled rows on player log out and reconnect
 
 
 Bugfixes
