@@ -39,7 +39,6 @@ Bugfixes
     - works when relogging, so do that on every rank up
 [❌] Militia don't convert back to villagers even without a nearby town center (with a captain?)
 [❌] Ravager artillery attacking buildings has too long a range
-[❌] Pillager shots are too inaccurate
 [❌] Building on top of a worker no longer cancels that units' commands
 [?] Check that avatar is not cancelled by being attacked
 
@@ -62,11 +61,16 @@ Quality of Life
 Balancing
 ---------
 
-[❌] Raise Hero exp requirements from 120 to 160
+[✔] Raise Hero exp requirements from 120 to 160
+
+[❌] raise brute HP by 5
 
 [❌] reduce wither shrine cost
-[❌] reduce hoglin cost by 25
-[❌] raise hoglin HP by 10, remove building damage bonus
-[❌] add hoglin upgrade to triple building damage
+[❌] reduce hoglin cost by 10 food, 5 ore
+[❌] raise hoglin HP by 5, movement speed by 1
+[❌] add 20% ranged armor to hoglins and iron golems
+[❌] raise pillager accuracy
 
 [❌] raise witch potion projectile speed?
+[❌] vexes should attack nearby targets if the evoker is not targeting anything
+    - reduce number of vexes to 2

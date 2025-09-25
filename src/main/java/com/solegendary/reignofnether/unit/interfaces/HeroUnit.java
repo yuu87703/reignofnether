@@ -24,7 +24,7 @@ import java.util.List;
 
 public interface HeroUnit extends Unit {
 
-    float EXP_REQ_MULTIPLIER = 1.2f;
+    float EXP_REQ_MULTIPLIER = 1.6f;
 
     public static void tick(HeroUnit heroUnit) {
         if (((LivingEntity) heroUnit).tickCount % 20 == 0) {
