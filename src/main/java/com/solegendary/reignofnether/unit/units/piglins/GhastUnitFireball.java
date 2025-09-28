@@ -20,7 +20,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.isSolidBlocking;
 
 public class GhastUnitFireball extends LargeFireball {
 
-    public static final int SOULSAND_DURATION = 300;
+    public static final int SOULSAND_DURATION = 200;
 
     public GhastUnitFireball(Level pLevel, LivingEntity pShooter, double pOffsetX, double pOffsetY, double pOffsetZ, int pExplosionPower) {
         super(pLevel, pShooter, pOffsetX, pOffsetY, pOffsetZ, pExplosionPower);

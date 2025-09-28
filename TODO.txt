@@ -42,20 +42,12 @@ Features
 
 Bugfixes
 --------
-[❌] Spectators can now see hero abilities as intended
-    - works when relogging, so do that on every rank up
-[❌] Militia don't convert back to villagers even without a nearby town center (with a captain?)
 [❌] Ravager artillery attacking buildings has too long a range
-[❌] Building on top of a worker no longer cancels that units' commands
-[?] Check that avatar is not cancelled by being attacked
+[✔] Building on top of a unit no longer cancels its commands if it was already moving away
 [✔] Fixed spiders' shift-queued movements not being shown
-
+[❌] Farm blocks no longer drop their crop items when destroyed
 [❌] Cheats persist when exiting a singleplayer world?
     - Maybe because logout from singleplayer code didn't run?
-
-[❌] Farm blocks no longer drop their crop items when destroyed
-
-[❌] When turning into a jockey, spider climb is turned back on
 
 Quality of Life
 ---------------
@@ -80,17 +72,17 @@ Piglins
 [✔] Hoglin cost reduced from (150 food, 75 ore) to (140 food, 70 ore)
 [✔] Hoglin HP raised from 70 to 75 and move speed from 30 to 31
 [✔] Hoglin Cavalry cost increased from (300 food, 250 wood, 100s) to (350 food, 300 wood, 120s)
-[✔] Hoglin Stables cost changed from (250 wood) to (150 wood, 100 ore)
-[✔] Flame Sanctuary cost changed from (300 wood, 150 ore) to (200 wood, 250 ore)
-[✔] Wither shrine cost reduced from (350 wood, 250 ore) to (200 wood, 250 ore)
-[✔] Blaze attack damage raised from 0 to 1
-[✔] Soul Fireball soulsand duration raised from 10s to 15s
-[🟡] Food thrown by the Piglin Merchant can no longer be picked up by neutral units
+[✔] Hoglin Stables cost reduced from (250 wood) to (150 wood, 50 ore)
+[✔] Flame Sanctuary, Basalt Springs and Wither Shrine costs all changed to (150 wood, 200 ore)
+[✔] Blaze attack damage raised from 0 to 0.5
+[✔] Ghasts now also gain the +10% movement speed bonus over nether terrain
+[✔] Food thrown by the Piglin Merchant can no longer be picked up by neutral units
 
 Villagers
 ---------
 [✔] Iron Golems now have 20% ranged armour
 [🟡] Pillagers are now much more accurate
+[❌] Pillagers no longer reload while out of range of their target
 [❌] raise witch potion projectile speed?
 [❌] vexes should attack nearby targets if the evoker is not targeting anything
     - reduce number of vexes to 2

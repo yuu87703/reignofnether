@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.packets.UnitSyncAbilityClientboundPacket;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -57,7 +58,9 @@ public abstract class HeroAbility extends Ability {
             rank += 1;
             hero.setSkillPoints(hero.getSkillPoints() - 1);
             if (((LivingEntity) hero).level().isClientSide)
-                ((Unit) hero).updateAbilityButtons();
+                hero.updateAbilityButtons();
+            else
+                hero.syncToClients();
             return true;
         }
         return false;

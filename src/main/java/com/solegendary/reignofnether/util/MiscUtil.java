@@ -38,6 +38,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.AbstractFish;
@@ -670,8 +671,12 @@ public class MiscUtil {
     }
 
     public static boolean isOnNetherTerrain(LivingEntity le) {
+        if (le instanceof FlyingMob) {
+            BlockPos groundPos = getHighestNonAirBlock(le.level(), le.getOnPos(), false);
+            return NetherBlocks.isNetherBlock(le.level(), groundPos);
+        }
         return (le.getVehicle() != null && NetherBlocks.isNetherBlock(le.level(), le.getVehicle().getOnPos())) ||
-                (NetherBlocks.isNetherBlock(le.level(), le.getOnPos())) && !(le instanceof GhastUnit);
+                (NetherBlocks.isNetherBlock(le.level(), le.getOnPos()));
     }
 
     public static void runServerCommand(MinecraftServer server, String command) {
