@@ -58,7 +58,7 @@ public class AllyCommand {
             player.sendSystemMessage(Component.translatable("alliance.reignofnether.ally_self", playerName));
             return 0;
         }
-        AlliancesServerEvents.pendingAlliances.put(allyPlayerName, playerName);
+        AlliancesServerEvents.pendingAlliances.computeIfAbsent(allyPlayerName, k -> new HashSet<>()).add(playerName);
         AllianceClientboundPacket.addPendingAlliance(allyPlayerName, playerName);
         context.getSource().sendSuccess(()->Component.translatable("alliance.reignofnether.sent_request", allyPlayerName), false);
         SoundClientboundPacket.playSoundForPlayer(SoundAction.CHAT, allyPlayerName);
@@ -77,7 +77,7 @@ public class AllyCommand {
         if (player.equals(allyPlayer)) {
             return 0;
         }
-        AlliancesServerEvents.pendingAlliances.remove(allyPlayerName);
+        AlliancesServerEvents.pendingAlliances.getOrDefault(playerName, new HashSet<>()).remove(allyPlayerName);
         AllianceClientboundPacket.cancelPendingAlliance(allyPlayerName, playerName);
         context.getSource().sendSuccess(()->Component.translatable("alliance.reignofnether.ally_request_cancelled_self", allyPlayerName), false);
         SoundClientboundPacket.playSoundForPlayer(SoundAction.ENEMY, allyPlayerName);
@@ -93,9 +93,9 @@ public class AllyCommand {
         String playerName = player.getName().getString();
         String requesterPlayerName = requesterPlayer.getName().getString();
 
-        if (AlliancesServerEvents.pendingAlliances.getOrDefault(playerName, "").equals(requesterPlayerName)) {
+        if (AlliancesServerEvents.pendingAlliances.getOrDefault(playerName, new HashSet<>()).contains(requesterPlayerName)) {
             AlliancesServerEvents.addAlliance(playerName, requesterPlayerName);
-            AlliancesServerEvents.pendingAlliances.remove(playerName);
+            AlliancesServerEvents.pendingAlliances.getOrDefault(requesterPlayerName, new HashSet<>()).remove(playerName);
 
             context.getSource().sendSuccess(()->Component.translatable("alliance.reignofnether.now_allied", requesterPlayerName), false);
             SoundClientboundPacket.playSoundForPlayer(SoundAction.ALLY, requesterPlayerName);

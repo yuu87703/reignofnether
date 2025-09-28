@@ -70,6 +70,11 @@ public class TimeClientEvents {
     private static int bloodMoonTicksLeft = 0;
     private static String bloodMoonOwner = "";
 
+    public static void resetBloodMoon() {
+        bloodMoonTicksLeft = 0;
+        bloodMoonOwner = "";
+    }
+
     public static boolean isBloodMoonActive() {
         return bloodMoonTicksLeft > 0;
     }

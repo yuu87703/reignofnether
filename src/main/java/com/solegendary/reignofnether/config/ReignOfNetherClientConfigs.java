@@ -15,6 +15,7 @@ public class ReignOfNetherClientConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> PLAYER_COLOR_ENEMY;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_PLAYER_COLORS;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CAMERA_SENSITIVITY;
 
     static {
         BUILDER.push("Configuration File");
@@ -27,7 +28,8 @@ public class ReignOfNetherClientConfigs {
         PLAYER_COLOR_ALLY = BUILDER.define("player_color_ally", PlayerColors.COLOR_FRIENDLY.id);
         PLAYER_COLOR_NEUTRAL = BUILDER.define("player_color_neutral", PlayerColors.COLOR_NEUTRAL.id);
         PLAYER_COLOR_ENEMY = BUILDER.define("player_color_enemy", PlayerColors.COLOR_HOSTILE.id);
-        USE_PLAYER_COLORS = BUILDER.define("use_player_colors", true);
+        USE_PLAYER_COLORS = BUILDER.define("use_player_colors", false);
+        CAMERA_SENSITIVITY = BUILDER.define("camera_sensitivity", 10);
         SPEC = BUILDER.build();
     }
 

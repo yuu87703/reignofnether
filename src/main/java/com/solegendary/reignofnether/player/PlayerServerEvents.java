@@ -22,6 +22,8 @@ import com.solegendary.reignofnether.resources.ResourcesServerEvents;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
 import com.solegendary.reignofnether.startpos.StartPosServerEvents;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
+import com.solegendary.reignofnether.time.TimeClientEvents;
+import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.time.TimeUtils;
 import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
@@ -322,8 +324,7 @@ public class PlayerServerEvents {
                 serverPlayer.sendSystemMessage(Component.literal(""));
                 serverPlayer.sendSystemMessage(Component.translatable("tutorial.reignofnether.op_commands"));
                 serverPlayer.sendSystemMessage(Component.translatable("tutorial.reignofnether.fog"));
-                serverPlayer.sendSystemMessage(Component.translatable("tutorial.reignofnether.lock"));
-                serverPlayer.sendSystemMessage(Component.translatable("tutorial.reignofnether.syncing"));
+                serverPlayer.sendSystemMessage(Component.translatable("tutorial.reignofnether.lock"));;
                 serverPlayer.sendSystemMessage(Component.translatable("tutorial.reignofnether.reset"));
                 serverPlayer.sendSystemMessage(Component.literal(""));
             }
@@ -997,6 +998,7 @@ public class PlayerServerEvents {
 
         playerDefaultGameModes.replaceAll((key, oldValue) -> GameType.SPECTATOR);
         AlliancesServerEvents.playersWithAlliedControl.clear();
+        TimeServerEvents.resetBloodMoon();
     }
 
     public static void setRTSLock(boolean lock) {

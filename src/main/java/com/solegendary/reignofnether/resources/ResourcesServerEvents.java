@@ -12,6 +12,8 @@ import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -339,6 +341,9 @@ public class ResourcesServerEvents {
             int oreAmount = Math.min(res.ore, sentResources.ore);
             if (oreAmount > 0)
                 trySendingResources(sentResources.ownerName,receivingPlayerName, ResourceName.ORE, oreAmount);
+
+            if (sentResources.getTotalValue() > 0)
+                SoundClientboundPacket.playSoundForPlayer(SoundAction.CHAT, receivingPlayerName);
         }
     }
 

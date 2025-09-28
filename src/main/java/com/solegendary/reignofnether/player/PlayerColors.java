@@ -19,14 +19,13 @@ import static com.solegendary.reignofnether.unit.UnitClientEvents.getPlayerToPla
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class PlayerColors {
-
-    private static final Minecraft MC = Minecraft.getInstance();
-
     /**
      * Indicates which color mode is used. This affects unit/buildings outlines, as well as some UI elements.
      * @return true if using player colors, false if using relation colors
      */
     public static boolean isUsingPlayerColors() {
+        if (!PlayerClientEvents.isRTSPlayer())
+            return true;
         return ReignOfNetherClientConfigs.USE_PLAYER_COLORS.get();
     }
 
@@ -244,13 +243,15 @@ public class PlayerColors {
                 null,
                 () -> false,
                 () -> !TutorialClientEvents.isAtOrPastStage(TutorialStage.MINIMAP_CLICK) || !MinimapClientEvents.isLargeMap(),
-                () -> true,
+                PlayerClientEvents::isRTSPlayer,
                 PlayerColors::toggleColorMode,
                 null,
                 List.of(
                         fcs(I18n.get("hud.orthoview.reignofnether.using_player_team_color"), isUsingPlayerColors()),
                         fcs(I18n.get("hud.orthoview.reignofnether.using_relation_color"), !isUsingPlayerColors()),
-                        fcs(I18n.get("hud.orthoview.reignofnether.color_type_toggle"), false)
+                        PlayerClientEvents.isRTSPlayer() ?
+                            fcs(I18n.get("hud.orthoview.reignofnether.color_type_toggle")) :
+                            fcs(I18n.get("hud.orthoview.reignofnether.locked_for_observers"))
                 )
         );
     }

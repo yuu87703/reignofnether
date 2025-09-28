@@ -19,6 +19,7 @@ import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.startpos.StartPosClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
+import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.Faction;
@@ -199,11 +200,14 @@ public class PlayerClientEvents {
             if (building.ownerName.equals(playerName))
                 building.ownerName = "";
 
-        if (!MC.player.getName().getString().equals(playerName))
-            return;
+        if (isRTSPlayer())
+            PlayerDisplayClientEvents.resetDisplay();
 
         removeRTSPlayer(playerName);
         ResourcesClientEvents.resourcesList.removeIf(r -> r.ownerName.equals(MC.player.getName().getString()));
+
+        if (!MC.player.getName().getString().equals(playerName))
+            return;
 
         if (!SandboxClientEvents.isSandboxPlayer(playerName)) {
             MC.gui.setTitle(Component.translatable("titles.reignofnether.defeated"));
@@ -231,7 +235,7 @@ public class PlayerClientEvents {
                     MC.getMusicManager().stopPlaying();
             }
         }
-        if (isRTSPlayer()) {
+        if (isRTSPlayer() && MC.player != null && MC.player.getName().getString().equals(playerName)) {
             PlayerDisplayClientEvents.resetDisplay();
         }
     }
@@ -256,6 +260,7 @@ public class PlayerClientEvents {
             OrthoviewClientEvents.unlockCam();
             HeroClientEvents.fallenHeroes.clear();
             PlayerDisplayClientEvents.resetDisplay();
+            PlayerColors.reset();
         }
     }
 
@@ -279,6 +284,7 @@ public class PlayerClientEvents {
             FogOfWarClientEvents.semiFrozenChunks.clear();
             HeroClientEvents.fallenHeroes.clear();
             PlayerDisplayClientEvents.resetDisplay();
+            PlayerColors.reset();
         }
     }
 
@@ -356,6 +362,7 @@ public class PlayerClientEvents {
         AlliancesClient.playersWithAlliedControl.clear();
         PlayerColors.reset();
         PlayerDisplayClientEvents.resetDisplay();
+        TimeClientEvents.resetBloodMoon();
     }
 
     public static void setRTSLock(boolean lock) {

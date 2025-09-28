@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.Resources;
 import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.resources.ResourcesServerboundPacket;
+import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,6 +21,10 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,29 +230,38 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
         Button renderedButton;
         String allianceStatusStr;
         int frameBgColour = 0xA0000000 | PlayerColors.getPlayerAllianceColorHex(rtsPlayer.name);
+        int frameWidth = 50;
 
         if (!isAllied() && !allianceRequested() && !allianceReceived()) {
             allianceStatusStr = "Enemy";
             allyRequestButton.render(guiGraphics, x, y, mouseX, mouseY);
             renderedButton = allyRequestButton;
+            frameWidth = 46;
         } else if (!isAllied() && allianceRequested()) {
             allianceStatusStr = "Requested";
             allyCancelRequestButton.render(guiGraphics, x, y, mouseX, mouseY);
             renderedButton = allyCancelRequestButton;
+            frameWidth = 67;
         } else if (!isAllied() && allianceReceived()) {
             allianceStatusStr = "Accept?";
             allyConfirmButton.render(guiGraphics, x, y, mouseX, mouseY);
             renderedButton = allyConfirmButton;
+            frameWidth = 55;
         } else {
             allianceStatusStr = "Allied";
             disbandButton.render(guiGraphics, x, y, mouseX, mouseY);
             renderedButton = disbandButton;
+            frameWidth = 41;
+            if (AlliancesClient.canControlAlly(rtsPlayer.name)) {
+                allianceStatusStr += " (s)";
+                frameWidth = 58;
+            }
         }
         MyRenderer.renderFrameWithBg(
                 guiGraphics,
                 x + Button.DEFAULT_ICON_FRAME_SIZE,
                 y,
-                Button.DEFAULT_ICON_FRAME_SIZE + 4 + (allianceStatusStr.length() * 4),
+                frameWidth,
                 Button.DEFAULT_ICON_FRAME_SIZE,
                 frameBgColour
         );

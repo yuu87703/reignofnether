@@ -21,6 +21,7 @@ import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.registrars.PacketHandler;
@@ -706,7 +707,7 @@ public class UnitClientEvents {
                         unit.getReturnResourcesGoal() != null &&
                         Resources.getTotalResourcesFromItems(unit.getItems()).getTotalValue() > 0 &&
                         preSelBuilding != null && preSelBuilding.getBuilding().canAcceptResources && preSelBuilding.isBuilt &&
-                        getPlayerToBuildingRelationship(preSelBuilding) == Relationship.OWNED) {
+                        unit.getOwnerName().equals(preSelBuilding.ownerName)) {
                     sendUnitCommand(UnitAction.RETURN_RESOURCES);
                 }
                 // right click -> build or repair preselected building
@@ -795,9 +796,17 @@ public class UnitClientEvents {
                 entityAABB = entityAABB.setMaxY(entityAABB.minY);
                 boolean excludeMaxY = OrthoviewClientEvents.isEnabled();
 
-                var colorHex = entity instanceof Unit unit
-                        ? new Color(PlayerColors.getPlayerDisplayColorHex(unit.getOwnerName()))
-                        : new Color(0xFFFFFF, false);
+                Color colorHex;
+                if (entity instanceof Unit unit) {
+                    if (PlayerClientEvents.isRTSPlayer(unit.getOwnerName())) {
+                        colorHex = new Color(PlayerColors.getPlayerDisplayColorHex(unit.getOwnerName()));
+                    } else {
+                        colorHex = new Color(PlayerColors.COLOR_GRAY.hexCode, false);
+                    }
+                } else {
+                    colorHex = new Color(0xFFFFFF, false);
+                }
+
                 float r = colorHex.getRed() / 255.0f;
                 float g = colorHex.getGreen() / 255.0f;
                 float b = colorHex.getBlue() / 255.0f;

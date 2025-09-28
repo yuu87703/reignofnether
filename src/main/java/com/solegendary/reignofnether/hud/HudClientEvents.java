@@ -1081,7 +1081,7 @@ public class HudClientEvents {
 
         int resourceBlitYStart = blitY;
 
-        if (resources != null) {
+        if (resources != null && MC.player != null) {
             for (String resourceName : new String[] { "food", "wood", "ore", "pop" }) {
                 ResourceLocation rl;
                 String resValueStr = "";
@@ -1106,9 +1106,7 @@ public class HudClientEvents {
                         resName = ResourceName.ORE;
                     }
                     default -> {
-                        rl = PlayerColors.isUsingPlayerColors()
-                            ? PlayerColors.getPlayerColorBedIcon(MC.player.getName().getString())
-                            : new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/bed.png");
+                        rl = PlayerColors.getPlayerColorBedIcon(selPlayerName);
                         resValueStr = UnitClientEvents.getCurrentPopulation(selPlayerName) + "/"
                             + BuildingClientEvents.getTotalPopulationSupply(selPlayerName);
                         resName = ResourceName.NONE;

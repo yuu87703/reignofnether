@@ -25,19 +25,19 @@ Features
         - nether spread with adjustable range
         - night warp with adjustable range
 
+
 [✔] Alliance Menu
-    [🟡] Disable being able to click behind the hud
-    [🟡] Fix state control (should be off and button hidden if there's no players to show and toggled off on log out or /rts-reset)
-    [🟡] Add in shared ally control button at the top left
+    - Pressing tab as an RTS player now brings up a menu where you can send resources and ally other players
+    - You can still use the old commands if you need to (/ally, /sendfood, etc.)
+    - Player names are coloured according to the new Player Colours system
 
+[✔] Player Colours
+    - Players are now coloured based on the order they join the game
+    - If you started using RTS Start blocks, your player colour is the same as that block
+    - You can toggle between player colours or the old alliance-based colours at the bottom right
+    - You can also change the colours of alliances (self, ally, enemy, neutral) in the mods config menu
+    - Thanks to @Daratrix for the coding and design
 
-3 player test cases
-    - colour consistency between logins
-    - alliance colour consistency between players
-    - observer colour consistency between players
-    - allying/disbanding players
-    - sending resources
-    - disabled rows on player log out and reconnect
 
 
 Bugfixes
@@ -48,18 +48,19 @@ Bugfixes
 [❌] Ravager artillery attacking buildings has too long a range
 [❌] Building on top of a worker no longer cancels that units' commands
 [?] Check that avatar is not cancelled by being attacked
+[✔] Fixed spiders' shift-queued movements not being shown
 
 [❌] Cheats persist when exiting a singleplayer world?
     - Maybe because logout from singleplayer code didn't run?
 
-[❌] Don't let farm blocks drop food when broken (potatoes, carrots, etc.)
+[❌] Farm blocks no longer drop their crop items when destroyed
 
-[❌] Sonic boom doing too low damage to buildings (should be 37.5 damage)
-
-[❌] when turning into a jockey, spider climb is turned back on
+[❌] When turning into a jockey, spider climb is turned back on
 
 Quality of Life
 ---------------
+[✔] Camera sensitivty is now saved to your local configs
+
 [🟡] Automatically ally players who start with the same colour of starting block
     [❌] Add indicator to the RTS start block helper button for this
 
@@ -67,17 +68,29 @@ Quality of Life
 
 Balancing
 ---------
+[✔] All hero experience requirements raised by 33%
+[✔] Beacon base cost reduced from (1000 wood, 1000 ore) to (500 wood, 500 ore)
+[✔] Default time to win with a fully upgraded beacon reduced from 20mins to 10mins
+    - You can still change this with /gamerule beaconWinMinutes
 
-[✔] Raise Hero exp requirements from 120 to 160
+Piglins
+-------
+[✔] Brute HP raised from 50 to 55
+[✔] Military portal cost reduced from (125 wood) to (100 wood)
+[✔] Hoglin cost reduced from (150 food, 75 ore) to (140 food, 70 ore)
+[✔] Hoglin HP raised from 70 to 75 and move speed from 30 to 31
+[✔] Hoglin Cavalry cost increased from (300 food, 250 wood, 100s) to (350 food, 300 wood, 120s)
+[✔] Hoglin Stables cost changed from (250 wood) to (150 wood, 100 ore)
+[✔] Flame Sanctuary cost changed from (300 wood, 150 ore) to (200 wood, 250 ore)
+[✔] Wither shrine cost reduced from (350 wood, 250 ore) to (200 wood, 250 ore)
+[✔] Blaze attack damage raised from 0 to 1
+[✔] Soul Fireball soulsand duration raised from 10s to 15s
+[🟡] Food thrown by the Piglin Merchant can no longer be picked up by neutral units
 
-[❌] raise brute HP by 5
-
-[❌] reduce wither shrine cost
-[❌] reduce hoglin cost by 10 food, 5 ore
-[❌] raise hoglin HP by 5, movement speed by 1
-[❌] add 20% ranged armor to hoglins and iron golems
-[❌] raise pillager accuracy
-
+Villagers
+---------
+[✔] Iron Golems now have 20% ranged armour
+[🟡] Pillagers are now much more accurate
 [❌] raise witch potion projectile speed?
 [❌] vexes should attack nearby targets if the evoker is not targeting anything
     - reduce number of vexes to 2
