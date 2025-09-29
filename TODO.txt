@@ -58,7 +58,7 @@ Quality of Life
 Balancing
 ---------
 [✔] All hero experience requirements raised by 33%
-[❌] Panicking animals no longer have any speed bonuses
+[✔] All panicking animals' speed bonuses reduced to 20% (previously 25% to 100%)
 [✔] Beacon base cost reduced from (1000 wood, 1000 ore) to (500 wood, 500 ore)
 [✔] Default time to win with a fully upgraded beacon reduced from 20mins to 10mins
     - You can still change this with /gamerule beaconWinMinutes

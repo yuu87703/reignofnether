@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PanicGoal.class)
 public class PanicGoalMixin {
 
-    @Shadow protected double speedModifier;
+    @Shadow public double speedModifier;
 
-    @Unique private static final double SPEED_MULTIPLIER_CAP = 1.1d;
+    @Unique private static final double SPEED_MULTIPLIER_CAP = 1.2d;
 
     @Inject(
             method = "start",
