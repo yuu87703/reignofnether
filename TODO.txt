@@ -38,29 +38,27 @@ Features
     - You can also change the colours of alliances (self, ally, enemy, neutral) in the mods config menu
     - Thanks to @Daratrix for the coding and design
 
-
-
 Bugfixes
 --------
-[❌] Ravager artillery attacking buildings has too long a range
 [✔] Building on top of a unit no longer cancels its commands if it was already moving away
 [✔] Fixed spiders' shift-queued movements not being shown
-[❌] Farm blocks no longer drop their crop items when destroyed
-[❌] Cheats persist when exiting a singleplayer world?
-    - Maybe because logout from singleplayer code didn't run?
+[✔] Cheats are now reset whenever a new game begins
+[✔] Carrot and Potato crops no longer drop items when broken by hand or building damage
+[✔] Polar Bears are no longer worth 300 food when killed by workers
+[❌] Ravager artillery attacking buildings has too long a range
+[❌] Fixed units sometimes stopping if moved to the same place they were already going
 
 Quality of Life
 ---------------
 [✔] Camera sensitivty is now saved to your local configs
-
-[🟡] Automatically ally players who start with the same colour of starting block
-    [❌] Add indicator to the RTS start block helper button for this
-
+[🟡] Players who start at the same colour of starting block are now automatically allied
+    - Your player colours will still be the same if you disband the alliance later on
 [❌] The clock is now clickable to toggle showing the tooltip permanently
 
 Balancing
 ---------
 [✔] All hero experience requirements raised by 33%
+[❌] Panicking animals no longer have any speed bonuses
 [✔] Beacon base cost reduced from (1000 wood, 1000 ore) to (500 wood, 500 ore)
 [✔] Default time to win with a fully upgraded beacon reduced from 20mins to 10mins
     - You can still change this with /gamerule beaconWinMinutes
@@ -80,9 +78,11 @@ Piglins
 
 Villagers
 ---------
+[✔] Hunter villagers now have only 1.5 damage against animals (2 for veterans)
+    - This is now also specified in their attack damage tooltip
 [✔] Iron Golems now have 20% ranged armour
-[🟡] Pillagers are now much more accurate
+[✔] Pillagers are now much more accurate
 [❌] Pillagers no longer reload while out of range of their target
-[❌] raise witch potion projectile speed?
-[❌] vexes should attack nearby targets if the evoker is not targeting anything
-    - reduce number of vexes to 2
+[❌] Witch potion projectile speed raised by 50%
+[❌] Vexes now attack random nearby targets if their parent evoker is not attacking instead of being idle
+[❌] Vexes summoned reduced from 3 to 2

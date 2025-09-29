@@ -14,6 +14,7 @@ import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
+import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientEvents;
@@ -231,8 +232,10 @@ public class PlayerClientEvents {
             rtsPlayers.add(RTSPlayer.getNewPlayer(playerName, faction, id.intValue(), startPosColorId));
             if (MC.player != null && MC.player.getName().getString().equals(playerName)) {
                 GameruleClient.gamerulesMenuOpen = false;
-                if (!SandboxClientEvents.isSandboxPlayer())
+                if (!SandboxClientEvents.isSandboxPlayer()) {
                     MC.getMusicManager().stopPlaying();
+                    ResearchClient.removeAllCheats();
+                }
             }
         }
         if (isRTSPlayer() && MC.player != null && MC.player.getName().getString().equals(playerName)) {

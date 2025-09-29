@@ -16,6 +16,7 @@
         "MixinNetworkFilters",
         "MixinNetworkManager",
         "MobMixin",
+        "PanicGoalMixin",
         "PlayerMixin",
         "PowderSnowBlockMixin",
         "SculkCatalystBlockEntityMixin",

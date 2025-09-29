@@ -442,6 +442,7 @@ public class PlayerServerEvents {
                 } else {
                     level.setDayTime(MONSTER_START_TIME_OF_DAY);
                 }
+                ResearchServerEvents.removeAllCheatsFor(playerName);
             } else {
                 enableAllCheats(playerName);
             }
@@ -473,6 +474,13 @@ public class PlayerServerEvents {
                     }
                     int[] workerIds = workers.stream().map(Entity::getId).mapToInt(Integer::intValue).toArray();
                     BuildingServerEvents.placeBuilding(building, bp, Rotation.NONE, playerName, workerIds, false, false);
+                }
+                for (RTSPlayer rtsPlayer : rtsPlayers) {
+                    String playerName1 = rtsPlayer.name;
+                    String playerName2 = serverPlayer.getName().getString();
+                    if (!playerName1.equals(playerName2) && rtsPlayer.startPosColorId == startPosColorId) {
+                        AlliancesServerEvents.addAlliance(playerName1, playerName2);
+                    }
                 }
             }
 
