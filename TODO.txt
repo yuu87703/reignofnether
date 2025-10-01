@@ -86,7 +86,7 @@ Villagers
 [✔] Pillagers crossbows are now unloaded whenever the pillager is issued a move or stop command
 [✔] Pillager attack speed reduced from 0.40 to 0.34
 [❌] Witch potion projectile speed raised by 50%
-[❌] Vexes now attack random nearby targets if their parent evoker is not attacking instead of being idle
+[✔] Vexes now attack random nearby targets if their parent evoker is not attacking instead of being idle
 
 Languages
 ---------
