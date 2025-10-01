@@ -46,6 +46,7 @@ public class Keybindings {
     public static final Keybinding chat = new Keybinding(GLFW.GLFW_KEY_ENTER, "", "Chat");
     public static final Keybinding deselect = new Keybinding(GLFW.GLFW_KEY_GRAVE_ACCENT, "~", "Deselect");
     public static final Keybinding tab = new Keybinding(GLFW.GLFW_KEY_TAB, "", "tab");
+    public static final Keybinding keyZ = new Keybinding(GLFW.GLFW_KEY_Z, "", "Z");
 
     public static final Keybinding[] nums = {
         new Keybinding(GLFW.GLFW_KEY_0, "0", "0"),

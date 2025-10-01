@@ -17,15 +17,24 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 import java.util.Random;
+
+import static com.solegendary.reignofnether.unit.goals.UnitCrossbowAttackGoal.CrossbowState.*;
 // - has an attack cooldown parameter in the constructor
 // - has no pathfinding delay
 // - stops when the target is dead
 
 public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & CrossbowAttackMob> extends Goal {
+    enum CrossbowState {
+        UNCHARGED,
+        CHARGING,
+        CHARGED,
+        READY_TO_ATTACK;
+    }
+
     private final Random random = new Random();
 
     private final T mob;
-    private UnitCrossbowAttackGoal.CrossbowState crossbowState = UnitCrossbowAttackGoal.CrossbowState.UNCHARGED;
+    private UnitCrossbowAttackGoal.CrossbowState crossbowState = UNCHARGED;
     private int seeTime;
     private int attackCooldown;
     private int attackCooldownMax;
@@ -71,13 +80,18 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
     public void stop() {
         super.stop();
         this.mob.setAggressive(false);
-        this.mob.setTarget((LivingEntity) null);
+        this.mob.setTarget(null);
         this.seeTime = 0;
-        if (this.mob.isUsingItem()) {
-            this.mob.stopUsingItem();
-            this.mob.setChargingCrossbow(false);
-            CrossbowItem.setCharged(this.mob.getUseItem(), false);
+        this.mob.stopUsingItem();
+        this.mob.setChargingCrossbow(false);
+        ItemStack item = this.mob.getMainHandItem();
+        this.crossbowState = UNCHARGED;
+        if (item.getItem() instanceof CrossbowItem) {
+            CrossbowItem.clearChargedProjectiles(item);
+            CrossbowItem.setCharged(item, false);
         }
+        this.attackCooldown = attackCooldownMax;
+        windupTime = random.nextInt(0,6);
     }
 
     private BuildingPlacement getBuildingTarget() {
@@ -149,55 +163,47 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
             else if (target instanceof GhastUnit ghastUnit)
                 attackRange += ghastUnit.getAttackerRangeBonus(this.mob);
 
-            boolean flag2 = (distToTarget > attackRange || this.seeTime < 5) && this.attackCooldown <= 0;
-
             if (target != null)
                 this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
             else
                 this.mob.getLookControl().setLookAt(buildTarget.centrePos.getX(), buildTarget.centrePos.getY(), buildTarget.centrePos.getZ(), 30.0F, 30.0F);
 
-            if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.UNCHARGED) {
-                if (!flag2) {
+            if (this.crossbowState == UNCHARGED) {
+                boolean canCharge = distToTarget < (attackRange + 1) && this.seeTime >= 5;
+                if (canCharge) {
                     this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
-                    this.crossbowState = UnitCrossbowAttackGoal.CrossbowState.CHARGING;
+                    this.crossbowState = CHARGING;
                     this.mob.setChargingCrossbow(true);
                 }
-            } else if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.CHARGING) {
+            } else if (this.crossbowState == CHARGING) {
                 if (!this.mob.isUsingItem()) {
-                    this.crossbowState = UnitCrossbowAttackGoal.CrossbowState.UNCHARGED;
+                    this.crossbowState = UNCHARGED;
                 }
 
                 int i = this.mob.getTicksUsingItem();
                 ItemStack itemstack = this.mob.getUseItem();
                 if (i >= CrossbowItem.getChargeDuration(itemstack) + windupTime) {
                     this.mob.releaseUsingItem();
-                    this.crossbowState = UnitCrossbowAttackGoal.CrossbowState.CHARGED;
+                    this.crossbowState = CHARGED;
                     this.attackCooldown = attackCooldownMax;
                     this.mob.setChargingCrossbow(false);
                     windupTime = random.nextInt(0,6);
                 }
-            } else if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.CHARGED) {
+            } else if (this.crossbowState == CHARGED) {
                 --this.attackCooldown;
                 if (this.attackCooldown <= 0) {
-                    this.crossbowState = UnitCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK;
+                    this.crossbowState = READY_TO_ATTACK;
                 }
-            } else if (this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK && canSeeTarget) {
+            } else if (this.crossbowState == READY_TO_ATTACK && canSeeTarget) {
                 this.mob.performCrossbowAttack(this.mob, 1.6F);
                 ItemStack itemstack1 = this.mob.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
                 CrossbowItem.setCharged(itemstack1, false);
-                this.crossbowState = UnitCrossbowAttackGoal.CrossbowState.UNCHARGED;
+                this.crossbowState = UNCHARGED;
             }
         }
     }
 
     private boolean canRun() {
-        return this.crossbowState == UnitCrossbowAttackGoal.CrossbowState.UNCHARGED;
-    }
-
-    enum CrossbowState {
-        UNCHARGED,
-        CHARGING,
-        CHARGED,
-        READY_TO_ATTACK;
+        return this.crossbowState == UNCHARGED;
     }
 }

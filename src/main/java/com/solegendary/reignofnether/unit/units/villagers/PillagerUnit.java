@@ -139,7 +139,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     // endregion
 
     final static public float attackDamage = 7.0f;
-    final static public float attacksPerSecond = 0.8f; // excludes crossbow charge time
+    final static public float attacksPerSecond = 0.6f; // excludes crossbow charge time
     final static public float maxHealth = 45.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.24f;
@@ -222,6 +222,9 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     @Override
     public void resetBehaviours() {
         this.mountGoal.stop();
+        if (this.attackGoal != null) {
+            this.attackGoal.stop();
+        }
     }
 
     @Override
@@ -331,5 +334,10 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     public boolean hasQuickChargeEnchant() {
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
         return itemStack.getAllEnchantments().containsKey(EnchantQuickCharge.actualEnchantment);
+    }
+
+    @Override
+    public boolean hasBonusAttackSpeed() {
+        return hasQuickChargeEnchant();
     }
 }

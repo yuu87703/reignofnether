@@ -45,7 +45,7 @@ Bugfixes
 [✔] Cheats are now reset whenever a new game begins
 [✔] Carrot and Potato crops no longer drop items when broken by hand or building damage
 [✔] Polar Bears are no longer worth 300 food when killed by workers
-[❌] Ravager artillery attacking buildings has too long a range
+[✔] Pillagers can no longer preload their crossbows and fire while out of range of a target
 [❌] Fixed units sometimes stopping if moved to the same place they were already going
 
 Quality of Life
@@ -81,8 +81,14 @@ Villagers
 [✔] Hunter villagers now have only 1.5 damage against animals (2 for veterans)
     - This is now also specified in their attack damage tooltip
 [✔] Iron Golems now have 20% ranged armour
+[✔] Iron Golem health reduced from 150 to 140
 [✔] Pillagers are now much more accurate
-[❌] Pillagers no longer reload while out of range of their target
+[✔] Pillagers crossbows are now unloaded whenever the pillager is issued a move or stop command
+[✔] Pillager attack speed reduced from 0.40 to 0.34
 [❌] Witch potion projectile speed raised by 50%
 [❌] Vexes now attack random nearby targets if their parent evoker is not attacking instead of being idle
-[❌] Vexes summoned reduced from 3 to 2
+
+Languages
+---------
+[❌] Updated Traditional Chinese (zh-tw)
+[❌] Updated Simplified Chinese (zh-cn)
