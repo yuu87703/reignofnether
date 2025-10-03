@@ -2,10 +2,12 @@ package com.solegendary.reignofnether.unit.goals;
 
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -82,14 +84,6 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
         this.mob.setAggressive(false);
         this.mob.setTarget(null);
         this.seeTime = 0;
-        this.mob.stopUsingItem();
-        this.mob.setChargingCrossbow(false);
-        ItemStack item = this.mob.getMainHandItem();
-        this.crossbowState = UNCHARGED;
-        if (item.getItem() instanceof CrossbowItem) {
-            CrossbowItem.clearChargedProjectiles(item);
-            CrossbowItem.setCharged(item, false);
-        }
         this.attackCooldown = attackCooldownMax;
         windupTime = random.nextInt(0,6);
     }
@@ -104,6 +98,27 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
 
     public boolean requiresUpdateEveryTick() {
         return true;
+    }
+
+    public void tickChargeCrossbow() {
+        ItemStack itemstack = this.mob.getUseItem();
+        if (this.crossbowState == UNCHARGED) {
+            int ticks = CrossbowItem.getChargeDuration(itemstack);
+            this.mob.addEffect(new MobEffectInstance(MobEffectRegistrar.MINOR_MOVEMENT_SLOWDOWN.get(), ticks, 5, true, false));
+            this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
+            this.crossbowState = CHARGING;
+            this.mob.setChargingCrossbow(true);
+        }
+        else if (this.crossbowState == CHARGING) {
+            int i = this.mob.getTicksUsingItem();
+            if (i >= CrossbowItem.getChargeDuration(itemstack) + windupTime) {
+                this.mob.releaseUsingItem();
+                this.crossbowState = CHARGED;
+                this.attackCooldown = attackCooldownMax;
+                this.mob.setChargingCrossbow(false);
+                windupTime = random.nextInt(0,6);
+            }
+        }
     }
 
     public void tick() {
@@ -141,6 +156,16 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
 
             float attackRange = ((AttackerUnit) this.mob).getAttackRange();
 
+            if (isGarrisoned) {
+                attackRange = garr.getAttackRange();
+                if (target instanceof GhastUnit)
+                    attackRange += GARRISON_BONUS_RANGE_TO_GHASTS;
+            }
+            else if (isTargetGarrisoned)
+                attackRange += targetGarr.getExternalAttackRangeBonus();
+            else if (target instanceof GhastUnit ghastUnit)
+                attackRange += ghastUnit.getAttackerRangeBonus(this.mob);
+
             // dont consider garrison range here so the unit still moves towards the edge of the building
             if (!this.mob.isPassenger()) {
                 if ((distToTarget > attackRange || !canSeeTarget) &&
@@ -153,43 +178,13 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
                     this.mob.getNavigation().stop();
                 }
             }
-            if (isGarrisoned) {
-                attackRange = garr.getAttackRange();
-                if (target instanceof GhastUnit ghastUnit)
-                    attackRange += GARRISON_BONUS_RANGE_TO_GHASTS;
-            }
-            else if (isTargetGarrisoned)
-                attackRange += targetGarr.getExternalAttackRangeBonus();
-            else if (target instanceof GhastUnit ghastUnit)
-                attackRange += ghastUnit.getAttackerRangeBonus(this.mob);
 
             if (target != null)
                 this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
             else
                 this.mob.getLookControl().setLookAt(buildTarget.centrePos.getX(), buildTarget.centrePos.getY(), buildTarget.centrePos.getZ(), 30.0F, 30.0F);
 
-            if (this.crossbowState == UNCHARGED) {
-                boolean canCharge = distToTarget < (attackRange + 1) && this.seeTime >= 5;
-                if (canCharge) {
-                    this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
-                    this.crossbowState = CHARGING;
-                    this.mob.setChargingCrossbow(true);
-                }
-            } else if (this.crossbowState == CHARGING) {
-                if (!this.mob.isUsingItem()) {
-                    this.crossbowState = UNCHARGED;
-                }
-
-                int i = this.mob.getTicksUsingItem();
-                ItemStack itemstack = this.mob.getUseItem();
-                if (i >= CrossbowItem.getChargeDuration(itemstack) + windupTime) {
-                    this.mob.releaseUsingItem();
-                    this.crossbowState = CHARGED;
-                    this.attackCooldown = attackCooldownMax;
-                    this.mob.setChargingCrossbow(false);
-                    windupTime = random.nextInt(0,6);
-                }
-            } else if (this.crossbowState == CHARGED) {
+            if (this.crossbowState == CHARGED) {
                 --this.attackCooldown;
                 if (this.attackCooldown <= 0) {
                     this.crossbowState = READY_TO_ATTACK;

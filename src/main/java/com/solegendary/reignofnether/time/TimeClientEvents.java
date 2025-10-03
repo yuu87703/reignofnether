@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
+import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -55,6 +56,8 @@ public class TimeClientEvents {
 
     public static NightCircleMode nightCircleMode = NightCircleMode.NO_OVERLAPS;
 
+    public static boolean showClockTooltip = false;
+
     private static final Button CLOCK_BUTTON = new Button("Clock",
             10,
             null,
@@ -63,7 +66,7 @@ public class TimeClientEvents {
             () -> false,
             () -> !OrthoviewClientEvents.isEnabled(),
             () -> true,
-            null,
+            () -> showClockTooltip = !showClockTooltip,
             null,
             null
     );
@@ -166,17 +169,19 @@ public class TimeClientEvents {
 
     @SubscribeEvent
     public static void onDrawScreen(ScreenEvent.Render evt) {
-        if (!TutorialClientEvents.isAtOrPastStage(TutorialStage.MINIMAP_CLICK)) {
+        if (!TutorialClientEvents.isAtOrPastStage(TutorialStage.MINIMAP_CLICK) ||
+            !(MC.screen instanceof TopdownGui)) {
             return;
         }
 
         final int GUI_LENGTH = 16;
 
-        if (!isBloodMoonActive() &&
-            evt.getMouseX() > xPos &&
-            evt.getMouseX() <= xPos + GUI_LENGTH &&
-            evt.getMouseY() > yPos &&
-            evt.getMouseY() <= yPos + GUI_LENGTH) {
+        boolean isMouseOver = evt.getMouseX() > xPos &&
+                evt.getMouseX() <= xPos + GUI_LENGTH &&
+                evt.getMouseY() > yPos &&
+                evt.getMouseY() <= yPos + GUI_LENGTH;
+
+        if (!isBloodMoonActive() && (isMouseOver || showClockTooltip)) {
 
             // 'day' is when undead start burning, ~500
             // 'night' is when undead stop burning, ~12500
@@ -194,12 +199,14 @@ public class TimeClientEvents {
 
             ArrayList<FormattedCharSequence> tooltip = new ArrayList<>();
 
-            if (targetClientTime != serverTime) {
-                tooltip.add(FormattedCharSequence.forward(I18n.get("time.reignofnether.time_is_distorted"), Style.EMPTY.withBold(true)));
-                tooltip.add(FormattedCharSequence.forward(I18n.get("time.reignofnether.real_time", timeStr), Style.EMPTY));
-            } else
-                tooltip.add(FormattedCharSequence.forward(I18n.get("time.reignofnether" + ".time", timeStr ), Style.EMPTY));
-
+            if (!showClockTooltip) {
+                if (targetClientTime != serverTime) {
+                    tooltip.add(FormattedCharSequence.forward(I18n.get("time.reignofnether.time_is_distorted"), Style.EMPTY.withBold(true)));
+                    tooltip.add(FormattedCharSequence.forward(I18n.get("time.reignofnether.real_time", timeStr), Style.EMPTY));
+                } else {
+                    tooltip.add(FormattedCharSequence.forward(I18n.get("time.reignofnether" + ".time", timeStr), Style.EMPTY));
+                }
+            }
             tooltip.add(timeUntilStr);
 
             if (SurvivalClientEvents.isEnabled) {
@@ -215,11 +222,14 @@ public class TimeClientEvents {
                 );
                 tooltip.add(gameLengthStr);
             }
-            MyRenderer.renderTooltip(evt.getGuiGraphics(), tooltip, evt.getMouseX(), evt.getMouseY());
+            if (showClockTooltip) {
+                MyRenderer.renderTooltip(evt.getGuiGraphics(), tooltip, xPos + 57, yPos - 4);
+            } else {
+                MyRenderer.renderTooltip(evt.getGuiGraphics(), tooltip, evt.getMouseX(), evt.getMouseY());
+            }
         }
     }
 
-    // show corners of all frozenChunks
     @SubscribeEvent
     public static void onRenderLevel(RenderLevelStageEvent evt) {
         if (evt.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
@@ -229,7 +239,6 @@ public class TimeClientEvents {
             //                return;
             //            }
         }
-
         // draw range indicators for buildings with abilities and monster night sources
         for (BuildingPlacement building : BuildingClientEvents.getBuildings())
             if (building instanceof RangeIndicator ri) {

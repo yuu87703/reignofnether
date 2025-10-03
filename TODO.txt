@@ -45,15 +45,15 @@ Bugfixes
 [✔] Cheats are now reset whenever a new game begins
 [✔] Carrot and Potato crops no longer drop items when broken by hand or building damage
 [✔] Polar Bears are no longer worth 300 food when killed by workers
-[✔] Pillagers can no longer preload their crossbows and fire while out of range of a target
-[❌] Fixed units sometimes stopping if moved to the same place they were already going
+[✔] Pillagers can no longer fire while out of range of a target (including when mounted)
+[✔] Fixed units sometimes stopping if moved to the same place they were already going
 
 Quality of Life
 ---------------
 [✔] Camera sensitivty is now saved to your local configs
-[🟡] Players who start at the same colour of starting block are now automatically allied
-    - Your player colours will still be the same if you disband the alliance later on
-[❌] The clock is now clickable to toggle showing the tooltip permanently
+[✔] Players who start at the same colour of starting block are now automatically allied
+[✔] While a worker is selected, mousing over resource blocks shows their values
+[✔] The clock is now clickable to toggle showing the tooltip permanently
 
 Balancing
 ---------
@@ -83,12 +83,12 @@ Villagers
 [✔] Iron Golems now have 20% ranged armour
 [✔] Iron Golem health reduced from 150 to 140
 [✔] Pillagers are now much more accurate
-[✔] Pillagers crossbows are now unloaded whenever the pillager is issued a move or stop command
-[✔] Pillager attack speed reduced from 0.40 to 0.34
-[❌] Witch potion projectile speed raised by 50%
-[✔] Vexes now attack random nearby targets if their parent evoker is not attacking instead of being idle
+[✔] Pillagers now reload their crossbows even when out of combat
+    - While reloading, movement speed is reduced by 30%
+[✔] Pillager attack speed reduced from 0.4 to 0.3
+[✔] Vexes now follow their parent evoker if the evoker is not in combat, instead of remaining where they are
 
 Languages
 ---------
-[❌] Updated Traditional Chinese (zh-tw)
-[❌] Updated Simplified Chinese (zh-cn)
+[✔] Updated Traditional Chinese (zh-tw)
+[✔] Updated Simplified Chinese (zh-cn)

@@ -139,7 +139,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     // endregion
 
     final static public float attackDamage = 7.0f;
-    final static public float attacksPerSecond = 0.6f; // excludes crossbow charge time
+    final static public float attacksPerSecond = 0.48f; // excludes crossbow charge time
     final static public float maxHealth = 45.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.24f;
@@ -193,7 +193,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         AttackerUnit.tick(this);
         this.mountGoal.tick();
         PromoteIllager.checkAndApplyBuff(this);
-
+        this.attackGoal.tickChargeCrossbow();
     }
 
     @Override

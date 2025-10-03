@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
+import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -835,8 +836,14 @@ public class MinimapClientEvents {
 
     @SubscribeEvent
     public static void onMouseDrag(ScreenEvent.MouseDragged.Pre evt) {
+        if (!OrthoviewClientEvents.isEnabled() ||
+                OrthoviewClientEvents.isCameraLocked() ||
+                !(MC.screen instanceof TopdownGui)) {
+            return;
+        }
+
         // when clicking on map move player there
-        if (OrthoviewClientEvents.isEnabled() && evt.getMouseButton() == GLFW.GLFW_MOUSE_BUTTON_1 &&
+        if (evt.getMouseButton() == GLFW.GLFW_MOUSE_BUTTON_1 &&
             !Keybindings.shiftMod.isDown() && !OrthoviewClientEvents.isCameraLocked() &&
             lastDragTeleportTimestamp < System.currentTimeMillis() - 100) {
 
@@ -854,7 +861,9 @@ public class MinimapClientEvents {
 
     @SubscribeEvent
     public static void onMouseClick(ScreenEvent.MouseButtonPressed.Pre evt) {
-        if (!OrthoviewClientEvents.isEnabled() || OrthoviewClientEvents.isCameraLocked()) {
+        if (!OrthoviewClientEvents.isEnabled() ||
+            OrthoviewClientEvents.isCameraLocked() ||
+            !(MC.screen instanceof TopdownGui)) {
             return;
         }
 

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
 
-// make vexes follow their parent evoker while out of combat
+// make vexes follow their parent evoker while out of combat or out of range of their target
 @Mixin(Vex.class)
 public abstract class VexMixin extends Mob {
 
@@ -32,7 +32,8 @@ public abstract class VexMixin extends Mob {
             at = @At("HEAD")
     )
     public void tick(CallbackInfo ci) {
-        if (tickCount % 10 == 0 && this.getOwner() instanceof EvokerUnit eu && eu.getTarget() == null) {
+        if (tickCount % 10 == 0 && this.getOwner() instanceof EvokerUnit eu &&
+            (eu.getTarget() == null || eu.distanceTo(eu.getTarget()) > eu.getVexTargetRange())) {
             double x = eu.getX() + reignofnether$random.nextFloat(-3f, 3f);
             double y = eu.getY() + reignofnether$random.nextFloat(4.5f,7f);
             double z = eu.getZ() + reignofnether$random.nextFloat(-3f, 3f);
