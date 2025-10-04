@@ -1283,7 +1283,7 @@
     "alliances.reignofnether.tooltip.accept_alliance": "Accept Alliance",
     "alliances.reignofnether.tooltip.disband_alliance": "Disband Alliance",
 
-    "alliances.reignofnether.tooltip.toggle_observer_player_displays": "Observer Menu",
-    "alliances.reignofnether.tooltip.toggle_diplomacy_player_displays": "Diplomacy Menu",
+    "alliances.reignofnether.tooltip.toggle_observer_player_displays": "Observer Menu (Z)",
+    "alliances.reignofnether.tooltip.toggle_diplomacy_player_displays": "Diplomacy Menu (Z)",
     "alliances.reignofnether.tooltip.toggle_shared_unit_control": "Toggle whether allies can control your units"
 }

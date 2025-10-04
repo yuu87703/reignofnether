@@ -205,7 +205,7 @@ public class PlayerClientEvents {
             PlayerDisplayClientEvents.resetDisplay();
 
         removeRTSPlayer(playerName);
-        ResourcesClientEvents.resourcesList.removeIf(r -> r.ownerName.equals(MC.player.getName().getString()));
+        ResourcesClientEvents.resourcesList.removeIf(r -> r.ownerName.equals(playerName));
 
         if (!MC.player.getName().getString().equals(playerName))
             return;
