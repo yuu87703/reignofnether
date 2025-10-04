@@ -47,6 +47,8 @@ Bugfixes
 [✔] Polar Bears are no longer worth 300 food when killed by workers
 [✔] Pillagers can no longer fire while out of range of a target (including when mounted)
 [✔] Fixed units sometimes stopping if moved to the same place they were already going
+[✔] Necromancer zombies are no longer upgraded into Husks or Drowned when research completes
+[✔] Fixed tab cycling and shift-tab cycling for units and buildings
 
 Quality of Life
 ---------------
@@ -84,7 +86,7 @@ Villagers
 [✔] Iron Golem health reduced from 150 to 140
 [✔] Pillagers are now much more accurate
 [✔] Pillagers now reload their crossbows even when out of combat
-    - While reloading, movement speed is reduced by 30%
+    - While reloading, movement speed is reduced by 20%
 [✔] Pillager attack speed reduced from 0.4 to 0.3
 [✔] Vexes now follow their parent evoker if the evoker is not in combat, instead of remaining where they are
 

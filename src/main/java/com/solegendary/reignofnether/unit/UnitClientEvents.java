@@ -120,6 +120,25 @@ public class UnitClientEvents {
         return selectedUnits;
     }
 
+    public static ArrayList<LivingEntity> getSortedSelectedUnits() {
+        ArrayList<LivingEntity> units = UnitClientEvents.getSelectedUnits();
+
+        units.sort(Comparator.comparing(HudClientEvents::getModifiedEntityName));
+
+        // always put heroes first
+        ArrayList<LivingEntity> heroUnits = new ArrayList<>();
+        units.removeIf(le -> {
+            if (le instanceof HeroUnit) {
+                heroUnits.add(le);
+                return true;
+            }
+            return false;
+        });
+        for (LivingEntity heroUnit : heroUnits)
+            units.add(0, heroUnit);
+        return units;
+    }
+
     public static ArrayList<LivingEntity> getAllUnits() {
         return allUnits;
     }

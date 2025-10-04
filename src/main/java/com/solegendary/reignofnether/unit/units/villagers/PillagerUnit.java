@@ -119,7 +119,10 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     // combat stats
     public boolean getWillRetaliate() { return willRetaliate; }
     public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
-    public float getAttacksPerSecond() { return 20f / (getAttackCooldown() + (hasQuickChargeEnchant() ? 15 : 25)); } // crossbow charge time is 25 ticks
+    public float getAttacksPerSecond() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return 20f / (getAttackCooldown() + (CrossbowItem.getChargeDuration(itemStack)));
+    }
     public float getAggroRange() { return aggroRange; }
     public boolean getAggressiveWhenIdle() { return aggressiveWhenIdle && !isVehicle(); }
     public float getAttackRange() { return attackRange; }
@@ -139,7 +142,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     // endregion
 
     final static public float attackDamage = 7.0f;
-    final static public float attacksPerSecond = 0.48f; // excludes crossbow charge time
+    final static public float attacksPerSecond = 0.632f; // excludes crossbow charge time
     final static public float maxHealth = 45.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.24f;
