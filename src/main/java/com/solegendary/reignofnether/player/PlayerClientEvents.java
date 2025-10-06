@@ -8,13 +8,12 @@ import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.hero.HeroClientEvents;
 import com.solegendary.reignofnether.hud.HudClientEvents;
-import com.solegendary.reignofnether.hud.PlayerDisplayClientEvents;
+import com.solegendary.reignofnether.hud.playerdisplay.PlayerDisplayClientEvents;
 import com.solegendary.reignofnether.hud.buttons.HelperButtons;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientEvents;
@@ -68,8 +67,7 @@ public class PlayerClientEvents {
         return Faction.NONE;
     }
 
-    public static RTSPlayer getPlayer(String playerName)
-    {
+    public static RTSPlayer getPlayer(String playerName) {
         for (RTSPlayer rtsPlayer : rtsPlayers)
             if (rtsPlayer.name.equals(playerName))
                 return rtsPlayer;

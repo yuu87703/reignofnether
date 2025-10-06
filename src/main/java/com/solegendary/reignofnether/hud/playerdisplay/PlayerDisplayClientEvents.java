@@ -1,20 +1,21 @@
-package com.solegendary.reignofnether.hud;
+package com.solegendary.reignofnether.hud.playerdisplay;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AllianceAction;
 import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
+import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.RTSPlayer;
-import com.solegendary.reignofnether.resources.Resources;
-import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -70,7 +71,7 @@ public class PlayerDisplayClientEvents {
             new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/sweet_berries.png"),
             Keybindings.keyZ,
             () -> displayType == DisplayType.DIPLOMACY,
-            () -> !PlayerClientEvents.isRTSPlayer() || PlayerClientEvents.rtsPlayers.size() <= 1,
+            () -> !PlayerClientEvents.isRTSPlayer() || (PlayerClientEvents.rtsPlayers.size() + getNumFpvPlayers()) <= 1,
             () -> true,
             () -> {
                 if (displayType != DisplayType.NONE)
@@ -81,6 +82,12 @@ public class PlayerDisplayClientEvents {
             null,
             List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.toggle_diplomacy_player_displays"), Style.EMPTY)
     ));
+
+    private static int getNumFpvPlayers() {
+        if (MC.level == null)
+            return 0;
+        return (MC.level.players().stream().filter(p -> !p.isSpectator() && !p.isCreative()).toList().size());
+    }
 
     public static final Button shareUnitControlButton = new Button(
             "Toggle Share Unit Control",
@@ -146,11 +153,11 @@ public class PlayerDisplayClientEvents {
 
         GuiGraphics guiGraphics = evt.getGuiGraphics();
 
-        observerPlayerDisplays.removeIf(r -> !PlayerClientEvents.rtsPlayers.contains(r.rtsPlayer));
+        observerPlayerDisplays.removeIf(r -> !PlayerClientEvents.rtsPlayers.stream().map(rtsp -> rtsp.name).toList().contains(r.playerName));
 
-        List<RTSPlayer> trackedPlayers = observerPlayerDisplays.stream().map(d -> d.rtsPlayer).collect(Collectors.toCollection(ArrayList::new));
+        List<String> trackedPlayers = observerPlayerDisplays.stream().map(d -> d.playerName).collect(Collectors.toCollection(ArrayList::new));
         for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
-            if (!trackedPlayers.contains(rtsPlayer)) {// && !rtsPlayer.name.equals(MC.player.getName().getString())) {
+            if (!trackedPlayers.contains(rtsPlayer.name)) {// && !rtsPlayer.name.equals(MC.player.getName().getString())) {
                 observerPlayerDisplays.add(new ObserverPlayerDisplay(rtsPlayer));
             }
         }
@@ -173,14 +180,21 @@ public class PlayerDisplayClientEvents {
 
         GuiGraphics guiGraphics = evt.getGuiGraphics();
 
-        diplomacyPlayerDisplays.removeIf(r -> !PlayerClientEvents.rtsPlayers.contains(r.rtsPlayer));
+        diplomacyPlayerDisplays.clear();
 
-        List<RTSPlayer> trackedPlayers = diplomacyPlayerDisplays.stream().map(d -> d.rtsPlayer).collect(Collectors.toCollection(ArrayList::new));
-        for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
-            if (!trackedPlayers.contains(rtsPlayer) && MC.player != null && !rtsPlayer.name.equals(MC.player.getName().getString())) {
-                diplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(rtsPlayer));
+        if (MC.level != null && MC.player != null) {
+            for (AbstractClientPlayer player : MC.level.players()) {
+                if (MC.player != player) {
+                    RTSPlayer rtsPlayer = PlayerClientEvents.getPlayer(player.getName().getString());
+                    if (rtsPlayer != null) {
+                        diplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(rtsPlayer));
+                    } else {
+                        diplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(player));
+                    }
+                }
             }
         }
+
         if (!diplomacyPlayerDisplays.isEmpty()) {
             if (!shareUnitControlButton.isHidden.get()) {
                 shareUnitControlButton.render(guiGraphics, blitX, blitY, evt.getMouseX(), evt.getMouseY());

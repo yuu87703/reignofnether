@@ -1,7 +1,9 @@
-package com.solegendary.reignofnether.hud;
+package com.solegendary.reignofnether.hud.playerdisplay;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.playerdisplay.AbstractPlayerDisplay;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.resources.ResourceName;
@@ -10,15 +12,11 @@ import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
-import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.ArrayList;
 
 // Dashboard for Observer players to track RTS players' resources and population
 public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
@@ -58,9 +56,9 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 color = 0xFFF4ED;
             }
             default -> {
-                icon = PlayerColors.getPlayerColorBedIcon(this.rtsPlayer.name);
-                var used = UnitClientEvents.getCurrentPopulation(this.rtsPlayer.name);
-                var produced = BuildingClientEvents.getTotalPopulationSupply(this.rtsPlayer.name);
+                icon = PlayerColors.getPlayerColorBedIcon(this.playerName);
+                var used = UnitClientEvents.getCurrentPopulation(this.playerName);
+                var produced = BuildingClientEvents.getTotalPopulationSupply(this.playerName);
                 value = used + "/" + produced;
                 color = used > produced
                         ? 0xFF0000
@@ -106,7 +104,7 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 continue;
             }
 
-            if (!this.rtsPlayer.name.equals(unit.getOwnerName())) {
+            if (!this.playerName.equals(unit.getOwnerName())) {
                 continue;
             }
 

@@ -21,6 +21,7 @@ import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.buttons.ActionButtons;
 import com.solegendary.reignofnether.hud.buttons.HelperButtons;
 import com.solegendary.reignofnether.hud.buttons.StartButtons;
+import com.solegendary.reignofnether.hud.playerdisplay.PlayerDisplayClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
@@ -85,8 +86,8 @@ import static com.solegendary.reignofnether.tutorial.TutorialClientEvents.helpBu
 import static com.solegendary.reignofnether.unit.UnitClientEvents.*;
 import static com.solegendary.reignofnether.util.MiscUtil.capitaliseAndSpace;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
-import static com.solegendary.reignofnether.hud.PlayerDisplayClientEvents.diplomacyButton;
-import static com.solegendary.reignofnether.hud.PlayerDisplayClientEvents.observerButton;
+import static com.solegendary.reignofnether.hud.playerdisplay.PlayerDisplayClientEvents.diplomacyButton;
+import static com.solegendary.reignofnether.hud.playerdisplay.PlayerDisplayClientEvents.observerButton;
 
 public class HudClientEvents {
 
