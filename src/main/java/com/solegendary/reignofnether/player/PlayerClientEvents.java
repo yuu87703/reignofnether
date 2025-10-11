@@ -36,6 +36,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class PlayerClientEvents {
@@ -58,6 +59,14 @@ public class PlayerClientEvents {
             if (rtsPlayer.name.equals(playerName))
                 return true;
         return false;
+    }
+
+    @Nullable
+    public static RTSPlayer getRTSPlayer(String playerName) {
+        for (RTSPlayer rtsPlayer : rtsPlayers)
+            if (rtsPlayer.name.equals(playerName))
+                return rtsPlayer;
+        return null;
     }
 
     public static Faction getFaction() {
@@ -235,9 +244,6 @@ public class PlayerClientEvents {
                     ResearchClient.removeAllCheats();
                 }
             }
-        }
-        if (isRTSPlayer() && MC.player != null && MC.player.getName().getString().equals(playerName)) {
-            PlayerDisplayClientEvents.resetDisplay();
         }
     }
 

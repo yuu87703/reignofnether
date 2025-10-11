@@ -158,8 +158,10 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
             y -= HERO_Y_OFFSET;
 
         Relationship rs = UnitClientEvents.getPlayerToEntityRelationship(entity);
-
         int bgCol = PlayerColors.getPlayerPortraitDisplayColorHex(entity instanceof Unit u ? u.getOwnerName() : null);
+        if (entity instanceof Player player) {
+            bgCol = 0xA0000000 | PlayerColors.getPlayerAllianceColorHex(player.getName().getString());
+        }
         int frameHeightPlus = 0;
         if (entity instanceof HeroUnit) {
             frameHeightPlus = HERO_Y_OFFSET;

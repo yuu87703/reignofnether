@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.hud.playerdisplay;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.hud.playerdisplay.AbstractPlayerDisplay;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.RTSPlayer;
@@ -166,5 +167,14 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
         this.renderResource(guiGraphics, x += RESOURCE_FRAME_WIDTH, y, ResourceName.ORE);
         this.renderResource(guiGraphics, x += RESOURCE_FRAME_WIDTH, y, ResourceName.NONE); // supply
         this.renderSupplyDetail(guiGraphics, x += RESOURCE_FRAME_WIDTH, y);
+    }
+
+    @Override
+    public RectZone getRectZone(int blitX, int blitY, int borderWidth) {
+        return new RectZone(
+            blitX - borderWidth, blitY - borderWidth,
+            blitX + ObserverPlayerDisplay.DISPLAY_WIDTH + borderWidth,
+            blitY + Button.DEFAULT_ICON_FRAME_SIZE + borderWidth
+        );
     }
 }

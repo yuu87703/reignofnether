@@ -5,10 +5,9 @@ import com.solegendary.reignofnether.alliance.AllianceAction;
 import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.hud.Button;
-import com.solegendary.reignofnether.hud.playerdisplay.AbstractPlayerDisplay;
+import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
-import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
@@ -46,13 +45,18 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
 
     private static final int RESOURCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 2; // frame containing a resource value + icon
     private static final int ALLIANCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 4; // frame containing a resource value + icon
-    public static final int DISPLAY_WIDTH = PLAYER_FRAME_WIDTH + RESOURCE_FRAME_WIDTH * 4 + ALLIANCE_FRAME_WIDTH; // total width of a player display
+    public static final int DISPLAY_WIDTH = // total width of a player display
+            PLAYER_FRAME_WIDTH +
+            RESOURCE_FRAME_WIDTH * 4 +
+            (int) (Button.DEFAULT_ICON_FRAME_SIZE * 2.5f) +
+            ALLIANCE_FRAME_WIDTH;
+
 
     private boolean isAllied() {
         return MC.player != null && AlliancesClient.isAllied(MC.player.getName().getString(), playerName);
     }
 
-    private boolean isRTSPlayer() {
+    protected boolean isRTSPlayer() {
         return PlayerClientEvents.isRTSPlayer(playerName);
     }
 
@@ -238,8 +242,6 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
         Button renderedButton;
         String allianceStatusStr;
         int frameBgColour = 0xA0000000 | PlayerColors.getPlayerAllianceColorHex(playerName);
-        if (!isRTSPlayer())
-            frameBgColour = 0x90000000;
 
         int frameWidth = 50;
 
@@ -284,6 +286,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 0xFFFFFF
         );
         if (!isPlayerLoggedIn()) {
+            guiGraphics.pose().translate(0,0,1);
             guiGraphics.fill(
                     x + Button.DEFAULT_ICON_FRAME_SIZE,
                     y,
@@ -364,5 +367,14 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
         }
         renderedButtons.add(this.renderAllianceButton(guiGraphics, x, y, mouseX, mouseY));
         return renderedButtons;
+    }
+
+    @Override
+    public RectZone getRectZone(int blitX, int blitY, int borderWidth) {
+        return new RectZone(
+                blitX - borderWidth, blitY - borderWidth,
+                blitX + DISPLAY_WIDTH + borderWidth,
+                blitY + Button.DEFAULT_ICON_FRAME_SIZE + borderWidth
+        );
     }
 }

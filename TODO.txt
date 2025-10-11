@@ -34,8 +34,8 @@ Bugfixes
 
 Quality of Life
 ---------------
-[❌] Survival/adventure players now also appear on the new diplomacy menu
-[❌] Holding shift before a game starts now shows a random race option
+[🟡] Added support for survival/adventure players to the diplomacy menu
+[🟡] Added a grey background to the observer and diplomacy menus for a cleaner look
 [❌] Command to list end of game stats like:
     - total resources gathered/spent
     - average resources gathered/min
@@ -44,3 +44,9 @@ Quality of Life
 
 Balancing
 ---------
+
+
+Languages
+---------
+[🟡] Updated Turkish (tr_tr)
+[🟡] Updated chinese again (remove this note)

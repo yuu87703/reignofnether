@@ -1,26 +1,18 @@
 package com.solegendary.reignofnether.hud.playerdisplay;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.RTSPlayer;
-import com.solegendary.reignofnether.resources.ResourceName;
-import com.solegendary.reignofnether.resources.Resources;
-import com.solegendary.reignofnether.resources.ResourcesClientEvents;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 
 public abstract class AbstractPlayerDisplay {
 
@@ -130,6 +122,7 @@ public abstract class AbstractPlayerDisplay {
                 0xFFFFFF
         );
         if (!isPlayerLoggedIn()) {
+            guiGraphics.pose().translate(0,0,1);
             guiGraphics.fill(
                     x, y,
                     x + PLAYER_FRAME_WIDTH,
@@ -143,6 +136,13 @@ public abstract class AbstractPlayerDisplay {
         int playerColorHex = PlayerColors.getPlayerColorHex(this.playerName);
         this.color = 0xFF000000 | playerColorHex;
         this.backgroundColor = 0xA0000000 | playerColorHex;
+        if (this instanceof DiplomacyPlayerDisplay dpd && !dpd.isRTSPlayer())
+            this.backgroundColor = 0x99000000;
         this.renderPlayer(guiGraphics, x, y);
     }
+
+    public RectZone getRectZone(int blitX, int blitY, int borderWidth) {
+        return new RectZone(blitX, blitY, blitX, blitY);
+    }
+
 }
