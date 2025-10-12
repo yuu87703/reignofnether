@@ -49,4 +49,4 @@ Balancing
 Languages
 ---------
 [🟡] Updated Turkish (tr_tr)
-[🟡] Updated chinese again (remove this note)
+[🟡] Updated Spanish (es_es)
