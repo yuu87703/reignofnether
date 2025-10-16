@@ -3,9 +3,9 @@ package com.solegendary.reignofnether;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
-import com.solegendary.reignofnether.entities.models.ThrownMaceModel;
+import com.solegendary.reignofnether.entities.models.NecromancerProjectileModel;
 import com.solegendary.reignofnether.entities.renderers.ThrowableTntRenderer;
-import com.solegendary.reignofnether.entities.renderers.ThrownMaceRenderer;
+import com.solegendary.reignofnether.entities.renderers.NecromancerProjectileRenderer;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.registrars.*;
 import com.solegendary.reignofnether.unit.modelling.models.*;
@@ -110,7 +110,7 @@ public class CommonModEvents {
         evt.registerEntityRenderer(EntityRegistrar.ADJUSTABLE_PRIMED_TNT.get(), TntRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.THROWABLE_TNT_PROJECTILE.get(), ThrowableTntRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.THROWN_HERO_EXPERIENCE_BOTTLE.get(), ThrownItemRenderer::new);
-        evt.registerEntityRenderer(EntityRegistrar.THROWN_MACE_PROJECTILE.get(), ThrownMaceRenderer::new);
+        evt.registerEntityRenderer(EntityRegistrar.NECROMANCER_PROJECTILE.get(), NecromancerProjectileRenderer::new);
     }
 
     @SubscribeEvent
@@ -172,7 +172,7 @@ public class CommonModEvents {
         event.registerLayerDefinition(NecromancerModel.LAYER_LOCATION, NecromancerModel::createBodyLayer);
         event.registerLayerDefinition(PiglinMerchantModel.LAYER_LOCATION, PiglinMerchantModel::createBodyLayer);
         event.registerLayerDefinition(ArmouredHoglinUnitModel.LAYER_LOCATION, ArmouredHoglinUnitModel::createBodyLayer);
-        event.registerLayerDefinition(ThrownMaceModel.LAYER_LOCATION, ThrownMaceModel::createBodyLayer);
+        event.registerLayerDefinition(NecromancerProjectileModel.LAYER_LOCATION, NecromancerProjectileModel::createBodyLayer);
     }
 
     @SubscribeEvent

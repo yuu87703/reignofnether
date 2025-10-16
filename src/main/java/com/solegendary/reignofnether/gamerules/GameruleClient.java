@@ -32,7 +32,7 @@ public class GameruleClient {
     public static double flyingMaxYLevel = 320;
     public static boolean allowBeacons = true;
     public static boolean pvpModesOnly = false;
-    public static double beaconWinMinutes = 20;
+    public static double beaconWinMinutes = 10;
     public static boolean slantedBuilding = true;
     public static boolean allowHeroes = true;
 

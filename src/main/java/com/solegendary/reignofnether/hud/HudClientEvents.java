@@ -1554,10 +1554,14 @@ public class HudClientEvents {
         BeaconPlacement beacon = BuildingUtils.getBeacon(true);
         if (beacon != null) {
             Button beaconButton = HelperButtons.getBeaconButton(beacon.ownerName);
+            int xi = screenWidth - (StartButtons.ICON_SIZE * 2);
+            if (!observerButton.isHidden.get()) {
+                xi = screenWidth - (StartButtons.ICON_SIZE * 4);
+            }
             if (!beaconButton.isHidden.get()) {
                 beaconButton.tooltipOffsetY = 15;
                 beaconButton.render(evt.getGuiGraphics(),
-                        screenWidth - (StartButtons.ICON_SIZE * 2),
+                        xi,
                         40,
                         mouseX,
                         mouseY

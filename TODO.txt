@@ -29,8 +29,13 @@ Features
 
 Bugfixes
 --------
-[❌] Neutral units aren't returning to leashes
-    - Because of the latest movement command optimisations?
+[✔] Fixed beacon win minutes showing incorrectly as 20mins by default (it should be 10mins)
+
+[❌] Artillery aiming at buildings has too long range
+
+[❌] Players logging in messes up the observer menu (freezes resources?)
+
+[❌] bridge scroll bug (up and down vs left/right?)
 
 Quality of Life
 ---------------
@@ -48,5 +53,7 @@ Balancing
 
 Languages
 ---------
-[🟡] Updated Turkish (tr_tr)
+[🟡] Added Turkish (tr_tr)
 [🟡] Updated Spanish (es_es)
+[🟡] Updated Traditional Chinese (zh_tw)
+[🟡] Updated Simplified Chinese (zh_cn)
