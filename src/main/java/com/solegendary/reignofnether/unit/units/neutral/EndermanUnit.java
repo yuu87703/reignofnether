@@ -140,8 +140,7 @@ public class EndermanUnit extends EnderMan implements Unit, AttackerUnit {
     private AbstractMeleeAttackUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    private List<AbilityButton> abilityButtons;
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public EndermanUnit(EntityType<? extends EnderMan> entityType, Level level) {

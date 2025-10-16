@@ -181,8 +181,7 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
 
     public boolean isCaptain = false;
 
-    private List<AbilityButton> abilityButtons;
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public MilitiaUnit(EntityType<? extends Vindicator> entityType, Level level) {

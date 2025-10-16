@@ -132,7 +132,6 @@ public class WolfUnit extends Wolf implements Unit, AttackerUnit {
     final static public float movementSpeed = 0.31f;
     public int maxResources = 100;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 

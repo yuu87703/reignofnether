@@ -332,7 +332,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
     private final Button gotoFpvPlayerButton = new Button(
             "Go to player",
             Button.DEFAULT_ICON_SIZE,
-            new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/map.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/map.png"),
             (Keybinding) null,
             () -> false,
             () -> false,

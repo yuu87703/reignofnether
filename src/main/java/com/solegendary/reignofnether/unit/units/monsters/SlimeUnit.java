@@ -166,7 +166,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     private MeleeAttackSlimeUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public SlimeUnit consumeTarget = null;

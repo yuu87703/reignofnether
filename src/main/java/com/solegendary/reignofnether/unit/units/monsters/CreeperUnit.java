@@ -3,8 +3,6 @@ package com.solegendary.reignofnether.unit.units.monsters;
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Explode;
-import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -148,7 +146,6 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
 
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
@@ -159,9 +156,6 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
 
         Explode explodeAbility = new Explode();
         this.abilities.add(explodeAbility);
-
-        if (level.isClientSide())
-            this.abilityButtons.add(explodeAbility.getButton(Keybindings.keyQ, this));
     }
 
     @Override

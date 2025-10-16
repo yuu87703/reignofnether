@@ -172,7 +172,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
     public int getFogRevealDuration() { return fogRevealDuration; }
     public void setFogRevealDuration(int duration) { fogRevealDuration = duration; }
 
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public HeadhunterUnit(EntityType<? extends PiglinBrute> entityType, Level level) {

@@ -147,7 +147,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
 
     public int deathCloudTicks = 0;
 
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public WitherSkeletonUnit(EntityType<? extends WitherSkeleton> entityType, Level level) {

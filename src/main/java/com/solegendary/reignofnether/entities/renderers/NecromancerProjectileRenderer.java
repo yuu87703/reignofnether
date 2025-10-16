@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class NecromancerProjectileRenderer extends EntityRenderer<NecromancerProjectile> {
 
-    private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation("reignofnether", "textures/entities/necromancer_projectile.png");
+    private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath("reignofnether", "textures/entities/necromancer_projectile.png");
 
     private static final RenderType RENDER_TYPE;
     private final NecromancerProjectileModel<NecromancerProjectile> model;

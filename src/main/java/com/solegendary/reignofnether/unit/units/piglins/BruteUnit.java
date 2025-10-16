@@ -167,7 +167,7 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
 
     public boolean isHoldingUpShield = false;
 
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public BruteUnit(EntityType<? extends PiglinBrute> entityType, Level level) {

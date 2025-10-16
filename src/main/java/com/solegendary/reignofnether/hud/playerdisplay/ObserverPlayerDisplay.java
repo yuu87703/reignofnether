@@ -123,8 +123,6 @@ public class ObserverPlayerDisplay extends AbstractPlayerDisplay {
                 frameBgColour
         );
         MyRenderer.renderIcon(guiGraphics,
-                //new ResourceLocation(ReignOfNether.MOD_ID, "textures/cursors/customcursor_shovel.png"),
-                //new ResourceLocation(ReignOfNether.MOD_ID, "textures/icons/items/pickaxe.png"),
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/shovel.png"),
                 x + 4,
                 y + 4,

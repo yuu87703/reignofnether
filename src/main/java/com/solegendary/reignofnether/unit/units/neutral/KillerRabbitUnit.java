@@ -134,7 +134,6 @@ public class KillerRabbitUnit extends Rabbit implements Unit, AttackerUnit {
     final static public float movementSpeed = 0.35f;
     public int maxResources = 100;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 

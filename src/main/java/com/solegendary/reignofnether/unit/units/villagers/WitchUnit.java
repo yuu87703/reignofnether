@@ -134,8 +134,7 @@ public class WitchUnit extends Witch implements Unit {
     final static public int LINGERING_POTION_DURATION = 5 * ResourceCost.TICKS_PER_SECOND;
     final static public int LINGERING_POTION_DURATION_EXTENDED = 10 * ResourceCost.TICKS_PER_SECOND;
 
-    private List<AbilityButton> abilityButtons;
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public WitchUnit(EntityType<? extends Witch> entityType, Level level) {
