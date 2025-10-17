@@ -46,13 +46,6 @@ public class PortalBasic extends AbstractPortal {
         this.icon = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/gray_glazed_terracotta.png");
         this.canSetRallyPoint = false;
 
-        Ability connectPortal = new ConnectPortal();
-        this.abilities.add(connectPortal, Keybindings.keyQ);
-        Ability gotoPortal = new GotoPortal();
-        this.abilities.add(gotoPortal, Keybindings.keyW);
-        Ability disconnectPortal = new DisconnectPortal();
-        this.abilities.add(disconnectPortal, Keybindings.keyE);
-
         this.productions.add(ProductionItems.RESEARCH_PORTAL_FOR_CIVILIAN, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_PORTAL_FOR_MILITARY, Keybindings.keyW);
         this.productions.add(ProductionItems.RESEARCH_PORTAL_FOR_TRANSPORT, Keybindings.keyE);
@@ -60,8 +53,7 @@ public class PortalBasic extends AbstractPortal {
 
     @Override
     public PortalPlacement createBuildingPlacement(Level level, BlockPos pos, Rotation rotation, String ownerName) {
-        PortalPlacement portalPlacement = new PortalPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
-        return portalPlacement;
+        return new PortalPlacement(this, level, pos, rotation, ownerName, getAbsoluteBlockData(getRelativeBlockData(level), level, pos, rotation), false);
     }
 
     @Override

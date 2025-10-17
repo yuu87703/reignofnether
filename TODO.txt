@@ -6,8 +6,6 @@
 [❌] Not done, including unmerged PRs
 
 
-Necromancer
-    [❌] Magical projectile model and sound
 
 Royal Guard
     - Mace Slam
@@ -26,19 +24,25 @@ Features
         - night warp with adjustable range
 
 
-
 Bugfixes
 --------
 [✔] Fixed beacon win minutes showing incorrectly as 20mins by default (it should be 10mins)
-
 [❌] Artillery aiming at buildings has too long range
-
 [❌] Players logging in messes up the observer menu (freezes resources?)
-
 [❌] bridge scroll bug (up and down vs left/right?)
+
+ABILITY REWORK BUGS
+[❌] Multiple castles cannot promote more than 1 captain (it overrides the last captain)
+    - Is it using the parent building Ability instance?
+[✔] Transport portals not gaining abilities
+[❌] Brute shield can't be toggled off
+    - Related to autocast? maybe the other toggleable abilities like hero passives have the same issue?
+[🟡] TEST: all hero abilities, ranks and saving, and multiple hero instances
+
 
 Quality of Life
 ---------------
+[✔] The Necromancer now fires a magical projectile that flies in a straight line
 [🟡] Added support for survival/adventure players to the diplomacy menu
 [🟡] Added a grey background to the observer and diplomacy menus for a cleaner look
 [❌] Command to list end of game stats like:
