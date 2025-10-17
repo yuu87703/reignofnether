@@ -51,12 +51,13 @@ public class MaceSlam extends HeroAbility {
     @Override
     public boolean rankUp(HeroUnit hero) {
         if (super.rankUp(hero)) {
-            updateStatsForRank();
+            updateStatsForRank(hero);
             return true;
         }
         return false;
     }
 
+    @Override
     public void updateStatsForRank(HeroUnit hero) {
         if (getRank(hero) == 1) {
             damage = 10;

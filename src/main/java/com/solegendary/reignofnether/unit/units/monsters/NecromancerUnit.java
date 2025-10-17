@@ -65,6 +65,11 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         ABILITIES.add(new BloodMoon());
     }
 
+    @Override
+    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
+        return heroAbilityRanks;
+    }
+
     //region
     @Override
     public void updateAbilityButtons() {
@@ -216,6 +221,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
     public int maxResources = 100;
+
+    public int souls = 0;
 
     @Override public float getHealthBonusPerLevel() { return maxHealthBonusPerLevel; };
     @Override public float getAttackBonusPerLevel() { return attackBonusPerLevel; };
@@ -559,14 +566,5 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
 
         TimeServerEvents.startBloodMoon(BloodMoon.DURATION + bonusDuration, this, bpl.centrePos);
         AbilityClientboundPacket.doAbility(this.getId(), UnitAction.BLOOD_MOON, BloodMoon.DURATION + bonusDuration);
-    }
-
-
-
-
-
-    @Override
-    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
-        return heroAbilityRanks;
     }
 }

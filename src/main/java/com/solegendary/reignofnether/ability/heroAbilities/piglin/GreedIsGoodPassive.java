@@ -39,12 +39,13 @@ public class GreedIsGoodPassive extends HeroAbility {
 
     public boolean rankUp(HeroUnit hero) {
         if (super.rankUp(hero)) {
-            updateStatsForRank();
+            updateStatsForRank(hero);
             return true;
         }
         return false;
     }
 
+    @Override
     public void updateStatsForRank(HeroUnit hero) {
         if (getRank(hero) == 1) {
             maxResourcesPerCast = 100;

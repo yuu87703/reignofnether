@@ -190,7 +190,7 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
                 if (this.attackCooldown <= 0) {
                     this.crossbowState = READY_TO_ATTACK;
                 }
-            } else if (this.crossbowState == READY_TO_ATTACK && canSeeTarget) {
+            } else if (this.crossbowState == READY_TO_ATTACK && canSeeTarget && distToTarget < attackRange) {
                 this.mob.performCrossbowAttack(this.mob, 1.6F);
                 ItemStack itemstack1 = this.mob.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
                 CrossbowItem.setCharged(itemstack1, false);

@@ -105,8 +105,8 @@ public class HeroClientboundPacket {
                                 List<HeroAbility> abls = hero.getHeroAbilities();
                                 if (abls.size() > abilityIndex) abls.get(abilityIndex).setRank(hero, (int)value);
                                 for (HeroAbility abl : abls)
-                                    abl.updateStatsForRank();
-                                ((Unit) hero).updateAbilityButtons();
+                                    abl.updateStatsForRank(hero);
+                                hero.updateAbilityButtons();
                             }
                             case SET_MANA -> hero.setMana(value);
                             case SET_MAX_MANA -> hero.setMaxMana(value);

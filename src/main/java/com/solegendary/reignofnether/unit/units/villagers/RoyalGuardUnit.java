@@ -71,6 +71,11 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
         ABILITIES.add(new Avatar());
     }
 
+    @Override
+    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
+        return heroAbilityRanks;
+    }
+
     //region
     @Override
     public void updateAbilityButtons() {
@@ -714,13 +719,4 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
             }
         }
     }
-
-    @Override
-    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
-        return heroAbilityRanks;
-    }
-
-
-
-
 }

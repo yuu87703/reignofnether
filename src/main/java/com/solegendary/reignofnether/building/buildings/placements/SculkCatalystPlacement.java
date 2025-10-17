@@ -27,6 +27,8 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
     private final static float HP_PER_SCULK = 0.5f;
     private final static float RANGE_PER_SCULK = 0.30f;
 
+    public String autoSacrificeUnitType = "";
+
     public final ArrayList<BlockPos> sculkBps = new ArrayList<>();
 
     // for some reason, destroy() does not restore sculk unless restoreRandomSculk was run at least once before

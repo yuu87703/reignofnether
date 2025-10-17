@@ -61,8 +61,8 @@ public abstract class HeroAbility extends Ability {
         }
         return false;
     }
-
-    public void updateStatsForRank() { }
+    
+    public void updateStatsForRank(HeroUnit heroUnit) { }
 
     protected String rankString(HeroUnit hero) {
         return getRank(hero) > 0 ? I18n.get("abilities.reignofnether.rank", getRank(hero)) : I18n.get("abilities.reignofnether.unlearnt");

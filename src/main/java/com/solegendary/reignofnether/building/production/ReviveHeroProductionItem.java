@@ -63,7 +63,7 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
                         HeroClientboundPacket.setAbilityRank(entity.getId(), oldHero.ability4Rank, 3);
                     }
                     for (HeroAbility abl : newHero.getHeroAbilities())
-                        abl.updateStatsForRank();
+                        abl.updateStatsForRank(newHero);
                 }
                 HeroServerEvents.fallenHeroes.remove(oldHero);
             } else {

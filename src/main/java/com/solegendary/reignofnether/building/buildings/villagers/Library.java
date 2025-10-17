@@ -49,9 +49,9 @@ public class Library extends ProductionBuilding {
 
         this.explodeChance = 0.2f;
 
-        this.abilities.add(new EnchantSharpness(), Keybindings.keyE);
-        this.abilities.add(new EnchantQuickCharge(), Keybindings.keyW);
         this.abilities.add(new EnchantMaiming(), Keybindings.keyQ);
+        this.abilities.add(new EnchantQuickCharge(), Keybindings.keyW);
+        this.abilities.add(new EnchantSharpness(), Keybindings.keyE);
         this.abilities.add(new EnchantMultishot(), Keybindings.keyR);
         this.abilities.add(new EnchantVigor(), Keybindings.keyT);
 

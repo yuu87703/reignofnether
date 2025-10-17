@@ -72,6 +72,11 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         ABILITIES.add(new LootExplosion());
     }
 
+    @Override
+    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
+        return heroAbilityRanks;
+    }
+
     //region
     @Override
     public void updateAbilityButtons() {
@@ -588,11 +593,4 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     }
 
 
-
-
-
-    @Override
-    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
-        return heroAbilityRanks;
-    }
 }
