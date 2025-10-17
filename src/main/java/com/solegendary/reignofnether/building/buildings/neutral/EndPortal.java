@@ -73,9 +73,4 @@ public class EndPortal extends ProductionBuilding {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return false;
-    }
 }

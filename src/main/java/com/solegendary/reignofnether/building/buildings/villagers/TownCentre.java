@@ -90,9 +90,4 @@ public class TownCentre extends ProductionBuilding {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.VILLAGERS;
-    }
 }

@@ -61,9 +61,4 @@ public class NetherwartFarm extends AbstractFarm {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.PIGLINS;
-    }
 }

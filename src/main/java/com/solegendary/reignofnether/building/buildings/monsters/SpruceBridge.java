@@ -82,9 +82,4 @@ public class SpruceBridge extends AbstractBridge {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
-    }
 }

@@ -80,9 +80,4 @@ public class PortalBasic extends AbstractPortal {
             this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.PIGLINS;
-    }
 }

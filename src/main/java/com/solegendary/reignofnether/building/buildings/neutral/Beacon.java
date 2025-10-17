@@ -137,11 +137,6 @@ public class Beacon extends ProductionBuilding {
     public Faction getFaction() {
         return Faction.NONE;
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return true;
-    }
 }
 
 

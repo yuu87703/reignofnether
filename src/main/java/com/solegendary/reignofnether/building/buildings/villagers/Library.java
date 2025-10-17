@@ -108,9 +108,4 @@ public class Library extends ProductionBuilding {
             }
         return 0;
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.VILLAGERS;
-    }
 }

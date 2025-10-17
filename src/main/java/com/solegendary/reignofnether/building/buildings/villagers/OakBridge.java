@@ -96,9 +96,4 @@ public class OakBridge extends AbstractBridge {
             this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.VILLAGERS;
-    }
 }

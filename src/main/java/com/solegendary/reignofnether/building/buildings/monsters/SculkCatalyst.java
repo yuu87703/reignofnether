@@ -97,9 +97,4 @@ public class SculkCatalyst extends Building {
             this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
-    }
 }

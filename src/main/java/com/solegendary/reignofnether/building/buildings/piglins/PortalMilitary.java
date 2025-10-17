@@ -37,9 +37,4 @@ public class PortalMilitary extends AbstractPortal {
     public int getUpgradeLevel(BuildingPlacement placement) {
         return 1;
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return false;
-    }
 }

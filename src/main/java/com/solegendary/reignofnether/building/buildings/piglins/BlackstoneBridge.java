@@ -79,9 +79,4 @@ public class BlackstoneBridge extends AbstractBridge {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.PIGLINS;
-    }
 }

@@ -80,9 +80,4 @@ public class CentralPortal extends ProductionBuilding {
     public BlockPos getIndoorSpawnPoint(ServerLevel level, BlockPos originPos) {
         return super.getIndoorSpawnPoint(level, originPos).offset(0,-5,0);
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.PIGLINS;
-    }
 }
