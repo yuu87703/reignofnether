@@ -75,12 +75,21 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         ABILITIES.add(new CallToArmsUnit(), Keybindings.keyQ);
     }
 
+    //region
+    @Override
+    public void updateAbilityButtons() {
+        abilities = ABILITIES.clone();
+    }
     Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
+    @Override public Object2ObjectArrayMap<Ability, Float> getCooldowns() { return cooldowns; }
+    @Override public boolean hasAutocast(Ability ability) { return autocast == ability; }
+    @Override public void setAutocast(Ability autocast) { this.autocast = autocast; }
+    @Override public Object2ObjectArrayMap<Ability, Integer> getCharges() { return charges; }
 
     Ability autocast;
 
-    // region
+
     private int eatingTicksLeft = 0;
     public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
     public int getEatingTicksLeft() { return eatingTicksLeft; }
@@ -513,31 +522,9 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         return this.getUnitProfession() != VillagerUnitProfession.NONE;
     }
 
-    @Override
-    public void updateAbilityButtons() {
-        this.abilities = ABILITIES.clone();
-        autocast = ABILITIES.getDefaultAutocast();
-    }
 
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
 
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
 
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
-    }
 
     @Override
     public List<Button> getAbilityButtons() {

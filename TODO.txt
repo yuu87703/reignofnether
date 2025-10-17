@@ -6,11 +6,6 @@
 [❌] Not done, including unmerged PRs
 
 
-
-Royal Guard
-    - Mace Slam
-        [❌] Raise ground blocks with block displays?
-
 Features
 --------
 [✔] Structure block to register custom buildings
@@ -34,9 +29,6 @@ Bugfixes
 ABILITY REWORK BUGS
 [❌] Multiple castles cannot promote more than 1 captain (it overrides the last captain)
     - Is it using the parent building Ability instance?
-[✔] Transport portals not gaining abilities
-[❌] Brute shield can't be toggled off
-    - Related to autocast? maybe the other toggleable abilities like hero passives have the same issue?
 [🟡] TEST: all hero abilities, ranks and saving, and multiple hero instances
 
 

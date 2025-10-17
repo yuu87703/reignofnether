@@ -1376,7 +1376,7 @@ Build: 1.16.3-34.0.12 - Tue Sep 22 19:06:10 GMT 2020
 =========
 Build: 1.16.3-34.0.11 - Tue Sep 22 18:58:28 GMT 2020
 	17338378+nightenom:
-		[1.16] Fix possible crash when using rendering regionCache (#7207)
+		[1.16] Fix possible crash when using renderingCache (#7207)
 
 =========
 Build: 1.16.3-34.0.10 - Tue Sep 22 18:41:16 GMT 2020
