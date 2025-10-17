@@ -1,20 +1,21 @@
-package com.solegendary.reignofnether.hud;
+package com.solegendary.reignofnether.hud.playerdisplay;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AllianceAction;
 import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
+import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.RTSPlayer;
-import com.solegendary.reignofnether.resources.Resources;
-import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -37,10 +38,12 @@ public class PlayerDisplayClientEvents {
     private static final Minecraft MC = Minecraft.getInstance();
 
     private static ArrayList<ObserverPlayerDisplay> observerPlayerDisplays = new ArrayList<>();
-    private static ArrayList<DiplomacyPlayerDisplay> diplomacyPlayerDisplays = new ArrayList<>();
+    private static ArrayList<DiplomacyPlayerDisplay> rtsDiplomacyPlayerDisplays = new ArrayList<>();
+    private static ArrayList<DiplomacyPlayerDisplay> fpvDiplomacyPlayerDisplays = new ArrayList<>();
     private static final ArrayList<Button> renderedButtons = new ArrayList<>();
     private static final ArrayList<RectZone> hudZones = new ArrayList<>();
     private static DisplayType displayType = DisplayType.NONE;
+    private static final int BG_BORDER_WIDTH = 7;
 
     public static void resetDisplay() {
         displayType = DisplayType.NONE;
@@ -70,7 +73,7 @@ public class PlayerDisplayClientEvents {
             ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/sweet_berries.png"),
             Keybindings.keyZ,
             () -> displayType == DisplayType.DIPLOMACY,
-            () -> !PlayerClientEvents.isRTSPlayer() || PlayerClientEvents.rtsPlayers.size() <= 1,
+            () -> !PlayerClientEvents.isRTSPlayer() || (PlayerClientEvents.rtsPlayers.size() + getNumFpvPlayers()) <= 1,
             () -> true,
             () -> {
                 if (displayType != DisplayType.NONE)
@@ -81,6 +84,12 @@ public class PlayerDisplayClientEvents {
             null,
             List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.toggle_diplomacy_player_displays"), Style.EMPTY)
     ));
+
+    private static int getNumFpvPlayers() {
+        if (MC.level == null)
+            return 0;
+        return (MC.level.players().stream().filter(p -> !p.isSpectator() && !p.isCreative()).toList().size());
+    }
 
     public static final Button shareUnitControlButton = new Button(
             "Toggle Share Unit Control",
@@ -141,74 +150,96 @@ public class PlayerDisplayClientEvents {
     private static void renderObserverPlayerDisplays(ScreenEvent.Render.Post evt) {
         int screenWidth = MC.getWindow().getGuiScaledWidth();
 
-        int blitX = screenWidth / 2 - ObserverPlayerDisplay.DISPLAY_WIDTH / 2;
+        int blitX = (screenWidth / 2 - ObserverPlayerDisplay.DISPLAY_WIDTH / 2) + 10;
         int blitY = 70;
 
         GuiGraphics guiGraphics = evt.getGuiGraphics();
 
-        observerPlayerDisplays.removeIf(r -> !PlayerClientEvents.rtsPlayers.contains(r.rtsPlayer));
+        observerPlayerDisplays.removeIf(r -> !PlayerClientEvents.rtsPlayers.stream().map(rtsp -> rtsp.name).toList().contains(r.playerName));
 
-        List<RTSPlayer> trackedPlayers = observerPlayerDisplays.stream().map(d -> d.rtsPlayer).collect(Collectors.toCollection(ArrayList::new));
+        List<String> trackedPlayers = observerPlayerDisplays.stream().map(d -> d.playerName).collect(Collectors.toCollection(ArrayList::new));
         for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
-            if (!trackedPlayers.contains(rtsPlayer)) {// && !rtsPlayer.name.equals(MC.player.getName().getString())) {
+            if (!trackedPlayers.contains(rtsPlayer.name)) {
                 observerPlayerDisplays.add(new ObserverPlayerDisplay(rtsPlayer));
             }
         }
+        guiGraphics.fill(
+                blitX - BG_BORDER_WIDTH, blitY - BG_BORDER_WIDTH,
+                blitX + ObserverPlayerDisplay.DISPLAY_WIDTH + BG_BORDER_WIDTH,
+                (blitY + Button.DEFAULT_ICON_FRAME_SIZE + BG_BORDER_WIDTH) * observerPlayerDisplays.size(),
+                0x99000000
+        );
+
         for (ObserverPlayerDisplay playerDisplay : observerPlayerDisplays) {
-            hudZones.add(new RectZone(
-                blitX, blitY,
-                blitX + ObserverPlayerDisplay.DISPLAY_WIDTH,
-                blitY + Button.DEFAULT_ICON_FRAME_SIZE)
-            );
+            hudZones.add(playerDisplay.getRectZone(blitX, blitY, BG_BORDER_WIDTH));
             playerDisplay.render(guiGraphics, blitX, blitY);
             blitY += Button.DEFAULT_ICON_FRAME_SIZE;
         }
     }
 
     private static void renderDiplomacyPlayerDisplays(ScreenEvent.Render.Post evt) {
+        if (MC.level == null)
+            return;
+
         int screenWidth = MC.getWindow().getGuiScaledWidth();
 
-        int blitX = screenWidth / 2 - DiplomacyPlayerDisplay.DISPLAY_WIDTH / 2;
+        int blitX = (screenWidth / 2 - DiplomacyPlayerDisplay.DISPLAY_WIDTH / 2) + 10;
         int blitY = 37;
 
         GuiGraphics guiGraphics = evt.getGuiGraphics();
 
-        diplomacyPlayerDisplays.removeIf(r -> !PlayerClientEvents.rtsPlayers.contains(r.rtsPlayer));
+        rtsDiplomacyPlayerDisplays.removeIf(d -> !PlayerClientEvents.rtsPlayers.stream().map(rtsp -> rtsp.name).toList().contains(d.playerName));
+        fpvDiplomacyPlayerDisplays.removeIf(d -> !MC.level.players().stream().map(p -> p.getName().getString()).toList().contains(d.playerName));
 
-        List<RTSPlayer> trackedPlayers = diplomacyPlayerDisplays.stream().map(d -> d.rtsPlayer).collect(Collectors.toCollection(ArrayList::new));
-        for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
-            if (!trackedPlayers.contains(rtsPlayer) && MC.player != null && !rtsPlayer.name.equals(MC.player.getName().getString())) {
-                diplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(rtsPlayer));
+        List<String> trackedRtsPlayers = rtsDiplomacyPlayerDisplays.stream().map(d -> d.playerName).collect(Collectors.toCollection(ArrayList::new));
+        List<String> trackedFpvPlayers = fpvDiplomacyPlayerDisplays.stream().map(d -> d.playerName).collect(Collectors.toCollection(ArrayList::new));
+        for (AbstractClientPlayer player : MC.level.players()) {
+            if (player != MC.player) {
+                RTSPlayer rtsPlayer = PlayerClientEvents.getRTSPlayer(player.getName().getString());
+                if (rtsPlayer != null && !trackedRtsPlayers.contains(player.getName().getString()))
+                    rtsDiplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(rtsPlayer));
+                else if (rtsPlayer == null && !trackedFpvPlayers.contains(player.getName().getString()))
+                    fpvDiplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(player));
             }
         }
-        if (!diplomacyPlayerDisplays.isEmpty()) {
-            if (!shareUnitControlButton.isHidden.get()) {
-                shareUnitControlButton.render(guiGraphics, blitX, blitY, evt.getMouseX(), evt.getMouseY());
-                MyRenderer.renderFrameWithBg(
-                        guiGraphics,
-                        blitX + Button.DEFAULT_ICON_FRAME_SIZE,
-                        blitY,
-                        102 + (AlliancesClient.sharingAllyControl() ? 10 : 15),
-                        Button.DEFAULT_ICON_FRAME_SIZE,
-                        0xA0000000
-                );
-                guiGraphics.drawString(
-                        MC.font,
-                        "Shared Control: " + (AlliancesClient.sharingAllyControl() ? "ON" : "OFF"),
-                        blitX + (Button.DEFAULT_ICON_SIZE / 2) + 1 + Button.DEFAULT_ICON_FRAME_SIZE,
-                        blitY + (Button.DEFAULT_ICON_SIZE / 2) + 1,
-                        0xFFFFFF
-                );
-                blitY += (Button.DEFAULT_ICON_FRAME_SIZE * 1.5f);
-                renderedButtons.add(shareUnitControlButton);
-            }
-        }
-        for (DiplomacyPlayerDisplay playerDisplay : diplomacyPlayerDisplays) {
-            hudZones.add(new RectZone(
-                blitX, blitY,
-                blitX + DiplomacyPlayerDisplay.DISPLAY_WIDTH,
-                blitY + Button.DEFAULT_ICON_FRAME_SIZE)
+
+        boolean canShareUnitControl = !rtsDiplomacyPlayerDisplays.isEmpty() && !shareUnitControlButton.isHidden.get();
+        int x1 = blitX - BG_BORDER_WIDTH;
+        int y1 = blitY - BG_BORDER_WIDTH;
+        int x2 = blitX + DiplomacyPlayerDisplay.DISPLAY_WIDTH + BG_BORDER_WIDTH;
+        int y2 = blitY + ((Button.DEFAULT_ICON_FRAME_SIZE + BG_BORDER_WIDTH) *
+                        (rtsDiplomacyPlayerDisplays.size() + fpvDiplomacyPlayerDisplays.size() )) +
+                        (canShareUnitControl ? (int) (Button.DEFAULT_ICON_FRAME_SIZE * 1.5f) : 0);
+        guiGraphics.fill(x1, y1, x2, y2, 0x99000000);
+        hudZones.add(new RectZone(x1, y1, x2, y2));
+
+        if (!rtsDiplomacyPlayerDisplays.isEmpty() && !shareUnitControlButton.isHidden.get()) {
+            shareUnitControlButton.render(guiGraphics, blitX, blitY, evt.getMouseX(), evt.getMouseY());
+            MyRenderer.renderFrameWithBg(
+                    guiGraphics,
+                    blitX + Button.DEFAULT_ICON_FRAME_SIZE,
+                    blitY,
+                    102 + (AlliancesClient.sharingAllyControl() ? 10 : 15),
+                    Button.DEFAULT_ICON_FRAME_SIZE,
+                    0xA0000000
             );
+            guiGraphics.drawString(
+                    MC.font,
+                    "Shared Control: " + (AlliancesClient.sharingAllyControl() ? "ON" : "OFF"),
+                    blitX + (Button.DEFAULT_ICON_SIZE / 2) + 1 + Button.DEFAULT_ICON_FRAME_SIZE,
+                    blitY + (Button.DEFAULT_ICON_SIZE / 2) + 1,
+                    0xFFFFFF
+            );
+            blitY += (Button.DEFAULT_ICON_FRAME_SIZE * 1.5f);
+            renderedButtons.add(shareUnitControlButton);
+        }
+        for (DiplomacyPlayerDisplay playerDisplay : rtsDiplomacyPlayerDisplays) {
+            hudZones.add(playerDisplay.getRectZone(blitX, blitY, BG_BORDER_WIDTH));
+            renderedButtons.addAll(playerDisplay.render(guiGraphics, blitX, blitY, evt.getMouseX(), evt.getMouseY()));
+            blitY += Button.DEFAULT_ICON_FRAME_SIZE;
+        }
+        for (DiplomacyPlayerDisplay playerDisplay : fpvDiplomacyPlayerDisplays) {
+            hudZones.add(playerDisplay.getRectZone(blitX, blitY, BG_BORDER_WIDTH));
             renderedButtons.addAll(playerDisplay.render(guiGraphics, blitX, blitY, evt.getMouseX(), evt.getMouseY()));
             blitY += Button.DEFAULT_ICON_FRAME_SIZE;
         }

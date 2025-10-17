@@ -78,9 +78,4 @@ public class ArcaneTower extends ProductionBuilding {
     public BlockPos getIndoorSpawnPoint(ServerLevel level, BlockPos centrePos) {
         return super.getIndoorSpawnPoint(level, centrePos).offset(0,-10,0);
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.VILLAGERS;
-    }
 }

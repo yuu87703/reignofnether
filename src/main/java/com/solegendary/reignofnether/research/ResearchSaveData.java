@@ -48,7 +48,6 @@ public class ResearchSaveData extends SavedData {
                 }else {
                     String researchName = btag.getString("researchName");
                     researchKey = translateOldData(researchName);
-//                    researchKey = new ResourceLocation(ReignOfNether.MOD_ID, researchName.toLowerCase().replace(' ', '_'));
                 }
                 data.researchItems.add(new Pair<>(ownerName, researchKey));
                 ReignOfNether.LOGGER.info("ResearchSaveData.load: " + ownerName + "|" + researchKey.toString());

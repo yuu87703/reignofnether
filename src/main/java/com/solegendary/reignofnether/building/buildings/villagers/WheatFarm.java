@@ -63,9 +63,4 @@ public class WheatFarm extends AbstractFarm {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.VILLAGERS;
-    }
 }

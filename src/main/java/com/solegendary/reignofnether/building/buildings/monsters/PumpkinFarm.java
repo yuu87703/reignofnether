@@ -64,9 +64,4 @@ public class PumpkinFarm extends AbstractFarm {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
-    }
 }

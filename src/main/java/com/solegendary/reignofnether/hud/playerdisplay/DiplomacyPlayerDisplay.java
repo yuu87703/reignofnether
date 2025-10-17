@@ -1,18 +1,21 @@
-package com.solegendary.reignofnether.hud;
+package com.solegendary.reignofnether.hud.playerdisplay;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AllianceAction;
 import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
+import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.Resources;
 import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.resources.ResourcesServerboundPacket;
-import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,10 +24,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,27 +32,40 @@ import java.util.List;
 public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
 
     private static final Minecraft MC = Minecraft.getInstance();
-    private final Resources resourcesToSend;
+    private Resources resourcesToSend = new Resources("", 0,0,0);
 
     public DiplomacyPlayerDisplay(RTSPlayer rtsPlayer) {
         super(rtsPlayer);
         resourcesToSend = new Resources(rtsPlayer.name,0,0,0);
     }
 
+    public DiplomacyPlayerDisplay(AbstractClientPlayer player) {
+        super(player);
+    }
+
     private static final int RESOURCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 2; // frame containing a resource value + icon
     private static final int ALLIANCE_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 4; // frame containing a resource value + icon
-    public static final int DISPLAY_WIDTH = PLAYER_FRAME_WIDTH + RESOURCE_FRAME_WIDTH * 4 + ALLIANCE_FRAME_WIDTH; // total width of a player display
+    public static final int DISPLAY_WIDTH = // total width of a player display
+            PLAYER_FRAME_WIDTH +
+            RESOURCE_FRAME_WIDTH * 4 +
+            (int) (Button.DEFAULT_ICON_FRAME_SIZE * 2.5f) +
+            ALLIANCE_FRAME_WIDTH;
+
 
     private boolean isAllied() {
-        return MC.player != null && AlliancesClient.isAllied(MC.player.getName().getString(), rtsPlayer.name);
+        return MC.player != null && AlliancesClient.isAllied(MC.player.getName().getString(), playerName);
+    }
+
+    protected boolean isRTSPlayer() {
+        return PlayerClientEvents.isRTSPlayer(playerName);
     }
 
     private boolean allianceRequested() {
-        return AlliancesClient.outboundPendingAlliances.contains(rtsPlayer.name);
+        return AlliancesClient.outboundPendingAlliances.contains(playerName);
     }
 
     private boolean allianceReceived() {
-        return AlliancesClient.inboundPendingAlliances.contains(rtsPlayer.name);
+        return AlliancesClient.inboundPendingAlliances.contains(playerName);
     }
 
     private Button renderTradeResources(GuiGraphics guiGraphics, ResourceName resourceName,
@@ -220,7 +232,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/crossed_swords.png"),
                 (Keybinding) null,
                 () -> false,
-                () -> true,
+                () -> false,
                 this::isAllied,
                 this::disbandAlliance,
                 null,
@@ -229,7 +241,8 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
 
         Button renderedButton;
         String allianceStatusStr;
-        int frameBgColour = 0xA0000000 | PlayerColors.getPlayerAllianceColorHex(rtsPlayer.name);
+        int frameBgColour = 0xA0000000 | PlayerColors.getPlayerAllianceColorHex(playerName);
+
         int frameWidth = 50;
 
         if (!isAllied() && !allianceRequested() && !allianceReceived()) {
@@ -252,7 +265,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
             disbandButton.render(guiGraphics, x, y, mouseX, mouseY);
             renderedButton = disbandButton;
             frameWidth = 41;
-            if (AlliancesClient.canControlAlly(rtsPlayer.name)) {
+            if (AlliancesClient.canControlAlly(playerName)) {
                 allianceStatusStr += " (s)";
                 frameWidth = 58;
             }
@@ -273,6 +286,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 0xFFFFFF
         );
         if (!isPlayerLoggedIn()) {
+            guiGraphics.pose().translate(0,0,1);
             guiGraphics.fill(
                     x + Button.DEFAULT_ICON_FRAME_SIZE,
                     y,
@@ -282,26 +296,6 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
             );
         }
         return renderedButton;
-    }
-
-    // render and return all relevant buttons
-    public ArrayList<Button> render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-
-        int x0 = x;
-        super.render(guiGraphics, x, y);
-        ArrayList<Button> renderedButtons = new ArrayList<>();
-        x += PLAYER_FRAME_WIDTH;
-        renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.FOOD, x, y, mouseX, mouseY));
-        x += RESOURCE_FRAME_WIDTH + Button.DEFAULT_ICON_FRAME_SIZE;
-        renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.WOOD, x, y, mouseX, mouseY));
-        x += RESOURCE_FRAME_WIDTH + Button.DEFAULT_ICON_FRAME_SIZE;
-        renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.ORE, x, y, mouseX, mouseY));
-        x += RESOURCE_FRAME_WIDTH + (Button.DEFAULT_ICON_FRAME_SIZE * 1.25f);
-        renderedButtons.addAll(this.renderTradeConfirms(guiGraphics, x, y, mouseX, mouseY));
-        x += (Button.DEFAULT_ICON_FRAME_SIZE * 2.25f);
-        renderedButtons.add(this.renderAllianceButton(guiGraphics, x, y, mouseX, mouseY));
-
-        return renderedButtons;
     }
 
     private void sendResources() {
@@ -318,20 +312,69 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
     }
 
     private void requestAlliance() {
-        AllianceServerboundPacket.doAllianceAction(AllianceAction.REQUEST, rtsPlayer.name);
-        AlliancesClient.outboundPendingAlliances.add(rtsPlayer.name);
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.REQUEST, playerName);
+        AlliancesClient.outboundPendingAlliances.add(playerName);
     }
 
     private void cancelAllianceRequest() {
-        AllianceServerboundPacket.doAllianceAction(AllianceAction.CANCEL_REQUEST, rtsPlayer.name);
-        AlliancesClient.outboundPendingAlliances.removeIf(p -> p.equals(rtsPlayer.name));
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.CANCEL_REQUEST, playerName);
+        AlliancesClient.outboundPendingAlliances.removeIf(p -> p.equals(playerName));
     }
 
     private void acceptAllianceRequest() {
-        AllianceServerboundPacket.doAllianceAction(AllianceAction.ACCEPT_REQUEST, rtsPlayer.name);
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.ACCEPT_REQUEST, playerName);
     }
 
     private void disbandAlliance() {
-        AllianceServerboundPacket.doAllianceAction(AllianceAction.DISBAND, rtsPlayer.name);
+        AllianceServerboundPacket.doAllianceAction(AllianceAction.DISBAND, playerName);
+    }
+
+    private final Button gotoFpvPlayerButton = new Button(
+            "Go to player",
+            Button.DEFAULT_ICON_SIZE,
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/map.png"),
+            (Keybinding) null,
+            () -> false,
+            () -> false,
+            this::isAllied,
+            () -> {
+                if (this.player != null)
+                    OrthoviewClientEvents.centreCameraOnPos(this.player.position());
+            },
+            null,
+            List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.goto_player"), Style.EMPTY))
+    );
+
+    // render and return all relevant buttons
+    public ArrayList<Button> render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+        super.render(guiGraphics, x, y);
+        ArrayList<Button> renderedButtons = new ArrayList<>();
+        x += PLAYER_FRAME_WIDTH;
+
+        if (isRTSPlayer()) {
+            renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.FOOD, x, y, mouseX, mouseY));
+            x += RESOURCE_FRAME_WIDTH + Button.DEFAULT_ICON_FRAME_SIZE;
+            renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.WOOD, x, y, mouseX, mouseY));
+            x += RESOURCE_FRAME_WIDTH + Button.DEFAULT_ICON_FRAME_SIZE;
+            renderedButtons.add(this.renderTradeResources(guiGraphics, ResourceName.ORE, x, y, mouseX, mouseY));
+            x += RESOURCE_FRAME_WIDTH + (Button.DEFAULT_ICON_FRAME_SIZE * 1.25f);
+            renderedButtons.addAll(this.renderTradeConfirms(guiGraphics, x, y, mouseX, mouseY));
+            x += (Button.DEFAULT_ICON_FRAME_SIZE * 2.25f);
+        } else {
+            gotoFpvPlayerButton.render(guiGraphics, x, y, mouseX, mouseY);
+            renderedButtons.add(gotoFpvPlayerButton);
+            x += (Button.DEFAULT_ICON_FRAME_SIZE * 1.25f);
+        }
+        renderedButtons.add(this.renderAllianceButton(guiGraphics, x, y, mouseX, mouseY));
+        return renderedButtons;
+    }
+
+    @Override
+    public RectZone getRectZone(int blitX, int blitY, int borderWidth) {
+        return new RectZone(
+                blitX - borderWidth, blitY - borderWidth,
+                blitX + DISPLAY_WIDTH + borderWidth,
+                blitY + Button.DEFAULT_ICON_FRAME_SIZE + borderWidth
+        );
     }
 }

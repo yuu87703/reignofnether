@@ -50,9 +50,6 @@ Bugfixes
 Quality of Life Features
 ------------------------
 
-[❌] players starting at the same colour of RTS Start Blocks are automatically allied at the start of a match
-    - including a tooltip showing who will be on your own team
-
 [❌] Handicap command
     - Makes all resource costs some % higher than normal
 
@@ -61,8 +58,6 @@ Quality of Life Features
     - Start/complete research
     - Created unit
     - Used ability
-
-[❌] Colours for different players (with toggle under map options for ally/enemy)
 
 [❌] Command block commands for mapmakers
     - Set unit owner (by id, by area, by type?)
@@ -77,15 +72,4 @@ Quality of Life Features
 
 
 
-Balancing
----------
-
-[❌] Soulfires created by blazes need to be made temporary
-
-
-
-
-MOHIST
-------
-Mohist servers causes workers to not move while far away
 

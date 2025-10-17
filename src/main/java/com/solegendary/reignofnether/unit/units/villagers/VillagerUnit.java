@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingPlaceButton;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -75,12 +76,21 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         ABILITIES.add(new CallToArmsUnit(), Keybindings.keyQ);
     }
 
+    //region
+    @Override
+    public void updateAbilityButtons() {
+        abilities = ABILITIES.clone();
+    }
     Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
+    @Override public Object2ObjectArrayMap<Ability, Float> getCooldowns() { return cooldowns; }
+    @Override public boolean hasAutocast(Ability ability) { return autocast == ability; }
+    @Override public void setAutocast(Ability autocast) { this.autocast = autocast; }
+    @Override public Object2ObjectArrayMap<Ability, Integer> getCharges() { return charges; }
 
     Ability autocast;
 
-    // region
+
     private int eatingTicksLeft = 0;
     public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
     public int getEatingTicksLeft() { return eatingTicksLeft; }
@@ -299,21 +309,22 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     }
 
     public static List<BuildingPlaceButton> getBuildingButtons() {
-        List<BuildingPlaceButton> buildingButtons = new ArrayList<>();
-
-        List<Keybinding> keybindings = BuildingUtils.keybindings;
-        int index = 0;
-
-        for (Building building : ReignOfNetherRegistries.BUILDING) {
-            if (building.isBuildableBuildingForFaction(Faction.VILLAGERS)) {
-                BuildingPlaceButton button = building.getBuildButton(index >= keybindings.size() ? null : keybindings.get(index));
-                if (button != null) {
-                    buildingButtons.add(button);
-                    index++;
-                }
-            }
-        }
-        return buildingButtons;
+        return List.of(
+                Buildings.TOWN_CENTRE.getBuildButton(Keybindings.keyQ),
+                Buildings.OAK_STOCKPILE.getBuildButton(Keybindings.keyW),
+                Buildings.VILLAGER_HOUSE.getBuildButton(Keybindings.keyE),
+                Buildings.WHEAT_FARM.getBuildButton(Keybindings.keyR),
+                Buildings.WATCHTOWER.getBuildButton(Keybindings.keyT),
+                Buildings.BARRACKS.getBuildButton(Keybindings.keyY),
+                Buildings.BLACKSMITH.getBuildButton(Keybindings.keyU),
+                Buildings.ARCANE_TOWER.getBuildButton(Keybindings.keyI),
+                Buildings.LIBRARY.getBuildButton(Keybindings.keyO),
+                Buildings.CASTLE.getBuildButton(Keybindings.keyP),
+                Buildings.SHRINE_OF_PROSPERITY.getBuildButton(Keybindings.keyF),
+                Buildings.IRON_GOLEM_BUILDING.getBuildButton(Keybindings.keyL),
+                Buildings.OAK_BRIDGE.getBuildButton(Keybindings.keyC),
+                Buildings.BEACON.getBuildButton(null)
+        );
     }
 
     public VillagerUnit(EntityType<? extends Vindicator> entityType, Level level) {
@@ -513,31 +524,9 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         return this.getUnitProfession() != VillagerUnitProfession.NONE;
     }
 
-    @Override
-    public void updateAbilityButtons() {
-        this.abilities = ABILITIES.clone();
-        autocast = ABILITIES.getDefaultAutocast();
-    }
 
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
 
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
 
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
-    }
 
     @Override
     public List<Button> getAbilityButtons() {

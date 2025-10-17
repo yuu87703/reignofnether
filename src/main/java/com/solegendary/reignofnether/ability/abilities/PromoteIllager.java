@@ -40,8 +40,6 @@ public class PromoteIllager extends Ability {
     private static final int RANGE = 20;
     private static final int BUFF_RANGE = 10;
 
-    LivingEntity promotedIllager = null;
-
     public PromoteIllager() {
         super(UnitAction.PROMOTE_ILLAGER, CD_MAX, RANGE, 0, true, true);
         this.defaultHotkey = Keybindings.keyW;
@@ -107,6 +105,10 @@ public class PromoteIllager extends Ability {
 
     @Override
     public void use(Level level, BuildingPlacement buildingUsing, LivingEntity targetEntity) {
+        if (!(buildingUsing instanceof CastlePlacement))
+            return;
+        CastlePlacement castle = (CastlePlacement) buildingUsing;
+
         Vec3 pos = targetEntity.getEyePosition();
         if (buildingUsing.centrePos.distToCenterSqr(pos.x, pos.y, pos.z) > RANGE * RANGE) {
             if (level.isClientSide()) {
@@ -130,16 +132,16 @@ public class PromoteIllager extends Ability {
                 return;
             }
             // only once promotedIllager allowed at a time
-            if (promotedIllager != null && promotedIllager.isAlive()
-                && promotedIllager.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BannerItem) {
-                promotedIllager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.AIR));
+            if (castle.promotedIllager != null && castle.promotedIllager.isAlive() &&
+                castle.promotedIllager.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BannerItem) {
+                castle.promotedIllager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.AIR));
             }
-            promotedIllager = targetEntity;
-            promotedIllager.setItemSlot(EquipmentSlot.HEAD, Raid.getLeaderBannerInstance());
+            castle.promotedIllager = targetEntity;
+            castle.promotedIllager.setItemSlot(EquipmentSlot.HEAD, Raid.getLeaderBannerInstance());
 
             // spawn a firework
             if (!level.isClientSide()) {
-                MiscUtil.shootFirework(level, promotedIllager.getEyePosition());
+                MiscUtil.shootFirework(level, castle.promotedIllager.getEyePosition());
             }
             this.setToMaxCooldown(buildingUsing);
         } else {

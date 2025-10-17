@@ -76,8 +76,6 @@ public class Ability {
 
     public boolean isCasting(Unit unit) { return false; }
 
-    public boolean isChanneling(Unit unit) { return false; }
-
     public float getCooldown(Unit unit) { return unit.getCooldown(this); }
     public float getCooldown(BuildingPlacement placement) { return placement.getCooldown(this); }
 

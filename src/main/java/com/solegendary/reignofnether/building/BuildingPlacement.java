@@ -134,8 +134,8 @@ public class BuildingPlacement {
 
     public boolean selfBuilding = false; // if set to true, will build itself quickly without workers (but not repair)
 
-    protected List<AbilityButton> abilityButtons;
-    protected List<Ability> abilities;
+    protected List<AbilityButton> abilityButtons = new ArrayList<>();
+    protected List<Ability> abilities = new ArrayList<>();
 
     Object2ObjectArrayMap<Ability, Float> cooldowns = new Object2ObjectArrayMap<>();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
@@ -217,7 +217,9 @@ public class BuildingPlacement {
             }
             FogOfWarClientboundPacket.revealOrHidePlayer(false, this.ownerName);
         }
-
+        for (Ability ability : building.abilities.get()) {
+            getAbilities().add(ability);
+        }
         updateButtons();
     }
 

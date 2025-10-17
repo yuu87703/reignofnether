@@ -66,9 +66,4 @@ public abstract class AbstractPortal extends ProductionBuilding {
     public boolean isTypeOf(Building building) {
         return super.isTypeOf(building) || building == Buildings.PORTAL_BASIC;
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.PIGLINS;
-    }
 }

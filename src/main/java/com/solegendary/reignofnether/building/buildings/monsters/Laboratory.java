@@ -52,8 +52,7 @@ public class Laboratory extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.SPRUCE_PLANKS);
         this.startingBlockTypes.add(Blocks.BLACKSTONE);
 
-        Ability callLightning = new CallLightning();
-        this.abilities.add(callLightning, Keybindings.keyL);
+        this.abilities.add(new CallLightning(), Keybindings.keyL);
 
         this.productions.add(ProductionItems.RESEARCH_HUSKS, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_DROWNED, Keybindings.keyW);
@@ -118,10 +117,5 @@ public class Laboratory extends ProductionBuilding {
             ),
                 this
         );
-    }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
     }
 }

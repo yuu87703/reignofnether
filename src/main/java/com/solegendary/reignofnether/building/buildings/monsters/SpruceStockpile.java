@@ -54,9 +54,4 @@ public class SpruceStockpile extends AbstractStockpile {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
-    }
 }

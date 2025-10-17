@@ -101,9 +101,7 @@ public class AbilityClientboundPacket {
                     }
                     else if (this.unitAction == UnitAction.SOUL_SIPHON_UPDATE) {
                         if (unit instanceof NecromancerUnit necromancer) {
-                            SoulSiphonPassive soulSiphon = necromancer.getSoulSiphon();
-                            if (soulSiphon != null)
-                                soulSiphon.souls = (int) value;
+                            necromancer.souls = (int) value;
                             necromancer.updateAbilityButtons();
                         }
                     }

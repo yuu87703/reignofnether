@@ -95,9 +95,4 @@ public class Mausoleum extends ProductionBuilding {
             this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
-    }
 }

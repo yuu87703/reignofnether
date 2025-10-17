@@ -26,7 +26,6 @@ public class Sacrifice extends Ability {
 
     private static final int CD_MAX = 0;
     private static final int RANGE = 8;
-    private String autoSacrificeUnitType = "";
 
     public Sacrifice() {
         super(UnitAction.SACRIFICE, CD_MAX, RANGE, 0, true, true);
@@ -54,13 +53,21 @@ public class Sacrifice extends Ability {
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sacrifice.tooltip2"), Style.EMPTY),
                     FormattedCharSequence.forward("", Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"), Style.EMPTY),
-                    !autoSacrificeUnitType.isBlank() && isAutocasting(placement) ?
-                            FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sacrifice.tooltip4", autoSacrificeUnitType), Style.EMPTY) :
-                            FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sacrifice.tooltip3"), Style.EMPTY)
+                    getAutoSacrificeTooltip(placement)
             ),
             this,
             placement
         );
+    }
+
+    private FormattedCharSequence getAutoSacrificeTooltip(BuildingPlacement placement) {
+        String unitType = "";
+        if (placement instanceof SculkCatalystPlacement sculkCat)
+            unitType = sculkCat.autoSacrificeUnitType;
+
+        return !unitType.isBlank() && isAutocasting(placement) ?
+                FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sacrifice.tooltip4", unitType), Style.EMPTY) :
+                FormattedCharSequence.forward(I18n.get("abilities.reignofnether.sacrifice.tooltip3"), Style.EMPTY);
     }
 
     public boolean isValidTarget(Level level, BuildingPlacement buildingUsing, LivingEntity targetEntity) {
@@ -84,14 +91,16 @@ public class Sacrifice extends Ability {
 
     @Override
     public void use(Level level, BuildingPlacement buildingUsing, LivingEntity targetEntity) {
+        if (!(buildingUsing instanceof SculkCatalystPlacement sculkCat))
+            return;
+
         if (targetEntity instanceof Unit && isAutocasting(buildingUsing)) {
-            autoSacrificeUnitType = getGenericName(targetEntity);
+            sculkCat.autoSacrificeUnitType = getGenericName(targetEntity);
             if (level.isClientSide())
-                HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.sacrifice.set_autocast_target", autoSacrificeUnitType));
+                HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.sacrifice.set_autocast_target", sculkCat.autoSacrificeUnitType));
             return;
         }
-        if (!level.isClientSide() && buildingUsing instanceof SculkCatalystPlacement &&
-                isValidTarget(level, buildingUsing, targetEntity)) {
+        if (!level.isClientSide() && isValidTarget(level, buildingUsing, targetEntity)) {
             targetEntity.kill();
         } else if (level.isClientSide()) {
             if (!(
@@ -111,9 +120,12 @@ public class Sacrifice extends Ability {
     }
 
     public void autoSacrifice(BuildingPlacement buildingUsing) {
+        if (!(buildingUsing instanceof SculkCatalystPlacement))
+            return;
+
         List<LivingEntity> entities = MiscUtil.getEntitiesWithinRange(Vec3.atCenterOf(buildingUsing.centrePos), range, LivingEntity.class, buildingUsing.level);
         for (LivingEntity le : entities) {
-            if (le instanceof Unit && getGenericName(le).equals(autoSacrificeUnitType)) {
+            if (le instanceof Unit && getGenericName(le).equals(((SculkCatalystPlacement) buildingUsing).autoSacrificeUnitType)) {
                 le.kill();
                 return;
             }

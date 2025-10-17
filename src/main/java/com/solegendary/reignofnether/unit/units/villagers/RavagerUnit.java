@@ -58,12 +58,21 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
         ABILITIES.add(new Eject(), Keybindings.keyW);
     }
 
+    //region
+    @Override
+    public void updateAbilityButtons() {
+        abilities = ABILITIES.clone();
+    }
     Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
+    @Override public Object2ObjectArrayMap<Ability, Float> getCooldowns() { return cooldowns; }
+    @Override public boolean hasAutocast(Ability ability) { return autocast == ability; }
+    @Override public void setAutocast(Ability autocast) { this.autocast = autocast; }
+    @Override public Object2ObjectArrayMap<Ability, Integer> getCharges() { return charges; }
 
     Ability autocast;
 
-    // region
+
     private int eatingTicksLeft = 0;
     public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
     public int getEatingTicksLeft() { return eatingTicksLeft; }
@@ -154,7 +163,6 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
     private AbstractMeleeAttackUnitGoal attackGoal;
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
@@ -313,29 +321,7 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
         }
     }
 
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.clone();
-        autocast = ABILITIES.getDefaultAutocast();
-    }
 
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
 
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
 
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
-    }
 }

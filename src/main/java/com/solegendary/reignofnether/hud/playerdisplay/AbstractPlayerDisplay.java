@@ -1,49 +1,52 @@
-package com.solegendary.reignofnether.hud;
+package com.solegendary.reignofnether.hud.playerdisplay;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.RTSPlayer;
-import com.solegendary.reignofnether.resources.ResourceName;
-import com.solegendary.reignofnether.resources.Resources;
-import com.solegendary.reignofnether.resources.ResourcesClientEvents;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 public abstract class AbstractPlayerDisplay {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
-    public final RTSPlayer rtsPlayer;
-    public final AbstractClientPlayer player;
+    public final String playerName;
+    public final Faction faction;
+    public final @Nullable AbstractClientPlayer player;
 
     private int color;
     private int backgroundColor;
 
     public AbstractPlayerDisplay(RTSPlayer rtsPlayer) {
-        this.rtsPlayer = rtsPlayer;
         var server = MC.getCurrentServer();
         if (server != null) {
-            this.player = MC.level.players().stream().filter(p -> p.getName().getString().equals(this.rtsPlayer.name)).findFirst().orElse(null);
-        } else if (MC.player.getName().getString().equals(this.rtsPlayer.name)) {
+            this.player = MC.level.players().stream().filter(p -> p.getName().getString().equals(rtsPlayer.name)).findFirst().orElse(null);
+        } else if (MC.player.getName().getString().equals(rtsPlayer.name)) {
             this.player = MC.player;
         } else {
             this.player = null;
         }
+        this.faction = rtsPlayer.faction;
+        this.playerName = rtsPlayer.name;
+    }
+
+    // survival/adventure player
+    public AbstractPlayerDisplay(AbstractClientPlayer clientPlayer) {
+        this.player = clientPlayer;
+        this.playerName = clientPlayer.getName().getString();
+        this.faction = Faction.NONE;
     }
 
     public boolean isPlayerLoggedIn() {
-        return MC.getConnection() != null && MC.getConnection().getPlayerInfo(rtsPlayer.name) != null;
+        return MC.getConnection() != null && MC.getConnection().getPlayerInfo(playerName) != null;
     }
 
     public static final int PLAYER_FRAME_WIDTH = Button.DEFAULT_ICON_FRAME_SIZE * 6; // frame containing player name + player icon + race icon
@@ -64,7 +67,7 @@ public abstract class AbstractPlayerDisplay {
         );
         // render faction icon
         ResourceLocation factionIcon;
-        switch (this.rtsPlayer.faction) {
+        switch (this.faction) {
             case VILLAGERS -> factionIcon = factionVillagerIconLocation;
             case MONSTERS -> factionIcon = factionMonsterIconLocation;
             case PIGLINS -> factionIcon = factionPiglinIconLocation;
@@ -113,12 +116,13 @@ public abstract class AbstractPlayerDisplay {
         // render player name
         guiGraphics.drawString(
                 MC.font,
-                this.rtsPlayer.name,
+                this.playerName,
                 x + (Button.DEFAULT_ICON_FRAME_SIZE * 2),
                 y + (Button.DEFAULT_ICON_SIZE / 2) + 1,
                 0xFFFFFF
         );
         if (!isPlayerLoggedIn()) {
+            guiGraphics.pose().translate(0,0,1);
             guiGraphics.fill(
                     x, y,
                     x + PLAYER_FRAME_WIDTH,
@@ -129,9 +133,16 @@ public abstract class AbstractPlayerDisplay {
     }
 
     public void render(GuiGraphics guiGraphics, int x, int y) {
-        int playerColorHex = PlayerColors.getPlayerColorHex(this.rtsPlayer.name);
+        int playerColorHex = PlayerColors.getPlayerColorHex(this.playerName);
         this.color = 0xFF000000 | playerColorHex;
         this.backgroundColor = 0xA0000000 | playerColorHex;
+        if (this instanceof DiplomacyPlayerDisplay dpd && !dpd.isRTSPlayer())
+            this.backgroundColor = 0x99000000;
         this.renderPlayer(guiGraphics, x, y);
     }
+
+    public RectZone getRectZone(int blitX, int blitY, int borderWidth) {
+        return new RectZone(blitX, blitY, blitX, blitY);
+    }
+
 }

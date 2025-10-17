@@ -1,6 +1,5 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
-import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.EnchantAbility;
 import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.building.Building;
@@ -19,17 +18,6 @@ public class LibraryPlacement extends ProductionPlacement {
     public EnchantAbility autoCastEnchant = null;
     public LibraryPlacement(Building building, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(building, level, originPos, rotation, ownerName, blocks, isCapitol);
-
-        Ability enchantMaiming = new EnchantMaiming();
-        getAbilities().add(enchantMaiming);
-        Ability enchantQuickCharge = new EnchantQuickCharge();
-        getAbilities().add(enchantQuickCharge);
-        Ability enchantSharpness = new EnchantSharpness();
-        getAbilities().add(enchantSharpness);
-        Ability enchantMultishot = new EnchantMultishot();
-        getAbilities().add(enchantMultishot);
-        Ability enchantVigor = new EnchantVigor();
-        getAbilities().add(enchantVigor);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.monster.InsomniaCurse
 import com.solegendary.reignofnether.ability.heroAbilities.monster.RaiseDead;
 import com.solegendary.reignofnether.ability.heroAbilities.monster.SoulSiphonPassive;
 import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.entities.NecromancerProjectile;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -45,9 +46,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -67,13 +65,27 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         ABILITIES.add(new BloodMoon());
     }
 
+    @Override
+    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
+        return heroAbilityRanks;
+    }
+
+    //region
+    @Override
+    public void updateAbilityButtons() {
+        abilities = ABILITIES.clone();
+    }
     Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
+    @Override public Object2ObjectArrayMap<Ability, Float> getCooldowns() { return cooldowns; }
+    @Override public boolean hasAutocast(Ability ability) { return autocast == ability; }
+    @Override public void setAutocast(Ability autocast) { this.autocast = autocast; }
+    @Override public Object2ObjectArrayMap<Ability, Integer> getCharges() { return charges; }
     Object2ObjectArrayMap<HeroAbility, Integer> heroAbilityRanks = new Object2ObjectArrayMap<>();
 
     Ability autocast;
 
-    // region
+
     private int eatingTicksLeft = 0;
     public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
     public int getEatingTicksLeft() { return eatingTicksLeft; }
@@ -209,6 +221,8 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
     public int maxResources = 100;
+
+    public int souls = 0;
 
     @Override public float getHealthBonusPerLevel() { return maxHealthBonusPerLevel; };
     @Override public float getAttackBonusPerLevel() { return attackBonusPerLevel; };
@@ -429,24 +443,16 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     // override to make inaccuracy 0
     @Override
     public void performUnitRangedAttack(LivingEntity pTarget, float velocity) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this,
-                (item) -> item instanceof BowItem
-        )));
-        AbstractArrow abstractarrow = this.getArrow(itemstack, velocity);
-        if (this.getMainHandItem().getItem() instanceof BowItem) {
-            abstractarrow = ((BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrow);
-        }
-        double d0 = pTarget.getX() - this.getX();
-        double d1 = pTarget.getY(0.3333333333333333) - abstractarrow.getY();
-        double d2 = pTarget.getZ() - this.getZ();
-        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 
-        if (pTarget.getEyeHeight() <= 1.0f)
-            d1 -= (1.0f - pTarget.getEyeHeight());
+        double x = pTarget.getX() - this.getX();
+        double y = pTarget.getY(0.5) - this.getY(0.5);
+        double z = pTarget.getZ() - this.getZ();
+        NecromancerProjectile proj = new NecromancerProjectile(this.level(), this, x, y, z);
+        proj.setPos(this.getEyePosition());
 
-        abstractarrow.shoot(d0, d1 + d3 * 0.20000000298023224, d2, 1.6F, 0);
+        level().addFreshEntity(proj);
+
         this.playSound(SoundEvents.SHULKER_SHOOT, 3.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level().addFreshEntity(abstractarrow);
 
         if (!level().isClientSide() && pTarget instanceof Unit unit)
             FogOfWarClientboundPacket.revealRangedUnit(unit.getOwnerName(), this.getId());
@@ -560,36 +566,5 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
 
         TimeServerEvents.startBloodMoon(BloodMoon.DURATION + bonusDuration, this, bpl.centrePos);
         AbilityClientboundPacket.doAbility(this.getId(), UnitAction.BLOOD_MOON, BloodMoon.DURATION + bonusDuration);
-    }
-
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.clone();
-        autocast = ABILITIES.getDefaultAutocast();
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
-
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
-
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
-        return heroAbilityRanks;
     }
 }

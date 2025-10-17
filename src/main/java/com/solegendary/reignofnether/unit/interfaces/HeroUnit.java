@@ -199,7 +199,6 @@ public interface HeroUnit extends Unit {
 
     // call from readAdditionalSaveData
     default void readHeroUnitSaveData(@NotNull CompoundTag pCompound) {
-        LivingEntity le = (LivingEntity) this;
         setExperience(pCompound.getInt("experience"));
         setSkillPoints(pCompound.getInt("skillPoints"));
         setChargesFromSaveData(pCompound.getInt("charges"));
@@ -209,22 +208,18 @@ public interface HeroUnit extends Unit {
         List<HeroAbility> abls = getHeroAbilities();
         if (abls.size() > 0) {
             setHeroAbilityRank(abls.get(0), pCompound.getInt("ability1Rank"));
-            //HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability1Rank, 0);
         }
         if (abls.size() > 1) {
             setHeroAbilityRank(abls.get(1), pCompound.getInt("ability2Rank"));
-            //HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability2Rank, 1);
         }
         if (abls.size() > 2) {
             setHeroAbilityRank(abls.get(2), pCompound.getInt("ability3Rank"));
-            //HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability3Rank, 2);
         }
         if (abls.size() > 3) {
             setHeroAbilityRank(abls.get(3), pCompound.getInt("ability4Rank"));
-            //HeroClientboundPacket.setAbilityRank(entity.getId(), shu.ability4Rank, 3);
         }
         for (HeroAbility abl : abls)
-            abl.updateStatsForRank();
+            abl.updateStatsForRank(this);
     }
 
     default void activateAbilityClientside(int abilityIndex) { }

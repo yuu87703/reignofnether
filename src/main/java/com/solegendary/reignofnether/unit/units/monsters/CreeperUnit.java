@@ -3,8 +3,6 @@ package com.solegendary.reignofnether.unit.units.monsters;
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Explode;
-import com.solegendary.reignofnether.hud.AbilityButton;
-import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -49,11 +47,20 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
         ABILITIES.add(new Explode());
     }
 
+    //region
+    @Override
+    public void updateAbilityButtons() {
+        abilities = ABILITIES.clone();
+    }
     Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
+    @Override public Object2ObjectArrayMap<Ability, Float> getCooldowns() { return cooldowns; }
+    @Override public boolean hasAutocast(Ability ability) { return autocast == ability; }
+    @Override public void setAutocast(Ability autocast) { this.autocast = autocast; }
+    @Override public Object2ObjectArrayMap<Ability, Integer> getCharges() { return charges; }
 
     Ability autocast;
-    // region
+
     private int eatingTicksLeft = 0;
     public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
     public int getEatingTicksLeft() { return eatingTicksLeft; }
@@ -148,7 +155,6 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
 
     private MeleeAttackBuildingGoal attackBuildingGoal;
 
-    private List<AbilityButton> abilityButtons = new ArrayList<>();
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
@@ -159,9 +165,6 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
 
         Explode explodeAbility = new Explode();
         this.abilities.add(explodeAbility);
-
-        if (level.isClientSide())
-            this.abilityButtons.add(explodeAbility.getButton(Keybindings.keyQ, this));
     }
 
     @Override
@@ -254,31 +257,9 @@ public class CreeperUnit extends Creeper implements Unit, AttackerUnit {
         forceSwelling = true;
     }
 
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.clone();
-        autocast = ABILITIES.getDefaultAutocast();
-    }
 
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
 
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
 
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
-    }
 
     @Override
     public void thunderHit(ServerLevel pLevel, LightningBolt pLightning) {

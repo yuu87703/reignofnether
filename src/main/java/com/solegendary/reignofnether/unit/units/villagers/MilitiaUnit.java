@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.AbilityButton;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -64,13 +65,24 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
     public static final Abilities ABILITIES = new Abilities();
     static {
         ABILITIES.add(new BackToWorkUnit(), Keybindings.build);
+        ABILITIES.add(new WeaponSwapBow(), Keybindings.keyQ);
+        ABILITIES.add(new WeaponSwapSword(), Keybindings.keyQ);
     }
 
+    //region
+    @Override
+    public void updateAbilityButtons() {
+        abilities = ABILITIES.clone();
+    }
     Object2ObjectArrayMap<Ability, Float> cooldowns = Unit.createCooldownMap();
     Object2ObjectArrayMap<Ability, Integer> charges = new Object2ObjectArrayMap<>();
+    @Override public Object2ObjectArrayMap<Ability, Float> getCooldowns() { return cooldowns; }
+    @Override public boolean hasAutocast(Ability ability) { return autocast == ability; }
+    @Override public void setAutocast(Ability autocast) { this.autocast = autocast; }
+    @Override public Object2ObjectArrayMap<Ability, Integer> getCharges() { return charges; }
 
     Ability autocast;
-    // region
+
     private int eatingTicksLeft = 0;
     public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
     public int getEatingTicksLeft() { return eatingTicksLeft; }
@@ -181,15 +193,11 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
 
     public boolean isCaptain = false;
 
-    private List<AbilityButton> abilityButtons;
-    private Abilities abilities;
+    private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public MilitiaUnit(EntityType<? extends Vindicator> entityType, Level level) {
         super(entityType, level);
-        this.abilities.add(new BackToWorkUnit());
-        this.abilities.add(new WeaponSwapBow());
-        this.abilities.add(new WeaponSwapSword());
         updateAbilityButtons();
     }
 
@@ -429,31 +437,9 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
         this.entityData.set(VILLAGER_DATA, p_35437_);
     }
 
-    @Override
-    public void updateAbilityButtons() {
-        abilities = ABILITIES.clone();
-        autocast = ABILITIES.getDefaultAutocast();
-    }
 
-    @Override
-    public Object2ObjectArrayMap<Ability, Float> getCooldowns() {
-        return cooldowns;
-    }
 
-    @Override
-    public boolean hasAutocast(Ability ability) {
-        return autocast == ability;
-    }
 
-    @Override
-    public void setAutocast(Ability autocast) {
-        this.autocast = autocast;
-    }
-
-    @Override
-    public Object2ObjectArrayMap<Ability, Integer> getCharges() {
-        return charges;
-    }
 
     static {
         VILLAGER_DATA = SynchedEntityData.defineId(Villager.class, EntityDataSerializers.VILLAGER_DATA);

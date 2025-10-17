@@ -78,11 +78,6 @@ public class CapturableBeacon extends Beacon {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return false;
-    }
 }
 
 

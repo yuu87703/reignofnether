@@ -1139,6 +1139,7 @@
     "alliance.reignofnether.sent_request": "\nAlliance request sent to %s.\n",
     "alliance.reignofnether.ally_self": "\nYou can't ally with yourself!\n",
     "alliance.reignofnether.ally_confirm": "\n%s wants to ally with you. Accept in the Diplomacy menu.\n",
+    "alliance.reignofnether.ally_confirm_survival": "\n%s wants to ally with you. Accept with /allyconfirm %s.\n",
     "alliance.reignofnether.now_allied": "\nYou are now allied with %s.\n",
     "alliance.reignofnether.ally_accepted": "\n%s has accepted your alliance request.\n",
     "alliance.reignofnether.ally_request_cancelled_self": "\nRetracted alliance request to %s.\n",
@@ -1282,6 +1283,7 @@
     "alliances.reignofnether.tooltip.cancel_request_alliance": "Cancel Request",
     "alliances.reignofnether.tooltip.accept_alliance": "Accept Alliance",
     "alliances.reignofnether.tooltip.disband_alliance": "Disband Alliance",
+    "alliances.reignofnether.tooltip.goto_player": "Go to player",
 
     "alliances.reignofnether.tooltip.toggle_observer_player_displays": "Observer Menu (Z)",
     "alliances.reignofnether.tooltip.toggle_diplomacy_player_displays": "Diplomacy Menu (Z)",

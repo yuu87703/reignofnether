@@ -81,9 +81,4 @@ public class FlameSanctuary extends ProductionBuilding {
             this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.PIGLINS;
-    }
 }

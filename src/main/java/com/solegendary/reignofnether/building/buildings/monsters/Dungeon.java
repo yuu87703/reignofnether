@@ -81,9 +81,4 @@ public class Dungeon extends ProductionBuilding {
     public BlockPos getIndoorSpawnPoint(ServerLevel level, BlockPos centerPos) {
         return super.getIndoorSpawnPoint(level, centerPos).offset(-1,0,0);
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
-    }
 }

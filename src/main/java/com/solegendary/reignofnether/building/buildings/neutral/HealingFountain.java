@@ -70,9 +70,4 @@ public class HealingFountain extends Building {
             this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return false;
-    }
 }

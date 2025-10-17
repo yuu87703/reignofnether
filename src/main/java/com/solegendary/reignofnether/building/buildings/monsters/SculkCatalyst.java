@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.building.buildings.monsters;
 
+import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Sacrifice;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
@@ -47,12 +48,7 @@ public class SculkCatalyst extends Building {
 
         this.startingBlockTypes.add(Blocks.POLISHED_BLACKSTONE);
 
-        Ability sacrifice = new Sacrifice();
-        this.abilities.add(sacrifice, Keybindings.keyQ);
-    }
-
-    public float getMagicDamageMult() {
-        return 0.5f;
+        this.abilities.add(new Sacrifice(), Keybindings.keyQ);
     }
 
     public Faction getFaction() {
@@ -100,10 +96,5 @@ public class SculkCatalyst extends Building {
             ),
             this
         );
-    }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
     }
 }

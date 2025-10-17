@@ -60,9 +60,4 @@ public class OakStockpile extends AbstractStockpile {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.VILLAGERS;
-    }
 }

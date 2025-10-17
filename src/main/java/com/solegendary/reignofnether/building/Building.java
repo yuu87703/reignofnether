@@ -117,6 +117,4 @@ public abstract class Building {
     public boolean isTypeOf(Building building) {
         return this == building;
     }
-
-    public abstract boolean isBuildableBuildingForFaction(Faction faction);
 }

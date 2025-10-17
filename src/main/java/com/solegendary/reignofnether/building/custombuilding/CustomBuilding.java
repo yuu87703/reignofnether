@@ -35,9 +35,4 @@ public class CustomBuilding extends Building {
     public BuildingPlaceButton getBuildButton(Keybinding hotkey) {
         return null;
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return false;
-    }
 }

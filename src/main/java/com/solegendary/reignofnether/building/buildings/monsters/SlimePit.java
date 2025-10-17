@@ -74,9 +74,4 @@ public class SlimePit extends ProductionBuilding {
     public BlockPos getDefaultOutdoorSpawnPoint(BlockPos minCorner) {
         return minCorner.offset((int) (-spawnRadiusOffset + 4), 0, (int) (-spawnRadiusOffset + 9));
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return faction == Faction.MONSTERS;
-    }
 }

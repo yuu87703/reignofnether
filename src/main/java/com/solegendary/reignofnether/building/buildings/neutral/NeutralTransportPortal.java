@@ -62,11 +62,6 @@ public class NeutralTransportPortal extends PortalTransport {
                 this
         );
     }
-
-    @Override
-    public boolean isBuildableBuildingForFaction(Faction faction) {
-        return false;
-    }
 }
 
 
