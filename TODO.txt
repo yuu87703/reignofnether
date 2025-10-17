@@ -28,6 +28,7 @@ Bugfixes
 [✔] Fixed beacon win minutes showing incorrectly as 20mins by default (it should be 10mins)
 [✔] Fixed pillagers having higher range than expected (again)
 [✔] Fixed an exploit where workers can drop off resources to a stockpile out of range
+[✔] Fixed endermen's manual teleport ability
 
 [❌] Players logging in messes up the observer menu (freezes resources?)
 [❌] bridge scroll bug (up and down vs left/right?)
@@ -46,6 +47,7 @@ Quality of Life
 
 Balancing
 ---------
+[✔] Endermen now only gain bonus movement speed if they're within 8 blocks of their target
 [✔] Increased the time it takes to mine higher tier ore blocks:
     - Tier 2 (iron, copper, netherrack gold): 45s -> 50s
     - Tier 3 (emerald, gold, blackstone gold): 45s -> 55s
