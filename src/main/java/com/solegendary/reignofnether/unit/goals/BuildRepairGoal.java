@@ -73,7 +73,10 @@ public class BuildRepairGoal extends MoveToTargetBlockGoal {
                     ((WorkerUnit) mob).getGatherResourceGoal().setTargetFarm(buildingTarget);
                 }
                 // look for the nearest resource to gather after completing a stockpile
-                else if (buildingTarget.getBuilding() instanceof OakStockpile stockpile && !buildingTarget.isBuilt && mob instanceof WorkerUnit workerUnit) {
+                else if (buildingTarget.getBuilding() instanceof OakStockpile stockpile &&
+                        !buildingTarget.isBuilt &&
+                        mob instanceof WorkerUnit workerUnit &&
+                        workerUnit.getBuildRepairGoal().isBuilding()) {
                     ((Unit) mob).getReturnResourcesGoal().depositItems();
                     workerUnit.getGatherResourceGoal().setTargetResourceName(stockpile.mostAbundantNearbyResource);
                 }
