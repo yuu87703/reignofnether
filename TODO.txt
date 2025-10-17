@@ -32,8 +32,6 @@ Bugfixes
 [❌] Players logging in messes up the observer menu (freezes resources?)
 [❌] bridge scroll bug (up and down vs left/right?)
 
-ERFINDER CHANGES
-[❌] Worker building hotkeys have disappeared
 
 Quality of Life
 ---------------
