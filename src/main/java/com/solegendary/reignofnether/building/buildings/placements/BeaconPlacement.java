@@ -155,7 +155,7 @@ public class BeaconPlacement extends ProductionPlacement implements RangeIndicat
             updateBorderBps();
 
         if (isBeaconActive() && tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 20 == 0 &&
-                !this.level.isClientSide() && this.level.isDay()) {
+                !this.level.isClientSide()) {
 
             List<LivingEntity> nearbyEntities = MiscUtil.getEntitiesWithinRange(
                     new Vector3d(this.centrePos.getX(), this.centrePos.getY(), this.centrePos.getZ()),

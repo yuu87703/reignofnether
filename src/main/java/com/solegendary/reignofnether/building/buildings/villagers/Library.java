@@ -7,7 +7,6 @@ import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
 import com.solegendary.reignofnether.building.production.ProductionItems;
-import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
@@ -50,16 +49,11 @@ public class Library extends ProductionBuilding {
 
         this.explodeChance = 0.2f;
 
-        Ability enchantSharpness = new EnchantSharpness();
-        this.abilities.add(enchantSharpness, Keybindings.keyE);
-        Ability enchantQuickCharge = new EnchantQuickCharge();
-        this.abilities.add(enchantQuickCharge, Keybindings.keyW);
-        Ability enchantMaiming = new EnchantMaiming();
-        this.abilities.add(enchantMaiming, Keybindings.keyQ);
-        Ability enchantMultishot = new EnchantMultishot();
-        this.abilities.add(enchantMultishot, Keybindings.keyR);
-        Ability enchantVigor = new EnchantVigor();
-        this.abilities.add(enchantVigor, Keybindings.keyT);
+        this.abilities.add(new EnchantSharpness(), Keybindings.keyE);
+        this.abilities.add(new EnchantQuickCharge(), Keybindings.keyW);
+        this.abilities.add(new EnchantMaiming(), Keybindings.keyQ);
+        this.abilities.add(new EnchantMultishot(), Keybindings.keyR);
+        this.abilities.add(new EnchantVigor(), Keybindings.keyT);
 
         this.productions.add(ProductionItems.RESEARCH_LINGERING_POTIONS, Keybindings.keyY);
         this.productions.add(ProductionItems.RESEARCH_EVOKER_VEXES, Keybindings.keyU);

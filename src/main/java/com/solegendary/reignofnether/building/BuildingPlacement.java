@@ -217,7 +217,9 @@ public class BuildingPlacement {
             }
             FogOfWarClientboundPacket.revealOrHidePlayer(false, this.ownerName);
         }
-
+        for (Ability ability : building.abilities.get()) {
+            getAbilities().add(ability);
+        }
         updateButtons();
     }
 

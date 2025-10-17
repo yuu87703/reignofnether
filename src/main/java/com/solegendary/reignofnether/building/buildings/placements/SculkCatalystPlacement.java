@@ -20,7 +20,7 @@ import java.util.*;
 import static com.solegendary.reignofnether.building.BuildingUtils.isPosInsideAnyBuilding;
 
 public class SculkCatalystPlacement extends BuildingPlacement implements RangeIndicator, NightSource {
-    private final static Random random = new Random();
+
     private final Set<BlockPos> nightBorderBps = new HashSet<>();
 
     private final static int SCULK_SEARCH_RANGE = 30;
@@ -30,12 +30,8 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
     public final ArrayList<BlockPos> sculkBps = new ArrayList<>();
 
     // for some reason, destroy() does not restore sculk unless restoreRandomSculk was run at least once before
-    private final boolean didSculkFix = false;
-    private final BlockPos sculkFixBp = null;
     public SculkCatalystPlacement(Building building, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(building, level, originPos, rotation, ownerName, blocks, isCapitol);
-        Ability sacrifice = new Sacrifice();
-        abilities.add(sacrifice);
     }
 
     public int getUncappedNightRange() {
@@ -154,8 +150,6 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
     public static boolean isSculk(Block block) {
         return block == Blocks.SCULK || block == Blocks.SCULK_VEIN || block == Blocks.SCULK_CATALYST || block == Blocks.SCULK_SENSOR || block == Blocks.SCULK_SHRIEKER || block == Blocks.CALIBRATED_SCULK_SENSOR;
     }
-
-    private static final int destroys = 0;
 
     @Override
     public void destroy(ServerLevel serverLevel) {
