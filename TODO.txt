@@ -35,7 +35,6 @@ Bugfixes
 
 
 - possibly only happening on a real server and jar
-[❌] Building sculk catalysts does not register it clientside, even on relog
 [❌] Completing a lightning rod upgrade did not register it clientside, even on relog
 
 [❌] Researching stockpile upgrade instantly crashes the client
@@ -46,6 +45,9 @@ Quality of Life
 [✔] The Necromancer now fires a magical projectile instead of an arrow
 [✔] Added support for survival/adventure players to the diplomacy menu
 [✔] Added a grey background to the observer and diplomacy menus for a cleaner look
+
+[ ] Changed clock tooltip to the format "Day/Night: XX:XX left"
+
 [❌] Command to list end of game stats like:
     - total resources gathered/spent
     - average resources gathered/min
