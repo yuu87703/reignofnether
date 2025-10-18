@@ -29,9 +29,16 @@ Bugfixes
 [✔] Fixed pillagers having higher range than expected (again)
 [✔] Fixed an exploit where workers can drop off resources to a stockpile out of range
 [✔] Fixed endermen's manual teleport ability
-
 [❌] Players logging in messes up the observer menu (freezes resources?)
 [❌] bridge scroll bug (up and down vs left/right?)
+
+
+
+- possibly only happening on a real server and jar
+[❌] Building sculk catalysts does not register it clientside, even on relog
+[❌] Completing a lightning rod upgrade did not register it clientside, even on relog
+
+[❌] Researching stockpile upgrade instantly crashes the client
 
 
 Quality of Life
