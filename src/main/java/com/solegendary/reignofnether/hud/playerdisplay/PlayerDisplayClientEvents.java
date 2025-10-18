@@ -199,14 +199,18 @@ public class PlayerDisplayClientEvents {
             if (player != MC.player) {
                 RTSPlayer rtsPlayer = PlayerClientEvents.getRTSPlayer(player.getName().getString());
                 if (rtsPlayer == null && !trackedFpvPlayers.contains(player.getName().getString()) &&
-                        !player.isSpectator() && !player.isCreative())
+                        !player.isSpectator() && !player.isCreative()) {
                     fpvDiplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(player));
+                    rtsDiplomacyPlayerDisplays.removeIf(d -> d.playerName.equals(player.getName().getString()));
+                }
             }
         }
         for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
             if (!rtsPlayer.name.equals(MC.player.getName().getString())) {
-                if (!trackedRtsPlayers.contains(rtsPlayer.name))
+                if (!trackedRtsPlayers.contains(rtsPlayer.name)) {
                     rtsDiplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(rtsPlayer));
+                    fpvDiplomacyPlayerDisplays.removeIf(d -> d.playerName.equals(rtsPlayer.name));
+                }
             }
         }
         boolean canShareUnitControl = !rtsDiplomacyPlayerDisplays.isEmpty() && !shareUnitControlButton.isHidden.get();
