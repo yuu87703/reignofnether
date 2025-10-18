@@ -196,7 +196,8 @@ public class PlayerDisplayClientEvents {
         for (AbstractClientPlayer player : MC.level.players()) {
             if (player != MC.player) {
                 RTSPlayer rtsPlayer = PlayerClientEvents.getRTSPlayer(player.getName().getString());
-                if (rtsPlayer == null && !trackedFpvPlayers.contains(player.getName().getString()))
+                if (rtsPlayer == null && !trackedFpvPlayers.contains(player.getName().getString()) &&
+                        !player.isSpectator() && !player.isCreative())
                     fpvDiplomacyPlayerDisplays.add(new DiplomacyPlayerDisplay(player));
             }
         }
