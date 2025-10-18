@@ -45,8 +45,7 @@ Quality of Life
 [✔] The Necromancer now fires a magical projectile instead of an arrow
 [✔] Added support for survival/adventure players to the diplomacy menu
 [✔] Added a grey background to the observer and diplomacy menus for a cleaner look
-
-[ ] Changed clock tooltip to the format "Day/Night: XX:XX left"
+[✔] Changed clock tooltip to the format "Day/Night: XX:XX left"
 
 [❌] Command to list end of game stats like:
     - total resources gathered/spent
