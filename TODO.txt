@@ -32,14 +32,6 @@ Bugfixes
 [❌] Players logging in messes up the observer menu (freezes resources?)
 [❌] bridge scroll bug (up and down vs left/right?)
 
-
-
-- possibly only happening on a real server and jar
-[❌] Completing a lightning rod upgrade did not register it clientside, even on relog
-
-[❌] Researching stockpile upgrade instantly crashes the client
-
-
 Quality of Life
 ---------------
 [✔] The Necromancer now fires a magical projectile instead of an arrow
