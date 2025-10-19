@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.entities;
 
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
@@ -24,6 +25,7 @@ public class NecromancerProjectile extends AbstractHurtingProjectile {
 
     @Override
     public void tick() {
+        setDeltaMovement(getDeltaMovement().normalize());
         super.tick();
         if (tickCount > MAX_TICKS)
             this.discard();
@@ -33,6 +35,7 @@ public class NecromancerProjectile extends AbstractHurtingProjectile {
     protected void onHitEntity(EntityHitResult pResult) {
         if (!this.level().isClientSide && this.getOwner() instanceof AttackerUnit aUnit) {
             pResult.getEntity().hurt(damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), aUnit.getUnitAttackDamage());
+            MiscUtil.addParticleExplosion(ParticleTypes.WITCH, 10, level(), position());
             discard();
         }
     }

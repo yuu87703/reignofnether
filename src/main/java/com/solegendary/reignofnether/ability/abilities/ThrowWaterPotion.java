@@ -46,7 +46,8 @@ public class ThrowWaterPotion extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        WitchUnit witchUnit = (WitchUnit) unit;
+        if (!(unit instanceof WitchUnit witchUnit))
+            return null;
         return new AbilityButton(
             "Water Potion",
             ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/splash_potion_water.png"),

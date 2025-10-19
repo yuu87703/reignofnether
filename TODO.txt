@@ -1,5 +1,5 @@
 
-1.19.2-1.2.2a
+1.19.2-1.2.2b
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -18,45 +18,23 @@ Features
         - nether spread with adjustable range
         - night warp with adjustable range
 
-
-
-Note that this version has a large code rework for both unit and building abilities.
-I've tested most of them as working but if there are any issues please open a #bug-reports thread
-
 Bugfixes
 --------
-[✔] Fixed beacon win minutes showing incorrectly as 20mins by default (it should be 10mins)
-[✔] Fixed pillagers having higher range than expected (again)
-[✔] Fixed an exploit where workers can drop off resources to a stockpile out of range
-[✔] Fixed endermen's manual teleport ability
 [❌] Players logging in messes up the observer menu (freezes resources?)
 [❌] bridge scroll bug (up and down vs left/right?)
 
+[🟡] Fixed an issue where drowned and slimes sometimes don't convert units
+[🟡] Fixed a crash when selecting drowned
+[🟡] Fixed witch research not being available
+[🟡] Fixed transport portals not working
+[🟡] Fixed beacon win timer not defaulting to 10mins (again)
+
 Quality of Life
 ---------------
-[✔] /gamerule allowHeroes is now enabled by default
-[✔] The Necromancer now fires a magical projectile instead of an arrow
-[✔] Added support for survival/adventure players to the diplomacy menu
-[✔] Added a grey background to the observer and diplomacy menus for a cleaner look
-[✔] Changed clock tooltip to the format "Day/Night: XX:XX left"
+[🟡] The Necromancer's new projectile now always travels at a consistent speed
 
 [❌] Command to list end of game stats like:
     - total resources gathered/spent
     - average resources gathered/min
     - total unit resource values lost
     - total units produced (military and worker)
-
-Balancing
----------
-[✔] Endermen now only gain bonus movement speed if they're within 8 blocks of their target
-[✔] Increased the time it takes to mine higher tier ore blocks:
-    - Tier 2 (iron, copper, netherrack gold): 45s -> 50s
-    - Tier 3 (emerald, gold, blackstone gold): 45s -> 55s
-    - Tier 4 (diamond, ancient debris): 45s -> 60s
-
-Languages
----------
-[✔] Added Turkish (tr_tr)
-[✔] Updated Spanish (es_es)
-[✔] Updated Traditional Chinese (zh_tw)
-[✔] Updated Simplified Chinese (zh_cn)

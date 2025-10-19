@@ -456,14 +456,16 @@ public class UnitServerEvents {
             creeperUnit.explodeCreeper();
         }
 
-        boolean drownedInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffectRegistrar.ZOMBIE_INFECTED.get());
-        boolean slimeInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffects.CONFUSION);
+        boolean drownedInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffectRegistrar.ZOMBIE_INFECTED.get()) ||
+                evt.getEntity().getLastHurtByMob() instanceof DrownedUnit;
+        boolean slimeInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffects.CONFUSION) ||
+                evt.getEntity().getLastHurtByMob() instanceof SlimeUnit;
 
         if (evt.getEntity().getLastHurtByMob() instanceof Unit unit && (drownedInfected || slimeInfected)) {
 
             EntityType<? extends Unit> entityType = null;
 
-            if (drownedInfected || unit instanceof DrownedUnit) {
+            if (drownedInfected) {
                 if (evt.getEntity() instanceof GruntUnit || evt.getEntity() instanceof BruteUnit
                         || evt.getEntity() instanceof HeadhunterUnit) {
                     entityType = EntityRegistrar.ZOMBIE_PIGLIN_UNIT.get();
@@ -476,7 +478,7 @@ public class UnitServerEvents {
                     entityType = EntityRegistrar.DROWNED_UNIT.get();
                 }
             }
-            if ((slimeInfected || unit instanceof SlimeUnit) && entityType == null) {
+            if (slimeInfected && entityType == null) {
                 entityType = EntityRegistrar.SLIME_UNIT.get();
             }
 
