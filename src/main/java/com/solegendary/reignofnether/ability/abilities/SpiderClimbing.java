@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.SpiderUnit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
+import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
@@ -32,7 +33,8 @@ public class SpiderClimbing extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        SpiderUnit spiderUnit = (SpiderUnit) unit;
+        if (!(unit instanceof SpiderUnit spiderUnit))
+            return null;
         ResourceLocation rlLadder = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/ladder.png");
         ResourceLocation rlBarrier = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/barrier.png");
 

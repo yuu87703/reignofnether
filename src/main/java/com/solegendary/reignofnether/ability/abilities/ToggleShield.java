@@ -42,7 +42,8 @@ public class ToggleShield extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        BruteUnit bruteUnit = (BruteUnit) unit;
+        if (!(unit instanceof BruteUnit bruteUnit))
+            return null;
         return new AbilityButton(
                 "Shield Stance",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/shield.png"),

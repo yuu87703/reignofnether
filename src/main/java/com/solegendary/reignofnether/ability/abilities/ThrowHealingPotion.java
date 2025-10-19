@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.monsters.SpiderUnit;
 import com.solegendary.reignofnether.unit.units.villagers.WitchUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -45,7 +46,8 @@ public class ThrowHealingPotion extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        WitchUnit witchUnit = (WitchUnit) unit;
+        if (!(unit instanceof WitchUnit witchUnit))
+            return null;
         return new AbilityButton("Healing Potion",
             ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/splash_potion_healing.png"),
             hotkey,

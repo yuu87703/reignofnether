@@ -44,7 +44,8 @@ public class ThrowLingeringRegenPotion extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        WitchUnit witchUnit = (WitchUnit) unit;
+        if (!(unit instanceof WitchUnit witchUnit))
+            return null;
         return new AbilityButton(
             "Lingering Regen Potion",
             ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/lingering_potion_regeneration.png"),

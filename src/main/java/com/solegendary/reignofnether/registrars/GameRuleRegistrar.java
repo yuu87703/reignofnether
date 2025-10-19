@@ -62,7 +62,7 @@ public class GameRuleRegistrar {
         );
         // ticks to win with a beacon
         BEACON_WIN_MINUTES = GameRules.register("beaconWinMinutes", GameRules.Category.PLAYER,
-                GameRules.IntegerValue.create(20)
+                GameRules.IntegerValue.create(10)
         );
         // buildings ignore ground flatness
         SLANTED_BUILDING = GameRules.register("slantedBuilding", GameRules.Category.PLAYER,

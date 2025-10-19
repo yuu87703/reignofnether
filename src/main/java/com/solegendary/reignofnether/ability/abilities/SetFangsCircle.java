@@ -34,7 +34,8 @@ public class SetFangsCircle extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        EvokerUnit evokerUnit = (EvokerUnit) unit;
+        if (!(unit instanceof EvokerUnit evokerUnit))
+            return null;
         return new AbilityButton("Evoker Fangs (Circular)",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/shears.png"),
                 hotkey,

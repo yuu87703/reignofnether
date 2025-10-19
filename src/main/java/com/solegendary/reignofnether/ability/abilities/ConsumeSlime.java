@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.SlimeUnit;
 import com.solegendary.reignofnether.unit.units.piglins.MagmaCubeUnit;
+import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +33,8 @@ public class ConsumeSlime extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        SlimeUnit slime = (SlimeUnit) unit;
+        if (!(unit instanceof SlimeUnit slime))
+            return null;
         return new AbilityButton("Consume",
             slime instanceof MagmaCubeUnit ?
                     ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/magma_cube.png") :

@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
+import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.piglins.PortalCivilian;
 import com.solegendary.reignofnether.building.buildings.piglins.PortalMilitary;
@@ -124,6 +125,7 @@ public class PortalPlacement extends ProductionPlacement implements NetherConver
                 newStructureName = PortalTransport.structureName;
             }
         }
+
         updateButtons();
         if (!newStructureName.isEmpty()) {
             ArrayList<BuildingBlock> newBlocks = BuildingBlockData.getBuildingBlocksFromNbt(newStructureName, this.getLevel());

@@ -1142,13 +1142,7 @@ public class UnitClientEvents {
     }
 
     public static void addUnitPoofs(Level level, Entity entity) {
-        RandomSource rand = RandomSource.create();
-        for(int j = 0; j < 35; ++j) {
-            double d0 = rand.nextGaussian() * 0.2;
-            double d1 = rand.nextGaussian() * 0.2;
-            double d2 = rand.nextGaussian() * 0.2;
-            level.addParticle(ParticleTypes.POOF, entity.getX(), entity.getY(), entity.getZ(), d0, d1, d2);
-        }
+        MiscUtil.addParticleExplosion(ParticleTypes.POOF, 35, level, entity.position());
     }
 
     public static void makeVillagerVeteran(int unitId) {

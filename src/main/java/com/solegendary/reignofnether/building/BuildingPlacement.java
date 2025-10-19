@@ -1194,6 +1194,9 @@ public class BuildingPlacement {
     public void setBuilding(Building building) {
         Objects.requireNonNull(building, "Building can't be null");
         this.building = building;
+        for (Ability ability : getBuilding().getAbilities().get()) {
+            getAbilities().add(ability);
+        }
     }
 
     public void setCharges(Ability ability, int cooldown) {

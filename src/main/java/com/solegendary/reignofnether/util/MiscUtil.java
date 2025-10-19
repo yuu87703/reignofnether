@@ -26,6 +26,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
@@ -35,6 +38,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -691,5 +695,15 @@ public class MiscUtil {
                 player.createCommandSourceStack(),
                 command
         );
+    }
+
+    public static void addParticleExplosion(SimpleParticleType particleType, int amount, Level level, Vec3 pos) {
+        RandomSource rand = RandomSource.create();
+        for(int j = 0; j < amount; ++j) {
+            double d0 = rand.nextGaussian() * 0.2;
+            double d1 = rand.nextGaussian() * 0.2;
+            double d2 = rand.nextGaussian() * 0.2;
+            level.addParticle(particleType, pos.x, pos.y, pos.z, d0, d1, d2);
+        }
     }
 }

@@ -34,7 +34,8 @@ public class SetFangsLine extends Ability {
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
-        EvokerUnit evokerUnit = (EvokerUnit) unit;
+        if (!(unit instanceof EvokerUnit evokerUnit))
+            return null;
         return new AbilityButton("Evoker Fangs (Line)",
             ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/shears.png"),
             hotkey,

@@ -42,10 +42,6 @@ import java.util.List;
 
 public class DrownedUnit extends Drowned implements Unit, AttackerUnit {
     public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new ToggleShield(), Keybindings.keyQ);
-        ABILITIES.add(new Bloodlust(), Keybindings.keyW);
-    }
 
     //region
     @Override
