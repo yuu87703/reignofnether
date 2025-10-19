@@ -47,8 +47,8 @@ public class WitchUnit extends Witch implements Unit {
     static {
         ABILITIES.add(new ThrowLingeringHarmingPotion(8), Keybindings.keyQ);
         ABILITIES.add(new ThrowLingeringRegenPotion(8), Keybindings.keyW);
-        ABILITIES.add(new ThrowHealingPotion(8), Keybindings.keyW);
-        ABILITIES.add(new ThrowWaterPotion(8), Keybindings.keyW);
+        ABILITIES.add(new ThrowHealingPotion(8), Keybindings.keyE);
+        ABILITIES.add(new ThrowWaterPotion(8), Keybindings.keyR);
     }
 
     //region
