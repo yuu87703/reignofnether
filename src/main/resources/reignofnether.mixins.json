@@ -51,6 +51,7 @@
         "RenderChunkRegionMixin",
         "ResourceLoadStateTrackerMixin",
         "SplashRendererAccessor",
+        "CycleButtonMixin",
         "TitleScreenMixin",
         "TopdownGuiMixin",
         "fogofwar.CompiledChunkMixin",
