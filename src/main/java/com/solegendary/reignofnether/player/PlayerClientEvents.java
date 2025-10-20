@@ -29,11 +29,13 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
@@ -46,6 +48,7 @@ public class PlayerClientEvents {
     public static boolean rtsLocked = false;
     public static boolean canStartRTS = true;
     public static final List<RTSPlayer> rtsPlayers = Collections.synchronizedList(new ArrayList<>());
+    public static BlockState lastUsedBlockState = null;
 
     public static boolean isRTSPlayer() {
         for (RTSPlayer rtsPlayer : rtsPlayers)
@@ -386,6 +389,11 @@ public class PlayerClientEvents {
                 rtsPlayers.get(i).beaconOwnerTicks = (int) ticks;
     }
 
+    @SubscribeEvent
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock evt) {
+        if (MC.level != null)
+            lastUsedBlockState = MC.level.getBlockState(evt.getPos());
+    }
 
     /*
     public static double red = 0.0d;
