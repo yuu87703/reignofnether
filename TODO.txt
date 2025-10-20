@@ -1,5 +1,5 @@
 
-1.19.2-1.2.2b
+1.19.2-1.2.2c
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -23,16 +23,8 @@ Bugfixes
 [❌] Players logging in messes up the observer menu (freezes resources?)
 [❌] bridge scroll bug (up and down vs left/right?)
 
-[🟡] Fixed an issue where drowned and slimes sometimes don't convert units
-[🟡] Fixed a crash when selecting drowned
-[🟡] Fixed witch research not being available
-[🟡] Fixed transport portals not working
-[🟡] Fixed beacon win timer not defaulting to 10mins (again)
-
 Quality of Life
 ---------------
-[🟡] The Necromancer's new projectile now always travels at a consistent speed
-
 [❌] Command to list end of game stats like:
     - total resources gathered/spent
     - average resources gathered/min
