@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.building.custombuilding;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.blocks.RTSStructureBlockEntity;
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -19,11 +20,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomBuildingClientEvents {
 
     // since every custom building has a different structure, we need to maintain a list of them here
-    private static final ArrayList<CustomBuilding> customBuildings = new ArrayList<>();
+    public static final ArrayList<CustomBuilding> customBuildings = new ArrayList<>();
 
     public static final ArrayList<BlockPos> rtsStructuresToRenderBB = new ArrayList<>();
 

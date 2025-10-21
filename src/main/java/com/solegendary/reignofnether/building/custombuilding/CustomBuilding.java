@@ -1,8 +1,8 @@
 package com.solegendary.reignofnether.building.custombuilding;
 
 import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlaceButton;
-import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.util.Faction;
@@ -11,6 +11,10 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.text.WordUtils;
+
+import java.util.List;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class CustomBuilding extends Building {
 
@@ -33,6 +37,18 @@ public class CustomBuilding extends Building {
 
     @Override
     public BuildingPlaceButton getBuildButton(Keybinding hotkey) {
-        return null;
+        String blockName = portraitBlock.getName().getString().replace(" ", "_").toLowerCase();
+        return new BuildingPlaceButton(
+                this.name,
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/" + blockName + ".png"),
+                hotkey,
+                () -> BuildingClientEvents.getBuildingToPlace() == this,
+                () -> false,
+                () -> true,
+                List.of(
+                        fcs(this.name, true)
+                ),
+                this
+        );
     }
 }

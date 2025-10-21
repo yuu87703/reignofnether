@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingPlaceButton;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
@@ -91,27 +92,31 @@ public class SandboxClientEvents {
     }
 
     public static List<Button> getCustomBuildingButtons() {
-        return List.of(new Button(
-            "Custom building info",
-            Button.itemIconSize,
-            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/help.png"),
-            (Keybinding) null,
-            () -> false,
-            () -> false,
-            () -> true,
-            () -> {
-                if (MC.player != null) {
-                    MC.player.addItem(new ItemStack(BlockRegistrar.RTS_STRUCTURE_BLOCK.get()));
-                }
-            },
-            null,
-            List.of(
-                fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip1")),
-                fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip2")),
-                fcs(""),
-                fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip3"))
-            )
-        ));
+        if (CustomBuildingClientEvents.customBuildings.isEmpty()) {
+            return List.of(new Button(
+                    "Custom building info",
+                    Button.itemIconSize,
+                    ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/help.png"),
+                    (Keybinding) null,
+                    () -> false,
+                    () -> false,
+                    () -> true,
+                    () -> {
+                        if (MC.player != null) {
+                            MC.player.addItem(new ItemStack(BlockRegistrar.RTS_STRUCTURE_BLOCK.get()));
+                        }
+                    },
+                    null,
+                    List.of(
+                            fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip1")),
+                            fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip2")),
+                            fcs(""),
+                            fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip3"))
+                    )
+            ));
+        } else {
+            return CustomBuildingClientEvents.customBuildings.stream().map(cb -> (Button) cb.getBuildButton(null)).toList();
+        }
     }
 
     public static List<UnitSpawnButton> getUnitButtons() {
