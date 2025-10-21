@@ -9,7 +9,6 @@ import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamemode.GameMode;
-import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.hud.buttons.UnitSpawnButton;
@@ -18,6 +17,8 @@ import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
+import com.solegendary.reignofnether.registrars.ItemRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerboundPacket;
 import com.solegendary.reignofnether.unit.Relationship;
@@ -29,6 +30,7 @@ import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
@@ -45,7 +47,7 @@ public class SandboxClientEvents {
 
     public static Relationship relationship = Relationship.OWNED;
 
-    public static SandboxMenuType sandboxMenuType = SandboxMenuType.BUILDINGS;
+    public static SandboxMenuType sandboxMenuType = SandboxMenuType.UNITS;
 
     private static final Minecraft MC = Minecraft.getInstance();
 
@@ -86,6 +88,30 @@ public class SandboxClientEvents {
             case PIGLINS -> GruntUnit.getBuildingButtons();
             case NONE -> getNeutralBuildingButtons();
         };
+    }
+
+    public static List<Button> getCustomBuildingButtons() {
+        return List.of(new Button(
+            "Custom building info",
+            Button.itemIconSize,
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/help.png"),
+            (Keybinding) null,
+            () -> false,
+            () -> false,
+            () -> true,
+            () -> {
+                if (MC.player != null) {
+                    MC.player.addItem(new ItemStack(BlockRegistrar.RTS_STRUCTURE_BLOCK.get()));
+                }
+            },
+            null,
+            List.of(
+                fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip1")),
+                fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip2")),
+                fcs(""),
+                fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.tooltip3"))
+            )
+        ));
     }
 
     public static List<UnitSpawnButton> getUnitButtons() {
@@ -190,8 +216,7 @@ public class SandboxClientEvents {
                         fcs(I18n.get("hud.faction.reignofnether.villager"), faction == Faction.VILLAGERS),
                         fcs(I18n.get("hud.faction.reignofnether.monster"), faction == Faction.MONSTERS),
                         fcs(I18n.get("hud.faction.reignofnether.piglin"), faction == Faction.PIGLINS),
-                        fcs(I18n.get("hud.faction.reignofnether.neutral"), faction == Faction.NONE),
-                        fcs(I18n.get("sandbox.reignofnether.faction_button2"))
+                        fcs(I18n.get("hud.faction.reignofnether.neutral"), faction == Faction.NONE)
                 )
         );
     }
@@ -225,20 +250,21 @@ public class SandboxClientEvents {
                     }
                 },
                 List.of(
-                        fcs(I18n.get("sandbox.reignofnether.relationship_button1", getRelationshipName(relationship))),
-                        fcs(I18n.get("sandbox.reignofnether.relationship_button2"))
+                        fcs(I18n.get("hud.relationship.reignofnether.owned"), relationship == Relationship.OWNED),
+                        fcs(I18n.get("hud.relationship.reignofnether.neutral"), relationship == Relationship.NEUTRAL),
+                        fcs(I18n.get("hud.relationship.reignofnether.enemy"), relationship == Relationship.HOSTILE)
                 )
         );
     }
 
-    public static Button getToggleBuildingOrUnitsButton() {
+    public static Button getCycleBuildingOrUnitsButton() {
         return new Button(
                 "Toggle Building or Units",
                 Button.itemIconSize,
                 switch (sandboxMenuType) {
-                    case BUILDINGS -> ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/crafting_table_front.png");
                     case UNITS -> ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/spawn_egg.png");
-                    case OTHER -> ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/spawn_egg.png");
+                    case BUILDINGS -> ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/crafting_table_front.png");
+                    case CUSTOM_BUILDINGS -> ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/smithing_table_front.png");
                 },
                 (Keybinding) null,
                 () -> false,
@@ -246,19 +272,22 @@ public class SandboxClientEvents {
                 () -> true,
                 () -> {
                     switch (sandboxMenuType) {
-                        case BUILDINGS -> sandboxMenuType = SandboxMenuType.UNITS;
                         case UNITS -> sandboxMenuType = SandboxMenuType.BUILDINGS;
-                        case OTHER -> sandboxMenuType = SandboxMenuType.BUILDINGS;
+                        case BUILDINGS -> sandboxMenuType = SandboxMenuType.CUSTOM_BUILDINGS;
+                        case CUSTOM_BUILDINGS -> sandboxMenuType = SandboxMenuType.UNITS;
                     }
                 },
-                null,
+                () -> {
+                    switch (sandboxMenuType) {
+                        case UNITS -> sandboxMenuType = SandboxMenuType.CUSTOM_BUILDINGS;
+                        case BUILDINGS -> sandboxMenuType = SandboxMenuType.UNITS;
+                        case CUSTOM_BUILDINGS -> sandboxMenuType = SandboxMenuType.BUILDINGS;
+                    }
+                },
                 List.of(
-                        switch (sandboxMenuType) {
-                            case BUILDINGS -> fcs(I18n.get("sandbox.reignofnether.menu_type_button_buildings"));
-                            case UNITS -> fcs(I18n.get("sandbox.reignofnether.menu_type_button_units"));
-                            case OTHER -> fcs(I18n.get("sandbox.reignofnether.menu_type_button_other"));
-                        },
-                        fcs(I18n.get("sandbox.reignofnether.menu_type_button1"))
+                        fcs(I18n.get("sandbox.reignofnether.menu_type_button_units"), sandboxMenuType == SandboxMenuType.UNITS),
+                        fcs(I18n.get("sandbox.reignofnether.menu_type_button_buildings"), sandboxMenuType == SandboxMenuType.BUILDINGS),
+                        fcs(I18n.get("sandbox.reignofnether.menu_type_button_custom_buildings"), sandboxMenuType == SandboxMenuType.CUSTOM_BUILDINGS)
                 )
         );
     }
@@ -292,8 +321,7 @@ public class SandboxClientEvents {
                 null,
                 List.of(hasCheats ? fcs(I18n.get("sandbox.reignofnether.building_cheats_on")) :
                                 fcs(I18n.get("sandbox.reignofnether.building_cheats_off")),
-                        fcs(I18n.get("sandbox.reignofnether.building_cheats1")),
-                        fcs(I18n.get("sandbox.reignofnether.building_cheats2"))
+                        fcs(I18n.get("sandbox.reignofnether.building_cheats1"))
                 )
         );
     }
@@ -334,8 +362,7 @@ public class SandboxClientEvents {
                 List.of(hasCheats ? fcs(I18n.get("sandbox.reignofnether.unit_cheats_on")) :
                                     fcs(I18n.get("sandbox.reignofnether.unit_cheats_off")),
                                     fcs(I18n.get("sandbox.reignofnether.unit_cheats1")),
-                                    fcs(I18n.get("sandbox.reignofnether.unit_cheats2")),
-                                    fcs(I18n.get("sandbox.reignofnether.unit_cheats3"))
+                                    fcs(I18n.get("sandbox.reignofnether.unit_cheats2"))
                 )
         );
     }
@@ -366,8 +393,7 @@ public class SandboxClientEvents {
                 null,
                 List.of(hasCheat ? fcs(I18n.get("sandbox.reignofnether.nonunit_control_cheat_on")) :
                                     fcs(I18n.get("sandbox.reignofnether.nonunit_control_cheat_off")),
-                                    fcs(I18n.get("sandbox.reignofnether.nonunit_control_cheat1")),
-                                    fcs(I18n.get("sandbox.reignofnether.nonunit_control_cheat2"))
+                                    fcs(I18n.get("sandbox.reignofnether.nonunit_control_cheat1"))
                 )
         );
     }

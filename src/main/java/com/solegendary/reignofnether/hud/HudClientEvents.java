@@ -957,7 +957,7 @@ public class HudClientEvents {
             blitY = screenHeight - iconFrameSize;
 
             ArrayList<Button> actionButtons = new ArrayList<>();
-            actionButtons.add(SandboxClientEvents.getToggleBuildingOrUnitsButton());
+            actionButtons.add(SandboxClientEvents.getCycleBuildingOrUnitsButton());
             actionButtons.add(SandboxClientEvents.getToggleFactionButton());
             actionButtons.add(SandboxClientEvents.getToggleRelationshipButton());
 
@@ -977,8 +977,9 @@ public class HudClientEvents {
             blitY = screenHeight - (iconFrameSize * 2) - 4;
 
             List<Button> abilityButtons = switch(SandboxClientEvents.sandboxMenuType) {
+                case UNITS -> List.copyOf(SandboxClientEvents.getUnitButtons());
                 case BUILDINGS -> List.copyOf(SandboxClientEvents.getBuildingButtons());
-                default -> List.copyOf(SandboxClientEvents.getUnitButtons());
+                case CUSTOM_BUILDINGS -> List.copyOf(SandboxClientEvents.getCustomBuildingButtons());
             };
 
             List<Button> shownAbilities = abilityButtons.stream()

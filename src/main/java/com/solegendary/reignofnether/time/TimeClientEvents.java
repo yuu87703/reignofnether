@@ -288,14 +288,6 @@ public class TimeClientEvents {
             }
         }
     }
-
-    public static String getNightCircleModeName() {
-        return switch (nightCircleMode) {
-            case ALL -> I18n.get("time.reignofnether.night_circle_mode_all");
-            case NO_OVERLAPS -> I18n.get("time.reignofnether.night_circle_mode_no_overlaps");
-            case OFF -> I18n.get("time.reignofnether.night_circle_mode_off");
-        };
-    }
 }
 
 

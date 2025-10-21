@@ -52,20 +52,23 @@ public class BuildingClientboundPacket {
         BlockPos portalDestination,
         boolean forPlayerLoggingIn
     ) {
-        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new BuildingClientboundPacket(BuildingAction.PLACE,
-            ReignOfNetherRegistries.BUILDING.getKey(building),
-            buildingPos,
-            rotation,
-            ownerName,
-            0,
-            numQueuedBlocks,
-            isDiagonalBridge,
-            upgradeLevel,
-            isBuilt,
-            portalType,
-            portalDestination,
-            forPlayerLoggingIn
-        ));
+        ResourceLocation rl = ReignOfNetherRegistries.BUILDING.getKey(building);
+        if (rl != null) {
+            PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new BuildingClientboundPacket(BuildingAction.PLACE,
+                    ReignOfNetherRegistries.BUILDING.getKey(building),
+                    buildingPos,
+                    rotation,
+                    ownerName,
+                    0,
+                    numQueuedBlocks,
+                    isDiagonalBridge,
+                    upgradeLevel,
+                    isBuilt,
+                    portalType,
+                    portalDestination,
+                    forPlayerLoggingIn
+            ));
+        }
     }
 
     public static void syncBuilding(BlockPos buildingPos, int blocksPlaced, String ownerName) {
