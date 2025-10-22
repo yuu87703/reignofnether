@@ -24,10 +24,12 @@ Bugfixes
 [❌] bridge scroll bug (up and down vs left/right?)
 
 [❌] Magma cubes are splitting off tiny slimes
+[🟡] Building multiple altars lets you sometimes train multiple heroes
 
 Quality of Life
 ---------------
 [❌] Cooked food is now worth food again for workers instead of being edible if it wasn't thrown by the Piglin Merchant
+[❌] If a building is cancelled or destroyed the production should be refunded
 
 [❌] Command to list end of game stats like:
     - total resources gathered/spent

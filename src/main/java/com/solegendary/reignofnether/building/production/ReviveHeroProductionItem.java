@@ -33,6 +33,7 @@ public abstract class ReviveHeroProductionItem extends ProductionItem {
 
     public ReviveHeroProductionItem(String itemName, ResourceLocation iconRl, String tooltipI18n) {
         super(ResourceCost.Unit(0,0,0,0,0));
+        this.dupeRule = ProdDupeRule.DISALLOW;
         this.itemName = itemName;
         this.iconRl = iconRl;
         this.tooltipI18n = tooltipI18n;
