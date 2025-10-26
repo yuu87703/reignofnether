@@ -10,11 +10,7 @@ Features
 --------
 [✔] Structure block to register custom buildings
 
-    [❌] Save and load CustomBuildings and CustomBuilding placements separately
-
-    [❌] test in multiplayer
-    [🟡] test saving (concurrent warning with normal building saves)
-    [🟡] new tab in sandbox menu to let you place previously registered custom buildings
+    [❌] checkbox in structure block menu to also make the captured structure a building
 
     [❌] Right click sandbox buttons to show a menu for customising the original building
         [❌] button to de-register building
@@ -22,6 +18,7 @@ Features
             - garrisonable with special entry/exit blocks
             - nether spread with adjustable range
             - night warp with adjustable range
+        [❌] customise button icon and portrait block
 
 Bugfixes
 --------

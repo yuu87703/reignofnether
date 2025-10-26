@@ -456,6 +456,26 @@ public class BuildingServerEvents {
         }
     }
 
+    public static void syncBuildingPlacement(BlockPos pos) {
+        for (BuildingPlacement building : buildings) {
+            if (building.originPos.equals(pos)) {
+                BuildingClientboundPacket.placeBuilding(building.originPos,
+                        building.getBuilding(),
+                        building.rotation,
+                        building.ownerName,
+                        building.blockPlaceQueue.size(),
+                        building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
+                        building.getUpgradeLevel(),
+                        building.isBuilt,
+                        building instanceof PortalPlacement p ? p.getPortalType() : PortalPlacement.PortalType.BASIC,
+                        building instanceof PortalPlacement p && p.hasDestination() ? p.destination : new BlockPos(0, 0, 0),
+                        true
+                );
+            }
+            break;
+        }
+    }
+
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent evt) {
         if (!PlayerServerEvents.rtsSyncingEnabled) {

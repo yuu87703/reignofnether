@@ -799,16 +799,16 @@ public class HudClientEvents {
             }
         }
 
+
         // ---------------------------
-        // Unit sandbox action buttons
+        // Unit sandbox buttons
         // ---------------------------
-        if (selUnits.size() > 0 && SandboxClientEvents.isSandboxPlayer() && hudSelectedEntity instanceof Unit &&
-            (getPlayerToEntityRelationship(selUnits.get(0)) != Relationship.OWNED &&
-                    !AlliancesClient.canControlAlly(selUnits.get(0)))) {
+        if (selUnits.size() > 0 && SandboxClientEvents.isSandboxPlayer() && hudSelectedEntity instanceof Unit) {
             blitX = 0;
             blitY = screenHeight - (iconFrameSize * 2);
             ArrayList<Button> actionButtons = new ArrayList<>();
 
+            actionButtons.add(SandboxActionButtons.getSetRelationshipButton());
             if (hudSelectedEntity instanceof AttackerUnit) {
                 actionButtons.add(SandboxActionButtons.setAnchor);
                 actionButtons.add(SandboxActionButtons.resetToAnchor);
@@ -859,10 +859,6 @@ public class HudClientEvents {
                 for (Ability ability : vUnit.getAbilities().get())
                     if (ability instanceof CallToArmsUnit callToArmsUnit)
                         actionButtons.add(callToArmsUnit.getButton(Keybindings.keyV, vUnit));
-
-            if (SandboxClientEvents.isSandboxPlayer()) {
-                actionButtons.add(SandboxActionButtons.getSetRelationshipButton());
-            }
 
             for (Button actionButton : actionButtons) {
                 // GATHER button does not have a static icon
@@ -987,6 +983,9 @@ public class HudClientEvents {
                     .toList();
 
             int rowsUp = (int) Math.floor((float) (shownAbilities.size() - 1) / MAX_BUTTONS_PER_ROW);
+            if (SandboxClientEvents.isSandboxPlayer())
+                rowsUp += 1;
+
             rowsUp = Math.max(0, rowsUp);
             blitY -= iconFrameSize * rowsUp;
 

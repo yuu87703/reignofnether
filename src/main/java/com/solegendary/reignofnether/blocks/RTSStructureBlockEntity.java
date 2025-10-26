@@ -68,8 +68,8 @@ public class RTSStructureBlockEntity extends StructureBlockEntity {
     @Override
     public boolean detectSize() {
         boolean result = super.detectSize();
-        if (result) {
-            if (this.getShowBoundingBox()) {
+        if (result && level != null && level.getServer() != null) { // this function only runs serverside but we can only render clientside unless in singleplayer
+            if (this.getShowBoundingBox() && (!level.isClientSide() && !level.getServer().isDedicatedServer())) {
                 CustomBuildingClientEvents.rtsStructuresToRenderBB.add(this.getBlockPos());
             }
         }

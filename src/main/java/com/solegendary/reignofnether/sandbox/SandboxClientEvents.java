@@ -45,9 +45,7 @@ public class SandboxClientEvents {
 
     // NONE == neutral
     private static Faction faction = Faction.NONE;
-
     public static Relationship relationship = Relationship.OWNED;
-
     public static SandboxMenuType sandboxMenuType = SandboxMenuType.UNITS;
 
     private static final Minecraft MC = Minecraft.getInstance();

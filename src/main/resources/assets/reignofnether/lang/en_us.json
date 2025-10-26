@@ -560,11 +560,14 @@
     "hud.actionbuttons.reignofnether.garrison": "Garrison",
     "hud.actionbuttons.reignofnether.ungarrison": "Ungarrison",
 
+    "hud.actionbuttons.reignofnether.toggle_sandbox_buttons": "Toggle Sandbox Buttons",
     "hud.actionbuttons.reignofnether.set_anchor": "Set Anchor",
     "hud.actionbuttons.reignofnether.set_anchor.tooltip1": "Units retreat to an anchor point when too far away.",
     "hud.actionbuttons.reignofnether.reset_to_anchor": "Reset to Anchor",
     "hud.actionbuttons.reignofnether.reset_to_anchor.tooltip1": "Also resets health and effects.",
     "hud.actionbuttons.reignofnether.remove_anchor": "Remove Anchor",
+    "hud.actionbuttons.reignofnether.remove_building": "Remove Building",
+    "hud.actionbuttons.reignofnether.remove_building.tooltip1": "Does not destroy any blocks",
 
     "hud.helperbuttons.reignofnether.chat": "Chat (enter)",
     "hud.helperbuttons.reignofnether.idle_workers": "Idle Workers",

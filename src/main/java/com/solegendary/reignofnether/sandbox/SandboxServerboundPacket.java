@@ -31,8 +31,14 @@ public class SandboxServerboundPacket {
     public static void removeAnchor(int entityId) {
         PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.REMOVE_ANCHOR, "", "", new BlockPos(0,0,0), entityId));
     }
-    public static void setOwner(int entityId, String ownerName) {
-        PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.SET_OWNER, ownerName, "", new BlockPos(0,0,0), entityId));
+    public static void setUnitOwner(int entityId, String ownerName) {
+        PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.SET_UNIT_OWNER, ownerName, "", new BlockPos(0,0,0), entityId));
+    }
+    public static void setBuildingOwner(BlockPos pos, String ownerName) {
+        PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.SET_UNIT_OWNER, ownerName, "", pos, 0));
+    }
+    public static void removeBuilding(BlockPos pos) {
+        PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.REMOVE_BUILDING, "", "", pos, 0));
     }
 
     public SandboxServerboundPacket(SandboxAction sandboxAction, String playerName, String unitName, BlockPos blockPos, int entityId) {
@@ -81,7 +87,9 @@ public class SandboxServerboundPacket {
                 case SET_ANCHOR -> SandboxServer.setAnchor(this.entityId, this.blockPos);
                 case RESET_TO_ANCHOR -> SandboxServer.resetToAnchor(this.entityId);
                 case REMOVE_ANCHOR -> SandboxServer.removeAnchor(this.entityId);
-                case SET_OWNER -> SandboxServer.setOwner(this.entityId, this.playerName);
+                case SET_UNIT_OWNER -> SandboxServer.setUnitOwner(this.entityId, this.playerName);
+                case SET_BUILDING_OWNER -> SandboxServer.setBuildingOwner(this.blockPos, this.playerName);
+                case REMOVE_BUILDING -> SandboxServer.removeBuilding(this.blockPos);
             }
             success.set(true);
         });

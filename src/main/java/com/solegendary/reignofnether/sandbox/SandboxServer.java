@@ -1,5 +1,8 @@
 package com.solegendary.reignofnether.sandbox;
 
+import com.solegendary.reignofnether.building.BuildingClientboundPacket;
+import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
@@ -75,7 +78,7 @@ public class SandboxServer {
         }
     }
 
-    public static void setOwner(int entityId, String ownerName) {
+    public static void setUnitOwner(int entityId, String ownerName) {
         for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
             if (entity.getId() == entityId && entity instanceof Unit unit) {
                 unit.setOwnerName(ownerName);
@@ -83,19 +86,21 @@ public class SandboxServer {
             }
         }
     }
+
+    public static void setBuildingOwner(BlockPos pos, String ownerName) {
+        for (BuildingPlacement bpl : BuildingServerEvents.getBuildings()) {
+            if (bpl.originPos.equals(pos)) {
+                bpl.ownerName = ownerName;
+                BuildingServerEvents.syncBuildingPlacement(pos);
+            }
+        }
+    }
+
+    public static void removeBuilding(BlockPos pos) {
+        for (BuildingPlacement bpl : BuildingServerEvents.getBuildings()) {
+            if (bpl.originPos.equals(pos)) {
+                BuildingServerEvents.syncBuildingPlacement(pos);
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

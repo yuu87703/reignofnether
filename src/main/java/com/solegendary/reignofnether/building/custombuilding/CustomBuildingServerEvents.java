@@ -90,8 +90,8 @@ public class CustomBuildingServerEvents {
                         }
                     }
                     customBuildings.add(building);
-                    //BuildingPlacement placement = new BuildingPlacement(building, level, pos, Rotation.NONE, "", blocks, false);
-                    //BuildingServerEvents.getBuildings().add(placement);
+                    BuildingPlacement placement = new BuildingPlacement(building, level, pos, Rotation.NONE, "", blocks, false);
+                    BuildingServerEvents.getBuildings().add(placement);
                     CustomBuildingClientboundPacket.registerCustomBuilding(building);
                     saveBuildings(level);
                     return true;
