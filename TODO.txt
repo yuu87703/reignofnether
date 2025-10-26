@@ -9,33 +9,37 @@
 Features
 --------
 [✔] Structure block to register custom buildings
+
+    [❌] Save and load CustomBuildings and CustomBuilding placements separately
+
     [❌] test in multiplayer
     [🟡] test saving (concurrent warning with normal building saves)
-    [❌] new tab in sandbox menu to let you place previously registered custom buildings
-    [❌] button to de-register individual building at bottom left
-    [❌] ability to add generic building features:
-        - garrisonable with special entry/exit blocks
-        - nether spread with adjustable range
-        - night warp with adjustable range
+    [🟡] new tab in sandbox menu to let you place previously registered custom buildings
+
+    [❌] Right click sandbox buttons to show a menu for customising the original building
+        [❌] button to de-register building
+        [❌] ability to add generic building features:
+            - garrisonable with special entry/exit blocks
+            - nether spread with adjustable range
+            - night warp with adjustable range
 
 Bugfixes
 --------
-[❌] Players logging in messes up the observer menu (freezes resources?)
-[❌] bridge scroll bug (up and down vs left/right?)
-
-[❌] Magma cubes are splitting off tiny slimes
+[❌] Don't let animals spawn on fences, slabs, gates, etc.
+[❌] Issues shooting directly downwards on bastions
+[❌] Disable portrait head tilts if Fresh animations is installed
+[🟡] Magma cubes are inheriting slime abilities
 [🟡] Building multiple altars lets you sometimes train multiple heroes
+[❌] Prevent incorrect ProductionItems being produced at buildings
+    - in ProductionItemList
 
 Quality of Life
 ---------------
 [❌] Cooked food is now worth food again for workers instead of being edible if it wasn't thrown by the Piglin Merchant
 [❌] If a building is cancelled or destroyed the production should be refunded
+[❌] Make workers automatically return to work when pressing D to drop off early
 
-[❌] Command to list end of game stats like:
-    - total resources gathered/spent
-    - average resources gathered/min
-    - total unit resource values lost
-    - total units produced (military and worker)
+
 
 Balance
 -------

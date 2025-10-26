@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.player;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
@@ -271,6 +272,7 @@ public class PlayerClientEvents {
             HeroClientEvents.fallenHeroes.clear();
             PlayerDisplayClientEvents.resetDisplay();
             PlayerColors.reset();
+            CustomBuildingClientEvents.customBuildings.clear();
         }
     }
 
@@ -295,6 +297,7 @@ public class PlayerClientEvents {
             HeroClientEvents.fallenHeroes.clear();
             PlayerDisplayClientEvents.resetDisplay();
             PlayerColors.reset();
+            CustomBuildingClientEvents.customBuildings.clear();
         }
     }
 

@@ -727,8 +727,7 @@ public class BuildingClientEvents {
     }
 
     @SubscribeEvent
-    public static void onMouseClick(ScreenEvent.MouseButtonPressed.Pre evt) throws NoSuchFieldException,
-        IllegalAccessException {
+    public static void onMouseClick(ScreenEvent.MouseButtonPressed.Pre evt) {
         if (!OrthoviewClientEvents.isEnabled()) {
             return;
         }
@@ -1003,19 +1002,16 @@ public class BuildingClientEvents {
         BlockPos portalDestination,
         boolean forPlayerLoggingIn
     ) {
-
-        BuildingPlacement newBuilding = BuildingUtils.getNewBuilding(building,
+        BuildingPlacement newBuilding = BuildingUtils.getNewBuildingPlacement(building,
             MC.level,
             pos,
             rotation,
             ownerName,
             isDiagonalBridge
         );
-
         for (BuildingPlacement placement : buildings)
-            if (newBuilding.originPos.equals(placement.originPos)) {
+            if (newBuilding.originPos.equals(placement.originPos))
                 return; // skip, building already exists clientside
-            }
 
         // add a bunch of dummy blocks so clients know not to remove buildings before the first blocks get placed
         while (numBlocksToPlace > 0) {

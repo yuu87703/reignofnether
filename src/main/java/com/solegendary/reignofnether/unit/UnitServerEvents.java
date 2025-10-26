@@ -456,12 +456,14 @@ public class UnitServerEvents {
             creeperUnit.explodeCreeper();
         }
 
-        boolean drownedInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffectRegistrar.ZOMBIE_INFECTED.get()) ||
-                evt.getEntity().getLastHurtByMob() instanceof DrownedUnit;
-        boolean slimeInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffects.CONFUSION) ||
-                evt.getEntity().getLastHurtByMob() instanceof SlimeUnit;
+        LivingEntity lastHurtByMob = evt.getEntity().getLastHurtByMob();
 
-        if (evt.getEntity().getLastHurtByMob() instanceof Unit unit && (drownedInfected || slimeInfected)) {
+        boolean drownedInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffectRegistrar.ZOMBIE_INFECTED.get()) ||
+                lastHurtByMob instanceof DrownedUnit;
+        boolean slimeInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffects.CONFUSION) ||
+                ((lastHurtByMob instanceof SlimeUnit) && !(lastHurtByMob instanceof MagmaCubeUnit));
+
+        if (lastHurtByMob instanceof Unit unit && (drownedInfected || slimeInfected)) {
 
             EntityType<? extends Unit> entityType = null;
 

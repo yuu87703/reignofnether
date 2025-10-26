@@ -81,7 +81,7 @@ public class RTSStructureBlockEntity extends StructureBlockEntity {
         boolean result = super.saveStructure(pWriteToDisk);
         if (result && level != null) {
             if (!level.isClientSide()) {
-                CustomBuildingServerEvents.createNewCustomBuilding(structureName, getStructureName(), (ServerLevel) this.level, getBlockPos());
+                CustomBuildingServerEvents.createAndRegisterNewCustomBuilding(structureName, getStructureName(), (ServerLevel) this.level, getBlockPos());
             }
         }
         return result;

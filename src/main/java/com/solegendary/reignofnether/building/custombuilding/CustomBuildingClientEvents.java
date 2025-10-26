@@ -3,24 +3,21 @@ package com.solegendary.reignofnether.building.custombuilding;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.blocks.RTSStructureBlockEntity;
 import com.solegendary.reignofnether.building.*;
-import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CustomBuildingClientEvents {
 
@@ -31,44 +28,29 @@ public class CustomBuildingClientEvents {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
-    public static Building findCustomBuilding(ResourceLocation rl) {
+    public static Building getCustomBuilding(String name) {
         for (CustomBuilding customBuilding : customBuildings)
-            if (customBuilding.structureName.equals(rl.toString()))
+            if (customBuilding.name.equals(name))
                 return customBuilding;
         return null;
     }
 
-    public static void registerCustomBuilding(String name, BlockPos originPos, BlockPos structurePos, Vec3i structureSize) {
-        boolean buildingExists = false;
-        for (BuildingPlacement existingPlacement : BuildingClientEvents.getBuildings()) {
-            if (existingPlacement.originPos.equals(originPos)) {
-                buildingExists = true;
-                break;
+    public static void registerCustomBuilding(String name, Vec3i structureSize, CompoundTag structureNbt) {
+        for (CustomBuilding customBuilding : customBuildings) {
+            if (customBuilding.name.equals(name)) {
+                MC.player.sendSystemMessage(Component.literal("ERROR: custom building " + name + " already exists"));
             }
         }
-        if (!buildingExists) {
-            ArrayList<BuildingBlock> blocks = BuildingBlockData.getBuildingBlocksFromWorld(MC.level, originPos, structurePos, structureSize);
-            int numSolidBlocks = 0;
-            Block portraitBlock = Blocks.COMMAND_BLOCK;
-            for (BuildingBlock bb : blocks) {
-                BlockState bs = bb.getBlockState();
-                if (!bs.isAir() && bs.getFluidState().isEmpty()) {
-                    numSolidBlocks += 1;
-                    portraitBlock = bs.getBlock();
-                }
+        ArrayList<BuildingBlock> blocks = BuildingBlockData.getBuildingBlocksFromNbt(structureNbt);
+        Block portraitBlock = Blocks.COMMAND_BLOCK;
+        for (BuildingBlock bb : blocks) {
+            BlockState bs = bb.getBlockState();
+            if (!bs.isAir() && bs.getFluidState().isEmpty()) {
+                portraitBlock = bs.getBlock();
             }
-            if (numSolidBlocks == 0) {
-                ReignOfNether.LOGGER.error("ERROR (server): cannot register custom building with no solid blocks");
-            } else {
-                CustomBuilding building = new CustomBuilding(name, structurePos, structureSize, portraitBlock);
-                customBuildings.add(building);
-                BuildingPlacement placement = new BuildingPlacement(
-                        building, MC.level, originPos, Rotation.NONE, "", blocks, false);
-                BuildingClientEvents.getBuildings().add(placement);
-            }
-        } else if (MC.player != null) {
-            MC.player.sendSystemMessage(Component.literal("ERROR: cannot register custom building at same origin as another building"));
         }
+        CustomBuilding building = new CustomBuilding(name, structureSize, portraitBlock, structureNbt);
+        customBuildings.add(building);
     }
 
     @SubscribeEvent

@@ -19,6 +19,7 @@ public class ProductionItemList {
     }
 
     public void add(ProductionItem production, Keybinding keybind) {
+        // TODO check that the parent building is allowed to have this production
         productions.put(production, keybind);
     }
 

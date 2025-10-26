@@ -961,10 +961,10 @@ public class HudClientEvents {
             actionButtons.add(SandboxClientEvents.getToggleFactionButton());
             actionButtons.add(SandboxClientEvents.getToggleRelationshipButton());
 
-            if (SandboxClientEvents.sandboxMenuType == SandboxMenuType.BUILDINGS) {
-                actionButtons.add(SandboxClientEvents.getToggleBuildingCheatsButton());
-            } else {
+            if (SandboxClientEvents.sandboxMenuType == SandboxMenuType.UNITS) {
                 actionButtons.add(SandboxClientEvents.getToggleUnitCheatsButton());
+            } else {
+                actionButtons.add(SandboxClientEvents.getToggleBuildingCheatsButton());
             }
             actionButtons.add(SandboxClientEvents.getToggleNonUnitControlButton());
 
