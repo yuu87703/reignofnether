@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.building.custombuilding;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -51,7 +52,7 @@ public class CustomBuilding extends Building {
         String blockName = portraitBlock.getName().getString().replace(" ", "_").toLowerCase();
         return new BuildingPlaceButton(
                 this.name,
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/command_block_side.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_side.png"),
                 hotkey,
                 () -> BuildingClientEvents.getBuildingToPlace() == this,
                 () -> false,

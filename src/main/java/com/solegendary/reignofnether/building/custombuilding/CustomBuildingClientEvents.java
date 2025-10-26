@@ -38,7 +38,8 @@ public class CustomBuildingClientEvents {
     public static void registerCustomBuilding(String name, Vec3i structureSize, CompoundTag structureNbt) {
         for (CustomBuilding customBuilding : customBuildings) {
             if (customBuilding.name.equals(name)) {
-                MC.player.sendSystemMessage(Component.literal("ERROR: custom building " + name + " already exists"));
+                MC.player.sendSystemMessage(Component.literal("ERROR: custom building '" + name + "' already exists"));
+                return;
             }
         }
         ArrayList<BuildingBlock> blocks = BuildingBlockData.getBuildingBlocksFromNbt(structureNbt);
