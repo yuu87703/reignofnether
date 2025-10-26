@@ -803,12 +803,15 @@ public class HudClientEvents {
         // ---------------------------
         // Unit sandbox buttons
         // ---------------------------
-        if (selUnits.size() > 0 && SandboxClientEvents.isSandboxPlayer() && hudSelectedEntity instanceof Unit) {
+        if (SandboxClientEvents.isSandboxPlayer() && (hudSelectedEntity != null || hudSelectedPlacement != null)) {
             blitX = 0;
             blitY = screenHeight - (iconFrameSize * 2);
             ArrayList<Button> actionButtons = new ArrayList<>();
 
             actionButtons.add(SandboxActionButtons.getSetRelationshipButton());
+            if (hudSelectedPlacement != null) {
+                actionButtons.add(SandboxActionButtons.removeBuildingPlacement);
+            }
             if (hudSelectedEntity instanceof AttackerUnit) {
                 actionButtons.add(SandboxActionButtons.setAnchor);
                 actionButtons.add(SandboxActionButtons.resetToAnchor);
@@ -910,6 +913,9 @@ public class HudClientEvents {
 
                 int rowsUp = (int) Math.floor((float) (unitAbilities.size() - 1) / MAX_BUTTONS_PER_ROW);
                 rowsUp = Math.max(0, rowsUp);
+                if (SandboxClientEvents.isSandboxPlayer() && (hudSelectedEntity != null || hudSelectedPlacement != null))
+                    rowsUp += 1;
+
                 blitY -= iconFrameSize * rowsUp;
 
                 int i = 0;
@@ -983,10 +989,10 @@ public class HudClientEvents {
                     .toList();
 
             int rowsUp = (int) Math.floor((float) (shownAbilities.size() - 1) / MAX_BUTTONS_PER_ROW);
-            if (SandboxClientEvents.isSandboxPlayer())
+            rowsUp = Math.max(0, rowsUp);
+            if (SandboxClientEvents.isSandboxPlayer() && (hudSelectedEntity != null || hudSelectedPlacement != null))
                 rowsUp += 1;
 
-            rowsUp = Math.max(0, rowsUp);
             blitY -= iconFrameSize * rowsUp;
 
             int i = 0;
