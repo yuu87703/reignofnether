@@ -24,7 +24,7 @@ Bugfixes
 --------
 [❌] Don't let animals spawn on fences, slabs, gates, etc.
 [❌] Issues shooting directly downwards on bastions
-[❌] Disable portrait head tilts if Fresh animations is installed
+[🟡] Fixed portrait heads from shaking uncontrollably when Fresh Animations is installed
 [🟡] Magma cubes are inheriting slime abilities
 [🟡] Building multiple altars lets you sometimes train multiple heroes
 [❌] Prevent incorrect ProductionItems being produced at buildings
