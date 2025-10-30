@@ -9,11 +9,7 @@
 Features
 --------
 [✔] Structure block to register custom buildings
-
-    [❌] checkbox in structure block menu to also make the captured structure a building
-
     [❌] Right click sandbox buttons to show a menu for customising the original building
-        [❌] button to de-register building
         [❌] ability to add generic building features:
             - garrisonable with special entry/exit blocks
             - nether spread with adjustable range
@@ -24,14 +20,19 @@ Bugfixes
 --------
 [❌] Don't let animals spawn on fences, slabs, gates, etc.
 [❌] Issues shooting directly downwards on bastions
-[🟡] Fixed portrait heads from shaking uncontrollably when Fresh Animations is installed
 [🟡] Magma cubes are inheriting slime abilities
 [🟡] Building multiple altars lets you sometimes train multiple heroes
-[❌] Prevent incorrect ProductionItems being produced at buildings
-    - in ProductionItemList
+[🟡] Added extra checks to prevent queueing the wrong kind of production at buildings
 
 Quality of Life
 ---------------
+Lots of sandbox improvements:
+    [🟡] You can now set anchors for groups of units at a time
+    [🟡] Cleaned up a lot of button tooltips in and the bottom right menu
+    [🟡] Added a button to change building allegiance
+    [🟡] Added a button to remove a building without destroying its blocks
+    [🟡] When cheats are enabled, enemy units' abilities can be used
+
 [❌] Cooked food is now worth food again for workers instead of being edible if it wasn't thrown by the Piglin Merchant
 [❌] If a building is cancelled or destroyed the production should be refunded
 [❌] Make workers automatically return to work when pressing D to drop off early
@@ -40,4 +41,7 @@ Quality of Life
 
 Balance
 -------
-[❌] Spawn a free mooshroom for piglin players at the start of the game (200 food value)
+[🟡] Reduced the night radius of additional mausoleums from 80 to 60
+[🟡] Tridents that hit a target on the same frame as another trident now pierce through
+    - This is the same behaviour that arrows have and should improve headhunter damage output
+[🟡] Piglin capitols now get a mooshroom (worth 175 food) on every odd spawn (1st, 3rd, 5th, etc.)

@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -195,6 +196,10 @@ public class ProductionPlacement extends BuildingPlacement {
     // return true if successful
     public boolean startProductionItem(ProductionItem prodItem) {
         boolean success = false;
+
+        if (getBuilding() instanceof ProductionBuilding pb && !pb.productions.get().contains(prodItem)) {
+            return false;
+        }
 
         if (prodItem != null) {
             // only worry about checking affordability on serverside

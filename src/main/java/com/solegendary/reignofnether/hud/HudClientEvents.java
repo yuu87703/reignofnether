@@ -28,6 +28,7 @@ import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
+import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.ResourceSources;
 import com.solegendary.reignofnether.resources.Resources;
@@ -901,7 +902,7 @@ public class HudClientEvents {
 
             // includes worker building buttons
             if (TutorialClientEvents.isAtOrPastStage(TutorialStage.BUILD_INTRO) &&
-                    (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED || !PlayerClientEvents.isRTSPlayer()) ||
+                    (getPlayerToEntityRelationship(selUnits.get(0)) == Relationship.OWNED || !PlayerClientEvents.isRTSPlayer() || ResearchClient.hasCheat("wouldyoukindly")) ||
                     AlliancesClient.canControlAlly(selUnits.get(0))) {
                 List<Button> abilityButtons = List.of();
                 for (LivingEntity livingEntity : selUnits) {

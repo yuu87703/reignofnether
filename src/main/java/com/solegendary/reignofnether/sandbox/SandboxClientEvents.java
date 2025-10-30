@@ -31,6 +31,7 @@ import com.solegendary.reignofnether.util.Faction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -438,13 +439,9 @@ public class SandboxClientEvents {
                default -> MC.player.getName().getString();
             };
 
-            int entityId = 0;
-            if (!UnitClientEvents.getSelectedUnits().isEmpty())
-                entityId = UnitClientEvents.getSelectedUnits().get(0).getId();
-
             switch (sandboxAction) {
                 case SPAWN_UNIT -> SandboxServerboundPacket.spawnUnit(CursorClientEvents.getLeftClickSandboxAction(), ownerName, spawnUnitName, CursorClientEvents.getPreselectedBlockPos());
-                case SET_ANCHOR -> SandboxServerboundPacket.setAnchor(CursorClientEvents.getPreselectedBlockPos(), entityId);
+                case SET_ANCHOR -> SandboxServerboundPacket.setAnchor(CursorClientEvents.getPreselectedBlockPos(), UnitClientEvents.getSelectedUnits().stream().mapToInt(Entity::getId).toArray());
             }
 
             if (!Keybindings.shiftMod.isDown()) {

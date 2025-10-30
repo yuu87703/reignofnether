@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
@@ -71,13 +72,10 @@ public class SandboxActionButtons {
                 () -> !SandboxClientEvents.isSandboxPlayer(),
                 SandboxActionButtons::selectedUnitsHaveAnchor,
                 () -> {
-                    if (!UnitClientEvents.getSelectedUnits().isEmpty()) {
-                        LivingEntity entity = UnitClientEvents.getSelectedUnits().get(0);
-                        if (entity instanceof Unit unit) {
-                            SandboxServerboundPacket.resetToAnchor(entity.getId());
-                            Unit.fullResetBehaviours(unit);
-                        }
-                    }
+                        SandboxServerboundPacket.resetToAnchor(UnitClientEvents.getSelectedUnits().stream().mapToInt(Entity::getId).toArray());
+                        for (LivingEntity entity : UnitClientEvents.getSelectedUnits())
+                            if (entity instanceof Unit unit)
+                                Unit.fullResetBehaviours(unit);
                 },
                 null,
                 List.of(
@@ -93,10 +91,7 @@ public class SandboxActionButtons {
                 () -> CursorClientEvents.getLeftClickSandboxAction() == SandboxAction.REMOVE_ANCHOR,
                 () -> !SandboxClientEvents.isSandboxPlayer(),
                 SandboxActionButtons::selectedUnitsHaveAnchor,
-                () -> {
-                    if (!UnitClientEvents.getSelectedUnits().isEmpty())
-                        SandboxServerboundPacket.removeAnchor(UnitClientEvents.getSelectedUnits().get(0).getId());
-                },
+                () -> SandboxServerboundPacket.removeAnchor(UnitClientEvents.getSelectedUnits().stream().mapToInt(Entity::getId).toArray()),
                 null,
                 List.of(
                         fcs(I18n.get("hud.actionbuttons.reignofnether.remove_anchor"), true)
@@ -155,9 +150,11 @@ public class SandboxActionButtons {
                                     case NEUTRAL -> unit.setOwnerName("Enemy");
                                     case HOSTILE -> unit.setOwnerName(MC.player.getName().getString());
                                 }
-                                SandboxServerboundPacket.setUnitOwner(entity.getId(), unit.getOwnerName());
-                                updateButtons();
                             }
+                        }
+                        if (HudClientEvents.hudSelectedEntity instanceof Unit unit) {
+                            SandboxServerboundPacket.setUnitOwner(UnitClientEvents.getSelectedUnits().stream().mapToInt(Entity::getId).toArray(), unit.getOwnerName());
+                            updateButtons();
                         }
                         for (BuildingPlacement bpl : BuildingClientEvents.getSelectedBuildings()) {
                             switch (finalRelationship) {
@@ -179,9 +176,11 @@ public class SandboxActionButtons {
                                     case NEUTRAL -> unit.setOwnerName(MC.player.getName().getString());
                                     case HOSTILE -> unit.setOwnerName("");
                                 }
-                                SandboxServerboundPacket.setUnitOwner(entity.getId(), unit.getOwnerName());
-                                updateButtons();
                             }
+                        }
+                        if (HudClientEvents.hudSelectedEntity instanceof Unit unit) {
+                            SandboxServerboundPacket.setUnitOwner(UnitClientEvents.getSelectedUnits().stream().mapToInt(Entity::getId).toArray(), unit.getOwnerName());
+                            updateButtons();
                         }
                         for (BuildingPlacement bpl : BuildingClientEvents.getSelectedBuildings()) {
                             switch (finalRelationship) {
