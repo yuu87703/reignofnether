@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -85,7 +84,7 @@ public class CustomBuildingServerEvents {
                     CustomBuilding building = new CustomBuilding(structureName, structureSize, portraitBlock, structureNbt);
                     for (CustomBuilding customBuilding : customBuildings) {
                         if (customBuilding.name.equals(building.name)) {
-                            PlayerServerEvents.sendMessageToAllPlayers("ERROR: custom building " + building.name + " already exists");
+                            PlayerServerEvents.sendMessageToAllPlayers("ERROR (server): custom building " + building.name + " already exists");
                             return false;
                         }
                     }
@@ -94,6 +93,7 @@ public class CustomBuildingServerEvents {
                     BuildingServerEvents.getBuildings().add(placement);
                     CustomBuildingClientboundPacket.registerCustomBuilding(building);
                     saveBuildings(level);
+                    BuildingServerEvents.saveBuildings(level);
                     return true;
                 }
             } else {
@@ -116,15 +116,11 @@ public class CustomBuildingServerEvents {
     public static void saveBuildings(ServerLevel level) {
         CustomBuildingSaveData customBuildingData = CustomBuildingSaveData.getInstance(level);
         customBuildingData.customBuildings.clear();
-
-        BuildingServerEvents.getBuildings().stream()
-                .filter(b -> b.getBuilding() instanceof CustomBuilding)
-                .toList()
-                .forEach(b -> {
+        customBuildings.forEach(b -> {
             customBuildingData.customBuildings.add(new CustomBuildingSave(
-                    ((CustomBuilding) b.getBuilding()).structureNbt,
-                    b.getBuilding().name,
-                    ((CustomBuilding) b.getBuilding()).structureSize
+                    b.structureNbt,
+                    b.name,
+                    b.structureSize
             ));
         });
         customBuildingData.save();

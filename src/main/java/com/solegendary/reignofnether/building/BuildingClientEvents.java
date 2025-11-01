@@ -16,6 +16,7 @@ import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
 import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
@@ -144,7 +145,14 @@ public class BuildingClientEvents {
         }
 
         selectedBuildings.add(building);
-        selectedBuildings.sort(Comparator.comparing(b -> ReignOfNetherRegistries.BUILDING.getKey(b.getBuilding()).toString()));
+        selectedBuildings.sort(Comparator.comparing(b -> {
+            if (b.getBuilding() instanceof CustomBuilding) {
+                return b.getBuilding().name;
+            } else {
+                ReignOfNetherRegistries.BUILDING.getKey(b.getBuilding()).toString();
+            }
+            return "";
+        }));
         UnitClientEvents.clearSelectedUnits();
     }
 

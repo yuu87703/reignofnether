@@ -14,7 +14,6 @@ Features
             - garrisonable with special entry/exit blocks
             - nether spread with adjustable range
             - night warp with adjustable range
-        [❌] customise button icon and portrait block
 
 Bugfixes
 --------
@@ -32,6 +31,7 @@ Lots of sandbox improvements:
     [🟡] Added a button to change building allegiance
     [🟡] Added a button to remove a building without destroying its blocks
     [🟡] When cheats are enabled, enemy units' abilities can be used
+    [🟡] /gamerule doLogFalling is treated as off while in sandbox
 
 [❌] Cooked food is now worth food again for workers instead of being edible if it wasn't thrown by the Piglin Merchant
 [❌] If a building is cancelled or destroyed the production should be refunded

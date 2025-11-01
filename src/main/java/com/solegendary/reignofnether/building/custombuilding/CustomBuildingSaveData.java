@@ -41,22 +41,11 @@ public class CustomBuildingSaveData extends SavedData {
         ListTag ltag = (ListTag) tag.get("custombuildings");
 
         if (ltag != null) {
-
-            CompoundTag structureNbt = null;
-            String buildingName = null;
-            Vec3i structureSize = null;
-
             for (Tag ctag : ltag) {
                 CompoundTag btag = (CompoundTag) ctag;
-                if (btag.contains("buildingName")) {
-                    buildingName = btag.getString("buildingName");
-                    structureSize = new Vec3i(btag.getInt("structureSizeX"), btag.getInt("structureSizeY"), btag.getInt("structureSizeZ"));
-                } else {
-                    structureNbt = btag;
-                }
-            }
-
-            if (buildingName != null && structureNbt != null) {
+                String buildingName = btag.getString("buildingName");
+                Vec3i structureSize = new Vec3i(btag.getInt("structureSizeX"), btag.getInt("structureSizeY"), btag.getInt("structureSizeZ"));
+                CompoundTag structureNbt = btag.getCompound("structureNbt");
                 data.customBuildings.add(new CustomBuildingSave(
                         structureNbt,
                         buildingName,
@@ -77,8 +66,8 @@ public class CustomBuildingSaveData extends SavedData {
             cTag.putInt("structureSizeX", b.structureSize.getX());
             cTag.putInt("structureSizeY", b.structureSize.getY());
             cTag.putInt("structureSizeZ", b.structureSize.getZ());
+            cTag.put("structureNbt", b.structureNbt);
             list.add(cTag);
-            list.add(b.structureNbt);
         });
         tag.put("custombuildings", list);
         return tag;

@@ -35,7 +35,7 @@ public class SandboxServerboundPacket {
         PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.SET_UNIT_OWNER, ownerName, "", new BlockPos(0,0,0), entityIds));
     }
     public static void setBuildingOwner(BlockPos pos, String ownerName) {
-        PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.SET_UNIT_OWNER, ownerName, "", pos,  new int[]{}));
+        PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.SET_BUILDING_OWNER, ownerName, "", pos,  new int[]{}));
     }
     public static void removeBuilding(BlockPos pos) {
         PacketHandler.INSTANCE.sendToServer(new SandboxServerboundPacket(SandboxAction.REMOVE_BUILDING, "", "", pos, new int[]{}));

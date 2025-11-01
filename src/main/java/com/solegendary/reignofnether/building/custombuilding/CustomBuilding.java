@@ -1,22 +1,23 @@
 package com.solegendary.reignofnether.building.custombuilding;
 
-import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.util.Faction;
-import net.minecraft.core.BlockPos;
+import com.solegendary.reignofnether.util.MiscUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
@@ -34,7 +35,7 @@ public class CustomBuilding extends Building {
         this.structureSize = structureSize;
         this.structureNbt = nbt;
         this.portraitBlock = portraitBlock;
-        this.icon = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/command_block.png");
+        this.icon = MiscUtil.getTextureForBlock(portraitBlock);
         this.startingBlockTypes.addAll(BuildingBlockData.getBuildingBlocksFromNbt(structureNbt)
                 .stream().filter(bb -> bb.getBlockPos().getY() == 0)
                 .map(bb -> bb.getBlockState().getBlock()).toList());
@@ -49,10 +50,9 @@ public class CustomBuilding extends Building {
 
     @Override
     public BuildingPlaceButton getBuildButton(Keybinding hotkey) {
-        String blockName = portraitBlock.getName().getString().replace(" ", "_").toLowerCase();
         return new BuildingPlaceButton(
                 this.name,
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_side.png"),
+                MiscUtil.getTextureForBlock(portraitBlock),
                 hotkey,
                 () -> BuildingClientEvents.getBuildingToPlace() == this,
                 () -> false,
