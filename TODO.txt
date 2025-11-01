@@ -45,3 +45,8 @@ Balance
 [🟡] Tridents that hit a target on the same frame as another trident now pierce through
     - This is the same behaviour that arrows have and should improve headhunter damage output
 [🟡] Piglin capitols now get a mooshroom (worth 175 food) on every odd spawn (1st, 3rd, 5th, etc.)
+
+Languages
+---------
+[❌] Added Korean (ko_kr)
+[❌] Updated Vietnamese (vi_vn)
