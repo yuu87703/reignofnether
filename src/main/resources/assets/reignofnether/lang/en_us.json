@@ -1253,6 +1253,7 @@
     "sandbox.reignofnether.custom_buildings_info.tooltip1": "Custom buildings saved with RTS",
     "sandbox.reignofnether.custom_buildings_info.tooltip2": "structure blocks are shown here",
     "sandbox.reignofnether.custom_buildings_info.tooltip3": "(Click to get an RTS Structure Block)",
+    "sandbox.reignofnether.custom_buildings_info.building_menu": "(Right-click to customise)",
 
     "startpos.reignofnether.positions_button.tooltip1": "Starting Locations",
     "startpos.reignofnether.positions_button.tooltip2": "%d/%d locations taken",

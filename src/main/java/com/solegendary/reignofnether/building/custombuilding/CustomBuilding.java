@@ -1,12 +1,15 @@
 package com.solegendary.reignofnether.building.custombuilding;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -35,10 +38,10 @@ public class CustomBuilding extends Building {
         this.structureSize = structureSize;
         this.structureNbt = nbt;
         this.portraitBlock = portraitBlock;
-        this.icon = MiscUtil.getTextureForBlock(portraitBlock);
+        this.icon = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_front.png");
         this.startingBlockTypes.addAll(BuildingBlockData.getBuildingBlocksFromNbt(structureNbt)
-                .stream().filter(bb -> bb.getBlockPos().getY() == 0)
-                .map(bb -> bb.getBlockState().getBlock()).toList());
+            .stream().filter(bb -> bb.getBlockPos().getY() == 0)
+            .map(bb -> bb.getBlockState().getBlock()).toList());
     }
 
     @Override
@@ -50,7 +53,7 @@ public class CustomBuilding extends Building {
 
     @Override
     public BuildingPlaceButton getBuildButton(Keybinding hotkey) {
-        return new BuildingPlaceButton(
+        BuildingPlaceButton button = new BuildingPlaceButton(
                 this.name,
                 MiscUtil.getTextureForBlock(portraitBlock),
                 hotkey,
@@ -58,9 +61,12 @@ public class CustomBuilding extends Building {
                 () -> false,
                 () -> true,
                 List.of(
-                        fcs(this.name, true)
+                        fcs(this.name, true),
+                        fcs(I18n.get("sandbox.reignofnether.custom_buildings_info.building_menu"))
                 ),
                 this
         );
+        button.onRightClick = () -> CustomBuildingClientEvents.setCustomBuildingMenu(this);
+        return button;
     }
 }

@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.config.ConfigClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
@@ -1565,7 +1566,7 @@ public class HudClientEvents {
         if (beacon != null) {
             Button beaconButton = HelperButtons.getBeaconButton(beacon.ownerName);
             int xi = screenWidth - (StartButtons.ICON_SIZE * 2);
-            if (!observerButton.isHidden.get()) {
+            if (!observerButton.isHidden.get() || !diplomacyButton.isHidden.get()) {
                 xi = screenWidth - (StartButtons.ICON_SIZE * 4);
             }
             if (!beaconButton.isHidden.get()) {
@@ -1667,6 +1668,8 @@ public class HudClientEvents {
         if (MinimapClientEvents.isPointInsideMinimap(mouseX, mouseY))
             return true;
         if (PlayerDisplayClientEvents.isMouseOverHud(mouseX, mouseY))
+            return true;
+        if (CustomBuildingClientEvents.isMouseOverHud(mouseX, mouseY))
             return true;
         return isMouseOverAnyButton();
     }

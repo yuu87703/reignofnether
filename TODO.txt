@@ -15,6 +15,11 @@ Features
             - nether spread with adjustable range
             - night warp with adjustable range
 
+    [❌] only works in singleplayer right now - test that you can at least import a map though
+
+    - Registering new custom buildings can currently only be done in singleplayer
+    - To export custom buildings into another map, copy the file world/data/saved-custom-building-data.dat
+
 Bugfixes
 --------
 [❌] Issues shooting directly downwards on bastions
