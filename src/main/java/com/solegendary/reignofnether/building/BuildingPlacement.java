@@ -767,12 +767,6 @@ public class BuildingPlacement {
                 }
             }
         }
-
-        for (BuildingBlock block : blocks) {
-            BlockPos bp = block.getBlockPos();
-            BlockState bs = block.getBlockState();
-            BlockState bsWorld = tickLevel.getBlockState(bp);
-        }
         float blocksPlaced = getBlocksPlaced();
         float blocksTotal = getBlocksTotal();
 
@@ -991,7 +985,9 @@ public class BuildingPlacement {
                 || Math.abs(spawnBp.getY() - minCorner.getY()) >= 4
                 || BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), spawnBp)
                 || BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), spawnBp.above())
-                || !level.getWorldBorder().isWithinBounds(spawnBp));
+                || !level.getWorldBorder().isWithinBounds(spawnBp)
+                || spawnBs.is(BlockTags.FENCES)
+                || BlockUtils.isBottomSlab(spawnBs));
 
         EntityType<? extends Animal> animalType = null;
 

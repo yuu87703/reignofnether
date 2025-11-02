@@ -5,7 +5,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.block.state.properties.StairsShape;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +34,7 @@ public class BlockUtils {
                 BlockRegistrar.FALLING_WARPED_STEM.get())
             .contains(bs.getBlock());
     }
+
     public static boolean isLeafBlock(BlockState bs) {
         if (bs.is(BlockTags.LEAVES))
             return true;
@@ -38,6 +42,14 @@ public class BlockUtils {
                         BlockRegistrar.DECAYABLE_NETHER_WART_BLOCK.get(), BlockRegistrar.DECAYABLE_WARPED_WART_BLOCK.get(),
                         Blocks.RED_MUSHROOM_BLOCK, Blocks.BROWN_MUSHROOM_BLOCK)
                 .contains(bs.getBlock());
+    }
+
+    public static boolean isBottomSlab(BlockState bs) {
+        if (bs.getBlock() instanceof SlabBlock) {
+            SlabType type = bs.getValue(SlabBlock.TYPE);
+            return type == SlabType.BOTTOM;
+        }
+        return false;
     }
 
     public static int numAirOrLeafBlocksBelow(BlockPos bp, Level level) {

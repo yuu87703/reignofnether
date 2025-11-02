@@ -317,14 +317,12 @@ public class BuildingClientboundPacket {
                     case CANCEL_PRODUCTION -> {
                         ((ProductionPlacement) building).cancelProductionItem(
                                 ReignOfNetherRegistries.PRODUCTION_ITEM.get(itemKey),
-                            this.buildingPos,
                             true
                         );
                     }
                     case CANCEL_BACK_PRODUCTION -> {
                         ((ProductionPlacement) building).cancelProductionItem(
                                 ReignOfNetherRegistries.PRODUCTION_ITEM.get(itemKey),
-                            this.buildingPos,
                             false
                         );
                     }

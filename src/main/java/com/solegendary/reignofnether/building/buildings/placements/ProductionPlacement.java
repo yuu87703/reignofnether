@@ -243,7 +243,7 @@ public class ProductionPlacement extends BuildingPlacement {
         return success;
     }
 
-    public boolean cancelProductionItem(ProductionItem item, BlockPos pos, boolean frontItem) {
+    public boolean cancelProductionItem(ProductionItem item, boolean frontItem) {
         boolean success = false;
 
         if (!productionQueue.isEmpty()) {
@@ -283,6 +283,14 @@ public class ProductionPlacement extends BuildingPlacement {
             }
         }
         return success;
+    }
+
+    @Override
+    public void destroy(ServerLevel serverLevel) {
+        super.destroy(serverLevel);
+        while (!productionQueue.isEmpty()) {
+            cancelProductionItem(productionQueue.get(0).item, true);
+        }
     }
 
     public void tick(Level tickLevel) {

@@ -555,17 +555,18 @@ public class UnitServerEvents {
 
             evt.setCanceled(true);
 
-            if (lastHuntedAnimalId != evt.getEntity().getId()) {            for (ItemStack itemStack : ResourceSources.getFoodItemsFromAnimal((Animal) evt.getEntity())) {
-                ResourceSource res = ResourceSources.getFromItem(itemStack.getItem());
+            if (lastHuntedAnimalId != evt.getEntity().getId()) {
+                for (ItemStack itemStack : ResourceSources.getFoodItemsFromAnimal((Animal) evt.getEntity())) {
+                    ResourceSource res = ResourceSources.getFromItem(itemStack.getItem());
 
-                if (res != null) {
-                    unit.getItems().add(itemStack);
-                    if (unit instanceof VillagerUnit vUnit) {
-                        vUnit.incrementHunterExp();
-                        if (!(evt.getEntity() instanceof Chicken))
+                    if (res != null) {
+                        unit.getItems().add(itemStack);
+                        if (unit instanceof VillagerUnit vUnit) {
                             vUnit.incrementHunterExp();
+                            if (!(evt.getEntity() instanceof Chicken))
+                                vUnit.incrementHunterExp();
+                        }
                     }
-                }
                 }
                 if (Unit.atThresholdResources(unit)) {
                     unit.getReturnResourcesGoal().returnToClosestBuilding();

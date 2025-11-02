@@ -17,11 +17,13 @@ Features
 
 Bugfixes
 --------
-[❌] Don't let animals spawn on fences, slabs, gates, etc.
 [❌] Issues shooting directly downwards on bastions
+
+[🟡] Random animal spawns can no longer happen on single bottom-slabs or fences
 [🟡] Magma cubes are inheriting slime abilities
 [🟡] Building multiple altars lets you sometimes train multiple heroes
 [🟡] Added extra checks to prevent queueing the wrong kind of production at buildings
+[🟡] Iron Golems and Witches can no longer pick up resources as they were not able to return them
 
 Quality of Life
 ---------------
@@ -33,10 +35,10 @@ Lots of sandbox improvements:
     [🟡] When cheats are enabled, enemy units' abilities can be used
     [🟡] /gamerule doLogFalling is treated as off while in sandbox
 
-[❌] Cooked food is now worth food again for workers instead of being edible if it wasn't thrown by the Piglin Merchant
-[❌] If a building is cancelled or destroyed the production should be refunded
-[❌] Make workers automatically return to work when pressing D to drop off early
+[🟡] When building is cancelled or destroyed any in-progress production is now fully refunded
+[🟡] When pressing D to have workers return resources early, they will now go back to work automatically
 
+[❌] Cooked food is now worth food again for workers instead of being edible if it wasn't thrown by the Piglin Merchant
 
 
 Balance
@@ -48,5 +50,5 @@ Balance
 
 Languages
 ---------
-[❌] Added Korean (ko_kr)
-[❌] Updated Vietnamese (vi_vn)
+[🟡] Added Korean (ko_kr)
+[🟡] Updated Vietnamese (vi_vn)

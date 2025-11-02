@@ -225,14 +225,14 @@ public class BuildingServerboundPacket {
                 }
                 case CANCEL_PRODUCTION -> {
                     if (building instanceof ProductionPlacement pBuilding) {
-                        boolean cancelSuccess = pBuilding.cancelProductionItem(ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(this.itemName)), this.buildingPos, true);
+                        boolean cancelSuccess = pBuilding.cancelProductionItem(ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(this.itemName)), true);
                         if (cancelSuccess || pBuilding.productionQueue.isEmpty())
                             BuildingClientboundPacket.cancelProduction(buildingPos, ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(itemName)), true);
                     }
                 }
                 case CANCEL_BACK_PRODUCTION -> {
                     if (building instanceof ProductionPlacement pBuilding) {
-                        boolean cancelSuccess = pBuilding.cancelProductionItem(ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(this.itemName)), this.buildingPos, false);
+                        boolean cancelSuccess = pBuilding.cancelProductionItem(ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(this.itemName)), false);
                         if (cancelSuccess || pBuilding.productionQueue.isEmpty())
                             BuildingClientboundPacket.cancelProduction(buildingPos, ReignOfNetherRegistries.PRODUCTION_ITEM.get(ResourceLocation.tryParse(itemName)), false);
                     }
