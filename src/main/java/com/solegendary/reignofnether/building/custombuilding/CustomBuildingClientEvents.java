@@ -63,7 +63,10 @@ public class CustomBuildingClientEvents {
         return null;
     }
 
-    public static void registerCustomBuilding(String name, Vec3i structureSize, CompoundTag structureNbt) {
+    public static void registerCustomBuilding(String playerName, String name, Vec3i structureSize, CompoundTag structureNbt) {
+        if (MC.player == null || (!playerName.isEmpty() && !MC.player.getName().getString().equals(playerName)))
+            return;
+
         for (CustomBuilding customBuilding : customBuildings) {
             if (customBuilding.name.equals(name)) {
                 MC.player.sendSystemMessage(Component.literal("ERROR (client): custom building '" + name + "' already exists"));

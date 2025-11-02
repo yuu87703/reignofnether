@@ -143,16 +143,16 @@ public class CustomBuildingServerEvents {
         }
         MinecraftServer server = evt.getEntity().level().getServer();
         if (server == null || !server.isDedicatedServer()) {
-            CompletableFuture.delayedExecutor(1000,  TimeUnit.MILLISECONDS).execute(CustomBuildingServerEvents::syncCustomBuildings);
+            CompletableFuture.delayedExecutor(1000,  TimeUnit.MILLISECONDS).execute(() -> syncCustomBuildings(evt.getEntity().getName().getString()));
         } else {
-            syncCustomBuildings();
+            syncCustomBuildings(evt.getEntity().getName().getString());
         }
         //ReignOfNether.LOGGER.info("Synced " + buildings.size() + " custom buildings with player logged in");
     }
 
-    private static void syncCustomBuildings() {
+    private static void syncCustomBuildings(String playerName) {
         for (CustomBuilding customBuilding : customBuildings) {
-            CustomBuildingClientboundPacket.registerCustomBuilding(customBuilding);
+            CustomBuildingClientboundPacket.registerCustomBuilding(playerName, customBuilding);
         }
     }
 }

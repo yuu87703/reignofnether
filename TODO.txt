@@ -1,5 +1,5 @@
 
-1.19.2-1.2.2c
+1.19.2-1.2.3
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -22,38 +22,49 @@ Features
 
 Bugfixes
 --------
-[❌] Issues shooting directly downwards on bastions
-
-[🟡] Random animal spawns can no longer happen on single bottom-slabs or fences
-[🟡] Magma cubes are inheriting slime abilities
-[🟡] Building multiple altars lets you sometimes train multiple heroes
-[🟡] Added extra checks to prevent queueing the wrong kind of production at buildings
-[🟡] Iron Golems and Witches can no longer pick up resources as they were not able to return them
+[✔] Animals can no longer spawn on single bottom-slabs or fences
+[✔] Magma cubes no longer inherit slime abilities
+[✔] Fixed an exploit where multiple altars could sometimes train multiple heroes
+[✔] Fixed an exploit where you could queue the wrong kind of production at buildings
+[✔] Iron Golems and Witches can no longer pick up resources as they were not able to return them
 
 Quality of Life
 ---------------
 Lots of sandbox improvements:
-    [🟡] You can now set anchors for groups of units at a time
-    [🟡] Cleaned up a lot of button tooltips in and the bottom right menu
-    [🟡] Added a button to change building allegiance
-    [🟡] Added a button to remove a building without destroying its blocks
-    [🟡] When cheats are enabled, enemy units' abilities can be used
-    [🟡] /gamerule doLogFalling is treated as off while in sandbox
+    [✔] You can now set anchors for groups of units at a time
+    [✔] Cleaned up a lot of button tooltips in and the bottom right menu
+    [✔] Added a button to change building allegiance
+    [✔] Added a button to remove a building without destroying its blocks
+    [✔] When cheats are enabled, enemy units' abilities can be used
+    [✔] /gamerule doLogFalling is treated as off while in sandbox
 
-[🟡] When building is cancelled or destroyed any in-progress production is now fully refunded
-[🟡] When pressing D to have workers return resources early, they will now go back to work automatically
+[✔] When building is cancelled or destroyed any in-progress production is now fully refunded
+[✔] When pressing D to have workers return resources early, they will now go back to work automatically
 
 [❌] Cooked food is now worth food again for workers instead of being edible if it wasn't thrown by the Piglin Merchant
 
 
 Balance
 -------
-[🟡] Reduced the night radius of additional mausoleums from 80 to 60
-[🟡] Tridents that hit a target on the same frame as another trident now pierce through
+[✔] All hero ultimates are put on 50% cooldown when they respawn
+
+Monsters
+--------
+[✔] Reduced the night radius of additional mausoleums from 80 to 60
+[🟡] You can now right-click the clock during a blood moon to see where the spawns are happening
+
+Piglins
+-------
+[✔] Tridents that hit a target on the same frame as another trident now pierce through
     - This is the same behaviour that arrows have and should improve headhunter damage output
-[🟡] Piglin capitols now get a mooshroom (worth 175 food) on every odd spawn (1st, 3rd, 5th, etc.)
+[✔] Piglin capitols now get a mooshroom (worth 175 food) on every odd spawn (1st, 3rd, 5th, etc.)
+[✔] The Piglin Merchant's Greed is Good now refunds mana for all abilities when used:
+    - 10 mana per 100 resources spent (max 30) for Fancy Feast
+    - 15 mana per 100 resources spent (max 45) for Loot Explosion
+[✔] The Piglin Merchant's Loot Explosion now spawns golden apples for units that are already equipped with netherite
+[✔] Headhunters' Fire Aspect Tridents now have +1 damage (previously 0)
 
 Languages
 ---------
-[🟡] Added Korean (ko_kr)
-[🟡] Updated Vietnamese (vi_vn)
+[✔] Added Korean (ko_kr)
+[✔] Updated Vietnamese (vi_vn)
