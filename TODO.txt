@@ -21,7 +21,8 @@ Bugfixes
 --------
 [❌] Structure blocks don't work when placed at different corners then bottom left and top right
 [❌] Test crash related to ability clientbound packet on lilypad
-
+[✔] Fixed the minimap centering being off when the camera is rotated
+[🟡] Hoglin riders ignore move commands when attacking a target
 
 Quality of Life
 ---------------
@@ -29,4 +30,6 @@ Quality of Life
 
 Balance
 -------
-[❌] Spiders no longer take fall damage
+[🟡] Spiders no longer take fall damage
+[❌] Dirt paths become regular dirt when fire walls are cast over it, to allow fire to spread
+[🟡] Netherwart crops now mature 15s faster
