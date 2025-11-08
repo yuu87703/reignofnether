@@ -16,20 +16,44 @@ Custom structures customisation
             - night warp with adjustable range
 
     [❌] add warning that structure blocks only work in singleplayer
+    [❌] add button to de-register building
+    [❌] allow overwriting of custom structures
 
 Bugfixes
 --------
-[❌] Structure blocks don't work when placed at different corners then bottom left and top right
-[❌] Test crash related to ability clientbound packet on lilypad
 [✔] Fixed the minimap centering being off when the camera is rotated
-[🟡] Hoglin riders ignore move commands when attacking a target
+[✔] Hoglin riders ignore move commands when attacking a target
+[✔] Destroying a custom building with delete doesn't immediately remove it (it removes after a delay)
+[❌] Fixed an issue with custom building saves duplicating
 
 Quality of Life
 ---------------
+[🟡] Custom structure should override the placement if it's already existing instead of just erroring
+[❌] Allow overlapping of custom structures (if possible, only with air blocks)
+[❌] Sacrifice on catalysts should not be redundant (if the sacrificed unit is already standing on sculk)
 
 
 Balance
 -------
-[🟡] Spiders no longer take fall damage
+
+Monsters
+--------
+[✔] Additional Mausoleum night range reduced from 60 to 40 (also fixed it not being visible to other players)
+    - If your last mausoleum is destroyed, your next one will have the full 80 block range
+[✔] Spiders no longer take fall damage
+
+Piglins
+-------
+[✔] TNT fuse time reduced from 2.5s to 2s
+[✔] Headhunter range increased to 14
 [❌] Dirt paths become regular dirt when fire walls are cast over it, to allow fire to spread
-[🟡] Netherwart crops now mature 15s faster
+[✔] Netherwart crops now mature 15s faster
+
+[🟡] Unmounted hoglins can now use bloodlust
+
+
+Languages
+---------
+[✔] Updated Traditional Chinese (zh_tw)
+[✔] Updated Simplified Chinese (zh_cn)
+[✔] Updated Korean (ko_kr)

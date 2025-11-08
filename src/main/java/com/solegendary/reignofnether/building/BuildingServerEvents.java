@@ -2,7 +2,6 @@ package com.solegendary.reignofnether.building;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
-import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.buildings.monsters.Laboratory;
 import com.solegendary.reignofnether.building.buildings.neutral.NeutralTransportPortal;
 import com.solegendary.reignofnether.building.buildings.placements.*;
@@ -534,6 +533,7 @@ public class BuildingServerEvents {
         List<BuildingPlacement> buildingsToDestroy = buildings.stream().filter(BuildingPlacement::shouldBeDestroyed).toList();
         buildings.removeIf(b -> {
             if (b.shouldBeDestroyed()) {
+                System.out.println("test");
                 if (b instanceof NetherConvertingBuilding nb && nb.getZone() != null) {
                     nb.getZone().startRestoring();
                     saveNetherZones(serverLevel);
@@ -725,7 +725,7 @@ public class BuildingServerEvents {
     }
 
     // does the player own one of these buildings?
-    public static boolean hasFinishedBuilding(Building building, String playerName) {
+    public static boolean playerHasFinishedBuilding(Building building, String playerName) {
         for (BuildingPlacement bpl : buildings) {
             if (bpl.getBuilding().isTypeOf(building) && bpl.isBuilt &&
                     (bpl.ownerName.equals(playerName))) {

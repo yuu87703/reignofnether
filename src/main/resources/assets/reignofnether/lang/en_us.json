@@ -149,6 +149,7 @@
     "abilities.reignofnether.bloodlust": "Bloodlust",
     "abilities.reignofnether.bloodlust.tooltip1": "Temporary lose %d life to gain 60%% faster attack ",
     "abilities.reignofnether.bloodlust.tooltip2": "speed and 20%% faster movement for %d seconds.",
+    "abilities.reignofnether.bloodlust.tooltip3": "Cannot use while mounted.",
     "abilities.reignofnether.call_to_arms_building": "Call to Arms",
     "abilities.reignofnether.call_to_arms_building.tooltip1": "Calls all nearby villagers to be converted into a ",
     "abilities.reignofnether.call_to_arms_building.tooltip2": "militia to defend your base. Militia turn back into ",

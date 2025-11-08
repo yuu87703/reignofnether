@@ -920,9 +920,9 @@ public class MinimapClientEvents {
 
         renderMap(evt.getGuiGraphics());
 
-        MiscUtil.drawDebugStrings(evt.getGuiGraphics(), MC.font, new String[] {
-                "camrotX: " + OrthoviewClientEvents.getCamRotX()
-        });
+        //MiscUtil.drawDebugStrings(evt.getGuiGraphics(), MC.font, new String[] {
+        //        "camrotX: " + OrthoviewClientEvents.getCamRotX()
+        //});
     }
 
     @SubscribeEvent

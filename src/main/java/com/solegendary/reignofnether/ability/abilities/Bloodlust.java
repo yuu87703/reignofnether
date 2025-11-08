@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
+import com.solegendary.reignofnether.unit.units.piglins.HoglinUnit;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -49,8 +50,31 @@ public class Bloodlust extends Ability {
             return headhunterUnit.bloodlustTicks;
         } else if (unit instanceof BruteUnit bruteUnit) {
             return bruteUnit.bloodlustTicks;
+        } else if (unit instanceof HoglinUnit hoglinUnit) {
+            return hoglinUnit.bloodlustTicks;
         }
         return 0;
+    }
+
+    private List<FormattedCharSequence> getTooltip(Unit unit) {
+        if (unit instanceof HoglinUnit) {
+            return List.of(
+                    fcs(I18n.get("abilities.reignofnether.bloodlust"), true),
+                    FormattedCharSequence.forward("\uE007  " + HEALTH_COST, MyRenderer.iconStyle),
+                    FormattedCharSequence.forward("", Style.EMPTY),
+                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
+                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY),
+                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip3"), Style.EMPTY)
+            );
+        } else {
+            return List.of(
+                    fcs(I18n.get("abilities.reignofnether.bloodlust"), true),
+                    FormattedCharSequence.forward("\uE007  " + HEALTH_COST, MyRenderer.iconStyle),
+                    FormattedCharSequence.forward("", Style.EMPTY),
+                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
+                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY)
+            );
+        }
     }
 
     @Override
@@ -64,13 +88,7 @@ public class Bloodlust extends Ability {
                 () -> true,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BLOOD_LUST),
                 null,
-                List.of(
-                        fcs(I18n.get("abilities.reignofnether.bloodlust"), true),
-                        FormattedCharSequence.forward("\uE007  " + HEALTH_COST, MyRenderer.iconStyle),
-                        FormattedCharSequence.forward("", Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY)
-                ),
+                getTooltip(unit),
                 this,
                 unit
         );
@@ -92,6 +110,10 @@ public class Bloodlust extends Ability {
             bruteUnit.bloodlustTicks = duration;
             bruteUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
             bruteUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
+        } else if (unitUsing instanceof HoglinUnit hoglinUnit) {
+            hoglinUnit.bloodlustTicks = duration;
+            hoglinUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
+            hoglinUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
         }
     }
 
