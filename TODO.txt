@@ -24,7 +24,7 @@ Bugfixes
 [✔] Fixed the minimap centering being off when the camera is rotated
 [✔] Hoglin riders ignore move commands when attacking a target
 [✔] Destroying a custom building with delete doesn't immediately remove it (it removes after a delay)
-[❌] Fixed an issue with custom building saves duplicating
+[✔] Fixed an issue with custom building saves duplicating
 
 Quality of Life
 ---------------
@@ -45,10 +45,9 @@ Monsters
 Piglins
 -------
 [✔] TNT fuse time reduced from 2.5s to 2s
-[✔] Headhunter range increased to 14
-[❌] Dirt paths become regular dirt when fire walls are cast over it, to allow fire to spread
+[✔] Headhunter range increased from 12 to 14
 [✔] Netherwart crops now mature 15s faster
-
+[🟡] Dirt paths become regular dirt when fire walls are cast over it, to allow fire to spread
 [🟡] Unmounted hoglins can now use bloodlust
 
 
