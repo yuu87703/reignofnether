@@ -109,12 +109,16 @@ public class CustomBuildingClientEvents {
 
             int blitX = 100;
             int blitY = 40;
-            int width = 290;
-            int height = 100;
+            int width = 200;
+            int height = 200;
             MyRenderer.renderFrameWithBg(evt.getGuiGraphics(), blitX, blitY, width, height, 0xA0000000);
 
+            renderedButtons.add(CustomBuildingMenu.renderIconButtonNameAndPortrait(evt, customBuildingToEdit, blitX + 18, blitY + 18));
             renderedButtons.add(CustomBuildingMenu.renderCloseButton(evt, blitX + width - Button.itemIconSize - 12, blitY + 4));
             renderedButtons.add(CustomBuildingMenu.renderDeregisterButton(evt, blitX + width - Button.itemIconSize - 12, blitY + height - 26));
+            renderedButtons.addAll(CustomBuildingMenu.renderCustomisationButtons(evt, blitX + 6, blitY + 38));
+
+            evt.getGuiGraphics().drawString(MC.font, "More options coming soon!", blitX + 10, blitY + height - 18, 0xFFFFFF);
 
             hudZones.add(new RectZone(blitX, blitY, blitX + width, blitY + height));
         }

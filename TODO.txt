@@ -25,6 +25,9 @@ Bugfixes
 [✔] Hoglin riders ignore move commands when attacking a target
 [✔] Fixed custom buildings not immediately disappearing after being destroyed
 [✔] Fixed an issue with custom building saves duplicating
+[🟡] Fixed a crash from planting the wrong crop type on a farm
+[❌] Fixed pigs running faster than other mobs when panicking
+[❌] Fixed building UI buttons overlapping in sandbox (on military portals)
 
 Quality of Life
 ---------------

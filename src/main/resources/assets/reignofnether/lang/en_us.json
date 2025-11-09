@@ -1256,9 +1256,14 @@
     "sandbox.reignofnether.custom_buildings_info.tooltip2": "structure blocks are shown here",
     "sandbox.reignofnether.custom_buildings_info.tooltip3": "(Click to get an RTS Structure Block)",
     "sandbox.reignofnether.custom_buildings_info.building_menu": "(Right-click to customise)",
-
     "sandbox.reignofnether.custom_buildings.deregister.tooltip1": "De-register building",
     "sandbox.reignofnether.custom_buildings.deregister.tooltip2": "WARNING: removes all buildings of this type!",
+
+    "sandbox.reignofnether.custom_buildings.set_capturable.label": "Capturable",
+    "sandbox.reignofnether.custom_buildings.set_capturable.tooltip1": "Capturable by whoever has the most nearby troops",
+    "sandbox.reignofnether.custom_buildings.set_invulnerable.label": "Invulnerable",
+    "sandbox.reignofnether.custom_buildings.set_invulnerable.tooltip1": "Cannot be attacked or damaged",
+    "sandbox.reignofnether.custom_buildings.change_icon.tooltip1": "Change portrait block",
 
     "startpos.reignofnether.positions_button.tooltip1": "Starting Locations",
     "startpos.reignofnether.positions_button.tooltip2": "%d/%d locations taken",

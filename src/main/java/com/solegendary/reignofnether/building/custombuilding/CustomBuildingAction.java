@@ -2,8 +2,9 @@ package com.solegendary.reignofnether.building.custombuilding;
 
 public enum CustomBuildingAction {
     DEREGISTER,
+    SET_PORTRAIT_BLOCK,
     SET_CAPTURABLE,
-    SET_INDESTRUCTIBLE,
+    SET_INVULNERABLE,
     SET_NIGHT_RADIUS,
     SET_NETHER_RADIUS,
     SET_BUILDABLE_BY_VILLAGERS,
@@ -14,6 +15,5 @@ public enum CustomBuildingAction {
     SET_ORE_COST,
     SET_FOOD_BOUNTY,
     SET_WOOD_BOUNTY,
-    SET_ORE_BOUNTY,
-    SET_PORTRAIT_BLOCK
+    SET_ORE_BOUNTY
 }

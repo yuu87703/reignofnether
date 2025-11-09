@@ -12,10 +12,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
@@ -23,6 +27,7 @@ public class CustomBuilding extends Building {
 
     public Vec3i structureSize;
     public final CompoundTag structureNbt;
+    public Set<Block> portraitBlockOptions;
 
     public CustomBuilding(String structureName, Vec3i structureSize, Block portraitBlock, CompoundTag nbt) {
         super(structureName, ResourceCost.Building(0,0,0,0), false);
@@ -37,6 +42,9 @@ public class CustomBuilding extends Building {
         this.startingBlockTypes.addAll(BuildingBlockData.getBuildingBlocksFromNbt(structureNbt)
             .stream().filter(bb -> bb.getBlockPos().getY() == 0)
             .map(bb -> bb.getBlockState().getBlock()).toList());
+        this.portraitBlockOptions = BuildingBlockData.getBuildingBlocksFromNbt(structureNbt)
+                .stream().map(bb -> bb.getBlockState().getBlock())
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -63,5 +71,30 @@ public class CustomBuilding extends Building {
         );
         button.onRightClick = () -> CustomBuildingClientEvents.setCustomBuildingToEdit(this);
         return button;
+    }
+
+    public void setIconAndPortrait(String blockDescriptionId) {
+
+    }
+
+    public void cycleIconAndPortrait(boolean reverse) {
+        ArrayList<Block> blockOptions = new ArrayList<>(portraitBlockOptions.stream().filter(b -> !b.defaultBlockState().isAir()).toList());
+        if (reverse)
+            Collections.reverse(blockOptions);
+        boolean foundCurrentPortrait = false;
+        boolean changedPortrait = false;
+        for (Block block : blockOptions) {
+            if (foundCurrentPortrait) {
+                portraitBlock = block;
+                changedPortrait = true;
+                break;
+            } else if (block == portraitBlock) {
+                foundCurrentPortrait = true;
+            }
+        }
+        if (!changedPortrait)
+            portraitBlock = blockOptions.get(0);
+
+        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_PORTRAIT_BLOCK, name, portraitBlock.getDescriptionId());
     }
 }

@@ -36,7 +36,7 @@ public class CustomBuildingServerEvents {
     // since every custom building has a different structure, we need to maintain a list of them here
     private static final Set<CustomBuilding> customBuildings = new HashSet<>();
 
-    public static Building getCustomBuilding(String name) {
+    public static CustomBuilding getCustomBuilding(String name) {
         for (CustomBuilding building : customBuildings)
             if (building.name.equals(name))
                 return building;
@@ -120,7 +120,9 @@ public class CustomBuildingServerEvents {
             customBuildingData.customBuildings.add(new CustomBuildingSave(
                     b.structureNbt,
                     b.name,
-                    b.structureSize
+                    b.structureSize,
+                    b.capturable,
+                    b.invulnerable
             ));
         });
         customBuildingData.save();
@@ -131,6 +133,9 @@ public class CustomBuildingServerEvents {
         CustomBuildingSaveData customBuildingData = CustomBuildingSaveData.getInstance(level);
         customBuildingData.customBuildings.forEach(b -> {
             CustomBuilding building = new CustomBuilding(b.buildingName, b.structureSize, Blocks.COMMAND_BLOCK, b.structureNbt);
+            building.capturable = b.capturable;
+            building.invulnerable = b.invulnerable;
+
             boolean buildingExists = false;
             for (CustomBuilding customBuilding : customBuildings) {
                 if (customBuilding.name.equals(building.name)) {

@@ -52,7 +52,7 @@ public class FarmPlacement extends BuildingPlacement {
             BlockState bs = level.getBlockState(farmBlock.bp);
             Block block = bs.getBlock();
 
-            if (block instanceof CropBlock) {
+            if (block instanceof CropBlock cropBlock && (cropBlock == Blocks.WHEAT || cropBlock == Blocks.CARROTS || cropBlock == Blocks.POTATOES)) {
                 farmBlock.tickAge += TICK_CROPS_INTERVAL;
                 int age = bs.getValue(BlockStateProperties.AGE_7);
                 if (farmBlock.tickAge >= CROP_GROW_TICKS) {
