@@ -30,6 +30,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 public class Bloodlust extends Ability {
 
     private static final int HEALTH_COST = 12;
+    private static final int HEALTH_COST_HOGLIN = 12;
     private static final int DURATION_SECONDS = 10;
 
     public static final float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.6f;
@@ -62,7 +63,7 @@ public class Bloodlust extends Ability {
                     fcs(I18n.get("abilities.reignofnether.bloodlust"), true),
                     FormattedCharSequence.forward("\uE007  " + HEALTH_COST, MyRenderer.iconStyle),
                     FormattedCharSequence.forward("", Style.EMPTY),
-                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
+                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST_HOGLIN), Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip3"), Style.EMPTY)
             );
@@ -85,7 +86,7 @@ public class Bloodlust extends Ability {
                 hotkey,
                 () -> getDurationLeft(unit) > 0,
                 () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLOODLUST),
-                () -> true,
+                () -> !((LivingEntity) unit).isVehicle() && !((LivingEntity) unit).isPassenger(),
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.BLOOD_LUST),
                 null,
                 getTooltip(unit),
@@ -96,24 +97,27 @@ public class Bloodlust extends Ability {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
+        float healthCost = HEALTH_COST;
+        if (unitUsing instanceof HoglinUnit)
+            healthCost = HEALTH_COST_HOGLIN;
         int duration = DURATION_SECONDS * ResourceCost.TICKS_PER_SECOND;
-        if (((LivingEntity) unitUsing).getHealth() <= HEALTH_COST)
+        if (((LivingEntity) unitUsing).getHealth() <= healthCost)
             return;
         else
-            ((LivingEntity) unitUsing).hurt(level.damageSources().magic(), HEALTH_COST);
+            ((LivingEntity) unitUsing).hurt(level.damageSources().magic(), healthCost);
 
         if (unitUsing instanceof HeadhunterUnit headhunterUnit) {
             headhunterUnit.bloodlustTicks = duration;
             headhunterUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
-            headhunterUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
+            headhunterUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (healthCost * 20 * 2.5f) + 40, 0));
         } else if (unitUsing instanceof BruteUnit bruteUnit) {
             bruteUnit.bloodlustTicks = duration;
             bruteUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
-            bruteUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
+            bruteUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (healthCost * 20 * 2.5f) + 40, 0));
         } else if (unitUsing instanceof HoglinUnit hoglinUnit) {
             hoglinUnit.bloodlustTicks = duration;
             hoglinUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
-            hoglinUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (HEALTH_COST * 20 * 2.5f) + 40, 0));
+            hoglinUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (healthCost * 20 * 2.5f) + 40, 0));
         }
     }
 

@@ -43,6 +43,12 @@ public class CustomBuildingServerEvents {
         return null;
     }
 
+    public static void deregisterCustomBuilding(String buildingName) {
+        customBuildings.removeIf(b -> b.name.equals(buildingName));
+        BuildingServerEvents.getBuildings().removeIf(b -> b.getBuilding().name.equals(buildingName));
+        saveBuildings(BuildingServerEvents.getServerLevel());
+    }
+
     public static boolean createAndRegisterNewCustomBuilding(ResourceLocation structureRL, String structureName, ServerLevel level, BlockPos pos) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof RTSStructureBlockEntity rtsBe) {

@@ -68,6 +68,8 @@ public class BuildingServerEvents {
 
     private static ServerLevel serverLevel = null;
 
+    public static ServerLevel getServerLevel() { return serverLevel; }
+
     // buildings that currently exist serverside
     private static final ArrayList<BuildingPlacement> buildings = new ArrayList<>();
 

@@ -23,15 +23,14 @@ Bugfixes
 --------
 [✔] Fixed the minimap centering being off when the camera is rotated
 [✔] Hoglin riders ignore move commands when attacking a target
-[✔] Destroying a custom building with delete doesn't immediately remove it (it removes after a delay)
+[✔] Fixed custom buildings not immediately disappearing after being destroyed
 [✔] Fixed an issue with custom building saves duplicating
 
 Quality of Life
 ---------------
 [🟡] Custom structure should override the placement if it's already existing instead of just erroring
+[✔] Sculk catalyst sacrifices can no longer target units already standing on sculk to avoid wasted sacrifices
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
-[❌] Sacrifice on catalysts should not be redundant (if the sacrificed unit is already standing on sculk)
-
 
 Balance
 -------
@@ -47,8 +46,8 @@ Piglins
 [✔] TNT fuse time reduced from 2.5s to 2s
 [✔] Headhunter range increased from 12 to 14
 [✔] Netherwart crops now mature 15s faster
-[🟡] Dirt paths become regular dirt when fire walls are cast over it, to allow fire to spread
-[🟡] Unmounted hoglins can now use bloodlust
+[✔] Dirt paths become regular dirt when fire walls are cast over it, to allow fire to spread
+[✔] Unmounted hoglins can now use bloodlust, but the health cost is 18 for the same duration
 
 
 Languages
