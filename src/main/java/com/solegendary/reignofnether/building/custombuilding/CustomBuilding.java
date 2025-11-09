@@ -8,11 +8,11 @@ import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
@@ -73,8 +73,12 @@ public class CustomBuilding extends Building {
         return button;
     }
 
-    public void setIconAndPortrait(String blockDescriptionId) {
+    public String getPortraitBlockRegistryKey() {
+        return BuiltInRegistries.BLOCK.getKey(portraitBlock).toString();
+    }
 
+    public void setIconAndPortrait(String blockRegistryKey) {
+        this.portraitBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(blockRegistryKey));
     }
 
     public void cycleIconAndPortrait(boolean reverse) {
@@ -95,6 +99,6 @@ public class CustomBuilding extends Building {
         if (!changedPortrait)
             portraitBlock = blockOptions.get(0);
 
-        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_PORTRAIT_BLOCK, name, portraitBlock.getDescriptionId());
+        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_PORTRAIT_BLOCK, name, getPortraitBlockRegistryKey());
     }
 }

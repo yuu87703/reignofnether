@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -121,6 +122,7 @@ public class CustomBuildingServerEvents {
                     b.structureNbt,
                     b.name,
                     b.structureSize,
+                    b.getPortraitBlockRegistryKey(),
                     b.capturable,
                     b.invulnerable
             ));
@@ -133,6 +135,8 @@ public class CustomBuildingServerEvents {
         CustomBuildingSaveData customBuildingData = CustomBuildingSaveData.getInstance(level);
         customBuildingData.customBuildings.forEach(b -> {
             CustomBuilding building = new CustomBuilding(b.buildingName, b.structureSize, Blocks.COMMAND_BLOCK, b.structureNbt);
+            if (!b.portraitBlockRegistryKey.isBlank())
+                building.setIconAndPortrait(b.portraitBlockRegistryKey);
             building.capturable = b.capturable;
             building.invulnerable = b.invulnerable;
 

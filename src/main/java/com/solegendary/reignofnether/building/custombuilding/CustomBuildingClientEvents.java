@@ -57,7 +57,8 @@ public class CustomBuildingClientEvents {
         return null;
     }
 
-    public static void registerCustomBuilding(String playerName, String name, Vec3i structureSize, CompoundTag structureNbt) {
+    public static void registerCustomBuilding(String playerName, String name, Vec3i structureSize, CompoundTag structureNbt,
+                                                String portraitBlockRegistryKey, boolean capturable, boolean invulnerable) {
         if (MC.player == null || (!playerName.isEmpty() && !MC.player.getName().getString().equals(playerName)))
             return;
 
@@ -76,6 +77,9 @@ public class CustomBuildingClientEvents {
             }
         }
         CustomBuilding building = new CustomBuilding(name, structureSize, portraitBlock, structureNbt);
+        building.setIconAndPortrait(portraitBlockRegistryKey);
+        building.capturable = capturable;
+        building.invulnerable = invulnerable;
         customBuildings.add(building);
     }
 
