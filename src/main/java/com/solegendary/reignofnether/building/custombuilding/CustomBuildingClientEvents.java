@@ -107,13 +107,12 @@ public class CustomBuildingClientEvents {
 
     @SubscribeEvent
     public static void onDrawScreen(ScreenEvent.Render.Post evt) {
+        hudZones.clear();
+        renderedButtons.clear();
         if (customBuildingToEdit != null && MC.screen instanceof TopdownGui) {
-            hudZones.clear();
-            renderedButtons.clear();
-
             int blitX = 100;
             int blitY = 40;
-            int width = 200;
+            int width = 300;
             int height = 200;
             MyRenderer.renderFrameWithBg(evt.getGuiGraphics(), blitX, blitY, width, height, 0xA0000000);
 

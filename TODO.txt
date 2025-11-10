@@ -8,16 +8,12 @@
 
 Features
 --------
-Custom structures customisation
-    [❌] Right click sandbox buttons to show a menu for customising the original building
-        [❌] ability to add generic building features:
-            - garrisonable with special entry/exit blocks
-            - nether spread with adjustable range
-            - night warp with adjustable range
+Custom structures
+[✔] Added options to customise the portrait block, capturability and invulnerability
+[✔] Added an option to de-register a custom building (this also removes all placements of that building)
 
-    [❌] add warning that structure blocks only work in singleplayer
-    [❌] add button to de-register building
-    [❌] allow overwriting of custom structures
+[❌] Issues with saving and loading in multiplayer ?
+    - test with some stuff in singleplayer then open it with Essential
 
 Bugfixes
 --------
@@ -26,8 +22,7 @@ Bugfixes
 [✔] Fixed custom buildings not immediately disappearing after being destroyed
 [✔] Fixed an issue with custom building saves duplicating
 [🟡] Fixed a crash from planting the wrong crop type on a farm
-[❌] Fixed pigs running faster than other mobs when panicking
-[❌] Fixed building UI buttons overlapping in sandbox (on military portals)
+[✔] Fixed building buttons overlapping in sandbox
 
 Quality of Life
 ---------------
@@ -51,7 +46,6 @@ Piglins
 [✔] Netherwart crops now mature 15s faster
 [✔] Dirt paths become regular dirt when fire walls are cast over it, to allow fire to spread
 [✔] Unmounted hoglins can now use bloodlust, but the health cost is 18 for the same duration
-
 
 Languages
 ---------
