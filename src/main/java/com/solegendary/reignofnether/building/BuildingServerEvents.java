@@ -300,6 +300,7 @@ public class BuildingServerEvents {
             }
             if (SandboxServer.isAnyoneASandboxPlayer() && builderUnitIds.length == 0) {
                 newBuilding.getBuilding().shouldDestroyOnReset = false;
+                saveBuildings(getServerLevel());
             }
             return newBuilding;
         }
