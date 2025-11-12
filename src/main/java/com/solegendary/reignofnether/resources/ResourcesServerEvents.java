@@ -172,7 +172,6 @@ public class ResourcesServerEvents {
         for (Resources resources : resourcesList) {
             if (resources.ownerName.equals(resourcesToAdd.ownerName)) {
                 // change serverside instantly
-                System.out.println(resourcesToAdd.wood);
                 resources.changeInstantly(resourcesToAdd.food, resourcesToAdd.wood, resourcesToAdd.ore);
                 // change clientside over time
                 ResourcesClientboundPacket.addSubtractResources(new Resources(resourcesToAdd.ownerName,

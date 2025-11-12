@@ -379,7 +379,6 @@ public class BuildingServerEvents {
     }
 
     public static void cancelBuilding(BuildingPlacement building, String playerName) {
-        System.out.println("cancelled!");
         if (building == null)
             return;
         if (building.isBuilt && !SandboxServer.isSandboxPlayer(playerName) &&
@@ -536,7 +535,6 @@ public class BuildingServerEvents {
         List<BuildingPlacement> buildingsToDestroy = buildings.stream().filter(BuildingPlacement::shouldBeDestroyed).toList();
         buildings.removeIf(b -> {
             if (b.shouldBeDestroyed()) {
-                System.out.println("test");
                 if (b instanceof NetherConvertingBuilding nb && nb.getZone() != null) {
                     nb.getZone().startRestoring();
                     saveNetherZones(serverLevel);
