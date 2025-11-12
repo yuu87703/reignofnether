@@ -379,6 +379,7 @@ public class BuildingServerEvents {
     }
 
     public static void cancelBuilding(BuildingPlacement building, String playerName) {
+        System.out.println("cancelled!");
         if (building == null)
             return;
         if (building.isBuilt && !SandboxServer.isSandboxPlayer(playerName) &&
@@ -409,7 +410,6 @@ public class BuildingServerEvents {
                 ore = Math.round(building.getBuilding().cost.ore * 0.5f * buildPercent);
             }
             if (food > 0 || wood > 0 || ore > 0) {
-                ResourcesServerEvents.addSubtractResources(new Resources(building.ownerName, food, wood, ore));
                 Resources res = new Resources(building.ownerName, food, wood, ore);
                 ResourcesServerEvents.addSubtractResources(res);
                 ResourcesClientboundPacket.showFloatingText(res, building.centrePos);
