@@ -12,8 +12,6 @@ Custom structures
 [✔] Added options to customise the portrait block, capturability and invulnerability
 [✔] Added an option to de-register a custom building (this also removes all placements of that building)
 
-[❌] Issues with saving and loading in multiplayer ?
-    - test with some stuff in singleplayer then open it with Essential
 
 Bugfixes
 --------
@@ -21,13 +19,16 @@ Bugfixes
 [✔] Hoglin riders ignore move commands when attacking a target
 [✔] Fixed custom buildings not immediately disappearing after being destroyed
 [✔] Fixed an issue with custom building saves duplicating
-[🟡] Fixed a crash from planting the wrong crop type on a farm
+[✔] Fixed a crash from planting the wrong crop type on a farm
 [✔] Fixed building buttons overlapping in sandbox
+
+[❌] Weapons and armour aren't saved on restart
 
 Quality of Life
 ---------------
-[🟡] Custom structure should override the placement if it's already existing instead of just erroring
+[✔] You can now register a new custom building at an existing building's location
 [✔] Sculk catalyst sacrifices can no longer target units already standing on sculk to avoid wasted sacrifices
+
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
 Balance
