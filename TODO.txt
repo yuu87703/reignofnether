@@ -14,6 +14,13 @@ Custom structures
 Bugfixes
 --------
 [❌] Weapons and armour aren't saved on restart
+[❌] Hoglins sometimes duplicate when picking up armour
+[❌] Deleting a building near terrain destroys that terrain
+    - When destroying a building, don't delete blocks in air block positions
+[❌] Nether zones sometimes aren't unloaded
+    - Check for nether zones with no parent building to remove
+[❌] Ravager artillery not damaging buildings
+    - Arrow explosions don't damage blocks that are too strong (like obsidian and deepslate)
 
 Quality of Life
 ---------------
