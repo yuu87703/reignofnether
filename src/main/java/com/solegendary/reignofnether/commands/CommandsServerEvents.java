@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -37,7 +36,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RtsCommands {
+public class CommandsServerEvents {
 
     private static final SimpleCommandExceptionType UNKNOWN_BUILDING =
         new SimpleCommandExceptionType(Component.literal("Unknown building name"));
@@ -211,16 +210,14 @@ public class RtsCommands {
             ownerName,
             new int[0],
             false,
-            false,
-            true,
-            true
+            false
         );
         if (placement == null) {
             ctx.getSource().sendFailure(Component.literal("Unable to place building at " + formatPos(pos)));
             return 0;
         }
         if (autoBuild) {
-            BuildingServerEvents.completeBuildingInstantly(placement);
+            placement.selfBuilding = true;
         }
         ctx.getSource().sendSuccess(
             () -> Component.literal("Placed " + building.name + " for " + ownerName + " at " + formatPos(pos)),
@@ -236,9 +233,8 @@ public class RtsCommands {
 
         int removed = 0;
         for (BuildingPlacement placement : targets) {
-            if (BuildingServerEvents.destroyBuilding(placement, "", true, false)) {
-                removed++;
-            }
+            placement.destroy(source.getLevel());
+            removed++;
         }
 
         if (removed == 0) {
@@ -287,9 +283,8 @@ public class RtsCommands {
         int changed = 0;
         for (BuildingPlacement placement : BuildingServerEvents.getBuildings()) {
             if (intersects(placement, min, max)) {
-                if (BuildingServerEvents.setBuildingOwner(placement, ownerName)) {
-                    changed++;
-                }
+                placement.ownerName = ownerName;
+                changed++;
             }
         }
         if (changed == 0) {

@@ -532,6 +532,7 @@ public class BuildingPlacement {
 
         this.blocks.forEach((BuildingBlock block) -> {
             if (!block.getBlockState().getFluidState().isEmpty() ||
+                !block.getBlockState().isAir() ||
                     (block.getBlockState().hasProperty(BlockStateProperties.WATERLOGGED) &&
                             block.getBlockState().getValue(BlockStateProperties.WATERLOGGED)))
             {
