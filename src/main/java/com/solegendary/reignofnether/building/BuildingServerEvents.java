@@ -196,14 +196,9 @@ public class BuildingServerEvents {
             netherData.netherZones.forEach(nz -> {
                 if (!placedNZs.contains(nz.getOrigin())) {
                     BuildingServerEvents.netherZones.add(nz);
+                    nz.startRestoring();
                     ReignOfNether.LOGGER.info("loaded orphaned netherzone: " + nz.getOrigin());
                 }
-            });
-            // restore any orphaned nether zones
-            BuildingServerEvents.netherZones.forEach(nz -> {
-                BuildingPlacement bpl = BuildingUtils.findBuilding(false, nz.getOrigin().above());
-                if (!(bpl instanceof NetherConvertingBuilding))
-                    nz.startRestoring();
             });
         }
     }

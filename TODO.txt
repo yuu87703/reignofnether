@@ -16,21 +16,23 @@ Custom structures
 
 Bugfixes
 --------
-[❌] Weapons and armour aren't saved on restart
-[❌] Hoglins sometimes duplicate when picking up armour
+[✔] All weapons and armour on units are now saved on restart
+[✔] Fixed Hoglins sometimes duplicating when picking up armour
 [🟡] Deleting a building near terrain destroys that terrain
     - When destroying a building, don't delete blocks in air block positions
 [🟡] Nether zones sometimes aren't unloaded
     - Check for nether zones with no parent building to remove
-[🟡] Fixed Ravager artillery shots not causing damage to obsidian and deepslate buildings
+[✔] Fixed Ravager artillery shots not causing damage to obsidian and deepslate buildings
 
 Quality of Life
 ---------------
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
-[❌] Command block API from @PerseoJ
+[🟡] Command block API from @PerseoJ
     - Test @p and @s arguments
     - Rename appropriately
+
+[❌] Minimap pings from @PerseoJ
 
 [❌] Postgame stats from @ThatBusyBoi
 
@@ -41,3 +43,4 @@ Balance
 
 Languages
 ---------
+[❌] Persian by Alizera
