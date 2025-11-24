@@ -31,11 +31,11 @@ Quality of Life
 ---------------
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
-[🟡] Command block API from @PerseoJ
+[✔] Command block API from @PerseoJ
     - Test @p and @s arguments
     - Rename appropriately
 
-[❌] Minimap pings from @PerseoJ
+[🟡] Minimap pings from @PerseoJ
 
 [❌] Postgame stats from @ThatBusyBoi
 

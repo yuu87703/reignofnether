@@ -83,18 +83,9 @@ public class MinimapClientEvents {
     public static boolean isLargeMap() { return largeMap; }
     private static boolean shouldToggleSize = false;
     private static boolean markerMode = false;
-    private static boolean altOnMinimap = false;
-
-    public static boolean isMarkerMode() {
-        return markerMode;
-    }
 
     public static boolean isMarkerInteractionActive() {
-        return markerMode || altOnMinimap;
-    }
-
-    private static boolean shouldShowMarkerButton() {
-        return Keybindings.altMod.isDown();
+        return markerMode || Keybindings.altMod.isDown();
     }
 
     private static final int UNIT_RADIUS = 3;
@@ -118,8 +109,7 @@ public class MinimapClientEvents {
         mapTexture
     ));
     private static int[][] mapColoursTerrain = new int[worldRadius * 2][worldRadius * 2];
-    private static int[][] mapColoursOverlays = new int[worldRadius * 2][worldRadius
-        * 2]; // view quad, units, buildings
+    private static int[][] mapColoursOverlays = new int[worldRadius * 2][worldRadius * 2]; // view quad, units, buildings
 
     private static int terrainPartition = 1;
     private static final int TERRAIN_PARTITIONS_MAX = 10;
@@ -177,6 +167,20 @@ public class MinimapClientEvents {
 
     public static void addMapMarker(int x, int z, String playerName) {
         mapMarkers.add(new MapMarker(x, z, playerName));
+    }
+
+    public static void addMapMarkerForSelfAndAllies(int mouseX, int mouseY) {
+        if (Keybindings.altMod.isDown()){
+            mouseX += 2;
+            mouseY += 1;
+        } else {
+            mouseX -= 1;
+            mouseY += 1;
+        }
+        BlockPos markerPos = getWorldPosOnMinimap(mouseX, mouseY, false);
+        if (markerPos != null) {
+            PacketHandler.INSTANCE.sendToServer(new MapMarkerServerboundPacket(markerPos.getX(), markerPos.getZ()));
+        }
     }
 
     public static void removeMinimapUnit(int id) {
@@ -249,13 +253,13 @@ public class MinimapClientEvents {
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
                 null,
                 () -> markerMode,
-                () -> !TutorialClientEvents.isAtOrPastStage(TutorialStage.MINIMAP_CLICK) || !shouldShowMarkerButton(),
-                () -> true,
+                () -> !Keybindings.altMod.isDown() && !isLargeMap(),
+                () -> Keybindings.altMod.isDown() || isLargeMap(),
                 () -> markerMode = !markerMode,
                 null,
-                List.of(FormattedCharSequence.forward(markerMode
-                        ? "Marker mode enabled"
-                        : "Marker mode disabled", Style.EMPTY))
+                List.of(markerMode
+                        ? fcs(I18n.get("hud.map.reignofnether.marker_mode_enabled"))
+                        : fcs(I18n.get("hud.map.reignofnether.marker_mode_disabled")))
         );
     }
 
@@ -963,11 +967,6 @@ public class MinimapClientEvents {
             return;
         }
 
-        if (Keybindings.altMod.isDown()) {
-            BlockPos hoverPos = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), false);
-            altOnMinimap = hoverPos != null;
-        }
-
         // when clicking on map move player there
         if (evt.getMouseButton() == GLFW.GLFW_MOUSE_BUTTON_1 &&
             !Keybindings.shiftMod.isDown() && !OrthoviewClientEvents.isCameraLocked() &&
@@ -992,22 +991,16 @@ public class MinimapClientEvents {
             !(MC.screen instanceof TopdownGui)) {
             return;
         }
-
         boolean altDown = Keybindings.altMod.isDown();
 
         // when clicking on map move player there
         if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1 && !isMouseOverAnyButton()) {
             BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), true);
-            altOnMinimap = altDown && moveTo != null;
-            if (altDown) {
-                evt.setCanceled(true);
-                return;
-            }
+
             if (MC.player != null && moveTo != null) {
                 if (markerMode) {
-                    PacketHandler.INSTANCE.sendToServer(new MapMarkerServerboundPacket(moveTo.getX(), moveTo.getZ()));
-                    // markerMode = false; // Keep mode enabled as per user request
-                } else if (Keybindings.shiftMod.isDown()) {
+                    addMapMarkerForSelfAndAllies((int) evt.getMouseX(), (int) evt.getMouseY());
+                } else if (!altDown && Keybindings.shiftMod.isDown()) {
                     setMapCentre(moveTo.getX(), moveTo.getZ());
                     forceUpdateAllPartitions = true;
                     TutorialClientEvents.clickedMinimap = true;
@@ -1016,7 +1009,7 @@ public class MinimapClientEvents {
                         MC.player.getY(),
                         (double) moveTo.getZ()
                     );
-                } else {
+                } else if (!altDown) {
                     TutorialClientEvents.clickedMinimap = true;
                     PlayerServerboundPacket.teleportPlayer(
                         (double) moveTo.getX(),
@@ -1027,17 +1020,14 @@ public class MinimapClientEvents {
             }
         } else if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_2) {
             BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), false);
-            altOnMinimap = altDown && moveTo != null;
             if (moveTo == null) {
                 return;
             }
-
             if (altDown) {
-                PacketHandler.INSTANCE.sendToServer(new MapMarkerServerboundPacket(moveTo.getX(), moveTo.getZ()));
+                addMapMarkerForSelfAndAllies((int) evt.getMouseX(), (int) evt.getMouseY());
                 evt.setCanceled(true);
                 return;
             }
-
             if (UnitClientEvents.getSelectedUnits().size() > 0) {
                 UnitClientEvents.sendUnitCommandManual(UnitAction.MOVE,
                     -1,
@@ -1072,10 +1062,6 @@ public class MinimapClientEvents {
     public static void onClientTick(TickEvent.ClientTickEvent evt) {
         if (evt.phase != TickEvent.Phase.END)
             return;
-
-        if (!Keybindings.altMod.isDown()) {
-            altOnMinimap = false;
-        }
 
         updateMapTerrain(terrainPartition, darkTerrainPartition);
         mapColoursOverlays = new int[worldRadius * 2][worldRadius * 2];

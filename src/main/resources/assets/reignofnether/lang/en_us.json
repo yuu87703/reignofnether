@@ -528,6 +528,10 @@
     "commands.reignofnether.gamerule.slanted_buildings": "Allow building on non-flat terrain",
     "commands.reignofnether.gamerule.allow_heroes": "Allow building of altars and heroes",
 
+    "commands.reignofnether.error.unknown_building": "Unknown building name",
+    "commands.reignofnether.error.unknown_resource": "Unknown resource name",
+    "commands.reignofnether.error.no_server_level": "Server level is not ready yet",
+
     "controls.reignofnether.toggle_cam": "F12 - Toggle RTS camera",
     "controls.reignofnether.refresh_chunks": "F8 - Refresh chunks",
     "controls.reignofnether.toggle_fps_tps": "F7 - Toggle FPS/TPS counters",
@@ -599,6 +603,8 @@
     "hud.map.reignofnether.rotate_cw.tooltip2": "(Alt + right-arrow)",
     "hud.map.reignofnether.rotate_ccw.tooltip1": "Rotate camera counter-clockwise",
     "hud.map.reignofnether.rotate_ccw.tooltip2": "(Alt + left-arrow)",
+    "hud.map.reignofnether.marker_mode_enabled": "Marker mode enabled",
+    "hud.map.reignofnether.marker_mode_disabled": "Marker mode disabled",
 
     "hud.startbuttons.villagers.reignofnether.first": "Join the game as Villagers",
     "hud.startbuttons.villagers.reignofnether.second": "Spawns 3 villagers at the target location.",

@@ -39,11 +39,11 @@ import java.util.List;
 public class CommandsServerEvents {
 
     private static final SimpleCommandExceptionType UNKNOWN_BUILDING =
-        new SimpleCommandExceptionType(Component.literal("Unknown building name"));
+        new SimpleCommandExceptionType(Component.translatable("commands.reignofnether.error.unknown_building"));
     private static final SimpleCommandExceptionType UNKNOWN_RESOURCE =
-        new SimpleCommandExceptionType(Component.literal("Unknown resource name"));
+        new SimpleCommandExceptionType(Component.translatable("commands.reignofnether.error.unknown_resource"));
     private static final SimpleCommandExceptionType NO_SERVER_LEVEL =
-        new SimpleCommandExceptionType(Component.literal("Server level is not ready yet"));
+        new SimpleCommandExceptionType(Component.translatable("commands.reignofnether.error.no_server_level"));
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {

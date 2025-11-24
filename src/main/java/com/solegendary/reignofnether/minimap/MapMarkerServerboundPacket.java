@@ -21,6 +21,8 @@ public class MapMarkerServerboundPacket {
     private final int x;
     private final int z;
 
+
+
     public MapMarkerServerboundPacket(int x, int z) {
         this.x = x;
         this.z = z;
