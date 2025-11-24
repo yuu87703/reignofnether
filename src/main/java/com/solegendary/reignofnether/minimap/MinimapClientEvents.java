@@ -108,9 +108,6 @@ public class MinimapClientEvents {
     private static final int MARKER_RADIUS = 16;
     private static final int MARKER_THICKNESS = 3;
     private static final int MARKER_PIXEL_OFFSET = 4; // shift rendered marker to better align with cursor
-    // Marker placement only happens while holding ALT, which forces the hand cursor (hotspot at origin).
-    private static final float MARKER_CURSOR_HOTSPOT_X = 0f;
-    private static final float MARKER_CURSOR_HOTSPOT_Y = 0f;
 
     // rate-limit teleporting from dragging the minimap to prevent being kicked from packet spamming
     private static long lastDragTeleportTimestamp = System.currentTimeMillis();
@@ -967,9 +964,7 @@ public class MinimapClientEvents {
         }
 
         if (Keybindings.altMod.isDown()) {
-            float hotspotX = MARKER_CURSOR_HOTSPOT_X;
-            float hotspotY = MARKER_CURSOR_HOTSPOT_Y;
-            BlockPos hoverPos = getWorldPosOnMinimap((float) evt.getMouseX() - hotspotX, (float) evt.getMouseY() - hotspotY, false);
+            BlockPos hoverPos = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), false);
             altOnMinimap = hoverPos != null;
         }
 
@@ -979,9 +974,7 @@ public class MinimapClientEvents {
             lastDragTeleportTimestamp < System.currentTimeMillis() - 100) {
 
             lastDragTeleportTimestamp = System.currentTimeMillis();
-            float hotspotX = MARKER_CURSOR_HOTSPOT_X;
-            float hotspotY = MARKER_CURSOR_HOTSPOT_Y;
-            BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX() - hotspotX, (float) evt.getMouseY() - hotspotY, true);
+            BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), true);
             if (MC.player != null && moveTo != null) {
                 PlayerServerboundPacket.teleportPlayer(
                     (double) moveTo.getX(),
@@ -1000,14 +993,11 @@ public class MinimapClientEvents {
             return;
         }
 
-        float hotspotX = MARKER_CURSOR_HOTSPOT_X;
-        float hotspotY = MARKER_CURSOR_HOTSPOT_Y;
-
         boolean altDown = Keybindings.altMod.isDown();
 
         // when clicking on map move player there
         if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1 && !isMouseOverAnyButton()) {
-            BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX() - hotspotX, (float) evt.getMouseY() - hotspotY, true);
+            BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), true);
             altOnMinimap = altDown && moveTo != null;
             if (altDown) {
                 evt.setCanceled(true);
@@ -1036,7 +1026,7 @@ public class MinimapClientEvents {
                 }
             }
         } else if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_2) {
-            BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX() - hotspotX, (float) evt.getMouseY() - hotspotY, false);
+            BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), false);
             altOnMinimap = altDown && moveTo != null;
             if (moveTo == null) {
                 return;
