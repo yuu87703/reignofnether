@@ -10,7 +10,8 @@ Features
 --------
 Custom structures
 
-
+[🟡] Custom structures can now save NBT data from block entities
+    - This means that command block content can now be saved
 
 
 
@@ -23,6 +24,7 @@ Bugfixes
 [🟡] Nether zones sometimes aren't unloaded
     - Check for nether zones with no parent building to remove
 [✔] Fixed Ravager artillery shots not causing damage to obsidian and deepslate buildings
+[✔] Fixed a crash when a beacon is upgraded in multiplayer wave survival
 
 Quality of Life
 ---------------
@@ -43,4 +45,4 @@ Balance
 
 Languages
 ---------
-[❌] Persian by Alizera
+[🟡] Persian by Alizera

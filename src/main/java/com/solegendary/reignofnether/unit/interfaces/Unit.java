@@ -470,9 +470,12 @@ public interface Unit {
             heroUnit.readHeroUnitSaveData(pCompound);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            CompoundTag itemNbt = (CompoundTag) pCompound.get(slot.name() + "Item");
-            if (itemNbt != null) {
-                ((LivingEntity) this).setItemSlot(slot, ItemStack.of(itemNbt));
+            String keyName = slot.name() + "Item";
+            if (pCompound.contains(keyName)) {
+                CompoundTag itemNbt = (CompoundTag) pCompound.get(keyName);
+                if (itemNbt != null) {
+                    ((LivingEntity) this).setItemSlot(slot, ItemStack.of(itemNbt));
+                }
             }
         }
     }
