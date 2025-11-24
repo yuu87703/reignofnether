@@ -533,10 +533,10 @@ public class BuildingPlacement {
         this.forceChunk(false);
 
         this.blocks.forEach((BuildingBlock block) -> {
-            if (!block.getBlockState().getFluidState().isEmpty() ||
-                !block.getBlockState().isAir() ||
+            if ((!block.getBlockState().getFluidState().isEmpty() ||
                     (block.getBlockState().hasProperty(BlockStateProperties.WATERLOGGED) &&
-                            block.getBlockState().getValue(BlockStateProperties.WATERLOGGED)))
+                            block.getBlockState().getValue(BlockStateProperties.WATERLOGGED))) &&
+                    !block.getBlockState().isAir())
             {
                 BlockState air = Blocks.AIR.defaultBlockState();
                 serverLevel.setBlockAndUpdate(block.getBlockPos(), air);
@@ -548,7 +548,8 @@ public class BuildingPlacement {
             if (block.isPlaced(serverLevel) && x % 2 == 0 && z % 2 != 0) {
                 serverLevel.explode(null, null, null, x, y, z, 1.0f, false, Level.ExplosionInteraction.TNT);
             }
-            serverLevel.destroyBlock(block.getBlockPos(), false);
+            if (!block.getBlockState().isAir())
+                serverLevel.destroyBlock(block.getBlockPos(), false);
         });
 
         this.scaffoldBlocks.forEach((BuildingBlock block) -> {
