@@ -10,7 +10,7 @@ Features
 --------
 Custom structures
 
-[🟡] Custom structures can now save NBT data from block entities
+[✔] Custom structures can now save NBT data from block entities
     - This means that command block content can now be saved
 
 
