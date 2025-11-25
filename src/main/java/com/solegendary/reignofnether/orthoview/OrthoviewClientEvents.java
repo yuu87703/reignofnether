@@ -498,7 +498,7 @@ public class OrthoviewClientEvents {
         if (!enabled || isCameraLocked()) {
             return;
         }
-        if (Keybindings.altMod.isDown() && !MinimapClientEvents.isMarkerInteractionActive()) {
+        if (Keybindings.altMod.isDown()) {
             zoomCam((float) sign(evt.getScrollDelta()) * -ZOOM_STEP_SCROLL);
         }
     }
