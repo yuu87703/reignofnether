@@ -23,21 +23,20 @@ Bugfixes
     - This was sometimes breaking surrounding terrain blocks
 [✔] Fixed Ravager artillery shots not causing damage to obsidian and deepslate buildings
 [✔] Fixed a crash when a beacon is upgraded in multiplayer wave survival
+[✔] Fixed nether conversion zones not saving properly when their portal was destroyed
 
-[🟡] Nether zones sometimes aren't unloaded
-    - Check for nether zones with no parent building to remove
 
 Quality of Life
 ---------------
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
+[❌] Postgame stats from @ThatBusyBoi
+
 [✔] Command block API from @PerseoJ
     - Test @p and @s arguments
     - Rename appropriately
 
-[🟡] Minimap pings from @PerseoJ
-
-[❌] Postgame stats from @ThatBusyBoi
+[✔] Minimap pings from @PerseoJ
 
 
 Balance

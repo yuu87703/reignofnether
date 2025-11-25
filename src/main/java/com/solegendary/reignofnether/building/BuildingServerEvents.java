@@ -93,6 +93,7 @@ public class BuildingServerEvents {
             ServerLevel level = evt.getServer().getLevel(Level.OVERWORLD);
             if (level != null) {
                 saveBuildings(level);
+                saveNetherZones(level);
                 saveTicks = 0;
             }
         }
@@ -132,7 +133,7 @@ public class BuildingServerEvents {
         netherData.save();
         level.getDataStorage().save();
 
-        //ReignOfNether.LOGGER.info("saved " + netherZones.size() + " netherzones in serverevents");
+        ReignOfNether.LOGGER.info("saved " + netherZones.size() + " netherzones in serverevents");
     }
 
     @SubscribeEvent
@@ -184,7 +185,7 @@ public class BuildingServerEvents {
                     if (building instanceof NetherConvertingBuilding ncb) {
                         for (NetherZone nz : netherData.netherZones)
                             if (building.isPosInsideBuilding(nz.getOrigin())) {
-                                ncb.setNetherZone(nz);
+                                ncb.setNetherZone(nz, false);
                                 placedNZs.add(nz.getOrigin());
                                 ReignOfNether.LOGGER.info("loaded netherzone for: " + b.building.name + "|" + b.originPos);
                                 break;
@@ -200,6 +201,7 @@ public class BuildingServerEvents {
                     ReignOfNether.LOGGER.info("loaded orphaned netherzone: " + nz.getOrigin());
                 }
             });
+            saveNetherZones(level);
         }
     }
 
