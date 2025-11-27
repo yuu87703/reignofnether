@@ -106,7 +106,7 @@ public class SandboxServer {
         BuildingServerEvents.getBuildings().removeIf(b -> {
             if (b.originPos.equals(pos)) {
                 BuildingServerEvents.syncBuildingPlacement(pos);
-                if (b instanceof NetherConvertingBuilding ncb)
+                if (b instanceof NetherConvertingBuilding ncb && ncb.getZone() != null)
                     ncb.getZone().startRestoring();
                 return true;
             }

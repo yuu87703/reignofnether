@@ -114,8 +114,8 @@ public class PortraitRendererModifiers {
                 entity instanceof HeadhunterUnit) {
             yOffset = -6;
         } else if (entity instanceof WretchedWraithUnit) {
-            yOffset = -24;
-            scale = -28;
+            yOffset = -6;
+            scale = -24;
         } else if (entity instanceof WildfireUnit) {
             yOffset = -30;
             scale = -32;
