@@ -124,7 +124,13 @@ public class CustomBuildingServerEvents {
                     b.structureSize,
                     b.getPortraitBlockRegistryKey(),
                     b.capturable,
-                    b.invulnerable
+                    b.invulnerable,
+                    b.nightRadius,
+                    b.netherRadius,
+                    b.buildableByVillagers,
+                    b.buildableByMonsters,
+                    b.buildableByPiglins,
+                    b.cost
             ));
         });
         customBuildingData.save();

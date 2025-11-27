@@ -14,7 +14,7 @@ Custom Buildings
 [🟡] Buildable by Villagers
 [🟡] Buildable by Monsters
 [🟡] Buildable by Piglins
-[🟡] Build cost (default 0,100,100)
+[🟡] Build cost
     - TODO: save and sync to clients on load
 
 [❌] Garrisonable

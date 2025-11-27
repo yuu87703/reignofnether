@@ -1,6 +1,8 @@
 package com.solegendary.reignofnether.building.custombuilding;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.resources.Resources;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -49,6 +51,14 @@ public class CustomBuildingSaveData extends SavedData {
                 String portraitBlockRegistryKey = btag.contains("portraitBlockRegistryKey") ? btag.getString("portraitBlockRegistryKey") : "";
                 boolean capturable = btag.contains("capturable") && btag.getBoolean("capturable");
                 boolean invulnerable = btag.contains("invulnerable") && btag.getBoolean("invulnerable");
+                int nightRadius = btag.contains("nightRadius") ? btag.getInt("nightRadius") : 0;
+                int netherRadius = btag.contains("netherRadius") ? btag.getInt("netherRadius") : 0;
+                boolean buildableByVillagers = btag.contains("buildableByVillagers") && btag.getBoolean("buildableByVillagers");
+                boolean buildableByMonsters = btag.contains("buildableByMonsters") && btag.getBoolean("buildableByMonsters");
+                boolean buildableByPiglins = btag.contains("buildableByPiglins") && btag.getBoolean("buildableByPiglins");
+                int foodCost = btag.contains("foodCost") ? btag.getInt("foodCost") : 0;
+                int woodCost = btag.contains("woodCost") ? btag.getInt("woodCost") : 0;
+                int oreCost = btag.contains("oreCost") ? btag.getInt("oreCost") : 0;
 
                 data.customBuildings.add(new CustomBuildingSave(
                         structureNbt,
@@ -56,7 +66,13 @@ public class CustomBuildingSaveData extends SavedData {
                         structureSize,
                         portraitBlockRegistryKey,
                         capturable,
-                        invulnerable
+                        invulnerable,
+                        nightRadius,
+                        netherRadius,
+                        buildableByVillagers,
+                        buildableByMonsters,
+                        buildableByPiglins,
+                        ResourceCost.Building(foodCost, woodCost, oreCost, 0)
                 ));
                 ReignOfNether.LOGGER.info("CustomBuildingSaveData.load: " + buildingName);
             }
@@ -77,6 +93,14 @@ public class CustomBuildingSaveData extends SavedData {
             cTag.putString("portraitBlockRegistryKey", b.portraitBlockRegistryKey);
             cTag.putBoolean("capturable", b.capturable);
             cTag.putBoolean("invulnerable", b.invulnerable);
+            cTag.putInt("nightRadius", b.nightRadius);
+            cTag.putInt("netherRadius", b.netherRadius);
+            cTag.putBoolean("buildableByVillagers", b.buildableByVillagers);
+            cTag.putBoolean("buildableByMonsters", b.buildableByMonsters);
+            cTag.putBoolean("buildableByPiglins", b.buildableByPiglins);
+            cTag.putInt("foodCost", b.cost.food);
+            cTag.putInt("woodCost", b.cost.wood);
+            cTag.putInt("oreCost", b.cost.ore);
             list.add(cTag);
         });
         tag.put("custombuildings", list);

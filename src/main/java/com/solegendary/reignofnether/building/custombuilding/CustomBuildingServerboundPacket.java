@@ -80,6 +80,9 @@ public class CustomBuildingServerboundPacket {
                     case SET_BUILDABLE_BY_VILLAGERS -> customBuilding.buildableByVillagers = this.boolValue;
                     case SET_BUILDABLE_BY_MONSTERS -> customBuilding.buildableByMonsters = this.boolValue;
                     case SET_BUILDABLE_BY_PIGLINS -> customBuilding.buildableByPiglins = this.boolValue;
+                    case SET_FOOD_COST -> customBuilding.cost.food = this.intValue;
+                    case SET_WOOD_COST -> customBuilding.cost.wood = this.intValue;
+                    case SET_ORE_COST -> customBuilding.cost.ore = this.intValue;
                 }
             }
             success.set(true);
