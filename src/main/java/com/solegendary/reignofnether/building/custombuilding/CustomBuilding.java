@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.building.buildings.placements.CentralPortal
 import com.solegendary.reignofnether.building.buildings.placements.CustomBuildingPlacement;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.util.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
@@ -69,6 +70,22 @@ public class CustomBuilding extends Building {
     }
 
     public Faction getFaction() {return Faction.NONE;}
+
+    public BuildingPlaceButton getWorkerBuildButton(Keybinding hotkey) {
+        return new BuildingPlaceButton(
+                this.name,
+                MiscUtil.getTextureForBlock(portraitBlock),
+                hotkey,
+                () -> BuildingClientEvents.getBuildingToPlace() == this,
+                () -> false,
+                () -> true,
+                List.of(
+                        fcs(this.name, true),
+                        ResourceCosts.getFormattedCost(cost)
+                ),
+                this
+        );
+    }
 
     @Override
     public BuildingPlaceButton getBuildButton(Keybinding hotkey) {
