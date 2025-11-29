@@ -127,8 +127,14 @@ public class CustomBuilding extends Building {
         tooltips.add(fcs(this.name, true));
         if (cost.food > 0 || cost.ore > 0 || cost.wood > 0)
             tooltips.add(ResourceCosts.getFormattedCost(cost));
-        tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.label") + ": " + nightRadius));
-        tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.label") + ": " + netherRadius));
+        if (capturable)
+            tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_capturable.label")));
+        if (invulnerable)
+            tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_invulnerable.label")));
+        if (nightRadius > 0)
+            tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.label") + ": " + nightRadius));
+        if (netherRadius > 0)
+            tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.label") + ": " + netherRadius));
         return tooltips;
     }
 
