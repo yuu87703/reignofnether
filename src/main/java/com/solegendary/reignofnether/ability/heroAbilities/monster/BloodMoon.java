@@ -105,7 +105,8 @@ public class BloodMoon extends HeroAbility {
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip3"))
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip3")),
+                fcs(I18n.get("abilities.reignofnether.blood_moon.tooltip4"))
         );
     }
 
