@@ -186,7 +186,8 @@ public class CustomBuildingMenu {
                 },
                 I18n.get("sandbox.reignofnether.custom_buildings.set_invulnerable.tooltip1")
         ));
-        buttonsCol2.add(new CustomBuildingIntegerButton(
+
+        Button setNightRadiusButton = new CustomBuildingIntegerButton(
                 I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.label") + ": " + customBuilding.nightRadius,
                 () -> {
                     int value = Math.min(200, customBuilding.nightRadius + (Keybindings.shiftMod.isDown() ? 10 : 1));
@@ -199,8 +200,11 @@ public class CustomBuildingMenu {
                     customBuilding.nightRadius = value;
                 },
                 I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.tooltip1")
-        ));
-        buttonsCol2.add(new CustomBuildingIntegerButton(
+        );
+        setNightRadiusButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/moon.png");
+        buttonsCol2.add(setNightRadiusButton);
+
+        Button setNetherRadiusButton = new CustomBuildingIntegerButton(
                 I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.label") + ": " + customBuilding.netherRadius,
                 () -> {
                     int value = Math.min(200, customBuilding.netherRadius + (Keybindings.shiftMod.isDown() ? 10 : 1));
@@ -213,7 +217,10 @@ public class CustomBuildingMenu {
                     customBuilding.netherRadius = value;
                 },
                 I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.tooltip1")
-        ));
+        );
+        setNetherRadiusButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png");
+        buttonsCol2.add(setNetherRadiusButton);
+
         buttonsCol1.add(new CustomBuildingBooleanButton(
                 I18n.get("sandbox.reignofnether.custom_buildings.set_buildable_by_villagers.label"), customBuilding.buildableByVillagers,
                 () -> {
@@ -251,7 +258,7 @@ public class CustomBuildingMenu {
                     CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_FOOD_COST, customBuilding.name, value);
                     customBuilding.cost.food = value;
                 },
-                null
+                I18n.get("sandbox.reignofnether.custom_buildings.set_food_cost.tooltip1")
         );
         setFoodCostButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/wheat.png");
         buttonsCol1.add(setFoodCostButton);
@@ -268,7 +275,7 @@ public class CustomBuildingMenu {
                     CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_WOOD_COST, customBuilding.name, value);
                     customBuilding.cost.wood = value;
                 },
-                null
+                I18n.get("sandbox.reignofnether.custom_buildings.set_wood_cost.tooltip1")
         );
         setWoodCostButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/wood.png");
         buttonsCol1.add(setWoodCostButton);
@@ -285,7 +292,7 @@ public class CustomBuildingMenu {
                     CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_ORE_COST, customBuilding.name, value);
                     customBuilding.cost.ore = value;
                 },
-                null
+                I18n.get("sandbox.reignofnether.custom_buildings.set_ore_cost.tooltip1")
         );
         setOreCostButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/iron_ore.png");
         buttonsCol1.add(setOreCostButton);

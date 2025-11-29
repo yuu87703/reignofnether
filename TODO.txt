@@ -9,6 +9,9 @@
 
 Custom Buildings
 ----------------
+
+[!] This patch reworks how custom building saves work - all options set in the customisation menu such as invulnerable, capturable, etc. will be set back to their defaults
+
 [🟡] Nether conversion range option (default 0)
 [🟡] Night radius option (default 0)
 [🟡] Buildable by Villagers

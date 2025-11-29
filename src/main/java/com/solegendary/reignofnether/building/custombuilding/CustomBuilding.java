@@ -2,7 +2,6 @@ package com.solegendary.reignofnether.building.custombuilding;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.*;
-import com.solegendary.reignofnether.building.buildings.placements.CentralPortalPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.CustomBuildingPlacement;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -15,6 +14,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -35,28 +35,66 @@ public class CustomBuilding extends Building {
     public Vec3i structureSize;
     public final CompoundTag structureNbt;
     public Set<Block> portraitBlockOptions;
+    public CompoundTag attributesNbt = new CompoundTag(); // NBT containing all the below fields (including portrait block key)
     public int nightRadius = 0;
     public int netherRadius = 0;
     public boolean buildableByVillagers = false;
     public boolean buildableByMonsters = false;
     public boolean buildableByPiglins = false;
 
-    public CustomBuilding(String structureName, Vec3i structureSize, Block portraitBlock, CompoundTag nbt) {
+    public CustomBuilding(String structureName, Vec3i structureSize, Block portraitBlock, CompoundTag structureNbt) {
+        this(structureName, structureSize, portraitBlock, structureNbt, null);
+    }
+
+    public CustomBuilding(String structureName, Vec3i structureSize, Block portraitBlock, CompoundTag structureNbt, CompoundTag attributesNbt) {
         super(structureName, ResourceCost.Building(0,0,0,0), false);
         this.name = WordUtils.capitalize(structureName
                 .replace("minecraft:", "")
                 .replace("reignofnether:", "")
                 .replace("_", " "));
         this.structureSize = structureSize;
-        this.structureNbt = nbt;
+        this.structureNbt = structureNbt;
         this.portraitBlock = portraitBlock;
         this.icon = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_front.png");
-        this.startingBlockTypes.addAll(BuildingBlockData.getBuildingBlocksFromNbt(structureNbt)
+        this.startingBlockTypes.addAll(BuildingBlockData.getBuildingBlocksFromNbt(this.structureNbt)
             .stream().filter(bb -> bb.getBlockPos().getY() == 0)
             .map(bb -> bb.getBlockState().getBlock()).toList());
-        this.portraitBlockOptions = BuildingBlockData.getBuildingBlocksFromNbt(structureNbt)
+        this.portraitBlockOptions = BuildingBlockData.getBuildingBlocksFromNbt(this.structureNbt)
                 .stream().map(bb -> bb.getBlockState().getBlock())
                 .collect(Collectors.toSet());
+        this.packAttributesNbt();
+        if (attributesNbt != null) {
+            this.attributesNbt = attributesNbt;
+            this.unpackAttributesNbt();
+        }
+    }
+
+    public void packAttributesNbt() {
+        attributesNbt.putString("portraitBlockRegistryKey", this.getPortraitBlockRegistryKey());
+        attributesNbt.putBoolean("capturable", this.capturable);
+        attributesNbt.putBoolean("invulnerable", this.invulnerable);
+        attributesNbt.putInt("nightRadius", this.nightRadius);
+        attributesNbt.putInt("netherRadius", this.netherRadius);
+        attributesNbt.putBoolean("buildableByVillagers", this.buildableByVillagers);
+        attributesNbt.putBoolean("buildableByMonsters", this.buildableByMonsters);
+        attributesNbt.putBoolean("buildableByPiglins", this.buildableByPiglins);
+        attributesNbt.putInt("foodCost", this.cost.food);
+        attributesNbt.putInt("woodCost", this.cost.wood);
+        attributesNbt.putInt("oreCost", this.cost.ore);
+    }
+
+    private void unpackAttributesNbt() {
+        this.setIconAndPortrait(attributesNbt.getString("portraitBlockRegistryKey"));
+        this.capturable = attributesNbt.getBoolean("capturable");
+        this.invulnerable = attributesNbt.getBoolean("invulnerable");
+        this.nightRadius = attributesNbt.getInt("nightRadius");
+        this.netherRadius = attributesNbt.getInt("netherRadius");
+        this.buildableByVillagers = attributesNbt.getBoolean("buildableByVillagers");
+        this.buildableByMonsters = attributesNbt.getBoolean("buildableByMonsters");
+        this.buildableByPiglins = attributesNbt.getBoolean("buildableByPiglins");
+        this.cost.food = attributesNbt.getInt("foodCost");
+        this.cost.wood = attributesNbt.getInt("woodCost");
+        this.cost.ore = attributesNbt.getInt("oreCost");
     }
 
     @Override
@@ -79,12 +117,19 @@ public class CustomBuilding extends Building {
                 () -> BuildingClientEvents.getBuildingToPlace() == this,
                 () -> false,
                 () -> true,
-                List.of(
-                        fcs(this.name, true),
-                        ResourceCosts.getFormattedCost(cost)
-                ),
+                getWorkerBuildTooltips(),
                 this
         );
+    }
+
+    private List<FormattedCharSequence> getWorkerBuildTooltips() {
+        ArrayList<FormattedCharSequence> tooltips = new ArrayList<>();
+        tooltips.add(fcs(this.name, true));
+        if (cost.food > 0 || cost.ore > 0 || cost.wood > 0)
+            tooltips.add(ResourceCosts.getFormattedCost(cost));
+        tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.label") + ": " + nightRadius));
+        tooltips.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.label") + ": " + netherRadius));
+        return tooltips;
     }
 
     @Override
