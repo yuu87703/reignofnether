@@ -316,10 +316,6 @@ public class GruntUnit extends Piglin implements Unit, WorkerUnit, AttackerUnit,
         return super.fireImmune() || (bpl != null && (bpl.getBuilding() instanceof FlameSanctuary || bpl.getBuilding() instanceof BasaltSprings));
     }
 
-
-
-
-
     @Override
     public List<Button> getAbilityButtons() {
         List<Button> abilities = new ArrayList<>(getAbilities().getButtons(this));

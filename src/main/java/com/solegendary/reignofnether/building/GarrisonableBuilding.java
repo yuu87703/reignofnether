@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface GarrisonableBuilding {
@@ -19,11 +20,15 @@ public interface GarrisonableBuilding {
     public int getExternalAttackRangeBonus();
 
     // returns the relative building position units will go to when garrisoning
-    BlockPos getEntryPosition();
+    @Nullable BlockPos getEntryPosition();
     // returns the relative building position units will go to when ungarrisoning
-    BlockPos getExitPosition();
+    @Nullable BlockPos getExitPosition();
 
-    boolean isFull();
+    int getCapacity();
+
+    default boolean isFull() {
+        return getNumOccupants((BuildingPlacement) this) >= getCapacity();
+    }
 
     // will only return actual Units, not any other LivingEntity
     public default List<LivingEntity> getOccupants() {
@@ -58,7 +63,7 @@ public interface GarrisonableBuilding {
                 isAllied = AlliancesServerEvents.isAllied(unit.getOwnerName(), building.ownerName);
 
             if ((unit.getOwnerName().equals(building.ownerName) || isAllied || (unit.getOwnerName().isEmpty() && building.ownerName.isEmpty())) &&
-                    building instanceof GarrisonableBuilding garr && building.isBuilt &&
+                    building instanceof GarrisonableBuilding garr && garr.getCapacity() > 0 && building.isBuilt &&
                     building.isPosInsideBuilding(((LivingEntity) unit).getOnPos()) &&
                     ((LivingEntity) unit).getOnPos().getY() > building.originPos.getY() + 2) {
                 return garr;

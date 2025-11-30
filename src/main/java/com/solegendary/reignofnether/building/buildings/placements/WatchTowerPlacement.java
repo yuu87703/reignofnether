@@ -48,7 +48,7 @@ public class WatchTowerPlacement extends BuildingPlacement implements Garrisonab
     }
 
     @Override
-    public boolean isFull() { return GarrisonableBuilding.getNumOccupants(this) >= MAX_OCCUPANTS; }
+    public int getCapacity() { return MAX_OCCUPANTS; }
 
     public boolean canDestroyBlock(BlockPos relativeBp) {
         return relativeBp.getY() != 10 &&

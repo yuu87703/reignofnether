@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.blocks.RTSStructureBlockEntity;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -22,10 +23,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -75,7 +73,9 @@ public class CustomBuildingServerEvents {
             Block portraitBlock = Blocks.COMMAND_BLOCK;
             for (BuildingBlock bb : blocks) {
                 BlockState bs = bb.getBlockState();
-                if (!bs.isAir() && bs.getFluidState().isEmpty()) {
+                if (!bs.isAir() && bs.getFluidState().isEmpty() &&
+                    !List.of(BlockRegistrar.GARRISON_EXIT_BLOCK.get(), BlockRegistrar.GARRISON_ENTRY_BLOCK.get())
+                            .contains(bb.getBlockState().getBlock())) {
                     numSolidBlocks += 1;
                     portraitBlock = bs.getBlock();
                 }

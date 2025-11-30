@@ -68,7 +68,5 @@ public class StrongholdPlacement extends DarknessProductionBuilding implements G
     }
 
     @Override
-    public boolean isFull() {
-        return GarrisonableBuilding.getNumOccupants(this) >= MAX_OCCUPANTS;
-    }
+    public int getCapacity() { return MAX_OCCUPANTS; }
 }

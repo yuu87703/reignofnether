@@ -633,7 +633,7 @@ public class BuildingServerEvents {
 
                 if (atkDmg > 0) {
                     // all explosion damage will directly hit all occupants at an average of 1/4 rate
-                    if (building instanceof GarrisonableBuilding garr) {
+                    if (building instanceof GarrisonableBuilding garr && garr.getCapacity() > 0) {
                         for (LivingEntity le : garr.getOccupants())
                             le.hurt(exp.getDamageSource(), (random.nextInt(atkDmg + 1)) / 2f);
                     }

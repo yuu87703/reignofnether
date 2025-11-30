@@ -62,9 +62,7 @@ public class CastlePlacement extends ProductionPlacement implements Garrisonable
     }
 
     @Override
-    public boolean isFull() {
-        return GarrisonableBuilding.getNumOccupants(this) >= MAX_OCCUPANTS;
-    }
+    public int getCapacity() { return MAX_OCCUPANTS; }
 
     @Override
     public BlockPos getIndoorSpawnPoint(ServerLevel level) {

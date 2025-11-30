@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.building.buildings.placements;
 
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
@@ -12,15 +13,27 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
-public class CustomBuildingPlacement extends BuildingPlacement implements RangeIndicator, NightSource, NetherConvertingBuilding {
+public class CustomBuildingPlacement extends BuildingPlacement implements RangeIndicator, NightSource, NetherConvertingBuilding, GarrisonableBuilding {
 
     public NetherZone netherConversionZone = null;
     private final Set<BlockPos> nightBorderBps = new HashSet<>();
+    private final ArrayList<BlockPos> garrisonEntries = new ArrayList<>();
+    private final ArrayList<BlockPos> garrisonExits = new ArrayList<>();
+    private final Random random = new Random();
 
     public CustomBuildingPlacement(CustomBuilding customBuilding, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(customBuilding, level, originPos, rotation, ownerName, blocks, isCapitol);
+
+        for (BuildingBlock bb : getCustomBuilding().getRelativeBlockData(level)) {
+            if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_ENTRY_BLOCK.get()) {
+                garrisonEntries.add(bb.getBlockPos());
+            } else if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_EXIT_BLOCK.get()) {
+                garrisonExits.add(bb.getBlockPos());
+            }
+        }
     }
 
     public CustomBuilding getCustomBuilding() {
@@ -84,4 +97,28 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     public boolean showOnlyWhenSelected() {
         return false;
     }
+
+    // GARRISON
+    @Override
+    public int getAttackRange() { return getCustomBuilding().garrisonRange; }
+
+    @Override
+    public int getExternalAttackRangeBonus() { return Math.min(15, getCustomBuilding().garrisonRange / 2); }
+
+    @Override
+    public BlockPos getEntryPosition() {
+        if (!garrisonEntries.isEmpty())
+            return garrisonEntries.get(random.nextInt(garrisonEntries.size())).above();
+        return null;
+    }
+
+    @Override
+    public BlockPos getExitPosition() {
+        if (!garrisonExits.isEmpty())
+            return garrisonExits.get(random.nextInt(garrisonExits.size())).above();
+        return null;
+    }
+
+    @Override
+    public int getCapacity() { return getCustomBuilding().garrisonCapacity; }
 }

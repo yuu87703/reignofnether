@@ -2,7 +2,6 @@ package com.solegendary.reignofnether.building.custombuilding;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
-import com.solegendary.reignofnether.gamerules.GameruleServerboundPacket;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.PortraitRendererBuilding;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -24,6 +23,7 @@ import java.util.stream.Stream;
 import static com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents.getCustomBuildingToEdit;
 import static com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents.setCustomBuildingToEdit;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
+import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class CustomBuildingMenu {
 
@@ -127,7 +127,8 @@ public class CustomBuildingMenu {
 
     private static class CustomBuildingIntegerButton extends Button {
         private final String label;
-        public CustomBuildingIntegerButton(String label, Runnable onLeftClick, Runnable onRightClick, String tooltip) {
+
+        public CustomBuildingIntegerButton(String label, Runnable onLeftClick, Runnable onRightClick, List<FormattedCharSequence> tooltips) {
             super(
                     "Integer Customise Building",
                     10,
@@ -138,9 +139,13 @@ public class CustomBuildingMenu {
                     () -> true,
                     onLeftClick,
                     onRightClick,
-                    tooltip != null ? List.of(fcs(tooltip)) : null
+                    tooltips
             );
             this.label = label;
+        }
+
+        public CustomBuildingIntegerButton(String label, Runnable onLeftClick, Runnable onRightClick, String tooltip) {
+            this(label, onLeftClick, onRightClick, tooltip != null ? List.of(fcs(tooltip)) : null);
         }
         @Override
         public void render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
@@ -169,57 +174,6 @@ public class CustomBuildingMenu {
         ArrayList<Button> buttonsCol1 = new ArrayList<>();
         ArrayList<Button> buttonsCol2 = new ArrayList<>();
         CustomBuilding customBuilding = getCustomBuildingToEdit();
-
-        buttonsCol2.add(new CustomBuildingBooleanButton(
-                I18n.get("sandbox.reignofnether.custom_buildings.set_capturable.label"), customBuilding.capturable,
-                () -> {
-                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_CAPTURABLE, customBuilding.name, !customBuilding.capturable);
-                    customBuilding.capturable = !customBuilding.capturable;
-                },
-                I18n.get("sandbox.reignofnether.custom_buildings.set_capturable.tooltip1")
-        ));
-        buttonsCol2.add(new CustomBuildingBooleanButton(
-                I18n.get("sandbox.reignofnether.custom_buildings.set_invulnerable.label"), customBuilding.invulnerable,
-                () -> {
-                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_INVULNERABLE, customBuilding.name, !customBuilding.invulnerable);
-                    customBuilding.invulnerable = !customBuilding.invulnerable;
-                },
-                I18n.get("sandbox.reignofnether.custom_buildings.set_invulnerable.tooltip1")
-        ));
-
-        Button setNightRadiusButton = new CustomBuildingIntegerButton(
-                I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.label") + ": " + customBuilding.nightRadius,
-                () -> {
-                    int value = Math.min(200, customBuilding.nightRadius + (Keybindings.shiftMod.isDown() ? 10 : 1));
-                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NIGHT_RADIUS, customBuilding.name, value);
-                    customBuilding.nightRadius = value;
-                },
-                () -> {
-                    int value = Math.max(0, customBuilding.nightRadius - (Keybindings.shiftMod.isDown() ? 10 : 1));
-                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NIGHT_RADIUS, customBuilding.name, value);
-                    customBuilding.nightRadius = value;
-                },
-                I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.tooltip1")
-        );
-        setNightRadiusButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/moon.png");
-        buttonsCol2.add(setNightRadiusButton);
-
-        Button setNetherRadiusButton = new CustomBuildingIntegerButton(
-                I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.label") + ": " + customBuilding.netherRadius,
-                () -> {
-                    int value = Math.min(200, customBuilding.netherRadius + (Keybindings.shiftMod.isDown() ? 10 : 1));
-                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NETHER_RADIUS, customBuilding.name, value);
-                    customBuilding.netherRadius = value;
-                },
-                () -> {
-                    int value = Math.max(0, customBuilding.netherRadius - (Keybindings.shiftMod.isDown() ? 10 : 1));
-                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NETHER_RADIUS, customBuilding.name, value);
-                    customBuilding.netherRadius = value;
-                },
-                I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.tooltip1")
-        );
-        setNetherRadiusButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png");
-        buttonsCol2.add(setNetherRadiusButton);
 
         buttonsCol1.add(new CustomBuildingBooleanButton(
                 I18n.get("sandbox.reignofnether.custom_buildings.set_buildable_by_villagers.label"), customBuilding.buildableByVillagers,
@@ -297,6 +251,93 @@ public class CustomBuildingMenu {
         setOreCostButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/iron_ore.png");
         buttonsCol1.add(setOreCostButton);
 
+
+
+        buttonsCol2.add(new CustomBuildingBooleanButton(
+                I18n.get("sandbox.reignofnether.custom_buildings.set_capturable.label"), customBuilding.capturable,
+                () -> {
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_CAPTURABLE, customBuilding.name, !customBuilding.capturable);
+                    customBuilding.capturable = !customBuilding.capturable;
+                },
+                I18n.get("sandbox.reignofnether.custom_buildings.set_capturable.tooltip1")
+        ));
+        buttonsCol2.add(new CustomBuildingBooleanButton(
+                I18n.get("sandbox.reignofnether.custom_buildings.set_invulnerable.label"), customBuilding.invulnerable,
+                () -> {
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_INVULNERABLE, customBuilding.name, !customBuilding.invulnerable);
+                    customBuilding.invulnerable = !customBuilding.invulnerable;
+                },
+                I18n.get("sandbox.reignofnether.custom_buildings.set_invulnerable.tooltip1")
+        ));
+
+        Button setNightRadiusButton = new CustomBuildingIntegerButton(
+                I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.label") + ": " + customBuilding.nightRadius,
+                () -> {
+                    int value = Math.min(200, customBuilding.nightRadius + (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NIGHT_RADIUS, customBuilding.name, value);
+                    customBuilding.nightRadius = value;
+                },
+                () -> {
+                    int value = Math.max(0, customBuilding.nightRadius - (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NIGHT_RADIUS, customBuilding.name, value);
+                    customBuilding.nightRadius = value;
+                },
+                I18n.get("sandbox.reignofnether.custom_buildings.set_night_radius.tooltip1")
+        );
+        setNightRadiusButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/moon.png");
+        buttonsCol2.add(setNightRadiusButton);
+
+        Button setNetherRadiusButton = new CustomBuildingIntegerButton(
+                I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.label") + ": " + customBuilding.netherRadius,
+                () -> {
+                    int value = Math.min(200, customBuilding.netherRadius + (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NETHER_RADIUS, customBuilding.name, value);
+                    customBuilding.netherRadius = value;
+                },
+                () -> {
+                    int value = Math.max(0, customBuilding.netherRadius - (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NETHER_RADIUS, customBuilding.name, value);
+                    customBuilding.netherRadius = value;
+                },
+                I18n.get("sandbox.reignofnether.custom_buildings.set_nether_radius.tooltip1")
+        );
+        setNetherRadiusButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/portal.png");
+        buttonsCol2.add(setNetherRadiusButton);
+
+        Button setGarrisonCapacityButton = new CustomBuildingIntegerButton(
+                I18n.get("sandbox.reignofnether.custom_buildings.set_garrison_capacity.label") + ": " + customBuilding.garrisonCapacity,
+                () -> {
+                    int value = Math.min(100, customBuilding.garrisonCapacity + (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_GARRISON_CAPACITY, customBuilding.name, value);
+                    customBuilding.garrisonCapacity = value;
+                },
+                () -> {
+                    int value = Math.max(0, customBuilding.garrisonCapacity - (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_GARRISON_CAPACITY, customBuilding.name, value);
+                    customBuilding.garrisonCapacity = value;
+                },
+                getGarrisonTooltips(customBuilding, I18n.get("sandbox.reignofnether.custom_buildings.set_garrison_capacity.tooltip1"))
+        );
+        setGarrisonCapacityButton.iconResource = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/ladder.png");
+        buttonsCol2.add(setGarrisonCapacityButton);
+
+        Button setGarrisonBonusRangeButton = new CustomBuildingIntegerButton(
+                I18n.get("sandbox.reignofnether.custom_buildings.set_garrison_range.label") + ": " + customBuilding.garrisonRange,
+                () -> {
+                    int value = Math.min(100, customBuilding.garrisonRange + (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_GARRISON_RANGE, customBuilding.name, value);
+                    customBuilding.garrisonRange = value;
+                },
+                () -> {
+                    int value = Math.max(0, customBuilding.garrisonRange - (Keybindings.shiftMod.isDown() ? 10 : 1));
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_GARRISON_RANGE, customBuilding.name, value);
+                    customBuilding.garrisonRange = value;
+                },
+                getGarrisonTooltips(customBuilding, I18n.get("sandbox.reignofnether.custom_buildings.set_garrison_range.tooltip1"))
+        );
+        setGarrisonBonusRangeButton.iconResource = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/bow.png");
+        buttonsCol2.add(setGarrisonBonusRangeButton);
+
         for (Button button : buttonsCol1) {
             renderButton(button, x, y, evt);
             y += 18;
@@ -308,5 +349,21 @@ public class CustomBuildingMenu {
             y += 18;
         }
         return Stream.of(buttonsCol1, buttonsCol2).flatMap(List::stream).collect(Collectors.toList());
+    }
+
+    private static List<FormattedCharSequence> getGarrisonTooltips(CustomBuilding customBuilding, String originalTooltip) {
+        ArrayList<FormattedCharSequence> tooltips = new ArrayList<>();
+        tooltips.add(fcs(originalTooltip));
+        if (customBuilding.numGarrisonEntries <= 0) {
+            tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.no_entry")));
+        } else if (customBuilding.numGarrisonEntries > 1) {
+            tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.multiple_entries")));
+        }
+        if (customBuilding.numGarrisonExits <= 0) {
+            tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.no_exit")));
+        } else if (customBuilding.numGarrisonExits > 1) {
+            tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.multiple_exits")));
+        }
+        return tooltips;
     }
 }

@@ -53,5 +53,5 @@ public class BastionPlacement extends ProductionPlacement implements Garrisonabl
     }
 
     @Override
-    public boolean isFull() { return GarrisonableBuilding.getNumOccupants(this) >= MAX_OCCUPANTS; }
+    public int getCapacity() { return MAX_OCCUPANTS; }
 }

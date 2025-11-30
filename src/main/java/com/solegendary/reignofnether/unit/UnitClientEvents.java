@@ -693,7 +693,7 @@ public class UnitClientEvents {
                         sendUnitCommand(UnitAction.MOUNT_SPIDER);
                 }
                 // right click -> garrison friendly building
-                else if (preSelBuilding instanceof GarrisonableBuilding garr &&
+                else if (preSelBuilding instanceof GarrisonableBuilding garr && garr.getCapacity() > 0 &&
                         hudSelectedEntity instanceof RangedAttackerUnit &&
                         hudSelectedEntity instanceof Unit unit && unit.canGarrison() &&
                         preSelBuilding.ownerName.equals(unit.getOwnerName())) {
