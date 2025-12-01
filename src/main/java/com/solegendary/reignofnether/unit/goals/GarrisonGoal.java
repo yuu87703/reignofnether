@@ -34,7 +34,7 @@ public class GarrisonGoal extends MoveToTargetBlockGoal {
 
                 // teleport to garrison entry pos
                 if (!garr.isFull() && buildingTarget.isBuilt && garr.getEntryPosition() != null) {
-                    BlockPos bp = buildingTarget.originPos.offset(garr.getEntryPosition());
+                    BlockPos bp = garr.getEntryPosition();
                     this.mob.teleportTo(bp.getX() + 0.5f, bp.getY() + 0.5f, bp.getZ() + 0.5f);
                 }
                 this.stopGarrisoning();

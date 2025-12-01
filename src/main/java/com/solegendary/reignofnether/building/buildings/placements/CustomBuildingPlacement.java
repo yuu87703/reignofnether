@@ -114,8 +114,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     @Override
     public BlockPos getEntryPosition() {
         if (!garrisonEntries.isEmpty()) {
-            BlockPos pos = garrisonEntries.get(random.nextInt(garrisonEntries.size())).above();
-            return pos.subtract(originPos);
+            return garrisonEntries.get(random.nextInt(garrisonEntries.size())).above();
         }
         return null;
     }
@@ -123,8 +122,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     @Override
     public BlockPos getExitPosition() {
         if (!garrisonExits.isEmpty()) {
-            BlockPos pos = garrisonExits.get(random.nextInt(garrisonExits.size())).above();
-            return pos.subtract(originPos);
+            return garrisonExits.get(random.nextInt(garrisonExits.size())).above();
         }
         return null;
     }

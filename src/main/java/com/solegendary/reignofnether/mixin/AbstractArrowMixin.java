@@ -49,12 +49,6 @@ public abstract class AbstractArrowMixin extends Projectile {
     @Shadow private int life;
 
     private boolean isInsideTopOfBuilding(BuildingPlacement building) {
-        BlockPos bp = this.blockPosition();
-        boolean isPosInsideBuildingExt =
-                bp.getX() <= building.maxCorner.getX() + 1 && bp.getX() >= building.minCorner.getX() - 1 &&
-                bp.getY() <= building.maxCorner.getY() + 1 && bp.getY() >= building.minCorner.getY() - 1 &&
-                bp.getZ() <= building.maxCorner.getZ() + 1 && bp.getZ() >= building.minCorner.getZ() - 1;
-
         // only have nophysics at a high Y value so we can still attack enemies at the base of the building
         return building.isPosInsideBuilding(this.blockPosition()) &&
                 this.blockPosition().getY() > building.originPos.getY() + 5;
@@ -256,6 +250,9 @@ public abstract class AbstractArrowMixin extends Projectile {
             at = @At("HEAD")
     )
     protected void onHitBlock(BlockHitResult pResult, CallbackInfo ci) {
+        ci.cancel();
+
+        /*
         if (this.getOwner() instanceof PillagerUnit pUnit &&
                 !pUnit.level().isClientSide() && pUnit.isPassenger()) {
             pUnit.level().explode(this.getOwner(), null, null,

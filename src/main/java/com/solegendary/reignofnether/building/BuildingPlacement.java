@@ -741,7 +741,7 @@ public class BuildingPlacement {
                         UnitServerEvents.spawnMob(
                                 entityType,
                                 (ServerLevel) level,
-                                originPos.offset(garr.getEntryPosition()),
+                                garr.getEntryPosition(),
                                 ENEMY_OWNER_NAME
                         );
                     }

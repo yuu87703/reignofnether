@@ -18,7 +18,7 @@ public class FortressPlacement extends ProductionPlacement implements Garrisonab
 
     @Override
     public BlockPos getIndoorSpawnPoint(ServerLevel level) {
-        return this.originPos.offset(getExitPosition());
+        return getExitPosition();
     }
 
     // don't use this for abilities as it may not be balanced
@@ -33,12 +33,12 @@ public class FortressPlacement extends ProductionPlacement implements Garrisonab
 
     @Override
     public BlockPos getEntryPosition() {
-        return GarrisonableBuilding.rotatePos(new BlockPos(5,17,5), this.rotation);
+        return originPos.offset(GarrisonableBuilding.rotatePos(new BlockPos(5,17,5), this.rotation));
     }
 
     @Override
     public BlockPos getExitPosition() {
-        return GarrisonableBuilding.rotatePos(new BlockPos(5,1,5), this.rotation);
+        return originPos.offset(GarrisonableBuilding.rotatePos(new BlockPos(5,1,5), this.rotation));
     }
 
     @Override

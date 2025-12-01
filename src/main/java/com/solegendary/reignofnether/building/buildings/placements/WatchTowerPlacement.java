@@ -23,12 +23,12 @@ public class WatchTowerPlacement extends BuildingPlacement implements Garrisonab
     public int getExternalAttackRangeBonus() { return 10; }
     @Override
     public BlockPos getEntryPosition() {
-        return GarrisonableBuilding.rotatePos(new BlockPos(2,11,2), this.rotation);
+        return originPos.offset(GarrisonableBuilding.rotatePos(new BlockPos(2,11,2), this.rotation));
     }
 
     @Override
     public BlockPos getExitPosition() {
-        return GarrisonableBuilding.rotatePos(new BlockPos(2,1,2), this.rotation);
+        return originPos.offset(GarrisonableBuilding.rotatePos(new BlockPos(2,1,2), this.rotation));
     }
 
     @Override

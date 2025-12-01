@@ -37,12 +37,12 @@ public class CastlePlacement extends ProductionPlacement implements Garrisonable
 
     @Override
     public BlockPos getEntryPosition() {
-        return GarrisonableBuilding.rotatePos(new BlockPos(5, 16, 5), this.rotation);
+        return originPos.offset(GarrisonableBuilding.rotatePos(new BlockPos(5, 16, 5), this.rotation));
     }
 
     @Override
     public BlockPos getExitPosition() {
-        return GarrisonableBuilding.rotatePos(new BlockPos(5, 2, 5), this.rotation);
+        return originPos.offset(GarrisonableBuilding.rotatePos(new BlockPos(5, 2, 5), this.rotation));
     }
 
     @Override
@@ -50,6 +50,6 @@ public class CastlePlacement extends ProductionPlacement implements Garrisonable
 
     @Override
     public BlockPos getIndoorSpawnPoint(ServerLevel level) {
-        return originPos.offset(getExitPosition());
+        return getExitPosition();
     }
 }

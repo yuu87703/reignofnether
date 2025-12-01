@@ -20,9 +20,9 @@ public interface GarrisonableBuilding {
     // bonus for units attacking garrisoned units
     public int getExternalAttackRangeBonus();
 
-    // returns the relative building position units will go to when garrisoning
+    // returns the absolute building position units will go to when garrisoning
     @Nullable BlockPos getEntryPosition();
-    // returns the relative building position units will go to when ungarrisoning
+    // returns the absolute building position units will go to when ungarrisoning
     @Nullable BlockPos getExitPosition();
 
     int getCapacity();
