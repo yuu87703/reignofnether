@@ -250,9 +250,6 @@ public abstract class AbstractArrowMixin extends Projectile {
             at = @At("HEAD")
     )
     protected void onHitBlock(BlockHitResult pResult, CallbackInfo ci) {
-        ci.cancel();
-
-        /*
         if (this.getOwner() instanceof PillagerUnit pUnit &&
                 !pUnit.level().isClientSide() && pUnit.isPassenger()) {
             pUnit.level().explode(this.getOwner(), null, null,
