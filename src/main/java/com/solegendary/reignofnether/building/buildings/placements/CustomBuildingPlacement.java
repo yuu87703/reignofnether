@@ -27,7 +27,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     public CustomBuildingPlacement(CustomBuilding customBuilding, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(customBuilding, level, originPos, rotation, ownerName, blocks, isCapitol);
 
-        for (BuildingBlock bb : getCustomBuilding().getRelativeBlockData(level)) {
+        for (BuildingBlock bb : blocks) {
             if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_ENTRY_BLOCK.get()) {
                 garrisonEntries.add(bb.getBlockPos());
             } else if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_EXIT_BLOCK.get()) {
@@ -115,7 +115,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     public BlockPos getEntryPosition() {
         if (!garrisonEntries.isEmpty()) {
             BlockPos pos = garrisonEntries.get(random.nextInt(garrisonEntries.size())).above();
-            return GarrisonableBuilding.rotatePos(pos, this.rotation);
+            return pos.subtract(originPos);
         }
         return null;
     }
@@ -124,7 +124,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     public BlockPos getExitPosition() {
         if (!garrisonExits.isEmpty()) {
             BlockPos pos = garrisonExits.get(random.nextInt(garrisonExits.size())).above();
-            return GarrisonableBuilding.rotatePos(pos, this.rotation);
+            return pos.subtract(originPos);
         }
         return null;
     }
