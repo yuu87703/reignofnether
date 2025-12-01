@@ -40,6 +40,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
         return (CustomBuilding) this.getBuilding();
     }
 
+    // NetherConvertingBuilding
     @Override public double getMaxNetherRange() { return this.getCustomBuilding().netherRadius; }
     @Override public double getStartingNetherRange() { return 3; }
 
@@ -71,11 +72,13 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
         }
     }
 
+    // NightSource
     @Override
     public int getNightRange() {
         return this.getCustomBuilding().nightRadius;
     }
 
+    // RangeIndicator
     @Override
     public void updateBorderBps() {
         if (!level.isClientSide() || this.getNightRange() <= 0) {
@@ -98,7 +101,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
         return false;
     }
 
-    // GARRISON
+    // GarrisonableBuilding
     @Override
     public int getAttackRange() { return getCustomBuilding().garrisonRange; }
 
@@ -106,19 +109,23 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     public int getExternalAttackRangeBonus() { return Math.min(15, getCustomBuilding().garrisonRange / 2); }
 
     @Override
+    public int getCapacity() { return getCustomBuilding().garrisonCapacity; }
+
+    @Override
     public BlockPos getEntryPosition() {
-        if (!garrisonEntries.isEmpty())
-            return garrisonEntries.get(random.nextInt(garrisonEntries.size())).above();
+        if (!garrisonEntries.isEmpty()) {
+            BlockPos pos = garrisonEntries.get(random.nextInt(garrisonEntries.size())).above();
+            return GarrisonableBuilding.rotatePos(pos, this.rotation);
+        }
         return null;
     }
 
     @Override
     public BlockPos getExitPosition() {
-        if (!garrisonExits.isEmpty())
-            return garrisonExits.get(random.nextInt(garrisonExits.size())).above();
+        if (!garrisonExits.isEmpty()) {
+            BlockPos pos = garrisonExits.get(random.nextInt(garrisonExits.size())).above();
+            return GarrisonableBuilding.rotatePos(pos, this.rotation);
+        }
         return null;
     }
-
-    @Override
-    public int getCapacity() { return getCustomBuilding().garrisonCapacity; }
 }

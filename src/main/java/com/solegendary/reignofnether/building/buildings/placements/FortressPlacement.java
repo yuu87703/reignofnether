@@ -33,28 +33,12 @@ public class FortressPlacement extends ProductionPlacement implements Garrisonab
 
     @Override
     public BlockPos getEntryPosition() {
-        if (this.rotation == Rotation.NONE) {
-            return new BlockPos(5,17,5);
-        } else if (this.rotation == Rotation.CLOCKWISE_90) {
-            return new BlockPos(-5,17,5);
-        } else if (this.rotation == Rotation.CLOCKWISE_180) {
-            return new BlockPos(-5,17,-5);
-        } else {
-            return new BlockPos(5,17,-5);
-        }
+        return GarrisonableBuilding.rotatePos(new BlockPos(5,17,5), this.rotation);
     }
 
     @Override
     public BlockPos getExitPosition() {
-        if (this.rotation == Rotation.NONE) {
-            return new BlockPos(5,1,5);
-        } else if (this.rotation == Rotation.CLOCKWISE_90) {
-            return new BlockPos(-5,1,5);
-        } else if (this.rotation == Rotation.CLOCKWISE_180) {
-            return new BlockPos(-5,1,-5);
-        } else {
-            return new BlockPos(5,1,-5);
-        }
+        return GarrisonableBuilding.rotatePos(new BlockPos(5,1,5), this.rotation);
     }
 
     @Override

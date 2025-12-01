@@ -118,7 +118,7 @@ public class CustomBuildingClientEvents {
             renderedButtons.add(CustomBuildingMenu.renderDeregisterButton(evt, blitX + width - Button.itemIconSize - 12, blitY + height - 26));
             renderedButtons.addAll(CustomBuildingMenu.renderCustomisationButtons(evt, blitX + 6, blitY + 38));
 
-            evt.getGuiGraphics().drawString(MC.font, "More options coming soon!", blitX + 10, blitY + height - 18, 0xFFFFFF);
+            //evt.getGuiGraphics().drawString(MC.font, "More options coming soon!", blitX + 10, blitY + height - 18, 0xFFFFFF);
 
             hudZones.add(new RectZone(blitX, blitY, blitX + width, blitY + height));
         }

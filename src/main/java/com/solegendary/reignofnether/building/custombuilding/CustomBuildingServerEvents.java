@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.building.custombuilding;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.blocks.RTSStructureBlockEntity;
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.placements.CustomBuildingPlacement;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import net.minecraft.core.BlockPos;
@@ -67,7 +68,7 @@ public class CustomBuildingServerEvents {
 
             ArrayList<BuildingBlock> blocks = BuildingUtils.getAbsoluteBlockData(
                     BuildingBlockData.getBuildingBlocksFromNbt(structureNbt),
-                    level, pos, Rotation.NONE, new Vec3i(1,0,1)
+                    level, pos, Rotation.NONE
             );
             int numSolidBlocks = 0;
             Block portraitBlock = Blocks.COMMAND_BLOCK;
@@ -91,12 +92,12 @@ public class CustomBuildingServerEvents {
                     }
                 }
                 customBuildings.add(building);
-                BuildingPlacement placement = new BuildingPlacement(building, level, pos, Rotation.NONE, "", blocks, false);
+                BuildingPlacement placement = new CustomBuildingPlacement(building, level, pos, Rotation.NONE, "", blocks, false);
                 BuildingServerEvents.getBuildings().add(placement);
                 CustomBuildingClientboundPacket.registerCustomBuilding(building);
                 saveCustomBuildings(level);
                 BuildingServerEvents.saveBuildings(level);
-                BuildingServerEvents.syncBuildingPlacement(pos);
+                BuildingServerEvents.placeBuildingClientside(pos);
                 return true;
             }
         }

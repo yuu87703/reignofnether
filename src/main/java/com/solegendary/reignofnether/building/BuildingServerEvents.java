@@ -58,6 +58,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class BuildingServerEvents {
 
@@ -122,6 +123,11 @@ public class BuildingServerEvents {
             ));
             //ReignOfNether.LOGGER.info("saved buildings/nether in serverevents: " + b.originPos);
         });
+
+        // deduplicate saved buildings by removing any additional buildings with the same originPos
+        Set<BlockPos> seenOriginPoses = new HashSet<>();
+        buildingData.buildings.removeIf(b -> !seenOriginPoses.add(b.originPos));
+
         buildingData.save();
         level.getDataStorage().save();
     }
@@ -444,7 +450,7 @@ public class BuildingServerEvents {
         }
     }
 
-    private static void syncBuildingPlacements() {
+    private static void placeBuildingsClientside() {
         for (BuildingPlacement building : buildings) {
             BuildingClientboundPacket.placeBuilding(building.originPos,
                     building.getBuilding(),
@@ -461,7 +467,7 @@ public class BuildingServerEvents {
         }
     }
 
-    public static void syncBuildingPlacement(BlockPos pos) {
+    public static void placeBuildingClientside(BlockPos pos) {
         for (BuildingPlacement building : buildings) {
             if (building.originPos.equals(pos)) {
                 BuildingClientboundPacket.placeBuilding(building.originPos,
@@ -488,9 +494,9 @@ public class BuildingServerEvents {
         }
         MinecraftServer server = evt.getEntity().level().getServer();
         if (server == null || !server.isDedicatedServer()) {
-            CompletableFuture.delayedExecutor(1000, TimeUnit.MILLISECONDS).execute(BuildingServerEvents::syncBuildingPlacements);
+            CompletableFuture.delayedExecutor(1000, TimeUnit.MILLISECONDS).execute(BuildingServerEvents::placeBuildingsClientside);
         } else {
-            syncBuildingPlacements();
+            placeBuildingsClientside();
         }
         //ReignOfNether.LOGGER.info("Synced " + buildings.size() + " buildings with player logged in");
     }

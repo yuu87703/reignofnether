@@ -817,7 +817,7 @@ public class HudClientEvents {
             blitY = screenHeight - iconFrameSize;
 
             blitY -= iconFrameSize * buildingProdRows;
-            if (hudSelectedEntity != null || (hudSelectedPlacement != null && !hudSelectedPlacement.getAbilities().isEmpty())) {
+            if (hudSelectedEntity != null || !hudSelectedPlacement.getAbilities().isEmpty() || !hudSelectedPlacement.isBuilt) {
                 blitY -= iconFrameSize;
             }
             ArrayList<Button> actionButtons = new ArrayList<>();

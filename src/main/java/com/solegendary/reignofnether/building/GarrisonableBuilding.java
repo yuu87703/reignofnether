@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Rotation;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,6 +29,18 @@ public interface GarrisonableBuilding {
 
     default boolean isFull() {
         return getNumOccupants((BuildingPlacement) this) >= getCapacity();
+    }
+
+    static BlockPos rotatePos(BlockPos pos, Rotation rot) {
+        if (rot == Rotation.NONE) {
+            return new BlockPos(pos.getX(), pos.getY(), pos.getZ());
+        } else if (rot == Rotation.CLOCKWISE_90) {
+            return new BlockPos(-pos.getX(), pos.getY(), pos.getZ());
+        } else if (rot == Rotation.CLOCKWISE_180) {
+            return new BlockPos(-pos.getX(), pos.getY(), -pos.getZ());
+        } else {
+            return new BlockPos(pos.getX(), pos.getY(), -pos.getZ());
+        }
     }
 
     // will only return actual Units, not any other LivingEntity

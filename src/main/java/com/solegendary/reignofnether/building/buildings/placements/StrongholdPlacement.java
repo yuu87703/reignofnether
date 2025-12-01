@@ -43,28 +43,12 @@ public class StrongholdPlacement extends DarknessProductionBuilding implements G
 
     @Override
     public BlockPos getEntryPosition() {
-        if (this.rotation == Rotation.NONE) {
-            return new BlockPos(5, 14, 5);
-        } else if (this.rotation == Rotation.CLOCKWISE_90) {
-            return new BlockPos(-5, 14, 5);
-        } else if (this.rotation == Rotation.CLOCKWISE_180) {
-            return new BlockPos(-5, 14, -5);
-        } else {
-            return new BlockPos(5, 14, -5);
-        }
+        return GarrisonableBuilding.rotatePos(new BlockPos(5, 14, 5), this.rotation);
     }
 
     @Override
     public BlockPos getExitPosition() {
-        if (this.rotation == Rotation.NONE) {
-            return new BlockPos(5, 2, 6);
-        } else if (this.rotation == Rotation.CLOCKWISE_90) {
-            return new BlockPos(-5, 2, 6);
-        } else if (this.rotation == Rotation.CLOCKWISE_180) {
-            return new BlockPos(-5, 2, -6);
-        } else {
-            return new BlockPos(5, 2, -6);
-        }
+        return GarrisonableBuilding.rotatePos(new BlockPos(5, 2, 6), this.rotation);
     }
 
     @Override
