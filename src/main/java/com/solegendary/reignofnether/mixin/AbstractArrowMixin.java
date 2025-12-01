@@ -24,9 +24,11 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -47,11 +49,21 @@ public abstract class AbstractArrowMixin extends Projectile {
 
     @Shadow public abstract boolean isNoPhysics();
     @Shadow private int life;
+    @Shadow protected EntityHitResult findHitEntity(Vec3 pStartVec, Vec3 pEndVec) {
+        return null;
+    }
 
-    private boolean isInsideTopOfBuilding(BuildingPlacement building) {
-        // only have nophysics at a high Y value so we can still attack enemies at the base of the building
-        return building.isPosInsideBuilding(this.blockPosition()) &&
-                this.blockPosition().getY() > building.originPos.getY() + 5;
+    private boolean isInsideBuildingAndNotEntity(BuildingPlacement building) {
+        Vec3 vec32 = this.position();
+        Vec3 vec33 = vec32.add(getDeltaMovement());
+        EntityHitResult entityHitResult = this.findHitEntity(vec32, vec33);
+
+        boolean insideForeignEntity = entityHitResult != null && entityHitResult.getEntity() != getOwner();
+        if (entityHitResult != null && entityHitResult.getEntity() instanceof Unit unit1 && getOwner() instanceof Unit unit2 &&
+            GarrisonableBuilding.getGarrison(unit1) == GarrisonableBuilding.getGarrison(unit2))
+            insideForeignEntity = false;
+
+        return building.isPosInsideBuilding(this.blockPosition()) && !insideForeignEntity;
     }
 
     // prevent arrows from colliding with the building that a garrisoned unit is inside of
@@ -64,7 +76,7 @@ public abstract class AbstractArrowMixin extends Projectile {
         if (this.getOwner() instanceof AttackerUnit aUnit) {
             // garrisoned unit -> ground
             if (GarrisonableBuilding.getGarrison((Unit) aUnit) instanceof BuildingPlacement building &&
-                isInsideTopOfBuilding(building)) {
+                    isInsideBuildingAndNotEntity(building)) {
                 cir.setReturnValue(true);
             }
 
