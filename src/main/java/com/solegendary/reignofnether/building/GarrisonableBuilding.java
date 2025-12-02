@@ -85,7 +85,8 @@ public interface GarrisonableBuilding {
 
                 if (building.getBuilding() instanceof CustomBuilding) {
                     Block onBlock = entity.level().getBlockState(entity.getOnPos().above()).getBlock();
-                    if (onBlock == BlockRegistrar.GARRISON_ZONE_BLOCK.get())
+                    if (onBlock == BlockRegistrar.GARRISON_ZONE_BLOCK.get() ||
+                        onBlock == BlockRegistrar.GARRISON_ENTRY_BLOCK.get())
                         return garr;
                 } else {
                     if (((LivingEntity) unit).getOnPos().getY() > building.originPos.getY() + 2)
@@ -108,7 +109,8 @@ public interface GarrisonableBuilding {
             if (building.isPosInsideBuilding(entity.getOnPos())) {
                 if (building.getBuilding() instanceof CustomBuilding) {
                     Block onBlock = entity.level().getBlockState(entity.getOnPos().above()).getBlock();
-                    if (onBlock == BlockRegistrar.GARRISON_ZONE_BLOCK.get())
+                    if (onBlock == BlockRegistrar.GARRISON_ZONE_BLOCK.get() ||
+                        onBlock == BlockRegistrar.GARRISON_ENTRY_BLOCK.get())
                         numOccupants += 1;;
                 } else {
                     if (entity.getOnPos().getY() > building.originPos.getY() + 2)
