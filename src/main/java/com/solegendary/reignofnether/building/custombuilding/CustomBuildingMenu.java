@@ -354,7 +354,9 @@ public class CustomBuildingMenu {
     private static List<FormattedCharSequence> getGarrisonTooltips(CustomBuilding customBuilding, String originalTooltip) {
         ArrayList<FormattedCharSequence> tooltips = new ArrayList<>();
         tooltips.add(fcs(originalTooltip));
-        if (customBuilding.numGarrisonEntries <= 0) {
+        if (customBuilding.numGarrisonZones <= 0) {
+            tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.no_zones")));
+        } else if (customBuilding.numGarrisonEntries <= 0) {
             tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.no_entry")));
         } else if (customBuilding.numGarrisonEntries > 1) {
             tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.multiple_entries")));

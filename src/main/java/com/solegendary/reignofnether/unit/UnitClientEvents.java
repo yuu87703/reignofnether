@@ -321,8 +321,8 @@ public class UnitClientEvents {
                     .mapToInt(Entity::getId).toArray();
 
             String playerName = MC.player.getName().getString();
-            if (hudSelectedEntity instanceof Unit unit && AlliancesClient.canControlAlly(hudSelectedEntity))
-                playerName = unit.getOwnerName();
+            //if (hudSelectedEntity instanceof Unit unit && AlliancesClient.canControlAlly(hudSelectedEntity))
+            //    playerName = unit.getOwnerName();
 
             UnitActionItem actionItem = new UnitActionItem(
                 playerName,

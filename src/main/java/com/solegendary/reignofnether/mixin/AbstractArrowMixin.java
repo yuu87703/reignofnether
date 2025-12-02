@@ -8,7 +8,6 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -24,11 +23,9 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,7 +50,7 @@ public abstract class AbstractArrowMixin extends Projectile {
         return null;
     }
 
-    private boolean isInsideBuildingAndNotEntity(BuildingPlacement building) {
+    private boolean isInsideBuildingAndNotForeignEntity(BuildingPlacement building) {
         Vec3 vec32 = this.position();
         Vec3 vec33 = vec32.add(getDeltaMovement());
         EntityHitResult entityHitResult = this.findHitEntity(vec32, vec33);
@@ -76,7 +73,7 @@ public abstract class AbstractArrowMixin extends Projectile {
         if (this.getOwner() instanceof AttackerUnit aUnit) {
             // garrisoned unit -> ground
             if (GarrisonableBuilding.getGarrison((Unit) aUnit) instanceof BuildingPlacement building &&
-                    isInsideBuildingAndNotEntity(building)) {
+                    isInsideBuildingAndNotForeignEntity(building)) {
                 cir.setReturnValue(true);
             }
 

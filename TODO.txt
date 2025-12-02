@@ -24,6 +24,8 @@ Custom Buildings
     - Enabled if there is exactly 1 of each
     - Not toggleable in menu (but will show warning if there's an issue):
     [❌] add new block for marking garrison area (the area a mob needs to be on to be considered 'garrisoned'
+        - also will prevent blocks underneath it from being destroyed
+    [❌] make entry and exit blocks (and marker blocks) indestructible
 
 [❌] Command block triggers?
     - Write commands directly in the UI that trigger periodically, on build, on destroy, etc.
@@ -34,11 +36,18 @@ Bugfixes
 [✔] Zombie piglins now correctly have piglin faction bonuses (regeneration and speed on nether terrain)
 [✔] Militia Archers now remain as archers after saving and quitting
 [✔] Fixed unit movement issues when trying to use a neutral transport portal
-    - Doesn't affect workers, maybe something to do with aggro logic?
+[✔] Fixed zombie villagers, skeletons and grunts sometimes spawning with extra equipment
+[✔] The Piglin Merchant's TNT no longer disappears when he dies
+[✔] Fixed sometimes not being able to control both shared allied units and your own units at once
 
 
 Quality of Life
 ---------------
+[✔] Workers can now chop jungle vines (worth 1 wood)
+
+[✔] You can now pre-queue all heroes for training before their altar is completed
+
+
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
 [❌] Postgame stats from @ThatBusyBoi

@@ -1208,6 +1208,7 @@
     "block.reignofnether.rts_structure_block": "RTS Structure Block",
     "block.reignofnether.garrison_entry_block": "Garrison Entry Block",
     "block.reignofnether.garrison_exit_block": "Garrison Exit Block",
+    "block.reignofnether.garrison_zone_block": "Garrison Zone Block",
 
     "block.reignofnether.rts_start_block_black": "Black RTS Start Block",
     "block.reignofnether.rts_start_block_blue": "Blue RTS Start Block",
@@ -1309,6 +1310,7 @@
     "sandbox.reignofnether.custom_buildings.set_garrison_capacity.tooltip1": "Maximum number of units that can garrison",
     "sandbox.reignofnether.custom_buildings.set_garrison_range.label": "Garrison Range",
     "sandbox.reignofnether.custom_buildings.set_garrison_range.tooltip1": "Set range for garrisoned ranged units",
+    "sandbox.reignofnether.custom_buildings.garrison_warning.no_zones": "\uE009   No    garrison    zone    blocks    detected!",
     "sandbox.reignofnether.custom_buildings.garrison_warning.no_exit": "\uE009   No    garrison    exit    block    detected!",
     "sandbox.reignofnether.custom_buildings.garrison_warning.no_entry": "\uE009   No    garrison    entry    block    detected!",
     "sandbox.reignofnether.custom_buildings.garrison_warning.multiple_exits": "\uE009   Multiple    garrison    exit    blocks    detected!",

@@ -44,6 +44,7 @@ public class CustomBuilding extends Building {
     public boolean buildableByPiglins = false;
     public int garrisonCapacity = 0;
     public int garrisonRange = 20;
+    public int numGarrisonZones = 0;
     public int numGarrisonEntries = 0;
     public int numGarrisonExits = 0;
 
@@ -65,8 +66,11 @@ public class CustomBuilding extends Building {
             .stream().filter(bb -> bb.getBlockPos().getY() == 0)
             .map(bb -> bb.getBlockState().getBlock()).toList());
         this.portraitBlockOptions = BuildingBlockData.getBuildingBlocksFromNbt(this.structureNbt)
-                .stream().filter(bb -> !List.of(BlockRegistrar.GARRISON_EXIT_BLOCK.get(), BlockRegistrar.GARRISON_ENTRY_BLOCK.get())
-                        .contains(bb.getBlockState().getBlock()))
+                .stream().filter(bb -> !List.of(
+                            BlockRegistrar.GARRISON_EXIT_BLOCK.get(),
+                            BlockRegistrar.GARRISON_ENTRY_BLOCK.get(),
+                            BlockRegistrar.GARRISON_ZONE_BLOCK.get()
+                        ).contains(bb.getBlockState().getBlock()))
                 .map(bb -> bb.getBlockState().getBlock())
                 .collect(Collectors.toSet());
         this.packAttributesNbt();
@@ -76,7 +80,9 @@ public class CustomBuilding extends Building {
         }
 
         for (BuildingBlock bb : BuildingBlockData.getBuildingBlocksFromNbt(structureNbt)) {
-            if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_ENTRY_BLOCK.get()) {
+            if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_ZONE_BLOCK.get()) {
+                numGarrisonZones += 1;
+            } else if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_ENTRY_BLOCK.get()) {
                 numGarrisonEntries += 1;
             } else if (bb.getBlockState().getBlock() == BlockRegistrar.GARRISON_EXIT_BLOCK.get()) {
                 numGarrisonExits += 1;

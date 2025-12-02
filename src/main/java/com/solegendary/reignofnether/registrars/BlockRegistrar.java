@@ -190,6 +190,14 @@ public class BlockRegistrar {
                             .noCollission()),
             CreativeModeTabs.FUNCTIONAL_BLOCKS);
 
+    public static final RegistryObject<Block> GARRISON_ZONE_BLOCK = registerBlock("garrison_zone_block", () ->
+                    new GarrisonZoneBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY)
+                            .strength(-1.0F, 3600000.0F)
+                            .noLootTable()
+                            .noOcclusion()
+                            .noCollission()),
+            CreativeModeTabs.FUNCTIONAL_BLOCKS);
+
     private static boolean always(BlockState p_50775_, BlockGetter p_50776_, BlockPos p_50777_) {
         return true;
     }

@@ -27,7 +27,8 @@ public class BlockEntityRegistrar {
             register("garrison_entry_block_entity",
                     () -> BlockEntityType.Builder.of(GarrisonBlockEntity::new,
                             BlockRegistrar.GARRISON_ENTRY_BLOCK.get(),
-                            BlockRegistrar.GARRISON_EXIT_BLOCK.get())
+                            BlockRegistrar.GARRISON_EXIT_BLOCK.get(),
+                            BlockRegistrar.GARRISON_ZONE_BLOCK.get())
                             .build(null)
             );
 

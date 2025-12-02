@@ -75,8 +75,7 @@ public class CustomBuildingServerEvents {
             for (BuildingBlock bb : blocks) {
                 BlockState bs = bb.getBlockState();
                 if (!bs.isAir() && bs.getFluidState().isEmpty() &&
-                    !List.of(BlockRegistrar.GARRISON_EXIT_BLOCK.get(), BlockRegistrar.GARRISON_ENTRY_BLOCK.get())
-                            .contains(bb.getBlockState().getBlock())) {
+                    !CustomBuildingPlacement.INVULNERABLE_BLOCKS.contains(bb.getBlockState().getBlock())) {
                     numSolidBlocks += 1;
                     portraitBlock = bs.getBlock();
                 }

@@ -8,13 +8,12 @@ import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class CustomBuildingPlacement extends BuildingPlacement implements RangeIndicator, NightSource, NetherConvertingBuilding, GarrisonableBuilding {
 
@@ -23,6 +22,17 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     private final ArrayList<BlockPos> garrisonEntries = new ArrayList<>();
     private final ArrayList<BlockPos> garrisonExits = new ArrayList<>();
     private final Random random = new Random();
+
+    public static final List<Block> INVULNERABLE_BLOCKS = List.of(
+            BlockRegistrar.GARRISON_EXIT_BLOCK.get(),
+            BlockRegistrar.GARRISON_ENTRY_BLOCK.get(),
+            BlockRegistrar.GARRISON_ZONE_BLOCK.get(),
+            Blocks.NETHER_PORTAL,
+            Blocks.LIGHT,
+            Blocks.COMMAND_BLOCK,
+            Blocks.CHAIN_COMMAND_BLOCK,
+            Blocks.REPEATING_COMMAND_BLOCK
+    );
 
     public CustomBuildingPlacement(CustomBuilding customBuilding, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(customBuilding, level, originPos, rotation, ownerName, blocks, isCapitol);
@@ -125,5 +135,14 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
             return garrisonExits.get(random.nextInt(garrisonExits.size())).above();
         }
         return null;
+    }
+
+    @Override
+    public boolean canDestroyBlock(BlockPos relativeBp) {
+        if (getCapacity() <= 0)
+            return true;
+        BlockPos worldBp = relativeBp.offset(this.originPos);
+        Block block = this.getLevel().getBlockState(worldBp).getBlock();
+        return !INVULNERABLE_BLOCKS.contains(block);
     }
 }
