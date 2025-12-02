@@ -34,6 +34,11 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
             Blocks.REPEATING_COMMAND_BLOCK
     );
 
+    public static final List<Block> INVULNERABLE_ABOVE_BLOCKS = List.of(
+            BlockRegistrar.GARRISON_ENTRY_BLOCK.get(),
+            BlockRegistrar.GARRISON_ZONE_BLOCK.get()
+    );
+
     public CustomBuildingPlacement(CustomBuilding customBuilding, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol) {
         super(customBuilding, level, originPos, rotation, ownerName, blocks, isCapitol);
 
@@ -143,6 +148,8 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
             return true;
         BlockPos worldBp = relativeBp.offset(this.originPos);
         Block block = this.getLevel().getBlockState(worldBp).getBlock();
-        return !INVULNERABLE_BLOCKS.contains(block);
+        BlockPos worldBpAbove = relativeBp.offset(this.originPos.above());
+        Block blockAbove = this.getLevel().getBlockState(worldBpAbove).getBlock();
+        return !INVULNERABLE_BLOCKS.contains(block) && !INVULNERABLE_ABOVE_BLOCKS.contains(blockAbove);
     }
 }

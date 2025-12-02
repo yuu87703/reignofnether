@@ -23,9 +23,9 @@ Custom Buildings
     - Using custom invisible block for exit/entry
     - Enabled if there is exactly 1 of each
     - Not toggleable in menu (but will show warning if there's an issue):
-    [❌] add new block for marking garrison area (the area a mob needs to be on to be considered 'garrisoned'
+    [✔] add new block for marking garrison area (the area a mob needs to be on to be considered 'garrisoned'
         - also will prevent blocks underneath it from being destroyed
-    [❌] make entry and exit blocks (and marker blocks) indestructible
+    [✔] make entry and exit blocks (and marker blocks) indestructible
 
 [❌] Command block triggers?
     - Write commands directly in the UI that trigger periodically, on build, on destroy, etc.
