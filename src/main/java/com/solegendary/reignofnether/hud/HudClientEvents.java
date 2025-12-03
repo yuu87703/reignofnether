@@ -134,121 +134,8 @@ public class HudClientEvents {
 
     private final static int iconBgColour = 0x64000000;
     private final static int frameBgColour = 0xA0000000;
-    private static final int TOP_QUEUE_PANEL_MARGIN = 6;
 
     private static final ArrayList<RectZone> hudZones = new ArrayList<>();
-
-    private static class ProductionQueueGroup {
-        final ProductionItem item;
-        final List<ProductionPlacement> placements = new ArrayList<>();
-        ActiveProduction rep;
-        ProductionPlacement repPlac;
-        int count;
-        boolean includesFront;
-
-        ProductionQueueGroup(ProductionItem item) { this.item = item; }
-
-        void add(ActiveProduction p, int idx, ProductionPlacement plac) {
-            count++;
-            if (!placements.contains(plac)) placements.add(plac);
-            if (idx == 0) includesFront = true;
-            if (rep == null || p.ticksLeft < rep.ticksLeft) { rep = p; repPlac = plac; }
-        }
-
-        float getProgress() {
-            if (rep == null || repPlac == null) return 0f;
-            float total = rep.item.getCost(true, repPlac.ownerName).ticks;
-            return total <= 0 ? 0f : rep.ticksLeft / total;
-        }
-    }
-
-    private static void aggregateQueue(ProductionPlacement placement, Map<ProductionItem, ProductionQueueGroup> grouped, List<ProductionQueueGroup> ordered) {
-        for (int i = 0; i < placement.productionQueue.size(); i++) {
-            ActiveProduction production = placement.productionQueue.get(i);
-            ProductionQueueGroup group = grouped.computeIfAbsent(production.item, k -> {
-                ProductionQueueGroup g = new ProductionQueueGroup(k);
-                ordered.add(g);
-                return g;
-            });
-            group.add(production, i, placement);
-        }
-    }
-
-    private static List<ProductionQueueGroup> groupProductionQueue(ProductionPlacement placement) {
-        LinkedHashMap<ProductionItem, ProductionQueueGroup> grouped = new LinkedHashMap<>();
-        ArrayList<ProductionQueueGroup> ordered = new ArrayList<>();
-        aggregateQueue(placement, grouped, ordered);
-        return ordered;
-    }
-
-    private static List<ProductionQueueGroup> groupPlayerProductionQueues(String playerName) {
-        if (playerName == null) return Collections.emptyList();
-        LinkedHashMap<ProductionItem, ProductionQueueGroup> grouped = new LinkedHashMap<>();
-        ArrayList<ProductionQueueGroup> ordered = new ArrayList<>();
-        for (BuildingPlacement b : BuildingClientEvents.getBuildings()) {
-            if (b instanceof ProductionPlacement p && playerName.equals(p.ownerName))
-                aggregateQueue(p, grouped, ordered);
-        }
-        return ordered;
-    }
-
-    private static final float COUNT_TEXT_SCALE = 0.75f;
-
-    private static void renderQueueGroupCount(GuiGraphics guiGraphics, int x, int y, int iconFrameSize, int count) {
-        if (count <= 1) return;
-        String countText = String.valueOf(count);
-        int textWidth = MC.font.width(countText);
-        guiGraphics.drawString(MC.font, countText, x + iconFrameSize - textWidth - 3, y + iconFrameSize - 10, 0xFFFFFF);
-    }
-
-    private static Button createQueueButton(ProductionQueueGroup group) {
-        Button btn = group.item.getCancelButton(group.repPlac, group.includesFront);
-        btn.onLeftClick = () -> {
-            if (group.placements.isEmpty()) return;
-            ProductionPlacement next = group.placements.get(0);
-            if (hudSelectedPlacement != null && group.placements.contains(hudSelectedPlacement)) {
-                next = group.placements.get((group.placements.indexOf(hudSelectedPlacement) + 1) % group.placements.size());
-            }
-            BuildingClientEvents.clearSelectedBuildings();
-            UnitClientEvents.clearSelectedUnits();
-            BuildingClientEvents.addSelectedBuilding(next);
-            OrthoviewClientEvents.centreCameraOnPos(next.centrePos);
-        };
-        float frac = Mth.clamp(group.getProgress(), 0f, 1f);
-        btn.greyPercent = group.includesFront ? frac : 1f;
-        
-        List<FormattedCharSequence> tooltip = new ArrayList<>();
-        tooltip.add(FormattedCharSequence.forward(btn.name, Style.EMPTY));
-        tooltip.add(FormattedCharSequence.forward(Math.round((1.0f - frac) * 100f) + "%", Style.EMPTY));
-        btn.tooltipLines = tooltip;
-        return btn;
-    }
-
-    private static void renderTopLeftQueuePanel(GuiGraphics guiGraphics, List<ProductionQueueGroup> groupedQueue, int baseX, int baseY, int mouseX, int mouseY) {
-        if (groupedQueue == null || groupedQueue.isEmpty()) return;
-
-        int iconFrameSize = Button.DEFAULT_ICON_FRAME_SIZE;
-        int iconsPerRow = 5;
-        int rows = (int) Math.ceil((double) groupedQueue.size() / iconsPerRow);
-
-        hudZones.add(MyRenderer.renderFrameWithBg(guiGraphics, baseX, baseY, 
-            iconFrameSize * Math.min(groupedQueue.size(), iconsPerRow) + 10, 
-            iconFrameSize * rows + 10, frameBgColour));
-
-        int startX = baseX + 5, startY = baseY + 5;
-        for (int i = 0; i < groupedQueue.size(); i++) {
-            ProductionQueueGroup group = groupedQueue.get(i);
-            int iconX = startX + (i % iconsPerRow) * iconFrameSize;
-            int iconY = startY + (i / iconsPerRow) * iconFrameSize;
-
-            Button btn = createQueueButton(group);
-            btn.render(guiGraphics, iconX, iconY, mouseX, mouseY);
-            renderedButtons.add(btn);
-            renderQueueGroupCount(guiGraphics, iconX, iconY, iconFrameSize, group.count);
-
-            if (btn.isMouseOver(mouseX, mouseY)) btn.renderTooltip(guiGraphics, mouseX, mouseY);
-        }
-    }
 
     public static void setLowestCdHudEntity() {
         if (UnitClientEvents.getSelectedUnits().isEmpty() || hudSelectedEntity == null) {
@@ -1387,18 +1274,17 @@ public class HudClientEvents {
             }
         }
 
-        List<ProductionQueueGroup> globalQueueGroups = groupPlayerProductionQueues(selPlayerName);
-        if (!globalQueueGroups.isEmpty()) {
-            int queuePanelStartX = 0;
-            int queuePanelStartY = resourcePanelBottomY + TOP_QUEUE_PANEL_MARGIN;
-            renderTopLeftQueuePanel(evt.getGuiGraphics(),
-                globalQueueGroups,
-                queuePanelStartX,
-                queuePanelStartY,
-                mouseX,
-                mouseY
-            );
-        }
+        int queuePanelStartX = 0;
+        int queuePanelStartY = resourcePanelBottomY + 6;
+        Pair<List<RectZone>, List<Button>> renderedElements = GlobalProductionQueueRenderer.renderQueue(evt.getGuiGraphics(),
+            selPlayerName,
+            queuePanelStartX,
+            queuePanelStartY,
+            mouseX,
+            mouseY
+        );
+        hudZones.addAll(renderedElements.getFirst());
+        renderedButtons.addAll(renderedElements.getSecond());
 
         // --------------------------
         // Temporary warning messages
