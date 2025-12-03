@@ -11,7 +11,6 @@ import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
@@ -91,8 +90,8 @@ public class GlobalProductionQueueRenderer {
             BuildingClientEvents.addSelectedBuilding(next);
             OrthoviewClientEvents.centreCameraOnPos(next.centrePos);
         };
-        float frac = Mth.clamp(group.getProgress(), 0.01f, 1.0f);
-        btn.greyPercent = 1 - (group.includesFront ? frac : 1f);
+        float frac = Mth.clamp(group.getProgress(), 0f, 1f);
+        btn.greyPercent = 1 - (group.includesFront ? frac : 0.99f);
 
         List<FormattedCharSequence> tooltip = new ArrayList<>();
         tooltip.add(fcs(btn.name));

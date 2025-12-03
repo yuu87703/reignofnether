@@ -1269,6 +1269,7 @@ public class HudClientEvents {
                     }
                     MyRenderer.renderTooltip(evt.getGuiGraphics(), tooltipWorkersAssigned, mouseX + 5, mouseY);
 
+
                 }
                 blitY += iconFrameSize - 1;
             }
