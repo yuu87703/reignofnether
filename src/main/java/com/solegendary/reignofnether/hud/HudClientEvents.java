@@ -14,6 +14,7 @@ import com.solegendary.reignofnether.building.buildings.placements.ProductionPla
 import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
+import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.config.ConfigClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamemode.GameMode;
@@ -59,6 +60,7 @@ import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.resources.language.I18n;
@@ -68,6 +70,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -131,8 +134,121 @@ public class HudClientEvents {
 
     private final static int iconBgColour = 0x64000000;
     private final static int frameBgColour = 0xA0000000;
+    private static final int TOP_QUEUE_PANEL_MARGIN = 6;
 
     private static final ArrayList<RectZone> hudZones = new ArrayList<>();
+
+    private static class ProductionQueueGroup {
+        final ProductionItem item;
+        final List<ProductionPlacement> placements = new ArrayList<>();
+        ActiveProduction rep;
+        ProductionPlacement repPlac;
+        int count;
+        boolean includesFront;
+
+        ProductionQueueGroup(ProductionItem item) { this.item = item; }
+
+        void add(ActiveProduction p, int idx, ProductionPlacement plac) {
+            count++;
+            if (!placements.contains(plac)) placements.add(plac);
+            if (idx == 0) includesFront = true;
+            if (rep == null || p.ticksLeft < rep.ticksLeft) { rep = p; repPlac = plac; }
+        }
+
+        float getProgress() {
+            if (rep == null || repPlac == null) return 0f;
+            float total = rep.item.getCost(true, repPlac.ownerName).ticks;
+            return total <= 0 ? 0f : rep.ticksLeft / total;
+        }
+    }
+
+    private static void aggregateQueue(ProductionPlacement placement, Map<ProductionItem, ProductionQueueGroup> grouped, List<ProductionQueueGroup> ordered) {
+        for (int i = 0; i < placement.productionQueue.size(); i++) {
+            ActiveProduction production = placement.productionQueue.get(i);
+            ProductionQueueGroup group = grouped.computeIfAbsent(production.item, k -> {
+                ProductionQueueGroup g = new ProductionQueueGroup(k);
+                ordered.add(g);
+                return g;
+            });
+            group.add(production, i, placement);
+        }
+    }
+
+    private static List<ProductionQueueGroup> groupProductionQueue(ProductionPlacement placement) {
+        LinkedHashMap<ProductionItem, ProductionQueueGroup> grouped = new LinkedHashMap<>();
+        ArrayList<ProductionQueueGroup> ordered = new ArrayList<>();
+        aggregateQueue(placement, grouped, ordered);
+        return ordered;
+    }
+
+    private static List<ProductionQueueGroup> groupPlayerProductionQueues(String playerName) {
+        if (playerName == null) return Collections.emptyList();
+        LinkedHashMap<ProductionItem, ProductionQueueGroup> grouped = new LinkedHashMap<>();
+        ArrayList<ProductionQueueGroup> ordered = new ArrayList<>();
+        for (BuildingPlacement b : BuildingClientEvents.getBuildings()) {
+            if (b instanceof ProductionPlacement p && playerName.equals(p.ownerName))
+                aggregateQueue(p, grouped, ordered);
+        }
+        return ordered;
+    }
+
+    private static final float COUNT_TEXT_SCALE = 0.75f;
+
+    private static void renderQueueGroupCount(GuiGraphics guiGraphics, int x, int y, int iconFrameSize, int count) {
+        if (count <= 1) return;
+        String countText = String.valueOf(count);
+        int textWidth = MC.font.width(countText);
+        guiGraphics.drawString(MC.font, countText, x + iconFrameSize - textWidth - 3, y + iconFrameSize - 10, 0xFFFFFF);
+    }
+
+    private static Button createQueueButton(ProductionQueueGroup group) {
+        Button btn = group.item.getCancelButton(group.repPlac, group.includesFront);
+        btn.onLeftClick = () -> {
+            if (group.placements.isEmpty()) return;
+            ProductionPlacement next = group.placements.get(0);
+            if (hudSelectedPlacement != null && group.placements.contains(hudSelectedPlacement)) {
+                next = group.placements.get((group.placements.indexOf(hudSelectedPlacement) + 1) % group.placements.size());
+            }
+            BuildingClientEvents.clearSelectedBuildings();
+            UnitClientEvents.clearSelectedUnits();
+            BuildingClientEvents.addSelectedBuilding(next);
+            OrthoviewClientEvents.centreCameraOnPos(next.centrePos);
+        };
+        float frac = Mth.clamp(group.getProgress(), 0f, 1f);
+        btn.greyPercent = group.includesFront ? frac : 1f;
+        
+        List<FormattedCharSequence> tooltip = new ArrayList<>();
+        tooltip.add(FormattedCharSequence.forward(btn.name, Style.EMPTY));
+        tooltip.add(FormattedCharSequence.forward(Math.round((1.0f - frac) * 100f) + "%", Style.EMPTY));
+        btn.tooltipLines = tooltip;
+        return btn;
+    }
+
+    private static void renderTopLeftQueuePanel(GuiGraphics guiGraphics, List<ProductionQueueGroup> groupedQueue, int baseX, int baseY, int mouseX, int mouseY) {
+        if (groupedQueue == null || groupedQueue.isEmpty()) return;
+
+        int iconFrameSize = Button.DEFAULT_ICON_FRAME_SIZE;
+        int iconsPerRow = 5;
+        int rows = (int) Math.ceil((double) groupedQueue.size() / iconsPerRow);
+
+        hudZones.add(MyRenderer.renderFrameWithBg(guiGraphics, baseX, baseY, 
+            iconFrameSize * Math.min(groupedQueue.size(), iconsPerRow) + 10, 
+            iconFrameSize * rows + 10, frameBgColour));
+
+        int startX = baseX + 5, startY = baseY + 5;
+        for (int i = 0; i < groupedQueue.size(); i++) {
+            ProductionQueueGroup group = groupedQueue.get(i);
+            int iconX = startX + (i % iconsPerRow) * iconFrameSize;
+            int iconY = startY + (i / iconsPerRow) * iconFrameSize;
+
+            Button btn = createQueueButton(group);
+            btn.render(guiGraphics, iconX, iconY, mouseX, mouseY);
+            renderedButtons.add(btn);
+            renderQueueGroupCount(guiGraphics, iconX, iconY, iconFrameSize, group.count);
+
+            if (btn.isMouseOver(mouseX, mouseY)) btn.renderTooltip(guiGraphics, mouseX, mouseY);
+        }
+    }
 
     public static void setLowestCdHudEntity() {
         if (UnitClientEvents.getSelectedUnits().isEmpty() || hudSelectedEntity == null) {
@@ -303,6 +419,15 @@ public class HudClientEvents {
         int blitY = MC.getWindow().getGuiScaledHeight();
         int blitXStart = blitX;
 
+        String localPlayerName = MC.player != null ? MC.player.getName().getString() : null;
+        List<ProductionQueueGroup> globalQueueGroups = groupPlayerProductionQueues(localPlayerName);
+        boolean showTopLeftQueue = false;
+        if (!globalQueueGroups.isEmpty()) {
+            ProductionQueueGroup firstGroup = globalQueueGroups.get(0);
+            ActiveProduction representative = firstGroup.rep;
+            showTopLeftQueue = true;
+        }
+
         // assign hudSelectedBuilding like hudSelectedUnit in onRenderLiving
         if (selBuildings.size() <= 0) {
             hudSelectedPlacement = null;
@@ -446,10 +571,16 @@ public class HudClientEvents {
             else if ((hudSelBuildingOwned || !PlayerClientEvents.isRTSPlayer()) && hudSelectedPlacement instanceof ProductionPlacement selProdBuilding) {
                 blitY = screenHeight - iconFrameSize * 2 - 5;
 
-                for (int i = 0; i < selProdBuilding.productionQueue.size(); i++) {
+                List<ActiveProduction> queue = selProdBuilding.productionQueue;
+                ActiveProduction firstProdItem = queue.isEmpty() ? null : queue.get(0);
+                float percentageDoneInv = 0f;
+                if (firstProdItem != null) {
+                    percentageDoneInv = firstProdItem.ticksLeft / firstProdItem.item.getCost(true, selProdBuilding.ownerName).ticks;
+                }
 
-                    Button button = selProdBuilding.productionQueue.get(i)
-                            .item.getCancelButton(selProdBuilding, i == 0);
+                for (int i = 0; i < queue.size(); i++) {
+                    ActiveProduction activeProduction = queue.get(i);
+                    Button button = activeProduction.item.getCancelButton(selProdBuilding, i == 0);
                     if (!hudSelBuildingOwned) {
                         button.onLeftClick = () -> { };
                         button.onRightClick = () -> { };
@@ -457,7 +588,7 @@ public class HudClientEvents {
                     productionButtons.add(button);
                 }
 
-                if (productionButtons.size() >= 1) {
+                if (!queue.isEmpty()) {
                     // background frame
                     hudZones.add(MyRenderer.renderFrameWithBg(evt.getGuiGraphics(),
                         blitX - 5,
@@ -468,9 +599,6 @@ public class HudClientEvents {
                     ));
 
                     // name and progress %
-                    ActiveProduction firstProdItem = selProdBuilding.productionQueue.get(0);
-                    float percentageDoneInv = firstProdItem.ticksLeft / firstProdItem.item.getCost(true, selProdBuilding.ownerName).ticks;
-
                     int colour = 0xFFFFFF;
                     if (!firstProdItem.item.isBelowPopulationSupply(selProdBuilding.getLevel(), selProdBuilding.ownerName)) {
                         colour = 0xFF0000;
@@ -487,10 +615,12 @@ public class HudClientEvents {
                     );
 
                     int buttonsRendered = 0;
-                    for (Button prodButton : productionButtons) {
+                    for (int i = 0; i < productionButtons.size(); i++) {
+                        Button prodButton = productionButtons.get(i);
+
                         // top row for currently-in-progress item
                         if (buttonsRendered == 0) {
-                            prodButton.greyPercent = 1 - percentageDoneInv;
+                            prodButton.greyPercent = Mth.clamp(percentageDoneInv, 0f, 1f);
                             prodButton.render(evt.getGuiGraphics(), blitX, blitY - 5, mouseX, mouseY);
                             renderedButtons.add(prodButton);
                         }
@@ -1098,6 +1228,7 @@ public class HudClientEvents {
         }
 
         int resourceBlitYStart = blitY;
+        int resourcePanelBottomY = blitY;
 
         if (resources != null && MC.player != null) {
             for (String resourceName : new String[] { "food", "wood", "ore", "pop" }) {
@@ -1226,6 +1357,8 @@ public class HudClientEvents {
                 blitY += iconFrameSize - 1;
             }
 
+            resourcePanelBottomY = blitY;
+
             blitY = resourceBlitYStart;
             final String finalSelPlayerName = selPlayerName;
             for (String resourceName : new String[] { "food", "wood", "ore", "population" }) {
@@ -1268,6 +1401,18 @@ public class HudClientEvents {
                 }
                 blitY += iconFrameSize - 1;
             }
+        }
+
+        if (showTopLeftQueue) {
+            int queuePanelStartX = 0;
+            int queuePanelStartY = resourcePanelBottomY + TOP_QUEUE_PANEL_MARGIN;
+            renderTopLeftQueuePanel(evt.getGuiGraphics(),
+                globalQueueGroups,
+                queuePanelStartX,
+                queuePanelStartY,
+                mouseX,
+                mouseY
+            );
         }
 
         // --------------------------
