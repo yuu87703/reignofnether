@@ -419,15 +419,6 @@ public class HudClientEvents {
         int blitY = MC.getWindow().getGuiScaledHeight();
         int blitXStart = blitX;
 
-        String localPlayerName = MC.player != null ? MC.player.getName().getString() : null;
-        List<ProductionQueueGroup> globalQueueGroups = groupPlayerProductionQueues(localPlayerName);
-        boolean showTopLeftQueue = false;
-        if (!globalQueueGroups.isEmpty()) {
-            ProductionQueueGroup firstGroup = globalQueueGroups.get(0);
-            ActiveProduction representative = firstGroup.rep;
-            showTopLeftQueue = true;
-        }
-
         // assign hudSelectedBuilding like hudSelectedUnit in onRenderLiving
         if (selBuildings.size() <= 0) {
             hudSelectedPlacement = null;
@@ -571,16 +562,9 @@ public class HudClientEvents {
             else if ((hudSelBuildingOwned || !PlayerClientEvents.isRTSPlayer()) && hudSelectedPlacement instanceof ProductionPlacement selProdBuilding) {
                 blitY = screenHeight - iconFrameSize * 2 - 5;
 
-                List<ActiveProduction> queue = selProdBuilding.productionQueue;
-                ActiveProduction firstProdItem = queue.isEmpty() ? null : queue.get(0);
-                float percentageDoneInv = 0f;
-                if (firstProdItem != null) {
-                    percentageDoneInv = firstProdItem.ticksLeft / firstProdItem.item.getCost(true, selProdBuilding.ownerName).ticks;
-                }
-
-                for (int i = 0; i < queue.size(); i++) {
-                    ActiveProduction activeProduction = queue.get(i);
-                    Button button = activeProduction.item.getCancelButton(selProdBuilding, i == 0);
+                for (int i = 0; i < selProdBuilding.productionQueue.size(); i++) {
+                    Button button = selProdBuilding.productionQueue.get(i)
+                            .item.getCancelButton(selProdBuilding, i == 0);
                     if (!hudSelBuildingOwned) {
                         button.onLeftClick = () -> { };
                         button.onRightClick = () -> { };
@@ -588,7 +572,7 @@ public class HudClientEvents {
                     productionButtons.add(button);
                 }
 
-                if (!queue.isEmpty()) {
+                if (productionButtons.size() >= 1) {
                     // background frame
                     hudZones.add(MyRenderer.renderFrameWithBg(evt.getGuiGraphics(),
                         blitX - 5,
@@ -599,6 +583,9 @@ public class HudClientEvents {
                     ));
 
                     // name and progress %
+                    ActiveProduction firstProdItem = selProdBuilding.productionQueue.get(0);
+                    float percentageDoneInv = firstProdItem.ticksLeft / firstProdItem.item.getCost(true, selProdBuilding.ownerName).ticks;
+
                     int colour = 0xFFFFFF;
                     if (!firstProdItem.item.isBelowPopulationSupply(selProdBuilding.getLevel(), selProdBuilding.ownerName)) {
                         colour = 0xFF0000;
@@ -615,12 +602,10 @@ public class HudClientEvents {
                     );
 
                     int buttonsRendered = 0;
-                    for (int i = 0; i < productionButtons.size(); i++) {
-                        Button prodButton = productionButtons.get(i);
-
+                    for (Button prodButton : productionButtons) {
                         // top row for currently-in-progress item
                         if (buttonsRendered == 0) {
-                            prodButton.greyPercent = Mth.clamp(percentageDoneInv, 0f, 1f);
+                            prodButton.greyPercent = 1 - percentageDoneInv;
                             prodButton.render(evt.getGuiGraphics(), blitX, blitY - 5, mouseX, mouseY);
                             renderedButtons.add(prodButton);
                         }
@@ -1356,7 +1341,6 @@ public class HudClientEvents {
 
                 blitY += iconFrameSize - 1;
             }
-
             resourcePanelBottomY = blitY;
 
             blitY = resourceBlitYStart;
@@ -1403,7 +1387,8 @@ public class HudClientEvents {
             }
         }
 
-        if (showTopLeftQueue) {
+        List<ProductionQueueGroup> globalQueueGroups = groupPlayerProductionQueues(selPlayerName);
+        if (!globalQueueGroups.isEmpty()) {
             int queuePanelStartX = 0;
             int queuePanelStartY = resourcePanelBottomY + TOP_QUEUE_PANEL_MARGIN;
             renderTopLeftQueuePanel(evt.getGuiGraphics(),
