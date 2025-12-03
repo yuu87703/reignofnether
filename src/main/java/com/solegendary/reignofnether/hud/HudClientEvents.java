@@ -1275,17 +1275,23 @@ public class HudClientEvents {
             }
         }
 
+        // global production queue - visible to yourself, observers, sandbox players and allies
         int queuePanelStartX = 0;
         int queuePanelStartY = resourcePanelBottomY + 6;
-        Pair<List<RectZone>, List<Button>> renderedElements = GlobalProductionQueueRenderer.renderQueue(evt.getGuiGraphics(),
-            selPlayerName,
-            queuePanelStartX,
-            queuePanelStartY,
-            mouseX,
-            mouseY
-        );
-        hudZones.addAll(renderedElements.getFirst());
-        renderedButtons.addAll(renderedElements.getSecond());
+        if (isSelPlayer ||
+            !PlayerClientEvents.isRTSPlayer() ||
+            SandboxClientEvents.isSandboxPlayer() ||
+            AlliancesClient.isAllied(MC.player.getName().getString(), selPlayerName)) {
+            Pair<List<RectZone>, List<Button>> renderedElements = GlobalProductionQueueRenderer.renderQueue(evt.getGuiGraphics(),
+                    selPlayerName,
+                    queuePanelStartX,
+                    queuePanelStartY,
+                    mouseX,
+                    mouseY
+            );
+            hudZones.addAll(renderedElements.getFirst());
+            renderedButtons.addAll(renderedElements.getSecond());
+        }
 
         // --------------------------
         // Temporary warning messages
