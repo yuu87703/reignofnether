@@ -23,9 +23,13 @@ public class BridgePlacement extends BuildingPlacement {
 
     @Override
     public void onBlockBreak(ServerLevel level, BlockPos pos, boolean breakBlocks) {
-        BlockState bs = level.getBlockState(pos);
         super.onBlockBreak(level, pos, breakBlocks);
-        replaceWithLiquidBelow(pos, bs);
+        for (BuildingBlock bb : blocks) {
+            if (bb.getBlockPos().equals(pos)) {
+                replaceWithLiquidBelow(pos, bb.getBlockState());
+                return;
+            }
+        }
     }
 
     @Override
@@ -43,8 +47,10 @@ public class BridgePlacement extends BuildingPlacement {
         if (!(bs.getBlock() instanceof FenceBlock)) {
             for (BlockPos bpAdj : List.of(bp.below(), bp.north(), bp.south(), bp.east(), bp.west())) {
                 BlockState bsAdj = level.getBlockState(bpAdj);
-                if (!bsAdj.getFluidState().isEmpty())
+                if (!bsAdj.getFluidState().isEmpty()) {
                     level.setBlockAndUpdate(bp, bsAdj);
+                    break;
+                }
             }
         }
     }

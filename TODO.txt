@@ -17,12 +17,11 @@ Bugfixes
 [❌] Fix max nbt size issue for custom buildings
     - Nbts can only be 2MB large, but really big structures (1000+ blocks) can exceed that when sent over packets
 
-[❌] Destroyed bridge blocks are not turning into liquids
+[✔] Destroyed bridge blocks adjacent to water or lava are replaced by matching source blocks
 
 
 Quality of Life
 ---------------
-
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
 [❌] Postgame stats from @ThatBusyBoi
