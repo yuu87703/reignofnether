@@ -42,13 +42,14 @@ public class RTSPlayerScores {
         return initials.toString();
     }
 
-    public ArrayList<Integer> getScoreListAsArray() {
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        for (RTSPlayerScoresEnum scoresEnum : RTSPlayerScoresEnum.values()) {
-            arrayList.add(scoreList.get(scoresEnum));
-        }
+    public int[] getScoreListAsArray() {
+        RTSPlayerScoresEnum[] values = RTSPlayerScoresEnum.values();
+        int[] result = new int[values.length];
 
-        return arrayList;
+        for (int i = 0; i < values.length; i++) {
+            result[i] = scoreList.get(values[i]);
+        }
+        return result;
     }
 
     public void setScoreListFromArray(int[] arrayList) {

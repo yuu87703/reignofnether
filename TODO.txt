@@ -7,15 +7,22 @@
 
 
 
+
+
 Custom Buildings
 ----------------
-
+[❌] Added 'Repairable' option for custom buildings  (default on)
 
 
 Bugfixes
 --------
 [❌] Fix max nbt size issue for custom buildings
     - Nbts can only be 2MB large, but really big structures (1000+ blocks) can exceed that when sent over packets
+
+[❌] Ravager artillery shooting themselves in the foot again
+    - only at -Y values
+
+[✔] Fixed custom buildings 'buildable by monsters' option not saving correctly
 
 [✔] Destroyed bridge blocks adjacent to water or lava are replaced by matching source blocks
 
@@ -24,7 +31,13 @@ Quality of Life
 ---------------
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
-[❌] Postgame stats from @ThatBusyBoi
+[🟡] Postgame stats from @ThatBusyBoi
+
+
+
+[❌] buffs like enchantments and potion effects are now shown above the unit portrait
+    - make new class of small button icon
+
 
 
 Balance
