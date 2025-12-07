@@ -186,7 +186,7 @@ public class CustomBuildingMenu {
         buttonsCol1.add(new CustomBuildingBooleanButton(
                 I18n.get("sandbox.reignofnether.custom_buildings.set_buildable_by_monsters.label"), customBuilding.buildableByMonsters,
                 () -> {
-                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_BUILDABLE_BY_VILLAGERS, customBuilding.name, !customBuilding.buildableByMonsters);
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_BUILDABLE_BY_MONSTERS, customBuilding.name, !customBuilding.buildableByMonsters);
                     customBuilding.buildableByMonsters = !customBuilding.buildableByMonsters;
                 },
                 I18n.get("sandbox.reignofnether.custom_buildings.set_buildable_by_monsters.tooltip1")

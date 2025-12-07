@@ -15,10 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BridgePlacement extends BuildingPlacement {
-    boolean diagonal;
+
     public BridgePlacement(Building building, Level level, BlockPos originPos, Rotation rotation, String ownerName, ArrayList<BuildingBlock> blocks, boolean isCapitol, boolean diagonal) {
         super(building, level, originPos, rotation, ownerName, blocks, isCapitol);
-        this.diagonal = diagonal;
     }
 
     @Override
@@ -53,9 +52,5 @@ public class BridgePlacement extends BuildingPlacement {
                 }
             }
         }
-    }
-
-    public boolean isDiagonal() {
-        return diagonal;
     }
 }
