@@ -33,7 +33,7 @@ public class RTSPlayerScoresCommand {
                     return Command.SINGLE_SUCCESS;
                 }
             }
-            player.sendSystemMessage(Component.literal("Player is either currently in a match or a spectator."));
+            player.sendSystemMessage(Component.literal("Player is either currently in a match, is a spectator or doesn't exist."));
         }
 
         return Command.SINGLE_SUCCESS;

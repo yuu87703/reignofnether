@@ -11,7 +11,10 @@
 
 Custom Buildings
 ----------------
-[❌] Added 'Repairable' option for custom buildings  (default on)
+[🟡] Added more options for custom buildings (both default on):
+    - Repairable (workers can repair the building)
+    - Destroy on reset (/rts-reset destroys the building)
+        - /rts-hard-reset will still destroy the building
 
 
 Bugfixes
@@ -27,11 +30,17 @@ Bugfixes
 [✔] Destroyed bridge blocks adjacent to water or lava are replaced by matching source blocks
 
 
+
 Quality of Life
 ---------------
+[✔] Postgame stats from @ThatBusyBoi
+    - You can use
+
+[🟡] Added a button to sort custom buildings (default alphabetically)
+
+
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
 
-[🟡] Postgame stats from @ThatBusyBoi
 
 
 

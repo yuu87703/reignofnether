@@ -38,7 +38,6 @@ public class RTSPlayerScores {
         for (String word : words) {
             initials.append(word.charAt(0));
         }
-
         return initials.toString();
     }
 
