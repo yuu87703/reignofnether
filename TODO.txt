@@ -19,7 +19,7 @@ Custom Buildings
 
 Bugfixes
 --------
-[❌] Fix max nbt size issue for custom buildings
+[✔] Fix max nbt size issue for custom buildings
     - Nbts can only be 2MB large, but really big structures (1000+ blocks) can exceed that when sent over packets
 
 [❌] Ravager artillery shooting themselves in the foot again
@@ -38,11 +38,7 @@ Quality of Life
 
 [🟡] Added a button to sort custom buildings (default alphabetically)
 
-
 [❌] Allow overlapping of custom structures (if possible, only with air blocks)
-
-
-
 
 [❌] buffs like enchantments and potion effects are now shown above the unit portrait
     - make new class of small button icon
