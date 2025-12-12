@@ -611,6 +611,8 @@ public class HudClientEvents {
                 nameCap,
                 blitX,
                 blitY,
+                mouseX,
+                mouseY,
                 hudSelectedEntity
             );
             hudZones.add(unitPortraitZone);
@@ -828,7 +830,7 @@ public class HudClientEvents {
             if (hudSelectedPlacement != null) {
                 actionButtons.add(SandboxActionButtons.removeBuildingPlacement);
             }
-            if (hudSelectedEntity instanceof AttackerUnit) {
+            if (hudSelectedEntity instanceof Unit) {
                 actionButtons.add(SandboxActionButtons.setAnchor);
                 actionButtons.add(SandboxActionButtons.resetToAnchor);
                 actionButtons.add(SandboxActionButtons.removeAnchor);

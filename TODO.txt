@@ -11,7 +11,7 @@
 
 Custom Buildings
 ----------------
-[🟡] Added more options for custom buildings (both default on):
+[✔] Added more options for custom buildings (both default on):
     - Repairable (workers can repair the building)
     - Destroy on reset (/rts-reset destroys the building)
         - /rts-hard-reset will still destroy the building
@@ -22,26 +22,24 @@ Bugfixes
 [✔] Fix max nbt size issue for custom buildings
     - Nbts can only be 2MB large, but really big structures (1000+ blocks) can exceed that when sent over packets
 
-[❌] Ravager artillery shooting themselves in the foot again
-    - only at -Y values
+[✔] Fixed ravager artilleries shooting themselves when at negative Y values
 
 [✔] Fixed custom buildings 'buildable by monsters' option not saving correctly
 
 [✔] Destroyed bridge blocks adjacent to water or lava are replaced by matching source blocks
 
+[✔] Fixed a bug where buildings could be constructed overlapping on a laggy server
 
 
 Quality of Life
 ---------------
 [✔] Postgame stats from @ThatBusyBoi
-    - You can use
 
-[🟡] Added a button to sort custom buildings (default alphabetically)
+[✔] You can now overlap buildings while in sandbox mode (as long as there are no solid blocks clipping)
 
-[❌] Allow overlapping of custom structures (if possible, only with air blocks)
+[✔] Added a button to sort custom buildings (default alphabetically)
 
-[❌] buffs like enchantments and potion effects are now shown above the unit portrait
-    - make new class of small button icon
+[✔] Enchantments are now shown as icons with tooltips next to the unit names instead of letter codes
 
 
 
