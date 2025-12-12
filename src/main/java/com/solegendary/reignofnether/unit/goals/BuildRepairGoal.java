@@ -112,6 +112,9 @@ public class BuildRepairGoal extends MoveToTargetBlockGoal {
     }
 
     public void setBuildingTarget(@Nullable BuildingPlacement target) {
+        if (target != null && !BuildingUtils.isBuildingBuildable(this.mob.level().isClientSide(), target))
+            return;
+
         if (target != null) {
             if (ignoreNextCheckpoint)
                 ignoreNextCheckpoint = false;
