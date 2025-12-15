@@ -3,7 +3,7 @@ package com.solegendary.reignofnether.unit;
 import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
-import com.solegendary.reignofnether.ability.heroAbilities.monster.SoulSiphonPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;

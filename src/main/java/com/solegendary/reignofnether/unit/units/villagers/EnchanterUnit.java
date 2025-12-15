@@ -169,11 +169,11 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         experience = amount;
         setStatsForLevel();
     }
-    private float baseMaxMana = 100;
+    private float baseMaxMana = 150;
     private float maxMana = baseMaxMana;
     private float mana = maxMana;
-    private float manaRegenPerSecond = 0.5f;
-    private float manaBonusPerLevel = 6;
+    private float manaRegenPerSecond = 1f;
+    private float manaBonusPerLevel = 10;
     @Override public float getBaseMaxMana() { return baseMaxMana; }
     @Override public float getMaxMana() { return maxMana; }
     @Override public void setMaxMana(float amount) {
@@ -190,13 +190,13 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     @Override public float getManaRegenPerSecond() { return manaRegenPerSecond; }
     @Override public float getManaBonusPerLevel() { return manaBonusPerLevel; }
 
-    final static public float attackDamage = 6.0f;
-    final static public float attackBonusPerLevel = 0.6f;
+    final static public float attackDamage = 4.0f;
+    final static public float attackBonusPerLevel = 0.4f;
     final static public float attacksPerSecond = 0.5f;
-    final static public float maxHealth = 125.0f;
-    final static public float maxHealthBonusPerLevel = 15.0f;
+    final static public float maxHealth = 100.0f;
+    final static public float maxHealthBonusPerLevel = 10.0f;
     final static public float armorValue = 0.0f;
-    final static public float movementSpeed = 0.28f;
+    final static public float movementSpeed = 0.25f;
     final static public float attackRange = 2; // only used by ranged units or melee building attackers
     final static public float aggroRange = 10;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
