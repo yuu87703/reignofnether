@@ -99,12 +99,12 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
     public int getMaxResources() {return maxResources;}
 
-    private GenericTargetedSpellGoal castEnchantCivilianGoal;
-    public GenericTargetedSpellGoal getCastEnchantCivilianGoal() { return castEnchantCivilianGoal; }
+    private GenericTargetedSpellGoal castEnchantCivilGoal;
+    public GenericTargetedSpellGoal getCastEnchantCivilGoal() { return castEnchantCivilGoal; }
     private GenericTargetedSpellGoal castEnchantMilitaryGoal;
-    public GenericTargetedSpellGoal getCastEnchantMilitaryGoal() { return castEnchantMilitaryGoal; }
-    private GenericTargetedSpellGoal castEnchantArmourGoal;
-    public GenericTargetedSpellGoal getCastEnchantArmourGoal() { return castEnchantArmourGoal; }
+    public GenericTargetedSpellGoal getCastEnchantMartialGoal() { return castEnchantMilitaryGoal; }
+    private GenericTargetedSpellGoal castEnchantProtectiveGoal;
+    public GenericTargetedSpellGoal getCastEnchantProtectiveGoal() { return castEnchantProtectiveGoal; }
     private GenericUntargetedSpellGoal castAuraGoal;
     public GenericUntargetedSpellGoal getCastAuraGoal() { return castAuraGoal; }
 
@@ -319,8 +319,8 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
             animateTicks -= 1;
         }
         this.castEnchantMilitaryGoal.tick();
-        this.castEnchantCivilianGoal.tick();
-        this.castEnchantArmourGoal.tick();
+        this.castEnchantCivilGoal.tick();
+        this.castEnchantProtectiveGoal.tick();
         this.castAuraGoal.tick();
 
         BlockPos targetBp = castEnchantMilitaryGoal.getCastTarget();
@@ -368,7 +368,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
         this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
-        this.castEnchantCivilianGoal = new GenericTargetedSpellGoal(
+        this.castEnchantCivilGoal = new GenericTargetedSpellGoal(
                 this,
                 14,
                 10,
@@ -386,7 +386,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 null,
                 null
         );
-        this.castEnchantArmourGoal = new GenericTargetedSpellGoal(
+        this.castEnchantProtectiveGoal = new GenericTargetedSpellGoal(
                 this,
                 14,
                 10,
@@ -428,7 +428,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public void resetBehaviours() {
         animateScaleReducing = true;
         this.castEnchantMilitaryGoal.stop();
-        this.castEnchantCivilianGoal.stop();
+        this.castEnchantCivilGoal.stop();
         this.castAuraGoal.stop();
     }
 

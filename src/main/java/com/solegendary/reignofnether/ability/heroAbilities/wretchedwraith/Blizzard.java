@@ -25,7 +25,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class Blizzard extends HeroAbility {
 
-    private static final int CD_MAX_SECONDS = 30 * ResourceCost.TICKS_PER_SECOND;
+    private static final int CD_MAX_SECONDS = 300 * ResourceCost.TICKS_PER_SECOND;
     public static final int DURATION_SECONDS = 10 * ResourceCost.TICKS_PER_SECOND;
     public static final int RADIUS = 10;
 
