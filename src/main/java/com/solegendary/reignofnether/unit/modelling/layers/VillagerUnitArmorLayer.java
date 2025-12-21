@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
 
 import javax.annotation.Nullable;
+import java.util.Locale;
 import java.util.Map;
 
 // based on HumanoidArmorLayer
@@ -128,26 +130,23 @@ public class VillagerUnitArmorLayer<T extends LivingEntity, M extends HumanoidMo
         return ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
     }
 
-    @Deprecated
-    private ResourceLocation getArmorLocation(ArmorItem pArmorItem, boolean pLayer2, @Nullable String pSuffix) {
-        String var10000 = pArmorItem.getMaterial().getName();
-        String s = "textures/models/armor/" + var10000 + "_layer_" + (pLayer2 ? 2 : 1) + (pSuffix == null ? "" : "_" + pSuffix) + ".png";
-        return ARMOR_LOCATION_CACHE.computeIfAbsent(s, ResourceLocation::new);
-    }
-
-    // Helper for texture
-    public ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity, ItemStack stack, EquipmentSlot slot, String type) {
+    public ResourceLocation getArmorResource(Entity entity, ItemStack stack, EquipmentSlot slot, @Nullable String type) {
         ArmorItem item = (ArmorItem)stack.getItem();
         String texture = item.getMaterial().getName();
         String domain = "minecraft";
-        int idx = texture.indexOf(':');
+        int idx = texture.indexOf(58);
         if (idx != -1) {
             domain = texture.substring(0, idx);
             texture = texture.substring(idx + 1);
         }
-        String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (usesInnerModel(slot) ? 2 : 1), type == null ? "" : String.format("_%s", type));
-
+        String s1 = String.format(Locale.ROOT, "%s:textures/models/armor/%s_layer_%d%s.png", domain, texture,
+                this.usesInnerModel(slot) ? 2 : 1, type == null ? "" : String.format(Locale.ROOT, "_%s", type));
         s1 = ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
-        return ResourceLocation.tryParse(s1);
+        ResourceLocation resourcelocation = ARMOR_LOCATION_CACHE.get(s1);
+        if (resourcelocation == null) {
+            resourcelocation = new ResourceLocation(s1);
+            ARMOR_LOCATION_CACHE.put(s1, resourcelocation);
+        }
+        return resourcelocation;
     }
 }

@@ -53,6 +53,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -356,6 +357,10 @@ public class UnitServerEvents {
                 }
             }
             ((Unit) entity).setupEquipmentAndUpgradesServer();
+
+            if (MiscUtil.isChristmasSeason() && MiscUtil.canWearChristmasHat(entity)) {
+                entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
+            }
 
             ChunkAccess chunk = evt.getLevel().getChunk(entity.getOnPos());
             ForgeChunkManager.forceChunk((ServerLevel) evt.getLevel(),

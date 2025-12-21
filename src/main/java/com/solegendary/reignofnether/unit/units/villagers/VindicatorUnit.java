@@ -261,12 +261,6 @@ public class VindicatorUnit extends Vindicator implements Unit, AttackerUnit {
         axeStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
 
         this.setItemSlot(EquipmentSlot.MAINHAND, axeStack);
-
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
-
-        ItemStack stack = new ItemStack(Items.IRON_CHESTPLATE);
-        stack.enchant(Enchantments.UNBREAKING, 1);
-        this.setItemSlot(EquipmentSlot.CHEST, stack);
     }
 
     public boolean hasAnyEnchant() {

@@ -27,13 +27,20 @@ Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
 
 
+
+Seasons Greetings!
+[🟡] Between 19th and 26th December (inclusive), many units will spawn with Santa Hats
+[🟡] On 31st December and 1st January, buildings will create fireworks when damaged instead of explosions
+
+
+
 Bugfixes
 --------
 
 
 Quality of Life
 ---------------
-
+[🟡] Illager models now show worn armour (this will be used in a later update)
 
 
 Balance
