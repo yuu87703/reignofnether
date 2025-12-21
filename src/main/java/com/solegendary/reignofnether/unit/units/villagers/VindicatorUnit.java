@@ -34,6 +34,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -260,6 +261,12 @@ public class VindicatorUnit extends Vindicator implements Unit, AttackerUnit {
         axeStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
 
         this.setItemSlot(EquipmentSlot.MAINHAND, axeStack);
+
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
+
+        ItemStack stack = new ItemStack(Items.IRON_CHESTPLATE);
+        stack.enchant(Enchantments.UNBREAKING, 1);
+        this.setItemSlot(EquipmentSlot.CHEST, stack);
     }
 
     public boolean hasAnyEnchant() {

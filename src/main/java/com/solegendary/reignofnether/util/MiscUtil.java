@@ -721,4 +721,15 @@ public class MiscUtil {
         String path = sprite.contents().name().getPath();
         return ResourceLocation.fromNamespaceAndPath("minecraft", "textures/" + path + ".png");
     }
+
+    public static boolean isChristmasSeason() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 19 && calendar.get(Calendar.DATE) <= 26;
+    }
+
+    public static boolean isNewYearsSeason() {
+        Calendar calendar = Calendar.getInstance();
+        return (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) == 31) ||
+                (calendar.get(Calendar.MONTH) + 1 == 1 && calendar.get(Calendar.DATE) == 1);
+    }
 }

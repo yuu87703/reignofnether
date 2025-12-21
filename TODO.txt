@@ -7,7 +7,10 @@
 
 
 
-
+Christmas
+---------
+During christmas season, units spawn with santa hats, and the piglin merchant throws presents
+During new years, buildings explode with fireworks
 
 New Heroes
 ----------
@@ -35,6 +38,9 @@ Quality of Life
 
 Balance
 -------
+[❌] Ghasts can no longer attack and move 20% slower while over void or structure void blocks
+[❌] Prevent friendly fire from wither skeleton clouds
+    - Might need to create a new AreaEffectCloud entity
 
 
 Languages
