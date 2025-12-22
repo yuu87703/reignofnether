@@ -36,6 +36,7 @@ Seasons Greetings!
 
 Bugfixes
 --------
+[🟡] Fixed sculk catalysts not spreading any sculk
 
 
 Quality of Life

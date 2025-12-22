@@ -24,6 +24,8 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.PhantomSummon;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
+import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
+import com.solegendary.reignofnether.unit.units.villagers.VillagerUnitProfession;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -750,6 +752,7 @@ public class MiscUtil {
     }
 
     public static boolean canWearChristmasHat(LivingEntity entity) {
+        boolean isFarmer = entity instanceof VillagerUnit vUnit && vUnit.getUnitProfession() == VillagerUnitProfession.FARMER;
         return List.of(
                 EntityRegistrar.VILLAGER_UNIT.get(),
                 EntityRegistrar.VINDICATOR_UNIT.get(),
@@ -766,7 +769,7 @@ public class MiscUtil {
                 EntityRegistrar.BRUTE_UNIT.get(),
                 EntityRegistrar.HEADHUNTER_UNIT.get(),
                 EntityRegistrar.WITHER_SKELETON_UNIT.get()
-        ).contains(entity.getType()) && !entity.hasItemInSlot(EquipmentSlot.HEAD);
+        ).contains(entity.getType()) && !entity.hasItemInSlot(EquipmentSlot.HEAD) && !isFarmer;
     }
 
     public static boolean isChristmasSeason() {

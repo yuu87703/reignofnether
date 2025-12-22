@@ -2,14 +2,13 @@ package com.solegendary.reignofnether.unit.modelling.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.unit.modelling.layers.CustomUnitHeadLayer;
 import com.solegendary.reignofnether.unit.modelling.layers.VillagerUnitArmorLayer;
-import com.solegendary.reignofnether.unit.modelling.models.VillagerUnitModel;
 import com.solegendary.reignofnether.unit.modelling.models.IllagerArmorModel;
+import com.solegendary.reignofnether.unit.modelling.models.VillagerUnitModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
-import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,7 +23,7 @@ public abstract class AbstractVillagerUnitRenderer<T extends AbstractIllager> ex
 
     protected AbstractVillagerUnitRenderer(EntityRendererProvider.Context context, VillagerUnitModel<T> model, float pShadowRadius) {
         super(context, model, pShadowRadius);
-        this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
+        this.addLayer(new CustomUnitHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
         this.addLayer(new VillagerUnitArmorLayer<>(this,
                 new IllagerArmorModel<>(context.bakeLayer(VILLAGER_ARMOR_INNER_LAYER)),
                 new IllagerArmorModel<>(context.bakeLayer(VILLAGER_ARMOR_OUTER_LAYER))));
