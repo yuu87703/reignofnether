@@ -422,8 +422,8 @@ public class UnitServerEvents {
         // some reason
         MinecraftServer server = evt.getEntity().level().getServer();
         if (server != null) {
-            evt.getEntity().level().getServer().tell(new TickTask(
-                server.getTickCount() + 1,
+            server.tell(new TickTask(
+                server.getTickCount() + 2,
                 () -> {
                     for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                         if (building instanceof SculkCatalystPlacement sc && evt.getEntity().distanceToSqr(Vec3.atCenterOf(sc.centrePos))
