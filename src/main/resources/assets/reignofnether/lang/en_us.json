@@ -1317,6 +1317,7 @@
     "block.reignofnether.garrison_entry_block": "Garrison Entry Block",
     "block.reignofnether.garrison_exit_block": "Garrison Exit Block",
     "block.reignofnether.garrison_zone_block": "Garrison Zone Block",
+    "block.reignofnether.wraith_snow_layer_block": "Wraith Snow Layer Block",
 
     "block.reignofnether.rts_start_block_black": "Black RTS Start Block",
     "block.reignofnether.rts_start_block_blue": "Blue RTS Start Block",

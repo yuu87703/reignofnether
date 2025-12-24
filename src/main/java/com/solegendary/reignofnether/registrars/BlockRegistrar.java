@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -104,6 +105,19 @@ public class BlockRegistrar {
                             .randomTicks().strength(0.5F)
                             .isValidSpawn((p_187421_, p_187422_, p_187423_, p_187424_) -> p_187424_.fireImmune())
                             .hasPostProcess(BlockRegistrar::always).emissiveRendering(BlockRegistrar::always)),
+            CreativeModeTabs.BUILDING_BLOCKS);
+
+    public static final RegistryObject<Block> WRAITH_SNOW_LAYER = registerBlock("wraith_snow_layer_block",
+            () -> new WraithSnowLayerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SNOW)
+                    .replaceable()
+                    .forceSolidOff()
+                    .randomTicks()
+                    .strength(0.1F)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.SNOW)
+                    .noCollission()
+                    .isViewBlocking((bs, blockGetter, bp) -> bs.getValue(SnowLayerBlock.LAYERS) >= 8)
+                    .pushReaction(PushReaction.DESTROY)),
             CreativeModeTabs.BUILDING_BLOCKS);
 
     public static final RegistryObject<Block> RTS_START_BLOCK_BLUE = registerBlock("rts_start_block_blue", () ->

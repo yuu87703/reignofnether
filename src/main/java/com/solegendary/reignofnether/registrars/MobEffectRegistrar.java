@@ -4,6 +4,8 @@ import com.solegendary.reignofnether.ReignOfNether;
 import net.minecraft.world.effect.InstantenousMobEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -30,6 +32,23 @@ public class MobEffectRegistrar {
 
     public static final RegistryObject<MobEffect> MINOR_MOVEMENT_SLOWDOWN = MOB_EFFECTS.register("minor_slowdown", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, "eb256076-43e6-470e-a907-434a389da860", -0.05, AttributeModifier.Operation.MULTIPLY_BASE));
+
+    public static final RegistryObject<MobEffect> DAMAGE_TAKEN_INCREASE = MOB_EFFECTS.register("damage_taken_increase", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
+            .addAttributeModifier(Attributes.LUCK, "e0772108-0408-4fa3-ad55-f90f5595d610", -0.05, AttributeModifier.Operation.ADDITION));
+
+    public static float getDamageTakenIncrease(Mob mob) {
+        MobEffectInstance mei = mob.getEffect(DAMAGE_TAKEN_INCREASE.get());
+        float value = mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05f;
+        return Math.round(value / 0.05f) * 0.05f;
+    }
+
+    public static final RegistryObject<MobEffect> ATTACK_SLOWDOWN = MOB_EFFECTS.register("attack_slowdown", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
+            .addAttributeModifier(Attributes.LUCK, "95086ec9-c6cc-41b4-a2ce-9b5cf28011e4", -0.05, AttributeModifier.Operation.MULTIPLY_BASE));
+
+    public static float getPercentAttackSlowdown(Mob mob) {
+        MobEffectInstance mei = mob.getEffect(ATTACK_SLOWDOWN.get());
+        return mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05f;
+    }
 
     public static void init(FMLJavaModLoadingContext context) {
         MOB_EFFECTS.register(context.getModEventBus());
