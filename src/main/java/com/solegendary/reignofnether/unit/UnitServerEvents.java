@@ -601,8 +601,6 @@ public class UnitServerEvents {
         if (evt.phase != TickEvent.Phase.END || evt.level.isClientSide() || evt.level.dimension() != Level.OVERWORLD) {
             return;
         }
-        ServerLevel serverLevel = (ServerLevel) evt.level;
-
         unitSyncTicks -= 1;
         if (unitSyncTicks <= 0) {
             unitSyncTicks = UNIT_SYNC_TICKS_MAX;
@@ -613,7 +611,12 @@ public class UnitServerEvents {
                     UnitSyncClientboundPacket.sendSyncResourcesPacket(unit);
                     UnitSyncClientboundPacket.sendSyncStatsPacket(entity);
 
-                    for (MobEffect me : List.of(MobEffects.DAMAGE_RESISTANCE, MobEffectRegistrar.STUN.get())) {
+                    for (MobEffect me : List.of(
+                            MobEffects.DAMAGE_RESISTANCE,
+                            MobEffectRegistrar.STUN.get(),
+                            MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(),
+                            MobEffectRegistrar.ATTACK_SLOWDOWN.get()
+                    )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)
                             UnitSyncMobEffectsClientboundPacket.addEffectClientside(entity, mei);
@@ -827,14 +830,26 @@ public class UnitServerEvents {
         }
 
         // ensure projectiles from units do the damage of the unit, not the item
-        if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE) &&
-            evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
+        if (evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
             float dmg = attackerUnit.getUnitAttackDamage();
+
             if (evt.getEntity() instanceof Unit unit) {
-                dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
-                dmg *= (1 - unit.getUnitRangedArmorPercentage());
-                dmg *= (1 - unit.getUnitResistPercentage());
+                if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE)) {
+                    dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
+                    dmg *= (1 - unit.getUnitRangedArmorPercentage());
+                    dmg *= (1 - unit.getUnitResistPercentage());
+                } else if (
+                    !evt.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) &&
+                    !evt.getSource().is(DamageTypeTags.IS_FIRE) &&
+                    !evt.getSource().is(DamageTypeTags.BYPASSES_SHIELD) &&
+                    !evt.getSource().is(DamageTypeTags.BYPASSES_ARMOR) &&
+                    !evt.getSource().is(DamageTypeTags.BYPASSES_RESISTANCE)
+                ) {
+                    dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
+                    dmg *= (1 - unit.getUnitResistPercentage());
+                }
             }
+
             evt.setAmount(dmg);
         }
 

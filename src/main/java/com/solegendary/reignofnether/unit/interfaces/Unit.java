@@ -155,10 +155,9 @@ public interface Unit {
     // SOURCE: armour attribute, armour items and the damage amplifier debuff
     default double getUnitPhysicalArmorPercentage() {
         Mob mob = (Mob) this;
-        return CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
-        //double dmgAfterAbsorb = CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
-        //dmgAfterAbsorb += MobEffectRegistrar.getDamageTakenIncrease(mob);
-        //return Math.round((1 - dmgAfterAbsorb)/ 0.01d) * 0.01d;
+        double dmgAfterAbsorb = CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        dmgAfterAbsorb += MobEffectRegistrar.getDamageTakenIncrease(mob);
+        return Math.round((1 - dmgAfterAbsorb)/ 0.01d) * 0.01d;
     }
 
     // SOURCE: inherent unit stats and abilities
