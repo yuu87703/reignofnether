@@ -150,7 +150,6 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         return isPassenger() ? attackDamage + 1 : attackDamage;
     }
     public float getUnitMaxHealth() { return maxHealth; }
-    public float getUnitPhysicalArmorPercentage() { return armorValue; }
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.PILLAGER;}
 

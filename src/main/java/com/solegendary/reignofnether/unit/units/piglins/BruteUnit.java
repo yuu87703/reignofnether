@@ -185,7 +185,7 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     }
 
     @Override
-    public float getUnitRangedArmorPercentage() {
+    public double getUnitRangedArmorPercentage() {
         if (isHoldingUpShield) {
             return 1 - ((1 - ToggleShield.PROJECTILE_DAMAGE_RESIST) * (1 - rangedDamageResist));
         } else {

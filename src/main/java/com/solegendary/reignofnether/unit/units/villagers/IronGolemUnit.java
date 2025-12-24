@@ -155,7 +155,7 @@ public class IronGolemUnit extends IronGolem implements Unit, AttackerUnit {
 
     final static public float rangedDamageResist = 0.2f;
     @Override
-    public float getUnitRangedArmorPercentage() {
+    public double getUnitRangedArmorPercentage() {
         return rangedDamageResist;
     }
 

@@ -152,25 +152,28 @@ public interface Unit {
     String getOwnerName();
     void setOwnerName(String name);
 
-    // SOURCE: armour attribute and armour items
-    default float getUnitPhysicalArmorPercentage() {
+    // SOURCE: armour attribute, armour items and the damage amplifier debuff
+    default double getUnitPhysicalArmorPercentage() {
         Mob mob = (Mob) this;
-        return 1 - CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        return CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        //double dmgAfterAbsorb = CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        //dmgAfterAbsorb += MobEffectRegistrar.getDamageTakenIncrease(mob);
+        //return Math.round((1 - dmgAfterAbsorb)/ 0.01d) * 0.01d;
     }
 
     // SOURCE: inherent unit stats and abilities
-    default float getUnitRangedArmorPercentage() {
+    default double getUnitRangedArmorPercentage() {
         return 0;
     }
 
     // SOURCE: inherent unit stats and vanilla mechanics (like resistance)
-    default float getUnitMagicArmorPercentage() {
+    default double getUnitMagicArmorPercentage() {
         Mob mob = (Mob) this;
         return 1 - mob.getDamageAfterMagicAbsorb(mob.damageSources().magic(), 1);
     }
 
     // SOURCE: resistance mob effect
-    default float getUnitResistPercentage() {
+    default double getUnitResistPercentage() {
         Mob mob = (Mob) this;
         MobEffectInstance mei = mob.getEffect(MobEffects.DAMAGE_RESISTANCE);
         if (mei != null) {
@@ -667,7 +670,7 @@ public interface Unit {
     public default List<FormattedCharSequence> getArmourStatTooltip() {
         ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
         fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour"), true));
-        if (getUnitPhysicalArmorPercentage() > 0) {
+        if (getUnitPhysicalArmorPercentage() != 0) {
             fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_melee_and_ranged", (int) (getUnitPhysicalArmorPercentage() * 100)), false));
         }
         if (getUnitRangedArmorPercentage() > 0) {

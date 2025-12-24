@@ -167,7 +167,7 @@ public class ZombieUnit extends Zombie implements Unit, AttackerUnit, Convertabl
     }
 
     @Override
-    public float getUnitRangedArmorPercentage() {
+    public double getUnitRangedArmorPercentage() {
         return rangedDamageResist;
     }
 
