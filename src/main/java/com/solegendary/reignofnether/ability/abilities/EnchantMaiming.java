@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacem
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -29,12 +30,14 @@ import java.util.List;
 public class EnchantMaiming extends EnchantAbility {
 
     private static final UnitAction ENCHANT_ACTION = UnitAction.ENCHANT_MAIMING;
-    public static final Enchantment actualEnchantment = Enchantments.VANISHING_CURSE;
-    public static final int SLOWNESS_DURATION = 5 * ResourceCost.TICKS_PER_SECOND;
-    public static final int enchantLevel = 1;
 
     public EnchantMaiming() {
-        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_MAIMING);
+        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_MAIMING, 1, EquipmentSlot.MAINHAND);
+    }
+
+    @Override
+    public Enchantment getEnchantment() {
+        return EnchantmentRegistrar.MAIMING.get();
     }
 
     @Override
@@ -75,24 +78,5 @@ public class EnchantMaiming extends EnchantAbility {
     public boolean isCorrectUnitAndEquipment(LivingEntity entity) {
         return entity instanceof VindicatorUnit &&
                 entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof AxeItem;
-    }
-
-    @Override
-    public boolean hasAnyEnchant(LivingEntity entity) {
-        return !entity.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().isEmpty();
-    }
-
-    @Override
-    protected boolean hasSameEnchant(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().containsKey(actualEnchantment);
-    }
-
-    @Override
-    protected void doEnchant(LivingEntity entity) {
-        ItemStack item = entity.getItemBySlot(EquipmentSlot.MAINHAND);
-        if (item != ItemStack.EMPTY) {
-            EnchantmentHelper.setEnchantments(new HashMap<>(), item);
-            item.enchant(actualEnchantment, enchantLevel);
-        }
     }
 }

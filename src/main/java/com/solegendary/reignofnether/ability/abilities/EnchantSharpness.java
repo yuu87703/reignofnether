@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacem
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.units.villagers.VindicatorUnit;
@@ -28,11 +29,14 @@ import java.util.List;
 public class EnchantSharpness extends EnchantAbility {
 
     private static final UnitAction ENCHANT_ACTION = UnitAction.ENCHANT_SHARPNESS;
-    public static final Enchantment actualEnchantment = Enchantments.SHARPNESS;
-    public static final int enchantLevel = 2;
 
     public EnchantSharpness() {
-        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_SHARPNESS);
+        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_SHARPNESS, 2, EquipmentSlot.MAINHAND);
+    }
+
+    @Override
+    public Enchantment getEnchantment() {
+        return Enchantments.SHARPNESS;
     }
 
     @Override
@@ -72,25 +76,6 @@ public class EnchantSharpness extends EnchantAbility {
     @Override
     public boolean isCorrectUnitAndEquipment(LivingEntity entity) {
         return entity instanceof VindicatorUnit &&
-                entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof AxeItem;
-    }
-
-    @Override
-    public boolean hasAnyEnchant(LivingEntity entity) {
-        return !entity.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().isEmpty();
-    }
-
-    @Override
-    protected boolean hasSameEnchant(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().containsKey(actualEnchantment);
-    }
-
-    @Override
-    protected void doEnchant(LivingEntity entity) {
-        ItemStack item = entity.getItemBySlot(EquipmentSlot.MAINHAND);
-        if (item != ItemStack.EMPTY) {
-            EnchantmentHelper.setEnchantments(new HashMap<>(), item);
-            item.enchant(actualEnchantment, enchantLevel);
-        }
+                entity.getItemBySlot(equipmentSlot).getItem() instanceof AxeItem;
     }
 }

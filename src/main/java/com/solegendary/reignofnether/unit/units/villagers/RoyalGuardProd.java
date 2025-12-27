@@ -60,12 +60,9 @@ public class RoyalGuardProd extends HeroProductionItem {
     }
 
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
-        return new StartProductionButton(
-                itemName,
-                iconRl,
+        return super.getStartButton(
+                prodBuilding,
                 hotkey,
-                () -> itemIsBeingProduced(prodBuilding.ownerName) || heroOwned(prodBuilding.level.isClientSide(), prodBuilding.ownerName),
-                () -> true,
                 List.of(
                         FormattedCharSequence.forward(
                                 I18n.get("units.villagers.reignofnether.royal_guard") +
@@ -76,8 +73,7 @@ public class RoyalGuardProd extends HeroProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.royal_guard.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.villagers.reignofnether.royal_guard.tooltip2"), Style.EMPTY)
-                ),
-                this
+                )
         );
     }
 }

@@ -10,17 +10,26 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.HashMap;
 
 public abstract class EnchantAbility extends Ability {
 
     public static final int CD_MAX = 1;
     public static final int RANGE = 12;
     public final ResourceCost cost;
+    public final int enchantmentLevel;
+    public final EquipmentSlot equipmentSlot;
 
-    public EnchantAbility(UnitAction action, ResourceCost cost) {
+    public EnchantAbility(UnitAction action, ResourceCost cost, int enchantmentLevel, EquipmentSlot equipmentSlot) {
         super(
                 action,
                 CD_MAX,
@@ -30,6 +39,12 @@ public abstract class EnchantAbility extends Ability {
                 true
         );
         this.cost = cost;
+        this.enchantmentLevel = enchantmentLevel;
+        this.equipmentSlot = equipmentSlot;
+    }
+
+    public Enchantment getEnchantment() {
+        return null;
     }
 
     public boolean canAfford(BuildingPlacement buildingUsing) {
@@ -52,13 +67,19 @@ public abstract class EnchantAbility extends Ability {
         return false;
     }
 
-    public boolean hasAnyEnchant(LivingEntity entity) { return false; }
+    public boolean hasAnyEnchantInSlot(LivingEntity entity) { return false; }
 
     protected boolean hasSameEnchant(LivingEntity entity) {
         return false;
     }
 
-    protected void doEnchant(LivingEntity entity) { }
+    protected void doEnchant(LivingEntity entity) {
+        ItemStack item = entity.getItemBySlot(equipmentSlot);
+        if (item != ItemStack.EMPTY) {
+            EnchantmentHelper.setEnchantments(new HashMap<>(), item);
+            item.enchant(getEnchantment(), enchantmentLevel);
+        }
+    }
 
     private void playSound(Level level, LivingEntity te) {
         level.playLocalSound(te.getX(), te.getY(), te.getZ(),

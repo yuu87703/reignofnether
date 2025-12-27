@@ -1,7 +1,6 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
 import com.solegendary.reignofnether.ability.EnchantAbility;
-import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingBlock;
 import com.solegendary.reignofnether.util.MiscUtil;
@@ -37,7 +36,7 @@ public class LibraryPlacement extends ProductionPlacement {
                     tickLevel
             ).stream().filter(e -> (
                     autoCastEnchant.isCorrectUnitAndEquipment(e) && autoCastEnchant.canAfford(this)
-                            && !autoCastEnchant.hasAnyEnchant(e)
+                            && !autoCastEnchant.hasAnyEnchantInSlot(e)
             )).toList();
 
             if (!mobs.isEmpty()) {

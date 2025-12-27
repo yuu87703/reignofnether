@@ -6,8 +6,10 @@ import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.enchantments.VigorEnchantment;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -136,7 +138,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
     public int getAttackCooldown() {
-        return (int) (20 * (hasVigorEnchant() ? EnchantVigor.cooldownMultiplier : 1) / attacksPerSecond);
+        return (int) (20 * (hasVigorEnchant() ? VigorEnchantment.CD_MULTIPLIER : 1) / attacksPerSecond);
     }
     public float getAttacksPerSecond() {return 20f / (getAttackCooldown() + 25);}
     public float getAggroRange() {return aggroRange;}
@@ -446,7 +448,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
     public boolean hasVigorEnchant() {
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
-        return itemStack.getAllEnchantments().containsKey(EnchantVigor.actualEnchantment);
+        return itemStack.getAllEnchantments().containsKey(EnchantmentRegistrar.VIGOR.get());
     }
 
     public Enchantment getEnchant() {

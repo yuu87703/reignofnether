@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacem
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
@@ -29,11 +30,14 @@ import java.util.List;
 public class EnchantMultishot extends EnchantAbility {
 
     private static final UnitAction ENCHANT_ACTION = UnitAction.ENCHANT_MULTISHOT;
-    public static final Enchantment actualEnchantment = Enchantments.MULTISHOT;
-    public static final int enchantLevel = 1;
 
     public EnchantMultishot() {
-        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_MULTISHOT);
+        super(ENCHANT_ACTION, ResourceCosts.ENCHANT_MULTISHOT, 1, EquipmentSlot.MAINHAND);
+    }
+
+    @Override
+    public Enchantment getEnchantment() {
+        return Enchantments.MULTISHOT;
     }
 
     @Override
@@ -74,24 +78,5 @@ public class EnchantMultishot extends EnchantAbility {
     public boolean isCorrectUnitAndEquipment(LivingEntity entity) {
         return entity instanceof PillagerUnit &&
                 entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof CrossbowItem;
-    }
-
-    @Override
-    public boolean hasAnyEnchant(LivingEntity entity) {
-        return !entity.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().isEmpty();
-    }
-
-    @Override
-    protected boolean hasSameEnchant(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().containsKey(actualEnchantment);
-    }
-
-    @Override
-    protected void doEnchant(LivingEntity entity) {
-        ItemStack item = entity.getItemBySlot(EquipmentSlot.MAINHAND);
-        if (item != ItemStack.EMPTY) {
-            EnchantmentHelper.setEnchantments(new HashMap<>(), item);
-            item.enchant(actualEnchantment, enchantLevel);
-        }
     }
 }

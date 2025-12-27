@@ -43,14 +43,6 @@ public interface HeroUnit extends Unit {
                 ResourceCosts.HERO_BASE_REVIVE_COST.population);
     }
 
-    static List<HeroUnit> getHeroes(boolean isClientside) {
-        List<LivingEntity> units = isClientside ? UnitClientEvents.getAllUnits() : UnitServerEvents.getAllUnits();
-        return units.stream()
-                .filter(e -> e instanceof HeroUnit)
-                .map(e -> (HeroUnit) e)
-                .toList();
-    }
-
     static List<HeroUnit> getHeroes(boolean isClientside, String ownerName) {
         return getHeroes(isClientside, ownerName, "");
     }
@@ -73,6 +65,17 @@ public interface HeroUnit extends Unit {
                 return heroUnit;
         }
         return null;
+    }
+
+    static int getNumHeroesOwnedOrInTraining(boolean isClientside, String ownerName) {
+        return HeroUnit.getHeroes(isClientside, ownerName).size() +
+                HeroUnit.getFallenHeroes(isClientside, ownerName).size();
+    }
+
+    static List<HeroUnitSave> getFallenHeroes(boolean isClientSide, String ownerName) {
+        ArrayList<HeroUnitSave> heroUnits = isClientSide ? HeroClientEvents.fallenHeroes : HeroServerEvents.fallenHeroes;
+        heroUnits.removeIf(h -> !h.ownerName.equals(ownerName));
+        return heroUnits;
     }
 
     int MAX_LEVEL = 10;

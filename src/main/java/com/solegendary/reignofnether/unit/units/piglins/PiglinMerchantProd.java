@@ -60,12 +60,9 @@ public class PiglinMerchantProd extends HeroProductionItem {
     }
 
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
-        return new StartProductionButton(
-                itemName,
-                iconRl,
+        return super.getStartButton(
+                prodBuilding,
                 hotkey,
-                () -> itemIsBeingProduced(prodBuilding.ownerName) || heroOwned(prodBuilding.level.isClientSide(), prodBuilding.ownerName),
-                () -> true,
                 List.of(
                         FormattedCharSequence.forward(
                                 I18n.get("units.piglins.reignofnether.piglin_merchant") +
@@ -76,8 +73,7 @@ public class PiglinMerchantProd extends HeroProductionItem {
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.piglin_merchant.tooltip1"), Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.piglin_merchant.tooltip2"), Style.EMPTY)
-                ),
-                this
+                )
         );
     }
 }

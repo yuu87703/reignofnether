@@ -144,7 +144,8 @@ public interface AttackerUnit {
         }
 
         if (!unitMob.level().isClientSide && unitMob.tickCount % 4 == 0) {
-            if (((LivingEntity) unit).getEffect(MobEffectRegistrar.STUN.get()) != null) {
+            if (((LivingEntity) unit).getEffect(MobEffectRegistrar.STUN.get()) != null ||
+                ((LivingEntity) unit).getEffect(MobEffectRegistrar.FREEZE.get()) != null) {
                 Unit.fullResetBehaviours(unit);
                 return;
             }

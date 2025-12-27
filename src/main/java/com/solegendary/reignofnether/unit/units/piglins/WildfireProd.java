@@ -55,12 +55,9 @@ public class WildfireProd extends HeroProductionItem {
     }
 
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
-        return new StartProductionButton(
-            itemName,
-            iconRl,
+        return super.getStartButton(
+            prodBuilding,
             hotkey,
-            () -> itemIsBeingProduced(prodBuilding.ownerName) || heroOwned(prodBuilding.level.isClientSide(), prodBuilding.ownerName),
-            () -> true,
             List.of(
                     FormattedCharSequence.forward(
                             I18n.get("units.piglins.reignofnether.wildfire") +
@@ -71,10 +68,7 @@ public class WildfireProd extends HeroProductionItem {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.wildfire.tooltip1"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("units.piglins.reignofnether.wildfire.tooltip2"), Style.EMPTY)
-            ),
-            this
+            )
         );
     }
-
-
 }

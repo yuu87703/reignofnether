@@ -53,6 +53,11 @@ public class CommonModEvents {
             }
             return tint;
         }, Blocks.NETHER_PORTAL);
+
+        evt.register(
+                (state, level, pos, tintIndex) -> 0xE0E0E0,
+                BlockRegistrar.WRAITH_SNOW_LAYER.get()
+        );
     }
 
     @SubscribeEvent

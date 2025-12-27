@@ -614,6 +614,7 @@ public class UnitServerEvents {
                     for (MobEffect me : List.of(
                             MobEffects.DAMAGE_RESISTANCE,
                             MobEffectRegistrar.STUN.get(),
+                            MobEffectRegistrar.FREEZE.get(),
                             MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(),
                             MobEffectRegistrar.ATTACK_SLOWDOWN.get()
                     )) {
@@ -943,6 +944,8 @@ public class UnitServerEvents {
 
     @SubscribeEvent
     public static void onLivingKnockBack(LivingKnockBackEvent evt) {
+        if (evt.getEntity().getEffect(MobEffectRegistrar.FREEZE.get()) != null)
+            evt.setCanceled(true);
         if (evt.getEntity() instanceof GhastUnit)
             evt.setCanceled(true);
         else if (evt.getEntity() instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield)

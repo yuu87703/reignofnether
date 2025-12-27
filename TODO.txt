@@ -14,14 +14,17 @@ During new years, buildings explode with fireworks
 
 New Heroes
 ----------
-[❌] Change /gamerule allowHeroes (bool) to /gamerule allowedHeroes (int) (default 1)
+[🟡] Change /gamerule allowHeroes (bool) to /gamerule allowedHeroes (int) (default 1)
 
 Wretched Wraith
-    [❌] New snow layer block that doesn't interfere with vanilla snow
+    [🟡] New snow layer block that doesn't interfere with vanilla snow
         - Maybe with a subtle particle effect, or just shaded differently
+
+    [🟡] Slowdown attack speed MobEffect
 
 Enchanter
     [❌] Blacksmith armour upgrades
+    [🟡] Actually register new enchantments
 
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires

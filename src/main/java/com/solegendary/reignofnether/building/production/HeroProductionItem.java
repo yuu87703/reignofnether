@@ -1,15 +1,21 @@
 package com.solegendary.reignofnether.building.production;
 
-import com.solegendary.reignofnether.building.BuildingServerboundPacket;
+import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
-import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+
+import java.util.List;
 
 public abstract class HeroProductionItem extends ProductionItem {
 
@@ -20,10 +26,13 @@ public abstract class HeroProductionItem extends ProductionItem {
         super(cost);
         this.dupeRule = ProdDupeRule.DISALLOW;
         this.onComplete = (Level level, ProductionPlacement placement) -> {
-            boolean notClientSide = !level.isClientSide();
-            boolean noHeroOwned = !heroOwned(level.isClientSide(), placement.ownerName);
-            if (notClientSide && noHeroOwned)
-                placement.produceUnit((ServerLevel) level, getHeroEntityType(), placement.ownerName, true);
+            if (!level.isClientSide()) {
+                int heroesOwned = HeroUnit.getNumHeroesOwnedOrInTraining(false, placement.ownerName);
+                if (heroesOwned < GameruleClient.allowedHeroes &&
+                    (heroesOwned == 0 || BuildingUtils.castleOwned(false, placement.ownerName))) {
+                    placement.produceUnit((ServerLevel) level, getHeroEntityType(), placement.ownerName, true);
+                }
+            }
         };
         this.itemName = itemName;
         this.iconRl = iconRl;
@@ -51,6 +60,21 @@ public abstract class HeroProductionItem extends ProductionItem {
                 prodBuilding,
                 this,
                 first
+        );
+    }
+
+    public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey, List<FormattedCharSequence> fcs) {
+        return new StartProductionButton(
+                itemName,
+                iconRl,
+                hotkey,
+                () -> itemIsBeingProduced(prodBuilding.ownerName) ||
+                        heroOwned(prodBuilding.level.isClientSide(), prodBuilding.ownerName) ||
+                        HeroUnit.getNumHeroesOwnedOrInTraining(true, prodBuilding.ownerName) >= GameruleClient.allowedHeroes,
+                () -> HeroUnit.getNumHeroesOwnedOrInTraining(true, prodBuilding.ownerName) == 0 ||
+                        BuildingUtils.castleOwned(true, prodBuilding.ownerName),
+                fcs,
+                this
         );
     }
 }

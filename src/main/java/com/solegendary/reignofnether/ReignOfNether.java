@@ -61,6 +61,8 @@ public class ReignOfNether {
 
     public ReignOfNether(FMLJavaModLoadingContext mlctx) {
         // Registering all components
+        EnchantmentRegistrar.init(mlctx);
+
         ItemRegistrar.init(mlctx);
         EntityRegistrar.init(mlctx);
         ContainerRegistrar.init(mlctx);
@@ -72,6 +74,7 @@ public class ReignOfNether {
         FactionRegistries.register();
         ProductionItems.init();
         MobEffectRegistrar.init(mlctx);
+
         final ClientEventRegistrar clientRegistrar = new ClientEventRegistrar();
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientRegistrar::registerClientEvents);
 

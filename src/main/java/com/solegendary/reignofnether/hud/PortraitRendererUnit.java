@@ -210,34 +210,6 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         guiGraphics.pose().translate(0,0,2000);
         name = WordUtils.capitalize(name);
 
-        /*
-        if ((entity instanceof BruteUnit bUnit && bUnit.hasEnchantedNetheriteSword()) ||
-            (entity instanceof HeadhunterUnit hUnit && hUnit.hasFlameTrident())) {
-            name += " (FA)";
-        }
-        if (entity instanceof VindicatorUnit pUnit && pUnit.getEnchant() == Enchantments.SHARPNESS) {
-            name += " (S)";
-        }
-        if (entity instanceof VindicatorUnit pUnit && pUnit.getEnchant() == EnchantMaiming.actualEnchantment) {
-            name += " (M)";
-        }
-        if (entity instanceof PillagerUnit pUnit && pUnit.getEnchant() == Enchantments.QUICK_CHARGE) {
-            name += " (QC)";
-        }
-        if (entity instanceof PillagerUnit pUnit && pUnit.getEnchant() == Enchantments.MULTISHOT) {
-            name += " (MS)";
-        }
-        if (entity instanceof EvokerUnit pUnit && pUnit.getEnchant() == EnchantVigor.actualEnchantment) {
-            name += " (V)";
-        }
-        if (entity instanceof ZombieUnit pUnit && pUnit.getThornsLevel() > 0) {
-            name += " (Thorns ";
-            for (int i = 0; i < pUnit.getThornsLevel(); i++)
-                name += "I";
-            name += ")";
-        }
-         */
-
         if (rs != Relationship.OWNED && entity instanceof Unit unit && unit.getOwnerName().length() > 0) {
             name += " (" + unit.getOwnerName() + ")";
         }

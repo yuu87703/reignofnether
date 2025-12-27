@@ -21,6 +21,9 @@ public class MobEffectRegistrar {
     // prevents any actions or movement from happening
     public static final RegistryObject<MobEffect> STUN = MOB_EFFECTS.register("stun",  () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFFFFFF));
 
+    // similar to STUN but also prevents the mob from being knocked back
+    public static final RegistryObject<MobEffect> FREEZE = MOB_EFFECTS.register("freeze",  () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0x000000));
+
     // prevents players from issuing any new commands
     // usually used in conjunction with a force-attack command for a taunt effect, or a move command for a fear effect
     public static final RegistryObject<MobEffect> UNCONTROLLABLE = MOB_EFFECTS.register("uncontrollable", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFF0000));
@@ -36,10 +39,10 @@ public class MobEffectRegistrar {
     public static final RegistryObject<MobEffect> DAMAGE_TAKEN_INCREASE = MOB_EFFECTS.register("damage_taken_increase", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.LUCK, "e0772108-0408-4fa3-ad55-f90f5595d610", -0.05, AttributeModifier.Operation.ADDITION));
 
-    public static float getDamageTakenIncrease(Mob mob) {
+    public static double getDamageTakenIncrease(Mob mob) {
         MobEffectInstance mei = mob.getEffect(DAMAGE_TAKEN_INCREASE.get());
-        float value = mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05f;
-        return Math.round(value / 0.05f) * 0.05f;
+        double value = mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05d;
+        return Math.round(value / 0.05d) * 0.05d;
     }
 
     public static final RegistryObject<MobEffect> ATTACK_SLOWDOWN = MOB_EFFECTS.register("attack_slowdown", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)

@@ -57,12 +57,9 @@ public class WretchedWraithProd extends HeroProductionItem {
     }
 
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
-        return new StartProductionButton(
-            itemName,
-            iconRl,
+        return super.getStartButton(
+            prodBuilding,
             hotkey,
-            () -> itemIsBeingProduced(prodBuilding.ownerName) || heroOwned(prodBuilding.level.isClientSide(), prodBuilding.ownerName),
-            () -> true,
             List.of(
                     FormattedCharSequence.forward(
                             I18n.get("units.monsters.reignofnether.wretched_wraith") +
@@ -75,10 +72,7 @@ public class WretchedWraithProd extends HeroProductionItem {
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.wretched_wraith.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.wretched_wraith.tooltip3"), Style.EMPTY)
-            ),
-            this
+            )
         );
     }
-
-
 }

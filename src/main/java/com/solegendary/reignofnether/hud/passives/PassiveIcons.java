@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.hud.passives;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.abilities.EnchantMaiming;
 import com.solegendary.reignofnether.ability.abilities.EnchantVigor;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -44,7 +45,7 @@ public class PassiveIcons {
             )
     );
     public static final EnchantmentIcon MAIMING = new EnchantmentIcon(
-            EnchantMaiming.actualEnchantment,
+            EnchantmentRegistrar.MAIMING.get(),
             EquipmentSlot.MAINHAND,
             getEnchantedItemStack(Items.IRON_AXE),
             List.of(
@@ -62,7 +63,7 @@ public class PassiveIcons {
             )
     );
     public static final EnchantmentIcon VIGOR = new EnchantmentIcon(
-            EnchantVigor.actualEnchantment,
+            EnchantmentRegistrar.VIGOR.get(),
             EquipmentSlot.MAINHAND,
             getEnchantedItemStack(Items.STICK),
             List.of(

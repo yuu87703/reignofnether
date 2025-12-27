@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.ability.abilities;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.enchantments.VigorEnchantment;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -74,7 +75,7 @@ public class SetFangsCircle extends Ability {
     public void setCooldown(float cooldown, Unit unit) {
         EvokerUnit evokerUnit = (EvokerUnit) unit;
         if (evokerUnit.hasVigorEnchant())
-            cooldown *= EnchantVigor.cooldownMultiplier;
+            cooldown *= VigorEnchantment.CD_MULTIPLIER;
 
         super.setCooldown(cooldown, unit);
         for (Ability ability : evokerUnit.getAbilities().get())

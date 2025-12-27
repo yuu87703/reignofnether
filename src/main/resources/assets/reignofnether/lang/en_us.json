@@ -607,7 +607,7 @@
     "commands.reignofnether.gamerule.pvp_modes_only": "Disable Wave Survival and Sandbox",
     "commands.reignofnether.gamerule.beacon_win_minutes": "Time needed to win with beacon control",
     "commands.reignofnether.gamerule.slanted_buildings": "Allow building on non-flat terrain",
-    "commands.reignofnether.gamerule.allow_heroes": "Allow building of altars and heroes",
+    "commands.reignofnether.gamerule.allowed_heroes": "How many heroes players can train",
 
     "commands.reignofnether.error.unknown_building": "Unknown building name",
     "commands.reignofnether.error.unknown_resource": "Unknown resource name",
