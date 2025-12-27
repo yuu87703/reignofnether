@@ -61,13 +61,13 @@ public class FrostBlink extends HeroAbility {
     public void updateStatsForRank(HeroUnit hero) {
         if (getRank(hero) == 1) {
             range = RANGE_RANK_1;
-            cooldownMax = CD_RANK_1;
+            cooldownMax = CD_RANK_1 * ResourceCost.TICKS_PER_SECOND;
         } else if (getRank(hero) == 2) {
             range = RANGE_RANK_2;
-            cooldownMax = CD_RANK_2;
+            cooldownMax = CD_RANK_2 * ResourceCost.TICKS_PER_SECOND;
         } else if (getRank(hero) == 3) {
             range = RANGE_RANK_3;
-            cooldownMax = CD_RANK_3;
+            cooldownMax = CD_RANK_3 * ResourceCost.TICKS_PER_SECOND;
         }
     }
 

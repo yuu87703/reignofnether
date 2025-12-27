@@ -103,7 +103,7 @@ public class IceNova extends HeroAbility {
     public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.ice_nova") + " " + rankString(hero), true),
-                fcsIcons(I18n.get("abilities.reignofnether.ice_nova.stats", CD_MAX_SECONDS / 20, manaCost)),
+                fcsIcons(I18n.get("abilities.reignofnether.ice_nova.stats", CD_MAX_SECONDS / 20, range, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.ice_nova.tooltip1"))
         );

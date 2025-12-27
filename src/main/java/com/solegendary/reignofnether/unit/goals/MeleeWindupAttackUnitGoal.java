@@ -1,6 +1,9 @@
 package com.solegendary.reignofnether.unit.goals;
 
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import net.minecraft.world.InteractionHand;
@@ -35,6 +38,11 @@ public class MeleeWindupAttackUnitGoal extends AbstractMeleeAttackUnitGoal {
                 if (windupTicksLeft == windupTicksMax &&
                         mob instanceof KeyframeAnimated && !mob.level().isClientSide()) {
                     UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.ATTACK_UNIT, mob);
+
+                    if (mob instanceof AttackerUnit attackerUnit &&
+                        attackerUnit.getAttackSound() != null) {
+                        SoundClientboundPacket.playSoundAtPos(attackerUnit.getAttackSound(), mob.blockPosition());
+                    }
                 }
                 windupTicksLeft -= 1;
                 if (windupTicksLeft <= 0) {

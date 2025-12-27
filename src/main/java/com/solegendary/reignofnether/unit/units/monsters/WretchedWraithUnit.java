@@ -4,10 +4,20 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.Avatar;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.BattleRagePassive;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCry;
 import com.solegendary.reignofnether.ability.heroAbilities.shared.PlaceholderUntargetedAbility;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingPresencePassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.IceNova;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
@@ -25,29 +35,32 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WretchedWraithUnit extends Zombie implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
+public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
     public static final Abilities ABILITIES = new Abilities();
     static {
-        ABILITIES.add(new PlaceholderUntargetedAbility());
+        ABILITIES.add(new IceNova());
+        ABILITIES.add(new FrostBlink());
+        ABILITIES.add(new ChillingPresencePassive());
+        ABILITIES.add(new Blizzard());
     }
 
     @Override
@@ -272,7 +285,7 @@ public class WretchedWraithUnit extends Zombie implements Unit, AttackerUnit, He
         }
     }
 
-    public WretchedWraithUnit(EntityType<? extends Zombie> entityType, Level level) {
+    public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
 
         updateAbilityButtons();
@@ -345,6 +358,25 @@ public class WretchedWraithUnit extends Zombie implements Unit, AttackerUnit, He
         return SunlightEffect.SLOWNESS_I;
     }
 
+    @Override protected SoundEvent getAmbientSound() {
+        return SoundRegistrar.WRETCHED_WRAITH_AMBIENT.get();
+    }
+    @Override protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return SoundRegistrar.WRETCHED_WRAITH_HURT.get();
+    }
+    @Override protected SoundEvent getDeathSound() {
+        return SoundRegistrar.WRETCHED_WRAITH_DEATH.get();
+    }
+    @Override protected void playStepSound(BlockPos pPos, BlockState pBlock) { }
+
+    public SoundAction getAttackSound() {
+        return SoundAction.WRETCHED_WRAITH_ATTACK_QUIET;
+    }
+
+    public MobType getMobType() {
+        return MobType.UNDEAD;
+    }
+
     public void initialiseGoals() {
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
@@ -356,17 +388,17 @@ public class WretchedWraithUnit extends Zombie implements Unit, AttackerUnit, He
 
         this.castIceNovaGoal = new GenericUntargetedSpellGoal(
                 this,
-                0,
+                20,
                 this::iceNova,
-                UnitAnimationAction.CHARGE_SPELL,
+                UnitAnimationAction.ATTACK_UNIT,
                 UnitAnimationAction.STOP,
-                UnitAnimationAction.CAST_SPELL
+                UnitAnimationAction.STOP
         );
         this.castFrostblinkGoal = new GenericTargetedSpellGoal(
                 this,
-                0,
+                10,
                 InsomniaCurse.RANGE,
-                UnitAnimationAction.CAST_SPELL,
+                UnitAnimationAction.TELEPORT,
                 null,
                 this::frostBlink,
                 null
@@ -394,14 +426,17 @@ public class WretchedWraithUnit extends Zombie implements Unit, AttackerUnit, He
     }
 
     public void iceNova() {
+        if (level().isClientSide) return;
 
     }
 
     public void frostBlink(BlockPos bp) {
+        if (level().isClientSide) return;
 
     }
 
     public void blizzard() {
+        if (level().isClientSide) return;
 
     }
 }

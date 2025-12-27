@@ -26,7 +26,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 public class Blizzard extends HeroAbility {
 
     private static final int CD_MAX_SECONDS = 300 * ResourceCost.TICKS_PER_SECOND;
-    public static final int DURATION_SECONDS = 10 * ResourceCost.TICKS_PER_SECOND;
+    public static final int DURATION_SECONDS = 10;
     public static final int RADIUS = 10;
 
     public Blizzard() {
@@ -74,7 +74,7 @@ public class Blizzard extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.blizzard") + " " + rankString(hero), true),
                 fcsIcons(I18n.get("abilities.reignofnether.blizzard.stats", CD_MAX_SECONDS / 20, manaCost)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1"))
+                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", DURATION_SECONDS))
         );
     }
 
@@ -83,7 +83,7 @@ public class Blizzard extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.blizzard"), true),
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", DURATION_SECONDS)),
                 fcs(I18n.get("abilities.reignofnether.blizzard.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.blizzard.tooltip3"))
         );
