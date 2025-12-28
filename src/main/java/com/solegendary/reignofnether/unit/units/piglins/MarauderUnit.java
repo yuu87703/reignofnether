@@ -12,19 +12,20 @@ import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
+import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.modelling.animations.MarauderAnimations;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -43,7 +44,7 @@ import java.util.List;
 
 import static com.solegendary.reignofnether.ability.abilities.Bloodlust.BLOODLUST_ATTACK_SPEED_MULTIPLIER;
 
-public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit {
+public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, KeyframeAnimated {
     public static final Abilities ABILITIES = new Abilities();
     static {
         ABILITIES.add(new Bloodlust(), Keybindings.keyW);
@@ -167,6 +168,44 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit {
 
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
+
+    public final AnimationState idleAnimState = new AnimationState();
+    public final AnimationState walkAnimState = new AnimationState();
+    public final AnimationState spellChargeAnimState = new AnimationState();
+    public final AnimationState spellActivateAnimState = new AnimationState();
+    public final AnimationState attackAnimState = new AnimationState();
+
+    final static private int ATTACK_WINDUP_TICKS = 32;
+
+    // non-looping animations
+    public AnimationDefinition activeAnimDef = null;
+    public AnimationState activeAnimState = null;
+
+    public void stopAllAnimations() {
+        idleAnimState.stop();
+        walkAnimState.stop();
+        spellChargeAnimState.stop();
+        spellActivateAnimState.stop();
+        attackAnimState.stop();
+    }
+    public int animateTicks = 0;
+    public float animateScale = 1.0f;
+    public boolean animateScaleReducing = false;
+    public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
+    public int getAnimateTicksLeft() { return animateTicks; }
+
+    public void playSingleAnimation(UnitAnimationAction animAction) {
+        animateScaleReducing = false;
+        switch (animAction) {
+            case ATTACK_UNIT, ATTACK_BUILDING -> {
+                activeAnimDef = MarauderAnimations.ATTACK_SLAM;
+                activeAnimState = attackAnimState;
+                animateScale = 1.0f;
+                startAnimation(activeAnimDef);
+            }
+            default -> animateScaleReducing = true;
+        }
+    }
 
     public MarauderUnit(EntityType<? extends PiglinBrute> entityType, Level level) {
         super(entityType, level);

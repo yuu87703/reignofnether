@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.unit.modelling.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.solegendary.reignofnether.unit.modelling.models.MarauderModel;
 import com.solegendary.reignofnether.unit.modelling.models.PiglinMerchantModel;
 import com.solegendary.reignofnether.unit.units.piglins.MarauderUnit;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -12,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
-public class MarauderRenderer extends MobRenderer<MarauderUnit, PiglinMerchantModel<MarauderUnit>> {
+public class MarauderRenderer extends MobRenderer<MarauderUnit, MarauderModel<MarauderUnit>> {
 
     public static final float SCALE_MULT = 1.5f;
 
@@ -20,7 +21,7 @@ public class MarauderRenderer extends MobRenderer<MarauderUnit, PiglinMerchantMo
     private static final ResourceLocation TEXTURE_LOCATION_ARMORED = ResourceLocation.fromNamespaceAndPath("reignofnether", "textures/entities/marauder_unit_armored.png");
 
     public MarauderRenderer(EntityRendererProvider.Context context) {
-        super(context, new PiglinMerchantModel<>(context.bakeLayer(PiglinMerchantModel.LAYER_LOCATION)), 0.5F);
+        super(context, new MarauderModel<>(context.bakeLayer(MarauderModel.LAYER_LOCATION)), 0.5F);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class MarauderRenderer extends MobRenderer<MarauderUnit, PiglinMerchantMo
     }
 
     public MarauderRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation mll) {
-        super(pContext, new PiglinMerchantModel<>(pContext.bakeLayer(mll)), 0.5F);
+        super(pContext, new MarauderModel<>(pContext.bakeLayer(mll)), 0.5F);
     }
 
     protected void scale(@NotNull MarauderUnit pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {

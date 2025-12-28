@@ -5,15 +5,18 @@ package com.solegendary.reignofnether.unit.modelling.models;// Made with Blockbe
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
+import com.solegendary.reignofnether.unit.modelling.animations.MarauderAnimations;
+import com.solegendary.reignofnether.unit.units.piglins.MarauderUnit;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
-public class MarauderModel<T extends Entity> extends EntityModel<T> {
+public class MarauderModel<T extends Entity> extends KeyframeHierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("reignofnether", "piglin_marauder"), "main");
 	private final ModelPart body;
@@ -147,11 +150,47 @@ public class MarauderModel<T extends Entity> extends EntityModel<T> {
 
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		MarauderUnit marauder = ((MarauderUnit) entity);
 
+		if (marauder.animateScale > 0 && marauder.animateScaleReducing) {
+			marauder.animateScale -= 0.02f;
+		}
+		if (marauder.animateScale <= 0) {
+			marauder.animateScale = 1.0f;
+			marauder.activeAnimDef = null;
+			marauder.activeAnimState = null;
+			marauder.animateScaleReducing = false;
+			marauder.stopAllAnimations();
+		}
+
+		AttributeInstance ms = marauder.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (ms == null)
+			return;
+		float speed = (float) ms.getValue() * 10;
+
+		// any once-off animation like attack or cast spell
+		if (marauder.activeAnimDef != null && marauder.activeAnimState != null && marauder.animateTicks > 0) {
+			restartThenAnimate(marauder, marauder.activeAnimState, marauder.activeAnimDef, ageInTicks, marauder.animateScale);
+		}
+		// walk animation
+		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
+			restart(marauder, marauder.walkAnimState, MarauderAnimations.WALK, ageInTicks);
+			animateWalk(MarauderAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
+		}
+		// idle animation
+		else {
+			restartThenAnimate(marauder, marauder.idleAnimState, MarauderAnimations.IDLE, ageInTicks);
+		}
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	}
+
+	@Override
+	public ModelPart root() {
+		return body;
 	}
 }

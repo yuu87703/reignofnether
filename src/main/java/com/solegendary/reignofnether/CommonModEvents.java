@@ -92,6 +92,7 @@ public class CommonModEvents {
         evt.registerEntityRenderer(EntityRegistrar.GRUNT_UNIT.get(), PiglinUnitRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.BRUTE_UNIT.get(), PiglinUnitRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.HEADHUNTER_UNIT.get(), PiglinUnitRenderer::new);
+        evt.registerEntityRenderer(EntityRegistrar.MARAUDER_UNIT.get(), MarauderRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.HOGLIN_UNIT.get(), HoglinRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.ARMOURED_HOGLIN_UNIT.get(), ArmouredHoglinUnitRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.BLAZE_UNIT.get(), BlazeRenderer::new);
@@ -154,6 +155,7 @@ public class CommonModEvents {
         evt.put(EntityRegistrar.SILVERFISH_UNIT.get(), SilverfishUnit.createAttributes().build());
         evt.put(EntityRegistrar.GRUNT_UNIT.get(), GruntUnit.createAttributes().build());
         evt.put(EntityRegistrar.HEADHUNTER_UNIT.get(), HeadhunterUnit.createAttributes().build());
+        evt.put(EntityRegistrar.MARAUDER_UNIT.get(), MarauderUnit.createAttributes().build());
         evt.put(EntityRegistrar.BRUTE_UNIT.get(), BruteUnit.createAttributes().build());
         evt.put(EntityRegistrar.HOGLIN_UNIT.get(), HoglinUnit.createAttributes().build());
         evt.put(EntityRegistrar.ARMOURED_HOGLIN_UNIT.get(), ArmouredHoglinUnit.createAttributes().build());
@@ -189,6 +191,7 @@ public class CommonModEvents {
         event.registerLayerDefinition(RoyalGuardModel.LAYER_LOCATION, RoyalGuardModel::createBodyLayer);
         event.registerLayerDefinition(NecromancerModel.LAYER_LOCATION, NecromancerModel::createBodyLayer);
         event.registerLayerDefinition(PiglinMerchantModel.LAYER_LOCATION, PiglinMerchantModel::createBodyLayer);
+        event.registerLayerDefinition(MarauderModel.LAYER_LOCATION, MarauderModel::createBodyLayer);
         event.registerLayerDefinition(ArmouredHoglinUnitModel.LAYER_LOCATION, ArmouredHoglinUnitModel::createBodyLayer);
         event.registerLayerDefinition(NecromancerProjectileModel.LAYER_LOCATION, NecromancerProjectileModel::createBodyLayer);
         event.registerLayerDefinition(EnchanterModel.LAYER_LOCATION, EnchanterModel::createBodyLayer);

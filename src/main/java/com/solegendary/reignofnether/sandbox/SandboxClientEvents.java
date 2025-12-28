@@ -147,6 +147,7 @@ public class SandboxClientEvents {
                 ProductionItems.GRUNT.getPlaceButton(),
                 ProductionItems.BRUTE.getPlaceButton(),
                 ProductionItems.HEADHUNTER.getPlaceButton(),
+                ProductionItems.MARAUDER.getPlaceButton(),
                 ProductionItems.HOGLIN.getPlaceButton(),
                 ProductionItems.BLAZE.getPlaceButton(),
                 ProductionItems.WITHER_SKELETON.getPlaceButton(),
