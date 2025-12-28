@@ -30,6 +30,8 @@ Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
 
 
+[❌] Overflowing graveyards
+[❌] Marauder
 
 
 Bugfixes
@@ -48,7 +50,7 @@ Balance
 [❌] Ghasts can no longer attack and move 20% slower while over void or structure void blocks
 [❌] Prevent friendly fire from wither skeleton clouds
     - Might need to create a new AreaEffectCloud entity
-
+[🟡] Headhunters no longer require a bastion to be trained
 
 Languages
 ---------

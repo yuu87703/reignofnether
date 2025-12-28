@@ -35,6 +35,7 @@ public class ResourceCosts {
     public static final ResourceCost GRUNT = new ResourceCost(ID, "GRUNT");
     public static final ResourceCost BRUTE = new ResourceCost(ID, "BRUTE");
     public static final ResourceCost HEADHUNTER = new ResourceCost(ID, "HEADHUNTER");
+    public static final ResourceCost MARAUDER = new ResourceCost(ID, "MARAUDER");
     public static final ResourceCost HOGLIN = new ResourceCost(ID, "HOGLIN");
     public static final ResourceCost BLAZE = new ResourceCost(ID, "BLAZE");
     public static final ResourceCost WITHER_SKELETON = new ResourceCost(ID, "WITHER_SKELETON");
@@ -221,6 +222,7 @@ public class ResourceCosts {
         GRUNT.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.GRUNT);
         BRUTE.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.BRUTE);
         HEADHUNTER.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.HEADHUNTER);
+        MARAUDER.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.MARAUDER);
         HOGLIN.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.HOGLIN);
         BLAZE.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.BLAZE);
         WITHER_SKELETON.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.WITHER_SKELETON);
