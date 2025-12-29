@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HoglinUnit;
+import com.solegendary.reignofnether.unit.units.piglins.MarauderUnit;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -31,6 +32,7 @@ public class Bloodlust extends Ability {
 
     private static final int HEALTH_COST = 12;
     private static final int HEALTH_COST_HOGLIN = 18;
+    private static final int HEALTH_COST_MARAUDER = 24;
     private static final int DURATION_SECONDS = 10;
 
     public static final float BLOODLUST_ATTACK_SPEED_MULTIPLIER = 1.6f;
@@ -53,6 +55,8 @@ public class Bloodlust extends Ability {
             return bruteUnit.bloodlustTicks;
         } else if (unit instanceof HoglinUnit hoglinUnit) {
             return hoglinUnit.bloodlustTicks;
+        } else if (unit instanceof MarauderUnit marauderUnit) {
+            return marauderUnit.bloodlustTicks;
         }
         return 0;
     }
@@ -72,7 +76,7 @@ public class Bloodlust extends Ability {
                     fcs(I18n.get("abilities.reignofnether.bloodlust"), true),
                     FormattedCharSequence.forward("\uE007  " + HEALTH_COST, MyRenderer.iconStyle),
                     FormattedCharSequence.forward("", Style.EMPTY),
-                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", HEALTH_COST), Style.EMPTY),
+                    FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip1", unit instanceof MarauderUnit ? HEALTH_COST_MARAUDER : HEALTH_COST), Style.EMPTY),
                     FormattedCharSequence.forward(I18n.get("abilities.reignofnether.bloodlust.tooltip2", DURATION_SECONDS), Style.EMPTY)
             );
         }
@@ -100,6 +104,8 @@ public class Bloodlust extends Ability {
         float healthCost = HEALTH_COST;
         if (unitUsing instanceof HoglinUnit)
             healthCost = HEALTH_COST_HOGLIN;
+        else if (unitUsing instanceof MarauderUnit)
+            healthCost = HEALTH_COST_MARAUDER;
         int duration = DURATION_SECONDS * ResourceCost.TICKS_PER_SECOND;
         if (((LivingEntity) unitUsing).getHealth() <= healthCost)
             return;
@@ -118,6 +124,10 @@ public class Bloodlust extends Ability {
             hoglinUnit.bloodlustTicks = duration;
             hoglinUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
             hoglinUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (healthCost * 20 * 2.5f) + 40, 0));
+        } else if (unitUsing instanceof MarauderUnit marauderUnit) {
+            marauderUnit.bloodlustTicks = duration;
+            marauderUnit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
+            marauderUnit.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) (healthCost * 20 * 2.5f) + 40, 0));
         }
     }
 

@@ -51,6 +51,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -733,5 +734,13 @@ public interface Unit {
             }
         }
         return icons;
+    }
+
+    default AABB getInflatedSelectionBox() {
+        return ((Entity) this).getBoundingBox();
+    }
+
+    default float getBonusMeleeRange() {
+        return 0f;
     }
 }

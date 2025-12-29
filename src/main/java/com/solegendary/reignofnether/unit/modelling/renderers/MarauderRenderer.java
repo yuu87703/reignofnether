@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @OnlyIn(Dist.CLIENT)
 public class MarauderRenderer extends MobRenderer<MarauderUnit, MarauderModel<MarauderUnit>> {
 
-    public static final float SCALE_MULT = 1.5f;
+    public static final float SCALE_MULT = 1.0f;
 
     private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath("reignofnether", "textures/entities/marauder_unit.png");
     private static final ResourceLocation TEXTURE_LOCATION_ARMORED = ResourceLocation.fromNamespaceAndPath("reignofnether", "textures/entities/marauder_unit_armored.png");

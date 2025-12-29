@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
+import com.solegendary.reignofnether.unit.units.piglins.MarauderUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
@@ -114,6 +115,10 @@ public class AbilityClientboundPacket {
                         if (unit instanceof NecromancerUnit necromancer) {
                             necromancer.souls = (int) value;
                             necromancer.updateAbilityButtons();
+                        }
+                    } else if (this.unitAction == UnitAction.SET_ATTACK_COUNT) {
+                        if (unit instanceof MarauderUnit marauderUnit) {
+                            marauderUnit.attacksToNextBigHit = (int) value;
                         }
                     }
                 });

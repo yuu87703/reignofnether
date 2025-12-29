@@ -131,6 +131,8 @@ public enum UnitAction {
     STARTRTS_MONSTERS,
     STARTRTS_PIGLINS,
 
+    SET_ATTACK_COUNT, // for marauders
+
     DEBUG1,
     DEBUG2
 }

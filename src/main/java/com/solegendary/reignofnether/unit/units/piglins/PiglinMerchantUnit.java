@@ -558,7 +558,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                     }
                 }
                 else if ((unit instanceof HoglinUnit && !(unit instanceof ArmouredHoglinUnit)) ||
-                        (unit instanceof WitherSkeletonUnit wither && !wither.hasNetheriteChestplate())) {
+                        (unit instanceof WitherSkeletonUnit wither && !wither.hasNetheriteChestplate()) ||
+                        (unit instanceof MarauderUnit marauder && !marauder.hasNetheriteChestplate())) {
                     items.add(new ItemStack(Items.NETHERITE_CHESTPLATE));
                 } else {
                     items.add(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE));
@@ -600,5 +601,15 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         setMana(getMana() + (resourceBonus * LootExplosion.MANA_REFUND_PER_100_RESOURCES));
     }
 
+    @Override
+    public AABB getInflatedSelectionBox() {
+        AABB aabb = this.getBoundingBox().inflate(0.6f, 0, 0.6f);
+        aabb.setMaxY(aabb.maxY + 0.8f);
+        return aabb;
+    }
 
+    @Override
+    public float getBonusMeleeRange() {
+        return 0.6f;
+    }
 }

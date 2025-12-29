@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.abilities.Bloodlust;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
@@ -9,9 +10,11 @@ import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -25,7 +28,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -36,6 +41,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -47,7 +53,7 @@ import static com.solegendary.reignofnether.ability.abilities.Bloodlust.BLOODLUS
 public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, KeyframeAnimated {
     public static final Abilities ABILITIES = new Abilities();
     static {
-        ABILITIES.add(new Bloodlust(), Keybindings.keyW);
+        ABILITIES.add(new Bloodlust(), Keybindings.keyQ);
     }
 
     //region
@@ -135,7 +141,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
-    public float getUnitAttackDamage() {return attackDamage;}
+    public float getUnitAttackDamage() {return isNextHitBig() ? attackDamageBigHit : attackDamage;}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
     public Goal getAttackGoal() { return attackGoal; }
@@ -151,7 +157,8 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         return (int) (20 / attacksPerSecond);
     }
 
-    final static public float attackDamage = 8.0f;
+    final static public float attackDamage = 7.0f;
+    final static public float attackDamageBigHit = 10.0f;
     final static public float attacksPerSecond = 0.4f;
     final static public float attackRange = 2; // only used by ranged units or melee building attackers
     final static public float aggroRange = 10;
@@ -166,6 +173,9 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
 
     public int bloodlustTicks = 0;
 
+    private final int ATTACKS_TO_BIG_HIT_MAX = 2;
+    public int attacksToNextBigHit = 2;
+
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
@@ -175,7 +185,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 32;
+    final static private int ATTACK_WINDUP_TICKS = 20;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -198,7 +208,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         animateScaleReducing = false;
         switch (animAction) {
             case ATTACK_UNIT, ATTACK_BUILDING -> {
-                activeAnimDef = MarauderAnimations.ATTACK_SLAM;
+                activeAnimDef = isNextHitBig() ? MarauderAnimations.ATTACK_SWING : MarauderAnimations.ATTACK_SLAM;
                 activeAnimState = attackAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
@@ -210,6 +220,10 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public MarauderUnit(EntityType<? extends PiglinBrute> entityType, Level level) {
         super(entityType, level);
         updateAbilityButtons();
+    }
+
+    private boolean isNextHitBig() {
+        return attacksToNextBigHit == 0;
     }
 
     @Override
@@ -231,7 +245,9 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
                 .add(Attributes.MOVEMENT_SPEED, MarauderUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, MarauderUnit.maxHealth)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
-                .add(Attributes.ARMOR, MarauderUnit.armorValue);
+                .add(Attributes.ARMOR, MarauderUnit.armorValue)
+                .add(Attributes.ATTACK_KNOCKBACK, 0f)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5f);
     }
 
     @Override
@@ -253,8 +269,31 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         Unit.tick(this);
         AttackerUnit.tick(this);
 
+        if (level().isClientSide() && animateTicks > 0) {
+            animateTicks -= 1;
+        }
+
         if (bloodlustTicks > 0)
             bloodlustTicks -= 1;
+    }
+
+    @Override
+    public boolean doHurtTarget(@NotNull Entity pEntity) {
+        boolean result;
+        if (isNextHitBig()) {
+            this.getAttribute(Attributes.ATTACK_KNOCKBACK).addTransientModifier(new AttributeModifier("knockback", 1.5f, AttributeModifier.Operation.ADDITION));
+            result = super.doHurtTarget(pEntity);
+            if (pEntity instanceof LivingEntity le) {
+                le.addEffect(new MobEffectInstance(MobEffectRegistrar.STUN.get(), 30));
+            }
+            this.getAttribute(Attributes.ATTACK_KNOCKBACK).removeModifiers();
+            attacksToNextBigHit = ATTACKS_TO_BIG_HIT_MAX;
+        } else {
+            result = super.doHurtTarget(pEntity);
+            attacksToNextBigHit -= 1;
+        }
+        AbilityClientboundPacket.doAbility(getId(), UnitAction.SET_ATTACK_COUNT, attacksToNextBigHit);
+        return result;
     }
 
     @Override
@@ -274,8 +313,8 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new MeleeAttackUnitGoal(this, false);
-        this.attackBuildingGoal = new MeleeAttackBuildingGoal(this);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
 
     }
@@ -317,16 +356,8 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     @Override
     public boolean canPickUpEquipment(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return (item == Items.GOLDEN_CHESTPLATE ||
-                item == Items.GOLDEN_LEGGINGS ||
-                item == Items.GOLDEN_BOOTS ||
-                item == Items.GOLDEN_HELMET ||
-                item == Items.NETHERITE_CHESTPLATE ||
-                item == Items.NETHERITE_LEGGINGS ||
-                item == Items.NETHERITE_BOOTS ||
-                item == Items.NETHERITE_HELMET ||
-                item == Items.NETHERITE_SWORD) &&
-                getItemBySlot(getEquipmentSlotForItem(itemStack)).getItem() != item;
+        return item == Items.NETHERITE_CHESTPLATE &&
+                !hasItemInSlot(EquipmentSlot.CHEST);
     }
 
     @Override
@@ -337,5 +368,17 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     @Override
     public boolean hasBonusAttackSpeed() {
         return bloodlustTicks > 0;
+    }
+
+    @Override
+    public AABB getInflatedSelectionBox() {
+        AABB aabb = this.getBoundingBox().inflate(0.5f, 0, 0.5f);
+        aabb.setMaxY(aabb.maxY + 0.8f);
+        return aabb;
+    }
+
+    @Override
+    public float getBonusMeleeRange() {
+        return isNextHitBig() ? 1.2f : 0.6f;
     }
 }

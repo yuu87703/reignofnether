@@ -318,7 +318,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 .add(Attributes.MAX_HEALTH, WretchedWraithUnit.maxHealth)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
                 .add(Attributes.ARMOR, WretchedWraithUnit.armorValue)
-                .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0); // needs to be added for parent to work
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5f);
     }
 
     public void tick() {

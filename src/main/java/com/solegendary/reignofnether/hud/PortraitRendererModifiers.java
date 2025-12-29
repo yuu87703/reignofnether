@@ -122,6 +122,9 @@ public class PortraitRendererModifiers {
         } else if (entity instanceof EnchanterUnit) {
             yOffset = -36;
             scale = -16;
+        } else if (entity instanceof MarauderUnit) {
+            yOffset = -34;
+            scale = -22;
         }
 
         return new Pair<>(yOffset, scale);

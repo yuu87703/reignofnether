@@ -797,9 +797,8 @@ public class UnitClientEvents {
                         continue;
 
                     AABB entityAABB = entity.getBoundingBox();
-                    if (entity instanceof PiglinMerchantUnit) {
-                        entityAABB = entityAABB.inflate(0.6f, 0, 0.6f);
-                        entityAABB.setMaxY(entityAABB.maxY + 0.8f);
+                    if (entity instanceof Unit unit) {
+                        entityAABB = unit.getInflatedSelectionBox();
                     }
 
                     boolean isPreselected = preselectedUnits.contains(entity);
@@ -830,8 +829,8 @@ public class UnitClientEvents {
 
                 // draw only the bottom of the outline boxes
                 AABB entityAABB = entity.getBoundingBox();
-                if (entity instanceof PiglinMerchantUnit) {
-                    entityAABB = entityAABB.inflate(0.6f, 0, 0.6f);
+                if (entity instanceof Unit unit) {
+                    entityAABB = unit.getInflatedSelectionBox();
                 }
                 entityAABB = entityAABB.setMaxY(entityAABB.minY);
                 boolean excludeMaxY = OrthoviewClientEvents.isEnabled();
