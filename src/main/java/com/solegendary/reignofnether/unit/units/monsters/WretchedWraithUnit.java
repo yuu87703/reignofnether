@@ -439,4 +439,9 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         if (level().isClientSide) return;
 
     }
+
+    @Override
+    public float getBonusMeleeRange() {
+        return 0.4f;
+    }
 }

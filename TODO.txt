@@ -26,6 +26,10 @@ Enchanter
     [❌] Blacksmith armour upgrades
     [🟡] Actually register new enchantments
 
+    [🟡] Breaching attacks
+    [🟡] Fortifying armour
+    [🟡] Zeal bonus damage
+
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
 
@@ -43,6 +47,7 @@ Bugfixes
 From performance changes:
     [❌] Building % and HP does not update in real time clientside
     [❌] Highlighted movement tiles are not filled correctly
+    [❌] Doubling clicking a unit adds a duplicate selected unit
 
 
 Quality of Life

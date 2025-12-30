@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -50,8 +51,10 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
@@ -901,6 +904,27 @@ public class UnitServerEvents {
                 headhunterUnit.hasFlameTrident() &&
                 evt.getAmount() > 0)
             evt.getEntity().setSecondsOnFire(4);
+
+        if (evt.getSource().getEntity() instanceof LivingEntity le) {
+            int breachLevel = le.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.BREACHING.get());
+            MobEffectInstance existingDmgIncrease = evt.getEntity().getEffect(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get());
+            if (breachLevel > 0) {
+                int amp = existingDmgIncrease != null ? breachLevel + existingDmgIncrease.getAmplifier() + 1 : breachLevel;
+                evt.getEntity().addEffect(new MobEffectInstance(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(), 100, amp));
+            }
+        }
+        if (evt.getSource().getEntity() instanceof Vex vex && vex.getOwner() instanceof EvokerUnit evokerUnit) {
+            int zealLevel = evokerUnit.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.ZEAL.get());
+            if (zealLevel > 0) {
+                evt.setAmount(evt.getAmount() + zealLevel);
+            }
+        }
+        if (evt.getSource().getEntity() instanceof EvokerFangs fangs && fangs.getOwner() instanceof EvokerUnit evokerUnit) {
+            int zealLevel = evokerUnit.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.ZEAL.get());
+            if (zealLevel > 0) {
+                evt.setAmount(evt.getAmount() + zealLevel);
+            }
+        }
     }
 
     @SubscribeEvent
