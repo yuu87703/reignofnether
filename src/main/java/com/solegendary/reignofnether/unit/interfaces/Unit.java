@@ -129,15 +129,6 @@ public interface Unit {
     public void setEatingTicksLeft(int amount);
     public int getEatingTicksLeft();
 
-    List<Keybinding> ABILITY_KEYBINDS = List.of(
-            Keybindings.keyQ,
-            Keybindings.keyW,
-            Keybindings.keyE,
-            Keybindings.keyR,
-            Keybindings.keyT,
-            Keybindings.keyY
-    );
-
     // note that attackGoal is specific to unit types
     MoveToTargetBlockGoal getMoveGoal();
     SelectedTargetGoal<?> getTargetGoal();
@@ -154,11 +145,17 @@ public interface Unit {
     String getOwnerName();
     void setOwnerName(String name);
 
+    default double getDamageTakenIncrease() {
+        MobEffectInstance mei = ((LivingEntity) this).getEffect(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get());
+        double value = mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05d;
+        return Math.round(value / 0.05d) * 0.05d;
+    }
+
     // SOURCE: armour attribute, armour items and the damage amplifier debuff
     default double getUnitPhysicalArmorPercentage() {
         Mob mob = (Mob) this;
         double dmgAfterAbsorb = CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
-        dmgAfterAbsorb += MobEffectRegistrar.getDamageTakenIncrease(mob);
+        dmgAfterAbsorb += getDamageTakenIncrease();
         return Math.round((1 - dmgAfterAbsorb)/ 0.01d) * 0.01d;
     }
 
@@ -659,14 +656,6 @@ public interface Unit {
         return List.of(fcs(I18n.get("unitstats.reignofnether.attack_damage"), true));
     }
 
-    public default boolean hasBonusDamage() {
-        return false;
-    }
-
-    public default boolean hasBonusAttackSpeed() {
-        return false;
-    }
-
     public default List<FormattedCharSequence> getAttackSpeedStatTooltip() {
         return List.of(fcs(I18n.get("unitstats.reignofnether.attack_speed"), true));
     }
@@ -748,7 +737,5 @@ public interface Unit {
         return ((Entity) this).getBoundingBox();
     }
 
-    default float getBonusMeleeRange() {
-        return 0f;
-    }
+
 }

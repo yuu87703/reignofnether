@@ -39,19 +39,11 @@ public class MobEffectRegistrar {
     public static final RegistryObject<MobEffect> DAMAGE_TAKEN_INCREASE = MOB_EFFECTS.register("damage_taken_increase", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.LUCK, "e0772108-0408-4fa3-ad55-f90f5595d610", -0.05, AttributeModifier.Operation.ADDITION));
 
-    public static double getDamageTakenIncrease(Mob mob) {
-        MobEffectInstance mei = mob.getEffect(DAMAGE_TAKEN_INCREASE.get());
-        double value = mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05d;
-        return Math.round(value / 0.05d) * 0.05d;
-    }
+    public static final RegistryObject<MobEffect> INTENSE_FIRE = MOB_EFFECTS.register("intense_fire", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFF2900)
+            .addAttributeModifier(Attributes.MOVEMENT_SPEED, "06d218a6-4328-4df1-8263-5dfc23f0c65c", -0.20, AttributeModifier.Operation.MULTIPLY_BASE));
 
     public static final RegistryObject<MobEffect> ATTACK_SLOWDOWN = MOB_EFFECTS.register("attack_slowdown", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.LUCK, "95086ec9-c6cc-41b4-a2ce-9b5cf28011e4", -0.05, AttributeModifier.Operation.MULTIPLY_BASE));
-
-    public static float getPercentAttackSlowdown(Mob mob) {
-        MobEffectInstance mei = mob.getEffect(ATTACK_SLOWDOWN.get());
-        return mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05f;
-    }
 
     public static void init(FMLJavaModLoadingContext context) {
         MOB_EFFECTS.register(context.getModEventBus());

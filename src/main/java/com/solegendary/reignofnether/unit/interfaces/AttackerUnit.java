@@ -16,6 +16,7 @@ import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,6 +36,7 @@ public interface AttackerUnit {
     public boolean getWillRetaliate();
     public int getAttackCooldown();
     public float getAttacksPerSecond();
+    public float getBaseAttacksPerSecond();
     public float getAggroRange();
     public boolean getAggressiveWhenIdle();
     public float getAttackRange();
@@ -266,4 +268,21 @@ public interface AttackerUnit {
     }
 
     public default @Nullable SoundAction getAttackSound() { return null; }
+
+    default float getBonusMeleeRange() {
+        return 0f;
+    }
+
+    public default boolean hasBonusDamage() {
+        return false;
+    }
+
+    public default float getAttackSlowdownMultiplier() {
+        MobEffectInstance mei = ((LivingEntity) (this)).getEffect(MobEffectRegistrar.ATTACK_SLOWDOWN.get());
+        return mei == null ? 1 : 1 + ((mei.getAmplifier() + 1) * 0.05f);
+    }
+
+    public default float getBuildingDamageMultiplier() {
+        return 1.0f;
+    }
 }

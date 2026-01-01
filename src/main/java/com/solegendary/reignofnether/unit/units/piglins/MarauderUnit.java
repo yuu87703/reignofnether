@@ -133,11 +133,8 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.MARAUDER;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttacksPerSecond() {
-        if (bloodlustTicks > 0)
-            return attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER;
-        return attacksPerSecond;
-    }
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -152,9 +149,9 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     // endregion
 
     public int getAttackCooldown() {
-        if (bloodlustTicks > 0)
-            return (int) (20 / (attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER));
-        return (int) (20 / attacksPerSecond);
+        int cd = (int) (20 / (attacksPerSecond));
+        cd *= BLOODLUST_ATTACK_SPEED_MULTIPLIER;
+        return (int) (cd * getAttackSlowdownMultiplier());
     }
 
     final static public float attackDamage = 7.0f;
@@ -363,11 +360,6 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     @Override
     public void onPickupEquipment(ItemStack itemStack) {
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
-    }
-
-    @Override
-    public boolean hasBonusAttackSpeed() {
-        return bloodlustTicks > 0;
     }
 
     @Override

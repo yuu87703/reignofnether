@@ -52,9 +52,9 @@ public class WraithSnowLayerBlock extends SnowLayerBlock {
             if (existingDamageIncrease == null || existingDamageIncrease.getAmplifier() < dmgIncreaseAmp) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(), 10, dmgIncreaseAmp, true, false));
             }
-            MobEffectInstance existingAttackSlowdown = livingEntity.getEffect(MobEffectRegistrar.MINOR_MOVEMENT_SLOWDOWN.get());
+            MobEffectInstance existingAttackSlowdown = livingEntity.getEffect(MobEffectRegistrar.ATTACK_SLOWDOWN.get());
             if (existingAttackSlowdown == null || existingAttackSlowdown.getAmplifier() < attackSlowdownAmp) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.MINOR_MOVEMENT_SLOWDOWN.get(), 10, attackSlowdownAmp, true, false));
+                livingEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.ATTACK_SLOWDOWN.get(), 10, attackSlowdownAmp, true, false));
             }
         }
     }

@@ -138,9 +138,11 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
     public int getAttackCooldown() {
-        return (int) (20 * (hasVigorEnchant() ? VigorEnchantment.CD_MULTIPLIER : 1) / attacksPerSecond);
+        return (int) ((20 * (hasVigorEnchant() ? VigorEnchantment.CD_MULTIPLIER : 1) / attacksPerSecond)
+                * getAttackSlowdownMultiplier());
     }
     public float getAttacksPerSecond() {return 20f / (getAttackCooldown() + 25);}
+    public float getBaseAttacksPerSecond() { return attacksPerSecond; }
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {
@@ -466,13 +468,4 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
     }
-
-    @Override
-    public boolean hasBonusAttackSpeed() {
-        return hasVigorEnchant();
-    }
-
-
-
-
 }

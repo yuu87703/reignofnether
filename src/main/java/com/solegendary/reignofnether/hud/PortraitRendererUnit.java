@@ -403,15 +403,22 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
                     ResourceLocation.fromNamespaceAndPath("reignofnether", "textures/icons/items/sword.png"),
                     atkStr,
                     UnitStatType.ATTACK_DAMAGE,
-                    unit.hasBonusDamage() ? 0xFF2BFF2B : 0xFFFFFFFF,
+                    attackerUnit.hasBonusDamage() ? 0xFF2BFF2B : 0xFFFFFFFF,
                     0
             ));
             DecimalFormat df2 = new DecimalFormat("###.##");
+
+            int atkSpdColour = 0xFFFFFFFF;
+            if (attackerUnit.getAttacksPerSecond() > attackerUnit.getBaseAttacksPerSecond()) {
+                atkSpdColour = 0xFF2BFF2B;
+            } else if (attackerUnit.getAttacksPerSecond() < attackerUnit.getBaseAttacksPerSecond()) {
+                atkSpdColour = 0xFFFC3838;
+            }
             renderedStats.add(new RenderedStat(
                     ResourceLocation.fromNamespaceAndPath("reignofnether","textures/icons/items/sparkler.png"),
                     String.valueOf(df2.format(attackerUnit.getAttacksPerSecond())),
                     UnitStatType.ATTACK_SPEED,
-                    unit.hasBonusAttackSpeed() ? 0xFF2BFF2B : 0xFFFFFFFF,
+                    atkSpdColour,
                     0
             ));
             String rangeStr;

@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
@@ -152,8 +153,8 @@ public abstract class AbstractMeleeAttackUnitGoal extends Goal {
 
     protected double getAttackReachSqr(LivingEntity target) {
         float width = mob.getBbWidth();
-        if (mob instanceof Unit unit)
-            width += unit.getBonusMeleeRange();
+        if (mob instanceof AttackerUnit attackerUnit)
+            width += attackerUnit.getBonusMeleeRange();
         if (mob instanceof SlimeUnit slime)
             width -= (0.3f * (Math.max(2, slime.getSize()) - 2));
         float targetWidth = target.getBbWidth();
