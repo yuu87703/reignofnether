@@ -38,7 +38,7 @@ public class LibraryPlacement extends ProductionPlacement {
             )) {
                 if ((
                     autoCastEnchant.isCorrectUnitAndEquipment(e) && autoCastEnchant.canAfford(this)
-                    && !autoCastEnchant.hasAnyEnchantInSlot(e)
+                    && autoCastEnchant.getMutuallyExclusiveEnchant(e) == null
                 )) {
                     mobs.add(e);
                 }

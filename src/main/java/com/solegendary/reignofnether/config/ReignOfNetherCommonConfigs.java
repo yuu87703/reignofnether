@@ -261,7 +261,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry BASIC_PORTAL = ResourceCostConfigEntry.Building(0, 75, 0, 0, ResourceCosts.BASIC_PORTAL, "Basic Portal Config");
         public static final ResourceCostConfigEntry CIVILIAN_PORTAL = ResourceCostConfigEntry.Building(0, 75, 0, 15, ResourceCosts.CIVILIAN_PORTAL, "Civilian Portal Config");
         public static final ResourceCostConfigEntry NETHERWART_FARM = ResourceCostConfigEntry.Building(0, 150, 0, 0, ResourceCosts.NETHERWART_FARM, "Netherwart Farm Config");
-        public static final ResourceCostConfigEntry BASTION = ResourceCostConfigEntry.Building(0, 150, 100, 0, ResourceCosts.BASTION, "Bastion Config");
+        public static final ResourceCostConfigEntry BASTION = ResourceCostConfigEntry.Building(0, 175, 150, 0, ResourceCosts.BASTION, "Bastion Config");
         public static final ResourceCostConfigEntry HOGLIN_STABLES = ResourceCostConfigEntry.Building(0, 150, 50, 0, ResourceCosts.HOGLIN_STABLES, "Hoglin Stables Config");
         public static final ResourceCostConfigEntry FLAME_SANCTUARY = ResourceCostConfigEntry.Building(0, 150, 200, 0, ResourceCosts.FLAME_SANCTUARY, "Flame Sanctuary Config");
         public static final ResourceCostConfigEntry WITHER_SHRINE = ResourceCostConfigEntry.Building(0, 150, 200, 0, ResourceCosts.WITHER_SHRINE, "Wither Shrine Config");

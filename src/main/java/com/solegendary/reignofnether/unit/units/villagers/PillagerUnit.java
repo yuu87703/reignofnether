@@ -138,13 +138,13 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
 
     // combat stats
     public boolean getWillRetaliate() { return willRetaliate; }
-    public int getAttackCooldown() {return (int) ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
     public float getAttacksPerSecond() {
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
         return 20f / (getAttackCooldown() + (CrossbowItem.getChargeDuration(itemStack)));
     }
     public float getBaseAttacksPerSecond() {
-        return attacksPerSecond;
+        return 20f / (getAttackCooldown() + 35);
     }
     public float getAggroRange() { return aggroRange; }
     public boolean getAggressiveWhenIdle() { return aggressiveWhenIdle && !isVehicle(); }
@@ -237,7 +237,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, false);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new UnitCrossbowAttackGoal<>(this, getAttackCooldown());
+        this.attackGoal = new UnitCrossbowAttackGoal<>(this, (int) getAttackCooldown());
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.mountGoal = new MountGoal(this);
         this.attackBuildingGoal = new RangedAttackBuildingGoal<>(this, this.attackGoal);

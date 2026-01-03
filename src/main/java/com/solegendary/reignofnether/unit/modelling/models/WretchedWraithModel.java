@@ -144,7 +144,7 @@ public class WretchedWraithModel<T extends Entity> extends KeyframeHierarchicalM
 		}
 		// walk animation
 		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
-			restart(wretchedWraith, wretchedWraith.walkAnimState, WretchedWraithAnimations.WALK, ageInTicks);
+			restart(wretchedWraith, wretchedWraith.walkAnimState, ageInTicks);
 			animateWalk(WretchedWraithAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
 		}
 		// idle animation

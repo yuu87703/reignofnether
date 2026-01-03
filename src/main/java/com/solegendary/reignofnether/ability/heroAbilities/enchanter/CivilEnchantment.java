@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -16,6 +17,7 @@ import com.solegendary.reignofnether.unit.units.villagers.EnchanterUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,6 +34,8 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class CivilEnchantment extends HeroAbility {
 
+    public static final float EFFICIENCY_SPEED_MULTIPLIER = 1.5f;
+
     public static final int RANGE = 10;
 
     public static final int CHARGES_RANK_1 = 2;
@@ -46,7 +50,7 @@ public class CivilEnchantment extends HeroAbility {
     public static final int MANA_COST_RANK_2 = 40;
     public static final int MANA_COST_RANK_3 = 30;
 
-    public static final int DURATION_SECONDS = 30;
+    public static final int DURATION_SECONDS = 60;
 
     public CivilEnchantment() {
         super(3, MANA_COST_RANK_1, UnitAction.CIVIL_ENCHANTMENT, CD_RANK_1 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
@@ -133,16 +137,13 @@ public class CivilEnchantment extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.civil_enchantment.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.civil_enchantment.tooltip2", DURATION_SECONDS)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.civil_enchantment.rank1"), getRank(hero) == 0),
-                fcs(I18n.get("abilities.reignofnether.civil_enchantment.rank2"), getRank(hero) == 1),
-                fcs(I18n.get("abilities.reignofnether.civil_enchantment.rank3"), getRank(hero) == 2)
+                fcs(I18n.get("abilities.reignofnether.civil_enchantment.rank1", CHARGES_RANK_1, CD_RANK_1), getRank(hero) == 0),
+                fcs(I18n.get("abilities.reignofnether.civil_enchantment.rank2", CHARGES_RANK_2, CD_RANK_2), getRank(hero) == 1),
+                fcs(I18n.get("abilities.reignofnether.civil_enchantment.rank3", CHARGES_RANK_3, CD_RANK_3), getRank(hero) == 2)
         );
     }
 
-    public static boolean canEnchantUnit(LivingEntity unit) {
-        return ALLOWED_MOB_TYPES.contains(unit.getType()) &&
-                !unit.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().containsKey(Enchantments.BLOCK_EFFICIENCY);
-    }
+    // actually we don't enchant anything, we just give the unit haste instead
 
     private final static List<EntityType<? extends Mob>> ALLOWED_MOB_TYPES = List.of(
             EntityRegistrar.VILLAGER_UNIT.get()
@@ -155,7 +156,7 @@ public class CivilEnchantment extends HeroAbility {
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error3"));
             return;
         }
-        if (targetEntity.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().containsKey(Enchantments.BLOCK_EFFICIENCY)) {
+        if (targetEntity instanceof Unit unit && unit.hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
             if (level.isClientSide())
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error4"));
             return;

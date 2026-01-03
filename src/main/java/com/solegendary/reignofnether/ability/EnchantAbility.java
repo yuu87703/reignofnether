@@ -12,6 +12,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -19,7 +20,9 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.Map;
 
 public abstract class EnchantAbility extends Ability {
 
@@ -67,16 +70,19 @@ public abstract class EnchantAbility extends Ability {
         return false;
     }
 
-    public boolean hasAnyEnchantInSlot(LivingEntity entity) { return false; }
-
     protected boolean hasSameEnchant(LivingEntity entity) {
-        return false;
+        return entity.getItemBySlot(equipmentSlot).getAllEnchantments().containsKey(getEnchantment());
     }
 
     protected void doEnchant(LivingEntity entity) {
         ItemStack item = entity.getItemBySlot(equipmentSlot);
+        Enchantment enchantToRemove = getMutuallyExclusiveEnchant(entity);
         if (item != ItemStack.EMPTY) {
-            EnchantmentHelper.setEnchantments(new HashMap<>(), item);
+            if (enchantToRemove != null) {
+                Map<Enchantment, Integer> enchants = new HashMap<>(item.getAllEnchantments());
+                enchants.remove(enchantToRemove);
+                EnchantmentHelper.setEnchantments(enchants, item);
+            }
             item.enchant(getEnchantment(), enchantmentLevel);
         }
     }
@@ -120,5 +126,10 @@ public abstract class EnchantAbility extends Ability {
                 playSound(level, te);
             }
         }
+    }
+
+    @Nullable
+    public Enchantment getMutuallyExclusiveEnchant(LivingEntity entity) {
+        return null;
     }
 }

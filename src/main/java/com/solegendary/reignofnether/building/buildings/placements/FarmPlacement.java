@@ -1,12 +1,19 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.CivilEnchantment;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingBlock;
 import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
+import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,6 +52,16 @@ public class FarmPlacement extends BuildingPlacement {
         }
     }
 
+    private boolean hasEfficiencyWorker() {
+        for (LivingEntity le : UnitServerEvents.getAllUnits()) {
+            if (le instanceof VillagerUnit villagerUnit && isPosInsideBuilding(villagerUnit.getOnPos())) {
+                if (villagerUnit.hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get()))
+                    return true;
+            }
+        }
+        return false;
+    }
+
     // tick crop growth here to have precise control over growth speed with no RNG
     private void tickCrops() {
         for (FarmCropBlock farmBlock : farmBlocks) {
@@ -52,8 +69,13 @@ public class FarmPlacement extends BuildingPlacement {
             BlockState bs = level.getBlockState(farmBlock.bp);
             Block block = bs.getBlock();
 
+            int ticksToIncrement = TICK_CROPS_INTERVAL;
+            if (hasEfficiencyWorker()) {
+                ticksToIncrement = (int) (TICK_CROPS_INTERVAL * CivilEnchantment.EFFICIENCY_SPEED_MULTIPLIER);
+            }
+
             if (block instanceof CropBlock cropBlock && (cropBlock == Blocks.WHEAT || cropBlock == Blocks.CARROTS || cropBlock == Blocks.POTATOES)) {
-                farmBlock.tickAge += TICK_CROPS_INTERVAL;
+                farmBlock.tickAge += ticksToIncrement;
                 int age = bs.getValue(BlockStateProperties.AGE_7);
                 if (farmBlock.tickAge >= CROP_GROW_TICKS) {
                     int newAge = Math.min(7, age + 1);
@@ -62,8 +84,8 @@ public class FarmPlacement extends BuildingPlacement {
                     farmBlock.tickAge = 0;
                 }
             }
-            if (block instanceof StemBlock stemBlock) {
-                farmBlock.tickAge += TICK_CROPS_INTERVAL;
+            else if (block instanceof StemBlock stemBlock) {
+                farmBlock.tickAge += ticksToIncrement;
                 int age = bs.getValue(BlockStateProperties.AGE_7);
                 if (age >= 7 && farmBlock.tickAge >= GOURD_GROW_TICKS) {
                     growGourd(stemBlock, farmBlock.bp);
@@ -76,7 +98,7 @@ public class FarmPlacement extends BuildingPlacement {
                 }
             }
             else if (block instanceof NetherWartBlock) {
-                farmBlock.tickAge += TICK_CROPS_INTERVAL;
+                farmBlock.tickAge += ticksToIncrement;
                 int age = bs.getValue(BlockStateProperties.AGE_3);
                 if (farmBlock.tickAge >= NETHER_WART_GROW_TICKS) {
                     int newAge = Math.min(3, age + 1);

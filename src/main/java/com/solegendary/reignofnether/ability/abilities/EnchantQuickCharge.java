@@ -80,4 +80,13 @@ public class EnchantQuickCharge extends EnchantAbility {
         return entity instanceof PillagerUnit &&
                 entity.getItemBySlot(equipmentSlot).getItem() instanceof CrossbowItem;
     }
+
+    @Override
+    public Enchantment getMutuallyExclusiveEnchant(LivingEntity entity) {
+        for (Enchantment enchantment : entity.getItemBySlot(equipmentSlot).getAllEnchantments().keySet()) {
+            if (enchantment == Enchantments.MULTISHOT || enchantment == getEnchantment())
+                return enchantment;
+        }
+        return null;
+    }
 }

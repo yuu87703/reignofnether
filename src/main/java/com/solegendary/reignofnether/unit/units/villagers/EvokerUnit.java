@@ -137,7 +137,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {
+    public float getAttackCooldown() {
         return (int) ((20 * (hasVigorEnchant() ? VigorEnchantment.CD_MULTIPLIER : 1) / attacksPerSecond)
                 * getAttackSlowdownMultiplier());
     }

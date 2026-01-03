@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitCommand;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
@@ -52,10 +53,10 @@ public class MarchOfProgress extends HeroAbility {
         return new AbilityButton("March of Progress",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/enchanted_book.png"),
                 hotkey,
-                () -> CursorClientEvents.getLeftClickAction() == UnitAction.MARCH_OF_PROGRESS,
+                () -> false,
                 () -> getRank(hero) == 0,
                 () -> true,
-                () -> CursorClientEvents.setLeftClickAction(UnitAction.MARCH_OF_PROGRESS),
+                () -> sendUnitCommand(UnitAction.MARCH_OF_PROGRESS),
                 null,
                 getTooltipLines((HeroUnit) hero),
                 this,

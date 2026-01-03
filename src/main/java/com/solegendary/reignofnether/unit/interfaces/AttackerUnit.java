@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 public interface AttackerUnit {
 
     public boolean getWillRetaliate();
-    public int getAttackCooldown();
+    public float getAttackCooldown();
     public float getAttacksPerSecond();
     public float getBaseAttacksPerSecond();
     public float getAggroRange();

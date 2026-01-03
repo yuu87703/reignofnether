@@ -124,7 +124,7 @@ public class NecromancerModel<T extends Entity> extends KeyframeHierarchicalMode
 		}
 		// walk animation
 		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
-			restart(necromancer, necromancer.walkAnimState, NecromancerAnimations.WALK, ageInTicks);
+			restart(necromancer, necromancer.walkAnimState, ageInTicks);
 			animateWalk(NecromancerAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
 		}
 		// idle animation

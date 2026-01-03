@@ -79,4 +79,13 @@ public class EnchantMaiming extends EnchantAbility {
         return entity instanceof VindicatorUnit &&
                 entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof AxeItem;
     }
+
+    @Override
+    public Enchantment getMutuallyExclusiveEnchant(LivingEntity entity) {
+        for (Enchantment enchantment : entity.getItemBySlot(equipmentSlot).getAllEnchantments().keySet()) {
+            if (enchantment == Enchantments.SHARPNESS || enchantment == getEnchantment())
+                return enchantment;
+        }
+        return null;
+    }
 }

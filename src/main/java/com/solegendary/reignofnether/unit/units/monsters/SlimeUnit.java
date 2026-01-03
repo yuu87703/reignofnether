@@ -131,7 +131,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
@@ -189,7 +189,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     }
 
     // big slimes sometimes bounce off of each other midair
-    public final int PUSH_ATTACK_CD_MAX = getAttackCooldown();
+    public final int PUSH_ATTACK_CD_MAX = (int) getAttackCooldown();
     public int pushAttackCd = 0;
 
     public boolean isPushable() {
@@ -537,7 +537,13 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         return result;
     }
 
+    @Override
+    public float getBonusMeleeRange() {
+        return -0.3f * (Math.max(2, getSize()) - 2);
+    }
 
-
-
+    @Override
+    public float getBonusMeleeRangeForAttackers() {
+        return 0.3f * (Math.max(2, getSize()) - 2);
+    }
 }

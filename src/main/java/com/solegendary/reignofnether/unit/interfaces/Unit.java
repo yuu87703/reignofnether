@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.interfaces;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.building.production.ProductionItems;
@@ -39,6 +40,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.damagesource.CombatRules;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -298,7 +300,7 @@ public interface Unit {
         }
 
         if (unitMob.tickCount % 20 == 0) {
-            if (unitMob.hasEffect(MobEffectRegistrar.UNCONTROLLABLE.get())) {
+            if (unit.hasEffectWithDuration(MobEffectRegistrar.UNCONTROLLABLE.get())) {
                 addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
             }
         }
@@ -349,7 +351,7 @@ public interface Unit {
         if (unitMob.tickCount % 80 == 0) {
             int fortifyingLevel = unitMob.getItemBySlot(EquipmentSlot.CHEST).getEnchantmentLevel(EnchantmentRegistrar.FORTYIFYING.get());
             float absorbHp = unitMob.getAbsorptionAmount();
-            if (fortifyingLevel > 0 && absorbHp < fortifyingLevel * 20)
+            if (fortifyingLevel > 0 && absorbHp < fortifyingLevel * ProtectiveEnchantment.MAX_ABSORB_HP)
                 unitMob.setAbsorptionAmount(absorbHp + 1);
         }
     }
@@ -737,5 +739,12 @@ public interface Unit {
         return ((Entity) this).getBoundingBox();
     }
 
+    default boolean hasEffectWithDuration(MobEffect mobEffect) {
+        MobEffectInstance mei = ((LivingEntity) this).getEffect(mobEffect);
+        return mei != null && mei.getDuration() > 0;
+    }
 
+    default float getBonusMeleeRangeForAttackers() {
+        return 0.4f;
+    }
 }

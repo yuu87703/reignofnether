@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -153,9 +154,10 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
 
     // endregion
 
-    public int getAttackCooldown() {
+    public float getAttackCooldown() {
         int cd = (int) (20 / (attacksPerSecond));
-        cd *= BLOODLUST_ATTACK_SPEED_MULTIPLIER;
+        if (hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()))
+            cd *= (1 / BLOODLUST_ATTACK_SPEED_MULTIPLIER);
         return (int) (cd * getAttackSlowdownMultiplier());
     }
 
@@ -170,8 +172,6 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.24f;
     public int maxResources = 100;
-
-    public int bloodlustTicks = 0;
 
     public int fogRevealDuration = 0; // set > 0 for the client who is attacked by this unit
     public int getFogRevealDuration() { return fogRevealDuration; }
@@ -222,9 +222,6 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         Unit.tick(this);
         AttackerUnit.tick(this);
         this.mountGoal.tick();
-
-        if (bloodlustTicks > 0)
-            bloodlustTicks -= 1;
     }
 
     @Override

@@ -205,7 +205,7 @@ public class WildfireModel<T extends Entity> extends KeyframeHierarchicalModel<T
 			}
 			// walk animation
 			if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
-				restart(wildfire, wildfire.walkAnimState, WildfireAnimations.WALK, ageInTicks);
+				restart(wildfire, wildfire.walkAnimState, ageInTicks);
 				animateWalk(WildfireAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
 			}
 			// idle animation

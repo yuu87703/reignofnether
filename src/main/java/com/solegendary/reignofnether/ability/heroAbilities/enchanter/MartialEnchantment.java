@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -52,7 +53,7 @@ public class MartialEnchantment extends HeroAbility {
         super(3, MANA_COST_RANK_1, UnitAction.MARTIAL_ENCHANTMENT, CD_RANK_1 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
         maxCharges = CHARGES_RANK_1;
         this.autocastEnableAction = UnitAction.MARTIAL_ENCHANTMENT_AUTOCAST_ENABLE;
-        this.autocastDisableAction = UnitAction.MARTIAL_ENCHANTMENT_AUTOCAST_ENABLE;
+        this.autocastDisableAction = UnitAction.MARTIAL_ENCHANTMENT_AUTOCAST_DISABLE;
     }
 
     @Override
@@ -133,9 +134,9 @@ public class MartialEnchantment extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.martial_enchantment.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.martial_enchantment.tooltip2")),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.martial_enchantment.rank1"), getRank(hero) == 0),
-                fcs(I18n.get("abilities.reignofnether.martial_enchantment.rank2"), getRank(hero) == 1),
-                fcs(I18n.get("abilities.reignofnether.martial_enchantment.rank3"), getRank(hero) == 2)
+                fcs(I18n.get("abilities.reignofnether.martial_enchantment.rank1", CHARGES_RANK_1, CD_RANK_1), getRank(hero) == 0),
+                fcs(I18n.get("abilities.reignofnether.martial_enchantment.rank2", CHARGES_RANK_2, CD_RANK_2), getRank(hero) == 1),
+                fcs(I18n.get("abilities.reignofnether.martial_enchantment.rank3", CHARGES_RANK_3, CD_RANK_3), getRank(hero) == 2)
         );
     }
 
@@ -151,18 +152,12 @@ public class MartialEnchantment extends HeroAbility {
         if (unit instanceof MilitiaUnit militiaUnit)
             return militiaUnit.isUsingBow() ? Enchantments.POWER_ARROWS : Enchantments.SHARPNESS;
         if (unit instanceof VindicatorUnit)
-            return Enchantments.SHARPNESS;
+            return EnchantmentRegistrar.BREACHING.get();
         if (unit instanceof PillagerUnit)
             return Enchantments.PIERCING;
         if (unit instanceof EvokerUnit)
-            return Enchantments.IMPALING;
+            return EnchantmentRegistrar.ZEAL.get();
         return null;
-    }
-
-    public static boolean canEnchantUnit(LivingEntity unit) {
-        return ALLOWED_MOB_TYPES.contains(unit.getType()) &&
-                !unit.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty() &&
-                !unit.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().containsKey(getEnchantmentForUnit(unit));
     }
 
     @Override

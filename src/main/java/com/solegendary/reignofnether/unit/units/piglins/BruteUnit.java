@@ -135,9 +135,10 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.BRUTE;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {
+    public float getAttackCooldown() {
         int cd = (int) (20 / (attacksPerSecond));
-        cd *= BLOODLUST_ATTACK_SPEED_MULTIPLIER;
+        if (hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()))
+            cd *= (1 / BLOODLUST_ATTACK_SPEED_MULTIPLIER);
         return (int) (cd * getAttackSlowdownMultiplier());
     }
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
@@ -167,8 +168,6 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     final static public float rangedDamageResist = 0.2f;
 
     public int maxResources = 100;
-
-    public int bloodlustTicks = 0;
 
     public boolean isHoldingUpShield = false;
 
@@ -242,9 +241,6 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         super.tick();
         Unit.tick(this);
         AttackerUnit.tick(this);
-
-        if (bloodlustTicks > 0)
-            bloodlustTicks -= 1;
     }
 
     @Override

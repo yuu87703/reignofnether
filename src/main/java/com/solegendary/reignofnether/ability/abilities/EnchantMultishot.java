@@ -79,4 +79,13 @@ public class EnchantMultishot extends EnchantAbility {
         return entity instanceof PillagerUnit &&
                 entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof CrossbowItem;
     }
+
+    @Override
+    public Enchantment getMutuallyExclusiveEnchant(LivingEntity entity) {
+        for (Enchantment enchantment : entity.getItemBySlot(equipmentSlot).getAllEnchantments().keySet()) {
+            if (enchantment == Enchantments.QUICK_CHARGE || enchantment == getEnchantment())
+                return enchantment;
+        }
+        return null;
+    }
 }

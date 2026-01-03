@@ -43,11 +43,8 @@ Bugfixes
 [❌] Fixed sculk catalysts not spreading any sculk
     - Seems to be intermittent, changes when relogging?
 
+[❌] When multiple of the same KFA unit is attacking, their animation states seem to be affecting each other
 
-From performance changes:
-    [❌] Building % and HP does not update in real time clientside
-    [❌] Highlighted movement tiles are not filled correctly
-    [❌] Doubling clicking a unit adds a duplicate selected unit
 
 
 Quality of Life
@@ -61,6 +58,7 @@ Balance
 [❌] Prevent friendly fire from wither skeleton clouds
     - Might need to create a new AreaEffectCloud entity
 [🟡] Headhunters no longer require a bastion to be trained
+[🟡] Bastion cost raised from (150 wood, 100 ore) to (175 wood, 150 ore)
 
 Languages
 ---------

@@ -171,11 +171,11 @@ public class MarauderModel<T extends Entity> extends KeyframeHierarchicalModel<T
 
 		// any once-off animation like attack or cast spell
 		if (marauder.activeAnimDef != null && marauder.activeAnimState != null && marauder.animateTicks > 0) {
-			restartThenAnimate(marauder, marauder.activeAnimState, marauder.activeAnimDef, ageInTicks, marauder.animateScale);
+			restartThenAnimate(marauder, marauder.activeAnimState, marauder.activeAnimDef, ageInTicks, marauder.animateScale, marauder.getAnimationSpeed());
 		}
 		// walk animation
 		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
-			restart(marauder, marauder.walkAnimState, MarauderAnimations.WALK, ageInTicks);
+			restart(marauder, marauder.walkAnimState, ageInTicks);
 			animateWalk(MarauderAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
 		}
 		// idle animation

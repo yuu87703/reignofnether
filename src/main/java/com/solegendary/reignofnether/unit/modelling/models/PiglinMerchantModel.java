@@ -151,7 +151,7 @@ public class PiglinMerchantModel<T extends Entity> extends KeyframeHierarchicalM
 		}
 		// walk animation
 		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
-			restart(merchant, merchant.walkAnimState, PiglinMerchantAnimations.WALK, ageInTicks);
+			restart(merchant, merchant.walkAnimState, ageInTicks);
 			animateWalk(PiglinMerchantAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
 		}
 		// idle animation

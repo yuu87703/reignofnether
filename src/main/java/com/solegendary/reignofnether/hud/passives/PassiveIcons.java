@@ -81,7 +81,7 @@ public class PassiveIcons {
             )
     );
     public static final EnchantmentIcon FORTIFYING = new EnchantmentIcon(
-            Enchantments.MENDING,
+            EnchantmentRegistrar.FORTYIFYING.get(),
             EquipmentSlot.CHEST,
             getEnchantedItemStack(Items.IRON_CHESTPLATE),
             List.of(
@@ -99,7 +99,7 @@ public class PassiveIcons {
             )
     );
     public static final EnchantmentIcon ZEAL = new EnchantmentIcon(
-            Enchantments.IMPALING,
+            EnchantmentRegistrar.ZEAL.get(),
             EquipmentSlot.MAINHAND,
             getEnchantedItemStack(Items.NETHER_STAR),
             List.of(
@@ -117,7 +117,7 @@ public class PassiveIcons {
             )
     );
     public static final EnchantmentIcon BREACHING = new EnchantmentIcon(
-            Enchantments.SWEEPING_EDGE,
+            EnchantmentRegistrar.BREACHING.get(),
             EquipmentSlot.MAINHAND,
             getEnchantedItemStack(Items.DIAMOND_AXE),
             List.of(
@@ -159,6 +159,7 @@ public class PassiveIcons {
             MAIMING,
             SHARPNESS,
             VIGOR,
+            ZEAL,
             EFFICIENCY,
             FORTIFYING,
             POWER,

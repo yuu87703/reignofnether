@@ -148,9 +148,10 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
 
     // endregion
 
-    public int getAttackCooldown() {
+    public float getAttackCooldown() {
         int cd = (int) (20 / (attacksPerSecond));
-        cd *= BLOODLUST_ATTACK_SPEED_MULTIPLIER;
+        if (hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()))
+            cd *= (1 / BLOODLUST_ATTACK_SPEED_MULTIPLIER);
         return (int) (cd * getAttackSlowdownMultiplier());
     }
 
@@ -168,8 +169,6 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
 
     public int maxResources = 100;
 
-    public int bloodlustTicks = 0;
-
     private final int ATTACKS_TO_BIG_HIT_MAX = 2;
     public int attacksToNextBigHit = 2;
 
@@ -182,7 +181,19 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 20;
+    private float ageInTicksOffset = 0;
+    public float getAgeInTicksOffset() { return ageInTicksOffset; }
+    public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
+
+    @Override
+    public int getAttackWindupTicks() {
+        return hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()) ? 10 : 16;
+    }
+
+    @Override
+    public float getAnimationSpeed() {
+        return hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()) ? 2.0f : 1.2f;
+    }
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -269,9 +280,6 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         if (level().isClientSide() && animateTicks > 0) {
             animateTicks -= 1;
         }
-
-        if (bloodlustTicks > 0)
-            bloodlustTicks -= 1;
     }
 
     @Override
@@ -284,13 +292,20 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
                 le.addEffect(new MobEffectInstance(MobEffectRegistrar.STUN.get(), 30));
             }
             this.getAttribute(Attributes.ATTACK_KNOCKBACK).removeModifiers();
-            attacksToNextBigHit = ATTACKS_TO_BIG_HIT_MAX;
         } else {
             result = super.doHurtTarget(pEntity);
-            attacksToNextBigHit -= 1;
         }
-        AbilityClientboundPacket.doAbility(getId(), UnitAction.SET_ATTACK_COUNT, attacksToNextBigHit);
+        decrementAttacks();
         return result;
+    }
+
+    public void decrementAttacks() {
+        if (isNextHitBig())
+            attacksToNextBigHit = ATTACKS_TO_BIG_HIT_MAX;
+        else
+            attacksToNextBigHit -= 1;
+        if (!level().isClientSide())
+            AbilityClientboundPacket.doAbility(getId(), UnitAction.SET_ATTACK_COUNT, attacksToNextBigHit);
     }
 
     @Override
@@ -310,8 +325,8 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
 
     }
@@ -372,5 +387,15 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     @Override
     public float getBonusMeleeRange() {
         return isNextHitBig() ? 1.2f : 0.6f;
+    }
+
+    @Override
+    public float getBonusMeleeRangeForAttackers() {
+        return 0.4f;
+    }
+
+    @Override
+    public boolean hasBonusDamage() {
+        return isNextHitBig();
     }
 }

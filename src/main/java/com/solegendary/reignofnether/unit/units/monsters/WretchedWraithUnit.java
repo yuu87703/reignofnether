@@ -156,7 +156,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
@@ -242,8 +242,14 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
-    final static private int ATTACK_WINDUP_TICKS = 12; // (int) (NecromancerAnimations.ATTACK.lengthInSeconds() * 20f * 0.22f);
+    private float ageInTicksOffset = 0;
+    public float getAgeInTicksOffset() { return ageInTicksOffset; }
+    public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
+
+    @Override
+    public int getAttackWindupTicks() {
+        return 12;
+    }
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -384,8 +390,8 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, false);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
 
         this.castIceNovaGoal = new GenericUntargetedSpellGoal(
@@ -445,5 +451,10 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     @Override
     public float getBonusMeleeRange() {
         return 0.4f;
+    }
+
+    @Override
+    public float getBonusMeleeRangeForAttackers() {
+        return 0.3f;
     }
 }

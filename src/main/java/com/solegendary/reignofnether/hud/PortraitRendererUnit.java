@@ -409,9 +409,12 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
             DecimalFormat df2 = new DecimalFormat("###.##");
 
             int atkSpdColour = 0xFFFFFFFF;
-            if (attackerUnit.getAttacksPerSecond() > attackerUnit.getBaseAttacksPerSecond()) {
+            float attacksPerSecond = Math.round(attackerUnit.getAttacksPerSecond() * 100f) / 100f;
+            float baseAttacksPerSecond = Math.round(attackerUnit.getBaseAttacksPerSecond() * 100f) / 100f;
+
+            if (attacksPerSecond > baseAttacksPerSecond) {
                 atkSpdColour = 0xFF2BFF2B;
-            } else if (attackerUnit.getAttacksPerSecond() < attackerUnit.getBaseAttacksPerSecond()) {
+            } else if (attacksPerSecond < baseAttacksPerSecond) {
                 atkSpdColour = 0xFFFC3838;
             }
             renderedStats.add(new RenderedStat(

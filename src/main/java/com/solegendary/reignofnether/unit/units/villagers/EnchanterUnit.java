@@ -4,7 +4,16 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.CivilEnchantment;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MarchOfProgress;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MartialEnchantment;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingPresencePassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.IceNova;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -24,10 +33,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -36,6 +47,8 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -48,7 +61,10 @@ import java.util.List;
 public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit, KeyframeAnimated {
     public static final Abilities ABILITIES = new Abilities();
     static {
-
+        ABILITIES.add(new CivilEnchantment());
+        ABILITIES.add(new MartialEnchantment());
+        ABILITIES.add(new ProtectiveEnchantment());
+        ABILITIES.add(new MarchOfProgress());
     }
 
     @Override
@@ -140,7 +156,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
@@ -219,7 +235,14 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 12;
+    private float ageInTicksOffset = 0;
+    public float getAgeInTicksOffset() { return ageInTicksOffset; }
+    public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
+
+    @Override
+    public int getAttackWindupTicks() {
+        return 12;
+    }
 
     private static final double KNOCKBACK_RESISTANCE = 0.5d;
 
@@ -249,14 +272,14 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            case CHARGE_SPELL -> {
-                activeAnimDef = EnchanterAnimations.SPELL_CHARGE;
+            case CAST_SPELL -> {
+                activeAnimDef = EnchanterAnimations.SPELL_FAST;
                 activeAnimState = spellChargeAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            case CAST_SPELL -> {
-                activeAnimDef = EnchanterAnimations.SPELL_ACTIVATE;
+            case ULTIMATE -> {
+                activeAnimDef = EnchanterAnimations.ULTIMATE;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
@@ -367,8 +390,8 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.castEnchantCivilGoal = new GenericTargetedSpellGoal(
                 this,
@@ -434,19 +457,33 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         this.castAuraGoal.stop();
     }
 
-    public void enchantCivilian(LivingEntity entity) {
+    private void playEnchantSound(Level level) {
+        level.playLocalSound(getX(), getY(), getZ(),
+                SoundEvents.ENCHANTMENT_TABLE_USE, getSoundSource(), 1.0F + getRandom().nextFloat(),
+                getRandom().nextFloat() * 0.7F + 0.3F, false);
+    }
 
+    public void enchantCivilian(LivingEntity entity) {
+        entity.getMainHandItem().enchant(Enchantments.BLOCK_EFFICIENCY, 1);
+        entity.addEffect(new MobEffectInstance(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get(), CivilEnchantment.DURATION_SECONDS * 20));
+        playEnchantSound(level());
     }
 
     public void enchantMilitary(LivingEntity entity) {
-
+        Enchantment enchantment = MartialEnchantment.getEnchantmentForUnit(entity);
+        if (enchantment != null) {
+            entity.getMainHandItem().enchant(enchantment, 1);
+        }
+        playEnchantSound(level());
     }
 
     public void enchantArmour(LivingEntity entity) {
-
+        entity.getItemBySlot(EquipmentSlot.CHEST).enchant(EnchantmentRegistrar.FORTYIFYING.get(), 1);
+        playEnchantSound(level());
     }
 
     public void activateAura() {
-
+        // TODO: activation cost + mana drain over time
+        // play beacon activate/deactivate/passive sounds
     }
 }

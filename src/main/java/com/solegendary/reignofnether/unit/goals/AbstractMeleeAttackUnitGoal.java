@@ -148,18 +148,17 @@ public abstract class AbstractMeleeAttackUnitGoal extends Goal {
     }
 
     protected int getAttackInterval() {
-        return this.adjustedTickDelay(((AttackerUnit) this.mob).getAttackCooldown());
+        return this.adjustedTickDelay((int) ((AttackerUnit) this.mob).getAttackCooldown());
     }
 
     protected double getAttackReachSqr(LivingEntity target) {
         float width = mob.getBbWidth();
         if (mob instanceof AttackerUnit attackerUnit)
             width += attackerUnit.getBonusMeleeRange();
-        if (mob instanceof SlimeUnit slime)
-            width -= (0.3f * (Math.max(2, slime.getSize()) - 2));
         float targetWidth = target.getBbWidth();
-        if (target instanceof SlimeUnit targetSlime)
-            targetWidth += (0.3f * (Math.max(2, targetSlime.getSize()) - 2));
+        if (target instanceof Unit unit) {
+            targetWidth += unit.getBonusMeleeRangeForAttackers();
+        }
         return width * 2.0F * width * 2.0F + targetWidth;
     }
 }

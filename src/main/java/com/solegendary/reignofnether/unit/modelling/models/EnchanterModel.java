@@ -146,7 +146,7 @@ public class EnchanterModel<T extends Entity> extends KeyframeHierarchicalModel<
 		}
 		// walk animation
 		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
-			restart(enchanter, enchanter.walkAnimState, EnchanterAnimations.WALK, ageInTicks);
+			restart(enchanter, enchanter.walkAnimState, ageInTicks);
 			animateWalk(EnchanterAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
 		}
 		// idle animation

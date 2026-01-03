@@ -162,7 +162,7 @@ public class Button {
         if (this.hotkey != null) {
             String hotkeyStr = hotkey.buttonLabel;
             hotkeyStr = hotkeyStr.substring(0,Math.min(3, hotkeyStr.length()));
-            guiGraphics.pose().translate(0,0,1);
+            guiGraphics.pose().translate(0,0,2);
             guiGraphics.drawCenteredString(MC.font,
                     hotkeyStr,
                     x + iconSize + 8 - (hotkeyStr.length() * 4),
@@ -178,12 +178,12 @@ public class Button {
         int xyDiff = (DEFAULT_ICON_SIZE - iconSize) / 2;
 
         if (this.frameResource != null) {
-            guiGraphics.pose().translate(0,0,1);
+            guiGraphics.pose().translate(0,0,2);
             MyRenderer.renderIconFrameWithBg(guiGraphics, this.frameResource, x + xyDiff, y + xyDiff, iconFrameSize, 0x64000000);
         }
 
         if (bgIconResource != null) {
-            guiGraphics.pose().translate(0,0,1);
+            guiGraphics.pose().translate(0,0,2);
             MyRenderer.renderIcon(
                     guiGraphics,
                     bgIconResource,
@@ -194,14 +194,16 @@ public class Button {
         }
         // item/unit icon
         if (iconResource != null) {
-            guiGraphics.pose().translate(0,0,1);
+            guiGraphics.pose().translate(0,0,2);
             MyRenderer.renderIcon(
                     guiGraphics,
                     iconResource,
                     x+4 + (7 - xyDiff - iconSize/2), y+4 + (7 - xyDiff - iconSize/2),
                     DEFAULT_ICON_SIZE
             );
-        } else if (iconItem != null) {
+        }
+        if (iconItem != null) {
+            guiGraphics.pose().translate(0,0,1);
             MyRenderer.renderItem(guiGraphics, iconItem, x+4 + (7 - xyDiff - iconSize/2), y+4 + (7 - xyDiff - iconSize/2), 0.75f);
         }
 
@@ -216,7 +218,7 @@ public class Button {
 
             if (frameResource != null) {
                 ResourceLocation iconFrameSelectedResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame_selected.png");
-                guiGraphics.pose().translate(0,0,1);
+                guiGraphics.pose().translate(0,0,2);
                 MyRenderer.renderIcon(
                         guiGraphics,
                         iconFrameSelectedResource,
@@ -227,7 +229,7 @@ public class Button {
         }
         // light up on hover
         if (isEnabled.get() && isMouseOver(mouseX, mouseY)) {
-            guiGraphics.pose().translate(0,0,1);
+            guiGraphics.pose().translate(0,0,2);
             guiGraphics.fill( // x1,y1, x2,y2,
                     x + xyDiff, y + xyDiff,
                     x + xyDiff + iconFrameSize,
@@ -240,7 +242,7 @@ public class Button {
             if (!isEnabled.get())
                 greyHeightPx = 0;
 
-            guiGraphics.pose().translate(0,0,1);
+            guiGraphics.pose().translate(0,0,2);
             guiGraphics.fill( // x1,y1, x2,y2,
                     x + xyDiff,
                     y + xyDiff + greyHeightPx,

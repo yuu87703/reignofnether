@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket
 import com.solegendary.reignofnether.unit.units.monsters.WardenUnit;
 import com.solegendary.reignofnether.unit.units.monsters.ZoglinUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HoglinUnit;
+import com.solegendary.reignofnether.unit.units.piglins.MarauderUnit;
 import com.solegendary.reignofnether.unit.units.villagers.IronGolemUnit;
 import com.solegendary.reignofnether.unit.units.villagers.RavagerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
@@ -28,7 +29,7 @@ import java.util.Random;
 
 public class MeleeAttackBuildingGoal extends MoveToTargetBlockGoal {
 
-    protected int ticksToNextBlockBreak = ((AttackerUnit) mob).getAttackCooldown();
+    protected int ticksToNextBlockBreak = (int) ((AttackerUnit) mob).getAttackCooldown();
     protected BuildingPlacement buildingTarget;
 
     protected final int RECALC_COOLDOWN_MAX = 10;
@@ -87,7 +88,7 @@ public class MeleeAttackBuildingGoal extends MoveToTargetBlockGoal {
             this.mob.swing(InteractionHand.MAIN_HAND);
 
         AttackerUnit unit = (AttackerUnit) mob;
-        ticksToNextBlockBreak = unit.getAttackCooldown();
+        ticksToNextBlockBreak = (int) unit.getAttackCooldown();
         double damageFloat = unit.getUnitAttackDamage() * buildingTarget.getMeleeDamageMult();
         damageFloat *= unit.getBuildingDamageMultiplier();
 
@@ -97,6 +98,10 @@ public class MeleeAttackBuildingGoal extends MoveToTargetBlockGoal {
             damageInt += 1;
         buildingTarget.destroyRandomBlocks(damageInt);
         buildingTarget.lastAttacker = this.mob;
+
+        if (unit instanceof MarauderUnit marauderUnit) {
+            marauderUnit.decrementAttacks();
+        }
 
         if (mob instanceof Slime slime && slime.onGround())
             slime.jumpFromGround();

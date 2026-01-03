@@ -54,6 +54,8 @@ import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
@@ -64,6 +66,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.solegendary.reignofnether.unit.units.villagers.VillagerUnitProfession.*;
@@ -149,7 +152,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.VILLAGER;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
@@ -365,6 +368,13 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
             AttackerUnit.tick(this);
             WorkerUnit.tick(this);
             this.callToArmsGoal.tick();
+
+            if (tickCount % 20 == 0) {
+                if (getMainHandItem().getAllEnchantments().containsKey(Enchantments.BLOCK_EFFICIENCY) &&
+                    !hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
+                    EnchantmentHelper.setEnchantments(new HashMap<>(), getMainHandItem());
+                }
+            }
         }
     }
 
@@ -520,10 +530,6 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         return this.getUnitProfession() != VillagerUnitProfession.NONE;
     }
 
-
-
-
-
     @Override
     public List<Button> getAbilityButtons() {
         List<Button> abilities = new ArrayList<>(getAbilities().getButtons(this));
@@ -532,6 +538,14 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
             abilities.addAll(getBuildingButtons());
         }
         return abilities;
+    }
+
+    @Override
+    public void setItemSlot(EquipmentSlot pSlot, ItemStack pStack) {
+        if (pSlot == EquipmentSlot.MAINHAND && this.hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
+            pStack.enchant(Enchantments.BLOCK_EFFICIENCY, 1);
+        }
+        super.setItemSlot(pSlot, pStack);
     }
 
     static {
