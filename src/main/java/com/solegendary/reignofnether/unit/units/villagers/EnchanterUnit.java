@@ -374,11 +374,11 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
             if (getMana() <= 0) {
                 auraEnabled = false;
                 level().playLocalSound(getX(), getY(), getZ(),
-                        SoundEvents.BEACON_DEACTIVATE, getSoundSource(), 2.0F,
+                        SoundEvents.BEACON_DEACTIVATE, getSoundSource(), 1.5F,
                         1.0f, false);
             } else {
                 level().playLocalSound(getX(), getY(), getZ(),
-                        SoundEvents.BEACON_AMBIENT, getSoundSource(), 2.0F,
+                        SoundEvents.BEACON_AMBIENT, getSoundSource(), 1.5F,
                         1.0f, false);
             }
             updateBorderBps();
@@ -529,11 +529,11 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         auraEnabled = !auraEnabled;
         if (auraEnabled) {
             level().playLocalSound(getX(), getY(), getZ(),
-                    SoundEvents.BEACON_ACTIVATE, getSoundSource(), 2.0F,
+                    SoundEvents.BEACON_ACTIVATE, getSoundSource(), 1.5F,
                     1.0f, false);
         } else {
             level().playLocalSound(getX(), getY(), getZ(),
-                    SoundEvents.BEACON_DEACTIVATE, getSoundSource(), 2.0F,
+                    SoundEvents.BEACON_DEACTIVATE, getSoundSource(), 1.5F,
                     1.0f, false);
             auraBorderBps.clear();
         }

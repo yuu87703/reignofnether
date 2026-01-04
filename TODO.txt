@@ -24,7 +24,6 @@ Wretched Wraith
 
 Enchanter
     [❌] Blacksmith armour upgrades
-    [🟡] Actually register new enchantments
 
     [🟡] Breaching attacks
     [🟡] Fortifying armour

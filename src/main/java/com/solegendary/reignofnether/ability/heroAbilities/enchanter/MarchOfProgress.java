@@ -26,7 +26,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class MarchOfProgress extends HeroAbility {
 
-    private static final int CD_MAX = 5 * ResourceCost.TICKS_PER_SECOND;
+    private static final int CD_MAX = 3 * ResourceCost.TICKS_PER_SECOND;
 
     public static final int RADIUS = 15;
 
