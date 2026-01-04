@@ -32,7 +32,7 @@ import java.util.List;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
-public class CivilEnchantment extends HeroAbility {
+public class CivilEnchantment extends AbstractEnchantment {
 
     public static final float EFFICIENCY_SPEED_MULTIPLIER = 1.5f;
 
@@ -143,20 +143,28 @@ public class CivilEnchantment extends HeroAbility {
         );
     }
 
-    // actually we don't enchant anything, we just give the unit haste instead
+    @Override
+    public List<EntityType<? extends Mob>> getAllowedMobTypes() {
+        return List.of(
+                EntityRegistrar.VILLAGER_UNIT.get()
+        );
+    }
 
-    private final static List<EntityType<? extends Mob>> ALLOWED_MOB_TYPES = List.of(
-            EntityRegistrar.VILLAGER_UNIT.get()
-    );
+    @Override
+    public boolean canEnchant(LivingEntity le) {
+        return getAllowedMobTypes().contains(le.getType()) &&
+                le instanceof Unit unit &&
+                !unit.hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get());
+    }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        if (!ALLOWED_MOB_TYPES.contains(targetEntity.getType())) {
+        if (!getAllowedMobTypes().contains(targetEntity.getType())) {
             if (level.isClientSide())
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error3"));
             return;
         }
-        if (targetEntity instanceof Unit unit && unit.hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
+        if (!canEnchant(targetEntity)) {
             if (level.isClientSide())
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error4"));
             return;

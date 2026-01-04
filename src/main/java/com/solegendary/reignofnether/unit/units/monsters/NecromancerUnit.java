@@ -8,10 +8,15 @@ import com.solegendary.reignofnether.ability.heroAbilities.necromancer.BloodMoon
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingPresencePassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.IceNova;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.entities.NecromancerProjectile;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -51,19 +56,21 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new RaiseDead());
-        ABILITIES.add(new InsomniaCurse());
-        ABILITIES.add(new SoulSiphonPassive());
-        ABILITIES.add(new BloodMoon());
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new RaiseDead(), Keybindings.keyQ),
+            new Pair<>(new InsomniaCurse(), Keybindings.keyW),
+            new Pair<>(new SoulSiphonPassive(), Keybindings.keyE),
+            new Pair<>(new BloodMoon(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {

@@ -26,15 +26,14 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class MarchOfProgress extends HeroAbility {
 
-    // TODO: only apply cooldown when the aura is turned off (either manually or when mana runs out)
     private static final int CD_MAX = 5 * ResourceCost.TICKS_PER_SECOND;
 
-    private static final int RADIUS = 15;
+    public static final int RADIUS = 15;
 
     public static final int MANA_COST_PER_SECOND = 3;
 
     public MarchOfProgress() {
-        super(1, 0, UnitAction.MARCH_OF_PROGRESS, 0, 0, RADIUS, false);
+        super(1, 0, UnitAction.MARCH_OF_PROGRESS,  CD_MAX, 0, RADIUS, false);
     }
 
     @Override
@@ -53,12 +52,12 @@ public class MarchOfProgress extends HeroAbility {
         return new AbilityButton("March of Progress",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/enchanted_book.png"),
                 hotkey,
-                () -> false,
+                () -> ((EnchanterUnit) unit).auraEnabled,
                 () -> getRank(hero) == 0,
                 () -> true,
                 () -> sendUnitCommand(UnitAction.MARCH_OF_PROGRESS),
                 null,
-                getTooltipLines((HeroUnit) hero),
+                getTooltipLines(hero),
                 this,
                 hero
         );

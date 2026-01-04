@@ -33,7 +33,7 @@ import java.util.List;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
-public class MartialEnchantment extends HeroAbility {
+public class MartialEnchantment extends AbstractEnchantment {
 
     public static final int RANGE = 10;
 
@@ -140,13 +140,6 @@ public class MartialEnchantment extends HeroAbility {
         );
     }
 
-    private final static List<EntityType<? extends Mob>> ALLOWED_MOB_TYPES = List.of(
-            EntityRegistrar.MILITIA_UNIT.get(),
-            EntityRegistrar.VINDICATOR_UNIT.get(),
-            EntityRegistrar.PILLAGER_UNIT.get(),
-            EntityRegistrar.EVOKER_UNIT.get()
-    );
-
     @Nullable
     public static Enchantment getEnchantmentForUnit(LivingEntity unit) {
         if (unit instanceof MilitiaUnit militiaUnit)
@@ -161,10 +154,33 @@ public class MartialEnchantment extends HeroAbility {
     }
 
     @Override
+    public List<EntityType<? extends Mob>> getAllowedMobTypes() {
+        return List.of(
+                EntityRegistrar.MILITIA_UNIT.get(),
+                EntityRegistrar.VINDICATOR_UNIT.get(),
+                EntityRegistrar.PILLAGER_UNIT.get(),
+                EntityRegistrar.EVOKER_UNIT.get()
+        );
+    }
+
+    @Override
+    public boolean canEnchant(LivingEntity le) {
+        return getAllowedMobTypes().contains(le.getType()) &&
+                le instanceof Unit &&
+                !le.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty() &&
+                !le.getItemBySlot(EquipmentSlot.MAINHAND).getAllEnchantments().containsKey(getEnchantmentForUnit(le));
+    }
+
+    @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        if (!ALLOWED_MOB_TYPES.contains(targetEntity.getType())) {
+        if (!getAllowedMobTypes().contains(targetEntity.getType())) {
             if (level.isClientSide())
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error3"));
+            return;
+        }
+        if (targetEntity.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) {
+            if (level.isClientSide())
+                HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error7"));
             return;
         }
         Enchantment enchantment = getEnchantmentForUnit(targetEntity);

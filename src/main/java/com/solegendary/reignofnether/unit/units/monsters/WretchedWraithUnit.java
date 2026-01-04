@@ -9,11 +9,16 @@ import com.solegendary.reignofnether.ability.heroAbilities.royalguard.BattleRage
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCry;
 import com.solegendary.reignofnether.ability.heroAbilities.shared.PlaceholderUntargetedAbility;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.IntenseHeatPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.SoulsAflame;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingPresencePassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.IceNova;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -50,19 +55,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new IceNova());
-        ABILITIES.add(new FrostBlink());
-        ABILITIES.add(new ChillingPresencePassive());
-        ABILITIES.add(new Blizzard());
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new IceNova(), Keybindings.keyQ),
+            new Pair<>(new FrostBlink(), Keybindings.keyW),
+            new Pair<>(new ChillingPresencePassive(), Keybindings.keyE),
+            new Pair<>(new Blizzard(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {

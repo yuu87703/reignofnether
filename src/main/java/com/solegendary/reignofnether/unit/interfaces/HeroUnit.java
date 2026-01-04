@@ -12,6 +12,7 @@ import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.HeroUnitSave;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.unit.packets.UnitSyncAbilityClientboundPacket;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -241,7 +242,7 @@ public interface HeroUnit extends Unit {
     }
 
     public default void syncToClients() {
-        Entity entity = (Entity) this;
+        LivingEntity entity = (LivingEntity) this;
         if (!entity.level().isClientSide()) {
             HeroClientboundPacket.setExperience(entity.getId(), this.getExperience());
             HeroClientboundPacket.setSkillPoints(entity.getId(), this.getSkillPoints());

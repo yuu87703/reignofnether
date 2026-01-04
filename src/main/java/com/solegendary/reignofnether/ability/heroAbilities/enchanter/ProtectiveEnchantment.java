@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -31,7 +32,7 @@ import java.util.List;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
-public class ProtectiveEnchantment extends HeroAbility {
+public class ProtectiveEnchantment extends AbstractEnchantment {
 
     public static final int RANGE = 10;
 
@@ -111,7 +112,7 @@ public class ProtectiveEnchantment extends HeroAbility {
                 null,
                 hero
         );
-        button.iconItem = new ItemStack(Items.IRON_SWORD);
+        button.iconItem = new ItemStack(Items.IRON_CHESTPLATE);
         button.iconItem.enchant(EnchantmentRegistrar.FORTYIFYING.get(), 1);
         return button;
     }
@@ -142,15 +143,26 @@ public class ProtectiveEnchantment extends HeroAbility {
         );
     }
 
-    private final static List<EntityType<? extends Mob>> ALLOWED_MOB_TYPES = List.of(
-            EntityRegistrar.PILLAGER_UNIT.get(),
-            EntityRegistrar.VINDICATOR_UNIT.get(),
-            EntityRegistrar.EVOKER_UNIT.get()
-    );
+    @Override
+    public List<EntityType<? extends Mob>> getAllowedMobTypes() {
+        return List.of(
+                EntityRegistrar.PILLAGER_UNIT.get(),
+                EntityRegistrar.VINDICATOR_UNIT.get(),
+                EntityRegistrar.EVOKER_UNIT.get()
+        );
+    }
+
+    @Override
+    public boolean canEnchant(LivingEntity le) {
+        return getAllowedMobTypes().contains(le.getType()) &&
+                le instanceof Unit &&
+                !le.getItemBySlot(EquipmentSlot.CHEST).isEmpty() &&
+                !le.getItemBySlot(EquipmentSlot.CHEST).getAllEnchantments().containsKey(EnchantmentRegistrar.FORTYIFYING.get());
+    }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        if (!ALLOWED_MOB_TYPES.contains(targetEntity.getType())) {
+        if (!getAllowedMobTypes().contains(targetEntity.getType())) {
             if (level.isClientSide())
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.enchant.error3"));
             return;

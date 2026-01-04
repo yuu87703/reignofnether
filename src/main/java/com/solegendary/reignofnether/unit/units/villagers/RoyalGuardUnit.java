@@ -4,6 +4,10 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.CivilEnchantment;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MarchOfProgress;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MartialEnchantment;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.Avatar;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.BattleRagePassive;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
@@ -11,6 +15,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCr
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -54,6 +59,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -64,13 +70,14 @@ import java.util.Set;
 import static com.ibm.icu.impl.ValidIdentifiers.Datatype.unit;
 
 public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new MaceSlam());
-        ABILITIES.add(new TauntingCry());
-        ABILITIES.add(new BattleRagePassive());
-        ABILITIES.add(new Avatar());
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new MaceSlam(), Keybindings.keyQ),
+            new Pair<>(new TauntingCry(), Keybindings.keyW),
+            new Pair<>(new BattleRagePassive(), Keybindings.keyE),
+            new Pair<>(new Avatar(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {

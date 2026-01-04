@@ -43,8 +43,6 @@ Bugfixes
 [❌] Fixed sculk catalysts not spreading any sculk
     - Seems to be intermittent, changes when relogging?
 
-[❌] When multiple of the same KFA unit is attacking, their animation states seem to be affecting each other
-
 
 
 Quality of Life

@@ -710,8 +710,8 @@ public interface Unit {
 
     boolean hasAutocast(Ability ability);
     void setAutocast(Ability ability);
-    default void setCharges(Ability abilityClass, int cooldown) {
-        getCharges().put(abilityClass, cooldown);
+    default void setCharges(Ability abilityClass, int charges) {
+        getCharges().put(abilityClass, Math.min(charges, abilityClass.maxCharges));
     }
 
     default int getCharges(Ability ability) {

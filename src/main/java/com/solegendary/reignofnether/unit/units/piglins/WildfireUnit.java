@@ -6,8 +6,17 @@ import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.FirewallShot;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead;
+import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyFeast;
+import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.GreedIsGoodPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.LootExplosion;
+import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.ThrowTNT;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.IntenseHeatPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.SoulsAflame;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -41,16 +50,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new MoltenBomb(), Keybindings.keyQ),
+            new Pair<>(new ScorchingGaze(), Keybindings.keyW),
+            new Pair<>(new IntenseHeatPassive(), Keybindings.keyE),
+            new Pair<>(new SoulsAflame(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {

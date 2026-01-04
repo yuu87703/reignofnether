@@ -8,8 +8,13 @@ import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyF
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.GreedIsGoodPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.LootExplosion;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.ThrowTNT;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.Avatar;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.BattleRagePassive;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
+import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCry;
 import com.solegendary.reignofnether.entities.ThrowableTntProjectile;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.ItemRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -56,6 +61,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -64,13 +70,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new ThrowTNT());
-        ABILITIES.add(new FancyFeast());
-        ABILITIES.add(new GreedIsGoodPassive());
-        ABILITIES.add(new LootExplosion());
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new ThrowTNT(), Keybindings.keyQ),
+            new Pair<>(new FancyFeast(), Keybindings.keyW),
+            new Pair<>(new GreedIsGoodPassive(), Keybindings.keyE),
+            new Pair<>(new LootExplosion(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {

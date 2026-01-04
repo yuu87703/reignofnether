@@ -4,10 +4,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
-import com.solegendary.reignofnether.building.BuildingClientEvents;
-import com.solegendary.reignofnether.building.BuildingPlacement;
-import com.solegendary.reignofnether.building.BuildingUtils;
-import com.solegendary.reignofnether.building.GarrisonableBuilding;
+import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.building.buildings.placements.IronGolemPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
@@ -857,6 +854,18 @@ public class UnitClientEvents {
                 }
 
                 MyRenderer.drawBoxBottom(evt.getPoseStack(), entityAABB, r, g, b, 0.5f);
+
+                /*
+                if (entity instanceof RangeIndicator ri) {
+                    for (BlockPos bp : ri.getBorderBps()) {
+                        if (selectedUnits.contains(entity)) {
+                            MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0.8f, 0f, 0.3f);
+                        } else if (!ri.showOnlyWhenSelected()) {
+                            MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0f, 0f, 0.6f);
+                        }
+                    }
+                }
+                 */
             }
 
             // render items in front of face for eating units
