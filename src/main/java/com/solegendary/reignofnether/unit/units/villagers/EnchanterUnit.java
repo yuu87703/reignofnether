@@ -535,6 +535,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
             level().playLocalSound(getX(), getY(), getZ(),
                     SoundEvents.BEACON_DEACTIVATE, getSoundSource(), 2.0F,
                     1.0f, false);
+            auraBorderBps.clear();
         }
     }
 

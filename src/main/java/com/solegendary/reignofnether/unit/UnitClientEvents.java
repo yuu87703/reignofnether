@@ -854,18 +854,6 @@ public class UnitClientEvents {
                 }
 
                 MyRenderer.drawBoxBottom(evt.getPoseStack(), entityAABB, r, g, b, 0.5f);
-
-                /*
-                if (entity instanceof RangeIndicator ri) {
-                    for (BlockPos bp : ri.getBorderBps()) {
-                        if (selectedUnits.contains(entity)) {
-                            MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0.8f, 0f, 0.3f);
-                        } else if (!ri.showOnlyWhenSelected()) {
-                            MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0f, 0f, 0.6f);
-                        }
-                    }
-                }
-                 */
             }
 
             // render items in front of face for eating units
