@@ -7,10 +7,6 @@
 
 
 
-Christmas
----------
-During christmas season, units spawn with santa hats, and the piglin merchant throws presents
-During new years, buildings explode with fireworks
 
 New Heroes
 ----------

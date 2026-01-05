@@ -2,17 +2,21 @@ package com.solegendary.reignofnether.resources;
 
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BlockUtils {
+
+    private static final Random RANDOM = new Random();
 
     public static boolean isLogBlock(BlockState bs) {
         return List.of(Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG, Blocks.MANGROVE_LOG, Blocks.SPRUCE_LOG,
@@ -65,15 +69,69 @@ public class BlockUtils {
         return false;
     }
 
-    public static int numAirOrLeafBlocksBelow(BlockPos bp, Level level) {
-        int blocks = 0;
-        for (int i = -1; i > -10; i--) {
-            BlockState bs = level.getBlockState(bp.offset(0,i,0));
-            if (bs.isAir() || isLeafBlock(bs))
-                blocks += 1;
-            else if (!isLogBlock(bs)) // stop counting if we hit a non-log solid block to avoid counting underground blocks
-                break;
+
+    public static final BlockState WRAITH_SNOW_BS = BlockRegistrar.WRAITH_SNOW_LAYER.get().defaultBlockState();
+
+    private static boolean isWraithSnow(BlockState bs) {
+        return bs.getBlock() == BlockRegistrar.WRAITH_SNOW_LAYER.get();
+    }
+    private static boolean isAirOrSnow(BlockState bs) {
+        return bs.getBlock() == Blocks.SNOW || bs.isAir();
+    }
+    private static int getWraithSnowLayers(BlockState bs) {
+        return bs.getBlock() == BlockRegistrar.WRAITH_SNOW_LAYER.get() ? bs.getValue(BlockStateProperties.LAYERS) : 0;
+    }
+
+    private static HashMap<BlockPos, Integer> getAdjPoses(ServerLevel level, BlockPos pos) {
+        ArrayList<BlockPos> poses = new ArrayList<>(List.of(pos.north(), pos.south(), pos.east(), pos.west()));
+        HashMap<BlockPos, Integer> posesAndLayers = new HashMap<>();
+        for (BlockPos pose : poses) {
+            BlockState bs = level.getBlockState(pose);
+            BlockState bsAbove = level.getBlockState(pose.above());
+            BlockState bsBelow = level.getBlockState(pose.below());
+            BlockState bsBelow2 = level.getBlockState(pose.below().below());
+            if ((isAirOrSnow(bs) || isWraithSnow(bs)) &&
+                !bsBelow.isAir()) {
+                posesAndLayers.put(pose, getWraithSnowLayers(bs));
+            } else if (!bsBelow2.isAir()) {
+                posesAndLayers.put(pose.below(), getWraithSnowLayers(bsBelow));
+            } else if (bsAbove.isAir() || isWraithSnow(bsAbove)) {
+                posesAndLayers.put(pose.above(), getWraithSnowLayers(bsAbove));
+            }
         }
-        return blocks;
+        return posesAndLayers;
+    }
+
+    // places wraith snow at pos - if there is already snow there, then first check if it is the highest nearby snow
+    // and if so, place it at a random adjacent pos instead
+    // TODO: spread out to 2 taxicab distance
+    public static void placeWraithSnow(ServerLevel level, BlockPos pos) {
+        BlockState bsExisting = level.getBlockState(pos);
+
+        int layers = getWraithSnowLayers(bsExisting);
+
+        int lowestAdjLayer = 8;
+        BlockPos targetPos = pos;
+        HashMap<BlockPos, Integer> posesAndLayers = getAdjPoses(level, pos);
+        for (BlockPos adjPos : posesAndLayers.keySet()) {
+            int adjLayers = posesAndLayers.get(adjPos);
+            if (adjLayers < lowestAdjLayer) {
+                lowestAdjLayer = adjLayers;
+                targetPos = adjPos;
+            } else if (adjLayers == lowestAdjLayer && RANDOM.nextBoolean()) {
+                targetPos = adjPos;
+            }
+        }
+        if (layers <= lowestAdjLayer && layers < 8)
+            targetPos = pos;
+
+        BlockState targetBs = level.getBlockState(targetPos);
+        int targetLayers = getWraithSnowLayers(targetBs);
+
+        if (targetLayers <= 0) {
+            level.setBlockAndUpdate(pos, WRAITH_SNOW_BS);
+        } else if (targetLayers < 8) {
+            targetBs.setValue(BlockStateProperties.LAYERS, layers + 1);
+        }
     }
 }

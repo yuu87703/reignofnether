@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -61,8 +62,9 @@ public class WraithSnowLayerBlock extends SnowLayerBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        int layers = state.getValue(LAYERS);
         double x = pos.getX() + random.nextDouble();
-        double y = pos.getY() + ((state.getValue(LAYERS) + 1) * 0.125D);
+        double y = pos.getY() + ((layers + 1) * 0.125D);
         double z = pos.getZ() + random.nextDouble();
 
         level.sendParticles(
@@ -72,5 +74,12 @@ public class WraithSnowLayerBlock extends SnowLayerBlock {
                 0.0D, 0.01D, 0.0D,
                 0
         );
+
+        if (random.nextBoolean()) {
+            if (layers <= 1)
+                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            else
+                state.setValue(LAYERS, layers - 1);
+        }
     }
 }
