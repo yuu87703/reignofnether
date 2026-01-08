@@ -88,6 +88,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import static com.solegendary.reignofnether.player.PlayerServerEvents.isRTSPlayer;
+import static com.solegendary.reignofnether.player.PlayerServerEvents.serverLevel;
 import static com.solegendary.reignofnether.resources.ResourcesServerEvents.NEUTRAL_UNIT_BOUNTY_PERCENT;
 
 public class UnitServerEvents {
@@ -978,8 +979,8 @@ public class UnitServerEvents {
             evt.setCanceled(true);
     }
 
-    public static void debug1() {
-
+    public static void debug1(BlockPos pos) {
+        BlockUtils.placeWraithSnow(serverLevel, pos.above());
     }
 
     public static void debug2() {

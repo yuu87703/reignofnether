@@ -21,6 +21,7 @@ import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
+import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
@@ -41,10 +42,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -53,6 +56,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
@@ -300,6 +304,8 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
     }
 
+    private ArrayList<BlockPos> snowQueue = new ArrayList<>();
+
     public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
 
@@ -349,6 +355,13 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.castIceNovaGoal.tick();
         this.castFrostblinkGoal.tick();
         this.castBlizzardGoal.tick();
+
+        if (!level().isClientSide()) {
+            if (!snowQueue.isEmpty()) {
+                BlockUtils.placeWraithSnow((ServerLevel) level(), snowQueue.get(0));
+                snowQueue.remove(0);
+            }
+        }
     }
 
     @Override
@@ -440,6 +453,13 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.goalSelector.addGoal(3, moveGoal);
     }
 
+    public ChillingPresencePassive getChillingPresence() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof ChillingPresencePassive)
+                return (ChillingPresencePassive) ability;
+        return null;
+    }
+
     public void iceNova() {
         if (level().isClientSide) return;
 
@@ -453,6 +473,17 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     public void blizzard() {
         if (level().isClientSide) return;
 
+    }
+
+    @Override
+    public boolean doHurtTarget(@NotNull Entity pEntity) {
+        boolean result = super.doHurtTarget(pEntity);
+        if (result && getChillingPresence().getRank(this) >= 1 && !level().isClientSide()) {
+            BlockUtils.placeWraithSnow((ServerLevel) level(), pEntity.getOnPos().above());
+            BlockUtils.placeWraithSnow((ServerLevel) level(), pEntity.getOnPos().above());
+            BlockUtils.placeWraithSnow((ServerLevel) level(), pEntity.getOnPos().above());
+        }
+        return result;
     }
 
     @Override

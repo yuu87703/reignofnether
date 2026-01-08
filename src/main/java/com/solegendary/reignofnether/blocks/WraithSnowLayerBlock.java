@@ -78,8 +78,10 @@ public class WraithSnowLayerBlock extends SnowLayerBlock {
         if (random.nextBoolean()) {
             if (layers <= 1)
                 level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-            else
-                state.setValue(LAYERS, layers - 1);
+            else {
+                BlockState newLayers = state.setValue(LAYERS, layers - 1);
+                level.setBlockAndUpdate(pos, newLayers);
+            }
         }
     }
 }

@@ -1,9 +1,11 @@
 package com.solegendary.reignofnether.resources;
 
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,11 +77,11 @@ public class BlockUtils {
     private static boolean isWraithSnow(BlockState bs) {
         return bs.getBlock() == BlockRegistrar.WRAITH_SNOW_LAYER.get();
     }
-    private static boolean isAirOrSnow(BlockState bs) {
-        return bs.getBlock() == Blocks.SNOW || bs.isAir();
-    }
     private static int getWraithSnowLayers(BlockState bs) {
-        return bs.getBlock() == BlockRegistrar.WRAITH_SNOW_LAYER.get() ? bs.getValue(BlockStateProperties.LAYERS) : 0;
+        return isWraithSnow(bs) ? bs.getValue(BlockStateProperties.LAYERS) : 0;
+    }
+    private static boolean canPlaceSnow(Level level, BlockPos pos) {
+        return !MiscUtil.isSolidBlocking(level, pos) && MiscUtil.isSolidBlocking(level, pos.below());
     }
 
     private static HashMap<BlockPos, Integer> getAdjPoses(ServerLevel level, BlockPos pos) {
@@ -89,13 +91,11 @@ public class BlockUtils {
             BlockState bs = level.getBlockState(pose);
             BlockState bsAbove = level.getBlockState(pose.above());
             BlockState bsBelow = level.getBlockState(pose.below());
-            BlockState bsBelow2 = level.getBlockState(pose.below().below());
-            if ((isAirOrSnow(bs) || isWraithSnow(bs)) &&
-                !bsBelow.isAir()) {
+            if (canPlaceSnow(level, pose)) {
                 posesAndLayers.put(pose, getWraithSnowLayers(bs));
-            } else if (!bsBelow2.isAir()) {
+            } else if (canPlaceSnow(level, pose.below())) {
                 posesAndLayers.put(pose.below(), getWraithSnowLayers(bsBelow));
-            } else if (bsAbove.isAir() || isWraithSnow(bsAbove)) {
+            } else if (canPlaceSnow(level, pose.above())) {
                 posesAndLayers.put(pose.above(), getWraithSnowLayers(bsAbove));
             }
         }
@@ -104,9 +104,11 @@ public class BlockUtils {
 
     // places wraith snow at pos - if there is already snow there, then first check if it is the highest nearby snow
     // and if so, place it at a random adjacent pos instead
-    // TODO: spread out to 2 taxicab distance
     public static void placeWraithSnow(ServerLevel level, BlockPos pos) {
         BlockState bsExisting = level.getBlockState(pos);
+
+        if (!canPlaceSnow(level, pos))
+            return;
 
         int layers = getWraithSnowLayers(bsExisting);
 
@@ -129,9 +131,10 @@ public class BlockUtils {
         int targetLayers = getWraithSnowLayers(targetBs);
 
         if (targetLayers <= 0) {
-            level.setBlockAndUpdate(pos, WRAITH_SNOW_BS);
+            level.setBlockAndUpdate(targetPos, WRAITH_SNOW_BS);
         } else if (targetLayers < 8) {
-            targetBs.setValue(BlockStateProperties.LAYERS, layers + 1);
+            BlockState newLayer = targetBs.setValue(BlockStateProperties.LAYERS, targetLayers + 1);
+            level.setBlockAndUpdate(targetPos, newLayer);
         }
     }
 }

@@ -690,6 +690,9 @@ public class UnitClientEvents {
             lastLeftClickTime = System.currentTimeMillis();
         }
         else if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_2) {
+
+            UnitClientEvents.sendUnitCommand(UnitAction.DEBUG1);
+
             if (BuildingClientEvents.getBuildingToPlace() != null) {
                 BuildingClientEvents.setBuildingToPlace(null);
                 return;

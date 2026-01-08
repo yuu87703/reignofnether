@@ -18,12 +18,17 @@ Wretched Wraith
 
     [🟡] Slowdown attack speed MobEffect
 
+    [❌] Wraith snow should not affect allies
+    [❌] Wraith snow does not do random tick consistently (based on player position and gamemode?)
+
 Enchanter
     [❌] Blacksmith armour upgrades
 
     [🟡] Breaching attacks
     [🟡] Fortifying armour
     [🟡] Zeal bonus damage
+
+    [❌] Particle effects for active aura
 
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
@@ -42,7 +47,7 @@ Bugfixes
 
 Quality of Life
 ---------------
-
+[❌] Add rotation to /rtsapi placebuilding
 
 
 Balance
