@@ -2,7 +2,15 @@ package com.solegendary.reignofnether.mixin;
 
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
+import com.solegendary.reignofnether.util.MiscUtil;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,6 +19,7 @@ import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -52,6 +61,21 @@ public abstract class MobMixin extends LivingEntity {
             boolean outOfRange = eu.distanceTo(pTarget) > eu.getVexTargetRange();
             if (outOfRange || targetIsAlliedPlayer)
                 ci.cancel();
+        }
+    }
+
+    @Inject(
+            method = "tick",
+            at = @At("HEAD")
+    )
+    public void tick(CallbackInfo ci) {
+        MobEffectInstance mei = this.getEffect(MobEffectRegistrar.FROST_DAMAGE.get());
+        if (mei != null && mei.getDuration() > 0 && mei.getDuration() % 20 == 0 &&
+                hasEffect(MobEffectRegistrar.ATTACK_SLOWDOWN.get())) {
+            int layers = BlockUtils.getWraithSnowLayers(level().getBlockState(getOnPos().above()));
+            if (layers > 0) {
+                hurt(damageSources().freeze(), layers);
+            }
         }
     }
 }

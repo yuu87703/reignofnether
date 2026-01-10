@@ -15,16 +15,16 @@ import java.util.List;
 
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
-public class ChillingPresencePassive extends HeroAbility {
+public class BitterFrostPassive extends HeroAbility {
 
-    public ChillingPresencePassive() {
+    public BitterFrostPassive() {
         super(3, 35, UnitAction.NONE, 0, 0, 0, false);
     }
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Chilling Presence",
+        return new AbilityButton("Bitter Frost",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/snow.png"),
                 hotkey,
                 () -> false,
@@ -41,7 +41,7 @@ public class ChillingPresencePassive extends HeroAbility {
     @Override
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
-                "Chilling Presence",
+                "Bitter Frost",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/snow.png"),
                 hero
         );
@@ -49,26 +49,25 @@ public class ChillingPresencePassive extends HeroAbility {
 
     public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
         return List.of(
-                fcs(I18n.get("abilities.reignofnether.chilling_presence") + " " + rankString(hero), true),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost") + " " + rankString(hero), true),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.tooltip3"))
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip3"))
         );
     }
 
     public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {
         return List.of(
-                fcs(I18n.get("abilities.reignofnether.chilling_presence"), true),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost"), true),
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.tooltip3")),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip2")),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.rank1"), getRank(hero) == 0),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.rank2"), getRank(hero) == 1),
-                fcs(I18n.get("abilities.reignofnether.chilling_presence.rank3"), getRank(hero) == 2)
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.rank1"), getRank(hero) == 0),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.rank2"), getRank(hero) == 1),
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.rank3"), getRank(hero) == 2)
         );
     }
 }

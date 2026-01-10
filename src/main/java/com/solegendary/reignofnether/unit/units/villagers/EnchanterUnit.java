@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.ability.heroAbilities.enchanter.*;
@@ -13,7 +14,11 @@ import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientEvents;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -262,6 +267,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     }
     public int animateTicks = 0;
     public float animateScale = 1.0f;
+    public float animateSpeed = 1.0f;
     public boolean animateScaleReducing = false;
     public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
     public int getAnimateTicksLeft() { return animateTicks; }
@@ -373,13 +379,11 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
             setMana(getMana() - MarchOfProgress.MANA_COST_PER_SECOND);
             if (getMana() <= 0) {
                 auraEnabled = false;
-                level().playLocalSound(getX(), getY(), getZ(),
-                        SoundEvents.BEACON_DEACTIVATE, getSoundSource(), 1.5F,
-                        1.0f, false);
+                if (!level().isClientSide)
+                    SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
             } else {
-                level().playLocalSound(getX(), getY(), getZ(),
-                        SoundEvents.BEACON_AMBIENT, getSoundSource(), 1.5F,
-                        1.0f, false);
+                if (!level().isClientSide)
+                    SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_AMBIENT, blockPosition(), 1.5f);
             }
             updateBorderBps();
         }
@@ -480,10 +484,8 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         this.castAuraGoal.stop();
     }
 
-    private void playEnchantSound(Level level) {
-        level.playLocalSound(getX(), getY(), getZ(),
-                SoundEvents.ENCHANTMENT_TABLE_USE, getSoundSource(), 1.0F + getRandom().nextFloat(),
-                getRandom().nextFloat() * 0.7F + 0.3F, false);
+    private void playEnchantSound() {
+        SoundClientboundPacket.playSoundAtPos(SoundAction.ENCHANT, blockPosition());
     }
 
     private void doAutocastEnchant() {
@@ -507,36 +509,45 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     }
 
     public void enchantCivilian(LivingEntity entity) {
+        if (level().isClientSide) return;
+
         entity.getMainHandItem().enchant(Enchantments.BLOCK_EFFICIENCY, 1);
         entity.addEffect(new MobEffectInstance(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get(), CivilEnchantment.DURATION_SECONDS * 20));
-        playEnchantSound(level());
+        playEnchantSound();
     }
 
     public void enchantMilitary(LivingEntity entity) {
+        if (level().isClientSide) return;
+
         Enchantment enchantment = MartialEnchantment.getEnchantmentForUnit(entity);
         if (enchantment != null) {
             entity.getMainHandItem().enchant(enchantment, 1);
         }
-        playEnchantSound(level());
+        playEnchantSound();
     }
 
     public void enchantArmour(LivingEntity entity) {
+        if (level().isClientSide) return;
+
         entity.getItemBySlot(EquipmentSlot.CHEST).enchant(EnchantmentRegistrar.FORTYIFYING.get(), 1);
-        playEnchantSound(level());
+        playEnchantSound();
     }
 
     public void toggleAura() {
         auraEnabled = !auraEnabled;
-        if (auraEnabled) {
-            level().playLocalSound(getX(), getY(), getZ(),
-                    SoundEvents.BEACON_ACTIVATE, getSoundSource(), 1.5F,
-                    1.0f, false);
-        } else {
-            level().playLocalSound(getX(), getY(), getZ(),
-                    SoundEvents.BEACON_DEACTIVATE, getSoundSource(), 1.5F,
-                    1.0f, false);
-            auraBorderBps.clear();
+        if (level().isClientSide) {
+            if (!auraEnabled)
+                auraBorderBps.clear();
+            return;
         }
+        if (auraEnabled) {
+            AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_ENABLE, 0f);
+            SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_ACTIVATE, blockPosition(), 1.5f);
+        } else {
+            AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_DISABLE, 0f);
+            SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
+        }
+
     }
 
     private final Set<BlockPos> auraBorderBps = new HashSet<>();

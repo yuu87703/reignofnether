@@ -52,6 +52,8 @@ public class MobEffectRegistrar {
     public static final RegistryObject<MobEffect> BLOODLUST = MOB_EFFECTS.register("bloodlust", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 0xFF0000)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, "b9da3d7f-da19-4860-9daa-328be5911517", 0.20, AttributeModifier.Operation.MULTIPLY_BASE));
 
+    public static final RegistryObject<MobEffect> FROST_DAMAGE = MOB_EFFECTS.register("frost_damage", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751));
+
     public static void init(FMLJavaModLoadingContext context) {
         MOB_EFFECTS.register(context.getModEventBus());
     }

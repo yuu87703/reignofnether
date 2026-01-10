@@ -140,7 +140,8 @@ public abstract class AbstractArrowMixin extends Projectile {
         return this.getOwner() instanceof Unit unit1 &&
                 entity instanceof Unit unit2 &&
                 unit1.getOwnerName().equals(unit2.getOwnerName()) &&
-                !unit1.getTargetGoal().getTarget().equals(unit2);
+                (unit1.getTargetGoal().getTarget() == null ||
+                !unit1.getTargetGoal().getTarget().equals(unit2));
     }
 
     protected boolean canHitEntity(Entity entity) {

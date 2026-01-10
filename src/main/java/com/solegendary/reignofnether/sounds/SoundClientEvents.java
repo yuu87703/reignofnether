@@ -125,6 +125,9 @@ public class SoundClientEvents {
         SOUND_MAP.put(SoundAction.BELL, SoundEvents.BELL_BLOCK);
         SOUND_MAP.put(SoundAction.BEACON_DEACTIVATE, SoundEvents.BEACON_DEACTIVATE);
         SOUND_MAP.put(SoundAction.BEACON_ACTIVATE, SoundEvents.BEACON_ACTIVATE);
+        SOUND_MAP.put(SoundAction.BEACON_AMBIENT, SoundEvents.BEACON_AMBIENT);
+        SOUND_MAP.put(SoundAction.ENCHANT, SoundEvents.ENCHANTMENT_TABLE_USE);
+        SOUND_MAP.put(SoundAction.FORGE_ARMOUR, SoundEvents.SMITHING_TABLE_USE);
         SOUND_MAP.put(SoundAction.LEVEL_UP, SoundEvents.PLAYER_LEVELUP);
         SOUND_MAP.put(SoundAction.BLOODLUST, SoundRegistrar.BLOODLUST.get());
         SOUND_MAP.put(SoundAction.WRETCHED_WRAITH_ATTACK_QUIET, SoundRegistrar.WRETCHED_WRAITH_ATTACK_QUIET.get());

@@ -4,19 +4,11 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.Avatar;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.BattleRagePassive;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCry;
-import com.solegendary.reignofnether.ability.heroAbilities.shared.PlaceholderUntargetedAbility;
-import com.solegendary.reignofnether.ability.heroAbilities.wildfire.IntenseHeatPassive;
-import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
-import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
-import com.solegendary.reignofnether.ability.heroAbilities.wildfire.SoulsAflame;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingPresencePassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.IceNova;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
+import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
@@ -25,16 +17,19 @@ import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.WretchedWraithAnimations;
-import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
@@ -54,23 +49,27 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.solegendary.reignofnether.resources.BlockUtils.canPlaceSnow;
 
 public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
     public final Abilities ABILITIES = new Abilities(
         List.of(
-            new Pair<>(new IceNova(), Keybindings.keyQ),
+            new Pair<>(new ChillingScreech(), Keybindings.keyQ),
             new Pair<>(new FrostBlink(), Keybindings.keyW),
-            new Pair<>(new ChillingPresencePassive(), Keybindings.keyE),
+            new Pair<>(new BitterFrostPassive(), Keybindings.keyE),
             new Pair<>(new Blizzard(), Keybindings.keyR)
         )
     );
@@ -129,9 +128,9 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     private ReturnResourcesGoal returnResourcesGoal;
     public MountGoal mountGoal;
 
-    private GenericUntargetedSpellGoal castIceNovaGoal;
-    public GenericUntargetedSpellGoal getCastIceNovaGoal() {
-        return castIceNovaGoal;
+    private GenericUntargetedSpellGoal castChillingScreechGoal;
+    public GenericUntargetedSpellGoal getCastChillingScreechGoal() {
+        return castChillingScreechGoal;
     }
     private GenericTargetedSpellGoal castFrostblinkGoal;
     public GenericTargetedSpellGoal getCastFrostblinkGoal() {
@@ -275,6 +274,10 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     }
     public int animateTicks = 0;
     public float animateScale = 1.0f;
+    public float animateSpeed = 1.0f;
+    public float getAnimationSpeed() {
+        return animateSpeed;
+    }
     public boolean animateScaleReducing = false;
     public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
     public int getAnimateTicksLeft() { return animateTicks; }
@@ -286,25 +289,38 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 activeAnimDef = WretchedWraithAnimations.ATTACK;
                 activeAnimState = attackAnimState;
                 animateScale = 1.0f;
+                animateSpeed = 1.0f;
+                startAnimation(activeAnimDef);
+            }
+            case CAST_SPELL -> {
+                activeAnimDef = WretchedWraithAnimations.SPELL;
+                activeAnimState = attackAnimState;
+                animateScale = 1.0f;
+                animateSpeed = 0.4f;
                 startAnimation(activeAnimDef);
             }
             case TELEPORT -> {
                 activeAnimDef = WretchedWraithAnimations.TELEPORT;
                 activeAnimState = spellChargeAnimState;
                 animateScale = 1.0f;
+                animateSpeed = 1.0f;
                 startAnimation(activeAnimDef);
             }
             case ULTIMATE -> {
                 activeAnimDef = WretchedWraithAnimations.ULTIMATE;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
+                animateSpeed = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            default -> animateScaleReducing = true;
+            default -> {
+                animateScaleReducing = true;
+                animateSpeed = 1.0f;
+            }
         }
     }
 
-    private ArrayList<BlockPos> snowQueue = new ArrayList<>();
+    private HashMap<BlockPos, Integer> snowQueue = new HashMap<>();
 
     public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -324,7 +340,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     @Override
     public void resetBehaviours() {
         animateScaleReducing = true;
-        this.castIceNovaGoal.stop();
+        this.castChillingScreechGoal.stop();
         this.castFrostblinkGoal.stop();
         this.castBlizzardGoal.stop();
     }
@@ -352,14 +368,30 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         if (level().isClientSide() && animateTicks > 0) {
             animateTicks -= 1;
         }
-        this.castIceNovaGoal.tick();
+        this.castChillingScreechGoal.tick();
         this.castFrostblinkGoal.tick();
         this.castBlizzardGoal.tick();
 
         if (!level().isClientSide()) {
-            if (!snowQueue.isEmpty()) {
-                BlockUtils.placeWraithSnow((ServerLevel) level(), snowQueue.get(0));
-                snowQueue.remove(0);
+            HashMap<BlockPos, Integer> newSnowQueue = new HashMap<>();
+            for (BlockPos pos : snowQueue.keySet()) {
+                int ticksLeft = snowQueue.get(pos);
+                if (ticksLeft <= 0) {
+                    BlockUtils.placeWraithSnow((ServerLevel) level(), pos);
+                } else {
+                    newSnowQueue.put(pos, ticksLeft - 1);
+                }
+            }
+            snowQueue = newSnowQueue;
+            if (getBitterFrost().getRank(this) >= 3 && tickCount % 40 == 0) {
+                if (onGround() && canPlaceSnow(level(), getOnPos().above())) {
+                    BlockUtils.placeWraithSnow((ServerLevel) level(), getOnPos().above());
+                }
+            }
+            // heal while on wraith snow
+            int layers = BlockUtils.getWraithSnowLayers(level().getBlockState(getOnPos().above()));
+            if (onGround() && layers > 0 && tickCount % (80 / layers) == 0) {
+                heal(1);
             }
         }
     }
@@ -414,11 +446,11 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
 
-        this.castIceNovaGoal = new GenericUntargetedSpellGoal(
+        this.castChillingScreechGoal = new GenericUntargetedSpellGoal(
                 this,
                 20,
-                this::iceNova,
-                UnitAnimationAction.ATTACK_UNIT,
+                this::ChillingScreech,
+                UnitAnimationAction.CAST_SPELL,
                 UnitAnimationAction.STOP,
                 UnitAnimationAction.STOP
         );
@@ -453,16 +485,78 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.goalSelector.addGoal(3, moveGoal);
     }
 
-    public ChillingPresencePassive getChillingPresence() {
+    public ChillingScreech getChillingScreech() {
         for (Ability ability : abilities.get())
-            if (ability instanceof ChillingPresencePassive)
-                return (ChillingPresencePassive) ability;
+            if (ability instanceof ChillingScreech)
+                return (ChillingScreech) ability;
         return null;
     }
 
-    public void iceNova() {
+    public FrostBlink getFrostBlink() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof FrostBlink)
+                return (FrostBlink) ability;
+        return null;
+    }
+
+    public BitterFrostPassive getBitterFrost() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof BitterFrostPassive)
+                return (BitterFrostPassive) ability;
+        return null;
+    }
+
+    public static HashMap<BlockPos, Integer> getSnowPositions(
+            Level level, BlockPos center, int maxDistance
+    ) {
+        HashMap<BlockPos, Integer> positions = new HashMap<>();
+        int cx = center.getX();
+        int cy = center.getY();
+        int cz = center.getZ();
+
+        for (int dx = -maxDistance; dx <= maxDistance; dx++) {
+            for (int dz = -maxDistance; dz <= maxDistance; dz++) {
+                int horizontalDistance = Math.abs(dx) + Math.abs(dz);
+                if (horizontalDistance > maxDistance)
+                    continue;
+
+                BlockPos basePos = new BlockPos(cx + dx, cy, cz + dz);
+                if (canPlaceSnow(level, basePos)) {
+                    positions.put(basePos, horizontalDistance);
+                    continue;
+                }
+                // Vertical search range grows with horizontal distance
+                for (int dy = 1; dy <= horizontalDistance; dy++) {
+                    BlockPos below = basePos.below(dy);
+                    if (canPlaceSnow(level, below)) {
+                        positions.put(below, horizontalDistance);
+                        break;
+                    }
+                    BlockPos above = basePos.above(dy);
+                    if (canPlaceSnow(level, above)) {
+                        positions.put(above, horizontalDistance);
+                        break;
+                    }
+                }
+            }
+        }
+        return positions;
+    }
+
+    public void ChillingScreech() {
         if (level().isClientSide) return;
 
+        ChillingScreech chillingScreech = getChillingScreech();
+        if (chillingScreech.getRank(this) > 0) {
+            float radius = getChillingScreech().radius;
+            int duration = getChillingScreech().duration;
+            snowQueue.putAll(getSnowPositions(level(), this.getOnPos().above(), (int) radius));
+            for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(position(), radius, LivingEntity.class, level())) {
+                Relationship rs = UnitServerEvents.getUnitToEntityRelationship(this, entity);
+                if (rs != Relationship.FRIENDLY && rs != Relationship.OWNED)
+                    entity.addEffect(new MobEffectInstance(MobEffectRegistrar.FROST_DAMAGE.get(), duration));
+            }
+        }
     }
 
     public void frostBlink(BlockPos bp) {
@@ -478,10 +572,21 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     @Override
     public boolean doHurtTarget(@NotNull Entity pEntity) {
         boolean result = super.doHurtTarget(pEntity);
-        if (result && getChillingPresence().getRank(this) >= 1 && !level().isClientSide()) {
-            BlockUtils.placeWraithSnow((ServerLevel) level(), pEntity.getOnPos().above());
-            BlockUtils.placeWraithSnow((ServerLevel) level(), pEntity.getOnPos().above());
-            BlockUtils.placeWraithSnow((ServerLevel) level(), pEntity.getOnPos().above());
+        if (result && getBitterFrost().getRank(this) >= 1 && !level().isClientSide()) {
+            snowQueue.putAll(getSnowPositions(level(), pEntity.getOnPos().above(), 1));
+        }
+        return result;
+    }
+
+    @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        boolean result = super.hurt(pSource, pAmount);
+        if (result && getBitterFrost().getRank(this) >= 2 && !level().isClientSide()) {
+            if (pSource.getEntity() instanceof Mob mob) {
+                BlockUtils.placeWraithSnow((ServerLevel) level(), mob.getOnPos().above());
+            } else if (pSource.getEntity() instanceof Projectile projectile && projectile.getOwner() instanceof Mob mob) {
+                BlockUtils.placeWraithSnow((ServerLevel) level(), mob.getOnPos().above());
+            }
         }
         return result;
     }
@@ -494,5 +599,12 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     @Override
     public float getBonusMeleeRangeForAttackers() {
         return 0.3f;
+    }
+
+    @Override
+    public AABB getInflatedSelectionBox() {
+        AABB aabb = this.getBoundingBox().inflate(0.4f, 0, 0.4f);
+        aabb.setMaxY(aabb.maxY + 1.0f);
+        return aabb;
     }
 }

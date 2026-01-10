@@ -9,9 +9,9 @@ import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaC
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingPresencePassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.IceNova;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.entities.NecromancerProjectile;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
@@ -273,6 +273,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     }
     public int animateTicks = 0;
     public float animateScale = 1.0f;
+    public float animateSpeed = 1.0f;
     public boolean animateScaleReducing = false;
     public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
     public int getAnimateTicksLeft() { return animateTicks; }

@@ -33,7 +33,7 @@ public class MarchOfProgress extends HeroAbility {
     public static final int MANA_COST_PER_SECOND = 3;
 
     public MarchOfProgress() {
-        super(1, 0, UnitAction.MARCH_OF_PROGRESS,  CD_MAX, 0, RADIUS, false);
+        super(1, 0, UnitAction.MARCH_OF_PROGRESS_TOGGLE,  CD_MAX, 0, RADIUS, false);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class MarchOfProgress extends HeroAbility {
                 () -> ((EnchanterUnit) unit).auraEnabled,
                 () -> getRank(hero) == 0,
                 () -> true,
-                () -> sendUnitCommand(UnitAction.MARCH_OF_PROGRESS),
+                () -> sendUnitCommand(UnitAction.MARCH_OF_PROGRESS_TOGGLE),
                 null,
                 getTooltipLines(hero),
                 this,

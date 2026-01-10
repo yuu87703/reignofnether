@@ -251,8 +251,7 @@ public class EntityRegistrar {
 
     public static final RegistryObject<EntityType<WretchedWraithUnit>> WRETCHED_WRAITH_UNIT = ENTITIES.register("wretched_wraith_unit",
             () -> EntityType.Builder.of(WretchedWraithUnit::new, MobCategory.CREATURE)
-                    .sized(1.5f * WretchedWraithRenderer.SCALE_MULT,
-                            2.0f * WretchedWraithRenderer.SCALE_MULT)
+                    .sized(EntityType.ZOMBIE.getWidth(), EntityType.ZOMBIE.getHeight())
                     .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
                     .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretched_wraith_unit").toString()));
 

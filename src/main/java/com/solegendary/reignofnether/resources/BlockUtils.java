@@ -8,7 +8,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -79,10 +81,10 @@ public class BlockUtils {
     private static boolean isWraithSnow(BlockState bs) {
         return bs.getBlock() == BlockRegistrar.WRAITH_SNOW_LAYER.get();
     }
-    private static int getWraithSnowLayers(BlockState bs) {
+    public static int getWraithSnowLayers(BlockState bs) {
         return isWraithSnow(bs) ? bs.getValue(BlockStateProperties.LAYERS) : 0;
     }
-    private static boolean canPlaceSnow(Level level, BlockPos pos) {
+    public static boolean canPlaceSnow(Level level, BlockPos pos) {
         return !MiscUtil.isSolidBlocking(level, pos) && MiscUtil.isSolidBlocking(level, pos.below());
     }
 
@@ -139,18 +141,13 @@ public class BlockUtils {
             }
         }
         // extra chance for centre pos:
-        if (centrePosLayers < 8)
+        if (centrePosLayers < 8 && canPlaceSnow(level, pos))
             posesAndLayers.put(pos, baseWeight * 2);
         return posesAndLayers;
     }
 
-    // places wraith snow at pos - if there is already snow there, then first check if it is the highest nearby snow
-    // and if so, place it at a random adjacent pos instead
     public static void placeWraithSnow(ServerLevel level, BlockPos pos) {
         BlockState bsExisting = level.getBlockState(pos);
-
-        if (!canPlaceSnow(level, pos))
-            return;
 
         int layers = getWraithSnowLayers(bsExisting);
 
@@ -167,11 +164,13 @@ public class BlockUtils {
 
             if (targetLayers <= 0) {
                 level.setBlockAndUpdate(targetPos, WRAITH_SNOW_BS);
+
             } else if (targetLayers < 8) {
                 BlockState newLayer = targetBs.setValue(BlockStateProperties.LAYERS, targetLayers + 1);
                 level.setBlockAndUpdate(targetPos, newLayer);
             }
+            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(targetBs));
+            level.levelEvent(targetBs.getSoundType().getPlaceSound().hashCode(), targetPos, Block.getId(targetBs));
         }
-
     }
 }

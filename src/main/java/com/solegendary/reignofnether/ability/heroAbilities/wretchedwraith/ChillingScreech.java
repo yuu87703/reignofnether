@@ -5,6 +5,8 @@ import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.goals.GenericUntargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -23,28 +25,28 @@ import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitComman
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
-public class IceNova extends HeroAbility {
+public class ChillingScreech extends HeroAbility {
 
     private static final int CD_MAX_SECONDS = 30 * ResourceCost.TICKS_PER_SECOND;
 
-    public static final int DAMAGE_RANK_1 = 6;
-    public static final int DAMAGE_RANK_2 = 8;
-    public static final int DAMAGE_RANK_3 = 10;
+    public static final int DURATION_RANK_1 = 6 * 20;
+    public static final int DURATION_RANK_2 = 8 * 20;
+    public static final int DURATION_RANK_3 = 10 * 20;
 
     public static final int RADIUS_RANK_1 = 4;
-    public static final int RADIUS_RANK_2 = 5;
-    public static final int RADIUS_RANK_3 = 6;
+    public static final int RADIUS_RANK_2 = 6;
+    public static final int RADIUS_RANK_3 = 8;
 
-    public int damage = DAMAGE_RANK_1;
+    public int duration = DURATION_RANK_1;
 
-    public IceNova() {
-        super(3, 75, UnitAction.ICE_NOVA, CD_MAX_SECONDS, 0, 0, false);
+    public ChillingScreech() {
+        super(3, 0, UnitAction.CHILLING_SCREECH, 0, 0, RADIUS_RANK_1, false);
     }
 
     @Override
     public boolean isCasting(Unit unit) {
         if (unit instanceof WretchedWraithUnit wraithUnit) {
-            GenericUntargetedSpellGoal goal = wraithUnit.getCastIceNovaGoal();
+            GenericUntargetedSpellGoal goal = wraithUnit.getCastChillingScreechGoal();
             if (goal != null)
                 return goal.isCasting();
         }
@@ -63,13 +65,13 @@ public class IceNova extends HeroAbility {
     @Override
     public void updateStatsForRank(HeroUnit hero) {
         if (getRank(hero) == 1) {
-            damage = DAMAGE_RANK_1;
+            duration = DURATION_RANK_1;
             radius = RADIUS_RANK_1;
         } else if (getRank(hero) == 2) {
-            damage = DAMAGE_RANK_2;
+            duration = DURATION_RANK_2;
             radius = RADIUS_RANK_2;
         } else if (getRank(hero) == 3) {
-            damage = DAMAGE_RANK_3;
+            duration = DURATION_RANK_3;
             radius = RADIUS_RANK_3;
         }
     }
@@ -77,13 +79,13 @@ public class IceNova extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Ice Nova",
+        return new AbilityButton("Chilling Screech",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/ice.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) <= 0,
                 () -> true,
-                () -> sendUnitCommand(UnitAction.ICE_NOVA),
+                () -> sendUnitCommand(UnitAction.CHILLING_SCREECH),
                 null,
                 getTooltipLines(hero),
                 this,
@@ -94,7 +96,7 @@ public class IceNova extends HeroAbility {
     @Override
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
-                "Ice Nova",
+                "Chilling Screech",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/ice.png"),
                 hero
         );
@@ -102,35 +104,43 @@ public class IceNova extends HeroAbility {
 
     public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
         return List.of(
-                fcs(I18n.get("abilities.reignofnether.ice_nova") + " " + rankString(hero), true),
-                fcsIcons(I18n.get("abilities.reignofnether.ice_nova.stats", CD_MAX_SECONDS / 20, range, manaCost)),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech") + " " + rankString(hero), true),
+                fcsIcons(I18n.get("abilities.reignofnether.chilling_screech.stats", CD_MAX_SECONDS / 20, range, manaCost)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.ice_nova.tooltip1"))
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip2", duration))
         );
     }
 
     public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {
         return List.of(
-                fcs(I18n.get("abilities.reignofnether.ice_nova"), true),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech"), true),
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.ice_nova.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip2", duration)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.ice_nova.rank1", DAMAGE_RANK_1, RADIUS_RANK_1), getRank(hero) == 0),
-                fcs(I18n.get("abilities.reignofnether.ice_nova.rank2", DAMAGE_RANK_2, RADIUS_RANK_2), getRank(hero) == 1),
-                fcs(I18n.get("abilities.reignofnether.ice_nova.rank3", DAMAGE_RANK_3, RADIUS_RANK_3), getRank(hero) == 2)
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank1", DURATION_RANK_1, RADIUS_RANK_1), getRank(hero) == 0),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank2", DURATION_RANK_2, RADIUS_RANK_2), getRank(hero) == 1),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank3", DURATION_RANK_3, RADIUS_RANK_3), getRank(hero) == 2)
         );
     }
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        ((WretchedWraithUnit) unitUsing).getCastIceNovaGoal().setAbility(this);
-        ((WretchedWraithUnit) unitUsing).getCastIceNovaGoal().startCasting();
+        ((WretchedWraithUnit) unitUsing).getCastChillingScreechGoal().setAbility(this);
+        ((WretchedWraithUnit) unitUsing).getCastChillingScreechGoal().startCasting();
+        if (!level.isClientSide()) {
+            SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_ATTACK_LOUD, ((WretchedWraithUnit) unitUsing).blockPosition(), 0.6f);
+        }
     }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        ((WretchedWraithUnit) unitUsing).getCastIceNovaGoal().setAbility(this);
-        ((WretchedWraithUnit) unitUsing).getCastIceNovaGoal().startCasting();
+        ((WretchedWraithUnit) unitUsing).getCastChillingScreechGoal().setAbility(this);
+        ((WretchedWraithUnit) unitUsing).getCastChillingScreechGoal().startCasting();
+        if (!level.isClientSide()) {
+            SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_ATTACK_LOUD, ((WretchedWraithUnit) unitUsing).blockPosition(), 0.6f);
+        }
     }
 }
