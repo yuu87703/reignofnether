@@ -8,6 +8,8 @@ import com.solegendary.reignofnether.entities.models.NecromancerProjectileModel;
 import com.solegendary.reignofnether.entities.renderers.ThrowableTntRenderer;
 import com.solegendary.reignofnether.entities.renderers.NecromancerProjectileRenderer;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
+import com.solegendary.reignofnether.particles.BigEnchantParticle;
+import com.solegendary.reignofnether.particles.BigEnchantParticleProvider;
 import com.solegendary.reignofnether.registrars.*;
 import com.solegendary.reignofnether.unit.modelling.models.*;
 import com.solegendary.reignofnether.unit.modelling.renderers.*;
@@ -25,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -258,6 +261,14 @@ public class CommonModEvents {
             event.accept(ItemRegistrar.THROWABLE_TNT);
             event.accept(ItemRegistrar.THROWN_HERO_EXPERIENCE_BOTTLE);
         }
+    }
+
+    @SubscribeEvent
+    public static void registerParticles(RegisterParticleProvidersEvent evt) {
+        evt.registerSpriteSet(
+                ParticleRegistrar.BIG_ENCHANT.get(),
+                BigEnchantParticle.Provider::new
+        );
     }
 }
 
