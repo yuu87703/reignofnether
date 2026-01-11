@@ -154,6 +154,41 @@ public class MiscUtil {
         }
     }
 
+    // returns a list of all BlockPos values between two points
+    public static List<BlockPos> getLine2D(BlockPos start, BlockPos end) {
+        List<BlockPos> result = new ArrayList<>();
+
+        int x0 = start.getX();
+        int z0 = start.getZ();
+        int x1 = end.getX();
+        int z1 = end.getZ();
+
+        int dx = Math.abs(x1 - x0);
+        int dz = Math.abs(z1 - z0);
+
+        int sx = x0 < x1 ? 1 : -1;
+        int sz = z0 < z1 ? 1 : -1;
+
+        int err = dx - dz;
+
+        while (true) {
+            result.add(new BlockPos(x0, 0, z0));
+
+            if (x0 == x1 && z0 == z1) break;
+
+            int e2 = 2 * err;
+            if (e2 > -dz) {
+                err -= dz;
+                x0 += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                z0 += sz;
+            }
+        }
+        return result;
+    }
+
     // excludes trees and buildings
     public static BlockPos getHighestGroundBlock(Level level, BlockPos blockPos) {
         int y = level.getHeight();

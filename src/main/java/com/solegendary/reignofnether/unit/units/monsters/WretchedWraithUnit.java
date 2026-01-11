@@ -39,7 +39,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -320,7 +319,19 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
     }
 
-    private HashMap<BlockPos, Integer> snowQueue = new HashMap<>();
+    private enum FrostBlinkStatus {
+        DESCENDING,
+        UNDERGROUND,
+        ASCENDING,
+        NONE
+    }
+
+    private HashMap<BlockPos, Integer> snowToPlace = new HashMap<>();
+    private int frostblinkTicks = 0;
+    private int frostblinkTicksMax = 0;
+    private BlockPos frostblinkTarget = null;
+    private FrostBlinkStatus frostBlinkStatus = FrostBlinkStatus.NONE;
+    private int blizzardTicksLeft = 0;
 
     public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -374,15 +385,16 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
 
         if (!level().isClientSide()) {
             HashMap<BlockPos, Integer> newSnowQueue = new HashMap<>();
-            for (BlockPos pos : snowQueue.keySet()) {
-                int ticksLeft = snowQueue.get(pos);
+            for (BlockPos pos : snowToPlace.keySet()) {
+                int ticksLeft = snowToPlace.get(pos);
                 if (ticksLeft <= 0) {
-                    BlockUtils.placeWraithSnow((ServerLevel) level(), pos);
+                    if (canPlaceSnow(level(), pos))
+                        BlockUtils.placeWraithSnow((ServerLevel) level(), pos);
                 } else {
                     newSnowQueue.put(pos, ticksLeft - 1);
                 }
             }
-            snowQueue = newSnowQueue;
+            snowToPlace = newSnowQueue;
             if (getBitterFrost().getRank(this) >= 3 && tickCount % 40 == 0) {
                 if (onGround() && canPlaceSnow(level(), getOnPos().above())) {
                     BlockUtils.placeWraithSnow((ServerLevel) level(), getOnPos().above());
@@ -394,6 +406,10 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 heal(1);
             }
         }
+        if (!level().isClientSide())
+            tickFrostBlink();
+        if (blizzardTicksLeft > 0)
+            blizzardTicksLeft -= 1;
     }
 
     @Override
@@ -550,7 +566,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         if (chillingScreech.getRank(this) > 0) {
             float radius = getChillingScreech().radius;
             int duration = getChillingScreech().duration;
-            snowQueue.putAll(getSnowPositions(level(), this.getOnPos().above(), (int) radius));
+            snowToPlace.putAll(getSnowPositions(level(), this.getOnPos().above(), (int) radius));
             for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(position(), radius, LivingEntity.class, level())) {
                 Relationship rs = UnitServerEvents.getUnitToEntityRelationship(this, entity);
                 if (rs != Relationship.FRIENDLY && rs != Relationship.OWNED)
@@ -559,9 +575,44 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
     }
 
-    public void frostBlink(BlockPos bp) {
+    public void frostBlink(BlockPos targetPos) {
         if (level().isClientSide) return;
+        ArrayList<BlockPos> snowPoses = new ArrayList<>();
+        for (BlockPos pos : MiscUtil.getLine2D(getOnPos(), targetPos)) {
+            snowPoses.add(MiscUtil.getHighestGroundBlock(level(), pos).above().above());
+        }
+        for (int i = 0; i < snowPoses.size(); i++) {
+            snowToPlace.put(snowPoses.get(i), i);
+        }
+        HashMap<BlockPos, Integer> startSnowPoses = getSnowPositions(level(), getOnPos().above(), 2);
+        snowToPlace.putAll(startSnowPoses);
+        HashMap<BlockPos, Integer> endSnowPoses = getSnowPositions(level(), targetPos.above(), 2);
+        for (BlockPos pos : endSnowPoses.keySet()) {
+            endSnowPoses.replace(pos, endSnowPoses.get(pos) + snowPoses.size() + 1);
+        }
+        snowToPlace.putAll(endSnowPoses);
+        frostBlinkStatus = FrostBlinkStatus.DESCENDING;
+        frostblinkTicksMax = snowPoses.size() + 1;
+        frostblinkTarget = targetPos;
+        SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_TELEPORT_START, blockPosition());
+    }
 
+    private void tickFrostBlink() {
+        if (frostblinkTicksMax > 0 && frostBlinkStatus != FrostBlinkStatus.NONE) {
+            frostblinkTicks += 1;
+            if (frostblinkTicks > 3) {
+                frostBlinkStatus = FrostBlinkStatus.UNDERGROUND;
+                teleportTo(getX(), getY() - 20, getZ());
+            }
+        }
+        if (frostblinkTicks > frostblinkTicksMax && frostblinkTarget != null) {
+            SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_TELEPORT_END, frostblinkTarget);
+            frostBlinkStatus = FrostBlinkStatus.ASCENDING;
+            teleportTo(frostblinkTarget.above().getX(), frostblinkTarget.above().getY(), frostblinkTarget.above().getZ());
+            frostblinkTicks = 0;
+            frostblinkTicksMax = 0;
+            frostblinkTarget = null;
+        }
     }
 
     public void blizzard() {
@@ -573,7 +624,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     public boolean doHurtTarget(@NotNull Entity pEntity) {
         boolean result = super.doHurtTarget(pEntity);
         if (result && getBitterFrost().getRank(this) >= 1 && !level().isClientSide()) {
-            snowQueue.putAll(getSnowPositions(level(), pEntity.getOnPos().above(), 1));
+            snowToPlace.putAll(getSnowPositions(level(), pEntity.getOnPos().above(), 1));
         }
         return result;
     }

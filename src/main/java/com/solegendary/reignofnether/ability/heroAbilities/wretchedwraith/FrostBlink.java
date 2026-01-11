@@ -26,13 +26,13 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class FrostBlink extends HeroAbility {
 
-    public static final int RANGE_RANK_1 = 7;
+    public static final int RANGE_RANK_1 = 6;
     public static final int RANGE_RANK_2 = 9;
-    public static final int RANGE_RANK_3 = 11;
+    public static final int RANGE_RANK_3 = 12;
 
-    public static final int CD_RANK_1 = 30;
-    public static final int CD_RANK_2 = 25;
-    public static final int CD_RANK_3 = 20;
+    public static final int CD_RANK_1 = 1;
+    public static final int CD_RANK_2 = 1;
+    public static final int CD_RANK_3 = 1;
 
     public static final int RADIUS = 3;
 

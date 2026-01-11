@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.resources;
 
+import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
@@ -85,7 +86,9 @@ public class BlockUtils {
         return isWraithSnow(bs) ? bs.getValue(BlockStateProperties.LAYERS) : 0;
     }
     public static boolean canPlaceSnow(Level level, BlockPos pos) {
-        return !MiscUtil.isSolidBlocking(level, pos) && MiscUtil.isSolidBlocking(level, pos.below());
+        return !MiscUtil.isSolidBlocking(level, pos) &&
+                MiscUtil.isSolidBlocking(level, pos.below()) &&
+                !BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), pos);
     }
 
     private static BlockPos pickWeighted(Map<BlockPos, Integer> weights) {
@@ -169,8 +172,8 @@ public class BlockUtils {
                 BlockState newLayer = targetBs.setValue(BlockStateProperties.LAYERS, targetLayers + 1);
                 level.setBlockAndUpdate(targetPos, newLayer);
             }
-            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(targetBs));
-            level.levelEvent(targetBs.getSoundType().getPlaceSound().hashCode(), targetPos, Block.getId(targetBs));
+            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(WRAITH_SNOW_BS));
+            level.levelEvent(targetBs.getSoundType().getPlaceSound().hashCode(), targetPos, Block.getId(WRAITH_SNOW_BS));
         }
     }
 }
