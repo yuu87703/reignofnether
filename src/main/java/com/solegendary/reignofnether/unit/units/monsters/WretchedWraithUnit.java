@@ -309,7 +309,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 activeAnimDef = WretchedWraithAnimations.ULTIMATE;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
-                animateSpeed = 1.0f;
+                animateSpeed = 0.5f;
                 startAnimation(activeAnimDef);
             }
             default -> {
@@ -319,18 +319,11 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
     }
 
-    private enum FrostBlinkStatus {
-        DESCENDING,
-        UNDERGROUND,
-        ASCENDING,
-        NONE
-    }
-
     private HashMap<BlockPos, Integer> snowToPlace = new HashMap<>();
     private int frostblinkTicks = 0;
     private int frostblinkTicksMax = 0;
     private BlockPos frostblinkTarget = null;
-    private FrostBlinkStatus frostBlinkStatus = FrostBlinkStatus.NONE;
+    private boolean frostBlinkInProgress = false;
     private int blizzardTicksLeft = 0;
 
     public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {
@@ -354,6 +347,9 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.castChillingScreechGoal.stop();
         this.castFrostblinkGoal.stop();
         this.castBlizzardGoal.stop();
+        if (this.blizzardTicksLeft > 0) {
+            blizzardTicksLeft = 0;
+        }
     }
 
     @Override
@@ -395,7 +391,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 }
             }
             snowToPlace = newSnowQueue;
-            if (getBitterFrost().getRank(this) >= 3 && tickCount % 40 == 0) {
+            if (getBitterFrost().getRank(this) >= 3 && tickCount % 30 == 0) {
                 if (onGround() && canPlaceSnow(level(), getOnPos().above())) {
                     BlockUtils.placeWraithSnow((ServerLevel) level(), getOnPos().above());
                 }
@@ -591,33 +587,32 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
             endSnowPoses.replace(pos, endSnowPoses.get(pos) + snowPoses.size() + 1);
         }
         snowToPlace.putAll(endSnowPoses);
-        frostBlinkStatus = FrostBlinkStatus.DESCENDING;
+        frostBlinkInProgress = true;
         frostblinkTicksMax = snowPoses.size() + 1;
         frostblinkTarget = targetPos;
         SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_TELEPORT_START, blockPosition());
     }
 
     private void tickFrostBlink() {
-        if (frostblinkTicksMax > 0 && frostBlinkStatus != FrostBlinkStatus.NONE) {
+        if (frostblinkTicksMax > 0 && frostBlinkInProgress) {
             frostblinkTicks += 1;
             if (frostblinkTicks > 3) {
-                frostBlinkStatus = FrostBlinkStatus.UNDERGROUND;
                 teleportTo(getX(), getY() - 20, getZ());
             }
-        }
-        if (frostblinkTicks > frostblinkTicksMax && frostblinkTarget != null) {
-            SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_TELEPORT_END, frostblinkTarget);
-            frostBlinkStatus = FrostBlinkStatus.ASCENDING;
-            teleportTo(frostblinkTarget.above().getX(), frostblinkTarget.above().getY(), frostblinkTarget.above().getZ());
-            frostblinkTicks = 0;
-            frostblinkTicksMax = 0;
-            frostblinkTarget = null;
+            if (frostblinkTicks > frostblinkTicksMax && frostblinkTarget != null) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_TELEPORT_END, frostblinkTarget);
+                frostBlinkInProgress = false;
+                teleportTo(frostblinkTarget.above().getX(), frostblinkTarget.above().getY(), frostblinkTarget.above().getZ());
+                frostblinkTicks = 0;
+                frostblinkTicksMax = 0;
+                frostblinkTarget = null;
+            }
         }
     }
 
     public void blizzard() {
         if (level().isClientSide) return;
-
+        blizzardTicksLeft = Blizzard.DURATION_SECONDS * 20;
     }
 
     @Override

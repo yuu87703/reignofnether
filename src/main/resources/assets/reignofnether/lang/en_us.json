@@ -234,6 +234,7 @@
     "abilities.reignofnether.frostblink.rank1": "Rank 1: %d range, %ds cooldown",
     "abilities.reignofnether.frostblink.rank2": "Rank 2: %d range, %ds cooldown",
     "abilities.reignofnether.frostblink.rank3": "Rank 3: %d range, %ds cooldown",
+    "abilities.reignofnether.frostblink.out_of_bounds": "You can't teleport there",
     "abilities.reignofnether.bitter_frost": "Bitter Frost (Passive)",
     "abilities.reignofnether.bitter_frost.tooltip1": "Create extra snow from various actions. Each layer",
     "abilities.reignofnether.bitter_frost.tooltip2": "reduces attack, move speed and armor by 10%% (max 80%%)",

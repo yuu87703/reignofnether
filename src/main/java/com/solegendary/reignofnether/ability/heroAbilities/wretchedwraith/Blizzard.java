@@ -27,10 +27,10 @@ public class Blizzard extends HeroAbility {
 
     private static final int CD_MAX_SECONDS = 300 * ResourceCost.TICKS_PER_SECOND;
     public static final int DURATION_SECONDS = 10;
-    public static final int RADIUS = 10;
+    public static final int RADIUS = 20;
 
     public Blizzard() {
-        super(3, 100, UnitAction.BLIZZARD, CD_MAX_SECONDS, 0, RADIUS, false);
+        super(1, 100, UnitAction.BLIZZARD, CD_MAX_SECONDS, 0, RADIUS, false);
     }
 
     @Override
@@ -74,7 +74,9 @@ public class Blizzard extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.blizzard") + " " + rankString(hero), true),
                 fcsIcons(I18n.get("abilities.reignofnether.blizzard.stats", CD_MAX_SECONDS / 20, manaCost)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", DURATION_SECONDS))
+                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", DURATION_SECONDS)),
+                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip2")),
+                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip3"))
         );
     }
 

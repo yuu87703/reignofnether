@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -125,13 +126,16 @@ public class FrostBlink extends HeroAbility {
 
     @Override
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
-        ((WretchedWraithUnit) unitUsing).getCastFrostblinkGoal().setAbility(this);
-        ((WretchedWraithUnit) unitUsing).getCastFrostblinkGoal().setTarget(targetBp);
+        if (level.getWorldBorder().isWithinBounds(targetBp)) {
+            ((WretchedWraithUnit) unitUsing).getCastFrostblinkGoal().setAbility(this);
+            ((WretchedWraithUnit) unitUsing).getCastFrostblinkGoal().setTarget(targetBp);
+        } else if (level.isClientSide()) {
+            HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.frostblink.out_of_bounds"), 200);
+        }
     }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
-        ((WretchedWraithUnit) unitUsing).getCastFrostblinkGoal().setAbility(this);
-        ((WretchedWraithUnit) unitUsing).getCastFrostblinkGoal().setTarget(targetEntity);
+        use(level, unitUsing, targetEntity.getOnPos());
     }
 }
