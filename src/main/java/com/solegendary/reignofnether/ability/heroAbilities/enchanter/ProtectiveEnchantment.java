@@ -89,7 +89,7 @@ public class ProtectiveEnchantment extends AbstractEnchantment {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         AbilityButton button = new AbilityButton("Protective Enchantment",
-                null,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/protective_enchantment.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.PROTECTIVE_ENCHANTMENT || isAutocasting(hero),
                 () -> getRank(hero) == 0,
@@ -100,8 +100,6 @@ public class ProtectiveEnchantment extends AbstractEnchantment {
                 this,
                 hero
         );
-        button.iconItem = new ItemStack(Items.IRON_CHESTPLATE);
-        button.iconItem.enchant(EnchantmentRegistrar.FORTYIFYING.get(), 1);
         return button;
     }
 
@@ -109,11 +107,9 @@ public class ProtectiveEnchantment extends AbstractEnchantment {
     public Button getRankUpButton(HeroUnit hero) {
         Button button = super.getRankUpButtonProtected(
                 "Protective Enchantment",
-                null,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/protective_enchantment.png"),
                 hero
         );
-        button.iconItem = new ItemStack(Items.IRON_CHESTPLATE);
-        button.iconItem.enchant(EnchantmentRegistrar.FORTYIFYING.get(), 1);
         return button;
     }
 

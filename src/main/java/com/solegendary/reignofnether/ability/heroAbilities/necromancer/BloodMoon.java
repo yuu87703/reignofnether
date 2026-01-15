@@ -64,7 +64,7 @@ public class BloodMoon extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Blood Moon",
-            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/blood_moon.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/blood_moon.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.BLOOD_MOON,
             () -> getRank(hero) == 0,
@@ -81,7 +81,7 @@ public class BloodMoon extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Blood Moon",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/blood_moon.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/blood_moon.png"),
                 hero
         );
     }

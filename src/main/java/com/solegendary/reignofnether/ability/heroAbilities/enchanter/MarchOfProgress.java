@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.heroAbilities.enchanter;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -50,7 +51,7 @@ public class MarchOfProgress extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("March of Progress",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/enchanted_book.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/march_of_progress.png"),
                 hotkey,
                 () -> ((EnchanterUnit) unit).auraEnabled,
                 () -> getRank(hero) == 0,
@@ -67,7 +68,7 @@ public class MarchOfProgress extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "March of Progress",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/enchanted_book.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/march_of_progress.png"),
                 hero
         );
     }

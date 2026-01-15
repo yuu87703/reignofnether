@@ -78,7 +78,7 @@ public class FrostBlink extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Frostblink",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/enderpearl.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/frostblink.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.FROSTBLINK,
                 () -> getRank(hero) == 0,
@@ -95,7 +95,7 @@ public class FrostBlink extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Frostblink",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/enderpearl.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/frostblink.png"),
                 hero
         );
     }

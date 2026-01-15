@@ -18,6 +18,10 @@ public class BlockServerEvents {
     public static ArrayList<TemporaryBlock> tempBlocks = new ArrayList<>();
 
     public static void addTempBlock(ServerLevel level, BlockPos bp, BlockState bs, BlockState oldBs, int lifespan) {
+        addTempBlock(level, bp, bs, oldBs, lifespan, false);
+    }
+
+    public static void addTempBlock(ServerLevel level, BlockPos bp, BlockState bs, BlockState oldBs, int lifespan, boolean allowInsideBuildings) {
         if (BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), bp))
             return;
 

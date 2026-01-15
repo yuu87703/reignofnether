@@ -68,6 +68,13 @@
         "subtitle": "sounds.reignofnether.wretchedwraith_teleport_start",
         "sounds": [ "reignofnether:wretchedwraith_teleport_start" ]
     },
+    "wretchedwraith_blizzard": {
+        "subtitle": "sounds.reignofnether.wretchedwraith_blizzard",
+        "sounds": [{
+            "name": "reignofnether:wretchedwraith_blizzard",
+            "stream": true
+        }]
+    },
     "wretchedwraith_death": {
         "subtitle": "sounds.reignofnether.wretchedwraith_attack_loud",
         "sounds": [

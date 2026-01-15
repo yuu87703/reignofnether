@@ -25,7 +25,7 @@ public class BitterFrostPassive extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Bitter Frost",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/snow.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/bitter_frost.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) == 0,
@@ -42,7 +42,7 @@ public class BitterFrostPassive extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Bitter Frost",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/snow.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/bitter_frost.png"),
                 hero
         );
     }

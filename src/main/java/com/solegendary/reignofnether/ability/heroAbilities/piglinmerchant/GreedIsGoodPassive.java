@@ -60,7 +60,7 @@ public class GreedIsGoodPassive extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Greed is Good",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/gold_block.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/greed_is_good.png"),
                 hotkey,
                 () -> isAutocasting(hero),
                 () -> getRank(hero) == 0,
@@ -77,7 +77,7 @@ public class GreedIsGoodPassive extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Greed is Good",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/gold_block.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/greed_is_good.png"),
                 hero
         );
     }

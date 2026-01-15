@@ -38,7 +38,7 @@ public class SetFangsCircle extends Ability {
         if (!(unit instanceof EvokerUnit evokerUnit))
             return null;
         return new AbilityButton("Evoker Fangs (Circular)",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/shears.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/evoker_fangs_circle.png"),
                 hotkey,
                 () -> !evokerUnit.isUsingLineFangs,
                 () -> false,

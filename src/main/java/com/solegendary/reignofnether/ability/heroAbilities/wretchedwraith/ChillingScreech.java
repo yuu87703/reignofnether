@@ -80,7 +80,7 @@ public class ChillingScreech extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Chilling Screech",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/ice.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/chilling_screech.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) <= 0,
@@ -97,7 +97,7 @@ public class ChillingScreech extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Chilling Screech",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/ice.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/chilling_screech.png"),
                 hero
         );
     }

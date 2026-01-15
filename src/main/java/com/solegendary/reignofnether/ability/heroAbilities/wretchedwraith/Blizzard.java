@@ -26,7 +26,8 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 public class Blizzard extends HeroAbility {
 
     private static final int CD_MAX_SECONDS = 300 * ResourceCost.TICKS_PER_SECOND;
-    public static final int DURATION_SECONDS = 10;
+    public static final int CHANNEL_DURATION = 15 * ResourceCost.TICKS_PER_SECOND;
+    public static final int FREEZE_DURATION = 6 * ResourceCost.TICKS_PER_SECOND;
     public static final int RADIUS = 20;
 
     public Blizzard() {
@@ -47,7 +48,7 @@ public class Blizzard extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Blizzard",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/blue_ice.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/blizzard.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) <= 0,
@@ -64,7 +65,7 @@ public class Blizzard extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Blizzard",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/blue_ice.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/blizzard.png"),
                 hero
         );
     }
@@ -74,7 +75,7 @@ public class Blizzard extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.blizzard") + " " + rankString(hero), true),
                 fcsIcons(I18n.get("abilities.reignofnether.blizzard.stats", CD_MAX_SECONDS / 20, manaCost)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", DURATION_SECONDS)),
+                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", CHANNEL_DURATION / 20)),
                 fcs(I18n.get("abilities.reignofnether.blizzard.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.blizzard.tooltip3"))
         );
@@ -85,7 +86,7 @@ public class Blizzard extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.blizzard"), true),
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", DURATION_SECONDS)),
+                fcs(I18n.get("abilities.reignofnether.blizzard.tooltip1", CHANNEL_DURATION / 20)),
                 fcs(I18n.get("abilities.reignofnether.blizzard.tooltip2")),
                 fcs(I18n.get("abilities.reignofnether.blizzard.tooltip3"))
         );
@@ -95,11 +96,13 @@ public class Blizzard extends HeroAbility {
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().setAbility(this);
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().startCasting();
+        ((WretchedWraithUnit) unitUsing).blizzard();
     }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().setAbility(this);
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().startCasting();
+        ((WretchedWraithUnit) unitUsing).blizzard();
     }
 }

@@ -8,15 +8,18 @@ import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizza
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
+import com.solegendary.reignofnether.blocks.BlockServerEvents;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -33,6 +36,7 @@ import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -41,6 +45,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -51,6 +56,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +64,7 @@ import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -309,7 +316,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 activeAnimDef = WretchedWraithAnimations.ULTIMATE;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
-                animateSpeed = 0.5f;
+                animateSpeed = 0.6f;
                 startAnimation(activeAnimDef);
             }
             default -> {
@@ -349,6 +356,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.castBlizzardGoal.stop();
         if (this.blizzardTicksLeft > 0) {
             blizzardTicksLeft = 0;
+            SoundClientboundPacket.stopSoundWithId(getId());
         }
     }
 
@@ -402,10 +410,10 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 heal(1);
             }
         }
-        if (!level().isClientSide())
+        if (!level().isClientSide()) {
             tickFrostBlink();
-        if (blizzardTicksLeft > 0)
-            blizzardTicksLeft -= 1;
+            tickBlizzard();
+        }
     }
 
     @Override
@@ -477,11 +485,11 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         );
         this.castBlizzardGoal = new GenericUntargetedSpellGoal(
                 this,
-                200,
-                this::blizzard,
+                Blizzard.CHANNEL_DURATION * 20,
+                null,
                 UnitAnimationAction.ULTIMATE,
-                UnitAnimationAction.STOP,
-                UnitAnimationAction.STOP
+                null,
+                null
         );
     }
 
@@ -610,9 +618,76 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
     }
 
+    private void freezeRandomNearbyEnemy() {
+        ArrayList<Mob> mobs = new ArrayList<>(MiscUtil.getEntitiesWithinRange(position(), Blizzard.RADIUS, Mob.class, level()));
+        Collections.shuffle(mobs);
+        for (Mob mob : mobs) {
+            Relationship rs = UnitServerEvents.getUnitToEntityRelationship(this, mob);
+            if (rs != Relationship.OWNED && rs != Relationship.FRIENDLY &&
+                mob.onGround() && !(mob instanceof WretchedWraithUnit) &&
+                !mob.hasEffect(MobEffectRegistrar.FREEZE.get())) {
+                int duration = Blizzard.FREEZE_DURATION;
+                BlockServerEvents.addTempBlock((ServerLevel) level(), mob.getOnPos().above(),
+                        Blocks.PACKED_ICE.defaultBlockState(), Blocks.AIR.defaultBlockState(), duration, true);
+                BlockServerEvents.addTempBlock((ServerLevel) level(), mob.getOnPos().above().above(),
+                        Blocks.PACKED_ICE.defaultBlockState(), Blocks.AIR.defaultBlockState(), duration, true);
+                BlockServerEvents.addTempBlock((ServerLevel) level(), mob.getOnPos().above().above().above(),
+                        BlockRegistrar.WRAITH_SNOW_LAYER.get().defaultBlockState(), Blocks.AIR.defaultBlockState(), duration, true);
+                snowToPlace.putAll(getSnowPositions(level(), mob.getOnPos().above(), 2));
+                mob.addEffect(new MobEffectInstance(MobEffectRegistrar.FREEZE.get(), duration));
+                mob.addEffect(new MobEffectInstance(MobEffectRegistrar.FROST_DAMAGE.get(), duration));
+                MiscUtil.addParticleExplosion(ParticleTypes.SNOWFLAKE, 10, level(), mob.position());
+                break;
+            }
+        }
+    }
+
+    public void spawnSnowStorm(
+            int radius,
+            int particlesPerTick
+    ) {
+        for (int i = 0; i < particlesPerTick; i++) {
+            double x = getX() + random.nextDouble() * radius * 2 - radius;
+            double y = getY() + random.nextDouble() * 10 + 5; // spawn above
+            double z = getZ() + random.nextDouble() * radius * 2 - radius;
+
+            // wind + fall speed
+            double vx = random.nextGaussian() * 0.01;
+            double vy = -0.03 - random.nextDouble() * 0.02;
+            double vz = random.nextGaussian() * 0.01;
+
+            ((ServerLevel) level()).sendParticles(
+                    ParticleTypes.ITEM_SNOWBALL,
+                    x, y, z,
+                    1,          // count
+                    vx, vy, vz, // velocity
+                    0.0
+            );
+        }
+    }
+
+    private void tickBlizzard() {
+        if (blizzardTicksLeft > 0) {
+            blizzardTicksLeft -= 1;
+            if (blizzardTicksLeft <= 0) {
+                SoundClientboundPacket.stopSoundWithId(getId());
+            }
+        }
+        if (blizzardTicksLeft > 0 && blizzardTicksLeft < Blizzard.CHANNEL_DURATION - 20) {
+            if (blizzardTicksLeft % 30 == 0) {
+                freezeRandomNearbyEnemy();
+            }
+            if (blizzardTicksLeft % 3 == 0) {
+                spawnSnowStorm(Blizzard.RADIUS, 15);
+            }
+        }
+    }
+
     public void blizzard() {
         if (level().isClientSide) return;
-        blizzardTicksLeft = Blizzard.DURATION_SECONDS * 20;
+        blizzardTicksLeft = Blizzard.CHANNEL_DURATION;
+        SoundClientboundPacket.playFadeableLoopingSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition(), 1.0f, getId());
+        //SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition()); this works...
     }
 
     @Override
@@ -652,5 +727,10 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         AABB aabb = this.getBoundingBox().inflate(0.4f, 0, 0.4f);
         aabb.setMaxY(aabb.maxY + 1.0f);
         return aabb;
+    }
+
+    @Override
+    public boolean isPushable() {
+        return blizzardTicksLeft <= 0 && !frostBlinkInProgress;
     }
 }

@@ -89,7 +89,7 @@ public class CivilEnchantment extends AbstractEnchantment {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         AbilityButton button = new AbilityButton("Civil Enchantment",
-                null,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/civil_enchantment.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.CIVIL_ENCHANTMENT || isAutocasting(hero),
                 () -> getRank(hero) == 0,
@@ -109,11 +109,9 @@ public class CivilEnchantment extends AbstractEnchantment {
     public Button getRankUpButton(HeroUnit hero) {
         Button button = super.getRankUpButtonProtected(
                 "Civil Enchantment",
-                null,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/civil_enchantment.png"),
                 hero
         );
-        button.iconItem = new ItemStack(Items.IRON_PICKAXE);
-        button.iconItem.enchant(Enchantments.BLOCK_EFFICIENCY, 1);
         return button;
     }
 

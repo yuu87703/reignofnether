@@ -46,13 +46,8 @@ public class FancyFeast extends HeroAbility {
         super(3, 70, UnitAction.FANCY_FEAST, CD_MAX_SECONDS, RANGE, 0, false);
     }
 
-    private ResourceLocation getIcon(int plusRank, HeroUnit hero) {
-        if (getRank(hero) + plusRank == 3)
-            return ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/cooked_beef.png");
-        else if (getRank(hero) + plusRank == 2)
-            return ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/cooked_chicken.png");
-        else
-            return ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/bread.png");
+    private ResourceLocation getIcon() {
+        return ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/fancy_feast.png");
     }
 
     public Item getFoodItem(HeroUnit hero) {
@@ -87,7 +82,7 @@ public class FancyFeast extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Fancy Feast",
-                getIcon(0, hero),
+                getIcon(),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.FANCY_FEAST,
                 () -> getRank(hero) == 0,
@@ -104,7 +99,7 @@ public class FancyFeast extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Fancy Feast",
-                getIcon(1, hero),
+                getIcon(),
                 hero
         );
     }

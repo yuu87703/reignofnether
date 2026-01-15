@@ -23,6 +23,8 @@ public class SoundClientEvents {
 
     public static FadeableMusicInstance customSong = null;
 
+    private static final ArrayList<FadeableSoundInstance> activeFadeableSounds = new ArrayList<>();
+
     public static int songTicksLeft = 0;
 
     private static final Minecraft MC = Minecraft.getInstance();
@@ -71,6 +73,16 @@ public class SoundClientEvents {
         }
     }
 
+    public static void stopSound(int id) {
+        activeFadeableSounds.removeIf(s -> {
+            if (s.id == id) {
+                s.fadeOut();
+                return true;
+            }
+            return false;
+        });
+    }
+
     public static void playSoundAtPos(SoundAction soundAction, BlockPos bp) {
         playSoundAtPos(soundAction, bp, 1.0f);
     }
@@ -81,6 +93,13 @@ public class SoundClientEvents {
         if (level != null) {
             level.playLocalSound(bp.getX(), bp.getY(), bp.getZ(), soundEvent, SoundSource.NEUTRAL, volume, 1.0F, false);
         }
+    }
+
+    public static void playFadeableSoundAtPos(SoundAction soundAction, BlockPos bp, float volume, int id) {
+        SoundEvent soundEvent = SOUND_MAP.get(soundAction);
+        FadeableSoundInstance fsi = new FadeableSoundInstance(soundEvent, bp, id,true, volume);
+        MC.getSoundManager().play(fsi);
+        activeFadeableSounds.add(fsi);
     }
 
     public static void playSoundForLocalPlayer(SoundAction soundAction) {
@@ -134,5 +153,6 @@ public class SoundClientEvents {
         SOUND_MAP.put(SoundAction.WRETCHED_WRAITH_ATTACK_LOUD, SoundRegistrar.WRETCHED_WRAITH_ATTACK_LOUD.get());
         SOUND_MAP.put(SoundAction.WRETCHED_WRAITH_TELEPORT_START, SoundRegistrar.WRETCHED_WRAITH_TELEPORT_START.get());
         SOUND_MAP.put(SoundAction.WRETCHED_WRAITH_TELEPORT_END, SoundRegistrar.WRETCHED_WRAITH_TELEPORT_END.get());
+        SOUND_MAP.put(SoundAction.WRETCHED_WRAITH_BLIZZARD, SoundRegistrar.WRETCHED_WRAITH_BLIZZARD.get());
     }
 }

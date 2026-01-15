@@ -715,4 +715,9 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
             }
         }
     }
+
+    @Override
+    public boolean isPushable() {
+        return avatarTicksLeft <= 0;
+    }
 }

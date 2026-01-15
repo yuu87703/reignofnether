@@ -21,7 +21,7 @@ public class MobEffectRegistrar {
     // prevents any actions or movement from happening
     public static final RegistryObject<MobEffect> STUN = MOB_EFFECTS.register("stun",  () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFFFFFF));
 
-    // similar to STUN but also prevents the mob from being knocked back
+    // similar to STUN but also prevents the mob from being knocked back and causes heavy damage over time
     public static final RegistryObject<MobEffect> FREEZE = MOB_EFFECTS.register("freeze",  () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0x000000));
 
     // prevents players from issuing any new commands

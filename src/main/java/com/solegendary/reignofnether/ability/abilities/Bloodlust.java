@@ -85,7 +85,7 @@ public class Bloodlust extends Ability {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
                 "Bloodlust",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/redstone_block.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/bloodlust.png"),
                 hotkey,
                 () -> unit.hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()),
                 () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLOODLUST),

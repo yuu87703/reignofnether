@@ -96,6 +96,10 @@ public class SoundRegistrar {
             SOUND_EVENTS.register("wretchedwraith_teleport_end", () ->
                     SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_teleport_end")));
 
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_BLIZZARD =
+            SOUND_EVENTS.register("wretchedwraith_blizzard", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_blizzard")));
+
 
     public static void init(FMLJavaModLoadingContext context) {
         SOUND_EVENTS.register(context.getModEventBus());

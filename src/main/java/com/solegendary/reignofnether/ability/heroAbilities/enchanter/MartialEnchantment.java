@@ -86,7 +86,7 @@ public class MartialEnchantment extends AbstractEnchantment {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         AbilityButton button = new AbilityButton("Martial Enchantment",
-                null,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/martial_enchantment.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.MARTIAL_ENCHANTMENT || isAutocasting(hero),
                 () -> getRank(hero) == 0,
@@ -97,8 +97,6 @@ public class MartialEnchantment extends AbstractEnchantment {
                 this,
                 hero
         );
-        button.iconItem = new ItemStack(Items.IRON_SWORD);
-        button.iconItem.enchant(Enchantments.SHARPNESS, 1);
         return button;
     }
 
@@ -106,11 +104,9 @@ public class MartialEnchantment extends AbstractEnchantment {
     public Button getRankUpButton(HeroUnit hero) {
         Button button = super.getRankUpButtonProtected(
                 "Martial Enchantment",
-                null,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/martial_enchantment.png"),
                 hero
         );
-        button.iconItem = new ItemStack(Items.IRON_SWORD);
-        button.iconItem.enchant(Enchantments.SHARPNESS, 1);
         return button;
     }
 
