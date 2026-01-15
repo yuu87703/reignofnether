@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.abilities;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -85,7 +86,7 @@ public class Bloodlust extends Ability {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         return new AbilityButton(
                 "Bloodlust",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/bloodlust.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/bloodlust.png"),
                 hotkey,
                 () -> unit.hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()),
                 () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BLOODLUST),

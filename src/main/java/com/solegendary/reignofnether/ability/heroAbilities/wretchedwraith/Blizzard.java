@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -48,7 +49,7 @@ public class Blizzard extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Blizzard",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/blizzard.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/blizzard.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) <= 0,
@@ -65,7 +66,7 @@ public class Blizzard extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Blizzard",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/blizzard.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/blizzard.png"),
                 hero
         );
     }

@@ -4,6 +4,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant;
 //Higher levels raise the quality of food thrown
 //Greed is Good raises the amount of food thrown
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -47,7 +48,7 @@ public class FancyFeast extends HeroAbility {
     }
 
     private ResourceLocation getIcon() {
-        return ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/fancy_feast.png");
+        return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/fancy_feast.png");
     }
 
     public Item getFoodItem(HeroUnit hero) {

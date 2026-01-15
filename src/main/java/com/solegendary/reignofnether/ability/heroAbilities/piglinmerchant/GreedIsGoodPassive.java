@@ -6,6 +6,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant;
 
 // only uses resources in multiples of 100
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -60,7 +61,7 @@ public class GreedIsGoodPassive extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Greed is Good",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/greed_is_good.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/greed_is_good.png"),
                 hotkey,
                 () -> isAutocasting(hero),
                 () -> getRank(hero) == 0,
@@ -77,7 +78,7 @@ public class GreedIsGoodPassive extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Greed is Good",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/greed_is_good.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/greed_is_good.png"),
                 hero
         );
     }

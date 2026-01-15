@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
@@ -114,6 +115,35 @@ public class AbilityButton extends Button {
                     x + iconSize - 7 - (extraLabel.length() >= 1 ? 0 : 5),
                     y + iconSize - 1,
                     extraLabelColour);
+        }
+    }
+
+    @Override
+    protected void renderIcons(GuiGraphics guiGraphics, int xyDiff) {
+        if (this.ability instanceof HeroAbility) {
+            if (bgIconResource != null) {
+                guiGraphics.pose().translate(0,0,1);
+                MyRenderer.renderIcon(
+                        guiGraphics,
+                        bgIconResource,
+                        frameResource != null ? x+3 + (7 - iconSize/2) : x + (7 - iconSize/2),
+                        frameResource != null ? y+3 + (7 - iconSize/2) : y + (7 - iconSize/2),
+                        iconSize + 2
+                );
+            }
+            // item/unit icon
+            if (iconResource != null) {
+                guiGraphics.pose().translate(0,0,1);
+                MyRenderer.renderIcon(
+                        guiGraphics,
+                        iconResource,
+                        x+3 + (7 - xyDiff - iconSize/2),
+                        y+3 + (7 - xyDiff - iconSize/2),
+                        DEFAULT_ICON_SIZE + 2
+                );
+            }
+        } else {
+            super.renderIcons(guiGraphics, xyDiff);
         }
     }
 }

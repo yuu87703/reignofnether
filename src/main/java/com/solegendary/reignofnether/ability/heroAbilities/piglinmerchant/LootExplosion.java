@@ -4,6 +4,7 @@ package com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant;
 //All equipment has limited durability
 //Greed is Good raises the amount of equipment thrown
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -42,7 +43,7 @@ public class LootExplosion extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Loot Explosion",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/loot_explosion.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/loot_explosion.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) == 0,
@@ -69,7 +70,7 @@ public class LootExplosion extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Loot Explosion",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/loot_explosion.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/loot_explosion.png"),
                 hero
         );
     }

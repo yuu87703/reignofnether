@@ -171,6 +171,30 @@ public class Button {
         }
     }
 
+    protected void renderIcons(GuiGraphics guiGraphics, int xyDiff) {
+        if (bgIconResource != null) {
+            guiGraphics.pose().translate(0,0,1);
+            MyRenderer.renderIcon(
+                    guiGraphics,
+                    bgIconResource,
+                    frameResource != null ? x+3 + (7 - iconSize/2) : x + (7 - iconSize/2),
+                    frameResource != null ? y+3 + (7 - iconSize/2) : y + (7 - iconSize/2),
+                    iconSize + 2
+            );
+        }
+        // item/unit icon
+        if (iconResource != null) {
+            guiGraphics.pose().translate(0,0,1);
+            MyRenderer.renderIcon(
+                    guiGraphics,
+                    iconResource,
+                    x+3 + (7 - xyDiff - iconSize/2),
+                    y+3 + (7 - xyDiff - iconSize/2),
+                    DEFAULT_ICON_SIZE + 2
+            );
+        }
+    }
+
     public void render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
         this.x = x;
         this.y = y;
@@ -181,27 +205,8 @@ public class Button {
             guiGraphics.pose().translate(0,0,1);
             MyRenderer.renderIconFrameWithBg(guiGraphics, this.frameResource, x + xyDiff, y + xyDiff, iconFrameSize, 0x64000000);
         }
+        renderIcons(guiGraphics, xyDiff);
 
-        if (bgIconResource != null) {
-            guiGraphics.pose().translate(0,0,1);
-            MyRenderer.renderIcon(
-                    guiGraphics,
-                    bgIconResource,
-                    frameResource != null ? x+4 + (7 - iconSize/2) : x + (7 - iconSize/2),
-                    frameResource != null ? y+4 + (7 - iconSize/2) : y + (7 - iconSize/2),
-                    iconSize
-            );
-        }
-        // item/unit icon
-        if (iconResource != null) {
-            guiGraphics.pose().translate(0,0,1);
-            MyRenderer.renderIcon(
-                    guiGraphics,
-                    iconResource,
-                    x+4 + (7 - xyDiff - iconSize/2), y+4 + (7 - xyDiff - iconSize/2),
-                    DEFAULT_ICON_SIZE
-            );
-        }
         if (iconItem != null) {
             guiGraphics.pose().translate(0,0,1);
             MyRenderer.renderItem(guiGraphics, iconItem, x+4 + (7 - xyDiff - iconSize/2), y+4 + (7 - xyDiff - iconSize/2), 0.75f);

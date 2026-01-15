@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -42,7 +43,7 @@ public class BitterFrostPassive extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Bitter Frost",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/bitter_frost.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/bitter_frost.png"),
                 hero
         );
     }

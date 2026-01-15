@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -80,7 +81,7 @@ public class ChillingScreech extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         return new AbilityButton("Chilling Screech",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/chilling_screech.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/chilling_screech.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) <= 0,
@@ -97,7 +98,7 @@ public class ChillingScreech extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Chilling Screech",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/chilling_screech.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/chilling_screech.png"),
                 hero
         );
     }
