@@ -49,7 +49,7 @@ public class SoulsAflame extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Souls Aflame",
+        AbilityButton button = new AbilityButton("Souls Aflame",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/fire.png"),
             hotkey,
             () -> false,
@@ -61,6 +61,8 @@ public class SoulsAflame extends HeroAbility {
             this,
             hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

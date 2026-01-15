@@ -57,7 +57,7 @@ public class Avatar extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Avatar",
+        AbilityButton button = new AbilityButton("Avatar",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/avatar.png"),
                 hotkey,
                 () -> false,
@@ -69,6 +69,8 @@ public class Avatar extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

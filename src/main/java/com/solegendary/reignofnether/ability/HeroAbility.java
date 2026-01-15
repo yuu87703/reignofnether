@@ -105,6 +105,7 @@ public abstract class HeroAbility extends Ability {
             getRankUpTooltipLines(hero)
         );
         button.bgIconResource = resourceLocation;
+        button.stretchIconToBorders = true;
         return button;
     }
 

@@ -100,8 +100,7 @@ public class CivilEnchantment extends AbstractEnchantment {
                 this,
                 hero
         );
-        button.iconItem = new ItemStack(Items.IRON_PICKAXE);
-        button.iconItem.enchant(Enchantments.BLOCK_EFFICIENCY, 1);
+        button.stretchIconToBorders = true;
         return button;
     }
 

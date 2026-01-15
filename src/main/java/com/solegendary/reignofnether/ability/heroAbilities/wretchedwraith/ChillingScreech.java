@@ -80,7 +80,7 @@ public class ChillingScreech extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Chilling Screech",
+        AbilityButton button = new AbilityButton("Chilling Screech",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/chilling_screech.png"),
                 hotkey,
                 () -> false,
@@ -92,6 +92,8 @@ public class ChillingScreech extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

@@ -50,7 +50,7 @@ public class MarchOfProgress extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("March of Progress",
+        AbilityButton button = new AbilityButton("March of Progress",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/march_of_progress.png"),
                 hotkey,
                 () -> ((EnchanterUnit) unit).auraEnabled,
@@ -62,6 +62,8 @@ public class MarchOfProgress extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

@@ -25,7 +25,7 @@ public class BitterFrostPassive extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Bitter Frost",
+        AbilityButton button = new AbilityButton("Bitter Frost",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/bitter_frost.png"),
                 hotkey,
                 () -> false,
@@ -37,6 +37,8 @@ public class BitterFrostPassive extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

@@ -78,7 +78,7 @@ public class MoltenBomb extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Molten Bomb",
+        AbilityButton button = new AbilityButton("Molten Bomb",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/fireball.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.MOLTEN_BOMB,
@@ -90,6 +90,8 @@ public class MoltenBomb extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

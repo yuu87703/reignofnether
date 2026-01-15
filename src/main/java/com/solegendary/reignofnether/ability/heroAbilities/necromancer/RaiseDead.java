@@ -51,7 +51,7 @@ public class RaiseDead extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Raise Dead",
+        AbilityButton button = new AbilityButton("Raise Dead",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/raise_dead.png"),
                 hotkey,
                 () -> false,
@@ -63,6 +63,8 @@ public class RaiseDead extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

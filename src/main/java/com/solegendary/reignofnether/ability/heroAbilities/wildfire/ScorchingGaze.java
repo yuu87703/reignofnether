@@ -56,7 +56,7 @@ public class ScorchingGaze extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Scorching Gaze",
+        AbilityButton button = new AbilityButton("Scorching Gaze",
             ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/eye_of_ender.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.SCORCHING_GAZE,
@@ -68,6 +68,8 @@ public class ScorchingGaze extends HeroAbility {
             this,
             hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

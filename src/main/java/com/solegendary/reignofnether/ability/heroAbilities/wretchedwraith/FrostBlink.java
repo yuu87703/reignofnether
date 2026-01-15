@@ -77,7 +77,7 @@ public class FrostBlink extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Frostblink",
+        AbilityButton button = new AbilityButton("Frostblink",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/frostblink.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.FROSTBLINK,
@@ -89,6 +89,8 @@ public class FrostBlink extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

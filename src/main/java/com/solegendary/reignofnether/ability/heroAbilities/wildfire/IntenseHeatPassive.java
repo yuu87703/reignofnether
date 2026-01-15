@@ -28,7 +28,7 @@ public class IntenseHeatPassive extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Intense Heat",
+        AbilityButton button = new AbilityButton("Intense Heat",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/redstone_block.png"),
                 hotkey,
                 () -> false,
@@ -40,6 +40,8 @@ public class IntenseHeatPassive extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

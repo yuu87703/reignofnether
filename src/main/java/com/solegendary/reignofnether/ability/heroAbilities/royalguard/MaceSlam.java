@@ -74,7 +74,7 @@ public class MaceSlam extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Mace Slam",
+        AbilityButton button = new AbilityButton("Mace Slam",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/mace_slam.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.MACE_SLAM,
@@ -86,6 +86,8 @@ public class MaceSlam extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

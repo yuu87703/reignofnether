@@ -48,7 +48,7 @@ public class Blizzard extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Blizzard",
+        AbilityButton button = new AbilityButton("Blizzard",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/blizzard.png"),
                 hotkey,
                 () -> false,
@@ -60,6 +60,8 @@ public class Blizzard extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

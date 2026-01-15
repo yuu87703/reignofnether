@@ -63,7 +63,7 @@ public class BloodMoon extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Blood Moon",
+        AbilityButton button = new AbilityButton("Blood Moon",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/blood_moon.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.BLOOD_MOON,
@@ -75,6 +75,8 @@ public class BloodMoon extends HeroAbility {
             this,
             hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

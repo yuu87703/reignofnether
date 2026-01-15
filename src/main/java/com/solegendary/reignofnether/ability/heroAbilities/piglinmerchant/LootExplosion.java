@@ -42,7 +42,7 @@ public class LootExplosion extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Loot Explosion",
+        AbilityButton button = new AbilityButton("Loot Explosion",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/loot_explosion.png"),
                 hotkey,
                 () -> false,
@@ -54,6 +54,8 @@ public class LootExplosion extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

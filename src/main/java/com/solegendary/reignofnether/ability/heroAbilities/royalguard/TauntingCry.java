@@ -61,7 +61,7 @@ public class TauntingCry extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Taunting Cry",
+        AbilityButton button = new AbilityButton("Taunting Cry",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/taunting_cry.png"),
                 hotkey,
                 () -> false,
@@ -73,6 +73,8 @@ public class TauntingCry extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override

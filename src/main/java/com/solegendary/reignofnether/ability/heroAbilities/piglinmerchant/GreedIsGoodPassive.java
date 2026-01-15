@@ -60,7 +60,7 @@ public class GreedIsGoodPassive extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Greed is Good",
+        AbilityButton button = new AbilityButton("Greed is Good",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/greed_is_good.png"),
                 hotkey,
                 () -> isAutocasting(hero),
@@ -72,6 +72,8 @@ public class GreedIsGoodPassive extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override
