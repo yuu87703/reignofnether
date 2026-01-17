@@ -153,6 +153,16 @@ public class PassiveIcons {
             )
     );
 
+    public static final EnchantmentIcon ENCHANTMENT_AMPLIFIER = new EnchantmentIcon(
+            null,
+            EquipmentSlot.MAINHAND,
+            getEnchantedItemStack(Items.ENCHANTED_BOOK),
+            List.of(
+                    fcs(I18n.get("hud.enchant.reignofnether.march_of_progress"), true),
+                    fcs(I18n.get("hud.enchant.reignofnether.march_of_progress.tooltip"))
+            )
+    );
+
     public static final List<EnchantmentIcon> ENCHANTMENT_ICONS = List.of(
             MULTISHOT,
             QUICK_CHARGE,

@@ -54,6 +54,8 @@ public class MobEffectRegistrar {
 
     public static final RegistryObject<MobEffect> FROST_DAMAGE = MOB_EFFECTS.register("frost_damage", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751));
 
+    public static final RegistryObject<MobEffect> ENCHANTMENT_AMPLIFIER = MOB_EFFECTS.register("enchantment_amplifier", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 0x000000));
+
     public static void init(FMLJavaModLoadingContext context) {
         MOB_EFFECTS.register(context.getModEventBus());
     }

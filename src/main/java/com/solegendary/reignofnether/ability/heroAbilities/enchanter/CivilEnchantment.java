@@ -13,7 +13,9 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.EnchanterUnit;
+import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -35,6 +37,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 public class CivilEnchantment extends AbstractEnchantment {
 
     public static final float EFFICIENCY_SPEED_MULTIPLIER = 1.5f;
+    public static final float SUPER_EFFICIENCY_SPEED_MULTIPLIER = 2.0f; // with enchanter aura
 
     public static final int RANGE = 10;
 
@@ -168,5 +171,15 @@ public class CivilEnchantment extends AbstractEnchantment {
         }
         ((EnchanterUnit) unitUsing).getCastEnchantCivilGoal().setAbility(this);
         ((EnchanterUnit) unitUsing).getCastEnchantCivilGoal().setTarget(targetEntity);
+    }
+
+    public static float getEfficiencyMultiplier(WorkerUnit workerUnit) {
+        LivingEntity le = (LivingEntity) workerUnit;
+        if (le.hasEffect(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
+            return le.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()) ?
+                    CivilEnchantment.SUPER_EFFICIENCY_SPEED_MULTIPLIER:
+                    CivilEnchantment.EFFICIENCY_SPEED_MULTIPLIER;
+        }
+        return 1.0f;
     }
 }

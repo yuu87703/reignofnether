@@ -732,6 +732,9 @@ public interface Unit {
                 }
             }
         }
+        if (hasAnyEnchants() && entity.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get())) {
+            icons.add(PassiveIcons.ENCHANTMENT_AMPLIFIER);
+        }
         return icons;
     }
 
@@ -746,5 +749,10 @@ public interface Unit {
 
     default float getBonusMeleeRangeForAttackers() {
         return 0.4f;
+    }
+
+    default boolean hasAnyEnchants() {
+        return !(((LivingEntity) this).getMainHandItem().getAllEnchantments().isEmpty()) ||
+               !(((LivingEntity) this).getItemBySlot(EquipmentSlot.CHEST).getAllEnchantments().isEmpty());
     }
 }

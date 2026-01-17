@@ -111,7 +111,7 @@ public class ChillingScreech extends HeroAbility {
                 fcsIcons(I18n.get("abilities.reignofnether.chilling_screech.stats", CD_MAX_SECONDS / 20, range, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip2", duration))
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip2", duration / 20))
         );
     }
 
@@ -121,11 +121,11 @@ public class ChillingScreech extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip2", duration)),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip2", duration / 20)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank1", DURATION_RANK_1, RADIUS_RANK_1), getRank(hero) == 0),
-                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank2", DURATION_RANK_2, RADIUS_RANK_2), getRank(hero) == 1),
-                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank3", DURATION_RANK_3, RADIUS_RANK_3), getRank(hero) == 2)
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank1", DURATION_RANK_1 / 20, RADIUS_RANK_1), getRank(hero) == 0),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank2", DURATION_RANK_2 / 20, RADIUS_RANK_2), getRank(hero) == 1),
+                fcs(I18n.get("abilities.reignofnether.chilling_screech.rank3", DURATION_RANK_3 / 20, RADIUS_RANK_3), getRank(hero) == 2)
         );
     }
 

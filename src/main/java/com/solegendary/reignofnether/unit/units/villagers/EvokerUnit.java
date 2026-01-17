@@ -148,7 +148,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     public float getAttackRange() {
         return isUsingLineFangs ? EvokerUnit.FANGS_RANGE_LINE : EvokerUnit.FANGS_RANGE_CIRCLE;
     }
-    public float getUnitAttackDamage() {return attackDamage;}
+    public float getUnitAttackDamage() {return attackDamage + (getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.ZEAL.get()) * 2);}
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
 
     public float getMovementSpeed() {return movementSpeed;}
@@ -467,5 +467,9 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
+    }
+
+    public boolean hasBonusDamage() {
+        return getUnitAttackDamage() > attackDamage;
     }
 }

@@ -17,9 +17,7 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
-import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.UnitAction;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -382,25 +380,33 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 if (!level().isClientSide)
                     SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
             } else {
-                if (!level().isClientSide)
+                if (!level().isClientSide) {
                     SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_AMBIENT, blockPosition(), 1.5f);
+                    for (Mob mob : MiscUtil.getEntitiesWithinRange(position(), MarchOfProgress.RADIUS, Mob.class, level())) {
+                        if (UnitServerEvents.getUnitToEntityRelationship(this, mob) == Relationship.FRIENDLY &&
+                            mob instanceof Unit unit && unit.hasAnyEnchants()) {
+                            mob.addEffect(new MobEffectInstance(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get(), 30, 0, true, false));
+                        }
+                    }
+                }
             }
             updateBorderBps();
         }
 
-        // TODO: enlarge these by a lot while in orthoview
         if (auraEnabled && level().isClientSide && tickCount % 20 == 0) {
             List<Mob> mobs = MiscUtil.getEntitiesWithinRange(position(), MarchOfProgress.RADIUS, Mob.class, level());
             for (Mob mob : mobs) {
-                level().addParticle(
-                        ParticleRegistrar.BIG_ENCHANT.get(),
-                        mob.position().x,
-                        mob.position().y + 2.0f,
-                        mob.position().z,
-                        position().x - mob.position().x,
-                        position().y - mob.position().y,
-                        position().z - mob.position().z
-                );
+                if (mob.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get())) {
+                    level().addParticle(
+                            ParticleRegistrar.BIG_ENCHANT.get(),
+                            mob.position().x,
+                            mob.position().y + 2.0f,
+                            mob.position().z,
+                            position().x - mob.position().x,
+                            position().y - mob.position().y,
+                            position().z - mob.position().z
+                    );
+                }
             }
         }
     }

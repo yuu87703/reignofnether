@@ -31,6 +31,7 @@ import com.solegendary.reignofnether.unit.packets.*;
 import com.solegendary.reignofnether.unit.units.monsters.*;
 import com.solegendary.reignofnether.unit.units.piglins.*;
 import com.solegendary.reignofnether.unit.units.villagers.*;
+import com.solegendary.reignofnether.util.EnchantmentUtil;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -54,8 +55,11 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -77,10 +81,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Vector3d;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ConcurrentModificationException;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
@@ -617,7 +618,11 @@ public class UnitServerEvents {
                             MobEffectRegistrar.STUN.get(),
                             MobEffectRegistrar.FREEZE.get(),
                             MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(),
-                            MobEffectRegistrar.ATTACK_SLOWDOWN.get()
+                            MobEffectRegistrar.ATTACK_SLOWDOWN.get(),
+                            MobEffectRegistrar.TEMPORARY_EFFICIENCY.get(),
+                            MobEffectRegistrar.BLOODLUST.get(),
+                            MobEffectRegistrar.FROST_DAMAGE.get(),
+                            MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()
                     )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)
@@ -958,6 +963,28 @@ public class UnitServerEvents {
                     return;
                 }
                 evt.setImpactResult(ProjectileImpactEvent.ImpactResult.SKIP_ENTITY);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMobEffectAdded(MobEffectEvent.Added evt) {
+        // double level of all enchants
+        if (evt.getEffectInstance().getEffect() == MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get() &&
+            evt.getOldEffectInstance() == null) {
+            EnchantmentUtil.updateEnchantLevels(evt.getEntity(), false);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMobEffectExpired(MobEffectEvent.Expired evt) {
+        // halve level of all enchants
+        if (evt.getEffectInstance() != null) {
+            MobEffect effect = evt.getEffectInstance().getEffect();
+            if (effect == MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()) {
+                EnchantmentUtil.updateEnchantLevels(evt.getEntity(), true);
+            } else if (effect == MobEffectRegistrar.TEMPORARY_EFFICIENCY.get()) {
+                EnchantmentHelper.setEnchantments(new HashMap<>(), evt.getEntity().getMainHandItem());
             }
         }
     }

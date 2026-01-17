@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,14 +53,14 @@ public class FarmPlacement extends BuildingPlacement {
         }
     }
 
-    private boolean hasEfficiencyWorker() {
+    @Nullable
+    private WorkerUnit getWorker() {
         for (LivingEntity le : UnitServerEvents.getAllUnits()) {
-            if (le instanceof VillagerUnit villagerUnit && isPosInsideBuilding(villagerUnit.getOnPos())) {
-                if (villagerUnit.hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get()))
-                    return true;
+            if (le instanceof WorkerUnit workerUnit && workerUnit.getGatherResourceGoal().getTargetFarm() == this) {
+                return workerUnit;
             }
         }
-        return false;
+        return null;
     }
 
     // tick crop growth here to have precise control over growth speed with no RNG
@@ -70,8 +71,8 @@ public class FarmPlacement extends BuildingPlacement {
             Block block = bs.getBlock();
 
             int ticksToIncrement = TICK_CROPS_INTERVAL;
-            if (hasEfficiencyWorker()) {
-                ticksToIncrement = (int) (TICK_CROPS_INTERVAL * CivilEnchantment.EFFICIENCY_SPEED_MULTIPLIER);
+            if (getWorker() != null) {
+                ticksToIncrement = (int) (TICK_CROPS_INTERVAL * CivilEnchantment.getEfficiencyMultiplier(getWorker()));
             }
 
             if (block instanceof CropBlock cropBlock && (cropBlock == Blocks.WHEAT || cropBlock == Blocks.CARROTS || cropBlock == Blocks.POTATOES)) {

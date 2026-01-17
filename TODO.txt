@@ -43,7 +43,7 @@ Bugfixes
 [❌] Fixed sculk catalysts not spreading any sculk
     - Seems to be intermittent, changes when relogging?
 
-
+[❌] left clicking now deselects everything
 
 Quality of Life
 ---------------

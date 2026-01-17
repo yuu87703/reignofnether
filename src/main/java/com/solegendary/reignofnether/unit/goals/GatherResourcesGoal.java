@@ -21,7 +21,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -288,10 +287,7 @@ public class GatherResourcesGoal extends MoveToTargetBlockGoal {
                             else
                                 ticksToProgress *= VillagerUnit.MINER_SPEED_MULT;
                         }
-
-                        if (vUnit.hasEffectWithDuration(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
-                            ticksToProgress *= CivilEnchantment.EFFICIENCY_SPEED_MULTIPLIER;
-                        }
+                        ticksToProgress *= CivilEnchantment.getEfficiencyMultiplier(vUnit);
                     }
 
                     this.gatherTicksLeft -= ticksToProgress;
@@ -452,6 +448,10 @@ public class GatherResourcesGoal extends MoveToTargetBlockGoal {
 
     public boolean isFarming() {
         return this.data.targetFarm != null;
+    }
+
+    @Nullable public BuildingPlacement getTargetFarm() {
+        return this.data.targetFarm;
     }
 
     // locks the worker to only gather from this specific building
