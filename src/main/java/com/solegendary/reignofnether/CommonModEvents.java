@@ -124,6 +124,7 @@ public class CommonModEvents {
         evt.registerEntityRenderer(EntityRegistrar.THROWABLE_TNT_PROJECTILE.get(), ThrowableTntRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.THROWN_HERO_EXPERIENCE_BOTTLE.get(), ThrownItemRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.NECROMANCER_PROJECTILE.get(), NecromancerProjectileRenderer::new);
+        evt.registerEntityRenderer(EntityRegistrar.WRAITH_SNOWBALL.get(), ThrownItemRenderer::new);
     }
 
     @SubscribeEvent

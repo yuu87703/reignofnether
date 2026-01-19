@@ -650,14 +650,15 @@ public class UnitClientEvents {
             // resolve any other abilities not explicitly covered here
             else if (CursorClientEvents.getLeftClickAction() != null && MC.player != null) {
                 sendUnitCommand(CursorClientEvents.getLeftClickAction());
-            } else if (
+            }
+            /*else if (
                     !selectedUnits.isEmpty() &&
                     BuildingClientEvents.getPreselectedBuilding() == null &&
                     preselectedUnits.isEmpty() &&
                     !BuildingClientEvents.isBuilt
             ) {
                 clearSelectedUnits();
-            }
+            }*/
 
             // left click -> select a single unit
             // if shift is held, deselect a unit or add it to the selected group

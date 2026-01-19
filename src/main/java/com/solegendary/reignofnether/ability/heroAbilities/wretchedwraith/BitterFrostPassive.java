@@ -26,7 +26,7 @@ public class BitterFrostPassive extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         AbilityButton button = new AbilityButton("Bitter Frost",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/icons/abilities/bitter_frost.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/bitter_frost.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) == 0,

@@ -13,22 +13,13 @@ New Heroes
 [🟡] Change /gamerule allowHeroes (bool) to /gamerule allowedHeroes (int) (default 1)
 
 Wretched Wraith
-    [🟡] New snow layer block that doesn't interfere with vanilla snow
-        - Maybe with a subtle particle effect, or just shaded differently
-
-    [🟡] Slowdown attack speed MobEffect
-
-    [❌] Wraith snow should not affect allies
+    [🟡] Wraith snow should not affect allies
     [❌] Wraith snow does not do random tick consistently (based on player position and gamemode?)
+    [🟡] Add random snowballs that produce 5x snow upon hitting the ground or a unit (deals damage to that unit)
 
 Enchanter
     [❌] Blacksmith armour upgrades
-
-    [🟡] Breaching attacks
-    [🟡] Fortifying armour
-    [🟡] Zeal bonus damage
-
-    [❌] Particle effects for active aura
+    [❌] Enchant militia (and have it be retained between weapon switches)
 
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires

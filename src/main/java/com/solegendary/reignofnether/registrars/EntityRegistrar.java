@@ -1,10 +1,7 @@
 package com.solegendary.reignofnether.registrars;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.entities.AdjustablePrimedTnt;
-import com.solegendary.reignofnether.entities.ThrownHeroExperienceBottle;
-import com.solegendary.reignofnether.entities.NecromancerProjectile;
-import com.solegendary.reignofnether.entities.ThrowableTntProjectile;
+import com.solegendary.reignofnether.entities.*;
 import com.solegendary.reignofnether.hero.HeroExperienceOrb;
 import com.solegendary.reignofnether.unit.modelling.renderers.*;
 import com.solegendary.reignofnether.unit.units.monsters.*;
@@ -345,6 +342,13 @@ public class EntityRegistrar {
                     .updateInterval(10)
                     .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "necromancer_projectile").toString()));
 
+    public static final RegistryObject<EntityType<WraithSnowball>> WRAITH_SNOWBALL = ENTITIES.register("wraith_snowball",
+            () -> EntityType.Builder.of(WraithSnowball::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0.3f, 0.3f)
+                    .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
+                    .updateInterval(10)
+                    .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wraith_snowball").toString()));
 
     public static void init(FMLJavaModLoadingContext context) {
         ENTITIES.register(context.getModEventBus());

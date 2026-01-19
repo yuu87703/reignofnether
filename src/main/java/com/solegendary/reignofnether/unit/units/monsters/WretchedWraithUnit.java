@@ -4,22 +4,24 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
+import com.solegendary.reignofnether.blocks.WraithSnowLayerBlock;
+import com.solegendary.reignofnether.entities.WraithSnowball;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
+import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
-import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -45,7 +47,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -59,6 +60,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
@@ -67,8 +69,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.solegendary.reignofnether.resources.BlockUtils.canPlaceSnow;
 
 public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
     public final Abilities ABILITIES = new Abilities(
@@ -326,7 +326,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
     }
 
-    private HashMap<BlockPos, Integer> snowToPlace = new HashMap<>();
+    private HashMap<BlockPos, Integer> snowToPlace = new HashMap<>(); // ticks before being placed
     private int frostblinkTicks = 0;
     private int frostblinkTicksMax = 0;
     private BlockPos frostblinkTarget = null;
@@ -392,16 +392,15 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
             for (BlockPos pos : snowToPlace.keySet()) {
                 int ticksLeft = snowToPlace.get(pos);
                 if (ticksLeft <= 0) {
-                    if (canPlaceSnow(level(), pos))
-                        BlockUtils.placeWraithSnow((ServerLevel) level(), pos);
+                    BlockServerEvents.placeWraithSnow((ServerLevel) level(), pos, getId());
                 } else {
                     newSnowQueue.put(pos, ticksLeft - 1);
                 }
             }
             snowToPlace = newSnowQueue;
             if (getBitterFrost().getRank(this) >= 3 && tickCount % 30 == 0) {
-                if (onGround() && canPlaceSnow(level(), getOnPos().above())) {
-                    BlockUtils.placeWraithSnow((ServerLevel) level(), getOnPos().above());
+                if (onGround()) {
+                    BlockServerEvents.placeWraithSnow((ServerLevel) level(), getOnPos().above(), getId());
                 }
             }
             // heal while on wraith snow
@@ -526,43 +525,6 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         return null;
     }
 
-    public static HashMap<BlockPos, Integer> getSnowPositions(
-            Level level, BlockPos center, int maxDistance
-    ) {
-        HashMap<BlockPos, Integer> positions = new HashMap<>();
-        int cx = center.getX();
-        int cy = center.getY();
-        int cz = center.getZ();
-
-        for (int dx = -maxDistance; dx <= maxDistance; dx++) {
-            for (int dz = -maxDistance; dz <= maxDistance; dz++) {
-                int horizontalDistance = Math.abs(dx) + Math.abs(dz);
-                if (horizontalDistance > maxDistance)
-                    continue;
-
-                BlockPos basePos = new BlockPos(cx + dx, cy, cz + dz);
-                if (canPlaceSnow(level, basePos)) {
-                    positions.put(basePos, horizontalDistance);
-                    continue;
-                }
-                // Vertical search range grows with horizontal distance
-                for (int dy = 1; dy <= horizontalDistance; dy++) {
-                    BlockPos below = basePos.below(dy);
-                    if (canPlaceSnow(level, below)) {
-                        positions.put(below, horizontalDistance);
-                        break;
-                    }
-                    BlockPos above = basePos.above(dy);
-                    if (canPlaceSnow(level, above)) {
-                        positions.put(above, horizontalDistance);
-                        break;
-                    }
-                }
-            }
-        }
-        return positions;
-    }
-
     public void ChillingScreech() {
         if (level().isClientSide) return;
 
@@ -570,7 +532,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         if (chillingScreech.getRank(this) > 0) {
             float radius = getChillingScreech().radius;
             int duration = getChillingScreech().duration;
-            snowToPlace.putAll(getSnowPositions(level(), this.getOnPos().above(), (int) radius));
+            snowToPlace.putAll(BlockServerEvents.getSnowPositions(level(), this.getOnPos().above(), (int) radius));
             for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(position(), radius, LivingEntity.class, level())) {
                 Relationship rs = UnitServerEvents.getUnitToEntityRelationship(this, entity);
                 if (rs != Relationship.FRIENDLY && rs != Relationship.OWNED)
@@ -588,9 +550,9 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         for (int i = 0; i < snowPoses.size(); i++) {
             snowToPlace.put(snowPoses.get(i), i);
         }
-        HashMap<BlockPos, Integer> startSnowPoses = getSnowPositions(level(), getOnPos().above(), 2);
+        HashMap<BlockPos, Integer> startSnowPoses = BlockServerEvents.getSnowPositions(level(), getOnPos().above(), 2);
         snowToPlace.putAll(startSnowPoses);
-        HashMap<BlockPos, Integer> endSnowPoses = getSnowPositions(level(), targetPos.above(), 2);
+        HashMap<BlockPos, Integer> endSnowPoses = BlockServerEvents.getSnowPositions(level(), targetPos.above(), 2);
         for (BlockPos pos : endSnowPoses.keySet()) {
             endSnowPoses.replace(pos, endSnowPoses.get(pos) + snowPoses.size() + 1);
         }
@@ -633,7 +595,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                         Blocks.PACKED_ICE.defaultBlockState(), Blocks.AIR.defaultBlockState(), duration, true);
                 BlockServerEvents.addTempBlock((ServerLevel) level(), mob.getOnPos().above().above().above(),
                         BlockRegistrar.WRAITH_SNOW_LAYER.get().defaultBlockState(), Blocks.AIR.defaultBlockState(), duration, true);
-                snowToPlace.putAll(getSnowPositions(level(), mob.getOnPos().above(), 2));
+                snowToPlace.putAll(BlockServerEvents.getSnowPositions(level(), mob.getOnPos().above(), 2));
                 mob.addEffect(new MobEffectInstance(MobEffectRegistrar.FREEZE.get(), duration));
                 mob.addEffect(new MobEffectInstance(MobEffectRegistrar.FROST_DAMAGE.get(), duration));
                 MiscUtil.addParticleExplosion(ParticleTypes.SNOWFLAKE, 10, level(), mob.position());
@@ -642,27 +604,37 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
     }
 
-    public void spawnSnowStorm(
-            int radius,
-            int particlesPerTick
-    ) {
-        for (int i = 0; i < particlesPerTick; i++) {
+    public void spawnSnowStorm() {
+        int radius = Blizzard.RADIUS;
+        for (int i = 0; i < 15; i++) {
             double x = getX() + random.nextDouble() * radius * 2 - radius;
-            double y = getY() + random.nextDouble() * 10 + 5; // spawn above
+            double y = getY() + random.nextDouble() * 15 + 5;
             double z = getZ() + random.nextDouble() * radius * 2 - radius;
 
-            // wind + fall speed
             double vx = random.nextGaussian() * 0.01;
             double vy = -0.03 - random.nextDouble() * 0.02;
             double vz = random.nextGaussian() * 0.01;
 
-            ((ServerLevel) level()).sendParticles(
-                    ParticleTypes.ITEM_SNOWBALL,
-                    x, y, z,
-                    1,          // count
-                    vx, vy, vz, // velocity
-                    0.0
-            );
+            Vec2 stormPos2d = new Vec2((float) x, (float) z);
+            Vec2 wraithPos2d = new Vec2((float) getX(), (float) getZ());
+
+            if (stormPos2d.distanceToSqr(wraithPos2d) < Blizzard.RADIUS * Blizzard.RADIUS) {
+                ((ServerLevel) level()).sendParticles(
+                        ParticleTypes.ITEM_SNOWBALL,
+                        x, y, z,
+                        1,
+                        vx, vy, vz,
+                        0.0
+                );
+                if (i == 14) {
+                    WraithSnowball snowball = EntityRegistrar.WRAITH_SNOWBALL.get().create(this.level());
+                    if (snowball != null) {
+                        snowball.moveTo(x, y, z);
+                        snowball.setDeltaMovement(vx * 5, vy * 5, vz * 5);
+                        level().addFreshEntity(snowball);
+                    }
+                }
+            }
         }
     }
 
@@ -678,7 +650,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 freezeRandomNearbyEnemy();
             }
             if (blizzardTicksLeft % 3 == 0) {
-                spawnSnowStorm(Blizzard.RADIUS, 15);
+                spawnSnowStorm();
             }
         }
     }
@@ -694,7 +666,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     public boolean doHurtTarget(@NotNull Entity pEntity) {
         boolean result = super.doHurtTarget(pEntity);
         if (result && getBitterFrost().getRank(this) >= 1 && !level().isClientSide()) {
-            snowToPlace.putAll(getSnowPositions(level(), pEntity.getOnPos().above(), 1));
+            snowToPlace.putAll(BlockServerEvents.getSnowPositions(level(), pEntity.getOnPos().above(), 1));
         }
         return result;
     }
@@ -704,9 +676,9 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         boolean result = super.hurt(pSource, pAmount);
         if (result && getBitterFrost().getRank(this) >= 2 && !level().isClientSide()) {
             if (pSource.getEntity() instanceof Mob mob) {
-                BlockUtils.placeWraithSnow((ServerLevel) level(), mob.getOnPos().above());
+                BlockServerEvents.placeWraithSnow((ServerLevel) level(), mob.getOnPos().above(), getId());
             } else if (pSource.getEntity() instanceof Projectile projectile && projectile.getOwner() instanceof Mob mob) {
-                BlockUtils.placeWraithSnow((ServerLevel) level(), mob.getOnPos().above());
+                BlockServerEvents.placeWraithSnow((ServerLevel) level(), mob.getOnPos().above(), getId());
             }
         }
         return result;

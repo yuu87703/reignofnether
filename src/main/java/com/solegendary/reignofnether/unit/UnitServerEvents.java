@@ -290,6 +290,11 @@ public class UnitServerEvents {
             }
         }
     }
+
+    public static Relationship getUnitToEntityRelationship(Unit unit, Level level, int unitId) {
+        return getUnitToEntityRelationship(unit, level.getEntity(unitId));
+    }
+
     public static Relationship getUnitToEntityRelationship(Unit unit, Entity entity) {
         String ownerName1 = unit.getOwnerName();
         String ownerName2 = "";
@@ -618,6 +623,8 @@ public class UnitServerEvents {
                             MobEffectRegistrar.STUN.get(),
                             MobEffectRegistrar.FREEZE.get(),
                             MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(),
+                            MobEffectRegistrar.MINOR_MOVEMENT_SLOWDOWN.get(),
+                            MobEffectRegistrar.MINOR_MOVEMENT_SPEED.get(),
                             MobEffectRegistrar.ATTACK_SLOWDOWN.get(),
                             MobEffectRegistrar.TEMPORARY_EFFICIENCY.get(),
                             MobEffectRegistrar.BLOODLUST.get(),
@@ -912,7 +919,7 @@ public class UnitServerEvents {
             int breachLevel = le.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.BREACHING.get());
             MobEffectInstance existingDmgIncrease = evt.getEntity().getEffect(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get());
             if (breachLevel > 0) {
-                int amp = existingDmgIncrease != null ? breachLevel + existingDmgIncrease.getAmplifier() + 1 : breachLevel;
+                int amp = existingDmgIncrease != null ? (breachLevel * 2) + existingDmgIncrease.getAmplifier() : (breachLevel * 2);
                 evt.getEntity().addEffect(new MobEffectInstance(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(), 100, amp));
             }
         }

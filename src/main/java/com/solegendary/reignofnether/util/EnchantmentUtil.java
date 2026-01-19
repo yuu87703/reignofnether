@@ -1,7 +1,5 @@
 package com.solegendary.reignofnether.util;
 
-import com.solegendary.reignofnether.enchantments.*;
-import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -10,10 +8,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EnchantmentUtil {

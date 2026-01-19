@@ -4,21 +4,17 @@ import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BlockUtils {
@@ -77,8 +73,6 @@ public class BlockUtils {
     }
 
 
-    public static final BlockState WRAITH_SNOW_BS = BlockRegistrar.WRAITH_SNOW_LAYER.get().defaultBlockState();
-
     private static boolean isWraithSnow(BlockState bs) {
         return bs.getBlock() == BlockRegistrar.WRAITH_SNOW_LAYER.get();
     }
@@ -89,91 +83,5 @@ public class BlockUtils {
         return !MiscUtil.isSolidBlocking(level, pos) &&
                 MiscUtil.isSolidBlocking(level, pos.below()) &&
                 !BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), pos);
-    }
-
-    private static BlockPos pickWeighted(Map<BlockPos, Integer> weights) {
-        int totalWeight = 0;
-
-        for (int w : weights.values()) {
-            if (w > 0) {
-                totalWeight += w;
-            }
-        }
-        if (totalWeight <= 0) {
-            return null;
-        }
-        int roll = RANDOM.nextInt(totalWeight);
-
-        for (Map.Entry<BlockPos, Integer> entry : weights.entrySet()) {
-            int w = entry.getValue();
-            if (w <= 0) continue;
-
-            roll -= w;
-            if (roll < 0) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-    private static HashMap<BlockPos, Integer> getPosesAndWeights(ServerLevel level, BlockPos pos, int centrePosLayers) {
-        int baseWeight = 4;
-        List<BlockPos> adjPoses = List.of(
-                pos.north(), pos.south(), pos.east(), pos.west(),
-                pos.north().north(), pos.south().south(), pos.east().east(), pos.west().west(),
-                pos.north().east(), pos.south().east(), pos.north().west(), pos.south().west()
-        );
-        HashMap<BlockPos, Integer> posesAndLayers = new HashMap<>();
-        for (BlockPos adjPos : adjPoses) {
-
-            List<BlockPos> verticalPosesShort = List.of(adjPos, adjPos.below(), adjPos.above());
-            List<BlockPos> verticalPosesLong = List.of(adjPos, adjPos.below(), adjPos.above(), adjPos.below().below(), adjPos.above().above());
-            int horizDistance = adjPos.atY(0).distManhattan(new Vec3i(adjPos.getX(), 0, adjPos.getZ()));
-            for (BlockPos verticalPos : horizDistance <= 1 ? verticalPosesShort : verticalPosesLong) {
-                if (canPlaceSnow(level, verticalPos)) {
-                    int layers = getWraithSnowLayers(level.getBlockState(verticalPos));
-                    int layerDiffWeight = (centrePosLayers - layers) * 3;
-                    int distanceWeight = - horizDistance * 6;
-                    int weight = baseWeight + layerDiffWeight + distanceWeight;
-                    if (layers == 0 && layerDiffWeight > 0) {
-                        weight += baseWeight * 2;
-                    }
-                    posesAndLayers.put(adjPos, Math.max(0, weight));
-                    break;
-                }
-            }
-        }
-        // extra chance for centre pos:
-        if (centrePosLayers < 8 && canPlaceSnow(level, pos))
-            posesAndLayers.put(pos, baseWeight * 2);
-        return posesAndLayers;
-    }
-
-    public static void placeWraithSnow(ServerLevel level, BlockPos pos) {
-        BlockState bsExisting = level.getBlockState(pos);
-
-        int layers = getWraithSnowLayers(bsExisting);
-
-        BlockPos targetPos = pos;
-
-        if (layers > 1) {
-            HashMap<BlockPos, Integer> posesAndWeights = getPosesAndWeights(level, pos, layers);
-            targetPos = pickWeighted(posesAndWeights);
-        }
-
-        if (targetPos != null ) {
-            BlockState targetBs = level.getBlockState(targetPos);
-            int targetLayers = getWraithSnowLayers(targetBs);
-
-            if (targetLayers <= 0) {
-                level.setBlockAndUpdate(targetPos, WRAITH_SNOW_BS);
-
-            } else if (targetLayers < 8) {
-                BlockState newLayer = targetBs.setValue(BlockStateProperties.LAYERS, targetLayers + 1);
-                level.setBlockAndUpdate(targetPos, newLayer);
-            }
-            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(WRAITH_SNOW_BS));
-            level.levelEvent(targetBs.getSoundType().getPlaceSound().hashCode(), targetPos, Block.getId(WRAITH_SNOW_BS));
-        }
     }
 }

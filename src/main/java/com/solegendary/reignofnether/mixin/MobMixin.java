@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.mixin;
 
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
+import com.solegendary.reignofnether.blocks.BlockServerEvents;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.BlockUtils;
@@ -78,7 +79,7 @@ public abstract class MobMixin extends LivingEntity {
             int layers = BlockUtils.getWraithSnowLayers(inBlockState);
             boolean inIce = inBlockState.getBlock() == Blocks.PACKED_ICE;
             if (layers > 0) {
-                hurt(damageSources().freeze(), layers + (inIce ? 3 : 0));
+                hurt(damageSources().magic(), layers + (inIce ? 3 : 0));
             }
         }
     }

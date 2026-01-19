@@ -29,6 +29,7 @@ public class Blizzard extends HeroAbility {
     private static final int CD_MAX_SECONDS = 300 * ResourceCost.TICKS_PER_SECOND;
     public static final int CHANNEL_DURATION = 15 * ResourceCost.TICKS_PER_SECOND;
     public static final int FREEZE_DURATION = 6 * ResourceCost.TICKS_PER_SECOND;
+    public static final int SNOWBALL_DAMAGE = 5;
     public static final int RADIUS = 20;
 
     public Blizzard() {
