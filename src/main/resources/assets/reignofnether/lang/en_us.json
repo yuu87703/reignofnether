@@ -394,6 +394,16 @@
     "ability.reignofnether.enchant.vigor.tooltip2": "Vigor, lowering their cooldowns by 30%%",
     "ability.reignofnether.enchant.vigor.tooltip3": "Removes other library enchantments.",
 
+    "ability.reignofnether.equip.error1": "Can only forge armor for your own units",
+    "ability.reignofnether.equip.error2": "Target is out of range",
+    "ability.reignofnether.equip.error3": "Target must be a Villager military unit without a chestplate",
+    "ability.reignofnether.equip.error4": "Not enough resources",
+
+    "ability.reignofnether.equip.leather_chestplate": "Leather Chestplate",
+    "ability.reignofnether.equip.leather_chestplate.tooltip1": "Create and equip a leather chestplate on a unit.",
+    "ability.reignofnether.equip.chainmail_chestplate": "Chainmail Chestplate",
+    "ability.reignofnether.equip.chainmail_chestplate.tooltip1": "Create and equip a chainmail chestplate on a unit.",
+
     "ability.reignofnether.beacon_aura.wealth": "Wealth",
     "ability.reignofnether.beacon_aura.wealth.tooltip1": "Activate an aura to grant you a trickle of free resources.",
     "ability.reignofnether.beacon_aura.haste": "Haste",
@@ -942,6 +952,8 @@
     "research.reignofnether.sculk_amplifiers.tooltip3": "Requires a Stronghold.",
     "research.reignofnether.grand_library": "Grand Library",
     "research.reignofnether.grand_library.tooltip1": "Upgrades this library, unlocking more powerful enchantments.",
+    "research.reignofnether.superior_blacksmith": "Superior Blacksmith",
+    "research.reignofnether.superior_blacksmith.tooltip1": "Upgrades this blacksmith to allow forging chainmail armor",
 
     "research.reignofnether.beacon_level1": "Iron Beacon",
     "research.reignofnether.beacon_level1.tooltip1": "Adds a layer of iron and unlocks the Wealth aura.",

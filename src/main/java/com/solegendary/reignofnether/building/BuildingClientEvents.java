@@ -1059,9 +1059,9 @@ public class BuildingClientEvents {
             }
 
             if (upgradeLevel > 0) {
-                if (newBuilding.getBuilding() instanceof Castle castle) {
+                if (newBuilding.getBuilding() instanceof Castle) {
                     newBuilding.changeStructure(Castle.upgradedStructureName);
-                } else if (newBuilding.getBuilding() instanceof Laboratory lab) {
+                } else if (newBuilding.getBuilding() instanceof Laboratory) {
                     newBuilding.changeStructure(Laboratory.upgradedStructureName);
                 } else if (newBuilding instanceof PortalPlacement portal) {
                     if (!(newBuilding.getBuilding() instanceof NeutralTransportPortal)) {
