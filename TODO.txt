@@ -14,6 +14,7 @@ New Heroes
 
 Wretched Wraith
     [❌] Don't damage the wraith when going underground
+    [❌] Check blizzard damage to enemies
 
 Enchanter
     [🟡] Enchant militia (and have it be retained between weapon switches)

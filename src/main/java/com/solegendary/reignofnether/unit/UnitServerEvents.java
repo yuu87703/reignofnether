@@ -797,6 +797,11 @@ public class UnitServerEvents {
 
     @SubscribeEvent
     public static void onEntityDamaged(LivingDamageEvent evt) {
+
+        if (evt.getEntity() instanceof WretchedWraithUnit wraith && wraith.isFrostBlinkInProgress()) {
+            evt.setCanceled(true);
+        }
+
         if (shouldIgnoreKnockback(evt)) {
             knockbackIgnoreIds.add(evt.getEntity().getId());
         }
