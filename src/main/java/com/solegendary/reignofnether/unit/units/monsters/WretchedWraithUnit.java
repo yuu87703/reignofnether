@@ -335,6 +335,9 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         return frostBlinkInProgress;
     }
     private int blizzardTicksLeft = 0;
+    public boolean isBlizzardInProgress() {
+        return frostBlinkInProgress;
+    }
 
     public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
