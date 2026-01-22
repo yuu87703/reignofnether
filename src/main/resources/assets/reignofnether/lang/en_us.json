@@ -531,6 +531,7 @@
     "buildings.villagers.reignofnether.barracks": "Barracks",
     "buildings.villagers.reignofnether.barracks.tooltip1": "A training ground for Pillagers and Vindicators",
     "buildings.villagers.reignofnether.blacksmith": "Blacksmith",
+    "buildings.villagers.reignofnether.blacksmith.superior": "Superior Blacksmith",
     "buildings.villagers.reignofnether.blacksmith.tooltip1": "A smithy to forge military upgrades and iron golems.",
     "buildings.villagers.reignofnether.blacksmith.tooltip2": "Requires a Barracks.",
     "buildings.villagers.reignofnether.castle": "Castle",

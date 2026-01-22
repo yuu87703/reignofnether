@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.building.buildings.monsters.Laboratory;
 import com.solegendary.reignofnether.building.buildings.neutral.NeutralTransportPortal;
 import com.solegendary.reignofnether.building.buildings.placements.*;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
+import com.solegendary.reignofnether.building.buildings.villagers.Blacksmith;
 import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuildingServerEvents;
@@ -177,20 +178,25 @@ public class BuildingServerEvents {
                     }
 
                     if (b.upgradeLevel > 0) {
-                        if (building.getBuilding() instanceof Castle) {
-                            building.changeStructure(Castle.upgradedStructureName);
-                        } else if (building.getBuilding() instanceof Laboratory) {
-                            building.changeStructure(Laboratory.upgradedStructureName);
-                        } else if (building instanceof PortalPlacement portal) {
+                        if (building instanceof PortalPlacement portal) {
                             if (!(building.getBuilding() instanceof NeutralTransportPortal)) {
                                 portal.changeStructure(b.portalType);
-                            } if (b.portalDestination != null && !b.portalDestination.equals(new BlockPos(0,0,0))) {
+                            }
+                            if (b.portalDestination != null && !b.portalDestination.equals(new BlockPos(0, 0, 0))) {
                                 portal.destination = b.portalDestination;
                             }
-                        } else if (building.getBuilding() instanceof Library) {
-                            building.changeStructure(Library.upgradedStructureName);
                         } else if (building instanceof BeaconPlacement beacon) {
                             beacon.changeStructure(b.upgradeLevel);
+                        } else {
+                            if (building.getBuilding() instanceof Castle) {
+                                building.changeStructure(Castle.upgradedStructureName);
+                            } else if (building.getBuilding() instanceof Laboratory) {
+                                building.changeStructure(Laboratory.upgradedStructureName);
+                            } else if (building.getBuilding() instanceof Library) {
+                                building.changeStructure(Library.upgradedStructureName);
+                            } else if (building instanceof BlacksmithPlacement blacksmith) {
+                                blacksmith.changeStructure(Blacksmith.upgradedStructureName);
+                            }
                         }
                     }
                     // setNetherZone can only be run once - this supercedes where it normally happens in tick() ->

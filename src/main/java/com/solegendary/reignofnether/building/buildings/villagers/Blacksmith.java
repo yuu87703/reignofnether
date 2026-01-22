@@ -1,18 +1,13 @@
 package com.solegendary.reignofnether.building.buildings.villagers;
 
-import com.solegendary.reignofnether.ability.abilities.EnchantMaiming;
-import com.solegendary.reignofnether.ability.abilities.EnchantQuickCharge;
 import com.solegendary.reignofnether.ability.abilities.EquipChainmailChestplate;
 import com.solegendary.reignofnether.ability.abilities.EquipLeatherChestplate;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
-import com.solegendary.reignofnether.building.BuildingClientEvents;
-import com.solegendary.reignofnether.building.BuildingPlaceButton;
-import com.solegendary.reignofnether.building.BuildingPlacement;
-import com.solegendary.reignofnether.building.Buildings;
+import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.BlacksmithPlacement;
-import com.solegendary.reignofnether.building.buildings.placements.LibraryPlacement;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
 import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.research.ResearchClient;
@@ -20,7 +15,6 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
-import com.solegendary.reignofnether.faction.Faction;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
@@ -52,8 +46,8 @@ public class Blacksmith extends ProductionBuilding {
         this.startingBlockTypes.add(Blocks.OAK_PLANKS);
         this.startingBlockTypes.add(Blocks.COBBLESTONE);
 
-        this.abilities.add(new EquipLeatherChestplate(), Keybindings.keyQ);
-        this.abilities.add(new EquipChainmailChestplate(), Keybindings.keyW);
+        this.abilities.add(new EquipLeatherChestplate(), Keybindings.keyT);
+        this.abilities.add(new EquipChainmailChestplate(), Keybindings.keyY);
 
         this.productions.add(ProductionItems.IRON_GOLEM, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_GOLEM_SMITHING, Keybindings.keyW);
@@ -89,5 +83,14 @@ public class Blacksmith extends ProductionBuilding {
                 ),
                 this
         );
+    }
+
+    @Override
+    public int getUpgradeLevel(BuildingPlacement placement) {
+        for (BuildingBlock block : placement.getBlocks())
+            if (block.getBlockState().getBlock() == Blocks.BLAST_FURNACE) {
+                return 1;
+            }
+        return 0;
     }
 }

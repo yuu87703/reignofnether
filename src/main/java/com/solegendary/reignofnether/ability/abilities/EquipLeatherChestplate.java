@@ -37,7 +37,7 @@ public class EquipLeatherChestplate extends EquipAbility {
                 "Leather Chestplate",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/leather_chestplate.png"),
                 hotkey,
-                () -> CursorClientEvents.getLeftClickAction() == EQUIP_ACTION,
+                () -> CursorClientEvents.getLeftClickAction() == EQUIP_ACTION || placement.autocast == this,
                 () -> false,
                 () -> true,
                 () -> CursorClientEvents.setLeftClickAction(EQUIP_ACTION),

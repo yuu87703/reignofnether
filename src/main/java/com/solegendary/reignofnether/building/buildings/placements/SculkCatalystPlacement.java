@@ -118,10 +118,6 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
         );
     }
 
-    public static ArrayList<BuildingBlock> getRelativeBlockData(LevelAccessor level) {
-        return BuildingBlockData.getBuildingBlocksFromNbt(structureName, level);
-    }
-
     private void updateSculkBps() {
         sculkBps.clear();
         for (int x = centrePos.getX() - SCULK_SEARCH_RANGE / 2; x < centrePos.getX() + SCULK_SEARCH_RANGE / 2; x++) {

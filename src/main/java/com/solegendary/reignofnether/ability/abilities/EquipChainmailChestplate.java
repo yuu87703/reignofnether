@@ -36,7 +36,7 @@ public class EquipChainmailChestplate extends EquipAbility {
                 "Chainmail Chestplate",
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/chainmail_chestplate.png"),
                 hotkey,
-                () -> CursorClientEvents.getLeftClickAction() == EQUIP_ACTION,
+                () -> CursorClientEvents.getLeftClickAction() == EQUIP_ACTION || placement.autocast == this,
                 () -> false,
                 () -> blacksmith.getUpgradeLevel() > 0,
                 () -> CursorClientEvents.setLeftClickAction(EQUIP_ACTION),

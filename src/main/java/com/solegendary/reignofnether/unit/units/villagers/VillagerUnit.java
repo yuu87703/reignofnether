@@ -13,6 +13,7 @@ import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.faction.FactionRegistries;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
@@ -54,6 +55,7 @@ import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -286,6 +288,11 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
             makeVeteran();
     }
 
+    public Item chestplate = Items.AIR;
+    public boolean chestplateEnchanted = false;
+    public boolean swordEnchanted = false;
+    public boolean bowEnchanted = false;
+
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
@@ -389,6 +396,10 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         pCompound.putInt("masonExp", this.masonExp);
         pCompound.putInt("hunterExp", this.hunterExp);
         pCompound.putBoolean("isVeteran", this.isVeteran);
+        pCompound.putInt("chestplateId", Item.getId(chestplate));
+        pCompound.putBoolean("chestplateEnchanted", chestplateEnchanted);
+        pCompound.putBoolean("swordEnchanted", swordEnchanted);
+        pCompound.putBoolean("bowEnchanted", bowEnchanted);
         this.addUnitSaveData(pCompound);
     }
 
@@ -404,6 +415,14 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
         this.minerExp = pCompound.getInt("minerExp");
         this.masonExp = pCompound.getInt("masonExp");
         this.hunterExp = pCompound.getInt("hunterExp");
+        if (pCompound.contains("chestplateId"))
+            this.chestplate = Item.byId(pCompound.getInt("chestplateId"));
+        if (pCompound.contains("chestplateEnchanted"))
+            this.chestplateEnchanted = pCompound.getBoolean("chestplateEnchanted");
+        if (pCompound.contains("swordEnchanted"))
+            this.swordEnchanted = pCompound.getBoolean("swordEnchanted");
+        if (pCompound.contains("bowEnchanted"))
+            this.bowEnchanted = pCompound.getBoolean("bowEnchanted");
         if (!level().isClientSide() && pCompound.getBoolean("isVeteran"))
             makeVeteran();
         this.readUnitSaveData(pCompound);
@@ -421,6 +440,14 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
                 mUnit.minerExp = this.minerExp;
                 mUnit.masonExp = this.masonExp;
                 mUnit.hunterExp = this.hunterExp;
+                ItemStack chest = new ItemStack(this.chestplate);
+                if (chestplateEnchanted && chest.getItem() != Items.AIR) {
+                    chest.enchant(EnchantmentRegistrar.FORTYIFYING.get(), 1);
+                }
+                mUnit.setItemSlot(EquipmentSlot.CHEST, chest);
+                mUnit.swordEnchanted = swordEnchanted;
+                mUnit.bowEnchanted = bowEnchanted;
+                mUnit.swapWeapons(mUnit.isUsingBow());
 
                 UnitConvertClientboundPacket.syncConvertedUnits(getOwnerName(), List.of(getId()), List.of(newEntity.getId()));
                 converted = true;

@@ -544,6 +544,12 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         Enchantment enchantment = MartialEnchantment.getEnchantmentForUnit(entity);
         if (enchantment != null) {
             entity.getMainHandItem().enchant(enchantment, 1);
+            if (entity instanceof MilitiaUnit militiaUnit) {
+                if (militiaUnit.isUsingBow())
+                    militiaUnit.bowEnchanted = true;
+                else
+                    militiaUnit.swordEnchanted = true;
+            }
         }
         playEnchantSound();
     }

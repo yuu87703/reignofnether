@@ -13,13 +13,11 @@ New Heroes
 [🟡] Change /gamerule allowHeroes (bool) to /gamerule allowedHeroes (int) (default 1)
 
 Wretched Wraith
-    [🟡] Wraith snow should not affect allies
-    [❌] Wraith snow does not do random tick consistently (based on player position and gamemode?)
-    [🟡] Add random snowballs that produce 5x snow upon hitting the ground or a unit (deals damage to that unit)
+    [❌] Don't damage the wraith when going underground
 
 Enchanter
-    [❌] Blacksmith armour upgrades
-    [❌] Enchant militia (and have it be retained between weapon switches)
+    [🟡] Enchant militia (and have it be retained between weapon switches)
+    [❌] Charge counts still broken?
 
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
@@ -33,8 +31,6 @@ Bugfixes
 --------
 [❌] Fixed sculk catalysts not spreading any sculk
     - Seems to be intermittent, changes when relogging?
-
-[❌] left clicking now deselects everything
 
 Quality of Life
 ---------------

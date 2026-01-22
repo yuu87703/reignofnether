@@ -123,8 +123,6 @@ public class BuildingPlacement {
     public boolean isDestroyedServerside = false;
     public boolean isBuiltServerside = false;
 
-    public static String structureName;
-
     public final boolean isCapitol;
 
     public boolean isBuilt; // set true when blocksPercent reaches 100% the first time; the building can then be used
