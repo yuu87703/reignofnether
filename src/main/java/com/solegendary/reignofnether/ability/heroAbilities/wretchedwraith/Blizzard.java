@@ -26,9 +26,9 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class Blizzard extends HeroAbility {
 
-    private static final int CD_MAX_SECONDS = 300 * ResourceCost.TICKS_PER_SECOND;
-    public static final int CHANNEL_DURATION = 15 * ResourceCost.TICKS_PER_SECOND;
-    public static final int FREEZE_DURATION = 6 * ResourceCost.TICKS_PER_SECOND;
+    private static final int CD_MAX_SECONDS = 360 * ResourceCost.TICKS_PER_SECOND;
+    public static final int CHANNEL_DURATION = 20 * ResourceCost.TICKS_PER_SECOND;
+    public static final int FREEZE_DURATION = 8 * ResourceCost.TICKS_PER_SECOND;
     public static final int SNOWBALL_DAMAGE = 5;
     public static final int RADIUS = 20;
 
@@ -100,13 +100,11 @@ public class Blizzard extends HeroAbility {
     public void use(Level level, Unit unitUsing, BlockPos targetBp) {
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().setAbility(this);
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().startCasting();
-        ((WretchedWraithUnit) unitUsing).blizzard();
     }
 
     @Override
     public void use(Level level, Unit unitUsing, LivingEntity targetEntity) {
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().setAbility(this);
         ((WretchedWraithUnit) unitUsing).getCastBlizzardGoal().startCasting();
-        ((WretchedWraithUnit) unitUsing).blizzard();
     }
 }

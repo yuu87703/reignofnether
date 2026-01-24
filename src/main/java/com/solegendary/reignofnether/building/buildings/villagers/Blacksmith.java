@@ -93,4 +93,9 @@ public class Blacksmith extends ProductionBuilding {
             }
         return 0;
     }
+
+    @Override
+    public String getUpgradedStructureName(int upgradeLevel) {
+        return upgradeLevel > 0 ? upgradedStructureName : structureName;
+    }
 }

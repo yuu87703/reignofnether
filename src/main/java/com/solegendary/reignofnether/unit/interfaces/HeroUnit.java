@@ -2,6 +2,15 @@ package com.solegendary.reignofnether.unit.interfaces;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.BuildingServerEvents;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
+import com.solegendary.reignofnether.building.production.ActiveProduction;
+import com.solegendary.reignofnether.building.production.HeroProductionItem;
+import com.solegendary.reignofnether.building.production.ProductionBuilding;
+import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.hero.HeroClientEvents;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
@@ -54,12 +63,23 @@ public interface HeroUnit extends Unit {
         List<HeroUnit> list = new ArrayList<>();
         for (LivingEntity e : units) {
             if (e instanceof HeroUnit heroUnit &&
-                heroUnit.getOwnerName().equals(ownerName) &&
-                (e.getName().getString().equals(unitName) || unitName.isBlank())) {
+                    heroUnit.getOwnerName().equals(ownerName) &&
+                    (e.getName().getString().equals(unitName) || unitName.isBlank())) {
                 list.add(heroUnit);
             }
         }
         return list;
+    }
+
+    static List<ActiveProduction> getHeroesInTraining(boolean isClientside, String ownerName) {
+        List<BuildingPlacement> buildings = isClientside ? BuildingClientEvents.getBuildings() : BuildingServerEvents.getBuildings();
+        List<ActiveProduction> productions = new ArrayList<>();
+        for (BuildingPlacement b : buildings)
+            if (b instanceof ProductionPlacement pb && pb.ownerName.equals(ownerName))
+                for (ActiveProduction prod : pb.productionQueue)
+                    if (prod.item instanceof HeroProductionItem)
+                        productions.add(prod);
+        return productions;
     }
 
     @Nullable
@@ -74,7 +94,8 @@ public interface HeroUnit extends Unit {
 
     static int getNumHeroesOwnedOrInTraining(boolean isClientside, String ownerName) {
         return HeroUnit.getHeroes(isClientside, ownerName).size() +
-                HeroUnit.getFallenHeroes(isClientside, ownerName).size();
+                HeroUnit.getFallenHeroes(isClientside, ownerName).size() +
+                HeroUnit.getHeroesInTraining(isClientside, ownerName).size();
     }
 
     static List<HeroUnitSave> getFallenHeroes(boolean isClientSide, String ownerName) {

@@ -28,7 +28,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class ChillingScreech extends HeroAbility {
 
-    private static final int CD_MAX_SECONDS = 30 * ResourceCost.TICKS_PER_SECOND;
+    private static final int CD_MAX = 30 * ResourceCost.TICKS_PER_SECOND;
 
     public static final int DURATION_RANK_1 = 7 * 20;
     public static final int DURATION_RANK_2 = 9 * 20;
@@ -41,7 +41,7 @@ public class ChillingScreech extends HeroAbility {
     public int duration = DURATION_RANK_1;
 
     public ChillingScreech() {
-        super(3, 0, UnitAction.CHILLING_SCREECH, 0, 0, RADIUS_RANK_1, false);
+        super(3, 60, UnitAction.CHILLING_SCREECH, CD_MAX, RADIUS_RANK_1, RADIUS_RANK_1, false);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class ChillingScreech extends HeroAbility {
     public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.chilling_screech") + " " + rankString(hero), true),
-                fcsIcons(I18n.get("abilities.reignofnether.chilling_screech.stats", CD_MAX_SECONDS / 20, range, manaCost)),
+                fcsIcons(I18n.get("abilities.reignofnether.chilling_screech.stats", CD_MAX / 20, range, manaCost)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.chilling_screech.tooltip2", duration / 20))

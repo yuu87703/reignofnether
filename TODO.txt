@@ -10,22 +10,12 @@
 
 New Heroes
 ----------
-[🟡] Change /gamerule allowHeroes (bool) to /gamerule allowedHeroes (int) (default 1)
-
-Wretched Wraith
-    [❌] Don't damage the wraith when going underground
-    [❌] Check blizzard damage to enemies
-
-Enchanter
-    [🟡] Enchant militia (and have it be retained between weapon switches)
-    [❌] Charge counts still broken?
 
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
 
 
 [❌] Overflowing graveyards
-[🟡] Marauder
 
 
 Bugfixes
@@ -36,6 +26,7 @@ Bugfixes
 Quality of Life
 ---------------
 [❌] Add rotation to /rtsapi placebuilding
+[❌] Don't change allegiances when exiting sandbox
 
 
 Balance

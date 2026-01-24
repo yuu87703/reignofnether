@@ -316,7 +316,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 activeAnimDef = WretchedWraithAnimations.ULTIMATE;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
-                animateSpeed = 0.6f;
+                animateSpeed = 0.70f;
                 startAnimation(activeAnimDef);
             }
             default -> {
@@ -336,7 +336,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     }
     private int blizzardTicksLeft = 0;
     public boolean isBlizzardInProgress() {
-        return frostBlinkInProgress;
+        return blizzardTicksLeft > 0;
     }
 
     public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {
@@ -490,8 +490,8 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         );
         this.castBlizzardGoal = new GenericUntargetedSpellGoal(
                 this,
-                Blizzard.CHANNEL_DURATION * 20,
-                null,
+                0,
+                this::blizzard,
                 UnitAnimationAction.ULTIMATE,
                 null,
                 null
@@ -528,6 +528,13 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         for (Ability ability : abilities.get())
             if (ability instanceof BitterFrostPassive)
                 return (BitterFrostPassive) ability;
+        return null;
+    }
+
+    public Blizzard getBlizzard() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof Blizzard)
+                return (Blizzard) ability;
         return null;
     }
 
@@ -637,6 +644,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                     if (snowball != null) {
                         snowball.moveTo(x, y, z);
                         snowball.setDeltaMovement(vx * 5, vy * 5, vz * 5);
+                        snowball.setOwner(this);
                         level().addFreshEntity(snowball);
                     }
                 }
@@ -649,6 +657,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
             blizzardTicksLeft -= 1;
             if (blizzardTicksLeft <= 0) {
                 SoundClientboundPacket.stopSoundWithId(getId());
+
             }
         }
         if (blizzardTicksLeft > 0 && blizzardTicksLeft < Blizzard.CHANNEL_DURATION - 20) {
@@ -665,7 +674,6 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         if (level().isClientSide) return;
         blizzardTicksLeft = Blizzard.CHANNEL_DURATION;
         SoundClientboundPacket.playFadeableLoopingSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition(), 1.0f, getId());
-        //SoundClientboundPacket.playSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition()); this works...
     }
 
     @Override
@@ -709,6 +717,6 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
 
     @Override
     public boolean isPushable() {
-        return blizzardTicksLeft <= 0 && !frostBlinkInProgress;
+        return !isBlizzardInProgress() && !isFrostBlinkInProgress();
     }
 }

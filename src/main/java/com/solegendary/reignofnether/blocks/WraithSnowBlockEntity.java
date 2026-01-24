@@ -1,7 +1,9 @@
 package com.solegendary.reignofnether.blocks;
 
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
 import com.solegendary.reignofnether.registrars.BlockEntityRegistrar;
 import com.solegendary.reignofnether.resources.BlockUtils;
+import com.solegendary.reignofnether.unit.units.monsters.WretchedWraithUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -47,11 +49,19 @@ public class WraithSnowBlockEntity extends BlockEntity {
         if (level.isClientSide) return;
 
         be.ticksToNextMelt -= 1;
-        if (be.ticksToNextMelt <= 0) {
-            be.melt(level, pos, state);
+        if (be.ticksToNextMelt % 10 == 0) {
+            if (!be.isInRangeOfBlizzard()) {
+                if (be.ticksToNextMelt <= 0) {
+                    be.melt(level, pos, state);
+                }
+            }
         }
     }
 
+    public boolean isInRangeOfBlizzard() {
+        return level != null && level.getEntity(ownerId) instanceof WretchedWraithUnit wraith && wraith.isBlizzardInProgress() &&
+                worldPosition.distSqr(wraith.blockPosition()) < Blizzard.RADIUS * Blizzard.RADIUS;
+    }
 
     private void melt(Level level, BlockPos pos, BlockState state) {
         int layers = BlockUtils.getWraithSnowLayers(level.getBlockState(pos));

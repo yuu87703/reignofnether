@@ -55,6 +55,7 @@ public class BuildingUtils {
 
         for (BuildingPlacement building : buildings) {
             if (ownerName.equals(building.ownerName) &&
+                building.isBuilt &&
                 (building.getBuilding() instanceof Castle ||
                 building.getBuilding() instanceof Fortress ||
                 building.getBuilding() instanceof Stronghold)) {

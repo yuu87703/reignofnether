@@ -244,9 +244,9 @@
     "abilities.reignofnether.bitter_frost.rank3": "Rank 3: Snow is randomly created near the wraith",
     "abilities.reignofnether.blizzard": "Spectral Blizzard (Ultimate)",
     "abilities.reignofnether.blizzard.stats": "\uE004  %ds   \uE008  %d",
-    "abilities.reignofnether.blizzard.tooltip1": "Channel for up to %ds, causing random nearby enemies to periodically ",
-    "abilities.reignofnether.blizzard.tooltip2": "be frozen in a block of ice. Frozen units cannot attack or be moved.",
-    "abilities.reignofnether.blizzard.tooltip3": "While channeling, the wraith takes half damage and is immune to knockback.",
+    "abilities.reignofnether.blizzard.tooltip1": "Channel for up to %ds, causing random nearby enemies to be frozen ",
+    "abilities.reignofnether.blizzard.tooltip2": "in a block of ice and take heavy damage. While channeling, the wraith",
+    "abilities.reignofnether.blizzard.tooltip3": "can't be moved by enemies, but any other actions will end the blizzard.",
 
     "abilities.reignofnether.throw_tnt": "TNT Toss",
     "abilities.reignofnether.throw_tnt.stats": "\uE006  %d   \uE004  %ds   \uE005  %d   \uE008  %d",
@@ -396,8 +396,9 @@
 
     "ability.reignofnether.equip.error1": "Can only forge armor for your own units",
     "ability.reignofnether.equip.error2": "Target is out of range",
-    "ability.reignofnether.equip.error3": "Target must be a Villager military unit without a chestplate",
-    "ability.reignofnether.equip.error4": "Not enough resources",
+    "ability.reignofnether.equip.error3": "Target must be a Villager military unit",
+    "ability.reignofnether.equip.error4": "Target already has that type of chestplate",
+    "ability.reignofnether.equip.error5": "Not enough resources",
 
     "ability.reignofnether.equip.leather_chestplate": "Leather Chestplate",
     "ability.reignofnether.equip.leather_chestplate.tooltip1": "Create and equip a leather chestplate on a unit.",
@@ -1293,6 +1294,10 @@
     "units.neutral.reignofnether.grizzly_bear": "Grizzly Bear",
     "units.neutral.reignofnether.panda": "Panda",
     "units.neutral.reignofnether.llama": "Llama",
+
+    "units.reignofnether.hero_production.allowed_heroes_1": "You may only have one hero per game",
+    "units.reignofnether.hero_production.allowed_heroes_2": "You may only have two heroes per game",
+    "units.reignofnether.hero_production.unlock_hero_2": "Unlock a 2nd hero with a Castle, Stronghold or Fortress",
 
     "alliance.reignofnether.sent_request": "\nAlliance request sent to %s.\n",
     "alliance.reignofnether.ally_self": "\nYou can't ally with yourself!\n",

@@ -106,8 +106,10 @@ public abstract class EquipAbility extends Ability {
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.equip.error2"));
             } else if (!isCorrectUnit(te)) {
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.equip.error3"));
-            } else if (!canAfford(buildingUsing)) {
+            } else if (hasSameItem(te)) {
                 HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.equip.error4"));
+            } else if (!canAfford(buildingUsing)) {
+                HudClientEvents.showTemporaryMessage(I18n.get("ability.reignofnether.equip.error5"));
             } else {
                 setToMaxCooldown(buildingUsing);
                 playSound(level, te);

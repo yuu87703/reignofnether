@@ -17,7 +17,10 @@ public interface KeyframeAnimated {
         return 0;
     }
     public default void startAnimation(AnimationDefinition animDef) {
-        if (getAnimateTicksLeft() <= 0)
-            setAnimateTicksLeft((int) ((animDef.lengthInSeconds() * 20) * (1 / getAnimationSpeed())));
+        if (getAnimateTicksLeft() <= 0) {
+            setAnimateTicksLeft((int) ((animDef.lengthInSeconds() * 20) *
+                    ((animDef.lengthInSeconds() > 10 ? 1.1f : 1.0f) / getAnimationSpeed()))
+            );
+        }
     }
 }

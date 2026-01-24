@@ -117,4 +117,8 @@ public abstract class Building {
     public boolean isTypeOf(Building building) {
         return this == building;
     }
+
+    public String getUpgradedStructureName(int upgradeLevel) {
+        return structureName;
+    }
 }

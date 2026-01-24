@@ -78,7 +78,7 @@ public abstract class MobMixin extends LivingEntity {
         if (mei != null && mei.getDuration() > 0 && mei.getDuration() % 20 == 0 && onGround()) {
             int layers = BlockUtils.getWraithSnowLayers(inBlockState);
             boolean inIce = inBlockState.getBlock() == Blocks.PACKED_ICE;
-            if (layers > 0) {
+            if (layers > 0 || inIce) {
                 hurt(damageSources().magic(), layers + (inIce ? 3 : 0));
             }
         }

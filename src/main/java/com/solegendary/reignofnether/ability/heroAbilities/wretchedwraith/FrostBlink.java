@@ -31,9 +31,9 @@ public class FrostBlink extends HeroAbility {
     public static final int RANGE_RANK_2 = 9;
     public static final int RANGE_RANK_3 = 12;
 
-    public static final int CD_RANK_1 = 1;
-    public static final int CD_RANK_2 = 1;
-    public static final int CD_RANK_3 = 1;
+    public static final int CD_RANK_1 = 20;
+    public static final int CD_RANK_2 = 16;
+    public static final int CD_RANK_3 = 12;
 
     public static final int RADIUS = 3;
 

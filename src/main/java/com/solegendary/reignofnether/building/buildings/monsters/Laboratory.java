@@ -113,4 +113,9 @@ public class Laboratory extends ProductionBuilding {
                 this
         );
     }
+
+    @Override
+    public String getUpgradedStructureName(int upgradeLevel) {
+        return upgradeLevel > 0 ? upgradedStructureName : structureName;
+    }
 }
