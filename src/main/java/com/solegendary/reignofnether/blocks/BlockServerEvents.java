@@ -183,6 +183,9 @@ public class BlockServerEvents {
             int targetLayers = BlockUtils.getWraithSnowLayers(targetBs);
 
             if (targetLayers <= 0) {
+                if (level.getBlockState(targetPos.below()).getBlock() == Blocks.DIRT_PATH) {
+                    level.setBlockAndUpdate(targetPos.below(), Blocks.DIRT.defaultBlockState());
+                }
                 level.setBlockAndUpdate(targetPos, snowBs);
             } else if (targetLayers < 8) {
                 BlockState newLayer = targetBs.setValue(BlockStateProperties.LAYERS, targetLayers + 1);

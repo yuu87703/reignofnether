@@ -241,7 +241,7 @@
     "abilities.reignofnether.bitter_frost.tooltip3": "",
     "abilities.reignofnether.bitter_frost.rank1": "Rank 1: Basic attacks create an area of snow",
     "abilities.reignofnether.bitter_frost.rank2": "Rank 2: Attackers have snow placed under them",
-    "abilities.reignofnether.bitter_frost.rank3": "Rank 3: Snow is randomly created near the wraith",
+    "abilities.reignofnether.bitter_frost.rank3": "Rank 3: Snow cannot melt near wraith",
     "abilities.reignofnether.blizzard": "Spectral Blizzard (Ultimate)",
     "abilities.reignofnether.blizzard.stats": "\uE004  %ds   \uE008  %d",
     "abilities.reignofnether.blizzard.tooltip1": "Channel for up to %ds, causing random nearby enemies to be frozen ",

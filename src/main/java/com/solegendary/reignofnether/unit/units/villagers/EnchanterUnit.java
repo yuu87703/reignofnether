@@ -549,7 +549,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                     militiaUnit.swordEnchanted = true;
             }
         }
-        if (!level().isClientSide);
+        if (!level().isClientSide)
             playEnchantSound();
     }
 

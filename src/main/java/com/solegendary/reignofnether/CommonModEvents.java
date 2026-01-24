@@ -9,7 +9,6 @@ import com.solegendary.reignofnether.entities.renderers.ThrowableTntRenderer;
 import com.solegendary.reignofnether.entities.renderers.NecromancerProjectileRenderer;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.particles.BigEnchantParticle;
-import com.solegendary.reignofnether.particles.BigEnchantParticleProvider;
 import com.solegendary.reignofnether.registrars.*;
 import com.solegendary.reignofnether.unit.modelling.models.*;
 import com.solegendary.reignofnether.unit.modelling.renderers.*;
@@ -265,6 +264,7 @@ public class CommonModEvents {
     }
 
     @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
     public static void registerParticles(RegisterParticleProvidersEvent evt) {
         evt.registerSpriteSet(
                 ParticleRegistrar.BIG_ENCHANT.get(),

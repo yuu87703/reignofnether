@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.blocks;
 
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
 import com.solegendary.reignofnether.registrars.BlockEntityRegistrar;
 import com.solegendary.reignofnether.resources.BlockUtils;
@@ -11,7 +12,6 @@ import net.minecraft.server.level.TicketType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -24,6 +24,7 @@ public class WraithSnowBlockEntity extends BlockEntity {
 
     private int ownerId = -1;
     private int ticksToNextMelt = 200;
+    private int tickAge = 0;
 
     public WraithSnowBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityRegistrar.WRAITH_SNOW_BLOCK_ENTITY.get(), pos, state);
@@ -48,9 +49,10 @@ public class WraithSnowBlockEntity extends BlockEntity {
     public static void tick(Level level, BlockPos pos, BlockState state, WraithSnowBlockEntity be) {
         if (level.isClientSide) return;
 
-        be.ticksToNextMelt -= 1;
-        if (be.ticksToNextMelt % 10 == 0) {
-            if (!be.isInRangeOfBlizzard()) {
+        be.tickAge += 1;
+        if (be.tickAge > 0 && be.tickAge % 10 == 0) {
+            if (!be.cannotMelt()) {
+                be.ticksToNextMelt -= 10;
                 if (be.ticksToNextMelt <= 0) {
                     be.melt(level, pos, state);
                 }
@@ -58,9 +60,10 @@ public class WraithSnowBlockEntity extends BlockEntity {
         }
     }
 
-    public boolean isInRangeOfBlizzard() {
-        return level != null && level.getEntity(ownerId) instanceof WretchedWraithUnit wraith && wraith.isBlizzardInProgress() &&
-                worldPosition.distSqr(wraith.blockPosition()) < Blizzard.RADIUS * Blizzard.RADIUS;
+    public boolean cannotMelt() {
+        return level != null && level.getEntity(ownerId) instanceof WretchedWraithUnit wraith &&
+                ((wraith.isBlizzardInProgress() && worldPosition.distSqr(wraith.blockPosition()) < Blizzard.RADIUS * Blizzard.RADIUS) ||
+                (wraith.getBitterFrost().getRank(wraith) >= 3 && worldPosition.distSqr(wraith.blockPosition()) < BitterFrostPassive.SNOW_NO_MELT_RANGE * BitterFrostPassive.SNOW_NO_MELT_RANGE));
     }
 
     private void melt(Level level, BlockPos pos, BlockState state) {
