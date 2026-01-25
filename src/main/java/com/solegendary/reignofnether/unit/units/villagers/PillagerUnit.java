@@ -6,7 +6,6 @@ import com.solegendary.reignofnether.ability.abilities.MountRavager;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
-import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -36,7 +35,6 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -138,7 +136,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
 
     // combat stats
     public boolean getWillRetaliate() { return willRetaliate; }
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
         return 20f / (getAttackCooldown() + (CrossbowItem.getChargeDuration(itemStack)));

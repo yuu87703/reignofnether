@@ -4,10 +4,6 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
-import com.solegendary.reignofnether.ability.heroAbilities.enchanter.CivilEnchantment;
-import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MarchOfProgress;
-import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MartialEnchantment;
-import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.Avatar;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.BattleRagePassive;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
@@ -66,8 +62,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.ibm.icu.impl.ValidIdentifiers.Datatype.unit;
 
 public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit, KeyframeAnimated {
     public final Abilities ABILITIES = new Abilities(
@@ -166,7 +160,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}

@@ -7,7 +7,6 @@ import com.solegendary.reignofnether.ability.abilities.Roar;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.keybinds.Keybindings;
-import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -130,7 +129,7 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}

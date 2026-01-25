@@ -8,15 +8,10 @@ import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyF
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.GreedIsGoodPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.LootExplosion;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.ThrowTNT;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.Avatar;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.BattleRagePassive;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
-import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCry;
 import com.solegendary.reignofnether.entities.ThrowableTntProjectile;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.ItemRegistrar;
-import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.resources.ResourceName;
@@ -174,7 +169,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.PIGLIN_MERCHANT;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}

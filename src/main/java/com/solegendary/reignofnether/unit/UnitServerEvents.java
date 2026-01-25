@@ -629,6 +629,7 @@ public class UnitServerEvents {
                             MobEffectRegistrar.TEMPORARY_EFFICIENCY.get(),
                             MobEffectRegistrar.BLOODLUST.get(),
                             MobEffectRegistrar.FROST_DAMAGE.get(),
+                            MobEffectRegistrar.DISARM.get(),
                             MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()
                     )) {
                         MobEffectInstance mei = entity.getEffect(me);

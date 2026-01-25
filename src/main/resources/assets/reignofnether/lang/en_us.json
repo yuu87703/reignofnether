@@ -1477,6 +1477,7 @@
     "unitstats.reignofnether.attack_damage_bonus_buildings": "+%s to buildings",
     "unitstats.reignofnether.attack_damage_bonus_animals": "+%s to animals",
     "unitstats.reignofnether.attack_speed": "Attacks per second",
+    "unitstats.reignofnether.ghast_disarmed": "Can't attack while out of bounds",
     "unitstats.reignofnether.range": "Range",
     "unitstats.reignofnether.armour": "Armor",
     "unitstats.reignofnether.armour_melee_and_ranged": "%d%% vs melee & ranged",

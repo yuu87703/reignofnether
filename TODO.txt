@@ -31,8 +31,8 @@ Quality of Life
 
 Balance
 -------
-[❌] Ghasts can no longer attack and move 20% slower while over void or structure void blocks
-[✔] Potion clouds created by witches no longer have their size reduced over time or a mob stands in it
+[✔] Ghasts can no longer attack while over void or structure void blocks
+[✔] Potion clouds created by witches no longer have their size reduced over time or when a mob stands in it
 [✔] Headhunters no longer require a bastion to be trained
 [✔] Bastion cost raised from (150 wood, 100 ore) to (175 wood, 150 ore)
 [✔] The Piglin Merchant's food now heals 20% more health

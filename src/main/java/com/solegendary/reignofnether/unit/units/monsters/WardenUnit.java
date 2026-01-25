@@ -7,7 +7,6 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.SculkCatalystPlacement;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.keybinds.Keybindings;
-import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.research.researchItems.ResearchSculkAmplifiers;
@@ -128,7 +127,7 @@ public class WardenUnit extends Warden implements Unit, AttackerUnit {
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}

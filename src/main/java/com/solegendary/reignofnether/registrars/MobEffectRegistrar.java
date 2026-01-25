@@ -56,6 +56,9 @@ public class MobEffectRegistrar {
 
     public static final RegistryObject<MobEffect> ENCHANTMENT_AMPLIFIER = MOB_EFFECTS.register("enchantment_amplifier", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 0x000000));
 
+    public static final RegistryObject<MobEffect> DISARM = MOB_EFFECTS.register("disarm", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
+            .addAttributeModifier(Attributes.ATTACK_SPEED, "a5faf34d-0155-49cf-9c6e-73f16ad41a42", -1.0f, AttributeModifier.Operation.MULTIPLY_TOTAL));
+
     public static void init(FMLJavaModLoadingContext context) {
         MOB_EFFECTS.register(context.getModEventBus());
     }

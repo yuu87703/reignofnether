@@ -9,7 +9,6 @@ import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizza
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
-import com.solegendary.reignofnether.blocks.WraithSnowLayerBlock;
 import com.solegendary.reignofnether.entities.WraithSnowball;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
@@ -172,7 +171,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}

@@ -666,7 +666,14 @@ public interface Unit {
     }
 
     public default List<FormattedCharSequence> getAttackSpeedStatTooltip() {
-        return List.of(fcs(I18n.get("unitstats.reignofnether.attack_speed"), true));
+        if (this instanceof GhastUnit ghastUnit && ghastUnit.hasEffect(MobEffectRegistrar.DISARM.get())) {
+            return List.of(
+                    fcs(I18n.get("unitstats.reignofnether.attack_speed"), true),
+                    fcs(I18n.get("unitstats.reignofnether.ghast_disarmed"))
+            );
+        } else {
+            return List.of(fcs(I18n.get("unitstats.reignofnether.attack_speed"), true));
+        }
     }
 
     public default List<FormattedCharSequence> getRangeStatTooltip() {

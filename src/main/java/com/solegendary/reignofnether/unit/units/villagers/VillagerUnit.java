@@ -7,7 +7,6 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
 import com.solegendary.reignofnether.building.BuildingPlaceButton;
-import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.faction.FactionRegistries;
@@ -55,7 +54,6 @@ import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -154,7 +152,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.VILLAGER;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}

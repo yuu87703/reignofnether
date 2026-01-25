@@ -48,7 +48,6 @@ import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -140,7 +139,7 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
 
     public ResourceCost getCost() {return ResourceCosts.MILITIA;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / (isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond)) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / (isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond)) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}

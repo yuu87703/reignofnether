@@ -15,7 +15,6 @@ import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -277,9 +276,13 @@ public interface AttackerUnit {
         return false;
     }
 
-    public default float getAttackSlowdownMultiplier() {
-        MobEffectInstance mei = ((LivingEntity) (this)).getEffect(MobEffectRegistrar.ATTACK_SLOWDOWN.get());
-        return mei == null ? 1 : 1 + ((mei.getAmplifier() + 1) * 0.05f);
+    public default float getAttackCooldownMultiplier() {
+        MobEffectInstance disarm = ((LivingEntity) (this)).getEffect(MobEffectRegistrar.DISARM.get());
+        if (disarm != null) {
+            return 999999;
+        }
+        MobEffectInstance attackSlowdown = ((LivingEntity) (this)).getEffect(MobEffectRegistrar.ATTACK_SLOWDOWN.get());
+        return attackSlowdown == null ? 1 : 1 + ((attackSlowdown.getAmplifier() + 1) * 0.05f);
     }
 
     public default float getBuildingDamageMultiplier() {

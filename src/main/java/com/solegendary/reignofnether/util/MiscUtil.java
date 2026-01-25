@@ -209,20 +209,25 @@ public class MiscUtil {
         return new BlockPos(blockPos.getX(), y, blockPos.getZ());
     }
 
-    public static BlockPos getHighestNonAirBlock(Level level, BlockPos blockPos, boolean ignoreLeaves) {
+    public static BlockPos getHighestNonAirBlock(Level level, BlockPos blockPos, boolean ignoreLeaves, boolean ignoreStructureVoid) {
         int y = level.getHeight();
         BlockState bs;
         BlockPos bp;
         do {
             bp = new BlockPos(blockPos.getX(), y, blockPos.getZ());
             bs = level.getBlockState(bp);
+            if (!ignoreStructureVoid && bs.getBlock() == Blocks.STRUCTURE_VOID) {
+                break;
+            }
             y -= 1;
         } while((bs.isAir() ||
                 bs.getBlock() == Blocks.LIGHT ||
-                bs.getBlock() == Blocks.STRUCTURE_VOID ||
                 (!isSolidBlocking(level, bp) && bs.getFluidState().isEmpty()) ||
                 (ignoreLeaves && bs.is(BlockTags.LEAVES))) && y > -63);
         return new BlockPos(blockPos.getX(), y, blockPos.getZ());
+    }
+    public static BlockPos getHighestNonAirBlock(Level level, BlockPos blockPos, boolean ignoreLeaves) {
+        return getHighestNonAirBlock(level, blockPos, ignoreLeaves, true);
     }
     public static BlockPos getHighestNonAirBlock(Level level, BlockPos blockPos) {
         return getHighestNonAirBlock(level, blockPos, false);

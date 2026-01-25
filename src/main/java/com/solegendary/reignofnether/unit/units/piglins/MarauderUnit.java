@@ -152,7 +152,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         int cd = (int) (20 / (attacksPerSecond));
         if (hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()))
             cd *= (1 / BLOODLUST_ATTACK_SPEED_MULTIPLIER);
-        return (int) (cd * getAttackSlowdownMultiplier());
+        return (int) (cd * getAttackCooldownMultiplier());
     }
 
     final static public float attackDamage = 7.0f;

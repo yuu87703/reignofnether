@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -29,6 +30,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,6 +45,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -141,7 +144,7 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.GHAST;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackSlowdownMultiplier());}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
@@ -249,6 +252,13 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
     }
 
     public void tick() {
+        if (tickCount % 10 == 0) {
+            BlockState lowestBs = level().getBlockState(MiscUtil.getHighestNonAirBlock(level(), blockPosition(), false, false));
+            if (lowestBs.isAir() || lowestBs.getBlock() == Blocks.STRUCTURE_VOID) {
+                addEffect(new MobEffectInstance(MobEffectRegistrar.DISARM.get(), 15, 1, true, false));
+            }
+        }
+
         this.setCanPickUpLoot(false);
         super.tick();
         Unit.tick(this);
@@ -338,6 +348,9 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
 
     @Override
     public void performUnitRangedAttack(double x, double y, double z, float velocity) {
+        if (this.hasEffect(MobEffectRegistrar.DISARM.get()))
+            return;
+
         Vec3 viewVec = this.getViewVector(1.0F);
         double tx = x - (this.getX() + viewVec.x * 4.0);
         double ty = y - (0.5 + this.getY(0.5));
