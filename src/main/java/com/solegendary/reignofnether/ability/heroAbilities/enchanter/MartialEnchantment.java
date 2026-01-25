@@ -41,13 +41,13 @@ public class MartialEnchantment extends AbstractEnchantment {
     public static final int CHARGES_RANK_2 = 3;
     public static final int CHARGES_RANK_3 = 4;
 
-    public static final int CD_RANK_1 = 30;
-    public static final int CD_RANK_2 = 25;
-    public static final int CD_RANK_3 = 20;
+    public static final int CD_RANK_1 = 25;
+    public static final int CD_RANK_2 = 20;
+    public static final int CD_RANK_3 = 15;
 
-    public static final int MANA_COST_RANK_1 = 50;
-    public static final int MANA_COST_RANK_2 = 40;
-    public static final int MANA_COST_RANK_3 = 30;
+    public static final int MANA_COST_RANK_1 = 40;
+    public static final int MANA_COST_RANK_2 = 30;
+    public static final int MANA_COST_RANK_3 = 20;
 
     public MartialEnchantment() {
         super(3, MANA_COST_RANK_1, UnitAction.MARTIAL_ENCHANTMENT, CD_RANK_1 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);

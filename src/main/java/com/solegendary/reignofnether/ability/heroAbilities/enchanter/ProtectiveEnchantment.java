@@ -42,15 +42,13 @@ public class ProtectiveEnchantment extends AbstractEnchantment {
     public static final int CHARGES_RANK_2 = 3;
     public static final int CHARGES_RANK_3 = 4;
 
-    public static final int CD_RANK_1 = 30;
-    public static final int CD_RANK_2 = 25;
-    public static final int CD_RANK_3 = 20;
+    public static final int CD_RANK_1 = 25;
+    public static final int CD_RANK_2 = 20;
+    public static final int CD_RANK_3 = 15;
 
-    public static final int MANA_COST_RANK_1 = 50;
-    public static final int MANA_COST_RANK_2 = 40;
-    public static final int MANA_COST_RANK_3 = 30;
-
-    public static final int DURATION_SECONDS = 30;
+    public static final int MANA_COST_RANK_1 = 40;
+    public static final int MANA_COST_RANK_2 = 30;
+    public static final int MANA_COST_RANK_3 = 20;
 
     public ProtectiveEnchantment() {
         super(3, MANA_COST_RANK_1, UnitAction.PROTECTIVE_ENCHANTMENT, CD_RANK_1 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
@@ -132,7 +130,7 @@ public class ProtectiveEnchantment extends AbstractEnchantment {
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.protective_enchantment.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.protective_enchantment.tooltip2", DURATION_SECONDS)),
+                fcs(I18n.get("abilities.reignofnether.protective_enchantment.tooltip2", MAX_ABSORB_HP)),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.protective_enchantment.rank1", CHARGES_RANK_1, CD_RANK_1), getRank(hero) == 0),
                 fcs(I18n.get("abilities.reignofnether.protective_enchantment.rank2", CHARGES_RANK_2, CD_RANK_2), getRank(hero) == 1),

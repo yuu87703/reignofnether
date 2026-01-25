@@ -23,6 +23,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NecromancerProd extends HeroProductionItem {
@@ -62,14 +63,11 @@ public class NecromancerProd extends HeroProductionItem {
     }
 
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
-        return super.getStartButton(
-            prodBuilding,
-            hotkey,
-            List.of(
-                    FormattedCharSequence.forward(
-                            I18n.get("units.monsters.reignofnether.necromancer") +
-                                    " (" + I18n.get("hud.units.reignofnether.hero") + ")",
-                            Style.EMPTY.withBold(true)),
+        ArrayList<FormattedCharSequence> tooltips = new ArrayList<>(List.of(
+                FormattedCharSequence.forward(
+                        I18n.get("units.monsters.reignofnether.necromancer") +
+                                " (" + I18n.get("hud.units.reignofnether.hero") + ")",
+                        Style.EMPTY.withBold(true)),
                 ResourceCosts.getFormattedCost(cost),
                 ResourceCosts.getFormattedPopAndTime(cost),
                 FormattedCharSequence.forward("", Style.EMPTY),
@@ -77,9 +75,13 @@ public class NecromancerProd extends HeroProductionItem {
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.necromancer.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.necromancer.tooltip3"), Style.EMPTY)
-            )
+        ));
+        tooltips.addAll(getAdditionalHeroTooltips());
+
+        return super.getStartButton(
+            prodBuilding,
+            hotkey,
+            tooltips
         );
     }
-
-
 }

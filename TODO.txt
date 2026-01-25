@@ -25,7 +25,10 @@ Bugfixes
 Quality of Life
 ---------------
 [✔] General performance improvements on both server and client, thanks @NightFish!
-[✔] Units and buildings no longer have their allegiances changed when exiting sandbox
+[🟡] Units and buildings no longer have their allegiances changed when exiting sandbox
+
+
+[❌] Add tooltips for 2nd hero to all hero prod items
 
 [❌] Add rotation to /rtsapi placebuilding
 

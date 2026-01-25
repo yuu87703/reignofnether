@@ -1295,7 +1295,7 @@
     "units.neutral.reignofnether.llama": "Llama",
 
     "units.reignofnether.hero_production.allowed_heroes_1": "You may only have one hero per game",
-    "units.reignofnether.hero_production.allowed_heroes_2": "You may only have two heroes per game",
+    "units.reignofnether.hero_production.allowed_heroes_2": "You may have two different heroes per game",
     "units.reignofnether.hero_production.unlock_hero_2": "Unlock a 2nd hero with a Castle, Stronghold or Fortress",
 
     "alliance.reignofnether.sent_request": "\nAlliance request sent to %s.\n",

@@ -1,5 +1,9 @@
 package com.solegendary.reignofnether.gamerules;
 
+import com.solegendary.reignofnether.building.Building;
+import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -118,7 +122,14 @@ public class GameruleClientboundPacket {
                             }
                             case SET_BEACON_WIN_MINUTES -> GameruleClient.beaconWinMinutes = value;
                             case SET_SLANTED_BUILDING -> GameruleClient.slantedBuilding = value == 1L;
-                            case SET_ALLOWED_HEROES -> GameruleClient.allowedHeroes = Math.toIntExact(value);
+                            case SET_ALLOWED_HEROES -> {
+                                GameruleClient.allowedHeroes = Math.toIntExact(value);
+                                for (BuildingPlacement buildingPlacement : BuildingClientEvents.getBuildings()) {
+                                    if (buildingPlacement instanceof ProductionPlacement pp) {
+                                        pp.updateButtons();
+                                    }
+                                }
+                            }
                         }
                         success.set(true);
                     });

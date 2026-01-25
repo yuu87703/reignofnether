@@ -17,6 +17,8 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
+
 public abstract class HeroProductionItem extends ProductionItem {
 
     public final ResourceLocation iconRl;
@@ -76,5 +78,22 @@ public abstract class HeroProductionItem extends ProductionItem {
                 fcs,
                 this
         );
+    }
+
+    protected List<FormattedCharSequence> getAdditionalHeroTooltips() {
+        if (GameruleClient.allowedHeroes == 1) {
+            return List.of(
+                    fcs(""),
+                    fcs(I18n.get("units.reignofnether.hero_production.allowed_heroes_1"))
+            );
+        } else if (GameruleClient.allowedHeroes >= 2) {
+            return List.of(
+                    fcs(""),
+                    fcs(I18n.get("units.reignofnether.hero_production.allowed_heroes_2")),
+                    fcs(I18n.get("units.reignofnether.hero_production.unlock_hero_2"))
+            );
+        } else {
+            return List.of();
+        }
     }
 }
