@@ -35,6 +35,7 @@ public class ResourceCosts {
     public static final ResourceCost GRUNT = new ResourceCost(ID, "GRUNT");
     public static final ResourceCost BRUTE = new ResourceCost(ID, "BRUTE");
     public static final ResourceCost HEADHUNTER = new ResourceCost(ID, "HEADHUNTER");
+    public static final ResourceCost MARAUDER = new ResourceCost(ID, "MARAUDER");
     public static final ResourceCost HOGLIN = new ResourceCost(ID, "HOGLIN");
     public static final ResourceCost BLAZE = new ResourceCost(ID, "BLAZE");
     public static final ResourceCost WITHER_SKELETON = new ResourceCost(ID, "WITHER_SKELETON");
@@ -104,6 +105,7 @@ public class ResourceCosts {
 
     // RESEARCH
 
+    public static final ResourceCost RESEARCH_SUPERIOR_BLACKSMITH = new ResourceCost(ID, "RESEARCH_SUPERIOR_BLACKSMITH");
     public static final ResourceCost RESEARCH_GOLEM_SMITHING = new ResourceCost(ID, "RESEARCH_GOLEM_SMITHING");
     public static final ResourceCost RESEARCH_MILITIA_BOWS = new ResourceCost(ID, "RESEARCH_MILITIA_BOWS");
     public static final ResourceCost RESEARCH_LAB_LIGHTNING_ROD = new ResourceCost(ID, "RESEARCH_LAB_LIGHTNING_ROD");
@@ -143,13 +145,15 @@ public class ResourceCosts {
     public static final ResourceCost RESEARCH_BEACON_LEVEL4 = new ResourceCost(ID, "RESEARCH_BEACON_LEVEL4");
     public static final ResourceCost RESEARCH_BEACON_LEVEL5 = new ResourceCost(ID, "RESEARCH_BEACON_LEVEL5");
 
-    // ENCHANTMENTS
+    // ABILITIES
 
     public static final ResourceCost ENCHANT_MAIMING = new ResourceCost(ID, "ENCHANT_MAIMING");
     public static final ResourceCost ENCHANT_QUICK_CHARGE = new ResourceCost(ID, "ENCHANT_QUICK_CHARGE");
     public static final ResourceCost ENCHANT_SHARPNESS = new ResourceCost(ID, "ENCHANT_SHARPNESS");
     public static final ResourceCost ENCHANT_MULTISHOT = new ResourceCost(ID, "ENCHANT_MULTISHOT");
     public static final ResourceCost ENCHANT_VIGOR = new ResourceCost(ID, "ENCHANT_VIGOR");
+    public static final ResourceCost EQUIP_LEATHER_ARMOR = new ResourceCost(ID, "EQUIP_LEATHER_ARMOR");
+    public static final ResourceCost EQUIP_CHAINMAIL_ARMOR = new ResourceCost(ID, "EQUIP_CHAINMAIL_ARMOR");
 
     // UNUSED
 
@@ -221,6 +225,7 @@ public class ResourceCosts {
         GRUNT.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.GRUNT);
         BRUTE.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.BRUTE);
         HEADHUNTER.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.HEADHUNTER);
+        MARAUDER.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.MARAUDER);
         HOGLIN.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.HOGLIN);
         BLAZE.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.BLAZE);
         WITHER_SKELETON.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.WITHER_SKELETON);
@@ -285,6 +290,7 @@ public class ResourceCosts {
         INFERNAL_PORTAL.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.INFERNAL_PORTAL);
         // ******************* RESEARCH ******************* //
         RESEARCH_GOLEM_SMITHING.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_GOLEM_SMITHING);
+        RESEARCH_SUPERIOR_BLACKSMITH.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_SUPERIOR_BLACKSMITH);
         RESEARCH_MILITIA_BOWS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_MILITIA_BOWS);
         RESEARCH_LAB_LIGHTNING_ROD.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_LAB_LIGHTNING_ROD);
         RESEARCH_RESOURCE_CAPACITY.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_RESOURCE_CAPACITY);
@@ -322,11 +328,13 @@ public class ResourceCosts {
         RESEARCH_BEACON_LEVEL3.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_BEACON_LEVEL3);
         RESEARCH_BEACON_LEVEL4.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_BEACON_LEVEL4);
         RESEARCH_BEACON_LEVEL5.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_BEACON_LEVEL5);
-        // ******************* ENCHANTMENTS ******************* //
-        ENCHANT_MAIMING.bakeValues(ReignOfNetherCommonConfigs.EnchantmentCosts.ENCHANT_MAIMING);
-        ENCHANT_QUICK_CHARGE.bakeValues(ReignOfNetherCommonConfigs.EnchantmentCosts.ENCHANT_QUICK_CHARGE);
-        ENCHANT_SHARPNESS.bakeValues(ReignOfNetherCommonConfigs.EnchantmentCosts.ENCHANT_SHARPNESS);
-        ENCHANT_MULTISHOT.bakeValues(ReignOfNetherCommonConfigs.EnchantmentCosts.ENCHANT_MULTISHOT);
-        ENCHANT_VIGOR.bakeValues(ReignOfNetherCommonConfigs.EnchantmentCosts.ENCHANT_VIGOR);
+        // ******************* ABILITIES ******************* //
+        ENCHANT_MAIMING.bakeValues(ReignOfNetherCommonConfigs.AbilityCosts.ENCHANT_MAIMING);
+        ENCHANT_QUICK_CHARGE.bakeValues(ReignOfNetherCommonConfigs.AbilityCosts.ENCHANT_QUICK_CHARGE);
+        ENCHANT_SHARPNESS.bakeValues(ReignOfNetherCommonConfigs.AbilityCosts.ENCHANT_SHARPNESS);
+        ENCHANT_MULTISHOT.bakeValues(ReignOfNetherCommonConfigs.AbilityCosts.ENCHANT_MULTISHOT);
+        ENCHANT_VIGOR.bakeValues(ReignOfNetherCommonConfigs.AbilityCosts.ENCHANT_VIGOR);
+        EQUIP_LEATHER_ARMOR.bakeValues(ReignOfNetherCommonConfigs.AbilityCosts.EQUIP_LEATHER_ARMOR);
+        EQUIP_CHAINMAIL_ARMOR.bakeValues(ReignOfNetherCommonConfigs.AbilityCosts.EQUIP_CHAINMAIL_ARMOR);
     }
 }

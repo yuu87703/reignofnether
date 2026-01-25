@@ -1,5 +1,5 @@
 
-1.20.1-1.2.4
+1.20.1-1.3.0-beta-1
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -7,49 +7,38 @@
 
 
 
-Christmas
----------
-During christmas season, units spawn with santa hats, and the piglin merchant throws presents
-During new years, buildings explode with fireworks
 
 New Heroes
 ----------
-[❌] Change /gamerule allowHeroes (bool) to /gamerule allowedHeroes (int) (default 1)
-
-Wretched Wraith
-    [❌] New snow layer block that doesn't interfere with vanilla snow
-        - Maybe with a subtle particle effect?
-
-Enchanter
-    [❌] Blacksmith armour upgrades
 
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
 
-
-
-Seasons Greetings!
-[🟡] Between 19th and 26th December (inclusive), many units will spawn with Santa Hats
-[🟡] On 31st December and 1st January, buildings will create fireworks when damaged instead of explosions
-
+[❌] Overflowing graveyards
 
 
 Bugfixes
 --------
-[🟡] Fixed sculk catalysts not spreading any sculk
-
+[❌] Fixed sculk catalysts not spreading any sculk
+    - Seems to be intermittent, changes when relogging?
 
 Quality of Life
 ---------------
-[🟡] Illager models now show worn armour (this will be used in a later update)
+[✔] General performance improvements on both server and client, thanks @NightFish!
+[🟡] Units and buildings no longer have their allegiances changed when exiting sandbox
 
+
+[❌] Add tooltips for 2nd hero to all hero prod items
+
+[❌] Add rotation to /rtsapi placebuilding
 
 Balance
 -------
-[❌] Ghasts can no longer attack and move 20% slower while over void or structure void blocks
-[❌] Prevent friendly fire from wither skeleton clouds
-    - Might need to create a new AreaEffectCloud entity
-
+[✔] Ghasts can no longer attack while over void or structure void blocks
+[✔] Potion clouds created by witches no longer have their size reduced over time or when a mob stands in it
+[✔] Headhunters no longer require a bastion to be trained
+[✔] Bastion cost raised from (150 wood, 100 ore) to (175 wood, 150 ore)
+[✔] The Piglin Merchant's food now heals 20% more health
 
 Languages
 ---------

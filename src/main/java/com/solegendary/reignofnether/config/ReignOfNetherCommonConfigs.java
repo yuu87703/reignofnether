@@ -49,6 +49,7 @@ public class ReignOfNetherCommonConfigs {
         UnitCosts.GRUNT.define(BUILDER);
         UnitCosts.BRUTE.define(BUILDER);
         UnitCosts.HEADHUNTER.define(BUILDER);
+        UnitCosts.MARAUDER.define(BUILDER);
         UnitCosts.HOGLIN.define(BUILDER);
         UnitCosts.BLAZE.define(BUILDER);
         UnitCosts.WITHER_SKELETON.define(BUILDER);
@@ -118,6 +119,7 @@ public class ReignOfNetherCommonConfigs {
         //*Research*
         BUILDER.comment("Research Cost Configurations");
         ResearchCosts.RESEARCH_GOLEM_SMITHING.define(BUILDER);
+        ResearchCosts.RESEARCH_SUPERIOR_BLACKSMITH.define(BUILDER);
         ResearchCosts.RESEARCH_MILITIA_BOWS.define(BUILDER);
         ResearchCosts.RESEARCH_LAB_LIGHTNING_ROD.define(BUILDER);
         ResearchCosts.RESEARCH_RESOURCE_CAPACITY.define(BUILDER);
@@ -156,13 +158,15 @@ public class ReignOfNetherCommonConfigs {
         ResearchCosts.RESEARCH_BEACON_LEVEL4.define(BUILDER);
         ResearchCosts.RESEARCH_BEACON_LEVEL5.define(BUILDER);
 
-        //*Enchantments*
-        BUILDER.comment("Enchantment Cost Configurations");
-        EnchantmentCosts.ENCHANT_MAIMING.define(BUILDER);
-        EnchantmentCosts.ENCHANT_QUICK_CHARGE.define(BUILDER);
-        EnchantmentCosts.ENCHANT_SHARPNESS.define(BUILDER);
-        EnchantmentCosts.ENCHANT_MULTISHOT.define(BUILDER);
-        EnchantmentCosts.ENCHANT_VIGOR.define(BUILDER);
+        //*Abilities*
+        BUILDER.comment("Ability Cost Configurations");
+        AbilityCosts.ENCHANT_MAIMING.define(BUILDER);
+        AbilityCosts.ENCHANT_QUICK_CHARGE.define(BUILDER);
+        AbilityCosts.ENCHANT_SHARPNESS.define(BUILDER);
+        AbilityCosts.ENCHANT_MULTISHOT.define(BUILDER);
+        AbilityCosts.ENCHANT_VIGOR.define(BUILDER);
+        AbilityCosts.EQUIP_LEATHER_ARMOR.define(BUILDER);
+        AbilityCosts.EQUIP_CHAINMAIL_ARMOR.define(BUILDER);
         SPEC = BUILDER.build();
     }
 
@@ -201,6 +205,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry GRUNT = ResourceCostConfigEntry.Unit(50,0,0,15,1, ResourceCosts.GRUNT, "Grunt Config");
         public static final ResourceCostConfigEntry BRUTE = ResourceCostConfigEntry.Unit(120,0,0,25,2, ResourceCosts.BRUTE, "Brute Config");
         public static final ResourceCostConfigEntry HEADHUNTER = ResourceCostConfigEntry.Unit(90,60,0,25,2, ResourceCosts.HEADHUNTER, "Headhunter Config");
+        public static final ResourceCostConfigEntry MARAUDER = ResourceCostConfigEntry.Unit(175,50,50,40,4, ResourceCosts.MARAUDER, "Marauder Config");
         public static final ResourceCostConfigEntry HOGLIN = ResourceCostConfigEntry.Unit(140,0,70,35,3, ResourceCosts.HOGLIN, "Hoglin Config");
         public static final ResourceCostConfigEntry BLAZE = ResourceCostConfigEntry.Unit(40,40,100,30,2, ResourceCosts.BLAZE, "Blaze Config");
         public static final ResourceCostConfigEntry WITHER_SKELETON = ResourceCostConfigEntry.Unit(200,0,125,40,4, ResourceCosts.WITHER_SKELETON, "Wither Skeleton Config");
@@ -259,7 +264,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry BASIC_PORTAL = ResourceCostConfigEntry.Building(0, 75, 0, 0, ResourceCosts.BASIC_PORTAL, "Basic Portal Config");
         public static final ResourceCostConfigEntry CIVILIAN_PORTAL = ResourceCostConfigEntry.Building(0, 75, 0, 15, ResourceCosts.CIVILIAN_PORTAL, "Civilian Portal Config");
         public static final ResourceCostConfigEntry NETHERWART_FARM = ResourceCostConfigEntry.Building(0, 150, 0, 0, ResourceCosts.NETHERWART_FARM, "Netherwart Farm Config");
-        public static final ResourceCostConfigEntry BASTION = ResourceCostConfigEntry.Building(0, 150, 100, 0, ResourceCosts.BASTION, "Bastion Config");
+        public static final ResourceCostConfigEntry BASTION = ResourceCostConfigEntry.Building(0, 175, 150, 0, ResourceCosts.BASTION, "Bastion Config");
         public static final ResourceCostConfigEntry HOGLIN_STABLES = ResourceCostConfigEntry.Building(0, 150, 50, 0, ResourceCosts.HOGLIN_STABLES, "Hoglin Stables Config");
         public static final ResourceCostConfigEntry FLAME_SANCTUARY = ResourceCostConfigEntry.Building(0, 150, 200, 0, ResourceCosts.FLAME_SANCTUARY, "Flame Sanctuary Config");
         public static final ResourceCostConfigEntry WITHER_SHRINE = ResourceCostConfigEntry.Building(0, 150, 200, 0, ResourceCosts.WITHER_SHRINE, "Wither Shrine Config");
@@ -269,6 +274,7 @@ public class ReignOfNetherCommonConfigs {
     }
     public static class ResearchCosts implements Costs {
         public static final ResourceCostConfigEntry RESEARCH_GOLEM_SMITHING = ResourceCostConfigEntry.Research(0, 150,200, 90, ResourceCosts.RESEARCH_GOLEM_SMITHING, "Golem Smithing Research Config");
+        public static final ResourceCostConfigEntry RESEARCH_SUPERIOR_BLACKSMITH = ResourceCostConfigEntry.Research(0, 100,200, 90, ResourceCosts.RESEARCH_SUPERIOR_BLACKSMITH, "Superior Blacksmith Research Config");
         public static final ResourceCostConfigEntry RESEARCH_MILITIA_BOWS = ResourceCostConfigEntry.Research(250,500,0, 160, ResourceCosts.RESEARCH_MILITIA_BOWS, "Militia Bows Research Config");
         public static final ResourceCostConfigEntry RESEARCH_LAB_LIGHTNING_ROD = ResourceCostConfigEntry.Research(0,0,400, 120, ResourceCosts.RESEARCH_LAB_LIGHTNING_ROD, "Lightning Lab Research Config");
         public static final ResourceCostConfigEntry RESEARCH_RESOURCE_CAPACITY = ResourceCostConfigEntry.Research(200,200,0, 90, ResourceCosts.RESEARCH_RESOURCE_CAPACITY, "Stockpile Resource Capacity Research Config");
@@ -308,12 +314,14 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry RESEARCH_BEACON_LEVEL4 = ResourceCostConfigEntry.Research(0, 0, 500, 120, ResourceCosts.RESEARCH_BEACON_LEVEL4, "Beacon Level 4 Research Config");
         public static final ResourceCostConfigEntry RESEARCH_BEACON_LEVEL5 = ResourceCostConfigEntry.Research(0, 0, 600, 120, ResourceCosts.RESEARCH_BEACON_LEVEL5, "Beacon Level 5 Research Config");
     }
-    public static class EnchantmentCosts implements Costs {
-        public static final ResourceCostConfigEntry ENCHANT_MAIMING = ResourceCostConfigEntry.Enchantment(0,20, 30, ResourceCosts.ENCHANT_MAIMING, "Maiming Enchantment Config");
-        public static final ResourceCostConfigEntry ENCHANT_QUICK_CHARGE = ResourceCostConfigEntry.Enchantment(0,40, 20, ResourceCosts.ENCHANT_QUICK_CHARGE, "Quick Charge Enchantment Config");
-        public static final ResourceCostConfigEntry ENCHANT_SHARPNESS = ResourceCostConfigEntry.Enchantment(0,40, 60, ResourceCosts.ENCHANT_SHARPNESS, "Sharpness Enchantment Config");
-        public static final ResourceCostConfigEntry ENCHANT_MULTISHOT = ResourceCostConfigEntry.Enchantment(0,70, 35, ResourceCosts.ENCHANT_MULTISHOT, "Multishot Enchantment Config");
-        public static final ResourceCostConfigEntry ENCHANT_VIGOR = ResourceCostConfigEntry.Enchantment(0,60, 60, ResourceCosts.ENCHANT_VIGOR, "Vigor Enchantment Config");
+    public static class AbilityCosts implements Costs {
+        public static final ResourceCostConfigEntry ENCHANT_MAIMING = ResourceCostConfigEntry.Ability(0,20, 30, ResourceCosts.ENCHANT_MAIMING, "Maiming Enchantment Config");
+        public static final ResourceCostConfigEntry ENCHANT_QUICK_CHARGE = ResourceCostConfigEntry.Ability(0,40, 20, ResourceCosts.ENCHANT_QUICK_CHARGE, "Quick Charge Enchantment Config");
+        public static final ResourceCostConfigEntry ENCHANT_SHARPNESS = ResourceCostConfigEntry.Ability(0,40, 60, ResourceCosts.ENCHANT_SHARPNESS, "Sharpness Enchantment Config");
+        public static final ResourceCostConfigEntry ENCHANT_MULTISHOT = ResourceCostConfigEntry.Ability(0,70, 35, ResourceCosts.ENCHANT_MULTISHOT, "Multishot Enchantment Config");
+        public static final ResourceCostConfigEntry ENCHANT_VIGOR = ResourceCostConfigEntry.Ability(0,60, 60, ResourceCosts.ENCHANT_VIGOR, "Vigor Enchantment Config");
+        public static final ResourceCostConfigEntry EQUIP_LEATHER_ARMOR = ResourceCostConfigEntry.Ability(0,0, 30, ResourceCosts.EQUIP_LEATHER_ARMOR, "Equip Leather Armor Config");
+        public static final ResourceCostConfigEntry EQUIP_CHAINMAIL_ARMOR = ResourceCostConfigEntry.Ability(0,0, 60, ResourceCosts.EQUIP_CHAINMAIL_ARMOR, "Equip Chainmail Armor Config");
     }
     public interface Costs {}
 }

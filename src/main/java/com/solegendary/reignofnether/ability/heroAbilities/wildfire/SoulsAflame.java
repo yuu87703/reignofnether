@@ -49,8 +49,8 @@ public class SoulsAflame extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Souls Aflame",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/fire.png"),
+        AbilityButton button = new AbilityButton("Souls Aflame",
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/souls_aflame.png"),
             hotkey,
             () -> false,
             () -> getRank(hero) == 0,
@@ -61,13 +61,15 @@ public class SoulsAflame extends HeroAbility {
             this,
             hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Souls Aflame",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/fire.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/souls_aflame.png"),
                 hero
         );
     }

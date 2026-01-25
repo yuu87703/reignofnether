@@ -34,9 +34,6 @@ public class Laboratory extends ProductionBuilding {
     public final static String upgradedStructureName = "laboratory_lightning";
     public final static ResourceCost cost = ResourceCosts.LABORATORY;
 
-    // distance you can move away from a town centre before being turned back into a villager
-    private final Set<BlockPos> lightningBorderBps = new HashSet<>();
-
     public Laboratory() {
         super(structureName, cost, false);
         this.name = buildingName;
@@ -115,5 +112,10 @@ public class Laboratory extends ProductionBuilding {
             ),
                 this
         );
+    }
+
+    @Override
+    public String getUpgradedStructureName(int upgradeLevel) {
+        return upgradeLevel > 0 ? upgradedStructureName : structureName;
     }
 }

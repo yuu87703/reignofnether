@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.heroAbilities.wildfire;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.hud.AbilityButton;
 import com.solegendary.reignofnether.hud.Button;
@@ -28,8 +29,8 @@ public class IntenseHeatPassive extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Intense Heat",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/redstone_block.png"),
+        AbilityButton button = new AbilityButton("Intense Heat",
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/intense_heat.png"),
                 hotkey,
                 () -> false,
                 () -> getRank(hero) == 0,
@@ -40,13 +41,15 @@ public class IntenseHeatPassive extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Intense Heat",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/redstone_block.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/intense_heat.png"),
                 hero
         );
     }

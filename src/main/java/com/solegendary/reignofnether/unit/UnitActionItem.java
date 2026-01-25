@@ -150,7 +150,8 @@ public class UnitActionItem {
         actionableUnitsLoop:
         for (Unit unit : actionableUnits) {
 
-            if (((LivingEntity) unit).getEffect(MobEffectRegistrar.STUN.get()) != null) {
+            if (((LivingEntity) unit).getEffect(MobEffectRegistrar.STUN.get()) != null ||
+                ((LivingEntity) unit).getEffect(MobEffectRegistrar.FREEZE.get()) != null) {
                 Unit.fullResetBehaviours(unit);
                 continue;
             } else if (((LivingEntity) unit).getEffect(MobEffectRegistrar.UNCONTROLLABLE.get()) != null) {

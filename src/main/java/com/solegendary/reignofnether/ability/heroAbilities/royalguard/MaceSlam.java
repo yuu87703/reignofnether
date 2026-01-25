@@ -74,8 +74,8 @@ public class MaceSlam extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Mace Slam",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/mace.png"),
+        AbilityButton button = new AbilityButton("Mace Slam",
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/mace_slam.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.MACE_SLAM,
                 () -> getRank(hero) == 0,
@@ -86,13 +86,15 @@ public class MaceSlam extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Mace Slam",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/mace.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/mace_slam.png"),
                 hero
         );
     }

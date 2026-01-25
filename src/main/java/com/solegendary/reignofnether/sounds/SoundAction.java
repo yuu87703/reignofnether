@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.sounds;
 
 public enum SoundAction {
+    STOP_SOUND,
     USE_PORTAL,
     RANDOM_CAVE_AMBIENCE,
     ALLY,
@@ -9,7 +10,15 @@ public enum SoundAction {
     BELL,
     BEACON_ACTIVATE,
     BEACON_DEACTIVATE,
+    BEACON_AMBIENT,
     LEVEL_UP,
     BLOODLUST,
-    HEROISM
+    HEROISM,
+    WRETCHED_WRAITH_ATTACK_QUIET,
+    WRETCHED_WRAITH_ATTACK_LOUD,
+    WRETCHED_WRAITH_TELEPORT_START,
+    WRETCHED_WRAITH_TELEPORT_END,
+    WRETCHED_WRAITH_BLIZZARD,
+    ENCHANT,
+    FORGE_ARMOUR
 }

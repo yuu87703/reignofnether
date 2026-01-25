@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -27,12 +28,10 @@ import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.*;
-import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
-import com.solegendary.reignofnether.unit.units.monsters.DrownedUnit;
-import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
-import com.solegendary.reignofnether.unit.units.monsters.SlimeUnit;
+import com.solegendary.reignofnether.unit.units.monsters.*;
 import com.solegendary.reignofnether.unit.units.piglins.*;
 import com.solegendary.reignofnether.unit.units.villagers.*;
+import com.solegendary.reignofnether.util.EnchantmentUtil;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -50,12 +49,17 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -77,14 +81,12 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Vector3d;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ConcurrentModificationException;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import static com.solegendary.reignofnether.player.PlayerServerEvents.isRTSPlayer;
+import static com.solegendary.reignofnether.player.PlayerServerEvents.serverLevel;
 import static com.solegendary.reignofnether.resources.ResourcesServerEvents.NEUTRAL_UNIT_BOUNTY_PERCENT;
 
 public class UnitServerEvents {
@@ -288,6 +290,11 @@ public class UnitServerEvents {
             }
         }
     }
+
+    public static Relationship getUnitToEntityRelationship(Unit unit, Level level, int unitId) {
+        return getUnitToEntityRelationship(unit, level.getEntity(unitId));
+    }
+
     public static Relationship getUnitToEntityRelationship(Unit unit, Entity entity) {
         String ownerName1 = unit.getOwnerName();
         String ownerName2 = "";
@@ -601,8 +608,6 @@ public class UnitServerEvents {
         if (evt.phase != TickEvent.Phase.END || evt.level.isClientSide() || evt.level.dimension() != Level.OVERWORLD) {
             return;
         }
-        ServerLevel serverLevel = (ServerLevel) evt.level;
-
         unitSyncTicks -= 1;
         if (unitSyncTicks <= 0) {
             unitSyncTicks = UNIT_SYNC_TICKS_MAX;
@@ -613,7 +618,20 @@ public class UnitServerEvents {
                     UnitSyncClientboundPacket.sendSyncResourcesPacket(unit);
                     UnitSyncClientboundPacket.sendSyncStatsPacket(entity);
 
-                    for (MobEffect me : List.of(MobEffects.DAMAGE_RESISTANCE, MobEffectRegistrar.STUN.get())) {
+                    for (MobEffect me : List.of(
+                            MobEffects.DAMAGE_RESISTANCE,
+                            MobEffectRegistrar.STUN.get(),
+                            MobEffectRegistrar.FREEZE.get(),
+                            MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(),
+                            MobEffectRegistrar.MINOR_MOVEMENT_SLOWDOWN.get(),
+                            MobEffectRegistrar.MINOR_MOVEMENT_SPEED.get(),
+                            MobEffectRegistrar.ATTACK_SLOWDOWN.get(),
+                            MobEffectRegistrar.TEMPORARY_EFFICIENCY.get(),
+                            MobEffectRegistrar.BLOODLUST.get(),
+                            MobEffectRegistrar.FROST_DAMAGE.get(),
+                            MobEffectRegistrar.DISARM.get(),
+                            MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()
+                    )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)
                             UnitSyncMobEffectsClientboundPacket.addEffectClientside(entity, mei);
@@ -780,6 +798,11 @@ public class UnitServerEvents {
 
     @SubscribeEvent
     public static void onEntityDamaged(LivingDamageEvent evt) {
+
+        if (evt.getEntity() instanceof WretchedWraithUnit wraith && wraith.isFrostBlinkInProgress()) {
+            evt.setCanceled(true);
+        }
+
         if (shouldIgnoreKnockback(evt)) {
             knockbackIgnoreIds.add(evt.getEntity().getId());
         }
@@ -827,14 +850,26 @@ public class UnitServerEvents {
         }
 
         // ensure projectiles from units do the damage of the unit, not the item
-        if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE) &&
-            evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
+        if (evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
             float dmg = attackerUnit.getUnitAttackDamage();
+
             if (evt.getEntity() instanceof Unit unit) {
-                dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
-                dmg *= (1 - unit.getUnitRangedArmorPercentage());
-                dmg *= (1 - unit.getUnitResistPercentage());
+                if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE)) {
+                    dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
+                    dmg *= (1 - unit.getUnitRangedArmorPercentage());
+                    dmg *= (1 - unit.getUnitResistPercentage());
+                } else if (
+                    !evt.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) &&
+                    !evt.getSource().is(DamageTypeTags.IS_FIRE) &&
+                    !evt.getSource().is(DamageTypeTags.BYPASSES_SHIELD) &&
+                    !evt.getSource().is(DamageTypeTags.BYPASSES_ARMOR) &&
+                    !evt.getSource().is(DamageTypeTags.BYPASSES_RESISTANCE)
+                ) {
+                    dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
+                    dmg *= (1 - unit.getUnitResistPercentage());
+                }
             }
+
             evt.setAmount(dmg);
         }
 
@@ -885,6 +920,27 @@ public class UnitServerEvents {
                 headhunterUnit.hasFlameTrident() &&
                 evt.getAmount() > 0)
             evt.getEntity().setSecondsOnFire(4);
+
+        if (evt.getSource().getEntity() instanceof LivingEntity le) {
+            int breachLevel = le.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.BREACHING.get());
+            MobEffectInstance existingDmgIncrease = evt.getEntity().getEffect(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get());
+            if (breachLevel > 0) {
+                int amp = existingDmgIncrease != null ? (breachLevel * 2) + existingDmgIncrease.getAmplifier() : (breachLevel * 2);
+                evt.getEntity().addEffect(new MobEffectInstance(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get(), 100, amp));
+            }
+        }
+        if (evt.getSource().getEntity() instanceof Vex vex && vex.getOwner() instanceof EvokerUnit evokerUnit) {
+            int zealLevel = evokerUnit.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.ZEAL.get());
+            if (zealLevel > 0) {
+                evt.setAmount(evt.getAmount() + zealLevel);
+            }
+        }
+        if (evt.getSource().getEntity() instanceof EvokerFangs fangs && fangs.getOwner() instanceof EvokerUnit evokerUnit) {
+            int zealLevel = evokerUnit.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.ZEAL.get());
+            if (zealLevel > 0) {
+                evt.setAmount(evt.getAmount() + zealLevel);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -924,11 +980,37 @@ public class UnitServerEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onMobEffectAdded(MobEffectEvent.Added evt) {
+        // double level of all enchants
+        if (evt.getEffectInstance().getEffect() == MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get() &&
+            evt.getOldEffectInstance() == null) {
+            EnchantmentUtil.updateEnchantLevels(evt.getEntity(), false);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMobEffectExpired(MobEffectEvent.Expired evt) {
+        // halve level of all enchants
+        if (evt.getEffectInstance() != null) {
+            MobEffect effect = evt.getEffectInstance().getEffect();
+            if (effect == MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()) {
+                EnchantmentUtil.updateEnchantLevels(evt.getEntity(), true);
+            } else if (effect == MobEffectRegistrar.TEMPORARY_EFFICIENCY.get()) {
+                EnchantmentHelper.setEnchantments(new HashMap<>(), evt.getEntity().getMainHandItem());
+            }
+        }
+    }
+
     public static ArrayList<Integer> knockbackIgnoreIds = new ArrayList<>();
 
     @SubscribeEvent
     public static void onLivingKnockBack(LivingKnockBackEvent evt) {
+        if (evt.getEntity().getEffect(MobEffectRegistrar.FREEZE.get()) != null)
+            evt.setCanceled(true);
         if (evt.getEntity() instanceof GhastUnit)
+            evt.setCanceled(true);
+        else if (evt.getEntity() instanceof WretchedWraithUnit wraith && wraith.isBlizzardInProgress())
             evt.setCanceled(true);
         else if (evt.getEntity() instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield)
             evt.setCanceled(true);
@@ -936,8 +1018,8 @@ public class UnitServerEvents {
             evt.setCanceled(true);
     }
 
-    public static void debug1() {
-
+    public static void debug1(BlockPos pos) {
+        //BlockUtils.placeWraithSnow(serverLevel, pos.above());
     }
 
     public static void debug2() {

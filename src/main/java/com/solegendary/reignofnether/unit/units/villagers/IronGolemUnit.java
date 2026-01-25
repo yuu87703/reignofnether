@@ -109,8 +109,9 @@ public class IronGolemUnit extends IronGolem implements Unit, AttackerUnit {
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
-    public float getAttacksPerSecond() {return attacksPerSecond;}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -137,7 +138,9 @@ public class IronGolemUnit extends IronGolem implements Unit, AttackerUnit {
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
 
-    final static public float BUILDING_DAMAGE_MULTIPLIER = 2.0f;
+    public float getBuildingDamageMultiplier() {
+        return 2.0f;
+    }
 
     final static public int maxResources = 200;
 
@@ -155,7 +158,7 @@ public class IronGolemUnit extends IronGolem implements Unit, AttackerUnit {
 
     final static public float rangedDamageResist = 0.2f;
     @Override
-    public float getUnitRangedArmorPercentage() {
+    public double getUnitRangedArmorPercentage() {
         return rangedDamageResist;
     }
 

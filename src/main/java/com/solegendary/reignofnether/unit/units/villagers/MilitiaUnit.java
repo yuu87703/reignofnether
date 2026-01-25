@@ -48,6 +48,7 @@ import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -138,12 +139,19 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
 
     public ResourceCost getCost() {return ResourceCosts.MILITIA;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / (isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond));}
-    public float getAttacksPerSecond() {return isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond;}
+    public float getAttackCooldown() {return ((20 / (isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond)) * getAttackCooldownMultiplier());}
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return isUsingBow() ? attackRange : 2;}
-    public float getUnitAttackDamage() {return isUsingBow() ? rangedAttackDamage : attackDamage;}
+    public float getUnitAttackDamage() {
+        if (isUsingBow()) {
+            return rangedAttackDamage + (bowEnchanted ? 1 : 0);
+        } else {
+            return attackDamage + (swordEnchanted ? 1 : 0);
+        }
+    }
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null && !isUsingBow();}
     public Goal getAttackGoal() { return isUsingBow() ? rangedAttackGoal : attackGoal; }
@@ -172,6 +180,8 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
     public int minerExp = 0;
     public int masonExp = 0;
     public int hunterExp = 0;
+    public boolean swordEnchanted = false;
+    public boolean bowEnchanted = false;
 
     final static public float attackDamage = 3.0f;
     final static public float rangedAttackDamage = 3.0f;
@@ -207,6 +217,11 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
         Item weapon = useBow ? Items.BOW : Items.STONE_SWORD;
         int damageMod = 0;
         ItemStack weaponStack = new ItemStack(weapon);
+        if (weapon == Items.STONE_SWORD && swordEnchanted) {
+            weaponStack.enchant(Enchantments.SHARPNESS, 1);
+        } else if (weapon == Items.BOW && bowEnchanted) {
+            weaponStack.enchant(Enchantments.POWER_ARROWS, 1);
+        }
         AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), damageMod, AttributeModifier.Operation.ADDITION);
         weaponStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
         this.setItemSlot(EquipmentSlot.MAINHAND, weaponStack);
@@ -331,6 +346,10 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
                 vUnit.minerExp = this.minerExp;
                 vUnit.masonExp = this.masonExp;
                 vUnit.hunterExp = this.hunterExp;
+                vUnit.chestplate = this.getItemBySlot(EquipmentSlot.CHEST).getItem();
+                vUnit.chestplateEnchanted = this.getItemBySlot(EquipmentSlot.CHEST).isEnchanted();
+                vUnit.swordEnchanted = this.swordEnchanted;
+                vUnit.bowEnchanted = this.bowEnchanted;
 
                 UnitConvertClientboundPacket.syncConvertedUnits(getOwnerName(), List.of(getId()), List.of(newEntity.getId()));
                 converted = true;
@@ -428,11 +447,13 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
         this.entityData.set(VILLAGER_DATA, p_35437_);
     }
 
-
-
-
-
     static {
         VILLAGER_DATA = SynchedEntityData.defineId(Villager.class, EntityDataSerializers.VILLAGER_DATA);
+    }
+
+    @Override
+    public boolean hasBonusDamage() {
+        return (isUsingBow() && bowEnchanted) ||
+                (!isUsingBow() && swordEnchanted);
     }
 }

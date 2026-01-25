@@ -259,7 +259,7 @@ public class BeaconPlacement extends ProductionPlacement implements RangeIndicat
         return block != Blocks.BEACON && blockAbove != Blocks.BEACON;
     }
 
-    public void changeStructure(int structureLevel) {
+    public void changeBeaconStructure(int structureLevel) {
         String newStructureName = switch (structureLevel) {
             case 1 -> Beacon.structureNameT1;
             case 2 -> Beacon.structureNameT2;

@@ -837,7 +837,7 @@ public class PlayerServerEvents {
             // Remove the defeated player from the list
             rtsPlayers.removeIf(rtsPlayer -> {
                 if (rtsPlayer.name.equals(playerName)) {
-                    sendMessageToAllPlayers(playerName + " has " + reason + " and is defeated!", true);
+                    sendMessageToAllPlayers("server.reignofnether.is_defeated", true);
                     sendMessageToAllPlayers("server.reignofnether.players_remaining", false, (rtsPlayers.size() - 1));
 
                     postGameRtsPlayers.add(rtsPlayer);
@@ -981,9 +981,10 @@ public class PlayerServerEvents {
             if (!isSandbox)
                 UnitServerEvents.getAllUnits().removeIf(u -> (hardReset || (u instanceof Unit unit && !Unit.hasAnchor(unit))));
 
-            for (LivingEntity entity : UnitServerEvents.getAllUnits())
-                if (entity instanceof Unit unit)
-                    unit.setOwnerName("");
+            if (!isSandbox)
+                for (LivingEntity entity : UnitServerEvents.getAllUnits())
+                    if (entity instanceof Unit unit)
+                        unit.setOwnerName("");
 
             for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                 if (building instanceof ProductionPlacement productionBuilding)
@@ -993,8 +994,11 @@ public class PlayerServerEvents {
             }
             if (!isSandbox)
                 BuildingServerEvents.getBuildings().removeIf(b -> b.getBuilding().shouldDestroyOnReset || hardReset);
-            for (BuildingPlacement building : BuildingServerEvents.getBuildings())
-                building.ownerName = "";
+
+            if (!isSandbox)
+                for (BuildingPlacement building : BuildingServerEvents.getBuildings())
+                    building.ownerName = "";
+
             ResearchServerEvents.removeAllResearch();
             ResearchServerEvents.removeAllCheats();
             PlayerClientboundPacket.resetRTS(hardReset);

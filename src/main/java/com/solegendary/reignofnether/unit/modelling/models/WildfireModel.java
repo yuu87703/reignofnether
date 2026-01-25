@@ -198,14 +198,14 @@ public class WildfireModel<T extends Entity> extends KeyframeHierarchicalModel<T
 
 		// any once-off animation like attack or cast spell
 		if (wildfire.activeAnimDef != null && wildfire.activeAnimState != null && wildfire.animateTicks > 0) {
-			restartThenAnimate(wildfire, wildfire.activeAnimState, wildfire.activeAnimDef, ageInTicks, wildfire.animateScale);
+			restartThenAnimate(wildfire, wildfire.activeAnimState, wildfire.activeAnimDef, ageInTicks, wildfire.animateScale, wildfire.animateSpeed);
 		} else {
 			if (wildfire.getTarget() == null) {
 				desyncShieldRotations(wildfire);
 			}
 			// walk animation
 			if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
-				restart(wildfire, wildfire.walkAnimState, WildfireAnimations.WALK, ageInTicks);
+				restart(wildfire, wildfire.walkAnimState, ageInTicks);
 				animateWalk(WildfireAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
 			}
 			// idle animation

@@ -117,7 +117,12 @@ public abstract class LivingEntityMixin extends Entity {
     )
     protected void actuallyHurt(DamageSource pDamageSource, float pDamageAmount, CallbackInfo ci) {
         // ensure projectiles from units do the damage of the unit, not the item
-        if (pDamageSource.is(DamageTypeTags.IS_PROJECTILE) &&
+        if ((pDamageSource.is(DamageTypeTags.IS_PROJECTILE) ||
+            !pDamageSource.is(DamageTypeTags.WITCH_RESISTANT_TO) &&
+            !pDamageSource.is(DamageTypeTags.IS_FIRE) &&
+            !pDamageSource.is(DamageTypeTags.BYPASSES_SHIELD) &&
+            !pDamageSource.is(DamageTypeTags.BYPASSES_ARMOR) &&
+            !pDamageSource.is(DamageTypeTags.BYPASSES_RESISTANCE)) &&
             pDamageSource.getEntity() instanceof AttackerUnit attackerUnit &&
             this.getAbsorptionAmount() > 0) {
 
@@ -126,7 +131,8 @@ public abstract class LivingEntityMixin extends Entity {
             float dmg = attackerUnit.getUnitAttackDamage();
             if (this instanceof Unit unit) {
                 dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
-                dmg *= (1 - unit.getUnitRangedArmorPercentage());
+                if (pDamageSource.is(DamageTypeTags.IS_PROJECTILE))
+                    dmg *= (1 - unit.getUnitRangedArmorPercentage());
                 dmg *= (1 - unit.getUnitResistPercentage());
             }
 

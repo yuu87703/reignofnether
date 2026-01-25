@@ -68,6 +68,39 @@ public class SoundRegistrar {
             SOUND_EVENTS.register("soul_resonance_calm", () ->
                     SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "soul_resonance_calm")));
 
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_AMBIENT =
+            SOUND_EVENTS.register("wretchedwraith_ambient", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_ambient")));
+
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_HURT =
+            SOUND_EVENTS.register("wretchedwraith_hurt", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_hurt")));
+
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_DEATH =
+            SOUND_EVENTS.register("wretchedwraith_death", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_death")));
+
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_ATTACK_QUIET =
+            SOUND_EVENTS.register("wretchedwraith_attack_quiet", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_attack_quiet")));
+
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_ATTACK_LOUD =
+            SOUND_EVENTS.register("wretchedwraith_attack_loud", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_attack_loud")));
+
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_TELEPORT_START =
+            SOUND_EVENTS.register("wretchedwraith_teleport_start", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_teleport_start")));
+
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_TELEPORT_END =
+            SOUND_EVENTS.register("wretchedwraith_teleport_end", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_teleport_end")));
+
+    public static final RegistryObject<SoundEvent> WRETCHED_WRAITH_BLIZZARD =
+            SOUND_EVENTS.register("wretchedwraith_blizzard", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_blizzard")));
+
+
     public static void init(FMLJavaModLoadingContext context) {
         SOUND_EVENTS.register(context.getModEventBus());
     }

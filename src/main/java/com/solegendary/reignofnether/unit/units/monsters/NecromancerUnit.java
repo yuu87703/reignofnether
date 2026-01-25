@@ -10,8 +10,10 @@ import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.entities.NecromancerProjectile;
+import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -23,7 +25,6 @@ import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.modelling.animations.NecromancerAnimations;
-import com.solegendary.reignofnether.faction.Faction;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
@@ -50,19 +51,21 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new RaiseDead());
-        ABILITIES.add(new InsomniaCurse());
-        ABILITIES.add(new SoulSiphonPassive());
-        ABILITIES.add(new BloodMoon());
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new RaiseDead(), Keybindings.keyQ),
+            new Pair<>(new InsomniaCurse(), Keybindings.keyW),
+            new Pair<>(new SoulSiphonPassive(), Keybindings.keyE),
+            new Pair<>(new BloodMoon(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
@@ -157,8 +160,9 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
-    public float getAttacksPerSecond() {return attacksPerSecond;}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -244,7 +248,9 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    public String animDebug = "";
+    private float ageInTicksOffset = 0;
+    public float getAgeInTicksOffset() { return ageInTicksOffset; }
+    public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
 
     // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
     final static private int ATTACK_WINDUP_TICKS = 6; // (int) (NecromancerAnimations.ATTACK.lengthInSeconds() * 20f * 0.22f);
@@ -262,6 +268,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     }
     public int animateTicks = 0;
     public float animateScale = 1.0f;
+    public float animateSpeed = 1.0f;
     public boolean animateScaleReducing = false;
     public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
     public int getAnimateTicksLeft() { return animateTicks; }

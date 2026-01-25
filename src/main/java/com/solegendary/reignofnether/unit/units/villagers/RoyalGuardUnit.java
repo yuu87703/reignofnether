@@ -11,6 +11,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCr
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -54,6 +55,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -61,16 +63,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.ibm.icu.impl.ValidIdentifiers.Datatype.unit;
-
 public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new MaceSlam());
-        ABILITIES.add(new TauntingCry());
-        ABILITIES.add(new BattleRagePassive());
-        ABILITIES.add(new Avatar());
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new MaceSlam(), Keybindings.keyQ),
+            new Pair<>(new TauntingCry(), Keybindings.keyW),
+            new Pair<>(new BattleRagePassive(), Keybindings.keyE),
+            new Pair<>(new Avatar(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
@@ -159,8 +160,9 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
-    public float getAttacksPerSecond() {return attacksPerSecond;}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -237,7 +239,14 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 12;
+    private float ageInTicksOffset = 0;
+    public float getAgeInTicksOffset() { return ageInTicksOffset; }
+    public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
+
+    @Override
+    public int getAttackWindupTicks() {
+        return 12;
+    }
 
     public int tauntingCryTicksLeft = 0;
 
@@ -262,6 +271,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
     }
     public int animateTicks = 0;
     public float animateScale = 1.0f;
+    public float animateSpeed = 1.0f;
     public boolean animateScaleReducing = false;
     public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
     public int getAnimateTicksLeft() { return animateTicks; }
@@ -484,8 +494,8 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.castMaceSlamGoal = new GenericTargetedSpellGoal(
                 this,
@@ -698,5 +708,10 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
                 avatarScalingStarted = false;
             }
         }
+    }
+
+    @Override
+    public boolean isPushable() {
+        return avatarTicksLeft <= 0;
     }
 }

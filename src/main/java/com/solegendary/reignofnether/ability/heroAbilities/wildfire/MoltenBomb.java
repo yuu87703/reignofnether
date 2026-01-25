@@ -78,8 +78,8 @@ public class MoltenBomb extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Molten Bomb",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/fireball.png"),
+        AbilityButton button = new AbilityButton("Molten Bomb",
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/molten_bomb.png"),
                 hotkey,
                 () -> CursorClientEvents.getLeftClickAction() == UnitAction.MOLTEN_BOMB,
                 () -> getRank(hero) == 0,
@@ -90,13 +90,15 @@ public class MoltenBomb extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Molten Bomb",
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/fireball.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/molten_bomb.png"),
                 hero
         );
     }

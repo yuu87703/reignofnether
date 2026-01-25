@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -27,6 +28,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -248,7 +250,7 @@ public class TimeClientEvents {
             //            }
         }
         // draw range indicators for buildings with abilities and monster night sources
-        for (BuildingPlacement building : BuildingClientEvents.getBuildings())
+        for (BuildingPlacement building : BuildingClientEvents.getBuildings()) {
             if (building instanceof RangeIndicator ri) {
                 for (BlockPos bp : ri.getBorderBps()) {
                     if (BuildingClientEvents.getSelectedBuildings().contains(building)) {
@@ -268,6 +270,15 @@ public class TimeClientEvents {
                     */
                 }
             }
+        }
+
+        for (LivingEntity le : UnitClientEvents.getSelectedUnits()) {
+            if (le instanceof RangeIndicator ri) {
+                for (BlockPos bp : ri.getBorderBps()) {
+                    MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0.8f, 0f, 0.3f);
+                }
+            }
+        }
     }
 
     // maintain a mapping of night sources for easy culling calcs

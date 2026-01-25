@@ -2,20 +2,29 @@ package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.*;
+import com.solegendary.reignofnether.building.RangeIndicator;
+import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.registrars.ParticleRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
+import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.EnchanterAnimations;
-import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
@@ -27,6 +36,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -35,20 +45,29 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-
-    }
+public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit, KeyframeAnimated, RangeIndicator {
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new CivilEnchantment(), Keybindings.keyQ),
+            new Pair<>(new MartialEnchantment(), Keybindings.keyW),
+            new Pair<>(new ProtectiveEnchantment(), Keybindings.keyE),
+            new Pair<>(new MarchOfProgress(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
@@ -139,8 +158,9 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
-    public float getAttacksPerSecond() {return attacksPerSecond;}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -217,9 +237,19 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 12;
+    private float ageInTicksOffset = 0;
+    public float getAgeInTicksOffset() { return ageInTicksOffset; }
+    public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
+
+    @Override
+    public int getAttackWindupTicks() {
+        return 12;
+    }
 
     private static final double KNOCKBACK_RESISTANCE = 0.5d;
+    private static final float AUTOCAST_ENCHANT_RANGE = 15;
+
+    public boolean auraEnabled = false;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -234,6 +264,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     }
     public int animateTicks = 0;
     public float animateScale = 1.0f;
+    public float animateSpeed = 1.0f;
     public boolean animateScaleReducing = false;
     public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
     public int getAnimateTicksLeft() { return animateTicks; }
@@ -247,17 +278,19 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            case CHARGE_SPELL -> {
-                activeAnimDef = EnchanterAnimations.SPELL_CHARGE;
+            case CAST_SPELL -> {
+                activeAnimDef = EnchanterAnimations.SPELL_FAST;
                 activeAnimState = spellChargeAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            case CAST_SPELL -> {
-                activeAnimDef = EnchanterAnimations.SPELL_ACTIVATE;
-                activeAnimState = spellActivateAnimState;
-                animateScale = 1.0f;
-                startAnimation(activeAnimDef);
+            case ULTIMATE -> {
+                if (auraEnabled) {
+                    activeAnimDef = EnchanterAnimations.ULTIMATE;
+                    activeAnimState = spellActivateAnimState;
+                    animateScale = 1.0f;
+                    startAnimation(activeAnimDef);
+                }
             }
             default -> animateScaleReducing = true;
         }
@@ -335,6 +368,46 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
             float f = (float) (Mth.atan2(z0, x0) * 57.2957763671875) - 90.0F;
             this.setYRot(this.rotlerp(this.getYRot(), f, 10f));
         }
+
+        if (tickCount % 30 == 0) {
+            doAutocastEnchant();
+        }
+        if (auraEnabled && tickCount % 20 == 0) {
+            setMana(getMana() - MarchOfProgress.MANA_COST_PER_SECOND);
+            if (getMana() <= 0) {
+                auraEnabled = false;
+                if (!level().isClientSide)
+                    SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
+            } else {
+                if (!level().isClientSide) {
+                    SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_AMBIENT, blockPosition(), 1.5f);
+                    for (Mob mob : MiscUtil.getEntitiesWithinRange(position(), MarchOfProgress.RADIUS, Mob.class, level())) {
+                        if (UnitServerEvents.getUnitToEntityRelationship(this, mob) == Relationship.FRIENDLY &&
+                            mob instanceof Unit unit && unit.hasAnyEnchants()) {
+                            mob.addEffect(new MobEffectInstance(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get(), 30, 0, true, false));
+                        }
+                    }
+                }
+            }
+            updateBorderBps();
+        }
+
+        if (auraEnabled && level().isClientSide && tickCount % 20 == 0) {
+            List<Mob> mobs = MiscUtil.getEntitiesWithinRange(position(), MarchOfProgress.RADIUS, Mob.class, level());
+            for (Mob mob : mobs) {
+                if (mob.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get())) {
+                    level().addParticle(
+                            ParticleRegistrar.BIG_ENCHANT.get(),
+                            mob.position().x,
+                            mob.position().y + 2.0f,
+                            mob.position().z,
+                            position().x - mob.position().x,
+                            position().y - mob.position().y,
+                            position().z - mob.position().z
+                    );
+                }
+            }
+        }
     }
 
     private float rotlerp(float pAngle, float pTargetAngle, float pMaxIncrease) {
@@ -365,12 +438,12 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.castEnchantCivilGoal = new GenericTargetedSpellGoal(
                 this,
-                14,
+                0,
                 10,
                 UnitAnimationAction.CAST_SPELL,
                 this::enchantCivilian,
@@ -379,7 +452,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         );
         this.castEnchantMilitaryGoal = new GenericTargetedSpellGoal(
                 this,
-                14,
+                0,
                 10,
                 UnitAnimationAction.CAST_SPELL,
                 this::enchantMilitary,
@@ -388,7 +461,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         );
         this.castEnchantProtectiveGoal = new GenericTargetedSpellGoal(
                 this,
-                14,
+                0,
                 10,
                 UnitAnimationAction.CAST_SPELL,
                 this::enchantArmour,
@@ -397,9 +470,9 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         );
         this.castAuraGoal = new GenericUntargetedSpellGoal(
                 this,
-                40,
-                this::activateAura,
-                UnitAnimationAction.ULTIMATE,
+                0,
+                this::toggleAura,
+                null,
                 UnitAnimationAction.STOP,
                 null
         );
@@ -432,19 +505,99 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         this.castAuraGoal.stop();
     }
 
-    public void enchantCivilian(LivingEntity entity) {
+    private void playEnchantSound() {
+        SoundClientboundPacket.playSoundAtPos(SoundAction.ENCHANT, blockPosition());
+    }
 
+    private void doAutocastEnchant() {
+        if (!isIdle()) {
+            return;
+        }
+        for (Ability ability : abilities.get()) {
+            if (ability instanceof AbstractEnchantment enchantAbility &&
+                    enchantAbility.isAutocasting(this) &&
+                    enchantAbility.getRank(this) > 0 &&
+                    enchantAbility.manaCost < getMana() &&
+                    enchantAbility.isOffCooldown(this)) {
+
+                for (Mob mob : MiscUtil.getEntitiesWithinRange(this.position(), AUTOCAST_ENCHANT_RANGE, Mob.class, level())) {
+                    if (enchantAbility.canEnchant(mob)) {
+                        enchantAbility.use(level(), this, mob);
+                    }
+                }
+            }
+        }
+    }
+
+    public void enchantCivilian(LivingEntity entity) {
+        if (level().isClientSide) return;
+
+        entity.getMainHandItem().enchant(Enchantments.BLOCK_EFFICIENCY, 1);
+        entity.addEffect(new MobEffectInstance(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get(), CivilEnchantment.DURATION_SECONDS * 20));
+        playEnchantSound();
     }
 
     public void enchantMilitary(LivingEntity entity) {
-
+        Enchantment enchantment = MartialEnchantment.getEnchantmentForUnit(entity);
+        if (enchantment != null) {
+            entity.getMainHandItem().enchant(enchantment, 1);
+            if (entity instanceof MilitiaUnit militiaUnit) {
+                if (militiaUnit.isUsingBow())
+                    militiaUnit.bowEnchanted = true;
+                else
+                    militiaUnit.swordEnchanted = true;
+            }
+        }
+        if (!level().isClientSide)
+            playEnchantSound();
     }
 
     public void enchantArmour(LivingEntity entity) {
+        if (level().isClientSide) return;
 
+        entity.getItemBySlot(EquipmentSlot.CHEST).enchant(EnchantmentRegistrar.FORTYIFYING.get(), 1);
+        playEnchantSound();
     }
 
-    public void activateAura() {
+    public void toggleAura() {
+        auraEnabled = !auraEnabled;
+        if (level().isClientSide) {
+            if (!auraEnabled)
+                auraBorderBps.clear();
+        } else {
+            if (auraEnabled) {
+                AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_SET, 1f);
+                SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_ACTIVATE, blockPosition(), 1.5f);
+            } else {
+                AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_SET, 0f);
+                SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
+            }
+        }
+    }
 
+    private final Set<BlockPos> auraBorderBps = new HashSet<>();
+
+    @Override
+    public void updateBorderBps() {
+        if (!level().isClientSide()) {
+            return;
+        }
+        this.auraBorderBps.clear();
+        if (auraEnabled) {
+            this.auraBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
+                    MarchOfProgress.RADIUS - 1,
+                    level()
+            ));
+        }
+    }
+
+    @Override
+    public Set<BlockPos> getBorderBps() {
+        return auraBorderBps;
+    }
+
+    @Override
+    public boolean showOnlyWhenSelected() {
+        return true;
     }
 }

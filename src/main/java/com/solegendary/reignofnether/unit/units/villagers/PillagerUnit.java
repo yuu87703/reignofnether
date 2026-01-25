@@ -35,7 +35,6 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -137,10 +136,13 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
 
     // combat stats
     public boolean getWillRetaliate() { return willRetaliate; }
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
         return 20f / (getAttackCooldown() + (CrossbowItem.getChargeDuration(itemStack)));
+    }
+    public float getBaseAttacksPerSecond() {
+        return 20f / (getAttackCooldown() + 35);
     }
     public float getAggroRange() { return aggroRange; }
     public boolean getAggressiveWhenIdle() { return aggressiveWhenIdle && !isVehicle(); }
@@ -150,7 +152,6 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         return isPassenger() ? attackDamage + 1 : attackDamage;
     }
     public float getUnitMaxHealth() { return maxHealth; }
-    public float getUnitPhysicalArmorPercentage() { return armorValue; }
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.PILLAGER;}
 
@@ -234,7 +235,7 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, false);
         this.garrisonGoal = new GarrisonGoal(this);
-        this.attackGoal = new UnitCrossbowAttackGoal<>(this, getAttackCooldown());
+        this.attackGoal = new UnitCrossbowAttackGoal<>(this, (int) getAttackCooldown());
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.mountGoal = new MountGoal(this);
         this.attackBuildingGoal = new RangedAttackBuildingGoal<>(this, this.attackGoal);
@@ -353,10 +354,5 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
-    }
-
-    @Override
-    public boolean hasBonusAttackSpeed() {
-        return getEnchant() == Enchantments.QUICK_CHARGE;
     }
 }

@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.mixin;
 
 import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.entities.AdjustableAreaEffectCloud;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.unit.units.villagers.WitchUnit;
@@ -37,11 +38,11 @@ public abstract class ThrownPotionMixin extends ThrowableItemProjectile {
     private void makeAreaOfEffectCloud(ItemStack pStack, Potion pPotion, CallbackInfo ci) {
         ci.cancel();
 
-        AreaEffectCloud aec = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
+        AdjustableAreaEffectCloud aec = new AdjustableAreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
         if (this.getOwner() instanceof LivingEntity le) {
             aec.setOwner(le);
         }
-
+        aec.diminishWithTimeAndUse = false;
         aec.setRadius(3.0F);
         aec.setRadiusOnUse(-0.5F);
         aec.setWaitTime(10);

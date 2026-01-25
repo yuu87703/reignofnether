@@ -2,6 +2,8 @@ package com.solegendary.reignofnether.unit.interfaces;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
+import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyFeast;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.building.production.ProductionItems;
@@ -10,6 +12,7 @@ import com.solegendary.reignofnether.hud.passives.EnchantmentIcon;
 import com.solegendary.reignofnether.hud.passives.PassiveIcons;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -38,6 +41,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.damagesource.CombatRules;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -51,6 +55,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -127,15 +132,6 @@ public interface Unit {
     public void setEatingTicksLeft(int amount);
     public int getEatingTicksLeft();
 
-    List<Keybinding> ABILITY_KEYBINDS = List.of(
-            Keybindings.keyQ,
-            Keybindings.keyW,
-            Keybindings.keyE,
-            Keybindings.keyR,
-            Keybindings.keyT,
-            Keybindings.keyY
-    );
-
     // note that attackGoal is specific to unit types
     MoveToTargetBlockGoal getMoveGoal();
     SelectedTargetGoal<?> getTargetGoal();
@@ -152,25 +148,33 @@ public interface Unit {
     String getOwnerName();
     void setOwnerName(String name);
 
-    // SOURCE: armour attribute and armour items
-    default float getUnitPhysicalArmorPercentage() {
+    default double getDamageTakenIncrease() {
+        MobEffectInstance mei = ((LivingEntity) this).getEffect(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get());
+        double value = mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05d;
+        return Math.round(value / 0.05d) * 0.05d;
+    }
+
+    // SOURCE: armour attribute, armour items and the damage amplifier debuff
+    default double getUnitPhysicalArmorPercentage() {
         Mob mob = (Mob) this;
-        return 1 - CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        double dmgAfterAbsorb = CombatRules.getDamageAfterAbsorb(1, (float)mob.getArmorValue(), (float)mob.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        dmgAfterAbsorb += getDamageTakenIncrease();
+        return Math.round((1 - dmgAfterAbsorb)/ 0.01d) * 0.01d;
     }
 
     // SOURCE: inherent unit stats and abilities
-    default float getUnitRangedArmorPercentage() {
+    default double getUnitRangedArmorPercentage() {
         return 0;
     }
 
     // SOURCE: inherent unit stats and vanilla mechanics (like resistance)
-    default float getUnitMagicArmorPercentage() {
+    default double getUnitMagicArmorPercentage() {
         Mob mob = (Mob) this;
         return 1 - mob.getDamageAfterMagicAbsorb(mob.damageSources().magic(), 1);
     }
 
     // SOURCE: resistance mob effect
-    default float getUnitResistPercentage() {
+    default double getUnitResistPercentage() {
         Mob mob = (Mob) this;
         MobEffectInstance mei = mob.getEffect(MobEffects.DAMAGE_RESISTANCE);
         if (mei != null) {
@@ -297,7 +301,7 @@ public interface Unit {
         }
 
         if (unitMob.tickCount % 20 == 0) {
-            if (unitMob.hasEffect(MobEffectRegistrar.UNCONTROLLABLE.get())) {
+            if (unit.hasEffectWithDuration(MobEffectRegistrar.UNCONTROLLABLE.get())) {
                 addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
             }
         }
@@ -315,6 +319,12 @@ public interface Unit {
                         if (itemStack.getItem() == Items.ENCHANTED_GOLDEN_APPLE) {
                             unitMob.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 999999, 5));
                             unitMob.setAbsorptionAmount(24);
+                        } else if (itemStack.getItem() == Items.BREAD) {
+                            unitMob.heal(FancyFeast.HEALTH_PER_BREAD);
+                        } else if (itemStack.getItem() == Items.COOKED_CHICKEN) {
+                            unitMob.heal(FancyFeast.HEALTH_PER_CHICKEN);
+                        } else if (itemStack.getItem() == Items.COOKED_BEEF) {
+                            unitMob.heal(FancyFeast.HEALTH_PER_BEEF);
                         } else {
                             unitMob.heal(nutrition * HEAL_PER_NUTRITION);
                         }
@@ -343,6 +353,13 @@ public interface Unit {
             unit.getFaction() == Faction.PIGLINS &&
             MiscUtil.isOnNetherTerrain(unitMob)) {
             unitMob.addEffect(new MobEffectInstance(MobEffectRegistrar.MINOR_MOVEMENT_SPEED.get(), 15, 1, true, false));
+        }
+
+        if (unitMob.tickCount % 80 == 0) {
+            int fortifyingLevel = unitMob.getItemBySlot(EquipmentSlot.CHEST).getEnchantmentLevel(EnchantmentRegistrar.FORTYIFYING.get());
+            float absorbHp = unitMob.getAbsorptionAmount();
+            if (fortifyingLevel > 0 && absorbHp < fortifyingLevel * ProtectiveEnchantment.MAX_ABSORB_HP)
+                unitMob.setAbsorptionAmount(absorbHp + 1);
         }
     }
 
@@ -648,16 +665,15 @@ public interface Unit {
         return List.of(fcs(I18n.get("unitstats.reignofnether.attack_damage"), true));
     }
 
-    public default boolean hasBonusDamage() {
-        return false;
-    }
-
-    public default boolean hasBonusAttackSpeed() {
-        return false;
-    }
-
     public default List<FormattedCharSequence> getAttackSpeedStatTooltip() {
-        return List.of(fcs(I18n.get("unitstats.reignofnether.attack_speed"), true));
+        if (this instanceof GhastUnit ghastUnit && ghastUnit.hasEffect(MobEffectRegistrar.DISARM.get())) {
+            return List.of(
+                    fcs(I18n.get("unitstats.reignofnether.attack_speed"), true),
+                    fcs(I18n.get("unitstats.reignofnether.ghast_disarmed"))
+            );
+        } else {
+            return List.of(fcs(I18n.get("unitstats.reignofnether.attack_speed"), true));
+        }
     }
 
     public default List<FormattedCharSequence> getRangeStatTooltip() {
@@ -667,7 +683,7 @@ public interface Unit {
     public default List<FormattedCharSequence> getArmourStatTooltip() {
         ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
         fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour"), true));
-        if (getUnitPhysicalArmorPercentage() > 0) {
+        if (getUnitPhysicalArmorPercentage() != 0) {
             fcsList.add(fcs(I18n.get("unitstats.reignofnether.armour_melee_and_ranged", (int) (getUnitPhysicalArmorPercentage() * 100)), false));
         }
         if (getUnitRangedArmorPercentage() > 0) {
@@ -708,8 +724,8 @@ public interface Unit {
 
     boolean hasAutocast(Ability ability);
     void setAutocast(Ability ability);
-    default void setCharges(Ability abilityClass, int cooldown) {
-        getCharges().put(abilityClass, cooldown);
+    default void setCharges(Ability abilityClass, int charges) {
+        getCharges().put(abilityClass, Math.min(charges, abilityClass.maxCharges));
     }
 
     default int getCharges(Ability ability) {
@@ -730,6 +746,27 @@ public interface Unit {
                 }
             }
         }
+        if (hasAnyEnchants() && entity.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get())) {
+            icons.add(PassiveIcons.ENCHANTMENT_AMPLIFIER);
+        }
         return icons;
+    }
+
+    default AABB getInflatedSelectionBox() {
+        return ((Entity) this).getBoundingBox();
+    }
+
+    default boolean hasEffectWithDuration(MobEffect mobEffect) {
+        MobEffectInstance mei = ((LivingEntity) this).getEffect(mobEffect);
+        return mei != null && mei.getDuration() > 0;
+    }
+
+    default float getBonusMeleeRangeForAttackers() {
+        return 0.4f;
+    }
+
+    default boolean hasAnyEnchants() {
+        return !(((LivingEntity) this).getMainHandItem().getAllEnchantments().isEmpty()) ||
+               !(((LivingEntity) this).getItemBySlot(EquipmentSlot.CHEST).getAllEnchantments().isEmpty());
     }
 }

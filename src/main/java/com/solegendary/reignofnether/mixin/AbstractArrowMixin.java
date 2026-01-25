@@ -27,8 +27,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -131,6 +133,23 @@ public abstract class AbstractArrowMixin extends Projectile {
     @Shadow protected abstract ItemStack getPickupItem();
     @Shadow protected void doPostHurtEffects(LivingEntity pTarget) { }
     @Shadow public boolean shotFromCrossbow() { return false; }
+    @Shadow @Final private IntOpenHashSet ignoredEntities;
+
+    @Unique
+    private boolean reignofnether$collidedWithUntargetedAlly(Entity entity) {
+        return this.getOwner() instanceof Unit unit1 &&
+                entity instanceof Unit unit2 &&
+                unit1.getOwnerName().equals(unit2.getOwnerName()) &&
+                (unit1.getTargetGoal().getTarget() == null ||
+                !unit1.getTargetGoal().getTarget().equals(unit2));
+    }
+
+    protected boolean canHitEntity(Entity entity) {
+        return super.canHitEntity(entity) &&
+                (this.piercingIgnoreEntityIds == null || !this.piercingIgnoreEntityIds.contains(entity.getId())) &&
+                !this.ignoredEntities.contains(entity.getId()) &&
+                !reignofnether$collidedWithUntargetedAlly(entity);
+    }
 
     // replace bounce logic (on hitting an enemy at the time as another arrow) with pierce logic instead
     @Inject(
@@ -140,9 +159,10 @@ public abstract class AbstractArrowMixin extends Projectile {
     )
     protected void onHitEntity(EntityHitResult pResult, CallbackInfo ci) {
         ci.cancel();
+        Entity entity = pResult.getEntity();
 
         super.onHitEntity(pResult);
-        Entity entity = pResult.getEntity();
+
         float f = (float)this.getDeltaMovement().length();
         int i = Mth.ceil(Mth.clamp((double)f * this.baseDamage, 0.0, 2.147483647E9));
         if (this.getPierceLevel() > 0) {

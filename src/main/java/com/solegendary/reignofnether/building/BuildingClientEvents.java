@@ -13,6 +13,7 @@ import com.solegendary.reignofnether.building.buildings.placements.BeaconPlaceme
 import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
+import com.solegendary.reignofnether.building.buildings.villagers.Blacksmith;
 import com.solegendary.reignofnether.building.buildings.villagers.Castle;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
@@ -1059,20 +1060,19 @@ public class BuildingClientEvents {
             }
 
             if (upgradeLevel > 0) {
-                if (newBuilding.getBuilding() instanceof Castle castle) {
-                    newBuilding.changeStructure(Castle.upgradedStructureName);
-                } else if (newBuilding.getBuilding() instanceof Laboratory lab) {
-                    newBuilding.changeStructure(Laboratory.upgradedStructureName);
-                } else if (newBuilding instanceof PortalPlacement portal) {
+                if (newBuilding instanceof PortalPlacement portal) {
                     if (!(newBuilding.getBuilding() instanceof NeutralTransportPortal)) {
-                        portal.changeStructure(portalType);
+                        portal.changePortalStructure(portalType);
                     }
                     if (portalType == PortalPlacement.PortalType.TRANSPORT)
                         portal.destination = portalDestination;
-                } else if (newBuilding.getBuilding() instanceof Library library) {
-                    newBuilding.changeStructure(Library.upgradedStructureName);
                 } else if (newBuilding instanceof BeaconPlacement beacon) {
-                    beacon.changeStructure(upgradeLevel);
+                    beacon.changeBeaconStructure(upgradeLevel);
+                } else {
+                    String upgradedStructureName = newBuilding.getBuilding().getUpgradedStructureName(upgradeLevel);
+                    if (!upgradedStructureName.equals(newBuilding.getBuilding().structureName)) {
+                        newBuilding.changeStructure(upgradedStructureName);
+                    }
                 }
             }
             buildings.add(newBuilding);

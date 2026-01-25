@@ -55,12 +55,11 @@ public class GenericUntargetedSpellGoal extends Goal {
         if (isCasting) {
             ticksCasting += 1;
             if (ticksCasting >= channelTicksMax) {
-                if (!this.mob.level().isClientSide()) {
-                    if (castAnimation != null) {
-                        UnitAnimationClientboundPacket.sendBasicPacket(castAnimation, this.mob);
-                    }
-                    onCast.run();
+                if (!this.mob.level().isClientSide() && castAnimation != null) {
+                    UnitAnimationClientboundPacket.sendBasicPacket(castAnimation, this.mob);
                 }
+                if (onCast != null)
+                    onCast.run();
                 if (this.ability != null && !this.mob.level().isClientSide()) {
                     if (!this.mob.level().isClientSide()) {
                         AbilityClientboundPacket.sendSetCooldownPacket(this.mob.getId(), this.ability.action, this.ability.cooldownMax);

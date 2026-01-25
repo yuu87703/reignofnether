@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -134,11 +135,14 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.BRUTE;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttacksPerSecond() {
-        if (bloodlustTicks > 0)
-            return attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER;
-        return attacksPerSecond;
+    public float getAttackCooldown() {
+        int cd = (int) (20 / (attacksPerSecond));
+        if (hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()))
+            cd *= (1 / BLOODLUST_ATTACK_SPEED_MULTIPLIER);
+        return (int) (cd * getAttackCooldownMultiplier());
     }
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -151,12 +155,6 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public void setFollowTarget(@Nullable LivingEntity target) { this.followTarget = target; }
 
     // endregion
-
-    public int getAttackCooldown() {
-        if (bloodlustTicks > 0)
-            return (int) (20 / (attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER));
-        return (int) (20 / attacksPerSecond);
-    }
 
     final static public float attackDamage = 5.0f;
     final static public float attacksPerSecond = 0.5f;
@@ -171,8 +169,6 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
 
     public int maxResources = 100;
 
-    public int bloodlustTicks = 0;
-
     public boolean isHoldingUpShield = false;
 
     private Abilities abilities = ABILITIES.clone();
@@ -185,7 +181,7 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     }
 
     @Override
-    public float getUnitRangedArmorPercentage() {
+    public double getUnitRangedArmorPercentage() {
         if (isHoldingUpShield) {
             return 1 - ((1 - ToggleShield.PROJECTILE_DAMAGE_RESIST) * (1 - rangedDamageResist));
         } else {
@@ -245,9 +241,6 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         super.tick();
         Unit.tick(this);
         AttackerUnit.tick(this);
-
-        if (bloodlustTicks > 0)
-            bloodlustTicks -= 1;
     }
 
     @Override
@@ -343,11 +336,6 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
             itemStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
         }
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
-    }
-
-    @Override
-    public boolean hasBonusAttackSpeed() {
-        return bloodlustTicks > 0;
     }
 
     @Override

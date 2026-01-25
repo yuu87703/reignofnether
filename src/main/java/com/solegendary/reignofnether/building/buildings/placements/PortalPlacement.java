@@ -105,7 +105,7 @@ public class PortalPlacement extends ProductionPlacement implements NetherConver
         return block != Blocks.OBSIDIAN && block != Blocks.NETHER_PORTAL;
     }
 
-    public void changeStructure(PortalType portalType) {
+    public void changePortalStructure(PortalType portalType) {
         String newStructureName = "";
         switch (portalType) {
             case CIVILIAN -> {

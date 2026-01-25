@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.LootEx
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.ThrowTNT;
 import com.solegendary.reignofnether.entities.ThrowableTntProjectile;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.ItemRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -55,6 +56,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -63,13 +65,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
-    public static final Abilities ABILITIES = new Abilities();
-    static {
-        ABILITIES.add(new ThrowTNT());
-        ABILITIES.add(new FancyFeast());
-        ABILITIES.add(new GreedIsGoodPassive());
-        ABILITIES.add(new LootExplosion());
-    }
+    public final Abilities ABILITIES = new Abilities(
+        List.of(
+            new Pair<>(new ThrowTNT(), Keybindings.keyQ),
+            new Pair<>(new FancyFeast(), Keybindings.keyW),
+            new Pair<>(new GreedIsGoodPassive(), Keybindings.keyE),
+            new Pair<>(new LootExplosion(), Keybindings.keyR)
+        )
+    );
 
     @Override
     public Object2ObjectArrayMap<HeroAbility, Integer> getHeroAbilityRanks() {
@@ -166,8 +169,9 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.PIGLIN_MERCHANT;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public int getAttackCooldown() {return (int) (20 / attacksPerSecond);}
-    public float getAttacksPerSecond() {return attacksPerSecond;}
+    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -240,7 +244,14 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     public final AnimationState spellActivateAnimState = new AnimationState();
     public final AnimationState attackAnimState = new AnimationState();
 
-    final static private int ATTACK_WINDUP_TICKS = 32;
+    private float ageInTicksOffset = 0;
+    public float getAgeInTicksOffset() { return ageInTicksOffset; }
+    public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
+
+    @Override
+    public int getAttackWindupTicks() {
+        return 32;
+    }
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -255,6 +266,7 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
     }
     public int animateTicks = 0;
     public float animateScale = 1.0f;
+    public float animateSpeed = 1.0f;
     public boolean animateScaleReducing = false;
     public void setAnimateTicksLeft(int ticks) { animateTicks = ticks; }
     public int getAnimateTicksLeft() { return animateTicks; }
@@ -374,8 +386,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
-        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false, ATTACK_WINDUP_TICKS);
-        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this, ATTACK_WINDUP_TICKS);
+        this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
+        this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.castTNTGoal = new GenericTargetedSpellGoal(
                 this,
                 32,
@@ -558,7 +570,8 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                     }
                 }
                 else if ((unit instanceof HoglinUnit && !(unit instanceof ArmouredHoglinUnit)) ||
-                        (unit instanceof WitherSkeletonUnit wither && !wither.hasNetheriteChestplate())) {
+                        (unit instanceof WitherSkeletonUnit wither && !wither.hasNetheriteChestplate()) ||
+                        (unit instanceof MarauderUnit marauder && !marauder.hasNetheriteChestplate())) {
                     items.add(new ItemStack(Items.NETHERITE_CHESTPLATE));
                 } else {
                     items.add(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE));
@@ -600,5 +613,20 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         setMana(getMana() + (resourceBonus * LootExplosion.MANA_REFUND_PER_100_RESOURCES));
     }
 
+    @Override
+    public AABB getInflatedSelectionBox() {
+        AABB aabb = this.getBoundingBox().inflate(0.6f, 0, 0.6f);
+        aabb.setMaxY(aabb.maxY + 0.8f);
+        return aabb;
+    }
 
+    @Override
+    public float getBonusMeleeRange() {
+        return 0.6f;
+    }
+
+    @Override
+    public float getBonusMeleeRangeForAttackers() {
+        return 0.4f;
+    }
 }

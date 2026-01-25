@@ -33,6 +33,7 @@ public class ProductionItems {
     public static final GruntProd GRUNT = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "grunt"), new GruntProd());
     public static final BruteProd BRUTE = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "brute"), new BruteProd());
     public static final HeadhunterProd HEADHUNTER = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "headhunter"), new HeadhunterProd());
+    public static final MarauderProd MARAUDER = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "marauder"), new MarauderProd());
     public static final HoglinProd HOGLIN = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "hoglin"), new HoglinProd());
     public static final BlazeProd BLAZE = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "blaze"), new BlazeProd());
     public static final WitherSkeletonProd WITHER_SKELETON = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wither_skeleton"), new WitherSkeletonProd());
@@ -87,6 +88,7 @@ public class ProductionItems {
     public static final ResearchAdvancedPortals RESEARCH_ADVANCED_PORTALS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "advanced_portals"), new ResearchAdvancedPortals());
     public static final ResearchFireResistance RESEARCH_FIRE_RESISTANCE = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "fire_resistance"), new ResearchFireResistance());
     public static final ResearchGrandLibrary RESEARCH_GRAND_LIBRARY = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "grand_library"), new ResearchGrandLibrary());
+    public static final ResearchSuperiorBlacksmith RESEARCH_SUPERIOR_BLACKSMITH = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "superior_blacksmith"), new ResearchSuperiorBlacksmith());
     public static final ResearchSpiderWebs RESEARCH_SPIDER_WEBS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "spider_webs"), new ResearchSpiderWebs());
     public static final ResearchBloodlust RESEARCH_BLOODLUST = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "bloodlust"), new ResearchBloodlust());
     public static final ResearchCubeMagma RESEARCH_CUBE_MAGMA = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "cube_magma"), new ResearchCubeMagma());

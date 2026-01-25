@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -136,11 +137,8 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.HOGLIN;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttacksPerSecond() {
-        if (bloodlustTicks > 0)
-            return attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER;
-        return attacksPerSecond;
-    }
+    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
+    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
@@ -159,10 +157,11 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
 
     // endregion
 
-    public int getAttackCooldown() {
-        if (bloodlustTicks > 0)
-            return (int) (20 / (attacksPerSecond * BLOODLUST_ATTACK_SPEED_MULTIPLIER));
-        return (int) (20 / attacksPerSecond);
+    public float getAttackCooldown() {
+        int cd = (int) (20 / (attacksPerSecond));
+        if (hasEffectWithDuration(MobEffectRegistrar.BLOODLUST.get()))
+            cd *= (1 / BLOODLUST_ATTACK_SPEED_MULTIPLIER);
+        return (int) (cd * getAttackCooldownMultiplier());
     }
 
     final static public float attackDamage = 6.0f;
@@ -177,9 +176,9 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     final static public float movementSpeed = 0.31f;
     public int maxResources = 100;
 
-    public int bloodlustTicks = 0;
-
-    final static public float BUILDING_DAMAGE_MULTIPLIER = 1.5f;
+    public float getBuildingDamageMultiplier() {
+        return 1.5f;
+    }
 
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
@@ -248,8 +247,6 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
             super.tick();
             Unit.tick(this);
             AttackerUnit.tick(this);
-            if (bloodlustTicks > 0)
-                bloodlustTicks -= 1;
         }
     }
 
@@ -337,11 +334,6 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     @Override
     public boolean hasBonusDamage() {
         return true;
-    }
-
-    @Override
-    public boolean hasBonusAttackSpeed() {
-        return bloodlustTicks > 0;
     }
 
 }

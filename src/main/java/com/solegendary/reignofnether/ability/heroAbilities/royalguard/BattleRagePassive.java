@@ -62,7 +62,7 @@ public class BattleRagePassive extends HeroAbility {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
-        return new AbilityButton("Battle Rage",
+        AbilityButton button = new AbilityButton("Battle Rage",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/battle_rage.png"),
                 hotkey,
                 () -> false,
@@ -74,6 +74,8 @@ public class BattleRagePassive extends HeroAbility {
                 this,
                 hero
         );
+        button.stretchIconToBorders = true;
+        return button;
     }
 
     @Override
