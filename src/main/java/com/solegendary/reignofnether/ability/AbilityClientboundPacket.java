@@ -3,11 +3,14 @@ package com.solegendary.reignofnether.ability;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
+import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.modelling.animations.EnchanterAnimations;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
 import com.solegendary.reignofnether.unit.units.piglins.MarauderUnit;
+import com.solegendary.reignofnether.unit.units.villagers.EnchanterUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
@@ -119,6 +122,14 @@ public class AbilityClientboundPacket {
                     } else if (this.unitAction == UnitAction.SET_ATTACK_COUNT) {
                         if (unit instanceof MarauderUnit marauderUnit) {
                             marauderUnit.attacksToNextBigHit = (int) value;
+                        }
+                    } else if (this.unitAction == UnitAction.MARCH_OF_PROGRESS_SET) {
+                        boolean enable = value == 1f;
+                        if (unit instanceof EnchanterUnit enchanterUnit) {
+                            enchanterUnit.auraEnabled = enable;
+                            if (enable) {
+                                enchanterUnit.playSingleAnimation(UnitAnimationAction.ULTIMATE);
+                            }
                         }
                     }
                 });

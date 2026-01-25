@@ -14,12 +14,6 @@ New Heroes
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
 
-Enchanter
-    [❌] Ultimate cast animation doesn't show to other players
-
-Wraith
-    [❌] When turning a dirt path into dirt by placing snow, displaces units up by a block
-
 
 [❌] Overflowing graveyards
 

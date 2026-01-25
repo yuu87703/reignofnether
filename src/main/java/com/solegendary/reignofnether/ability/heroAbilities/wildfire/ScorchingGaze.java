@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability.heroAbilities.wildfire;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.AbilityButton;
@@ -57,7 +58,7 @@ public class ScorchingGaze extends HeroAbility {
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         if (!(unit instanceof HeroUnit hero)) return null;
         AbilityButton button = new AbilityButton("Scorching Gaze",
-            ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/eye_of_ender.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/scorching_gaze.png"),
             hotkey,
             () -> CursorClientEvents.getLeftClickAction() == UnitAction.SCORCHING_GAZE,
             () -> getRank(hero) == 0,
@@ -76,7 +77,7 @@ public class ScorchingGaze extends HeroAbility {
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
                 "Scorching Gaze",
-                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/eye_of_ender.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/scorching_gaze.png"),
                 hero
         );
     }

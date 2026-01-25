@@ -12,6 +12,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
@@ -53,12 +54,23 @@ public class BitterFrostPassive extends HeroAbility {
     }
 
     public List<FormattedCharSequence> getTooltipLines(HeroUnit hero) {
-        return List.of(
+        ArrayList<FormattedCharSequence> tooltipLines = new ArrayList<>(List.of(
                 fcs(I18n.get("abilities.reignofnether.bitter_frost") + " " + rankString(hero), true),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip1")),
-                fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip2"))
-        );
+                fcs(I18n.get("abilities.reignofnether.bitter_frost.tooltip2")),
+                fcs("")
+        ));
+        if (getRank(hero) >= 1) {
+            tooltipLines.add(fcs("abilities.reignofnether.bitter_frost.rank1"));
+        }
+        if (getRank(hero) >= 2) {
+            tooltipLines.add(fcs("abilities.reignofnether.bitter_frost.rank2"));
+        }
+        if (getRank(hero) >= 3) {
+            tooltipLines.add(fcs("abilities.reignofnether.bitter_frost.rank3"));
+        }
+        return tooltipLines;
     }
 
     public List<FormattedCharSequence> getRankUpTooltipLines(HeroUnit hero) {

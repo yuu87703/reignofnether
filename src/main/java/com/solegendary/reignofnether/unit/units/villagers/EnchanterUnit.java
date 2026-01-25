@@ -473,7 +473,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 this,
                 0,
                 this::toggleAura,
-                UnitAnimationAction.ULTIMATE,
+                null,
                 UnitAnimationAction.STOP,
                 null
         );
@@ -565,16 +565,15 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         if (level().isClientSide) {
             if (!auraEnabled)
                 auraBorderBps.clear();
-            return;
-        }
-        if (auraEnabled) {
-            AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_ENABLE, 0f);
-            SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_ACTIVATE, blockPosition(), 1.5f);
         } else {
-            AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_DISABLE, 0f);
-            SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
+            if (auraEnabled) {
+                AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_SET, 1f);
+                SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_ACTIVATE, blockPosition(), 1.5f);
+            } else {
+                AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_SET, 0f);
+                SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
+            }
         }
-
     }
 
     private final Set<BlockPos> auraBorderBps = new HashSet<>();
