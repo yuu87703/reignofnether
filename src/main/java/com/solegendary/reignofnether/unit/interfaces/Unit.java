@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.unit.interfaces;
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
+import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyFeast;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.building.production.ProductionItems;
@@ -318,6 +319,12 @@ public interface Unit {
                         if (itemStack.getItem() == Items.ENCHANTED_GOLDEN_APPLE) {
                             unitMob.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 999999, 5));
                             unitMob.setAbsorptionAmount(24);
+                        } else if (itemStack.getItem() == Items.BREAD) {
+                            unitMob.heal(FancyFeast.HEALTH_PER_BREAD);
+                        } else if (itemStack.getItem() == Items.COOKED_CHICKEN) {
+                            unitMob.heal(FancyFeast.HEALTH_PER_CHICKEN);
+                        } else if (itemStack.getItem() == Items.COOKED_BEEF) {
+                            unitMob.heal(FancyFeast.HEALTH_PER_BEEF);
                         } else {
                             unitMob.heal(nutrition * HEAL_PER_NUTRITION);
                         }

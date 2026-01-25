@@ -1,5 +1,5 @@
 
-1.20.1-1.2.4
+1.20.1-1.3.0-beta
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -14,7 +14,6 @@ New Heroes
 Wildfire
     [❌] Global toggle to turn all fire rendering into soulfires
 
-
 [❌] Overflowing graveyards
 
 
@@ -25,17 +24,18 @@ Bugfixes
 
 Quality of Life
 ---------------
-[❌] Add rotation to /rtsapi placebuilding
-[❌] Don't change allegiances when exiting sandbox
+[✔] General performance improvements on both server and client, thanks @NightFish!
+[✔] Units and buildings no longer have their allegiances changed when exiting sandbox
 
+[❌] Add rotation to /rtsapi placebuilding
 
 Balance
 -------
 [❌] Ghasts can no longer attack and move 20% slower while over void or structure void blocks
-[❌] Prevent friendly fire from wither skeleton clouds
-    - Might need to create a new AreaEffectCloud entity
-[🟡] Headhunters no longer require a bastion to be trained
-[🟡] Bastion cost raised from (150 wood, 100 ore) to (175 wood, 150 ore)
+[✔] Potion clouds created by witches no longer have their size reduced over time or a mob stands in it
+[✔] Headhunters no longer require a bastion to be trained
+[✔] Bastion cost raised from (150 wood, 100 ore) to (175 wood, 150 ore)
+[✔] The Piglin Merchant's food now heals 20% more health
 
 Languages
 ---------

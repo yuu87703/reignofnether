@@ -39,9 +39,9 @@ public class FancyFeast extends HeroAbility {
     public static final int BONUS_ITEMS_PER_100_RESOURCES = 2;
     public static int MANA_REFUND_PER_100_RESOURCES = 10;
 
-    private static final float HEALTH_PER_BREAD = 10;
-    private static final float HEALTH_PER_CHICKEN = 15;
-    private static final float HEALTH_PER_BEEF = 20;
+    public static final float HEALTH_PER_BREAD = 12;
+    public static final float HEALTH_PER_CHICKEN = 18;
+    public static final float HEALTH_PER_BEEF = 24;
 
     public FancyFeast() {
         super(3, 70, UnitAction.FANCY_FEAST, CD_MAX_SECONDS, RANGE, 0, false);
