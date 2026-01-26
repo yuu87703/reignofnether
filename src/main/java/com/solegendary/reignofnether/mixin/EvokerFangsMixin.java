@@ -39,7 +39,8 @@ public abstract class EvokerFangsMixin extends Entity {
     )
     private void dealDamageTo(LivingEntity pTarget, CallbackInfo ci) {
         ci.cancel();
-        LivingEntity owner = this.getOwner();
+
+        System.out.println("damaged!");
 
         // prevent friendly fire
         if (this.getOwner() instanceof Unit unit &&
