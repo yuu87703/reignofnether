@@ -22,8 +22,6 @@ Bugfixes
 [❌] Fixed sculk catalysts not spreading any sculk
     - Seems to be intermittent, changes when relogging?
 
-[❌] Add icons/strings and check effects of new MobEffects on players
-
 
 [✔] Fixed the Enchanter's Breach enchantment on Vindicators causing 5% more armour reduction than intended
 [✔] Fixed the Enchanter's ultimate not affecting Vindicators and Militia attack damage
@@ -38,8 +36,8 @@ Bugfixes
 
 Quality of Life
 ---------------
-[❌] Freeze and Stun effects now affect players (causes immobility and inability to attack)
-[❌] Bloodlust can now affect any mob or player if applied with commands (higher amplifiers have no effect)
+[✔] Freeze and Stun effects now affect players (causes immobility and inability to attack)
+[✔] Bloodlust can now affect any mob or player if applied with commands (higher amplifiers have no effect)
 
 
 [❌] Add rotation to /rtsapi placebuilding
