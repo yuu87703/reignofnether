@@ -1499,5 +1499,20 @@
 
     "alliances.reignofnether.tooltip.toggle_observer_player_displays": "Observer Menu (Z)",
     "alliances.reignofnether.tooltip.toggle_diplomacy_player_displays": "Diplomacy Menu (Z)",
-    "alliances.reignofnether.tooltip.toggle_shared_unit_control": "Toggle whether allies can control your units"
+    "alliances.reignofnether.tooltip.toggle_shared_unit_control": "Toggle whether allies can control your units",
+
+    "effect.reignofnether.stun": "Stun",
+    "effect.reignofnether.freeze": "Freeze",
+    "effect.reignofnether.uncontrollable": "Uncontrollable",
+    "effect.reignofnether.zombie_infected": "Zombie Infected",
+    "effect.reignofnether.minor_speed": "Minor Speed",
+    "effect.reignofnether.minor_slowdown": "Minor Slowdown",
+    "effect.reignofnether.damage_taken_increase": "Damage Taken Increase",
+    "effect.reignofnether.intense_fire": "Intense Fire",
+    "effect.reignofnether.attack_slowdown": "Attack Slowdown",
+    "effect.reignofnether.temporary_efficiency": "Temporary Efficiency",
+    "effect.reignofnether.bloodlust": "Bloodlust",
+    "effect.reignofnether.frost_damage": "Frost Damage",
+    "effect.reignofnether.enchantment_amplifier": "Enchantment Amplifier",
+    "effect.reignofnether.disarm": "Disarm"
 }

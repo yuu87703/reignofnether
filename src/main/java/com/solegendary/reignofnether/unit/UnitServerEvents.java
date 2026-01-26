@@ -491,7 +491,7 @@ public class UnitServerEvents {
 
             if (drownedInfected) {
                 if (evt.getEntity() instanceof GruntUnit || evt.getEntity() instanceof BruteUnit
-                        || evt.getEntity() instanceof HeadhunterUnit) {
+                        || evt.getEntity() instanceof HeadhunterUnit || evt.getEntity() instanceof MarauderUnit) {
                     entityType = EntityRegistrar.ZOMBIE_PIGLIN_UNIT.get();
                 } else if (evt.getEntity() instanceof HoglinUnit) {
                     entityType = EntityRegistrar.ZOGLIN_UNIT.get();

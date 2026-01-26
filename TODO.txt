@@ -33,15 +33,14 @@ Bugfixes
 [✔] Fixed Militia not saving their old villager profession on reload
 [✔] Evokers can no longer pick up and equip weapons (this was preventing them casting spells)
 [✔] Fixed Evokers dealing way higher than expected damage with line fangs
-
-
-
-
-
+[✔] Marauders can now be zombified by drowned (it becomes a regular zombie piglin)
 
 
 Quality of Life
 ---------------
+[❌] Freeze and Stun effects now affect players (causes immobility and inability to attack)
+[❌] Bloodlust can now affect any mob or player if applied with commands (higher amplifiers have no effect)
+
 
 [❌] Add rotation to /rtsapi placebuilding
 
