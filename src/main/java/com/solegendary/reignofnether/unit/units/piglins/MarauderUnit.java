@@ -8,19 +8,20 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.piglins.BasaltSprings;
 import com.solegendary.reignofnether.building.buildings.piglins.FlameSanctuary;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.UnitAction;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.MarauderAnimations;
+import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
@@ -43,9 +44,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.solegendary.reignofnether.ability.abilities.Bloodlust.BLOODLUST_ATTACK_SPEED_MULTIPLIER;
@@ -157,7 +160,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     final static public float aggroRange = 10;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
-    final static public float maxHealth = 120.0f;
+    final static public float maxHealth = 140.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.28f;
     final static public float rangedDamageResist = 0.0f;
@@ -285,13 +288,35 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
             this.getAttribute(Attributes.ATTACK_KNOCKBACK).addTransientModifier(new AttributeModifier("knockback", 1.5f, AttributeModifier.Operation.ADDITION));
             result = super.doHurtTarget(pEntity);
             if (pEntity instanceof LivingEntity le) {
-                le.addEffect(new MobEffectInstance(MobEffectRegistrar.STUN.get(), 30));
+                le.addEffect(new MobEffectInstance(MobEffectRegistrar.STUN.get(), 40));
             }
             this.getAttribute(Attributes.ATTACK_KNOCKBACK).removeModifiers();
+            decrementAttacks();
+
+            if (!level().isClientSide() && ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_CLEAVING_FLAILS)) {
+                List<Mob> nearbyMobs = MiscUtil.getEntitiesWithinRange(new Vector3d(
+                            pEntity.position().x,
+                            pEntity.position().y,
+                            pEntity.position().z
+                        ), 2, Mob.class, level()
+                );
+                List<Mob> closestMobs = nearbyMobs.stream().sorted(Comparator.comparing(m -> m.distanceToSqr(position()))).toList();
+                int extraHitsLeft = 2;
+                for (Mob mob : closestMobs) {
+                    if (UnitServerEvents.getUnitToEntityRelationship(this, mob) != Relationship.FRIENDLY && mob.getId() != pEntity.getId()) {
+                        super.doHurtTarget(mob);
+                        mob.addEffect(new MobEffectInstance(MobEffectRegistrar.STUN.get(), 30));
+                        extraHitsLeft -= 1;
+                        if (extraHitsLeft <= 0) {
+                            break;
+                        }
+                    }
+                }
+            }
         } else {
             result = super.doHurtTarget(pEntity);
+            decrementAttacks();
         }
-        decrementAttacks();
         return result;
     }
 
