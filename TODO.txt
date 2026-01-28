@@ -22,12 +22,13 @@ Bugfixes
 [❌] Fixed sculk catalysts not spreading any sculk
     - Seems to be intermittent, changes when relogging?
 
-[❌] Fixed Enchanter being able to autocast Civil Enchantment on military units
+[❌] Fixed the Efficiency enchantment from
 
 [🟡] The Enchanter's aura now correctly affects all library enchantments, including quickshot, vigor and maiming
     - Vigor will reduce cooldowns by 44% when affected
     - Maiming increases the magnitude of slowness applied
 
+[🟡] Fixed Warden's Sonic Boom doing way less damage than expected
 
 Quality of Life
 ---------------
@@ -39,8 +40,10 @@ Quality of Life
 
 Balance
 -------
-[🟡] Enchant Vigor has been reduced from 30% to 25% faster cooldowns for evokers, cost reduced to (50 ore, 50 wood)
+[🟡] Enchant Vigor cooldown reduction reduced from 30% to 25%
+    - Cost reduced from (60 ore, 60 wood) to (50 ore, 50 wood)
 [🟡] Marauder health increased from 120 to 140
+[🟡] Marauder knockback resistance increased from 50% to 66%
 [🟡] Marauder flail attack stun duration increased from 1.5s to 2s
 [🟡] Added research to the Bastion for Marauders costing (350 wood, 350 ore, 160s)
     - Makes flail attacks hit two extra enemies near the main target for 30% less damage, stun and knockback

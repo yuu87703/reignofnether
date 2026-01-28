@@ -254,7 +254,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
                 .add(Attributes.ARMOR, MarauderUnit.armorValue)
                 .add(Attributes.ATTACK_KNOCKBACK, 0f)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5f);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.66f);
     }
 
     @Override
