@@ -47,3 +47,4 @@ Balance
 
 Languages
 ---------
+[✔] Added French (fr_fr), thanks @EnderBreaker!
