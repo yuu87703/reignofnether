@@ -216,10 +216,6 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
         this.mountGoal.tick();
         PromoteIllager.checkAndApplyBuff(this);
         this.attackGoal.tickChargeCrossbow();
-
-        if (hasAnyEnchants()) {
-            System.out.println("test");
-        }
     }
 
     @Override

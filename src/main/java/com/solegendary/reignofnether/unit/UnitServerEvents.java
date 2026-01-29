@@ -425,12 +425,12 @@ public class UnitServerEvents {
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent evt) {
         // Convert nearby blocks arond a death into something that is sculk convertible
-        // supposed to add to sculk_spreadable.json tag under the data/minecraft/tags/blocks but doesn't work for
-        // some reason
+        // supposed to add to sculk_spreadable.json tag under the data/minecraft/tags/blocks
+        // but doesn't work for some reason
         MinecraftServer server = evt.getEntity().level().getServer();
         if (server != null) {
             server.tell(new TickTask(
-                server.getTickCount() + 2,
+                server.getTickCount() + 1,
                 () -> {
                     for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                         if (building instanceof SculkCatalystPlacement sc && evt.getEntity().distanceToSqr(Vec3.atCenterOf(sc.centrePos))

@@ -170,7 +170,7 @@ public class PassiveIcons {
             SHARPNESS,
             VIGOR,
             ZEAL,
-            EFFICIENCY, // apply based on the MobEffect instead for consistency
+            //EFFICIENCY,
             FORTIFYING,
             POWER,
             PIERCING,

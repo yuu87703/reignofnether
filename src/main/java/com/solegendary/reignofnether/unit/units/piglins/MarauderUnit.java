@@ -51,8 +51,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.solegendary.reignofnether.ability.abilities.Bloodlust.BLOODLUST_ATTACK_SPEED_MULTIPLIER;
-
 public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, KeyframeAnimated {
     public static final Abilities ABILITIES = new Abilities();
     static {
