@@ -139,7 +139,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
-    public float getUnitAttackDamage() {return isNextHitBig() ? attackDamageBigHit : attackDamage;}
+    public float getUnitAttackDamage() {return isNextHitBig() ? attackDamage + bigHitDamageBonus : attackDamage;}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
     public Goal getAttackGoal() { return attackGoal; }
@@ -152,7 +152,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
 
     final static public float attackDamage = 7.0f;
-    final static public float attackDamageBigHit = 10.0f;
+    final static public float bigHitDamageBonus = 3.0f;
     final static public float attacksPerSecond = 0.4f;
     final static public float attackRange = 2; // only used by ranged units or melee building attackers
     final static public float aggroRange = 10;
@@ -284,11 +284,13 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
         boolean result;
         if (isNextHitBig()) {
             this.getAttribute(Attributes.ATTACK_KNOCKBACK).addTransientModifier(new AttributeModifier("knockback", 1.5f, AttributeModifier.Operation.ADDITION));
+            this.getAttribute(Attributes.ATTACK_DAMAGE).addTransientModifier(new AttributeModifier("attackDamage", bigHitDamageBonus, AttributeModifier.Operation.ADDITION));
             result = super.doHurtTarget(pEntity);
             if (pEntity instanceof LivingEntity le) {
                 le.addEffect(new MobEffectInstance(MobEffectRegistrar.STUN.get(), 40));
             }
             this.getAttribute(Attributes.ATTACK_KNOCKBACK).removeModifiers();
+            this.getAttribute(Attributes.ATTACK_DAMAGE).removeModifiers();
             decrementAttacks();
 
             if (!level().isClientSide() && ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_CLEAVING_FLAILS)) {
