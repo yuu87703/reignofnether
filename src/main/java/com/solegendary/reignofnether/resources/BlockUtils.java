@@ -76,8 +76,14 @@ public class BlockUtils {
     private static boolean isWraithSnow(BlockState bs) {
         return bs.getBlock() == BlockRegistrar.WRAITH_SNOW_LAYER.get();
     }
+    private static boolean isVanillaSnow(BlockState bs) {
+        return bs.getBlock() == Blocks.SNOW;
+    }
     public static int getWraithSnowLayers(BlockState bs) {
         return isWraithSnow(bs) ? bs.getValue(BlockStateProperties.LAYERS) : 0;
+    }
+    public static int getSnowLayers(BlockState bs) {
+        return isWraithSnow(bs) || isVanillaSnow(bs) ? bs.getValue(BlockStateProperties.LAYERS) : 0;
     }
     public static boolean canPlaceSnow(Level level, BlockPos pos) {
         return !MiscUtil.isSolidBlocking(level, pos) &&

@@ -2,9 +2,9 @@ package com.solegendary.reignofnether.building.buildings.placements;
 
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Sacrifice;
+import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.monsters.SculkCatalyst;
-import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -57,25 +57,25 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
     @Override
     public void onBuilt() {
         super.onBuilt();
-        updateBorderBps();
+        updateHighlightBps();
         updateSculkBps();
     }
 
     @Override
-    public void updateBorderBps() {
+    public void updateHighlightBps() {
         if (!level.isClientSide()) {
             return;
         }
         updateSculkBps();
         this.nightBorderBps.clear();
         this.nightBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(centrePos,
-                getNightRange() - TimeClientEvents.VISIBLE_BORDER_ADJ,
-                level
+                getNightRange() - BlockClientEvents.VISIBLE_BORDER_ADJ,
+                level, true
         ));
     }
 
     @Override
-    public Set<BlockPos> getBorderBps() {
+    public Set<BlockPos> getHighlightBps() {
         return nightBorderBps;
     }
 
@@ -91,7 +91,7 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
         if (tickAgeAfterBuilt > 0) {
             if (tickAgeAfterBuilt % 100 == 0) {
                 if (tickLevel.isClientSide()) {
-                    updateBorderBps();
+                    updateHighlightBps();
                 } else {
                     updateSculkBps();
                 }

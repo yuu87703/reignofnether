@@ -76,7 +76,7 @@
         }]
     },
     "wretchedwraith_death": {
-        "subtitle": "sounds.reignofnether.wretchedwraith_attack_loud",
+        "subtitle": "sounds.reignofnether.wretchedwraith_death",
         "sounds": [
             "reignofnether:wretchedwraith_death_01",
             "reignofnether:wretchedwraith_death_02"
@@ -98,6 +98,35 @@
             "reignofnether:wretchedwraith_ambient_03",
             "reignofnether:wretchedwraith_ambient_04",
             "reignofnether:wretchedwraith_ambient_05"
+        ]
+    },
+    "wildfire_death": {
+        "subtitle": "sounds.reignofnether.wildfire_death",
+        "sounds": [ "reignofnether:wildfire_death" ]
+    },
+    "wildfire_molten_bomb": {
+        "subtitle": "sounds.reignofnether.wildfire_molten_bomb",
+        "sounds": [ "reignofnether:wildfire_molten_bomb" ]
+    },
+    "wildfire_scorching_gaze": {
+        "subtitle": "sounds.reignofnether.wildfire_scorching_gaze",
+        "sounds": [ "reignofnether:wildfire_scorching_gaze" ]
+    },
+    "wildfire_hurt": {
+        "subtitle": "sounds.reignofnether.wildfire_hurt",
+        "sounds": [
+            "reignofnether:wildfire_hurt_01",
+            "reignofnether:wildfire_hurt_02",
+            "reignofnether:wildfire_hurt_03"
+        ]
+    },
+    "wildfire_ambient": {
+        "subtitle": "sounds.reignofnether.wildfire_ambient",
+        "sounds": [
+            "reignofnether:wildfire_ambient_01",
+            "reignofnether:wildfire_ambient_02",
+            "reignofnether:wildfire_ambient_03",
+            "reignofnether:wildfire_ambient_04"
         ]
     }
 }

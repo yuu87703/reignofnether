@@ -324,7 +324,7 @@ public class OrthoviewClientEvents {
 
         for (BuildingPlacement building : BuildingClientEvents.getBuildings())
             if (building instanceof RangeIndicator ri)
-                ri.updateBorderBps();
+                ri.updateHighlightBps();
 
         enabled = !enabled;
 

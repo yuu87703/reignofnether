@@ -1,11 +1,10 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
 import com.solegendary.reignofnether.ability.EnchantAbility;
-import com.solegendary.reignofnether.ability.EquipAbility;
+import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingBlock;
 import com.solegendary.reignofnether.building.RangeIndicator;
-import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -33,7 +32,7 @@ public class LibraryPlacement extends ProductionPlacement implements RangeIndica
     @Override
     public void onBuilt() {
         super.onBuilt();
-        updateBorderBps();
+        updateHighlightBps();
     }
 
     @Override
@@ -65,22 +64,22 @@ public class LibraryPlacement extends ProductionPlacement implements RangeIndica
             }
         }
         if (tickLevel.isClientSide && tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 100 == 0)
-            updateBorderBps();
+            updateHighlightBps();
     }
 
     private final Set<BlockPos> borderBps = new HashSet<>();
 
     @Override
-    public void updateBorderBps() {
+    public void updateHighlightBps() {
         if (!level.isClientSide())
             return;
         this.borderBps.clear();
         this.borderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(centrePos,
-                EnchantAbility.RANGE - TimeClientEvents.VISIBLE_BORDER_ADJ, level));
+                EnchantAbility.RANGE - BlockClientEvents.VISIBLE_BORDER_ADJ, level));
     }
 
     @Override
-    public Set<BlockPos> getBorderBps() {
+    public Set<BlockPos> getHighlightBps() {
         return borderBps;
     }
 

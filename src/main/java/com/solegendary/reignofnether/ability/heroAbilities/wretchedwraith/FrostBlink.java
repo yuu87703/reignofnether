@@ -27,8 +27,8 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class FrostBlink extends HeroAbility {
 
-    public static final int RANGE_RANK_1 = 6;
-    public static final int RANGE_RANK_2 = 9;
+    public static final int RANGE_RANK_1 = 8;
+    public static final int RANGE_RANK_2 = 10;
     public static final int RANGE_RANK_3 = 12;
 
     public static final int CD_RANK_1 = 20;
@@ -71,6 +71,9 @@ public class FrostBlink extends HeroAbility {
         } else if (getRank(hero) == 3) {
             range = RANGE_RANK_3;
             cooldownMax = CD_RANK_3 * ResourceCost.TICKS_PER_SECOND;
+        }
+        if (hero instanceof WretchedWraithUnit wraith) {
+            wraith.castFrostblinkGoal.range = range;
         }
     }
 

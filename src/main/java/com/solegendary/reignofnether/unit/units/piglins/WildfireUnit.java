@@ -4,23 +4,32 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.FirewallShot;
+import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MarchOfProgress;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.IntenseHeatPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.SoulsAflame;
+import com.solegendary.reignofnether.building.RangeIndicator;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.SoundRegistrar;
+import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.modelling.animations.WildfireAnimations;
 import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
+import com.solegendary.reignofnether.util.MyMath;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
@@ -28,6 +37,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,15 +54,18 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated {
+public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated, RangeIndicator {
     public final Abilities ABILITIES = new Abilities(
         List.of(
             new Pair<>(new MoltenBomb(), Keybindings.keyQ),
@@ -274,12 +287,6 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            case CHARGE_SPELL -> {
-                activeAnimDef = WildfireAnimations.SPELL_CHARGE;
-                activeAnimState = spellChargeAnimState;
-                animateScale = 1.0f;
-                startAnimation(activeAnimDef);
-            }
             case CAST_SPELL -> {
                 activeAnimDef = WildfireAnimations.SPELL_ACTIVATE;
                 activeAnimState = spellActivateAnimState;
@@ -338,6 +345,14 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.castMoltenBombGoal.tick();
         this.castScorchingGazeGoal.tick();
         this.castSoulsAflameGoal.tick();
+
+        if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
+            if (!lastOnPos.equals(getOnPos()) || !lastCursorPos.equals(CursorClientEvents.getPreselectedBlockPos())) {
+                updateHighlightBps();
+            }
+            lastOnPos = getOnPos();
+            lastCursorPos = CursorClientEvents.getPreselectedBlockPos();
+        }
     }
 
     @Override
@@ -352,6 +367,17 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.readUnitSaveData(pCompound);
     }
 
+    @Override protected SoundEvent getAmbientSound() {
+        return SoundRegistrar.WILDFIRE_AMBIENT.get();
+    }
+    @Override protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return SoundRegistrar.WILDFIRE_HURT.get();
+    }
+    @Override protected SoundEvent getDeathSound() {
+        return SoundRegistrar.WILDFIRE_DEATH.get();
+    }
+    @Override protected void playStepSound(BlockPos pPos, BlockState pBlock) { }
+
     public void initialiseGoals() {
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
@@ -361,9 +387,9 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
         this.castMoltenBombGoal = new GenericTargetedSpellGoal(
                 this,
-                0,
+                20,
                 InsomniaCurse.RANGE,
-                UnitAnimationAction.CAST_SPELL,
+                UnitAnimationAction.CAST_SPELL_ALT,
                 null,
                 this::doFirebomb,
                 null
@@ -372,14 +398,14 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 this,
                 0,
                 InsomniaCurse.RANGE,
-                UnitAnimationAction.CAST_SPELL,
+                UnitAnimationAction.CAST_SPELL_ALT,
                 this::scorchingGaze,
                 null,
                 null
         );
         this.castSoulsAflameGoal = new GenericUntargetedSpellGoal(
                 this,
-                RaiseDead.CHANNEL_TICKS,
+                40,
                 this::soulsAflame,
                 UnitAnimationAction.CHARGE_SPELL,
                 UnitAnimationAction.STOP,
@@ -447,5 +473,31 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         AABB aabb = this.getBoundingBox().inflate(0.6f, 0, 0.6f);
         aabb.setMaxY(aabb.maxY + 1.2f);
         return aabb;
+    }
+
+    private final Set<BlockPos> auraBorderBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
+    private BlockPos lastCursorPos = new BlockPos(0,0,0);
+
+    @Override
+    public void updateHighlightBps() {
+        if (!level().isClientSide())
+            return;
+        this.auraBorderBps.clear();
+        if (CursorClientEvents.getLeftClickAction() == UnitAction.MOLTEN_BOMB) {
+            BlockPos limitedBp = MyMath.getXZRangeLimitedBlockPos(getOnPos(), CursorClientEvents.getPreselectedBlockPos(), MoltenBomb.RANGE);
+            for (BlockPos pos : MiscUtil.getLine2D(getOnPos(), limitedBp)) {
+                this.auraBorderBps.add(MiscUtil.getHighestGroundBlock(level(), pos).above().above());
+            }
+        }
+    }
+
+    @Override
+    public Set<BlockPos> getHighlightBps() {
+        return auraBorderBps;
+    }
+    @Override
+    public boolean showOnlyWhenSelected() {
+        return true;
     }
 }

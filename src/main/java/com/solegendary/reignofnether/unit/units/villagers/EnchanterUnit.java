@@ -7,8 +7,10 @@ import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.ability.heroAbilities.enchanter.*;
 import com.solegendary.reignofnether.building.RangeIndicator;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
@@ -390,7 +392,6 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                     }
                 }
             }
-            updateBorderBps();
         }
 
         if (auraEnabled && level().isClientSide && tickCount % 20 == 0) {
@@ -408,6 +409,12 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                     );
                 }
             }
+        }
+        if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
+            if (!lastOnPos.equals(getOnPos())) {
+                updateHighlightBps();
+            }
+            lastOnPos = getOnPos();
         }
     }
 
@@ -564,8 +571,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public void toggleAura() {
         auraEnabled = !auraEnabled;
         if (level().isClientSide) {
-            if (!auraEnabled)
-                auraBorderBps.clear();
+            updateHighlightBps();
         } else {
             if (auraEnabled) {
                 AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_SET, 1f);
@@ -575,29 +581,42 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
             }
         }
+
     }
 
     private final Set<BlockPos> auraBorderBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
 
     @Override
-    public void updateBorderBps() {
-        if (!level().isClientSide()) {
+    public void updateHighlightBps() {
+        if (!level().isClientSide())
             return;
-        }
+        if (!auraEnabled)
+            return;
         this.auraBorderBps.clear();
-        if (auraEnabled) {
-            this.auraBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
-                    MarchOfProgress.RADIUS - 1,
-                    level()
-            ));
+        int radius = MarchOfProgress.RADIUS;
+        /*
+        int radius = 0;
+        if (CursorClientEvents.getLeftClickAction() == UnitAction.CIVIL_ENCHANTMENT) {
+            radius = CivilEnchantment.RANGE;
+        } else if (CursorClientEvents.getLeftClickAction() == UnitAction.MARTIAL_ENCHANTMENT) {
+            radius = MartialEnchantment.RANGE;
+        } else if (CursorClientEvents.getLeftClickAction() == UnitAction.PROTECTIVE_ENCHANTMENT) {
+            radius = ProtectiveEnchantment.RANGE;
+        } else if (auraEnabled) {
+            radius = MarchOfProgress.RADIUS;
         }
+         */
+        this.auraBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
+                radius - 1,
+                level()
+        ));
     }
 
     @Override
-    public Set<BlockPos> getBorderBps() {
+    public Set<BlockPos> getHighlightBps() {
         return auraBorderBps;
     }
-
     @Override
     public boolean showOnlyWhenSelected() {
         return true;

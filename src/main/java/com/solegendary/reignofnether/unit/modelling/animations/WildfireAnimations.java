@@ -522,7 +522,7 @@ public class WildfireAnimations {
 			))
 			.build();
 
-	public static final AnimationDefinition SPELL_ALT = AnimationDefinition.Builder.withLength(1.25F)
+	public static final AnimationDefinition ULTIMATE = AnimationDefinition.Builder.withLength(1.25F)
 			.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(0.375F, KeyframeAnimations.degreeVec(45.82F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),

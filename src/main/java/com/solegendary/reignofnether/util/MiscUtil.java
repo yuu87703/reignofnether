@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.BloodMoon;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
+import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
@@ -13,7 +14,7 @@ import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
-import com.solegendary.reignofnether.time.NightCircleMode;
+import com.solegendary.reignofnether.blocks.NightCircleMode;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.Relationship;
@@ -545,20 +546,24 @@ public class MiscUtil {
         return CursorClientEvents.getRefinedCursorWorldPos(cursorWorldPosNear, cursorWorldPosFar);
     }
 
-    // get the tops of all blocks which are of at a certain horizontal distance away from the centrePos
     public static Set<BlockPos> getRangeIndicatorCircleBlocks(BlockPos centrePos, int radius, Level level) {
+        return getRangeIndicatorCircleBlocks(centrePos, radius, level, false);
+    }
+
+    // get the tops of all blocks which are of at a certain horizontal distance away from the centrePos
+    public static Set<BlockPos> getRangeIndicatorCircleBlocks(BlockPos centrePos, int radius, Level level, boolean isNightSource) {
         if (radius <= 0)
             return Set.of();
 
         ArrayList<BlockPos> bps = new ArrayList<>();
 
-        Set<BlockPos> nightCircleBps;
-        if (TimeClientEvents.nightCircleMode == NightCircleMode.NO_OVERLAPS)
-            nightCircleBps = MiscUtil.CircleUtil.getCircleWithCulledOverlaps(centrePos, radius, TimeClientEvents.nightSourceOrigins);
+        Set<BlockPos> circleBps;
+        if (BlockClientEvents.nightCircleMode == NightCircleMode.NO_OVERLAPS && isNightSource)
+            circleBps = MiscUtil.CircleUtil.getCircleWithCulledOverlaps(centrePos, radius, BlockClientEvents.nightSourceOrigins);
         else
-            nightCircleBps = MiscUtil.CircleUtil.getCircle(centrePos, radius);
+            circleBps = MiscUtil.CircleUtil.getCircle(centrePos, radius);
 
-        for (BlockPos bp : nightCircleBps) {
+        for (BlockPos bp : circleBps) {
             for (int i = 0; i < 3 ; i++) {
                 int x = bp.getX();
                 int z = bp.getZ();
@@ -615,7 +620,7 @@ public class MiscUtil {
                 return new HashSet<>();
 
             // skip rendering entirely if we are fully inside another circle
-            if (TimeClientEvents.nightCircleMode == NightCircleMode.NO_OVERLAPS) {
+            if (BlockClientEvents.nightCircleMode == NightCircleMode.NO_OVERLAPS) {
                 for (Pair<BlockPos, Integer> os : overlapSources) {
                     Vec2 centre1 = new Vec2(center.getX(),center.getZ());
                     Vec2 centre2 = new Vec2(os.getFirst().getX(), os.getFirst().getZ());

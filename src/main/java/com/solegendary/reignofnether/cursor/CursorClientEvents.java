@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -107,6 +108,12 @@ public class CursorClientEvents {
             leftClickAction = actionName;
         else if (actionName == null)
             leftClickAction = null;
+
+        if (HudClientEvents.hudSelectedEntity instanceof RangeIndicator ri) {
+            ri.updateHighlightBps();
+        } else if (HudClientEvents.hudSelectedPlacement instanceof RangeIndicator ri) {
+            ri.updateHighlightBps();
+        }
     }
 
     public static void setLeftClickSandboxAction(SandboxAction actionName) {

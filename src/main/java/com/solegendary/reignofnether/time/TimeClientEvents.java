@@ -1,11 +1,6 @@
 package com.solegendary.reignofnether.time;
 
-import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.BuildingClientEvents;
-import com.solegendary.reignofnether.building.BuildingPlacement;
-import com.solegendary.reignofnether.building.NightSource;
-import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
@@ -17,24 +12,17 @@ import com.solegendary.reignofnether.sounds.SoundClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
-import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
@@ -55,8 +43,6 @@ public class TimeClientEvents {
     public static long targetClientTime = 0;
     // actual time on the server
     public static long serverTime = 0;
-
-    public static NightCircleMode nightCircleMode = NightCircleMode.NO_OVERLAPS;
 
     public static boolean showClockTooltip = false;
 
@@ -234,76 +220,6 @@ public class TimeClientEvents {
                 MyRenderer.renderTooltip(evt.getGuiGraphics(), tooltip, xPos + 57, yPos - 4);
             } else {
                 MyRenderer.renderTooltip(evt.getGuiGraphics(), tooltip, evt.getMouseX(), evt.getMouseY());
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onRenderLevel(RenderLevelStageEvent evt) {
-        ResourceLocation rl = ResourceLocation.parse("forge:textures/white.png");
-        var vertexConsumer = MC.renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(rl));
-        if (evt.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-            return;
-            //            if (!OrthoviewClientEvents.isEnabled() || nightCircleMode == NightCircleMode.OFF || MC
-            //            .level == null) {
-            //                return;
-            //            }
-        }
-        // draw range indicators for buildings with abilities and monster night sources
-        for (BuildingPlacement building : BuildingClientEvents.getBuildings()) {
-            if (building instanceof RangeIndicator ri) {
-                for (BlockPos bp : ri.getBorderBps()) {
-                    if (BuildingClientEvents.getSelectedBuildings().contains(building)) {
-                        MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0.8f, 0f, 0.3f);
-                    } else if (!ri.showOnlyWhenSelected()) {
-                        MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0f, 0f, 0.6f);
-                    }
-                    /* causes a lot of flickering
-                    if (MC.level.getBlockState(bp.north()).isAir())
-                        MyRenderer.drawBlockFace(evt.getPoseStack(), Direction.NORTH, bp, 0f, 0f, 0f, 0.5f);
-                    if (MC.level.getBlockState(bp.south()).isAir())
-                        MyRenderer.drawBlockFace(evt.getPoseStack(), Direction.SOUTH, bp, 0f, 0f, 0f, 0.5f);
-                    if (MC.level.getBlockState(bp.east()).isAir())
-                        MyRenderer.drawBlockFace(evt.getPoseStack(), Direction.EAST, bp, 0f, 0f, 0f, 0.5f);
-                    if (MC.level.getBlockState(bp.west()).isAir())
-                        MyRenderer.drawBlockFace(evt.getPoseStack(), Direction.WEST, bp, 0f, 0f, 0f, 0.5f);
-                    */
-                }
-            }
-        }
-
-        for (LivingEntity le : UnitClientEvents.getSelectedUnits()) {
-            if (le instanceof RangeIndicator ri) {
-                for (BlockPos bp : ri.getBorderBps()) {
-                    MyRenderer.drawBlockFace(evt.getPoseStack(), vertexConsumer, Direction.UP, bp, 0f, 0.8f, 0f, 0.3f);
-                }
-            }
-        }
-    }
-
-    // maintain a mapping of night sources for easy culling calcs
-    private static final int NIGHT_SOURCES_UPDATE_TICKS_MAX = 50;
-    private static int nightSourcesUpdateTicks = NIGHT_SOURCES_UPDATE_TICKS_MAX;
-    public static ArrayList<Pair<BlockPos, Integer>> nightSourceOrigins = new ArrayList<>();
-    public static final int VISIBLE_BORDER_ADJ = 2; // shrink a bit so borderlines themselves are safe to walk on
-
-    @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent evt) {
-        if (evt.phase != TickEvent.Phase.END)
-            return;
-
-        nightSourcesUpdateTicks -= 1;
-        if (nightSourcesUpdateTicks <= 0) {
-            nightSourcesUpdateTicks = NIGHT_SOURCES_UPDATE_TICKS_MAX;
-
-            nightSourceOrigins.clear();
-
-            // get list of night source centre:range pairs
-            for (BuildingPlacement building : BuildingClientEvents.getBuildings()) {
-                if (!building.isExploredClientside || !(building instanceof NightSource ns) || ns.getNightRange() <= 0) {
-                    continue;
-                }
-                nightSourceOrigins.add(new Pair<>(building.centrePos, ns.getNightRange() - VISIBLE_BORDER_ADJ));
             }
         }
     }

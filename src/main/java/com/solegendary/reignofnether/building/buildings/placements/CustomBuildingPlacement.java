@@ -1,9 +1,9 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
+import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
-import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -62,7 +62,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     @Override
     public void onBuilt() {
         super.onBuilt();
-        updateBorderBps();
+        updateHighlightBps();
         if (getMaxNetherRange() > 0)
             setNetherZone(new NetherZone(new BlockPos(centrePos.getX(), originPos.getY() + 1, centrePos.getZ()), getMaxNetherRange(), getStartingNetherRange()), true);
     }
@@ -95,19 +95,19 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
 
     // RangeIndicator
     @Override
-    public void updateBorderBps() {
+    public void updateHighlightBps() {
         if (!level.isClientSide() || this.getNightRange() <= 0) {
             return;
         }
         this.nightBorderBps.clear();
         this.nightBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(centrePos,
-                getNightRange() - TimeClientEvents.VISIBLE_BORDER_ADJ,
-                level
+                getNightRange() - BlockClientEvents.VISIBLE_BORDER_ADJ,
+                level, true
         ));
     }
 
     @Override
-    public Set<BlockPos> getBorderBps() {
+    public Set<BlockPos> getHighlightBps() {
         return nightBorderBps;
     }
 

@@ -3,7 +3,6 @@ package com.solegendary.reignofnether.unit.units.monsters;
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
@@ -137,7 +136,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     public GenericUntargetedSpellGoal getCastChillingScreechGoal() {
         return castChillingScreechGoal;
     }
-    private GenericTargetedSpellGoal castFrostblinkGoal;
+    public GenericTargetedSpellGoal castFrostblinkGoal;
     public GenericTargetedSpellGoal getCastFrostblinkGoal() {
         return castFrostblinkGoal;
     }
@@ -483,7 +482,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.castFrostblinkGoal = new GenericTargetedSpellGoal(
                 this,
                 10,
-                InsomniaCurse.RANGE,
+                FrostBlink.RANGE_RANK_1,
                 UnitAnimationAction.TELEPORT,
                 null,
                 this::frostBlink,
@@ -720,4 +719,6 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     public boolean isPushable() {
         return !isBlizzardInProgress() && !isFrostBlinkInProgress();
     }
+
+
 }

@@ -26,7 +26,7 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
     protected final int channelTicksMax; // max time required to cast a spell
     protected boolean isCasting = false;
     protected BlockPos castTarget = null; // pos that the spell will be cast at
-    protected final float range;
+    public float range;
     public Consumer<LivingEntity> onEntityCast;
     public Consumer<BlockPos> onGroundCast;
     public Consumer<BuildingPlacement> onBuildingCast;

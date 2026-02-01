@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
+import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.RangeIndicator;
@@ -22,8 +23,7 @@ import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.startpos.StartPos;
 import com.solegendary.reignofnether.startpos.StartPosClientEvents;
-import com.solegendary.reignofnether.time.NightCircleMode;
-import com.solegendary.reignofnether.time.TimeClientEvents;
+import com.solegendary.reignofnether.blocks.NightCircleMode;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialStage;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -45,7 +45,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
@@ -68,7 +67,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.solegendary.reignofnether.hud.HudClientEvents.isMouseOverAnyButton;
-import static com.solegendary.reignofnether.time.TimeClientEvents.nightCircleMode;
+import static com.solegendary.reignofnether.blocks.BlockClientEvents.nightCircleMode;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class MinimapClientEvents {
@@ -302,7 +301,7 @@ public class MinimapClientEvents {
                     }
                     for (BuildingPlacement building : BuildingClientEvents.getBuildings())
                         if (building instanceof RangeIndicator ri)
-                            ri.updateBorderBps();
+                            ri.updateHighlightBps();
                 },
                 null,
                 List.of(
@@ -611,7 +610,7 @@ public class MinimapClientEvents {
         // get list of night source centre:range pairs
         ArrayList<Pair<BlockPos, Integer>> nightSources = new ArrayList<>();
 
-        for (Pair<BlockPos, Integer> ns : TimeClientEvents.nightSourceOrigins) {
+        for (Pair<BlockPos, Integer> ns : BlockClientEvents.nightSourceOrigins) {
 
             int xc = ns.getFirst().getX() + (BUILDING_RADIUS / 2);
             int zc = ns.getFirst().getZ() + (BUILDING_RADIUS / 2);
@@ -623,7 +622,7 @@ public class MinimapClientEvents {
 
         for (Pair<BlockPos, Integer> ns : nightSources) {
             Set<BlockPos> nightCircleBps;
-            if (TimeClientEvents.nightCircleMode == NightCircleMode.NO_OVERLAPS)
+            if (BlockClientEvents.nightCircleMode == NightCircleMode.NO_OVERLAPS)
                 nightCircleBps = MiscUtil.CircleUtil.getCircleWithCulledOverlaps(ns.getFirst(), ns.getSecond(), nightSources);
             else
                 nightCircleBps = MiscUtil.CircleUtil.getCircle(ns.getFirst(), ns.getSecond());
@@ -1068,7 +1067,7 @@ public class MinimapClientEvents {
 
         updateMapTerrain(terrainPartition, darkTerrainPartition);
         mapColoursOverlays = new int[worldRadius * 2][worldRadius * 2];
-        if (TimeClientEvents.nightCircleMode != NightCircleMode.OFF)
+        if (BlockClientEvents.nightCircleMode != NightCircleMode.OFF)
             updateNightCircles();
         
         // Update map markers

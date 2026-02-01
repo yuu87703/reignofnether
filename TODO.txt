@@ -12,24 +12,29 @@ New Heroes
 ----------
 
 Wildfire
-    [❌] Global toggle to turn all fire rendering into soulfires
+    [❌] Molten Bomb: skillshot block highlighting
+         - For performance, only update if the cursor or origin blockPosition changes
+    [❌] Souls Aflame: make the global flag also change vanilla fire textures
 
 [❌] Overflowing graveyards
 
 
 Bugfixes
 --------
-[✔] Fixed marauders doing only regular damage on flail hits
-[✔] Fixed blood moon creating too many mob spawns
-[✔] Removed the Wildfire from Infernal portals (it's not done yet!)
+[✔] Fixed Wraith teleport being the same range at all levels (it was stuck at the rank 2 range of 9 blocks)
+
 
 Quality of Life
 ---------------
-[✔] Added rotation arguments (0,90,180,270) to /rtsapi-place-building
-[✔] Removed the "Coming Soon" label from the new heroes
+[🟡] Made dripstone blocks unpathable by units
+[❌] rtsapi commands now place neutral units and buildings if the owner name is not specified (instead of it being the player's name)
+
+[❌] Give all abilities range indicators
+[✔] Range indicators are now visible on top of snow layers
 
 Balance
 -------
+[✔] Wretched Wraith Frostblink range increased from (6,9,12) to (8,10,12)
 
 Languages
 ---------
