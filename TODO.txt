@@ -1,5 +1,5 @@
 
-1.20.1-1.3.0-beta-3
+1.20.1-1.3.0-beta-4
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -19,36 +19,17 @@ Wildfire
 
 Bugfixes
 --------
-[✔] Fixed the Efficiency enchantment being applied to all units across the game randomly
-
-[✔] Fixed the Efficiency enchantment icon disappearing whenever the villager stopped working
-
-[✔] The Enchanter's aura now correctly affects all library enchantments, including quickshot, vigor and maiming
-    - Vigor will reduce cooldowns by 44% when affected
-    - Maiming increases the magnitude of slowness applied
-
-[✔] Fixed Warden's Sonic Boom doing way less damage than expected
-
-[✔] Fixed Sculk Catalysts sometimes not spreading sculk when units near it died, including from sacrifice
+[✔] Fixed marauders doing only regular damage on flail hits
+[✔] Fixed blood moon creating too many mob spawns
+[✔] Removed the Wildfire from Infernal portals (it's not done yet!)
 
 Quality of Life
 ---------------
-[✔] Reworked the Hero level up menu icons, thanks @20-sided!
-[✔] Libraries and Blacksmiths now have a range indicator
-
-[❌] Add rotation to /rtsapi placebuilding
-
+[✔] Added rotation arguments (0,90,180,270) to /rtsapi-place-building
+[✔] Removed the "Coming Soon" label from the new heroes
 
 Balance
 -------
-[✔] Enchant Vigor cooldown reduction reduced from 30% to 25%
-    - Cost reduced from (60 ore, 60 wood) to (50 ore, 50 wood)
-[✔] Marauder health increased from 120 to 140
-[✔] Marauder knockback resistance increased from 50% to 66%
-[✔] Marauder flail attack stun duration increased from 1.5s to 2s
-[✔] Added research to the Bastion for Marauders costing (350 wood, 350 ore, 160s)
-    - Makes flail attacks hit two extra enemies near the main target for 30% less damage, stun and knockback
 
 Languages
 ---------
-[✔] Added French (fr_fr), thanks @EnderBreaker!
