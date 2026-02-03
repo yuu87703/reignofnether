@@ -104,9 +104,9 @@ public class ScorchingGaze extends HeroAbility {
             fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip2")),
             fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip3")),
             fcs(""),
-            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank1"), getRank(hero) == 0),
-            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank2"), getRank(hero) == 1),
-            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank3"), getRank(hero) == 2)
+            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank1", DURATION_RANK_1), getRank(hero) == 0),
+            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank2", DURATION_RANK_2), getRank(hero) == 1),
+            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank3", DURATION_RANK_3), getRank(hero) == 2)
         );
     }
 

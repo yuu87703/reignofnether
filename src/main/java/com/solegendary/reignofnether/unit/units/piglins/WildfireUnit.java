@@ -4,25 +4,18 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.FirewallShot;
-import com.solegendary.reignofnether.ability.heroAbilities.enchanter.MarchOfProgress;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.IntenseHeatPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.SoulsAflame;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
-import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
+import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
-import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -31,7 +24,6 @@ import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.modelling.animations.WildfireAnimations;
-import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -71,12 +63,12 @@ import java.util.Set;
 
 public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated, RangeIndicator {
     public final Abilities ABILITIES = new Abilities(
-        List.of(
-            new Pair<>(new MoltenBomb(), Keybindings.keyQ),
-            new Pair<>(new ScorchingGaze(), Keybindings.keyW),
-            new Pair<>(new IntenseHeatPassive(), Keybindings.keyE),
-            new Pair<>(new SoulsAflame(), Keybindings.keyR)
-        )
+            List.of(
+                    new Pair<>(new MoltenBomb(), Keybindings.keyQ),
+                    new Pair<>(new ScorchingGaze(), Keybindings.keyW),
+                    new Pair<>(new IntenseHeatPassive(), Keybindings.keyE),
+                    new Pair<>(new SoulsAflame(), Keybindings.keyR)
+            )
     );
 
     @Override
@@ -373,7 +365,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         if (CursorClientEvents.getLeftClickAction() == UnitAction.MOLTEN_BOMB) {
             BlockPos limitedBp = MyMath.getXZRangeLimitedBlockPos(getOnPos(), CursorClientEvents.getPreselectedBlockPos(), MoltenBomb.RANGE);
             for (BlockPos pos : MiscUtil.getLine2D(getOnPos(), limitedBp)) {
-                this.highlightBps.add(MiscUtil.getHighestGroundBlock(level(), pos).above().above());
+                this.highlightBps.add(MiscUtil.getHighestGroundBlock(level(), pos).above());
             }
             this.highlightBps.addAll(MiscUtil.getRangeIndicatorFilledCircleBlocks(limitedBp, (int) getMoltenBomb().radius, level()));
         } else if (CursorClientEvents.getLeftClickAction() == UnitAction.SCORCHING_GAZE) {
@@ -417,7 +409,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.castMoltenBombGoal = new GenericTargetedSpellGoal(
                 this,
                 20,
-                InsomniaCurse.RANGE,
+                Integer.MAX_VALUE, // cast without moving to the target location first
                 UnitAnimationAction.CAST_SPELL_ALT,
                 null,
                 this::doFirebomb,
@@ -426,7 +418,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.castScorchingGazeGoal = new GenericTargetedSpellGoal(
                 this,
                 0,
-                InsomniaCurse.RANGE,
+                ScorchingGaze.RANGE,
                 UnitAnimationAction.CAST_SPELL_ALT,
                 this::scorchingGaze,
                 null,

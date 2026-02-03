@@ -4,17 +4,21 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.FirewallShot;
 import com.solegendary.reignofnether.building.RangeIndicator;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.util.MiscUtil;
+import com.solegendary.reignofnether.util.MyMath;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -195,18 +199,32 @@ public class BlazeUnit extends Blaze implements Unit, AttackerUnit, RangedAttack
         Unit.tick(this);
         AttackerUnit.tick(this);
         if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
-            if (!lastOnPos.equals(getOnPos())) {
+            if (!lastOnPos.equals(getOnPos()) || !lastCursorPos.equals(CursorClientEvents.getPreselectedBlockPos())) {
                 updateHighlightBps();
             }
             lastOnPos = getOnPos();
+            lastCursorPos = CursorClientEvents.getPreselectedBlockPos();
         }
     }
 
     private Set<BlockPos> highlightBps = new HashSet<>();
     private BlockPos lastOnPos = new BlockPos(0,0,0);
+    private BlockPos lastCursorPos = new BlockPos(0,0,0);
 
     @Override public Set<BlockPos> getHighlightBps() { return highlightBps; }
     @Override public void setHighlightBps(Set<BlockPos> bps) { highlightBps = bps; }
+
+    @Override public void updateHighlightBps() {
+        if (!level().isClientSide())
+            return;
+        this.highlightBps.clear();
+        if (CursorClientEvents.getLeftClickAction() == UnitAction.SHOOT_FIREWALL) {
+            BlockPos limitedBp = MyMath.getXZRangeLimitedBlockPos(getOnPos(), CursorClientEvents.getPreselectedBlockPos(), FirewallShot.RANGE + 1);
+            for (BlockPos pos : MiscUtil.getLine2D(getOnPos(), limitedBp)) {
+                this.highlightBps.add(MiscUtil.getHighestGroundBlock(level(), pos).above());
+            }
+        }
+    }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
@@ -249,8 +267,8 @@ public class BlazeUnit extends Blaze implements Unit, AttackerUnit, RangedAttack
     @Override
     public void performUnitRangedAttack(LivingEntity pTarget, float velocity) {
         if (!this.abilities.isEmpty() &&
-            this.abilities.get().get(0) instanceof FirewallShot firewallShot &&
-            !firewallShot.isOffCooldown(this))
+                this.abilities.get().get(0) instanceof FirewallShot firewallShot &&
+                !firewallShot.isOffCooldown(this))
             return;
 
         LivingEntity target = this.getTarget();

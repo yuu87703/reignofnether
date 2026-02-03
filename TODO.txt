@@ -30,6 +30,7 @@ Quality of Life
 [❌] rtsapi commands now place neutral units and buildings if the owner name is not specified (instead of it being the player's name)
 
 [✔] Added range indicators for all units with targeted ranged abilities
+    - Blaze Firewall and the Wildfire's Molten Bomb have special line indicators
 [✔] Range indicators are now visible on top of snow layers
 
 Balance

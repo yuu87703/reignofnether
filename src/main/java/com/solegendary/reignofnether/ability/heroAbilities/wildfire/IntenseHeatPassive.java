@@ -18,8 +18,10 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class IntenseHeatPassive extends HeroAbility {
 
+    public static final float MAX_RADIUS = 10;
+
     public IntenseHeatPassive() {
-        super(3, 0, UnitAction.NONE, 0, 0, 0, false);
+        super(3, 0, UnitAction.NONE, 0, 0, MAX_RANGE, false);
     }
 
     public static final float TICK_MULTIPLIER_RANK_1 = 1.5f;
@@ -58,7 +60,7 @@ public class IntenseHeatPassive extends HeroAbility {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.intense_heat") + " " + rankString(hero), true),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1", MAX_RADIUS)),
                 fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip2"))
         );
     }
@@ -68,7 +70,7 @@ public class IntenseHeatPassive extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.intense_heat"), true),
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1", MAX_RADIUS)),
                 fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip2")),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.intense_heat.rank1", TICK_MULTIPLIER_RANK_1), getRank(hero) == 0),
