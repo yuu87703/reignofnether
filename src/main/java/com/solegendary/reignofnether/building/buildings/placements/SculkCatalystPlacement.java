@@ -5,6 +5,8 @@ import com.solegendary.reignofnether.ability.abilities.Sacrifice;
 import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.monsters.SculkCatalyst;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -72,6 +74,12 @@ public class SculkCatalystPlacement extends BuildingPlacement implements RangeIn
                 getNightRange() - BlockClientEvents.VISIBLE_BORDER_ADJ,
                 level, true
         ));
+        if (CursorClientEvents.getLeftClickAction() == UnitAction.SACRIFICE) {
+            this.nightBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(centrePos,
+                    Sacrifice.RANGE - 1,
+                    level
+            ));
+        }
     }
 
     @Override

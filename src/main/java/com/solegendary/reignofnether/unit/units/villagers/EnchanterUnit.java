@@ -418,6 +418,33 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         }
     }
 
+    private Set<BlockPos> highlightBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
+
+    @Override public Set<BlockPos> getHighlightBps() { return highlightBps; }
+    @Override public void setHighlightBps(Set<BlockPos> bps) { highlightBps = bps; }
+
+    @Override public void updateHighlightBps() {
+        if (level().isClientSide()) {
+            highlightBps.clear();
+            for (Ability ability : getAbilities().get()) {
+                if (CursorClientEvents.getLeftClickAction() == ability.action) {
+                    setHighlightBps(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
+                            (int) (ability.range - 1),
+                            level()
+                    ));
+                }
+            }
+            if (auraEnabled) {
+                int radius = MarchOfProgress.RADIUS;
+                this.highlightBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
+                        radius - 1,
+                        level()
+                ));
+            }
+        }
+    }
+
     private float rotlerp(float pAngle, float pTargetAngle, float pMaxIncrease) {
         float f = Mth.wrapDegrees(pTargetAngle - pAngle);
         if (f > pMaxIncrease) {
@@ -581,44 +608,5 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
             }
         }
-
-    }
-
-    private final Set<BlockPos> auraBorderBps = new HashSet<>();
-    private BlockPos lastOnPos = new BlockPos(0,0,0);
-
-    @Override
-    public void updateHighlightBps() {
-        if (!level().isClientSide())
-            return;
-        if (!auraEnabled)
-            return;
-        this.auraBorderBps.clear();
-        int radius = MarchOfProgress.RADIUS;
-        /*
-        int radius = 0;
-        if (CursorClientEvents.getLeftClickAction() == UnitAction.CIVIL_ENCHANTMENT) {
-            radius = CivilEnchantment.RANGE;
-        } else if (CursorClientEvents.getLeftClickAction() == UnitAction.MARTIAL_ENCHANTMENT) {
-            radius = MartialEnchantment.RANGE;
-        } else if (CursorClientEvents.getLeftClickAction() == UnitAction.PROTECTIVE_ENCHANTMENT) {
-            radius = ProtectiveEnchantment.RANGE;
-        } else if (auraEnabled) {
-            radius = MarchOfProgress.RADIUS;
-        }
-         */
-        this.auraBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
-                radius - 1,
-                level()
-        ));
-    }
-
-    @Override
-    public Set<BlockPos> getHighlightBps() {
-        return auraBorderBps;
-    }
-    @Override
-    public boolean showOnlyWhenSelected() {
-        return true;
     }
 }

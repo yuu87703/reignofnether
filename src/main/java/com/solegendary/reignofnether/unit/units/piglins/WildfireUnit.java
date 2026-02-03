@@ -11,6 +11,10 @@ import com.solegendary.reignofnether.ability.heroAbilities.wildfire.IntenseHeatP
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.SoulsAflame;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
+import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
@@ -355,6 +359,31 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         }
     }
 
+    private Set<BlockPos> highlightBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
+    private BlockPos lastCursorPos = new BlockPos(0,0,0);
+
+    @Override public Set<BlockPos> getHighlightBps() { return highlightBps; }
+    @Override public void setHighlightBps(Set<BlockPos> bps) { highlightBps = bps; }
+
+    @Override public void updateHighlightBps() {
+        if (!level().isClientSide())
+            return;
+        this.highlightBps.clear();
+        if (CursorClientEvents.getLeftClickAction() == UnitAction.MOLTEN_BOMB) {
+            BlockPos limitedBp = MyMath.getXZRangeLimitedBlockPos(getOnPos(), CursorClientEvents.getPreselectedBlockPos(), MoltenBomb.RANGE);
+            for (BlockPos pos : MiscUtil.getLine2D(getOnPos(), limitedBp)) {
+                this.highlightBps.add(MiscUtil.getHighestGroundBlock(level(), pos).above().above());
+            }
+            this.highlightBps.addAll(MiscUtil.getRangeIndicatorFilledCircleBlocks(limitedBp, (int) getMoltenBomb().radius, level()));
+        } else if (CursorClientEvents.getLeftClickAction() == UnitAction.SCORCHING_GAZE) {
+            setHighlightBps(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
+                    ScorchingGaze.RANGE - 1,
+                    level()
+            ));
+        }
+    }
+
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
@@ -425,6 +454,34 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.goalSelector.addGoal(3, moveGoal);
     }
 
+    public MoltenBomb getMoltenBomb() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof MoltenBomb)
+                return (MoltenBomb) ability;
+        return null;
+    }
+
+    public ScorchingGaze getScorchingGaze() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof ScorchingGaze)
+                return (ScorchingGaze) ability;
+        return null;
+    }
+
+    public IntenseHeatPassive getIntenseHeatPassive() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof IntenseHeatPassive)
+                return (IntenseHeatPassive) ability;
+        return null;
+    }
+
+    public SoulsAflame getSoulsAflame() {
+        for (Ability ability : abilities.get())
+            if (ability instanceof SoulsAflame)
+                return (SoulsAflame) ability;
+        return null;
+    }
+
     @Override
     public void performUnitRangedAttack(LivingEntity pTarget, float velocity) {
         if (!this.abilities.isEmpty() &&
@@ -473,31 +530,5 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         AABB aabb = this.getBoundingBox().inflate(0.6f, 0, 0.6f);
         aabb.setMaxY(aabb.maxY + 1.2f);
         return aabb;
-    }
-
-    private final Set<BlockPos> auraBorderBps = new HashSet<>();
-    private BlockPos lastOnPos = new BlockPos(0,0,0);
-    private BlockPos lastCursorPos = new BlockPos(0,0,0);
-
-    @Override
-    public void updateHighlightBps() {
-        if (!level().isClientSide())
-            return;
-        this.auraBorderBps.clear();
-        if (CursorClientEvents.getLeftClickAction() == UnitAction.MOLTEN_BOMB) {
-            BlockPos limitedBp = MyMath.getXZRangeLimitedBlockPos(getOnPos(), CursorClientEvents.getPreselectedBlockPos(), MoltenBomb.RANGE);
-            for (BlockPos pos : MiscUtil.getLine2D(getOnPos(), limitedBp)) {
-                this.auraBorderBps.add(MiscUtil.getHighestGroundBlock(level(), pos).above().above());
-            }
-        }
-    }
-
-    @Override
-    public Set<BlockPos> getHighlightBps() {
-        return auraBorderBps;
-    }
-    @Override
-    public boolean showOnlyWhenSelected() {
-        return true;
     }
 }

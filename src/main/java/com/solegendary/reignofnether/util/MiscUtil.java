@@ -71,6 +71,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.lwjgl.glfw.GLFW;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -555,15 +556,37 @@ public class MiscUtil {
         if (radius <= 0)
             return Set.of();
 
-        ArrayList<BlockPos> bps = new ArrayList<>();
-
         Set<BlockPos> circleBps;
         if (BlockClientEvents.nightCircleMode == NightCircleMode.NO_OVERLAPS && isNightSource)
             circleBps = MiscUtil.CircleUtil.getCircleWithCulledOverlaps(centrePos, radius, BlockClientEvents.nightSourceOrigins);
         else
             circleBps = MiscUtil.CircleUtil.getCircle(centrePos, radius);
 
-        for (BlockPos bp : circleBps) {
+        return new HashSet<>(getHeightAdjustedBlockPoses(level, circleBps.stream().toList()));
+    }
+
+    // like getRangeIndicatorCircleBlocks but returns ALL blocks in the circle, not just on the edge
+    public static Set<BlockPos> getRangeIndicatorFilledCircleBlocks(BlockPos centrePos, int radius, Level level) {
+        if (radius <= 0)
+            return Set.of();
+
+        ArrayList<BlockPos> bps = new ArrayList<>();
+
+        for (int x = -radius; x < radius; x++) {
+            for (int z = -radius; z < radius; z++) {
+                BlockPos bp = new BlockPos(centrePos.getX() + x, centrePos.getY(), centrePos.getZ() + z);
+                if (bp.distToCenterSqr(centrePos.getX(), centrePos.getY(), centrePos.getZ()) < radius * radius) {
+                    bps.add(bp);
+                }
+            }
+        }
+        return new HashSet<>(getHeightAdjustedBlockPoses(level, bps));
+    }
+
+    // given a 2d set of blockPoses, adjust them so they are of the topmost ground block within 3 blocks
+    private static List<BlockPos> getHeightAdjustedBlockPoses(Level level, List<BlockPos> bps) {
+        ArrayList<BlockPos> returnBps = new ArrayList<>();
+        for (BlockPos bp : bps) {
             for (int i = 0; i < 3 ; i++) {
                 int x = bp.getX();
                 int z = bp.getZ();
@@ -574,7 +597,7 @@ public class MiscUtil {
 
                 int groundY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1;
                 BlockPos topBp = new BlockPos(x, groundY, z);
-                bps.add(topBp);
+                returnBps.add(topBp);
 
                 int y = 1;
                 if (level.getBlockState(topBp).getBlock() instanceof LeavesBlock) {
@@ -586,15 +609,12 @@ public class MiscUtil {
                         y += 1;
                     } while (y < 30 && (bs.getBlock() instanceof LeavesBlock || !bs.isSolid()));
                     if (!level.getBlockState(bottomBp.above()).isSolid())
-                        bps.add(bottomBp);
+                        returnBps.add(bottomBp);
                 }
             }
         }
-        return new HashSet<>(bps);
+        return returnBps;
     }
-
-
-
 
     public static class CircleUtil {
 

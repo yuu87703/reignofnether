@@ -161,6 +161,9 @@ public class CursorClientEvents {
         cursorDrawY = Math.max(0, cursorDrawY);
         ResourceLocation texture;
 
+        int cursorXoffset = 0;
+        int cursorYoffset = 0;
+
         if (Keybindings.altMod.isDown() && (leftClickDown || rightClickDown)) {
             RenderSystem.setShaderTexture(0, TEXTURE_HAND_GRAB);
             texture = TEXTURE_HAND_GRAB;
@@ -176,13 +179,16 @@ public class CursorClientEvents {
         } else if (leftClickAction != null || leftClickSandboxAction != null) {
             RenderSystem.setShaderTexture(0, TEXTURE_CROSS);
             texture = TEXTURE_CROSS;
+            cursorXoffset = -8;
+            cursorYoffset = -8;
         } else {
             RenderSystem.setShaderTexture(0, TEXTURE_CURSOR);
             texture = TEXTURE_CURSOR;
         }
         evt.getGuiGraphics().pose().translate(0,0,2500);
         evt.getGuiGraphics().blit(texture,
-                cursorDrawX, cursorDrawY,
+                cursorDrawX + cursorXoffset,
+                cursorDrawY + cursorYoffset,
                 16,
                 16, 16,
                 16, 16,

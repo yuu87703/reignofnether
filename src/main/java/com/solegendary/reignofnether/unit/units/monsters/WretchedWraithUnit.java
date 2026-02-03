@@ -8,9 +8,11 @@ import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizza
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.ChillingScreech;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.FrostBlink;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
+import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.entities.WraithSnowball;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
@@ -63,12 +65,9 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
+public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated, RangeIndicator {
     public final Abilities ABILITIES = new Abilities(
         List.of(
             new Pair<>(new ChillingScreech(), Keybindings.keyQ),
@@ -419,7 +418,19 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
             tickFrostBlink();
             tickBlizzard();
         }
+        if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
+            if (!lastOnPos.equals(getOnPos())) {
+                updateHighlightBps();
+            }
+            lastOnPos = getOnPos();
+        }
     }
+
+    private Set<BlockPos> highlightBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
+
+    @Override public Set<BlockPos> getHighlightBps() { return highlightBps; }
+    @Override public void setHighlightBps(Set<BlockPos> bps) { highlightBps = bps; }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {

@@ -29,7 +29,7 @@ Quality of Life
 [🟡] Made dripstone blocks unpathable by units
 [❌] rtsapi commands now place neutral units and buildings if the owner name is not specified (instead of it being the player's name)
 
-[❌] Give all abilities range indicators
+[✔] Added range indicators for all units with targeted ranged abilities
 [✔] Range indicators are now visible on top of snow layers
 
 Balance
