@@ -10,6 +10,8 @@ import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaz
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.SoulsAflame;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
+import com.solegendary.reignofnether.entities.BlazeUnitFireball;
+import com.solegendary.reignofnether.entities.MoltenBombProjectile;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
@@ -18,6 +20,8 @@ import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
@@ -36,6 +40,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -260,6 +265,11 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     public AnimationDefinition activeAnimDef = null;
     public AnimationState activeAnimState = null;
 
+    // smoother look controls
+    private float targetYaw;
+    private float targetPitch;
+    private int rotateTicksRemaining = 0;
+
     public void stopAllAnimations() {
         idleAnimState.stop();
         walkAnimState.stop();
@@ -284,7 +294,19 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 startAnimation(activeAnimDef);
             }
             case CAST_SPELL -> {
-                activeAnimDef = WildfireAnimations.SPELL_ACTIVATE;
+                activeAnimDef = WildfireAnimations.SPELL_SLAM;
+                activeAnimState = spellActivateAnimState;
+                animateScale = 1.0f;
+                startAnimation(activeAnimDef);
+            }
+            case CAST_SPELL_ALT -> {
+                activeAnimDef = WildfireAnimations.SPELL_STARE;
+                activeAnimState = spellActivateAnimState;
+                animateScale = 1.0f;
+                startAnimation(activeAnimDef);
+            }
+            case ULTIMATE -> {
+                activeAnimDef = WildfireAnimations.ULTIMATE;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
@@ -349,6 +371,17 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
             lastOnPos = getOnPos();
             lastCursorPos = CursorClientEvents.getPreselectedBlockPos();
         }
+        if (rotateTicksRemaining > 0) {
+            float yawStep = Mth.wrapDegrees(targetYaw - getYRot()) / rotateTicksRemaining;
+            float pitchStep = (targetPitch - getXRot()) / rotateTicksRemaining;
+            setYRot(getYRot() + yawStep);
+            setXRot(getXRot() + pitchStep);
+            yRotO = getYRot();
+            xRotO = getXRot();
+            yBodyRot = getYRot();
+            yHeadRot = getYRot();
+            rotateTicksRemaining--;
+        }
     }
 
     private Set<BlockPos> highlightBps = new HashSet<>();
@@ -410,28 +443,51 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 this,
                 20,
                 Integer.MAX_VALUE, // cast without moving to the target location first
-                UnitAnimationAction.CAST_SPELL_ALT,
+                UnitAnimationAction.CAST_SPELL,
                 null,
-                this::doFirebomb,
+                this::doMoltenBomb,
                 null
         );
+        this.castMoltenBombGoal.setOnStartChanneling((BlockPos bp) -> {
+            if (!this.level().isClientSide()) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_MOLTEN_BOMB, blockPosition());
+            }
+            setSmoothLookAtTarget(bp, 10);
+        });
         this.castScorchingGazeGoal = new GenericTargetedSpellGoal(
                 this,
-                0,
+                40,
                 ScorchingGaze.RANGE,
                 UnitAnimationAction.CAST_SPELL_ALT,
                 this::scorchingGaze,
                 null,
                 null
         );
+        this.castMoltenBombGoal.setOnStartChanneling((BlockPos bp) -> {
+            if (!this.level().isClientSide()) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE, blockPosition());
+            }
+            setSmoothLookAtTarget(bp, 10);
+        });
+        this.castScorchingGazeGoal.instantLook = true;
         this.castSoulsAflameGoal = new GenericUntargetedSpellGoal(
                 this,
                 40,
                 this::soulsAflame,
-                UnitAnimationAction.CHARGE_SPELL,
-                UnitAnimationAction.STOP,
-                UnitAnimationAction.CAST_SPELL
+                UnitAnimationAction.ULTIMATE,
+                null,
+                null
         );
+    }
+
+    private void setSmoothLookAtTarget(BlockPos bp, int ticks) {
+        double dx = bp.getX() + 0.5 - getX();
+        double dy = bp.getY() + 0.5 - getEyeY();
+        double dz = bp.getZ() + 0.5 - getZ();
+        double horiz = Math.sqrt(dx * dx + dz * dz);
+        targetYaw = (float)(Math.atan2(dz, dx) * (180F / Math.PI)) - 90F;
+        targetPitch = (float)-(Math.atan2(dy, horiz) * (180F / Math.PI));
+        rotateTicksRemaining = 10;
     }
 
     @Override
@@ -500,8 +556,22 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         }
     }
 
-    public void doFirebomb(BlockPos bp) {
+    public void doMoltenBomb(BlockPos bp) {
+        if (level().isClientSide())
+            return;
 
+        bp = MyMath.getXZRangeLimitedBlockPos(this.blockPosition(), bp, getMoltenBomb().range);
+
+        double x = bp.getCenter().x() - this.getX();
+        double y = bp.getCenter().y() - this.getY(0.5);
+        double z = bp.getCenter().z() - this.getZ();
+        MoltenBombProjectile proj = new MoltenBombProjectile(this.level(), this, x, y, z);
+        proj.setMaxTicks((int) (bp.getCenter().distanceTo(position())) * 2);
+        proj.setPos(this.getEyePosition());
+
+        level().addFreshEntity(proj);
+        proj.setInvulnerable(true);
+        this.level().addFreshEntity(proj);
     }
 
     public void scorchingGaze(LivingEntity targetEntity) {

@@ -12,8 +12,7 @@ New Heroes
 ----------
 
 Wildfire
-    [❌] Molten Bomb: skillshot block highlighting
-         - For performance, only update if the cursor or origin blockPosition changes
+    [❌] Molten Bomb
     [❌] Souls Aflame: make the global flag also change vanilla fire textures
 
 [❌] Overflowing graveyards
@@ -22,7 +21,7 @@ Wildfire
 Bugfixes
 --------
 [✔] Fixed Wraith teleport being the same range at all levels (it was stuck at the rank 2 range of 9 blocks)
-
+[❌] Zeal not doing any bonus damage
 
 Quality of Life
 ---------------

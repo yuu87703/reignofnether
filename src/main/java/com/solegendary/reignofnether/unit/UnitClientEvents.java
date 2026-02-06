@@ -65,6 +65,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
@@ -1337,6 +1338,32 @@ public class UnitClientEvents {
                     new BlockPos(0,0,0)
             ));
         }
+    }
+     */
+
+    /*
+    public static int pitch = 0;
+    public static int yaw = 0;
+
+    @SubscribeEvent
+    public static void onButtonPress2(ScreenEvent.KeyPressed.Pre evt) {
+        if (evt.getKeyCode() == GLFW.GLFW_KEY_LEFT || evt.getKeyCode() == GLFW.GLFW_KEY_RIGHT) {
+            int sign = evt.getKeyCode() == GLFW.GLFW_KEY_LEFT ? -1 : 1;
+            yaw += sign;
+        }
+        else if (evt.getKeyCode() == GLFW.GLFW_KEY_UP || evt.getKeyCode() == GLFW.GLFW_KEY_DOWN) {
+            int sign = evt.getKeyCode() == GLFW.GLFW_KEY_UP ? -1 : 1;
+            pitch += sign;
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onRenderOverLay(RenderGuiOverlayEvent.Pre evt) {
+        MiscUtil.drawDebugStrings(evt.getGuiGraphics(), MC.font, new String[] {
+                "pitch: " +  pitch,
+                "yaw: " + yaw,
+        });
     }
      */
 }

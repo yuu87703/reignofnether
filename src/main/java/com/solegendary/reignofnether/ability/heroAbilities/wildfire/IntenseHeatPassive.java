@@ -21,7 +21,7 @@ public class IntenseHeatPassive extends HeroAbility {
     public static final float MAX_RADIUS = 10;
 
     public IntenseHeatPassive() {
-        super(3, 0, UnitAction.NONE, 0, 0, MAX_RANGE, false);
+        super(3, 0, UnitAction.NONE, 0, 0, MAX_RADIUS, false);
     }
 
     public static final float TICK_MULTIPLIER_RANK_1 = 1.5f;

@@ -38,6 +38,9 @@ public class MoltenBomb extends HeroAbility {
 
     public int damage = DAMAGE_RANK_1;
 
+    public static final int MIN_MAGMA_DURATION = 200;
+    public static final int MAX_MAGMA_DURATION = 300;
+
     public MoltenBomb() {
         super(3, 60, UnitAction.MOLTEN_BOMB, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, RADIUS_RANK_1, false);
     }

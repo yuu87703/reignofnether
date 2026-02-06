@@ -1,4 +1,4 @@
-package com.solegendary.reignofnether.unit.units.piglins;
+package com.solegendary.reignofnether.entities;
 
 import com.solegendary.reignofnether.ability.abilities.FirewallShot;
 import com.solegendary.reignofnether.building.BuildingPlacement;
