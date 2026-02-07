@@ -24,6 +24,8 @@ import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -568,19 +570,20 @@ public class UnitServerEvents {
 
         if (evt.getEntity().hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get())) {
             List<Mob> mobs = MiscUtil.getEntitiesWithinRange(evt.getEntity().position(), ScorchingGaze.SPREAD_RANGE, Mob.class, evt.getEntity().level());
-            ArrayList<Mob> sameOwnerUnits = new ArrayList<>();
+            ArrayList<Mob> friendlyUnits = new ArrayList<>();
             for (Mob mob : mobs) {
                 if (mob instanceof Unit unit1 && evt.getEntity() instanceof Unit unit2 &&
-                    unit1.getOwnerName().equals(unit2.getOwnerName()) && unit1 != unit2) {
-                    sameOwnerUnits.add((Mob) unit1);
+                    getUnitToEntityRelationship(unit1, evt.getEntity()) == Relationship.FRIENDLY && unit1 != unit2) {
+                    friendlyUnits.add((Mob) unit1);
                 }
             }
-            sameOwnerUnits.sort(Comparator.comparing(le -> le.position().distanceToSqr(evt.getEntity().position())));
-            if (!sameOwnerUnits.isEmpty()) {
+            friendlyUnits.sort(Comparator.comparing(le -> le.position().distanceToSqr(evt.getEntity().position())));
+            if (!friendlyUnits.isEmpty()) {
                 int amp = evt.getEntity().getEffect(MobEffectRegistrar.SCORCHING_FIRE.get()).getAmplifier();
                 int duration = (ScorchingGaze.DURATION_RANK_1 + (amp * ScorchingGaze.EXTRA_DURATION_PER_RANK)) * 20;
-                if (sameOwnerUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
+                if (friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
                     MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 12, evt.getEntity().level(), evt.getEntity().position());
+                    SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_END, friendlyUnits.get(0).blockPosition());
                 }
             }
         }
@@ -651,7 +654,8 @@ public class UnitServerEvents {
                             MobEffectRegistrar.BLOODLUST.get(),
                             MobEffectRegistrar.FROST_DAMAGE.get(),
                             MobEffectRegistrar.DISARM.get(),
-                            MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()
+                            MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get(),
+                            MobEffectRegistrar.SCORCHING_FIRE.get()
                     )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)

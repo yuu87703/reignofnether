@@ -91,9 +91,7 @@ public class ScorchingGaze extends HeroAbility {
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip3")),
-                fcs(""),
-                fcs(I18n.get("abilities.reignofnether.charges", maxCharges))
+                fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip3"))
         );
     }
 

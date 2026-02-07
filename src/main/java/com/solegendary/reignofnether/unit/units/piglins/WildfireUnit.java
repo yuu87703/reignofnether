@@ -23,9 +23,7 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
-import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.UnitAction;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.modelling.animations.WildfireAnimations;
@@ -44,10 +42,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -391,6 +386,24 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
             yHeadRot = getYRot();
             rotateTicksRemaining--;
         }
+        if (!level().isClientSide() && getIntenseHeatPassive().getRank(this) > 0 && tickCount % 10 == 0) {
+            List<Mob> nearbyMobs = MiscUtil.getEntitiesWithinRange(position(), IntenseHeatPassive.MAX_RANGE, Mob.class, level());
+            ArrayList<Mob> nearbyEnemies = new ArrayList<>();
+            for (Mob mob : nearbyMobs)
+                if (UnitServerEvents.getUnitToEntityRelationship(this, mob) != Relationship.FRIENDLY)
+                    nearbyEnemies.add(mob);
+            int maxAmp = getIntenseHeatPassive().getMaxAmp();
+
+            for (Mob mob : nearbyEnemies) {
+                double distSqr = distanceToSqr(mob);
+                double minSqr = IntenseHeatPassive.MIN_RANGE * IntenseHeatPassive.MIN_RANGE;
+                double maxSqr = IntenseHeatPassive.MAX_RANGE * IntenseHeatPassive.MAX_RANGE;
+                double t = (distSqr - minSqr) / (maxSqr - minSqr);
+                t = 1 - Mth.clamp(t, 0.0, 1.0);
+                int amp = (int) Math.round(t * maxAmp);
+                mob.addEffect(new MobEffectInstance(MobEffectRegistrar.INTENSE_HEAT.get(), 15, amp, true, true));
+            }
+        }
     }
 
     private Set<BlockPos> highlightBps = new HashSet<>();
@@ -592,6 +605,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 getScorchingGaze().duration * 20,
                 getScorchingGaze().getRank(this) - 1)
         );
+        targetEntity.setSecondsOnFire(getScorchingGaze().duration);
         targetEntity.setSecondsOnFire(getScorchingGaze().duration);
     }
 

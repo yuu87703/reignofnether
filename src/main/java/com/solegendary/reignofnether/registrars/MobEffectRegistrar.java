@@ -46,8 +46,10 @@ public class MobEffectRegistrar {
 
     // Causes a unit to take 2x fire and magma damage, and spreads it to another friendly mob if it dies
     // Higher amplifiers increase the duration of the passed effect
-    public static final RegistryObject<MobEffect> SCORCHING_FIRE = MOB_EFFECTS.register("intense_fire", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203));
-            //.addAttributeModifier(Attributes.MOVEMENT_SPEED, "06d218a6-4328-4df1-8263-5dfc23f0c65c", -0.10, AttributeModifier.Operation.MULTIPLY_BASE));
+    public static final RegistryObject<MobEffect> SCORCHING_FIRE = MOB_EFFECTS.register("scorching_fire", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203));
+    //.addAttributeModifier(Attributes.MOVEMENT_SPEED, "06d218a6-4328-4df1-8263-5dfc23f0c65c", -0.10, AttributeModifier.Operation.MULTIPLY_BASE));
+
+    public static final RegistryObject<MobEffect> INTENSE_HEAT = MOB_EFFECTS.register("intense_heat", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203));
 
     public static final RegistryObject<MobEffect> ATTACK_SLOWDOWN = MOB_EFFECTS.register("attack_slowdown", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.ATTACK_SPEED, "95086ec9-c6cc-41b4-a2ce-9b5cf28011e4", -0.05, AttributeModifier.Operation.MULTIPLY_BASE));

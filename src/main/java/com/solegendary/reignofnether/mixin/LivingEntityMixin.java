@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.mixin;
 
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -12,6 +13,8 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -159,6 +162,23 @@ public abstract class LivingEntityMixin extends Entity {
                     this.getCombatTracker().recordDamage(pDamageSource, f1);
                     this.gameEvent(GameEvent.ENTITY_DAMAGE);
                 }
+            }
+        }
+    }
+
+    @Shadow public boolean hasEffect(MobEffect pEffect) { return true; }
+    @Shadow public MobEffectInstance getEffect(MobEffect pEffect) { return null; }
+
+    @Inject(
+            method = "baseTick",
+            at = @At("TAIL")
+    )
+    public void baseTick(CallbackInfo ci) {
+        if (!this.level().isClientSide && this.remainingFireTicks > 0 && !fireImmune() && hasEffect(MobEffectRegistrar.INTENSE_HEAT.get())) {
+            int amp = Math.min(39, getEffect(MobEffectRegistrar.INTENSE_HEAT.get()).getAmplifier());
+            int fireTicks = (this.remainingFireTicks + 10);
+            if (fireTicks % (80 - (amp * 2)) == 0) {
+                this.hurt(this.damageSources().onFire(), 1.0F);
             }
         }
     }
