@@ -156,6 +156,7 @@ public class SoundClientEvents {
         SOUND_MAP.put(SoundAction.WRETCHED_WRAITH_TELEPORT_END, SoundRegistrar.WRETCHED_WRAITH_TELEPORT_END.get());
         SOUND_MAP.put(SoundAction.WRETCHED_WRAITH_BLIZZARD, SoundRegistrar.WRETCHED_WRAITH_BLIZZARD.get());
         SOUND_MAP.put(SoundAction.WILDFIRE_MOLTEN_BOMB, SoundRegistrar.WILDFIRE_MOLTEN_BOMB.get());
-        SOUND_MAP.put(SoundAction.WILDFIRE_SCORCHING_GAZE, SoundRegistrar.WILDFIRE_SCORCHING_GAZE.get());
+        SOUND_MAP.put(SoundAction.WILDFIRE_SCORCHING_GAZE_START, SoundRegistrar.WILDFIRE_SCORCHING_GAZE_START.get());
+        SOUND_MAP.put(SoundAction.WILDFIRE_SCORCHING_GAZE_END, SoundRegistrar.WILDFIRE_SCORCHING_GAZE_END.get());
     }
 }

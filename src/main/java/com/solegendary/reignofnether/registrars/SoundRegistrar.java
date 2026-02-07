@@ -104,9 +104,13 @@ public class SoundRegistrar {
             SOUND_EVENTS.register("wildfire_molten_bomb", () ->
                     SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_molten_bomb")));
 
-    public static final RegistryObject<SoundEvent> WILDFIRE_SCORCHING_GAZE =
-            SOUND_EVENTS.register("wildfire_scorching_gaze", () ->
-                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_scorching_gaze")));
+    public static final RegistryObject<SoundEvent> WILDFIRE_SCORCHING_GAZE_START =
+            SOUND_EVENTS.register("wildfire_scorching_gaze_start", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_scorching_gaze_start")));
+
+    public static final RegistryObject<SoundEvent> WILDFIRE_SCORCHING_GAZE_END =
+            SOUND_EVENTS.register("wildfire_scorching_gaze_end", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_scorching_gaze_end")));
 
     public static final RegistryObject<SoundEvent> WILDFIRE_HURT =
             SOUND_EVENTS.register("wildfire_hurt", () ->

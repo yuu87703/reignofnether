@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -42,6 +43,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -471,6 +473,9 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 null
         );
         this.castScorchingGazeGoal.setOnStartChanneling((BlockPos bp) -> {
+            if (!this.level().isClientSide()) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_START, blockPosition(), 1.5f);
+            }
             setSmoothLookAtTarget(bp, 10);
         });
         this.castScorchingGazeGoal.instantLook = true;
@@ -580,8 +585,10 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
 
     public void scorchingGaze(LivingEntity targetEntity) {
         if (!this.level().isClientSide()) {
-            SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE, blockPosition());
+            SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_END, blockPosition());
         }
+        targetEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.INTENSE_FIRE.get(), getScorchingGaze().duration * 20));
+        targetEntity.setSecondsOnFire(getScorchingGaze().duration);
     }
 
     public void soulsAflame() {

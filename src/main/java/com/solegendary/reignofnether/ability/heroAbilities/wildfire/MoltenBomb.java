@@ -26,7 +26,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class MoltenBomb extends HeroAbility {
 
-    public static final int RANGE = 15;
+    public static final int RANGE = 18;
 
     public static final int DAMAGE_RANK_1 = 6;
     public static final int DAMAGE_RANK_2 = 8;

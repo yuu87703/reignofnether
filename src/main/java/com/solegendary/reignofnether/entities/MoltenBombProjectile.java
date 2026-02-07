@@ -6,6 +6,8 @@ import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.unit.units.piglins.WildfireUnit;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -96,5 +98,10 @@ public class MoltenBombProjectile extends Fireball {
             }
         }
         discard();
+    }
+
+    @Override
+    protected ParticleOptions getTrailParticle() {
+        return ParticleTypes.SMOKE;
     }
 }

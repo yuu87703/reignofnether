@@ -24,7 +24,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class ScorchingGaze extends HeroAbility {
 
-    public static final int RANGE = 12;
+    public static final int RANGE = 15;
     public static final int DURATION_RANK_1 = 8;
     public static final int DURATION_RANK_2 = 11;
     public static final int DURATION_RANK_3 = 14;

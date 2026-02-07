@@ -67,6 +67,10 @@ public class WildfireModel<T extends Entity> extends KeyframeHierarchicalModel<T
 		return this.main;
 	}
 
+	public ModelPart getHead() {
+		return this.head;
+	}
+
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();

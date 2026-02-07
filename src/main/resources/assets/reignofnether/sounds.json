@@ -108,9 +108,13 @@
         "subtitle": "sounds.reignofnether.wildfire_molten_bomb",
         "sounds": [ "reignofnether:wildfire_molten_bomb" ]
     },
-    "wildfire_scorching_gaze": {
-        "subtitle": "sounds.reignofnether.wildfire_scorching_gaze",
-        "sounds": [ "reignofnether:wildfire_scorching_gaze" ]
+    "wildfire_scorching_gaze_start": {
+        "subtitle": "sounds.reignofnether.wildfire_scorching_gaze_start",
+        "sounds": [ "reignofnether:wildfire_scorching_gaze_start" ]
+    },
+    "wildfire_scorching_gaze_end": {
+        "subtitle": "sounds.reignofnether.wildfire_scorching_gaze_end",
+        "sounds": [ "reignofnether:wildfire_scorching_gaze_end" ]
     },
     "wildfire_hurt": {
         "subtitle": "sounds.reignofnether.wildfire_hurt",
