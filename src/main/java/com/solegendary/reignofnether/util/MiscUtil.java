@@ -813,7 +813,11 @@ public class MiscUtil {
             double d0 = rand.nextGaussian() * 0.2;
             double d1 = rand.nextGaussian() * 0.2;
             double d2 = rand.nextGaussian() * 0.2;
-            level.addParticle(particleType, pos.x, pos.y, pos.z, d0, d1, d2);
+            if (level.isClientSide()) {
+                level.addParticle(particleType, pos.x, pos.y, pos.z, d0, d1, d2);
+            } else {
+                ((ServerLevel) level).sendParticles(particleType, pos.x, pos.y, pos.z, 1, d0, d1, d2, 0);
+            }
         }
     }
 

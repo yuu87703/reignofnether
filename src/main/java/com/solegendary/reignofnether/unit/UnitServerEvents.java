@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
@@ -35,6 +36,7 @@ import com.solegendary.reignofnether.util.EnchantmentUtil;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -563,6 +565,25 @@ public class UnitServerEvents {
                 }
             }
         }
+
+        if (evt.getEntity().hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get())) {
+            List<Mob> mobs = MiscUtil.getEntitiesWithinRange(evt.getEntity().position(), ScorchingGaze.SPREAD_RANGE, Mob.class, evt.getEntity().level());
+            ArrayList<Mob> sameOwnerUnits = new ArrayList<>();
+            for (Mob mob : mobs) {
+                if (mob instanceof Unit unit1 && evt.getEntity() instanceof Unit unit2 &&
+                    unit1.getOwnerName().equals(unit2.getOwnerName())) {
+                    sameOwnerUnits.add((Mob) unit1);
+                }
+            }
+            sameOwnerUnits.sort(Comparator.comparing(le -> le.position().distanceToSqr(le.position())));
+            if (!mobs.isEmpty()) {
+                int amp = evt.getEntity().getEffect(MobEffectRegistrar.SCORCHING_FIRE.get()).getAmplifier();
+                int duration = (ScorchingGaze.DURATION_RANK_1 + (amp * ScorchingGaze.EXTRA_DURATION_PER_RANK)) * 20;
+                if (mobs.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
+                    MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 12, evt.getEntity().level(), evt.getEntity().position());
+                }
+            }
+        }
     }
 
     // prevent onDropItem firing twice if the same animal is killed by two workers on the same tick
@@ -928,6 +949,9 @@ public class UnitServerEvents {
             if (zealLevel > 0) {
                 evt.setAmount(evt.getAmount() + zealLevel);
             }
+        }
+        if (evt.getEntity().hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get()) && evt.getSource().is(DamageTypeTags.IS_FIRE)) {
+            evt.setAmount(evt.getAmount() * 2);
         }
     }
 

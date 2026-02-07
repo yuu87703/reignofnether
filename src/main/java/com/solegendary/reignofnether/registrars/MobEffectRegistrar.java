@@ -4,8 +4,6 @@ import com.solegendary.reignofnether.ReignOfNether;
 import net.minecraft.world.effect.InstantenousMobEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -46,8 +44,9 @@ public class MobEffectRegistrar {
     public static final RegistryObject<MobEffect> DAMAGE_TAKEN_INCREASE = MOB_EFFECTS.register("damage_taken_increase", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.LUCK, "e0772108-0408-4fa3-ad55-f90f5595d610", -0.05, AttributeModifier.Operation.ADDITION));
 
-    // Causes a unit to take fire damage at 2x tick rate, and explodes if it dies
-    public static final RegistryObject<MobEffect> INTENSE_FIRE = MOB_EFFECTS.register("intense_fire", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203)
+    // Causes a unit to take fire damage at 2x rate, and spreads it to another friendly mob if it dies
+    // Higher amplifiers increase the duration of the passed effect
+    public static final RegistryObject<MobEffect> SCORCHING_FIRE = MOB_EFFECTS.register("intense_fire", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, "06d218a6-4328-4df1-8263-5dfc23f0c65c", -0.20, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
     public static final RegistryObject<MobEffect> ATTACK_SLOWDOWN = MOB_EFFECTS.register("attack_slowdown", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)

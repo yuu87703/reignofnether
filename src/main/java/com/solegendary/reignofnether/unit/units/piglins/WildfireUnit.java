@@ -587,7 +587,11 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         if (!this.level().isClientSide()) {
             SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_END, blockPosition());
         }
-        targetEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.INTENSE_FIRE.get(), getScorchingGaze().duration * 20));
+        targetEntity.addEffect(new MobEffectInstance(
+                MobEffectRegistrar.SCORCHING_FIRE.get(),
+                getScorchingGaze().duration * 20,
+                getScorchingGaze().getRank(this) - 1)
+        );
         targetEntity.setSecondsOnFire(getScorchingGaze().duration);
     }
 
