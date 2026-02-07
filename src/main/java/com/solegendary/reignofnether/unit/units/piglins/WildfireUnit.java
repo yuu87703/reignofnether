@@ -575,7 +575,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         double y = bp.getCenter().y() - this.getY(0.5);
         double z = bp.getCenter().z() - this.getZ();
         MoltenBombProjectile proj = new MoltenBombProjectile(this.level(), this, x, y, z);
-        proj.setMaxTicks(((int) (bp.getCenter().distanceTo(position())) * 2) + 5);
+        proj.setMaxTicks((int) (bp.getCenter().distanceTo(position())) * 2);
         proj.setPos(this.getEyePosition());
 
         level().addFreshEntity(proj);

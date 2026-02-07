@@ -571,15 +571,15 @@ public class UnitServerEvents {
             ArrayList<Mob> sameOwnerUnits = new ArrayList<>();
             for (Mob mob : mobs) {
                 if (mob instanceof Unit unit1 && evt.getEntity() instanceof Unit unit2 &&
-                    unit1.getOwnerName().equals(unit2.getOwnerName())) {
+                    unit1.getOwnerName().equals(unit2.getOwnerName()) && unit1 != unit2) {
                     sameOwnerUnits.add((Mob) unit1);
                 }
             }
-            sameOwnerUnits.sort(Comparator.comparing(le -> le.position().distanceToSqr(le.position())));
-            if (!mobs.isEmpty()) {
+            sameOwnerUnits.sort(Comparator.comparing(le -> le.position().distanceToSqr(evt.getEntity().position())));
+            if (!sameOwnerUnits.isEmpty()) {
                 int amp = evt.getEntity().getEffect(MobEffectRegistrar.SCORCHING_FIRE.get()).getAmplifier();
                 int duration = (ScorchingGaze.DURATION_RANK_1 + (amp * ScorchingGaze.EXTRA_DURATION_PER_RANK)) * 20;
-                if (mobs.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
+                if (sameOwnerUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
                     MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 12, evt.getEntity().level(), evt.getEntity().position());
                 }
             }
