@@ -86,7 +86,7 @@ public class MoltenBombProjectile extends Fireball {
                         level().getBlockState(bp),
                         random.nextInt(MoltenBomb.MIN_MAGMA_DURATION, MoltenBomb.MAX_MAGMA_DURATION),
                         true,
-                        random.nextBoolean() && !isSolidBlocking(level(), bp.above()) ? Blocks.FIRE.defaultBlockState() : null
+                        random.nextFloat() < 0.333f && !isSolidBlocking(level(), bp.above()) ? Blocks.FIRE.defaultBlockState() : null
                 );
             }
         }
@@ -94,6 +94,7 @@ public class MoltenBombProjectile extends Fireball {
         for (Mob mob : mobs) {
             mob.hurt(damageSources().explosion(this.getOwner(), this), moltenBomb.damage);
         }
+        MiscUtil.addParticleExplosion(ParticleTypes.LAVA, (int) (moltenBomb.radius * 3), level(), position());
         discard();
     }
 

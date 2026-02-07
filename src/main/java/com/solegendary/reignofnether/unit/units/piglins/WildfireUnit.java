@@ -409,7 +409,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
             for (BlockPos pos : MiscUtil.getLine2D(getOnPos(), limitedBp)) {
                 this.highlightBps.add(MiscUtil.getHighestGroundBlock(level(), pos).above());
             }
-            this.highlightBps.addAll(MiscUtil.getRangeIndicatorFilledCircleBlocks(limitedBp, (int) getMoltenBomb().radius, level()));
+            this.highlightBps.addAll(MiscUtil.getRangeIndicatorFilledCircleBlocks(limitedBp, (int) getMoltenBomb().radius - 1, level()));
         } else if (CursorClientEvents.getLeftClickAction() == UnitAction.SCORCHING_GAZE) {
             setHighlightBps(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
                     ScorchingGaze.RANGE - 1,
@@ -575,7 +575,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         double y = bp.getCenter().y() - this.getY(0.5);
         double z = bp.getCenter().z() - this.getZ();
         MoltenBombProjectile proj = new MoltenBombProjectile(this.level(), this, x, y, z);
-        proj.setMaxTicks((int) (bp.getCenter().distanceTo(position())) * 2);
+        proj.setMaxTicks(((int) (bp.getCenter().distanceTo(position())) * 2) + 5);
         proj.setPos(this.getEyePosition());
 
         level().addFreshEntity(proj);
