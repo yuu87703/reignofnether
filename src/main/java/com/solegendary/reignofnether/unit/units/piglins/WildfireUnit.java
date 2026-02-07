@@ -257,6 +257,9 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     private float ageInTicksOffset = 0;
     public float getAgeInTicksOffset() { return ageInTicksOffset; }
     public void setAgeInTicksOffset(float ticks) { ageInTicksOffset = ticks; }
+    public float getAnimationSpeed() {
+        return animateSpeed;
+    }
 
     // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
     final static private int ATTACK_WINDUP_TICKS = 6;
@@ -303,6 +306,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 activeAnimDef = WildfireAnimations.SPELL_STARE;
                 activeAnimState = spellActivateAnimState;
                 animateScale = 1.0f;
+                animateSpeed = 0.75f;
                 startAnimation(activeAnimDef);
             }
             case ULTIMATE -> {
@@ -311,7 +315,10 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
-            default -> animateScaleReducing = true;
+            default -> {
+                animateScaleReducing = true;
+                animateSpeed = 1.0f;
+            }
         }
     }
 
@@ -463,10 +470,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 null,
                 null
         );
-        this.castMoltenBombGoal.setOnStartChanneling((BlockPos bp) -> {
-            if (!this.level().isClientSide()) {
-                SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE, blockPosition());
-            }
+        this.castScorchingGazeGoal.setOnStartChanneling((BlockPos bp) -> {
             setSmoothLookAtTarget(bp, 10);
         });
         this.castScorchingGazeGoal.instantLook = true;
@@ -575,7 +579,9 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     }
 
     public void scorchingGaze(LivingEntity targetEntity) {
-
+        if (!this.level().isClientSide()) {
+            SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE, blockPosition());
+        }
     }
 
     public void soulsAflame() {

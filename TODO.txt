@@ -22,6 +22,8 @@ Bugfixes
 --------
 [✔] Fixed Wraith teleport being the same range at all levels (it was stuck at the rank 2 range of 9 blocks)
 [❌] Zeal not doing any bonus damage
+[❌] Fixed the blizzard sound effect continuing when the wraith is killed
+[❌] Enchanters autocast on neutral illagers
 
 Quality of Life
 ---------------
@@ -35,6 +37,7 @@ Quality of Life
 Balance
 -------
 [✔] Wretched Wraith Frostblink range increased from (6,9,12) to (8,10,12)
+[❌] The Wretched Wraith is now immune to stuns and taunts while channeling Blizzard
 
 Languages
 ---------

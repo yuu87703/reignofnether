@@ -81,6 +81,12 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
         this.setMoveTarget(building.centrePos);
         this.setTarget((LivingEntity) null);
     }
+    public int getChannelTicks() {
+        return channelTicks;
+    }
+    public int getChannelTicksMax() {
+        return channelTicksMax;
+    }
 
     public LivingEntity getTargetEntity() {
         return targetEntity;

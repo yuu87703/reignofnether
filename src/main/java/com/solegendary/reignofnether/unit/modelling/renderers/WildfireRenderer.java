@@ -1,15 +1,14 @@
 package com.solegendary.reignofnether.unit.modelling.renderers;
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import com.solegendary.reignofnether.unit.goals.GenericTargetedSpellGoal;
 import com.solegendary.reignofnether.unit.modelling.models.WildfireModel;
 import com.solegendary.reignofnether.unit.units.piglins.WildfireUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -23,6 +22,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.mojang.blaze3d.vertex.DefaultVertexFormat.*;
 
 @OnlyIn(Dist.CLIENT)
 public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<WildfireUnit>> {
@@ -43,21 +47,50 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
         return WILDFIRE_LOCATION;
     }
 
+    private static final Map<ResourceLocation, RenderType> EYES_ALPHA_CACHE = new ConcurrentHashMap<>();
+
+    public static RenderType eyesWithAlpha(ResourceLocation texture) {
+        return EYES_ALPHA_CACHE.computeIfAbsent(texture, tex -> {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getRendertypeEyesShader))
+                    .setTextureState(new RenderStateShard.TextureStateShard(tex, false, false))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setCullState(RenderStateShard.NO_CULL)
+                    .setLightmapState(new RenderStateShard.LightmapStateShard(true))
+                    .setOverlayState(new RenderStateShard.OverlayStateShard(true))
+                    .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
+                    .createCompositeState(true);
+
+            return RenderType.create(
+                    "ron_eyes_alpha",
+                    DefaultVertexFormat.NEW_ENTITY,
+                    VertexFormat.Mode.QUADS,
+                    256,
+                    false,
+                    true,
+                    state
+            );
+        });
+    }
+
     @Override
-    public void render(WildfireUnit mob, float yaw, float partialTicks,
+    public void render(WildfireUnit wildfire, float yaw, float partialTicks,
                        PoseStack poseStack, MultiBufferSource buffer,
                        int packedLight) {
 
-        super.render(mob, yaw, partialTicks, poseStack, buffer, packedLight);
+        super.render(wildfire, yaw, partialTicks, poseStack, buffer, packedLight);
 
-        Entity target = mob.getTarget();
-        if (target != null) {
+        GenericTargetedSpellGoal scorchingGazeGoal = wildfire.getCastScorchingGazeGoal();
+        LivingEntity target = scorchingGazeGoal.getTargetEntity();
+        if (scorchingGazeGoal.isCasting() && target != null) {
+            float alpha = Math.min(1.0f, scorchingGazeGoal.getChannelTicks() / 20f);
             renderFireBeam(
-                    mob,
+                    wildfire,
                     target,
                     partialTicks,
                     poseStack,
-                    buffer
+                    buffer,
+                    alpha
             );
         }
     }
@@ -70,7 +103,8 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
             Entity target,
             float partialTick,
             PoseStack poseStack,
-            MultiBufferSource buffer
+            MultiBufferSource buffer,
+            float alpha
     ) {
         float time = source.tickCount + partialTick;
 
@@ -86,11 +120,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
         float dist = Mth.sqrt(dx * dx + dy * dy + dz * dz);
 
         poseStack.pushPose();
-
-        // Move to eye position in model space
         poseStack.translate(0.0D, source.getEyeHeight() + 2.0f, 0.0D);
-
-        // Now rotate toward target
         float yaw = (float)Math.atan2(dx, dz);
         float pitch = (float)Math.atan2(dy, Math.sqrt(dx * dx + dz * dz));
 
@@ -98,7 +128,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
         poseStack.mulPose(Axis.XP.rotationDegrees((-pitch * Mth.RAD_TO_DEG) + 90));
 
         VertexConsumer vertexConsumer =
-                buffer.getBuffer(RenderType.eyes(FIRE_BEAM_TEXTURE));
+                buffer.getBuffer(eyesWithAlpha(FIRE_BEAM_TEXTURE));
 
         float scroll = time * 0.02F;
         float vStart = -1.0F + scroll;
@@ -121,7 +151,6 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
         float r = r1 + (r2 - r1) * pulse;
         float g = g1 + (g2 - g1) * pulse;
         float b = b1 + (b2 - b1) * pulse;
-        float a = 1.0F;
 
         float radius = 0.2F;
         int sides = 4;
@@ -136,7 +165,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
             float z2 = Mth.sin(angle2) * radius;
 
             vertexConsumer.vertex(matrix, x1, 0.0F, z1)
-                    .color(r, g, b, a)
+                    .color(r, g, b, alpha)
                     .uv(0.0F, vEnd)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(LightTexture.pack(15, 15))
@@ -144,7 +173,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
                     .endVertex();
 
             vertexConsumer.vertex(matrix, x1, dist, z1)
-                    .color(r, g, b, a)
+                    .color(r, g, b, alpha)
                     .uv(0.0F, vStart)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(LightTexture.pack(15, 15))
@@ -152,7 +181,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
                     .endVertex();
 
             vertexConsumer.vertex(matrix, x2, dist, z2)
-                    .color(r, g, b, a)
+                    .color(r, g, b, alpha)
                     .uv(1.0F, vStart)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(LightTexture.pack(15, 15))
@@ -160,7 +189,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
                     .endVertex();
 
             vertexConsumer.vertex(matrix, x2, 0.0F, z2)
-                    .color(r, g, b, a)
+                    .color(r, g, b, alpha)
                     .uv(1.0F, vEnd)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
                     .uv2(LightTexture.pack(15, 15))

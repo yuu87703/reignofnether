@@ -401,13 +401,6 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 }
             }
             snowToPlace = newSnowQueue;
-            /*
-            if (getBitterFrost().getRank(this) >= 3 && tickCount % 30 == 0) {
-                if (onGround()) {
-                    BlockServerEvents.placeWraithSnow((ServerLevel) level(), getOnPos().above(), getId());
-                }
-            }
-             */
             // heal while on wraith snow
             int layers = BlockUtils.getWraithSnowLayers(level().getBlockState(getOnPos().above()));
             if (onGround() && layers > 0 && tickCount % (80 / layers) == 0) {
