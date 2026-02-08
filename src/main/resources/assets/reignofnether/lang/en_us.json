@@ -300,6 +300,7 @@
     "abilities.reignofnether.souls_aflame.tooltip1": "Transforms all fire blocks and fire on enemies on the map ",
     "abilities.reignofnether.souls_aflame.tooltip2": "into soulfire for %ds. Soulfire burns for double damage,",
     "abilities.reignofnether.souls_aflame.tooltip3": "cannot be extinguished and ignores fire resistance.",
+    "abilities.reignofnether.souls_aflame.already_active": "Souls Aflame is already active",
 
     "abilities.reignofnether.mace_slam": "Mace Slam",
     "abilities.reignofnether.mace_slam.stats": "\uE006  %d   \uE004  %ds   \uE008  %d",

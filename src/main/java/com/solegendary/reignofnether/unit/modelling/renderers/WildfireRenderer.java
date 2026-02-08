@@ -4,6 +4,7 @@ package com.solegendary.reignofnether.unit.modelling.renderers;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.goals.GenericTargetedSpellGoal;
 import com.solegendary.reignofnether.unit.modelling.models.WildfireModel;
 import com.solegendary.reignofnether.unit.units.piglins.WildfireUnit;
@@ -36,6 +37,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
     public static final float SCALE_MULT = 1.0f;
 
     private static final ResourceLocation WILDFIRE_LOCATION = ResourceLocation.fromNamespaceAndPath("reignofnether", "textures/entities/wildfire_unit.png");
+    private static final ResourceLocation SOUL_WILDFIRE_LOCATION = ResourceLocation.fromNamespaceAndPath("reignofnether", "textures/entities/soulfire_wildfire_unit.png");
 
     public WildfireRenderer(EntityRendererProvider.Context context) {
         super(context, new WildfireModel<>(context.bakeLayer(WildfireModel.LAYER_LOCATION)), 0.5F);
@@ -46,7 +48,10 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
     }
 
     public ResourceLocation getTextureLocation(WildfireUnit pEntity) {
-        return WILDFIRE_LOCATION;
+        if (TimeClientEvents.isSoulsAflameActive())
+            return SOUL_WILDFIRE_LOCATION;
+        else
+            return WILDFIRE_LOCATION;
     }
 
     private static final Map<ResourceLocation, RenderType> EYES_ALPHA_CACHE = new ConcurrentHashMap<>();

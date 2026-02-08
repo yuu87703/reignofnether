@@ -113,8 +113,9 @@ public class AbilityClientboundPacket {
                     }
                     if (this.unitAction == UnitAction.BLOOD_MOON) {
                         TimeClientEvents.setBloodMoonTicks((int) value, this.pos);
-                    }
-                    else if (this.unitAction == UnitAction.SOUL_SIPHON_UPDATE) {
+                    } else if (this.unitAction == UnitAction.SOULS_AFLAME) {
+                        TimeClientEvents.setSoulsAflameTicksLeft((int) value);
+                    } else if (this.unitAction == UnitAction.SOUL_SIPHON_UPDATE) {
                         if (unit instanceof NecromancerUnit necromancer) {
                             necromancer.souls = (int) value;
                             necromancer.updateAbilityButtons();

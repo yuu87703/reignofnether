@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
+import com.solegendary.reignofnether.time.TimeClientEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,9 +25,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityRenderDispatcherMixin {
 
     private static final ResourceLocation SOUL_FIRE_0 =
-            new ResourceLocation("minecraft", "block/soul_fire_0");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "block/soul_fire_0");
     private static final ResourceLocation SOUL_FIRE_1 =
-            new ResourceLocation("minecraft", "block/soul_fire_1");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "block/soul_fire_1");
 
     private static TextureAtlasSprite getSprite(ResourceLocation loc) {
         return Minecraft.getInstance()
@@ -45,8 +46,7 @@ public abstract class EntityRenderDispatcherMixin {
     private void onRenderFlame(PoseStack poseStack, MultiBufferSource pBuffer, Entity pEntity, CallbackInfo ci) {
         if (!FogOfWarClientEvents.isInBrightChunk(pEntity))
             ci.cancel();
-        /*
-        else {
+        else if (TimeClientEvents.isSoulsAflameActive()) {
             ci.cancel();
             TextureAtlasSprite textureatlassprite = getSprite(SOUL_FIRE_0);
             TextureAtlasSprite textureatlassprite1 = getSprite(SOUL_FIRE_1);
@@ -85,6 +85,5 @@ public abstract class EntityRenderDispatcherMixin {
             }
             poseStack.popPose();
         }
-         */
     }
 }

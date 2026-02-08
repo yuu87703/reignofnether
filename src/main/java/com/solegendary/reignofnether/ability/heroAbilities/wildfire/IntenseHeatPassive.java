@@ -18,7 +18,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class IntenseHeatPassive extends HeroAbility {
 
-    public static final float MAX_RANGE = 8;
+    public static final float MAX_RANGE = 10;
     public static final float MIN_RANGE = 2; // range at which max amp is applied
 
     public IntenseHeatPassive() {

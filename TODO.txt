@@ -33,6 +33,7 @@ Quality of Life
 [✔] Added range indicators for all units with targeted ranged abilities
     - Blaze Firewall and the Wildfire's Molten Bomb have special line indicators
 [✔] Range indicators are now visible on top of snow layers
+[❌] Added a button to the map menu that applies a glow effect to all huntable animals
 
 Balance
 -------
