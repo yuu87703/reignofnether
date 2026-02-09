@@ -55,14 +55,9 @@ import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.EvokerFangs;
-import net.minecraft.world.entity.projectile.Fireball;
-import net.minecraft.world.entity.projectile.ThrownTrident;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -90,7 +85,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import static com.solegendary.reignofnether.player.PlayerServerEvents.isRTSPlayer;
-import static com.solegendary.reignofnether.player.PlayerServerEvents.serverLevel;
 import static com.solegendary.reignofnether.resources.ResourcesServerEvents.NEUTRAL_UNIT_BOUNTY_PERCENT;
 
 public class UnitServerEvents {
@@ -655,7 +649,8 @@ public class UnitServerEvents {
                             MobEffectRegistrar.FROST_DAMAGE.get(),
                             MobEffectRegistrar.DISARM.get(),
                             MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get(),
-                            MobEffectRegistrar.SCORCHING_FIRE.get()
+                            MobEffectRegistrar.SCORCHING_FIRE.get(),
+                            MobEffectRegistrar.SOULS_AFLAME.get()
                     )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)
@@ -955,6 +950,10 @@ public class UnitServerEvents {
             }
         }
         if (evt.getEntity().hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get()) && evt.getSource().is(DamageTypeTags.IS_FIRE)) {
+            evt.setAmount(evt.getAmount() * 2);
+        }
+
+        if (evt.getEntity().hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()) && evt.getSource() == evt.getEntity().damageSources().onFire()) {
             evt.setAmount(evt.getAmount() * 2);
         }
     }

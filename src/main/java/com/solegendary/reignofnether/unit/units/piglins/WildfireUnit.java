@@ -2,10 +2,8 @@ package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.FirewallShot;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.BloodMoon;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.IntenseHeatPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
@@ -25,7 +23,6 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
-import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
@@ -58,6 +55,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
@@ -407,6 +405,9 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 mob.addEffect(new MobEffectInstance(MobEffectRegistrar.INTENSE_HEAT.get(), 15, amp, true, true));
             }
         }
+        if (!level().isClientSide() && tickCount % 20 == 0 && hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+            tickSoulsAflame();
+        }
     }
 
     private Set<BlockPos> highlightBps = new HashSet<>();
@@ -615,11 +616,30 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     public void soulsAflame() {
         if (level().isClientSide())
             return;
-        if (TimeServerEvents.isSoulsAflameActive())
+        if (hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()))
             return;
 
-        TimeServerEvents.startSoulsAflame(SoulsAflame.DURATION, this);
-        AbilityClientboundPacket.doAbility(this.getId(), UnitAction.SOULS_AFLAME, SoulsAflame.DURATION);
+        addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), SoulsAflame.DURATION, 0, true, true));
+        tickSoulsAflame();
+        convertNearbyFires();
+    }
+
+    private void tickSoulsAflame() {
+        List<LivingEntity> nearbyUnits = MiscUtil.getEntitiesWithinRange(position(), SoulsAflame.RANGE, LivingEntity.class, level());
+        for (LivingEntity le : nearbyUnits) {
+            if (le != this) {
+                le.addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), 25, 0, true, true));
+            }
+        }
+    }
+
+    private void convertNearbyFires() {
+        // TODO: turn all fires in range into soulfire
+
+        // TODO (not here)
+        // - Mixin baseFireBlock.canSurvive() to be true if in range of this wildfire with the effect active
+        // - Fires should turn back into regular fire if out of range and cannot survive on their block
+        // - Prevent extinguishing fire on entities with the effect on
     }
 
     @Override

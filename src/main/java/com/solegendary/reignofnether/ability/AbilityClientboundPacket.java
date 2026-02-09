@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.ability;
 
+import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
@@ -113,8 +114,6 @@ public class AbilityClientboundPacket {
                     }
                     if (this.unitAction == UnitAction.BLOOD_MOON) {
                         TimeClientEvents.setBloodMoonTicks((int) value, this.pos);
-                    } else if (this.unitAction == UnitAction.SOULS_AFLAME) {
-                        TimeClientEvents.setSoulsAflameTicksLeft((int) value);
                     } else if (this.unitAction == UnitAction.SOUL_SIPHON_UPDATE) {
                         if (unit instanceof NecromancerUnit necromancer) {
                             necromancer.souls = (int) value;

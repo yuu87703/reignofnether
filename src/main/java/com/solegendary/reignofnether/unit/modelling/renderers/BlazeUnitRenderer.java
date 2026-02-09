@@ -1,10 +1,10 @@
 package com.solegendary.reignofnether.unit.modelling.renderers;
 
-import com.solegendary.reignofnether.time.TimeClientEvents;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.unit.units.piglins.BlazeUnit;
 import net.minecraft.client.renderer.entity.BlazeRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.monster.Blaze;
 
 public class BlazeUnitRenderer extends BlazeRenderer {
 
@@ -15,8 +15,8 @@ public class BlazeUnitRenderer extends BlazeRenderer {
         super(p_173933_);
     }
 
-    public ResourceLocation getTextureLocation(Blaze pEntity) {
-        if (TimeClientEvents.isSoulsAflameActive())
+    public ResourceLocation getTextureLocation(BlazeUnit blazeUnit) {
+        if (blazeUnit.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()))
             return SOULFIRE_BLAZE_LOCATION;
         else
             return BLAZE_LOCATION;

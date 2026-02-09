@@ -297,9 +297,9 @@
     "abilities.reignofnether.intense_heat.rank3": "Rank 3: Fire ticks up to %dx faster",
     "abilities.reignofnether.souls_aflame": "Souls Aflame (Ultimate)",
     "abilities.reignofnether.souls_aflame.stats": "\uE004  %ds   \uE008  %d",
-    "abilities.reignofnether.souls_aflame.tooltip1": "Transforms all fire blocks and fire on enemies on the map ",
-    "abilities.reignofnether.souls_aflame.tooltip2": "into soulfire for %ds. Soulfire burns for double damage,",
-    "abilities.reignofnether.souls_aflame.tooltip3": "cannot be extinguished and ignores fire resistance.",
+    "abilities.reignofnether.souls_aflame.tooltip1": "Kindle the souls of all nearby flames and friendly blazes, ",
+    "abilities.reignofnether.souls_aflame.tooltip2": "infusing them with soulfire for %ds. Soulfire burns for 2x",
+    "abilities.reignofnether.souls_aflame.tooltip3": "damage, cannot be extinguished and ignores fire resistance.",
     "abilities.reignofnether.souls_aflame.already_active": "Souls Aflame is already active",
 
     "abilities.reignofnether.mace_slam": "Mace Slam",
@@ -1513,11 +1513,12 @@
     "effect.reignofnether.minor_slowdown": "Minor Slowdown",
     "effect.reignofnether.damage_taken_increase": "Damage Taken Increase",
     "effect.reignofnether.scorching_fire": "Scorching Fire",
-    "effect.reignofnether.intense_heat": "Scorching Fire",
+    "effect.reignofnether.intense_heat": "Intense Heat",
     "effect.reignofnether.attack_slowdown": "Attack Slowdown",
     "effect.reignofnether.temporary_efficiency": "Temporary Efficiency",
     "effect.reignofnether.bloodlust": "Bloodlust",
     "effect.reignofnether.frost_damage": "Frost Damage",
     "effect.reignofnether.enchantment_amplifier": "Enchantment Amplifier",
-    "effect.reignofnether.disarm": "Disarm"
+    "effect.reignofnether.disarm": "Disarm",
+    "effect.reignofnether.souls_aflame": "Souls Aflame"
 }

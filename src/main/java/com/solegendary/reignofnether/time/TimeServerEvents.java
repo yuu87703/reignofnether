@@ -36,9 +36,6 @@ public class TimeServerEvents {
     private static BlockPos bloodMoonTarget = null; // area to spawn enemies
     private static boolean zombieOrSkeleton = true;
 
-    private static int soulsAflameTicksLeft = 0;
-    private static LivingEntity soulsAflameOwner = null;
-
     public static void resetBloodMoon() {
         bloodMoonTicksLeft = 0;
         bloodMoonOwner = null;
@@ -48,19 +45,12 @@ public class TimeServerEvents {
         return bloodMoonTicksLeft > 0;
     }
 
-    public static boolean isSoulsAflameActive() { return soulsAflameTicksLeft > 0; }
-
     public static void startBloodMoon(int tickDuration, Unit owner, BlockPos targetPos) {
         bloodMoonTicksLeft = tickDuration;
         bloodMoonOwner = (LivingEntity) owner;
         bloodMoonTarget = targetPos;
         sendMessageToAllPlayers("abilities.reignofnether.blood_moon.start", 0xFF0000, true, owner.getOwnerName());
         SoundClientboundPacket.playSoundForAllPlayers(SoundAction.RANDOM_CAVE_AMBIENCE);
-    }
-
-    public static void startSoulsAflame(int tickDuration, Unit owner) {
-        soulsAflameTicksLeft = tickDuration;
-        soulsAflameOwner = (LivingEntity) owner;
     }
 
     // spawns one neutral undead unit (zombie or skeleton at random) in each base owned by bloodMoonTarget
@@ -107,13 +97,6 @@ public class TimeServerEvents {
             }
             if (bloodMoonTicksLeft % 20 == 0) {
                 AbilityClientboundPacket.doAbility(bloodMoonOwner.getId(), UnitAction.BLOOD_MOON, bloodMoonTicksLeft, bloodMoonTarget);
-            }
-        }
-
-        if (soulsAflameTicksLeft > 0 && soulsAflameOwner != null) {
-            soulsAflameTicksLeft -= 1;
-            if (bloodMoonTicksLeft % 20 == 0) {
-                AbilityClientboundPacket.doAbility(soulsAflameOwner.getId(), UnitAction.SOULS_AFLAME, soulsAflameTicksLeft);
             }
         }
     }

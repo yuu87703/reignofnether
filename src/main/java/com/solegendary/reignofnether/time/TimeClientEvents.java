@@ -61,9 +61,6 @@ public class TimeClientEvents {
     private static Button bloodMoonButton = getBloodMoonButton();
     private static int bloodMoonTicksLeft = 0;
     private static BlockPos bloodMoonPos = null;
-
-    private static int soulsAflameTicksLeft = 0;
-
     public static void resetBloodMoon() {
         bloodMoonTicksLeft = 0;
         bloodMoonPos = null;
@@ -71,10 +68,6 @@ public class TimeClientEvents {
 
     public static boolean isBloodMoonActive() {
         return bloodMoonTicksLeft > 0;
-    }
-
-    public static boolean isSoulsAflameActive() {
-        return soulsAflameTicksLeft > 0;
     }
 
     private static Button getBloodMoonButton() {
@@ -108,10 +101,6 @@ public class TimeClientEvents {
         } else if (tickDuration <= 0) {
             SoundClientEvents.stopFadeableMusicInstance();
         }
-    }
-
-    public static void setSoulsAflameTicksLeft(int tickDuration) {
-        soulsAflameTicksLeft = tickDuration;
     }
 
     // render directly above the minimap
