@@ -78,4 +78,38 @@ public abstract class EntityMixin {
         float percent = (float)Math.min(this.getTicksFrozen(), 140) / (float)i;
         cir.setReturnValue(Math.min(percent, 0.5f));
     }
+
+    @Inject(
+            method = "extinguishFire()V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void extinguishFire(CallbackInfo ci) {
+        if ((Object)this instanceof LivingEntity le && le.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(
+            method = "playEntityOnFireExtinguishedSound",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void playEntityOnFireExtinguishedSound(CallbackInfo ci) {
+        if ((Object)this instanceof LivingEntity le && le.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(
+            method = "setRemainingFireTicks",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void setRemainingFireTicks(int pRemainingFireTicks, CallbackInfo ci) {
+        if (pRemainingFireTicks <= 0 && (Object)this instanceof LivingEntity le &&
+            le.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+            ci.cancel();
+        }
+    }
 }

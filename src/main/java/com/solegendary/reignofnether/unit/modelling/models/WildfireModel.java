@@ -24,6 +24,7 @@ public class WildfireModel<T extends Entity> extends KeyframeHierarchicalModel<T
 
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_layer"), "main");
+
 	private final ModelPart main;
 	private final ModelPart head;
 	private final ModelPart bodySegment1;

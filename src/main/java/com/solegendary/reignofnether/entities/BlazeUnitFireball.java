@@ -3,14 +3,19 @@ package com.solegendary.reignofnether.entities;
 import com.solegendary.reignofnether.ability.abilities.FirewallShot;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.piglins.BlazeUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -33,21 +38,25 @@ public class BlazeUnitFireball extends SmallFireball {
     public void tick() {
         super.tick();
         if (!this.level().isClientSide() && isFirewallShot) {
+            BlockState fireState = Blocks.FIRE.defaultBlockState();
+            if (getOwner() instanceof Blaze blaze && blaze.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+                fireState = BlockRegistrar.UNEXTINGUISHABLE_SOUL_FIRE.get().defaultBlockState();
+            }
             Block block = this.level().getBlockState(this.getOnPos()).getBlock();
             Block blockBelow = this.level().getBlockState(this.getOnPos().below()).getBlock();
             Block blockBelow2 = this.level().getBlockState(this.getOnPos().below().below()).getBlock();
 
             if (List.of(Blocks.AIR, Blocks.TALL_GRASS, Blocks.GRASS, Blocks.CRIMSON_ROOTS).contains(blockBelow2)) {
                 replacePathWithDirt(this.getOnPos().below().below().below());
-                this.level().setBlockAndUpdate(this.getOnPos().below().below(), Blocks.FIRE.defaultBlockState());
+                this.level().setBlockAndUpdate(this.getOnPos().below().below(), fireState);
             }
             if (List.of(Blocks.AIR, Blocks.TALL_GRASS, Blocks.GRASS, Blocks.CRIMSON_ROOTS).contains(blockBelow)) {
                 replacePathWithDirt(this.getOnPos().below().below());
-                this.level().setBlockAndUpdate(this.getOnPos().below(), Blocks.FIRE.defaultBlockState());
+                this.level().setBlockAndUpdate(this.getOnPos().below(), fireState);
             }
             else if (List.of(Blocks.AIR, Blocks.TALL_GRASS, Blocks.GRASS, Blocks.CRIMSON_ROOTS).contains(block)) {
                 replacePathWithDirt(this.getOnPos());
-                this.level().setBlockAndUpdate(this.getOnPos(), Blocks.FIRE.defaultBlockState());
+                this.level().setBlockAndUpdate(this.getOnPos(), fireState);
             }
         }
         if (tickCount > MAX_TICKS || (tickCount > MAX_TICKS_FIREWALL && isFirewallShot))

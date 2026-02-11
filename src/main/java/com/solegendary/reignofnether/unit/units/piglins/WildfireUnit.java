@@ -52,7 +52,9 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -498,7 +500,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.castScorchingGazeGoal.instantLook = true;
         this.castSoulsAflameGoal = new GenericUntargetedSpellGoal(
                 this,
-                40,
+                20,
                 this::soulsAflame,
                 UnitAnimationAction.ULTIMATE,
                 null,
@@ -634,12 +636,23 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     }
 
     private void convertNearbyFires() {
-        // TODO: turn all fires in range into soulfire
-
-        // TODO (not here)
-        // - Mixin baseFireBlock.canSurvive() to be true if in range of this wildfire with the effect active
-        // - Fires should turn back into regular fire if out of range and cannot survive on their block
-        // - Prevent extinguishing fire on entities with the effect on
+        int range = SoulsAflame.RANGE;
+        int x0 = blockPosition().getX();
+        int y0 = blockPosition().getY();
+        int z0 = blockPosition().getZ();
+        for (int x = -range + x0; x < range + x0; x++) {
+            for (int y = -range + y0; y < range + y0; y++) {
+                for (int z = -range + z0; z < range + z0; z++) {
+                    BlockPos pos = new BlockPos(x, y, z);
+                    if (blockPosition().distToCenterSqr(pos.getCenter()) < range) {
+                        BlockState bs = level().getBlockState(pos);
+                        if (bs.getBlock() == Blocks.FIRE) {
+                            level().setBlockAndUpdate(pos, Blocks.SOUL_FIRE.defaultBlockState());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override

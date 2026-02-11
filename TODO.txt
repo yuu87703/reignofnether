@@ -12,8 +12,11 @@ New Heroes
 ----------
 
 Wildfire
-    [❌] Molten Bomb
-    [❌] Souls Aflame: make the global flag also change vanilla fire textures
+    Souls Aflame:
+    [🟡] Mixin baseFireBlock.canSurvive() to be true if in range of this wildfire with the effect active
+    [❌] Fires should turn back into regular fire if out of range and cannot survive on their block
+    [🟡] Prevent extinguishing fire on entities with the effect on
+    [🟡] Any fire block placed should turn into soulfire immediately
 
 [❌] Overflowing graveyards
 

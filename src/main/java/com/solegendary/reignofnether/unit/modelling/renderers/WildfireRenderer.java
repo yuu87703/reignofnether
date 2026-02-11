@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.goals.GenericTargetedSpellGoal;
 import com.solegendary.reignofnether.unit.modelling.models.WildfireModel;
@@ -49,7 +50,7 @@ public class WildfireRenderer extends MobRenderer<WildfireUnit, WildfireModel<Wi
     }
 
     public ResourceLocation getTextureLocation(WildfireUnit wildfireUnit) {
-        if (w)
+        if (wildfireUnit.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()))
             return SOUL_WILDFIRE_LOCATION;
         else
             return WILDFIRE_LOCATION;

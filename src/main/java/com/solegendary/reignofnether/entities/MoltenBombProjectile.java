@@ -4,6 +4,8 @@ import com.solegendary.reignofnether.ability.heroAbilities.wildfire.MoltenBomb;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.unit.units.piglins.BlazeUnit;
 import com.solegendary.reignofnether.unit.units.piglins.WildfireUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
@@ -14,9 +16,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -79,6 +83,10 @@ public class MoltenBombProjectile extends Fireball {
 
         for (BlockPos bp : bpAndDists.keySet()) {
             if (random.nextFloat() > bpAndDists.get(bp)) {
+                BlockState fireState = Blocks.FIRE.defaultBlockState();
+                if (getOwner() instanceof Blaze blaze && blaze.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+                    fireState = BlockRegistrar.UNEXTINGUISHABLE_SOUL_FIRE.get().defaultBlockState();
+                }
                 BlockServerEvents.addTempBlock(
                         (ServerLevel) level(),
                         bp,
@@ -86,7 +94,7 @@ public class MoltenBombProjectile extends Fireball {
                         level().getBlockState(bp),
                         random.nextInt(MoltenBomb.MIN_MAGMA_DURATION, MoltenBomb.MAX_MAGMA_DURATION),
                         true,
-                        random.nextFloat() < 0.333f && !isSolidBlocking(level(), bp.above()) ? Blocks.FIRE.defaultBlockState() : null
+                        random.nextFloat() < 0.333f && !isSolidBlocking(level(), bp.above()) ? fireState : null
                 );
             }
         }
