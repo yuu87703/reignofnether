@@ -124,6 +124,13 @@ public class SoundRegistrar {
             SOUND_EVENTS.register("wildfire_ambient", () ->
                     SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_ambient")));
 
+    public static final RegistryObject<SoundEvent> WILDFIRE_SOULS_AFLAME =
+            SOUND_EVENTS.register("wildfire_souls_aflame", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_souls_aflame")));
+
+    public static final RegistryObject<SoundEvent> PIGLIN_MERCHANT_LOOT_EXPLOSION =
+            SOUND_EVENTS.register("piglin_merchant_loot_explosion", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "piglin_merchant_loot_explosion")));
 
     public static void init(FMLJavaModLoadingContext context) {
         SOUND_EVENTS.register(context.getModEventBus());

@@ -33,7 +33,7 @@ public class ScorchingGaze extends HeroAbility {
     public int duration = DURATION_RANK_1;
 
     public ScorchingGaze() {
-        super(3, 4, UnitAction.SCORCHING_GAZE, 2 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+        super(3, 40, UnitAction.SCORCHING_GAZE, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
     }
 
     @Override

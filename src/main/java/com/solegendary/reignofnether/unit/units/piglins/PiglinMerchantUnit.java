@@ -17,6 +17,8 @@ import com.solegendary.reignofnether.registrars.ItemRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.resources.ResourceName;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
@@ -426,6 +428,11 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                 UnitAnimationAction.STOP,
                 null
         );
+        this.castLootExplosionGoal.setOnStartChanneling(() -> {
+            if (!this.level().isClientSide()) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.PIGLIN_MERCHANT_LOOT_EXPLOSION, blockPosition());
+            }
+        });
     }
 
     @Override

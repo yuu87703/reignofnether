@@ -506,6 +506,11 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 null,
                 null
         );
+        this.castSoulsAflameGoal.setOnStartChanneling(() -> {
+            if (!this.level().isClientSide()) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SOULS_AFLAME, blockPosition());
+            }
+        });
     }
 
     private void setSmoothLookAtTarget(BlockPos bp, int ticks) {

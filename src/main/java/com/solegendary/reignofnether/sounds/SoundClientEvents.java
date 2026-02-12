@@ -158,5 +158,7 @@ public class SoundClientEvents {
         SOUND_MAP.put(SoundAction.WILDFIRE_MOLTEN_BOMB, SoundRegistrar.WILDFIRE_MOLTEN_BOMB.get());
         SOUND_MAP.put(SoundAction.WILDFIRE_SCORCHING_GAZE_START, SoundRegistrar.WILDFIRE_SCORCHING_GAZE_START.get());
         SOUND_MAP.put(SoundAction.WILDFIRE_SCORCHING_GAZE_END, SoundRegistrar.WILDFIRE_SCORCHING_GAZE_END.get());
+        SOUND_MAP.put(SoundAction.WILDFIRE_SOULS_AFLAME, SoundRegistrar.WILDFIRE_SOULS_AFLAME.get());
+        SOUND_MAP.put(SoundAction.PIGLIN_MERCHANT_LOOT_EXPLOSION, SoundRegistrar.PIGLIN_MERCHANT_LOOT_EXPLOSION.get());
     }
 }

@@ -43,7 +43,7 @@ public class WildfireModel<T extends Entity> extends KeyframeHierarchicalModel<T
 	private final ModelPart shield3;
 	private final ModelPart shield4;
 
-	public WildfireModel(ModelPart root) {
+	public WildfireModel(ModelPart root)  {
 		this.main = root.getChild("main");
 		this.head = this.main.getChild("head");
 		this.bodySegment1 = this.main.getChild("bodySegment1");

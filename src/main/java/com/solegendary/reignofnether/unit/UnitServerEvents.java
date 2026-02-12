@@ -869,18 +869,6 @@ public class UnitServerEvents {
             }
         }
 
-        // ensure projectiles from units do the damage of the unit, not the item
-        if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE) &&
-                evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
-            float dmg = attackerUnit.getUnitAttackDamage();
-            if (evt.getEntity() instanceof Unit unit) {
-                dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
-                dmg *= (1 - unit.getUnitRangedArmorPercentage());
-                dmg *= (1 - unit.getUnitResistPercentage());
-            }
-            evt.setAmount(dmg);
-        }
-
         // ignore added weapon damage for workers
         if (evt.getSource().getEntity() instanceof WorkerUnit && evt.getSource()
             .getEntity() instanceof AttackerUnit attackerUnit) {

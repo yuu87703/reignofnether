@@ -116,6 +116,10 @@
         "subtitle": "sounds.reignofnether.wildfire_scorching_gaze_end",
         "sounds": [ "reignofnether:wildfire_scorching_gaze_end" ]
     },
+    "wildfire_souls_aflame": {
+        "subtitle": "sounds.reignofnether.wildfire_souls_aflame",
+        "sounds": [ "reignofnether:wildfire_souls_aflame" ]
+    },
     "wildfire_hurt": {
         "subtitle": "sounds.reignofnether.wildfire_hurt",
         "sounds": [
@@ -132,6 +136,10 @@
             "reignofnether:wildfire_ambient_03",
             "reignofnether:wildfire_ambient_04"
         ]
+    },
+    "piglin_merchant_loot_explosion": {
+        "subtitle": "sounds.reignofnether.piglin_merchant_loot_explosion",
+        "sounds": [ "reignofnether:piglin_merchant_loot_explosion" ]
     }
 }
 

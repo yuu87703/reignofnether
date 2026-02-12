@@ -119,15 +119,15 @@ public abstract class LivingEntityMixin extends Entity {
             cancellable = true
     )
     protected void actuallyHurt(DamageSource pDamageSource, float pDamageAmount, CallbackInfo ci) {
-        // ensure projectiles from units do the damage of the unit, not the item
+        // ensure projectiles from units do the damage of the unit, not the item,
+        // and that armour and anti-armour effects are considered through absorption
         if ((pDamageSource.is(DamageTypeTags.IS_PROJECTILE) ||
             !pDamageSource.is(DamageTypeTags.WITCH_RESISTANT_TO) &&
             !pDamageSource.is(DamageTypeTags.IS_FIRE) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_SHIELD) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_ARMOR) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_RESISTANCE)) &&
-            pDamageSource.getEntity() instanceof AttackerUnit attackerUnit &&
-            this.getAbsorptionAmount() > 0) {
+            pDamageSource.getEntity() instanceof AttackerUnit attackerUnit) {
 
             ci.cancel();
 
@@ -144,7 +144,6 @@ public abstract class LivingEntityMixin extends Entity {
                 if (dmg <= 0.0F) {
                     return;
                 }
-                dmg = this.getDamageAfterArmorAbsorb(pDamageSource, dmg);
                 dmg = this.getDamageAfterMagicAbsorb(pDamageSource, dmg);
                 float f1 = Math.max(dmg - this.getAbsorptionAmount(), 0.0F);
                 this.setAbsorptionAmount(this.getAbsorptionAmount() - (dmg - f1));
