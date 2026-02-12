@@ -845,6 +845,7 @@ public class MiscUtil {
                 EntityRegistrar.DROWNED_UNIT.get(),
                 EntityRegistrar.SKELETON_UNIT.get(),
                 EntityRegistrar.STRAY_UNIT.get(),
+                EntityRegistrar.BOGGED_UNIT.get(),
                 EntityRegistrar.GRUNT_UNIT.get(),
                 EntityRegistrar.BRUTE_UNIT.get(),
                 EntityRegistrar.HEADHUNTER_UNIT.get(),

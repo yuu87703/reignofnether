@@ -131,6 +131,7 @@ public class SandboxClientEvents {
                 ProductionItems.DROWNED.getPlaceButton(),
                 ProductionItems.HUSK.getPlaceButton(),
                 ProductionItems.SKELETON.getPlaceButton(),
+                ProductionItems.BOGGED.getPlaceButton(),
                 ProductionItems.STRAY.getPlaceButton(),
                 ProductionItems.SPIDER.getPlaceButton(),
                 ProductionItems.POISON_SPIDER.getPlaceButton(),

@@ -40,6 +40,8 @@ public class SkeletonProd extends ProductionItem {
             if (!level.isClientSide()) {
                 if (ResearchServerEvents.playerHasResearch(placement.ownerName, ProductionItems.RESEARCH_STRAYS))
                     placement.produceUnit((ServerLevel) level, EntityRegistrar.STRAY_UNIT.get(), placement.ownerName, true);
+                else if (ResearchServerEvents.playerHasResearch(placement.ownerName, ProductionItems.RESEARCH_BOGGED))
+                    placement.produceUnit((ServerLevel) level, EntityRegistrar.BOGGED_UNIT.get(), placement.ownerName, true);
                 else
                     placement.produceUnit((ServerLevel) level, EntityRegistrar.SKELETON_UNIT.get(), placement.ownerName, true);
             }
@@ -48,6 +50,24 @@ public class SkeletonProd extends ProductionItem {
 
     public String getItemName() {
         return SkeletonProd.itemName;
+    }
+
+    private static ResourceLocation getIcon() {
+        if (ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS))
+            return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/stray.png");
+        else if (ResearchClient.hasResearch(ProductionItems.RESEARCH_BOGGED))
+            return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/bogged.png");
+        else
+            return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/skeleton.png");
+    }
+
+    private static String getCancelName() {
+        if (ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS))
+            return "Stray";
+        else if (ResearchClient.hasResearch(ProductionItems.RESEARCH_BOGGED))
+            return "Bogged";
+        else
+            return "Skeleton";
     }
 
     public UnitSpawnButton getPlaceButton() {
@@ -67,9 +87,7 @@ public class SkeletonProd extends ProductionItem {
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new StartProductionButton(
             SkeletonProd.itemName,
-            ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS) ?
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/stray.png") :
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/skeleton.png"),
+            getIcon(),
             hotkey,
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS),
             () -> true,
@@ -88,10 +106,8 @@ public class SkeletonProd extends ProductionItem {
 
     public StopProductionButton getCancelButton(ProductionPlacement prodBuilding, boolean first) {
         return new StopProductionButton(
-            ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS) ? "Stray" : "Skeleton",
-            ResearchClient.hasResearch(ProductionItems.RESEARCH_STRAYS) ?
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/stray.png") :
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/skeleton.png"),
+            getCancelName(),
+            getIcon(),
             prodBuilding,
             this,
             first

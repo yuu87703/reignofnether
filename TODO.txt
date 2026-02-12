@@ -19,6 +19,7 @@ Wildfire
     [🟡] Any fire block placed should turn into soulfire immediately
 
     [❌] Attack should be more accurate and actually do the attack damage correctly
+    [❌] Get fixed ult original animation from 20-sided
 
 
 [❌] Overflowing graveyards

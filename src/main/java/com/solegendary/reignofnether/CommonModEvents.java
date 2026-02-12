@@ -76,6 +76,7 @@ public class CommonModEvents {
         evt.registerEntityRenderer(EntityRegistrar.HUSK_UNIT.get(), HuskRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.DROWNED_UNIT.get(), DrownedRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.STRAY_UNIT.get(), StrayRenderer::new);
+        evt.registerEntityRenderer(EntityRegistrar.BOGGED_UNIT.get(), BoggedUnitRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.CREEPER_UNIT.get(), CreeperRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.SPIDER_UNIT.get(), SpiderRenderer::new);
         evt.registerEntityRenderer(EntityRegistrar.POISON_SPIDER_UNIT.get(), PoisonSpiderUnitRenderer::new);
@@ -142,6 +143,7 @@ public class CommonModEvents {
         evt.put(EntityRegistrar.HUSK_UNIT.get(), HuskUnit.createAttributes().build());
         evt.put(EntityRegistrar.DROWNED_UNIT.get(), DrownedUnit.createAttributes().build());
         evt.put(EntityRegistrar.STRAY_UNIT.get(), StrayUnit.createAttributes().build());
+        evt.put(EntityRegistrar.BOGGED_UNIT.get(), BoggedUnit.createAttributes().build());
         evt.put(EntityRegistrar.CREEPER_UNIT.get(), CreeperUnit.createAttributes().build());
         evt.put(EntityRegistrar.SPIDER_UNIT.get(), SpiderUnit.createAttributes().build());
         evt.put(EntityRegistrar.POISON_SPIDER_UNIT.get(), SpiderUnit.createAttributes().build());
