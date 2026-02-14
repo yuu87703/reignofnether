@@ -14,11 +14,10 @@ New Heroes
 Wildfire
     Souls Aflame:
     [🟡] Mixin baseFireBlock.canSurvive() to be true if in range of this wildfire with the effect active
-    [🟡] Fires should turn back into regular fire if out of range and cannot survive on their block
     [🟡] Prevent extinguishing fire on entities with the effect on
-    [🟡] Any fire block placed should turn into soulfire immediately
-
-    [🟡] Attack should be more accurate and actually do the attack damage correctly
+    [🟡] Souls aflame tests:
+        - Damage of all fire sources (should only do 2x tick damage)
+        - Interaction with all other spells
 
 
 [❌] Overflowing graveyards
@@ -31,8 +30,7 @@ Wildfire
     - needs a lab upgrade - possession?
 
 [✔] Bogged
-    - Should prioritise attacking non-poisoned enemies in range if possible
-    - Or pass through poisoned enemies?
+    [❌] Make undead not immune to poison
 
 Bugfixes
 --------
@@ -57,7 +55,8 @@ Balance
 -------
 [✔] Blaze attack damage reduced from 0.5 to 0
 [✔] Wretched Wraith Frostblink range increased from (6,9,12) to (8,10,12)
-[🟡] The Wretched Wraith is now immune to stuns and taunts while channeling Blizzard
+[🟡] The Wretched Wraith is now immune to stuns and taunts and has 30% additional physical armour while channeling Blizzard
+[ ] Undead units are no longer immune to poison
 
 Languages
 ---------

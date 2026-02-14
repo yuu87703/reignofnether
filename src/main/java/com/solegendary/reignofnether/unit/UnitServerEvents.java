@@ -19,6 +19,7 @@ import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.entities.BlazeUnitFireball;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
@@ -61,6 +62,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -78,6 +80,7 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Vector3d;
 
@@ -579,6 +582,9 @@ public class UnitServerEvents {
                 if (friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
                     MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 12, evt.getEntity().level(), evt.getEntity().position());
                     SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_END, friendlyUnits.get(0).blockPosition());
+                    if (evt.getEntity().hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+                        friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), duration + 20, 0, true, true));
+                    }
                 }
             }
         }
@@ -943,6 +949,15 @@ public class UnitServerEvents {
                 evt.setAmount(evt.getAmount() + zealLevel);
             }
         }
+
+        if (evt.getSource().is(DamageTypeTags.IS_FIRE)) {
+            Level level = evt.getEntity().level();
+            Block block = level.getBlockState(evt.getEntity().getOnPos().above()).getBlock();
+            if (block == Blocks.SOUL_FIRE || block == BlockRegistrar.UNEXTINGUISHABLE_SOUL_FIRE.get()) {
+                evt.getEntity().addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), 120, 0, true, true));
+            }
+        }
+
         if (evt.getEntity().hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get()) && evt.getSource().is(DamageTypeTags.IS_FIRE)) {
             evt.setAmount(evt.getAmount() * 2);
         }
@@ -1011,6 +1026,16 @@ public class UnitServerEvents {
             } else if (effect == MobEffectRegistrar.TEMPORARY_EFFICIENCY.get()) {
                 EnchantmentHelper.setEnchantments(new HashMap<>(), evt.getEntity().getMainHandItem());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMobEffectApplicable(MobEffectEvent.Applicable evt) {
+        // allow undead to be poisoned
+        if (evt.getEntity().getMobType() == MobType.UNDEAD &&
+            evt.getEntity() instanceof Unit &&
+            evt.getEffectInstance().getEffect() == MobEffects.POISON) {
+            evt.setResult(Event.Result.ALLOW);
         }
     }
 

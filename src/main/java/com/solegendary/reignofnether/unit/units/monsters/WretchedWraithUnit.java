@@ -46,6 +46,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -334,6 +335,16 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     private int blizzardTicksLeft = 0;
     public boolean isBlizzardInProgress() {
         return blizzardTicksLeft > 0;
+    }
+
+    @Override
+    public double getUnitPhysicalArmorPercentage() {
+        double dmgAfterAbsorb = CombatRules.getDamageAfterAbsorb(
+                1,
+                getArmorValue() + (isBlizzardInProgress() ? 8 : 0),
+                (float)getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        dmgAfterAbsorb += getDamageTakenIncrease();
+        return Math.round((1 - dmgAfterAbsorb)/ 0.01d) * 0.01d;
     }
 
     public WretchedWraithUnit(EntityType<? extends Monster> entityType, Level level) {

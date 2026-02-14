@@ -37,6 +37,7 @@ public class ResearchBogged extends ProductionItem {
                 ResearchServerEvents.addResearch(placement.ownerName, ProductionItems.RESEARCH_BOGGED);
 
                 // convert all skeletons into bogged with the same stats/inventory/etc.
+                /*
                 UnitServerEvents.convertAllToUnit(
                         placement.ownerName,
                     (ServerLevel) level,
@@ -44,6 +45,7 @@ public class ResearchBogged extends ProductionItem {
                         .equals(placement.ownerName),
                     EntityRegistrar.BOGGED_UNIT.get()
                 );
+                 */
             }
         };
     }
