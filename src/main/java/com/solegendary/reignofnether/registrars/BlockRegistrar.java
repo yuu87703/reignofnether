@@ -217,6 +217,7 @@ public class BlockRegistrar {
                             .replaceable()
                             .noCollission()
                             .instabreak()
+                            .randomTicks()
                             .lightLevel((p_152605_) -> 10)));
 
     private static boolean always(BlockState p_50775_, BlockGetter p_50776_, BlockPos p_50777_) {

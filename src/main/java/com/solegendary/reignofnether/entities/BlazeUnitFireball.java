@@ -7,7 +7,9 @@ import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.BlazeUnit;
+import com.solegendary.reignofnether.unit.units.piglins.WildfireUnit;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Blaze;
@@ -80,9 +82,14 @@ public class BlazeUnitFireball extends SmallFireball {
 
             this.onHitEntity(entityHitResult);
             this.level().gameEvent(GameEvent.PROJECTILE_LAND, pResult.getLocation(), GameEvent.Context.of(this, null));
-
+            if (this.getOwner() instanceof LivingEntity le && le.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()) &&
+                entityHitResult.getEntity() instanceof LivingEntity leTarget) {
+                leTarget.addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), 120, 0, false, false));
+            }
             if (!this.level().isClientSide && !targetOnFire && !this.isFirewallShot)
                 this.discard();
+            if (this.getOwner() instanceof WildfireUnit wildfireUnit)
+                entityHitResult.getEntity().hurt(damageSources().mobProjectile(this, wildfireUnit), wildfireUnit.getUnitAttackDamage());
 
         } else if (hitresult$type == HitResult.Type.BLOCK && !isNoPhysics()) {
             BlockHitResult blockhitresult = (BlockHitResult)pResult;

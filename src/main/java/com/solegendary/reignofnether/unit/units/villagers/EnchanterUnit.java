@@ -397,7 +397,8 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         if (auraEnabled && level().isClientSide && tickCount % 20 == 0) {
             List<Mob> mobs = MiscUtil.getEntitiesWithinRange(position(), MarchOfProgress.RADIUS, Mob.class, level());
             for (Mob mob : mobs) {
-                if (mob.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get())) {
+                if (mob.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()) ||
+                    mob.hasEffect(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
                     level().addParticle(
                             ParticleRegistrar.BIG_ENCHANT.get(),
                             mob.position().x,
@@ -556,7 +557,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                     enchantAbility.isOffCooldown(this)) {
 
                 for (Mob mob : MiscUtil.getEntitiesWithinRange(this.position(), AUTOCAST_ENCHANT_RANGE, Mob.class, level())) {
-                    if (enchantAbility.canEnchant(mob)) {
+                    if (enchantAbility.canEnchant(mob) && mob instanceof Unit unit && unit.getOwnerName().equals(getOwnerName())) {
                         enchantAbility.use(level(), this, mob);
                     }
                 }

@@ -16,6 +16,7 @@ import com.solegendary.reignofnether.building.buildings.placements.SculkCatalyst
 import com.solegendary.reignofnether.building.buildings.villagers.IronGolemBuilding;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.entities.BlazeUnitFireball;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
@@ -581,6 +582,9 @@ public class UnitServerEvents {
                 }
             }
         }
+        if (evt.getEntity() instanceof WretchedWraithUnit wretchedWraithUnit) {
+            SoundClientboundPacket.stopSoundWithId(wretchedWraithUnit.getId());
+        }
     }
 
     // prevent onDropItem firing twice if the same animal is killed by two workers on the same tick
@@ -777,6 +781,8 @@ public class UnitServerEvents {
             return true;
         if (projectile instanceof AbstractArrow)
             return true;
+        if (projectile instanceof BlazeUnitFireball)
+            return true;
 
         return evt.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) && evt.getSource().isIndirect()
             && (!(shooter instanceof EvokerUnit));
@@ -931,7 +937,7 @@ public class UnitServerEvents {
                 evt.setAmount(evt.getAmount() + zealLevel);
             }
         }
-        if (evt.getSource().getEntity() instanceof EvokerFangs fangs && fangs.getOwner() instanceof EvokerUnit evokerUnit) {
+        if (evt.getSource().getEntity() instanceof EvokerUnit evokerUnit) {
             int zealLevel = evokerUnit.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.ZEAL.get());
             if (zealLevel > 0) {
                 evt.setAmount(evt.getAmount() + zealLevel);
@@ -989,6 +995,9 @@ public class UnitServerEvents {
         if (evt.getEffectInstance().getEffect() == MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get() &&
             evt.getOldEffectInstance() == null) {
             EnchantmentUtil.updateEnchantLevels(evt.getEntity(), false);
+        }
+        if (evt.getEntity() instanceof Unit unit && MobEffectRegistrar.isInterrupt(evt.getEffectInstance().getEffect()) && unit.uninterruptable()) {
+            evt.setCanceled(true);
         }
     }
 

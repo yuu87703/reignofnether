@@ -52,13 +52,14 @@ public class Laboratory extends ProductionBuilding {
         this.productions.add(ProductionItems.RESEARCH_HUSKS, Keybindings.keyQ);
         this.productions.add(ProductionItems.RESEARCH_DROWNED, Keybindings.keyW);
         this.productions.add(ProductionItems.RESEARCH_STRAYS, Keybindings.keyE);
-        this.productions.add(ProductionItems.RESEARCH_SPIDER_JOCKEYS, Keybindings.keyR);
-        this.productions.add(ProductionItems.RESEARCH_POISON_SPIDERS, Keybindings.keyT);
-        this.productions.add(ProductionItems.RESEARCH_SPIDER_WEBS, Keybindings.keyY);
-        this.productions.add(ProductionItems.RESEARCH_SLIME_CONVERSION, Keybindings.keyU);
-        this.productions.add(ProductionItems.RESEARCH_LAB_LIGHTNING_ROD, Keybindings.keyI);
-        this.productions.add(ProductionItems.RESEARCH_SILVERFISH, Keybindings.keyO);
-        this.productions.add(ProductionItems.RESEARCH_SCULK_AMPLIFIERS, Keybindings.keyP);
+        this.productions.add(ProductionItems.RESEARCH_BOGGED, Keybindings.keyR);
+        this.productions.add(ProductionItems.RESEARCH_SPIDER_JOCKEYS, Keybindings.keyT);
+        this.productions.add(ProductionItems.RESEARCH_POISON_SPIDERS, Keybindings.keyY);
+        this.productions.add(ProductionItems.RESEARCH_SPIDER_WEBS, Keybindings.keyU);
+        this.productions.add(ProductionItems.RESEARCH_SLIME_CONVERSION, Keybindings.keyI);
+        this.productions.add(ProductionItems.RESEARCH_LAB_LIGHTNING_ROD, Keybindings.keyO);
+        this.productions.add(ProductionItems.RESEARCH_SILVERFISH, Keybindings.keyP);
+        this.productions.add(ProductionItems.RESEARCH_SCULK_AMPLIFIERS, Keybindings.keyJ);
     }
 
     public Faction getFaction() {return Faction.MONSTERS;}

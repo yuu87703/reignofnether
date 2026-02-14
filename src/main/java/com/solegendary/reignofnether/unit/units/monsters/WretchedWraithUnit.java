@@ -661,7 +661,6 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
             blizzardTicksLeft -= 1;
             if (blizzardTicksLeft <= 0) {
                 SoundClientboundPacket.stopSoundWithId(getId());
-
             }
         }
         if (blizzardTicksLeft > 0 && blizzardTicksLeft < Blizzard.CHANNEL_DURATION - 20) {
@@ -724,5 +723,8 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         return !isBlizzardInProgress() && !isFrostBlinkInProgress();
     }
 
-
+    @Override
+    public boolean uninterruptable() {
+        return isBlizzardInProgress();
+    }
 }

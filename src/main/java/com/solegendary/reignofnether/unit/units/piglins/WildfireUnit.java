@@ -17,7 +17,9 @@ import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.registrars.ParticleRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -54,10 +56,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
@@ -354,7 +354,8 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 .add(Attributes.MOVEMENT_SPEED, WildfireUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, WildfireUnit.maxHealth)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
-                .add(Attributes.ARMOR, WildfireUnit.armorValue);
+                .add(Attributes.ARMOR, WildfireUnit.armorValue)
+                .add(Attributes.ATTACK_KNOCKBACK, 0);
     }
 
     public void tick() {
@@ -406,9 +407,6 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
                 int amp = (int) Math.round(t * maxAmp);
                 mob.addEffect(new MobEffectInstance(MobEffectRegistrar.INTENSE_HEAT.get(), 15, amp, true, true));
             }
-        }
-        if (!level().isClientSide() && tickCount % 20 == 0 && hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
-            tickSoulsAflame();
         }
     }
 
@@ -500,7 +498,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         this.castScorchingGazeGoal.instantLook = true;
         this.castSoulsAflameGoal = new GenericUntargetedSpellGoal(
                 this,
-                20,
+                54,
                 this::soulsAflame,
                 UnitAnimationAction.ULTIMATE,
                 null,
@@ -575,11 +573,7 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
             double x = target.getX() - this.getX();
             double y = target.getY(0.5) - this.getY(0.5);
             double z = target.getZ() - this.getZ();
-            double distSqr = this.distanceToSqr(target);
-            double dist = Math.sqrt(Math.sqrt(distSqr)) * 0.5;
-            BlazeUnitFireball fireball = new BlazeUnitFireball(this.level(), this,
-                    this.getRandom().triangle(x, 2.297 * dist), y,
-                    this.getRandom().triangle(z, 2.297 * dist), false);
+            BlazeUnitFireball fireball = new BlazeUnitFireball(this.level(), this, x, y, z, false);
             fireball.setPos(fireball.getX(), this.getY(0.5) + 0.5, fireball.getZ());
             this.playSound(SoundEvents.BLAZE_SHOOT, 3.0F, 1.0F);
             this.level().addFreshEntity(fireball);
@@ -621,21 +615,22 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     }
 
     public void soulsAflame() {
-        if (level().isClientSide())
-            return;
         if (hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()))
             return;
 
+        MiscUtil.addParticleExplosion(ParticleRegistrar.BIG_SOUL_FLAME.get(), 15, level(), position().add(0,2,0));
         addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), SoulsAflame.DURATION, 0, true, true));
-        tickSoulsAflame();
-        convertNearbyFires();
+        if (!level().isClientSide()) {
+            convertNearbyBlazes();
+            convertNearbyFires();
+        }
     }
 
-    private void tickSoulsAflame() {
+    private void convertNearbyBlazes() {
         List<LivingEntity> nearbyUnits = MiscUtil.getEntitiesWithinRange(position(), SoulsAflame.RANGE, LivingEntity.class, level());
         for (LivingEntity le : nearbyUnits) {
-            if (le != this) {
-                le.addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), 25, 0, true, true));
+            if (le instanceof BlazeUnit blazeUnit && UnitServerEvents.getUnitToEntityRelationship(this, blazeUnit) == Relationship.FRIENDLY) {
+                le.addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), SoulsAflame.DURATION, 0, true, true));
             }
         }
     }
@@ -649,10 +644,11 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
             for (int y = -range + y0; y < range + y0; y++) {
                 for (int z = -range + z0; z < range + z0; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
-                    if (blockPosition().distToCenterSqr(pos.getCenter()) < range) {
+                    if (blockPosition().distToCenterSqr(pos.getCenter()) < range * range) {
+                        System.out.println(z);
                         BlockState bs = level().getBlockState(pos);
                         if (bs.getBlock() == Blocks.FIRE) {
-                            level().setBlockAndUpdate(pos, Blocks.SOUL_FIRE.defaultBlockState());
+                            level().setBlockAndUpdate(pos, BlockRegistrar.UNEXTINGUISHABLE_SOUL_FIRE.get().defaultBlockState());
                         }
                     }
                 }

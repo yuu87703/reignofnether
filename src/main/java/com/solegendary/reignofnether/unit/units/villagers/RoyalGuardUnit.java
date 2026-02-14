@@ -605,8 +605,12 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
         if (tauntingCry != null && tauntingCry.getRank(this) > 0) {
             for (Mob e : MiscUtil.getEntitiesWithinRange(position(), TauntingCry.RANGE, Mob.class, level())) {
                 if (!(e instanceof AttackerUnit attackerUnit) ||
-                    List.of(Relationship.OWNED, Relationship.FRIENDLY)
-                            .contains(UnitServerEvents.getUnitToEntityRelationship((Unit) attackerUnit, this))) continue;
+                    List.of(Relationship.OWNED, Relationship.FRIENDLY).contains(UnitServerEvents.getUnitToEntityRelationship((Unit) attackerUnit, this))) {
+                    continue;
+                }
+                if (((Unit) e).uninterruptable()) {
+                    continue;
+                }
                 Unit.fullResetBehaviours((Unit) attackerUnit);
                 attackerUnit.setUnitAttackTargetForced(this);
                 ((LivingEntity) attackerUnit).addEffect(new MobEffectInstance(MobEffectRegistrar.UNCONTROLLABLE.get(), tauntingCry.duration));

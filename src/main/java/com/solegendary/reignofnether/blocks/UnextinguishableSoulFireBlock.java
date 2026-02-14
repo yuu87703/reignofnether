@@ -28,7 +28,7 @@ public class UnextinguishableSoulFireBlock extends BaseFireBlock {
 
     @Override
     public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
-        return true;
+        return pLevel.getBlockState(pPos.below()).isSolid();
     }
 
     @Override

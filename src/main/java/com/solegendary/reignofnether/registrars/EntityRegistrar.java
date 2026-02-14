@@ -73,8 +73,8 @@ public class EntityRegistrar {
                     .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
                     .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "stray_unit").toString()));
 
-    public static final RegistryObject<EntityType<StrayUnit>> BOGGED_UNIT = ENTITIES.register("bogged_unit",
-            () -> EntityType.Builder.of(StrayUnit::new, MobCategory.CREATURE)
+    public static final RegistryObject<EntityType<BoggedUnit>> BOGGED_UNIT = ENTITIES.register("bogged_unit",
+            () -> EntityType.Builder.of(BoggedUnit::new, MobCategory.CREATURE)
                     .sized(EntityType.SKELETON.getWidth(), EntityType.SKELETON.getHeight())
                     .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
                     .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "bogged_unit").toString()));
@@ -374,6 +374,7 @@ public class EntityRegistrar {
             case SkeletonProd.itemName -> EntityRegistrar.SKELETON_UNIT.get();
             case ZombieProd.itemName -> EntityRegistrar.ZOMBIE_UNIT.get();
             case StrayProd.itemName -> EntityRegistrar.STRAY_UNIT.get();
+            case BoggedProd.itemName -> EntityRegistrar.BOGGED_UNIT.get();
             case HuskProd.itemName -> EntityRegistrar.HUSK_UNIT.get();
             case DrownedProd.itemName -> EntityRegistrar.DROWNED_UNIT.get();
             case SpiderProd.itemName -> EntityRegistrar.SPIDER_UNIT.get();

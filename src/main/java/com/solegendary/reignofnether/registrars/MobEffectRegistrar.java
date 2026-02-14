@@ -4,12 +4,16 @@ import com.solegendary.reignofnether.ReignOfNether;
 import net.minecraft.world.effect.InstantenousMobEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.stringtemplate.v4.ST;
+
+import java.util.List;
 
 
 public class MobEffectRegistrar {
@@ -60,7 +64,7 @@ public class MobEffectRegistrar {
             .addAttributeModifier(Attributes.ATTACK_SPEED, "95086ec9-c6cc-41b4-a2ce-9b5cf28011e4", -0.05, AttributeModifier.Operation.MULTIPLY_BASE));
 
     // Used to give workers temporary efficiency effects (faster gathering and build speed)
-    public static final RegistryObject<MobEffect> TEMPORARY_EFFICIENCY = MOB_EFFECTS.register("temporary_efficiency", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 3402751)
+    public static final RegistryObject<MobEffect> TEMPORARY_EFFICIENCY = MOB_EFFECTS.register("temporary_efficiency", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 0x68FF52)
             .addAttributeModifier(Attributes.LUCK, "a417cf34-dc4e-4047-8e14-89eece60c2f8", 0.05, AttributeModifier.Operation.MULTIPLY_BASE));
 
     public static final RegistryObject<MobEffect> BLOODLUST = MOB_EFFECTS.register("bloodlust", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 0xFF0000)
@@ -75,6 +79,12 @@ public class MobEffectRegistrar {
 
     public static final RegistryObject<MobEffect> DISARM = MOB_EFFECTS.register("disarm", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.ATTACK_SPEED, "a5faf34d-0155-49cf-9c6e-73f16ad41a42", -1.0f, AttributeModifier.Operation.MULTIPLY_TOTAL));
+
+
+    public static boolean isInterrupt(MobEffect mobEffect) {
+        return mobEffect == STUN.get() ||
+                mobEffect == UNCONTROLLABLE.get();
+    }
 
     public static void init(FMLJavaModLoadingContext context) {
         MOB_EFFECTS.register(context.getModEventBus());

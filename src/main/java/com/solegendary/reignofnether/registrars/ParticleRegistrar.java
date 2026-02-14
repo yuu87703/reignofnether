@@ -17,6 +17,10 @@ public class ParticleRegistrar {
             PARTICLES.register("big_enchant",
                     () -> new SimpleParticleType(false));
 
+    public static final RegistryObject<SimpleParticleType> BIG_SOUL_FLAME =
+            PARTICLES.register("big_soul_flame",
+                    () -> new SimpleParticleType(false));
+
     public static void init(FMLJavaModLoadingContext context) {
         PARTICLES.register(context.getModEventBus());
     }

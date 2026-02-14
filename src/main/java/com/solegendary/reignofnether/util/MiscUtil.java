@@ -23,6 +23,7 @@ import com.solegendary.reignofnether.unit.goals.AbstractMeleeAttackUnitGoal;
 import com.solegendary.reignofnether.unit.goals.FlyingMoveToTargetGoal;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.monsters.BoggedUnit;
 import com.solegendary.reignofnether.unit.units.monsters.PhantomSummon;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
@@ -323,9 +324,24 @@ public class MiscUtil {
         entities.sort(Comparator.comparingDouble(
                 it -> it.position().distanceTo(pos)
         ));
+
+        // prioritise unpoisoned enemies for bogged
+        if (unitMob instanceof BoggedUnit) {
+            for (LivingEntity entity : entities) {
+                if (!(entity.position().distanceTo(new Vec3(unitPosition.x, unitPosition.y, unitPosition.z)) <= range) ||
+                        !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition()) || entity.hasEffect(MobEffects.POISON)) {
+                    continue;
+                }
+                if (isIdleOrMoveAttackable(unitMob, entity, neutralAggro) && hasLineOfSightForAttacks(unitMob, entity)) {
+                    return entity;
+                }
+            }
+        }
         for (LivingEntity entity : entities) {
             if (!(entity.position().distanceTo(new Vec3(unitPosition.x, unitPosition.y, unitPosition.z)) <= range) ||
-                !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition())) continue;
+                !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition())) {
+                continue;
+            }
             if (isIdleOrMoveAttackable(unitMob, entity, neutralAggro) && hasLineOfSightForAttacks(unitMob, entity)) {
                 return entity;
             }

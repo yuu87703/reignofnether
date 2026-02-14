@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.mixin;
 
+import com.solegendary.reignofnether.entities.BlazeUnitFireball;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
@@ -123,7 +124,6 @@ public abstract class LivingEntityMixin extends Entity {
         // and that armour and anti-armour effects are considered through absorption
         if ((pDamageSource.is(DamageTypeTags.IS_PROJECTILE) ||
             !pDamageSource.is(DamageTypeTags.WITCH_RESISTANT_TO) &&
-            !pDamageSource.is(DamageTypeTags.IS_FIRE) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_SHIELD) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_ARMOR) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_RESISTANCE)) &&

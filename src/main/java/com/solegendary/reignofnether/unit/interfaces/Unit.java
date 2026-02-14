@@ -788,4 +788,8 @@ public interface Unit {
         return !(((LivingEntity) this).getMainHandItem().getAllEnchantments().isEmpty()) ||
                !(((LivingEntity) this).getItemBySlot(EquipmentSlot.CHEST).getAllEnchantments().isEmpty());
     }
+
+    default boolean uninterruptable() {
+        return false;
+    }
 }

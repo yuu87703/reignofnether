@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.entities.renderers.ThrowableTntRenderer;
 import com.solegendary.reignofnether.entities.renderers.NecromancerProjectileRenderer;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.particles.BigEnchantParticle;
+import com.solegendary.reignofnether.particles.BigSoulFlameParticle;
 import com.solegendary.reignofnether.registrars.*;
 import com.solegendary.reignofnether.unit.modelling.models.*;
 import com.solegendary.reignofnether.unit.modelling.renderers.*;
@@ -17,6 +18,8 @@ import com.solegendary.reignofnether.unit.units.neutral.*;
 import com.solegendary.reignofnether.unit.units.piglins.*;
 import com.solegendary.reignofnether.unit.units.villagers.*;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -180,8 +183,15 @@ public class CommonModEvents {
     }
 
     @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
     public static void onClientSetupEvent(FMLClientSetupEvent evt) {
-        evt.enqueueWork(() -> MenuScreens.register(ContainerRegistrar.TOPDOWNGUI_CONTAINER.get(), TopdownGui::new));
+        evt.enqueueWork(() -> {
+            MenuScreens.register(ContainerRegistrar.TOPDOWNGUI_CONTAINER.get(), TopdownGui::new);
+            ItemBlockRenderTypes.setRenderLayer(
+                    BlockRegistrar.UNEXTINGUISHABLE_SOUL_FIRE.get(),
+                    RenderType.cutout()
+            );
+        });
     }
 
     @SubscribeEvent
@@ -272,6 +282,10 @@ public class CommonModEvents {
         evt.registerSpriteSet(
                 ParticleRegistrar.BIG_ENCHANT.get(),
                 BigEnchantParticle.Provider::new
+        );
+        evt.registerSpriteSet(
+                ParticleRegistrar.BIG_SOUL_FLAME.get(),
+                BigSoulFlameParticle.Provider::new
         );
     }
 

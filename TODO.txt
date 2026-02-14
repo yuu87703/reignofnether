@@ -18,8 +18,7 @@ Wildfire
     [🟡] Prevent extinguishing fire on entities with the effect on
     [🟡] Any fire block placed should turn into soulfire immediately
 
-    [❌] Attack should be more accurate and actually do the attack damage correctly
-    [❌] Get fixed ult original animation from 20-sided
+    [🟡] Attack should be more accurate and actually do the attack damage correctly
 
 
 [❌] Overflowing graveyards
@@ -31,22 +30,23 @@ Wildfire
     - built at dungeons
     - needs a lab upgrade - possession?
 
-[❌] Bogged
+[✔] Bogged
     - Should prioritise attacking non-poisoned enemies in range if possible
+    - Or pass through poisoned enemies?
 
 Bugfixes
 --------
 [✔] Fixed Wraith teleport being the same range at all levels (it was stuck at the rank 2 range of 9 blocks)
-[❌] Zeal not doing any bonus damage
-[❌] Fixed the blizzard sound effect continuing when the wraith is killed
-[❌] Enchanters autocast on neutral illagers
+[✔] Fixed Zeal enchantments not doing any bonus damage
+[🟡] Fixed the blizzard sound effect continuing when the wraith is killed
+[✔] The Enchanter no longer autocasts enchantments on neutral illagers
 [✔] Fixed negative armour from Wraith Snow and Breaching enchantments not causing additional damage taken
 
 Quality of Life
 ---------------
 [🟡] Made dripstone blocks unpathable by units
 [❌] rtsapi commands now place neutral units and buildings if the owner name is not specified (instead of it being the player's name)
-[❌] Reworked the sound effect of the Piglin Merchant's loot explosion, thanks @GizmoVN!
+[✔] Reworked the sound effect of the Piglin Merchant's loot explosion, thanks @GizmoVN!
 
 [✔] Added range indicators for all units with targeted ranged abilities
     - Blaze Firewall and the Wildfire's Molten Bomb have special line indicators
@@ -55,8 +55,9 @@ Quality of Life
 
 Balance
 -------
+[✔] Blaze attack damage reduced from 0.5 to 0
 [✔] Wretched Wraith Frostblink range increased from (6,9,12) to (8,10,12)
-[❌] The Wretched Wraith is now immune to stuns and taunts while channeling Blizzard
+[🟡] The Wretched Wraith is now immune to stuns and taunts while channeling Blizzard
 
 Languages
 ---------
