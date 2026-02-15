@@ -199,11 +199,11 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         experience = amount;
         setStatsForLevel();
     }
-    private float baseMaxMana = 110;
+    private float baseMaxMana = 120;
     private float maxMana = baseMaxMana;
     private float mana = maxMana;
     private float manaRegenPerSecond = 0.6f;
-    private float manaBonusPerLevel = 7;
+    private float manaBonusPerLevel = 8;
     @Override public float getBaseMaxMana() { return baseMaxMana; }
     @Override public float getMaxMana() { return maxMana; }
     @Override public void setMaxMana(float amount) {
@@ -220,8 +220,8 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     @Override public float getManaRegenPerSecond() { return manaRegenPerSecond; }
     @Override public float getManaBonusPerLevel() { return manaBonusPerLevel; }
 
-    final static public float attackDamage = 2.5f;
-    final static public float attackBonusPerLevel = 0.3f;
+    final static public float attackDamage = 2.0f;
+    final static public float attackBonusPerLevel = 0.25f;
     final static public float attacksPerSecond = 0.75f;
     final static public float maxHealth = 120.0f;
     final static public float maxHealthBonusPerLevel = 12.0f;

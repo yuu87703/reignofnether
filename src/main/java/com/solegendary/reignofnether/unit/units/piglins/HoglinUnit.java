@@ -164,7 +164,7 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
 
-    final static public float maxHealth = 75.0f;
+    final static public float maxHealth = 70.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.31f;
     public int maxResources = 100;

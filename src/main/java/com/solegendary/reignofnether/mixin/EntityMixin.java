@@ -1,7 +1,12 @@
 package com.solegendary.reignofnether.mixin;
 
+import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.resources.ResourceSources;
+import com.solegendary.reignofnether.resources.ResourcesClientEvents;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
@@ -68,6 +73,8 @@ public abstract class EntityMixin {
     @Shadow public abstract Level level();
 
 
+    @Shadow private Level level;
+
     @Inject(
             method = "getPercentFrozen",
             at = @At("HEAD"),
@@ -112,4 +119,19 @@ public abstract class EntityMixin {
             ci.cancel();
         }
     }
+
+    // use this mixin if you want a mob to avoid damage and not even register a damage animation
+    @Inject(
+            method = "isCurrentlyGlowing",
+            at = @At("HEAD"),
+            cancellable=true
+    )
+    private void isCurrentlyGlowing(CallbackInfoReturnable<Boolean> cir) {
+        if (level.isClientSide() && MinimapClientEvents.shouldHighlightAnimals()) {
+            if ((Object) this instanceof LivingEntity le && ResourceSources.isHuntableAnimal(le)) {
+                cir.setReturnValue(true);
+            }
+        }
+    }
+
 }

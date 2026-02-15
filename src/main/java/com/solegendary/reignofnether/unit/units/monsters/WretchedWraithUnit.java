@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.BitterFrostPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.wretchedwraith.Blizzard;
@@ -24,15 +25,9 @@ import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.time.NightUtils;
-import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.Relationship;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
-import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
-import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
-import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
-import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
-import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.modelling.animations.WretchedWraithAnimations;
 import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -169,7 +164,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     }
 
     // combat stats
-    public boolean getWillRetaliate() {return willRetaliate;}
+    public boolean getWillRetaliate() {return !isBlizzardInProgress() && willRetaliate;}
     public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return attacksPerSecond;}
@@ -370,7 +365,9 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         this.castBlizzardGoal.stop();
         if (this.blizzardTicksLeft > 0) {
             blizzardTicksLeft = 0;
-            SoundClientboundPacket.stopSoundWithId(getId());
+            if (!level().isClientSide()) {
+                SoundClientboundPacket.stopSoundWithId(getId());
+            }
         }
     }
 
@@ -420,8 +417,8 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         }
         if (!level().isClientSide()) {
             tickFrostBlink();
-            tickBlizzard();
         }
+        tickBlizzard();
         if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
             if (!lastOnPos.equals(getOnPos())) {
                 updateHighlightBps();
@@ -670,24 +667,48 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     private void tickBlizzard() {
         if (blizzardTicksLeft > 0) {
             blizzardTicksLeft -= 1;
+        }
+        if (!level().isClientSide()) {
             if (blizzardTicksLeft <= 0) {
                 SoundClientboundPacket.stopSoundWithId(getId());
             }
-        }
-        if (blizzardTicksLeft > 0 && blizzardTicksLeft < Blizzard.CHANNEL_DURATION - 20) {
-            if (blizzardTicksLeft % 30 == 0) {
-                freezeRandomNearbyEnemy();
-            }
-            if (blizzardTicksLeft % 3 == 0) {
-                spawnSnowStorm();
+            if (blizzardTicksLeft > 0 && blizzardTicksLeft < Blizzard.CHANNEL_DURATION - 20) {
+                if (blizzardTicksLeft % 30 == 0) {
+                    freezeRandomNearbyEnemy();
+                }
+                if (blizzardTicksLeft % 3 == 0) {
+                    spawnSnowStorm();
+                }
             }
         }
     }
 
+    @Override
+    public boolean isIdle() {
+        boolean idleAttacker = getAttackMoveTarget() == null &&
+                !hasLivingTarget() &&
+                !AttackerUnit.isAttackingBuilding(this);
+
+        // some larger mobs like bears get stuck near their movetarget so nav won't be done but it also won't be null
+        boolean stationaryNearMoveTarget = false;
+        if (this.getMoveGoal().getMoveTarget() != null) {
+            double distToMoveTarget = this.distanceToSqr(this.getMoveGoal().getMoveTarget().getCenter());
+            boolean stationary = this.getDeltaMovement().x == 0 || this.getDeltaMovement().z == 0;
+            stationaryNearMoveTarget = stationary && distToMoveTarget < 4;
+        }
+        return (this.getMoveGoal().getMoveTarget() == null || stationaryNearMoveTarget) &&
+                this.getFollowTarget() == null &&
+                idleAttacker &&
+                !isBlizzardInProgress() &&
+                !isFrostBlinkInProgress();
+    }
+
     public void blizzard() {
-        if (level().isClientSide) return;
         blizzardTicksLeft = Blizzard.CHANNEL_DURATION;
-        SoundClientboundPacket.playFadeableLoopingSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition(), 1.0f, getId());
+        if (!level().isClientSide) {
+            AbilityClientboundPacket.doAbility(getId(), UnitAction.BLIZZARD, blizzardTicksLeft);
+            SoundClientboundPacket.playFadeableLoopingSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition(), 1.0f, getId());
+        }
     }
 
     @Override

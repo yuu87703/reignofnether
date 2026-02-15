@@ -696,6 +696,8 @@
     "hud.map.reignofnether.lock_map.tooltip1.enabled": "Map centre lock: ON",
     "hud.map.reignofnether.lock_map.tooltip1.disabled": "Map centre lock: OFF",
     "hud.map.reignofnether.lock_map.tooltip2": "(click to toggle)",
+    "hud.map.reignofnether.highlight_animals.enabled": "Highlight Huntable Animals: ON",
+    "hud.map.reignofnether.highlight_animals.disabled": "Highlight Huntable Animals: OFF",
     "hud.map.reignofnether.rotate_cw.tooltip1": "Rotate camera clockwise",
     "hud.map.reignofnether.rotate_cw.tooltip2": "(Alt + right-arrow)",
     "hud.map.reignofnether.rotate_ccw.tooltip1": "Rotate camera counter-clockwise",

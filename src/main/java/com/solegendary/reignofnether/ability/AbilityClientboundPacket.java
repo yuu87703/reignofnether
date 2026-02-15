@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.EnchanterAnimations;
 import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
+import com.solegendary.reignofnether.unit.units.monsters.WretchedWraithUnit;
 import com.solegendary.reignofnether.unit.units.piglins.MarauderUnit;
 import com.solegendary.reignofnether.unit.units.villagers.EnchanterUnit;
 import net.minecraft.core.BlockPos;
@@ -130,6 +131,10 @@ public class AbilityClientboundPacket {
                             if (enable) {
                                 enchanterUnit.playSingleAnimation(UnitAnimationAction.ULTIMATE);
                             }
+                        }
+                    } else if (this.unitAction == UnitAction.BLIZZARD) {
+                        if (unit instanceof WretchedWraithUnit wraithUnit) {
+                            wraithUnit.blizzard();
                         }
                     }
                 });

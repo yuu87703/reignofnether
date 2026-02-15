@@ -129,6 +129,11 @@ public class MinimapClientEvents {
     private static final float EXTRA_DARK = 0.10f;
 
     private static boolean lockedMap = false; // does map follow when moving offscreen?
+    private static boolean highlightAnimals = false; // apply glow effect (clientside only) to animals
+
+    public static boolean shouldHighlightAnimals() {
+        return highlightAnimals;
+    }
 
     // objects for tracking serverside Units that don't yet exist on clientside
     private static class MinimapUnit {
@@ -330,8 +335,30 @@ public class MinimapClientEvents {
                 },
                 null,
                 List.of(FormattedCharSequence.forward(lockedMap
-                                ? I18n.get("hud.map.reignofnether.lock_map.tooltip1.enabled")
-                                : I18n.get("hud.map.reignofnether.lock_map.tooltip1.disabled"), Style.EMPTY)
+                        ? I18n.get("hud.map.reignofnether.lock_map.tooltip1.enabled")
+                        : I18n.get("hud.map.reignofnether.lock_map.tooltip1.disabled"), Style.EMPTY)
+                )
+        );
+    }
+
+    public static Button getHighlightAnimalsButton() {
+        return new Button("Highlight Animals",
+                14,
+                highlightAnimals ?
+                        ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/sheep.png") :
+                        ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/sheep_dark.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
+                null,
+                () -> false,
+                () -> !TutorialClientEvents.isAtOrPastStage(TutorialStage.MINIMAP_CLICK) || !largeMap,
+                () -> true,
+                () -> {
+                    highlightAnimals = !highlightAnimals;
+                },
+                null,
+                List.of(FormattedCharSequence.forward(highlightAnimals
+                        ? I18n.get("hud.map.reignofnether.highlight_animals.enabled")
+                        : I18n.get("hud.map.reignofnether.highlight_animals.disabled"), Style.EMPTY)
                 )
         );
     }

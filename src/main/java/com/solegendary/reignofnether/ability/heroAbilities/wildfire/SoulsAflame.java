@@ -28,12 +28,12 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class SoulsAflame extends HeroAbility {
 
-    private static final int CD_MAX = 60; // 360 * ResourceCost.TICKS_PER_SECOND;
-    public static final int DURATION = 60; //45 * ResourceCost.TICKS_PER_SECOND;
+    private static final int CD_MAX = 360 * ResourceCost.TICKS_PER_SECOND;
+    public static final int DURATION = 50 * ResourceCost.TICKS_PER_SECOND;
     public static final int RANGE = 20;
 
     public SoulsAflame() {
-        super(1, 14, UnitAction.SOULS_AFLAME, CD_MAX, 20, 0, false);
+        super(1, 140, UnitAction.SOULS_AFLAME, CD_MAX, 20, 0, false);
     }
 
     @Override

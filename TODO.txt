@@ -13,11 +13,7 @@ New Heroes
 
 Wildfire
     Souls Aflame:
-    [🟡] Mixin baseFireBlock.canSurvive() to be true if in range of this wildfire with the effect active
-    [🟡] Prevent extinguishing fire on entities with the effect on
-    [🟡] Souls aflame tests:
-        - Damage of all fire sources (should only do 2x tick damage)
-        - Interaction with all other spells
+    [❌] Intense heat not working on server?
 
 
 [❌] Overflowing graveyards
@@ -30,15 +26,16 @@ Wildfire
     - needs a lab upgrade - possession?
 
 [✔] Bogged
-    [❌] Make undead not immune to poison
 
 Bugfixes
 --------
 [✔] Fixed Wraith teleport being the same range at all levels (it was stuck at the rank 2 range of 9 blocks)
 [✔] Fixed Zeal enchantments not doing any bonus damage
-[🟡] Fixed the blizzard sound effect continuing when the wraith is killed
+[✔] Fixed the blizzard sound effect continuing when the wraith is killed
 [✔] The Enchanter no longer autocasts enchantments on neutral illagers
 [✔] Fixed negative armour from Wraith Snow and Breaching enchantments not causing additional damage taken
+[✔] Fixed the marauder's tooltip damage incorrectly showing 13 (actual damage unchanged, it's still 7)
+[✔] The Wraith no longer retaliates with auto-attacks during blizzard channeling
 
 Quality of Life
 ---------------
@@ -49,14 +46,16 @@ Quality of Life
 [✔] Added range indicators for all units with targeted ranged abilities
     - Blaze Firewall and the Wildfire's Molten Bomb have special line indicators
 [✔] Range indicators are now visible on top of snow layers
-[❌] Added a button to the map menu that applies a glow effect to all huntable animals
+[✔] Added a button to the map menu that applies a glow effect to all huntable animals
 
 Balance
 -------
 [✔] Blaze attack damage reduced from 0.5 to 0
 [✔] Wretched Wraith Frostblink range increased from (6,9,12) to (8,10,12)
-[🟡] The Wretched Wraith is now immune to stuns and taunts and has 30% additional physical armour while channeling Blizzard
-[ ] Undead units are no longer immune to poison
+[✔] The Wretched Wraith is now immune to stuns and taunts and has 30% additional physical armour while channeling Blizzard
+[✔] Undead units are no longer immune to poison
+[✔] Marauder cost raised from (175 food, 50 wood, 50 ore) to (175 food, 75 wood, 75 ore)
+[✔] Hoglin HP reduced from 75 to 70
 
 Languages
 ---------

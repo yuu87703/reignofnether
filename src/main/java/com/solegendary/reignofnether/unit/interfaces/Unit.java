@@ -625,7 +625,6 @@ public interface Unit {
 
     default boolean isIdle() {
         boolean idleAttacker = true;
-        boolean idleBuildingAttacker = true;
         if (this instanceof AttackerUnit attackerUnit) {
             idleAttacker = attackerUnit.getAttackMoveTarget() == null &&
                     !((Unit) attackerUnit).hasLivingTarget() &&
