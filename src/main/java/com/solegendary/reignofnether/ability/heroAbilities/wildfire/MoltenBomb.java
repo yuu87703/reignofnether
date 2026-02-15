@@ -26,17 +26,20 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class MoltenBomb extends HeroAbility {
 
-    public static final int RANGE = 15;
+    public static final int RANGE = 18;
 
-    public static final int DAMAGE_RANK_1 = 6;
-    public static final int DAMAGE_RANK_2 = 8;
-    public static final int DAMAGE_RANK_3 = 10;
+    public static final int DAMAGE_RANK_1 = 4;
+    public static final int DAMAGE_RANK_2 = 6;
+    public static final int DAMAGE_RANK_3 = 8;
 
     public static final int RADIUS_RANK_1 = 4;
     public static final int RADIUS_RANK_2 = 5;
     public static final int RADIUS_RANK_3 = 6;
 
     public int damage = DAMAGE_RANK_1;
+
+    public static final int MIN_MAGMA_DURATION = 200;
+    public static final int MAX_MAGMA_DURATION = 300;
 
     public MoltenBomb() {
         super(3, 60, UnitAction.MOLTEN_BOMB, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, RADIUS_RANK_1, false);

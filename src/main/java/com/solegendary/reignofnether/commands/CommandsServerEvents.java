@@ -54,6 +54,7 @@ public class CommandsServerEvents {
         dispatcher.register(Commands.literal("rtsapi-place-building")
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("buildingName", StringArgumentType.string())
+                .then(placeBuildingTail(ctx -> ""))
                 .then(Commands.argument("ownerName", StringArgumentType.string())
                     .then(placeBuildingTail(ctx -> StringArgumentType.getString(ctx, "ownerName")))
                 )
@@ -72,6 +73,7 @@ public class CommandsServerEvents {
 
         dispatcher.register(Commands.literal("rtsapi-set-unit-owner")
             .requires(source -> source.hasPermission(2))
+            .then(unitSelectionTail(ctx -> ""))
             .then(Commands.argument("ownerName", StringArgumentType.string())
                 .then(unitSelectionTail(ctx -> StringArgumentType.getString(ctx, "ownerName")))
             )
@@ -82,6 +84,7 @@ public class CommandsServerEvents {
 
         dispatcher.register(Commands.literal("rtsapi-set-building-owner")
             .requires(source -> source.hasPermission(2))
+            .then(buildingSelectionTail(ctx -> ""))
             .then(Commands.argument("ownerName", StringArgumentType.string())
                 .then(buildingSelectionTail(ctx -> StringArgumentType.getString(ctx, "ownerName")))
             )

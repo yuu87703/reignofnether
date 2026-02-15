@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.unit.units.piglins;
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.AttackGround;
+import com.solegendary.reignofnether.entities.GhastUnitFireball;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;

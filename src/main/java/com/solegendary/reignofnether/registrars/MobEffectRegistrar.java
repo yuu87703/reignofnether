@@ -4,14 +4,16 @@ import com.solegendary.reignofnether.ReignOfNether;
 import net.minecraft.world.effect.InstantenousMobEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.stringtemplate.v4.ST;
+
+import java.util.List;
 
 
 public class MobEffectRegistrar {
@@ -46,15 +48,23 @@ public class MobEffectRegistrar {
     public static final RegistryObject<MobEffect> DAMAGE_TAKEN_INCREASE = MOB_EFFECTS.register("damage_taken_increase", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.LUCK, "e0772108-0408-4fa3-ad55-f90f5595d610", -0.05, AttributeModifier.Operation.ADDITION));
 
-    // Causes a unit to take fire damage at 2x tick rate, and explodes if it dies
-    public static final RegistryObject<MobEffect> INTENSE_FIRE = MOB_EFFECTS.register("intense_fire", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203)
-            .addAttributeModifier(Attributes.MOVEMENT_SPEED, "06d218a6-4328-4df1-8263-5dfc23f0c65c", -0.20, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    // Causes a unit to take 2x fire and magma damage, and spreads it to another friendly mob if it dies
+    // Higher amplifiers increase the duration of the passed effect
+    public static final RegistryObject<MobEffect> SCORCHING_FIRE = MOB_EFFECTS.register("scorching_fire", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203));
+    //.addAttributeModifier(Attributes.MOVEMENT_SPEED, "06d218a6-4328-4df1-8263-5dfc23f0c65c", -0.10, AttributeModifier.Operation.MULTIPLY_BASE));
+
+    // ticks fire damage faster
+    public static final RegistryObject<MobEffect> INTENSE_HEAT = MOB_EFFECTS.register("intense_heat", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0xFC6203));
+
+    // causes fire tick damage to be doubled and renders fire on entities as blue
+    // also causes wildfires and blazes to render as soulfire variants
+    public static final RegistryObject<MobEffect> SOULS_AFLAME = MOB_EFFECTS.register("souls_aflame", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0x4287f5));
 
     public static final RegistryObject<MobEffect> ATTACK_SLOWDOWN = MOB_EFFECTS.register("attack_slowdown", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.ATTACK_SPEED, "95086ec9-c6cc-41b4-a2ce-9b5cf28011e4", -0.05, AttributeModifier.Operation.MULTIPLY_BASE));
 
     // Used to give workers temporary efficiency effects (faster gathering and build speed)
-    public static final RegistryObject<MobEffect> TEMPORARY_EFFICIENCY = MOB_EFFECTS.register("temporary_efficiency", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 3402751)
+    public static final RegistryObject<MobEffect> TEMPORARY_EFFICIENCY = MOB_EFFECTS.register("temporary_efficiency", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 0x68FF52)
             .addAttributeModifier(Attributes.LUCK, "a417cf34-dc4e-4047-8e14-89eece60c2f8", 0.05, AttributeModifier.Operation.MULTIPLY_BASE));
 
     public static final RegistryObject<MobEffect> BLOODLUST = MOB_EFFECTS.register("bloodlust", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 0xFF0000)
@@ -69,6 +79,12 @@ public class MobEffectRegistrar {
 
     public static final RegistryObject<MobEffect> DISARM = MOB_EFFECTS.register("disarm", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 3402751)
             .addAttributeModifier(Attributes.ATTACK_SPEED, "a5faf34d-0155-49cf-9c6e-73f16ad41a42", -1.0f, AttributeModifier.Operation.MULTIPLY_TOTAL));
+
+
+    public static boolean isInterrupt(MobEffect mobEffect) {
+        return mobEffect == STUN.get() ||
+                mobEffect == UNCONTROLLABLE.get();
+    }
 
     public static void init(FMLJavaModLoadingContext context) {
         MOB_EFFECTS.register(context.getModEventBus());

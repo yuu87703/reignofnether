@@ -25,6 +25,8 @@ Features
 
 [❌] AoE2-style markets
     - Start as neutral building
+    - Trade with trader units by passing between markets
+        - Striders for piglins, zombie horses for monsters, mules for villagers
 
 
 Bugfixes

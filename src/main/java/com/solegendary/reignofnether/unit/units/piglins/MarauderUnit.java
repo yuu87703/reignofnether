@@ -367,12 +367,12 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
 
     @Override
     public void setupEquipmentAndUpgradesClient() {
-
+        setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.AIR));
     }
 
     @Override
     public void setupEquipmentAndUpgradesServer() {
-
+        setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.AIR));
     }
 
     @Override

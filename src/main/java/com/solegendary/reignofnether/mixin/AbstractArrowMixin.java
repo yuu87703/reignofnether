@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.monsters.BoggedUnit;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -141,14 +143,21 @@ public abstract class AbstractArrowMixin extends Projectile {
                 entity instanceof Unit unit2 &&
                 unit1.getOwnerName().equals(unit2.getOwnerName()) &&
                 (unit1.getTargetGoal().getTarget() == null ||
-                !unit1.getTargetGoal().getTarget().equals(unit2));
+                        !unit1.getTargetGoal().getTarget().equals(unit2));
+    }
+
+    @Unique
+    private boolean reignofnether$boggedArrowCollidedWithPoisonedEnemy(Entity entity) {
+        return this.getOwner() instanceof BoggedUnit boggedUnit && entity instanceof LivingEntity le && le.hasEffect(MobEffects.POISON) &&
+                !(boggedUnit.getTargetGoal().forced && boggedUnit.getTargetGoal().getTarget() == entity);
     }
 
     protected boolean canHitEntity(Entity entity) {
         return super.canHitEntity(entity) &&
                 (this.piercingIgnoreEntityIds == null || !this.piercingIgnoreEntityIds.contains(entity.getId())) &&
                 !this.ignoredEntities.contains(entity.getId()) &&
-                !reignofnether$collidedWithUntargetedAlly(entity);
+                !reignofnether$collidedWithUntargetedAlly(entity) &&
+                !reignofnether$boggedArrowCollidedWithPoisonedEnemy(entity);
     }
 
     // replace bounce logic (on hitting an enemy at the time as another arrow) with pierce logic instead

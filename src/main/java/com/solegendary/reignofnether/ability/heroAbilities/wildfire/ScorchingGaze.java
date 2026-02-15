@@ -24,10 +24,12 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class ScorchingGaze extends HeroAbility {
 
-    public static final int RANGE = 12;
+    public static final int RANGE = 15;
+    public static final int SPREAD_RANGE = 3;
+    public static final int EXTRA_DURATION_PER_RANK = 3;
     public static final int DURATION_RANK_1 = 8;
-    public static final int DURATION_RANK_2 = 11;
-    public static final int DURATION_RANK_3 = 14;
+    public static final int DURATION_RANK_2 = DURATION_RANK_1 + (EXTRA_DURATION_PER_RANK);
+    public static final int DURATION_RANK_3 = DURATION_RANK_1 + (2 * EXTRA_DURATION_PER_RANK);
     public int duration = DURATION_RANK_1;
 
     public ScorchingGaze() {
@@ -89,9 +91,7 @@ public class ScorchingGaze extends HeroAbility {
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip1")),
                 fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip2")),
-                fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip3")),
-                fcs(""),
-                fcs(I18n.get("abilities.reignofnether.charges", maxCharges))
+                fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip3"))
         );
     }
 
@@ -104,9 +104,9 @@ public class ScorchingGaze extends HeroAbility {
             fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip2")),
             fcs(I18n.get("abilities.reignofnether.scorching_gaze.tooltip3")),
             fcs(""),
-            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank1"), getRank(hero) == 0),
-            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank2"), getRank(hero) == 1),
-            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank3"), getRank(hero) == 2)
+            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank1", DURATION_RANK_1), getRank(hero) == 0),
+            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank2", DURATION_RANK_2), getRank(hero) == 1),
+            fcs(I18n.get("abilities.reignofnether.scorching_gaze.rank3", DURATION_RANK_3), getRank(hero) == 2)
         );
     }
 

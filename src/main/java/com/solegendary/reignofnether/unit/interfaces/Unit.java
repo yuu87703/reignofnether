@@ -4,14 +4,15 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyFeast;
+import com.solegendary.reignofnether.blocks.BlockServerEvents;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.passives.EnchantmentIcon;
 import com.solegendary.reignofnether.hud.passives.PassiveIcons;
-import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
@@ -55,6 +56,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -361,6 +363,20 @@ public interface Unit {
             if (fortifyingLevel > 0 && absorbHp < fortifyingLevel * ProtectiveEnchantment.MAX_ABSORB_HP)
                 unitMob.setAbsorptionAmount(absorbHp + 1);
         }
+
+        if (unitMob.tickCount % 4 == 0 && unitMob.hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get()) &&
+            unitMob.onGround() && !unitMob.level().isClientSide()) {
+            BlockState bsOn = unitMob.level().getBlockState(unitMob.getOnPos());
+            BlockState bsMagma = BlockRegistrar.WALKABLE_MAGMA_BLOCK.get().defaultBlockState();
+            if (bsOn.getBlock() != BlockRegistrar.WALKABLE_MAGMA_BLOCK.get()) {
+                BlockServerEvents.addTempBlock((ServerLevel) unitMob.level(), unitMob.getOnPos(), bsMagma, bsOn, unitMob.getRandom().nextInt(200,300));
+            }
+            MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 1, unitMob.level(), unitMob.position());
+            if (!unitMob.isOnFire()) {
+                int ticks = unitMob.getEffect(MobEffectRegistrar.SCORCHING_FIRE.get()).getDuration();
+                unitMob.setRemainingFireTicks(ticks);
+            }
+        }
     }
 
     private static void checkAndPickupResources(Unit unit) {
@@ -609,7 +625,6 @@ public interface Unit {
 
     default boolean isIdle() {
         boolean idleAttacker = true;
-        boolean idleBuildingAttacker = true;
         if (this instanceof AttackerUnit attackerUnit) {
             idleAttacker = attackerUnit.getAttackMoveTarget() == null &&
                     !((Unit) attackerUnit).hasLivingTarget() &&
@@ -771,5 +786,9 @@ public interface Unit {
     default boolean hasAnyEnchants() {
         return !(((LivingEntity) this).getMainHandItem().getAllEnchantments().isEmpty()) ||
                !(((LivingEntity) this).getItemBySlot(EquipmentSlot.CHEST).getAllEnchantments().isEmpty());
+    }
+
+    default boolean uninterruptable() {
+        return false;
     }
 }

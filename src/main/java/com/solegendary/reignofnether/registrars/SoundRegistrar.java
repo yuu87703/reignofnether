@@ -100,6 +100,37 @@ public class SoundRegistrar {
             SOUND_EVENTS.register("wretchedwraith_blizzard", () ->
                     SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wretchedwraith_blizzard")));
 
+    public static final RegistryObject<SoundEvent> WILDFIRE_MOLTEN_BOMB =
+            SOUND_EVENTS.register("wildfire_molten_bomb", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_molten_bomb")));
+
+    public static final RegistryObject<SoundEvent> WILDFIRE_SCORCHING_GAZE_START =
+            SOUND_EVENTS.register("wildfire_scorching_gaze_start", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_scorching_gaze_start")));
+
+    public static final RegistryObject<SoundEvent> WILDFIRE_SCORCHING_GAZE_END =
+            SOUND_EVENTS.register("wildfire_scorching_gaze_end", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_scorching_gaze_end")));
+
+    public static final RegistryObject<SoundEvent> WILDFIRE_HURT =
+            SOUND_EVENTS.register("wildfire_hurt", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_hurt")));
+
+    public static final RegistryObject<SoundEvent> WILDFIRE_DEATH =
+            SOUND_EVENTS.register("wildfire_death", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_death")));
+
+    public static final RegistryObject<SoundEvent> WILDFIRE_AMBIENT =
+            SOUND_EVENTS.register("wildfire_ambient", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_ambient")));
+
+    public static final RegistryObject<SoundEvent> WILDFIRE_SOULS_AFLAME =
+            SOUND_EVENTS.register("wildfire_souls_aflame", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_souls_aflame")));
+
+    public static final RegistryObject<SoundEvent> PIGLIN_MERCHANT_LOOT_EXPLOSION =
+            SOUND_EVENTS.register("piglin_merchant_loot_explosion", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "piglin_merchant_loot_explosion")));
 
     public static void init(FMLJavaModLoadingContext context) {
         SOUND_EVENTS.register(context.getModEventBus());

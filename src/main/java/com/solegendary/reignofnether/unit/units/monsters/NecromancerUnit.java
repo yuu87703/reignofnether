@@ -9,10 +9,12 @@ import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaC
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
 import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.entities.NecromancerProjectile;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
@@ -55,9 +57,11 @@ import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated {
+public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, RangedAttackerUnit, HeroUnit, KeyframeAnimated, RangeIndicator {
     public final Abilities ABILITIES = new Abilities(
         List.of(
             new Pair<>(new RaiseDead(), Keybindings.keyQ),
@@ -346,7 +350,20 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
         this.castRaiseDeadGoal.tick();
         this.castPhantomGoal.tick();
         this.castBloodMoonGoal.tick();
+
+        if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
+            if (!lastOnPos.equals(getOnPos())) {
+                updateHighlightBps();
+            }
+            lastOnPos = getOnPos();
+        }
     }
+
+    private Set<BlockPos> highlightBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
+
+    @Override public Set<BlockPos> getHighlightBps() { return highlightBps; }
+    @Override public void setHighlightBps(Set<BlockPos> bps) { highlightBps = bps; }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {

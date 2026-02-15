@@ -4,18 +4,21 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,9 +27,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityRenderDispatcherMixin {
 
     private static final ResourceLocation SOUL_FIRE_0 =
-            new ResourceLocation("minecraft", "block/soul_fire_0");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "block/soul_fire_0");
     private static final ResourceLocation SOUL_FIRE_1 =
-            new ResourceLocation("minecraft", "block/soul_fire_1");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "block/soul_fire_1");
 
     private static TextureAtlasSprite getSprite(ResourceLocation loc) {
         return Minecraft.getInstance()
@@ -37,6 +40,16 @@ public abstract class EntityRenderDispatcherMixin {
     @Shadow public Camera camera;
     @Shadow private static void fireVertex(PoseStack.Pose pMatrixEntry, VertexConsumer pBuffer, float pX, float pY, float pZ, float pTexU, float pTexV) { }
 
+    // TODO: cache this?
+    @Unique private static boolean reignofnether$shouldRenderSoulfire(Entity entity) {
+        if (entity instanceof LivingEntity le) {
+            return le.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get());
+        } else if (entity instanceof Projectile proj && proj.getOwner() instanceof LivingEntity le) {
+            return le.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get());
+        }
+        return false;
+    }
+
     @Inject(
             method = "renderFlame",
             at = @At("HEAD"),
@@ -45,8 +58,7 @@ public abstract class EntityRenderDispatcherMixin {
     private void onRenderFlame(PoseStack poseStack, MultiBufferSource pBuffer, Entity pEntity, CallbackInfo ci) {
         if (!FogOfWarClientEvents.isInBrightChunk(pEntity))
             ci.cancel();
-        /*
-        else {
+        else if (reignofnether$shouldRenderSoulfire(pEntity)) {
             ci.cancel();
             TextureAtlasSprite textureatlassprite = getSprite(SOUL_FIRE_0);
             TextureAtlasSprite textureatlassprite1 = getSprite(SOUL_FIRE_1);
@@ -85,6 +97,5 @@ public abstract class EntityRenderDispatcherMixin {
             }
             poseStack.popPose();
         }
-         */
     }
 }

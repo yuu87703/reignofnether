@@ -19,7 +19,7 @@ public class StrongholdPlacement extends DarknessProductionBuilding implements G
     @Override
     public void onBuilt() {
         super.onBuilt();
-        updateBorderBps();
+        updateHighlightBps();
     }
 
     // don't use this for abilities as it may not be balanced

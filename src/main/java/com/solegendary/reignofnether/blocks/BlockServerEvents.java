@@ -29,15 +29,19 @@ public class BlockServerEvents {
     public static ArrayList<TemporaryBlock> tempBlocks = new ArrayList<>();
 
     public static void addTempBlock(ServerLevel level, BlockPos bp, BlockState bs, BlockState oldBs, int lifespan) {
-        addTempBlock(level, bp, bs, oldBs, lifespan, false);
+        addTempBlock(level, bp, bs, oldBs, lifespan, false, null);
     }
 
     public static void addTempBlock(ServerLevel level, BlockPos bp, BlockState bs, BlockState oldBs, int lifespan, boolean allowInsideBuildings) {
-        if (BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), bp))
+        addTempBlock(level, bp, bs, oldBs, lifespan, allowInsideBuildings, null);
+    }
+
+    public static void addTempBlock(ServerLevel level, BlockPos bp, BlockState bs, BlockState oldBs, int lifespan, boolean allowInsideBuildings, BlockState bsAbove) {
+        if (!allowInsideBuildings && BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), bp))
             return;
 
         if (level.getBlockState(bp) != bs)
-            tempBlocks.add(new TemporaryBlock(level, bp, bs, oldBs, lifespan));
+            tempBlocks.add(new TemporaryBlock(bp, bs, oldBs, lifespan, bsAbove));
         else {
             for (TemporaryBlock block : tempBlocks)
                 if (bp.equals(block.bp))

@@ -10,6 +10,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.royalguard.MaceSlam;
 import com.solegendary.reignofnether.ability.heroAbilities.royalguard.TauntingCry;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
@@ -27,7 +28,6 @@ import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.RoyalGuardAnimations;
-import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -52,6 +52,8 @@ import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -364,7 +366,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
     public boolean doHurtTarget(Entity pEntity) {
         boolean result = super.doHurtTarget(pEntity);
         if (result && avatarTicksLeft > 0) {
-            level().explode(null, null, null, pEntity.getX(), pEntity.getY(), pEntity.getZ(),
+            level().explode(null, null, null, pEntity.getX(), pEntity.getEyeY(), pEntity.getZ(),
                     1.0f, false, Level.ExplosionInteraction.NONE);
             AttributeInstance ai = getAttribute(Attributes.ATTACK_DAMAGE);
 
@@ -560,8 +562,20 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
             return;
         MaceSlam maceSlam = getMaceSlam();
         if (maceSlam != null && maceSlam.getRank(this) > 0) {
-            level().explode(null, null, null, blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+            level().explode(null, null, null, blockPos.getCenter().x, blockPos.getCenter().y, blockPos.getCenter().z,
                     2.0f, false, Level.ExplosionInteraction.NONE);
+
+            for (int x = (int) (blockPos.getX() - MaceSlam.RADIUS); x <= blockPos.getX() + MaceSlam.RADIUS; x++) {
+                for (int y = (int) (blockPos.getY() - MaceSlam.RADIUS); y <= blockPos.getY() + MaceSlam.RADIUS; y++) {
+                    for (int z = (int) (blockPos.getZ() - MaceSlam.RADIUS); z <= blockPos.getZ() + MaceSlam.RADIUS; z++) {
+                        BlockPos bp = new BlockPos(x,y,z);
+                        if (MiscUtil.isSolidBlocking(level(), bp) && !MiscUtil.isSolidBlocking(level(), bp.above()) &&
+                            bp.distToCenterSqr(blockPos.getCenter()) <= MaceSlam.RADIUS * MaceSlam.RADIUS) {
+                            level().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, bp, Block.getId(level().getBlockState(bp)));
+                        }
+                    }
+                }
+            }
 
             Set<BuildingPlacement> buildings = new HashSet<>();
             for (int x = -1; x <= 1; x++) {
@@ -578,7 +592,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
             }
 
             for (LivingEntity hitEntity : MiscUtil.getEntitiesWithinRange(Vec3.atCenterOf(blockPos.above()), MaceSlam.RADIUS, LivingEntity.class, level())) {
-                if (hitEntity instanceof Unit unit) {
+                if (hitEntity instanceof Unit unit && !unit.uninterruptable()) {
                     var relationShip = UnitServerEvents.getUnitToEntityRelationship(unit, this);
                     if (relationShip.equals(Relationship.OWNED)) continue;
                     if (relationShip.equals(Relationship.FRIENDLY)) continue;
@@ -605,8 +619,12 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
         if (tauntingCry != null && tauntingCry.getRank(this) > 0) {
             for (Mob e : MiscUtil.getEntitiesWithinRange(position(), TauntingCry.RANGE, Mob.class, level())) {
                 if (!(e instanceof AttackerUnit attackerUnit) ||
-                    List.of(Relationship.OWNED, Relationship.FRIENDLY)
-                            .contains(UnitServerEvents.getUnitToEntityRelationship((Unit) attackerUnit, this))) continue;
+                    List.of(Relationship.OWNED, Relationship.FRIENDLY).contains(UnitServerEvents.getUnitToEntityRelationship((Unit) attackerUnit, this))) {
+                    continue;
+                }
+                if (((Unit) e).uninterruptable()) {
+                    continue;
+                }
                 Unit.fullResetBehaviours((Unit) attackerUnit);
                 attackerUnit.setUnitAttackTargetForced(this);
                 ((LivingEntity) attackerUnit).addEffect(new MobEffectInstance(MobEffectRegistrar.UNCONTROLLABLE.get(), tauntingCry.duration));

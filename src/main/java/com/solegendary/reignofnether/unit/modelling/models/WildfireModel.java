@@ -6,7 +6,6 @@ package com.solegendary.reignofnether.unit.modelling.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.unit.goals.UnitRangedAttackGoal;
 import com.solegendary.reignofnether.unit.modelling.animations.WildfireAnimations;
 import com.solegendary.reignofnether.unit.units.piglins.WildfireUnit;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -18,12 +17,21 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 
 public class WildfireModel<T extends Entity> extends KeyframeHierarchicalModel<T> {
 
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wildfire_layer"), "main");
+
+	@Override
+	public ModelPart root() {
+		return this.main;
+	}
+
+	public ModelPart getHead() {
+		return this.head;
+	}
+
 	private final ModelPart main;
 	private final ModelPart head;
 	private final ModelPart bodySegment1;
@@ -60,11 +68,6 @@ public class WildfireModel<T extends Entity> extends KeyframeHierarchicalModel<T
 		this.shield2 = this.shields.getChild("shield2");
 		this.shield3 = this.shields.getChild("shield3");
 		this.shield4 = this.shields.getChild("shield4");
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.main;
 	}
 
 	public static LayerDefinition createBodyLayer() {

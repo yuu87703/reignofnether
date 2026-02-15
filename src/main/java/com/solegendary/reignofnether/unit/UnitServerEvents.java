@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
@@ -15,14 +16,18 @@ import com.solegendary.reignofnether.building.buildings.placements.SculkCatalyst
 import com.solegendary.reignofnether.building.buildings.villagers.IronGolemBuilding;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionItems;
+import com.solegendary.reignofnether.entities.BlazeUnitFireball;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -35,6 +40,7 @@ import com.solegendary.reignofnether.util.EnchantmentUtil;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -51,16 +57,12 @@ import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.EvokerFangs;
-import net.minecraft.world.entity.projectile.Fireball;
-import net.minecraft.world.entity.projectile.ThrownTrident;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -78,6 +80,7 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Vector3d;
 
@@ -86,7 +89,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import static com.solegendary.reignofnether.player.PlayerServerEvents.isRTSPlayer;
-import static com.solegendary.reignofnether.player.PlayerServerEvents.serverLevel;
 import static com.solegendary.reignofnether.resources.ResourcesServerEvents.NEUTRAL_UNIT_BOUNTY_PERCENT;
 
 public class UnitServerEvents {
@@ -563,6 +565,32 @@ public class UnitServerEvents {
                 }
             }
         }
+
+        if (evt.getEntity().hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get())) {
+            List<Mob> mobs = MiscUtil.getEntitiesWithinRange(evt.getEntity().position(), ScorchingGaze.SPREAD_RANGE, Mob.class, evt.getEntity().level());
+            ArrayList<Mob> friendlyUnits = new ArrayList<>();
+            for (Mob mob : mobs) {
+                if (mob instanceof Unit unit1 && evt.getEntity() instanceof Unit unit2 &&
+                    getUnitToEntityRelationship(unit1, evt.getEntity()) == Relationship.FRIENDLY && unit1 != unit2) {
+                    friendlyUnits.add((Mob) unit1);
+                }
+            }
+            friendlyUnits.sort(Comparator.comparing(le -> le.position().distanceToSqr(evt.getEntity().position())));
+            if (!friendlyUnits.isEmpty()) {
+                int amp = evt.getEntity().getEffect(MobEffectRegistrar.SCORCHING_FIRE.get()).getAmplifier();
+                int duration = (ScorchingGaze.DURATION_RANK_1 + (amp * ScorchingGaze.EXTRA_DURATION_PER_RANK)) * 20;
+                if (friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
+                    MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 12, evt.getEntity().level(), evt.getEntity().position());
+                    SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_END, friendlyUnits.get(0).blockPosition());
+                    if (evt.getEntity().hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+                        friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), duration + 20, 0, true, true));
+                    }
+                }
+            }
+        }
+        if (evt.getEntity() instanceof WretchedWraithUnit wretchedWraithUnit) {
+            SoundClientboundPacket.stopSoundWithId(wretchedWraithUnit.getId());
+        }
     }
 
     // prevent onDropItem firing twice if the same animal is killed by two workers on the same tick
@@ -630,7 +658,9 @@ public class UnitServerEvents {
                             MobEffectRegistrar.BLOODLUST.get(),
                             MobEffectRegistrar.FROST_DAMAGE.get(),
                             MobEffectRegistrar.DISARM.get(),
-                            MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()
+                            MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get(),
+                            MobEffectRegistrar.SCORCHING_FIRE.get(),
+                            MobEffectRegistrar.SOULS_AFLAME.get()
                     )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)
@@ -757,6 +787,8 @@ public class UnitServerEvents {
             return true;
         if (projectile instanceof AbstractArrow)
             return true;
+        if (projectile instanceof BlazeUnitFireball)
+            return true;
 
         return evt.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) && evt.getSource().isIndirect()
             && (!(shooter instanceof EvokerUnit));
@@ -849,18 +881,6 @@ public class UnitServerEvents {
             }
         }
 
-        // ensure projectiles from units do the damage of the unit, not the item
-        if (evt.getSource().is(DamageTypeTags.IS_PROJECTILE) &&
-                evt.getSource().getEntity() instanceof AttackerUnit attackerUnit) {
-            float dmg = attackerUnit.getUnitAttackDamage();
-            if (evt.getEntity() instanceof Unit unit) {
-                dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
-                dmg *= (1 - unit.getUnitRangedArmorPercentage());
-                dmg *= (1 - unit.getUnitResistPercentage());
-            }
-            evt.setAmount(dmg);
-        }
-
         // ignore added weapon damage for workers
         if (evt.getSource().getEntity() instanceof WorkerUnit && evt.getSource()
             .getEntity() instanceof AttackerUnit attackerUnit) {
@@ -923,11 +943,27 @@ public class UnitServerEvents {
                 evt.setAmount(evt.getAmount() + zealLevel);
             }
         }
-        if (evt.getSource().getEntity() instanceof EvokerFangs fangs && fangs.getOwner() instanceof EvokerUnit evokerUnit) {
+        if (evt.getSource().getEntity() instanceof EvokerUnit evokerUnit) {
             int zealLevel = evokerUnit.getMainHandItem().getEnchantmentLevel(EnchantmentRegistrar.ZEAL.get());
             if (zealLevel > 0) {
                 evt.setAmount(evt.getAmount() + zealLevel);
             }
+        }
+
+        if (evt.getSource().is(DamageTypeTags.IS_FIRE)) {
+            Level level = evt.getEntity().level();
+            Block block = level.getBlockState(evt.getEntity().getOnPos().above()).getBlock();
+            if (block == Blocks.SOUL_FIRE || block == BlockRegistrar.UNEXTINGUISHABLE_SOUL_FIRE.get()) {
+                evt.getEntity().addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), 120, 0, true, true));
+            }
+        }
+
+        if (evt.getEntity().hasEffect(MobEffectRegistrar.SCORCHING_FIRE.get()) && evt.getSource().is(DamageTypeTags.IS_FIRE)) {
+            evt.setAmount(evt.getAmount() * 2);
+        }
+
+        if (evt.getEntity().hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()) && evt.getSource() == evt.getEntity().damageSources().onFire()) {
+            evt.setAmount(evt.getAmount() * 2);
         }
     }
 
@@ -975,6 +1011,9 @@ public class UnitServerEvents {
             evt.getOldEffectInstance() == null) {
             EnchantmentUtil.updateEnchantLevels(evt.getEntity(), false);
         }
+        if (evt.getEntity() instanceof Unit unit && MobEffectRegistrar.isInterrupt(evt.getEffectInstance().getEffect()) && unit.uninterruptable()) {
+            evt.setCanceled(true);
+        }
     }
 
     @SubscribeEvent
@@ -987,6 +1026,16 @@ public class UnitServerEvents {
             } else if (effect == MobEffectRegistrar.TEMPORARY_EFFICIENCY.get()) {
                 EnchantmentHelper.setEnchantments(new HashMap<>(), evt.getEntity().getMainHandItem());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMobEffectApplicable(MobEffectEvent.Applicable evt) {
+        // allow undead to be poisoned
+        if (evt.getEntity().getMobType() == MobType.UNDEAD &&
+            evt.getEntity() instanceof Unit &&
+            evt.getEffectInstance().getEffect() == MobEffects.POISON) {
+            evt.setResult(Event.Result.ALLOW);
         }
     }
 

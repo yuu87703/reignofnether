@@ -212,6 +212,14 @@ public class BlockRegistrar {
                             .noCollission()),
             CreativeModeTabs.FUNCTIONAL_BLOCKS);
 
+    public static final RegistryObject<Block> UNEXTINGUISHABLE_SOUL_FIRE = registerBlock("unextinguishable_soul_fire", () ->
+                    new UnextinguishableSoulFireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE)
+                            .replaceable()
+                            .noCollission()
+                            .instabreak()
+                            .randomTicks()
+                            .lightLevel((p_152605_) -> 10)));
+
     private static boolean always(BlockState p_50775_, BlockGetter p_50776_, BlockPos p_50777_) {
         return true;
     }
@@ -219,8 +227,11 @@ public class BlockRegistrar {
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, ResourceKey<CreativeModeTab> tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn, tab);
-
         return toReturn;
+    }
+
+    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
+        return BLOCKS.register(name, block);
     }
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block,

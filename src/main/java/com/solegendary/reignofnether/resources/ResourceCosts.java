@@ -16,6 +16,7 @@ public class ResourceCosts {
     public static final ResourceCost ZOMBIE = new ResourceCost(ID, "ZOMBIE");
     public static final ResourceCost SKELETON = new ResourceCost(ID, "SKELETON");
     public static final ResourceCost STRAY = new ResourceCost(ID, "STRAY");
+    public static final ResourceCost BOGGED = new ResourceCost(ID, "BOGGED");
     public static final ResourceCost HUSK = new ResourceCost(ID, "HUSK");
     public static final ResourceCost DROWNED = new ResourceCost(ID, "DROWNED");
     public static final ResourceCost SPIDER = new ResourceCost(ID, "SPIDER");
@@ -116,6 +117,7 @@ public class ResourceCosts {
     public static final ResourceCost RESEARCH_HUSKS = new ResourceCost(ID, "RESEARCH_HUSKS");
     public static final ResourceCost RESEARCH_DROWNED = new ResourceCost(ID, "RESEARCH_DROWNED");
     public static final ResourceCost RESEARCH_STRAYS = new ResourceCost(ID, "RESEARCH_STRAYS");
+    public static final ResourceCost RESEARCH_BOGGED = new ResourceCost(ID, "RESEARCH_BOGGED");
     public static final ResourceCost RESEARCH_SLIME_CONVERSION = new ResourceCost(ID, "RESEARCH_SLIME_CONVERSION");
     public static final ResourceCost RESEARCH_LINGERING_POTIONS = new ResourceCost(ID, "RESEARCH_LINGERING_POTIONS");
     public static final ResourceCost RESEARCH_HEALING_POTIONS = new ResourceCost(ID, "RESEARCH_HEALING_POTIONS");
@@ -201,6 +203,7 @@ public class ResourceCosts {
         ZOMBIE_VILLAGER.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.ZOMBIE_VILLAGER);
         SKELETON.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.SKELETON);
         STRAY.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.STRAY);
+        BOGGED.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.BOGGED);
         HUSK.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.HUSK);
         DROWNED.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.DROWNED);
         SPIDER.bakeValues(ReignOfNetherCommonConfigs.UnitCosts.SPIDER);
@@ -301,6 +304,7 @@ public class ResourceCosts {
         RESEARCH_HUSKS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_HUSKS);
         RESEARCH_DROWNED.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_DROWNED);
         RESEARCH_STRAYS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_STRAYS);
+        RESEARCH_BOGGED.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_BOGGED);
         RESEARCH_SLIME_CONVERSION.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_SLIME_CONVERSION);
         RESEARCH_LINGERING_POTIONS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_LINGERING_POTIONS);
         RESEARCH_WATER_POTIONS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_WATER_POTIONS);

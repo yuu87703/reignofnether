@@ -1,9 +1,10 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
+import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.Building;
 import com.solegendary.reignofnether.building.BuildingBlock;
+import com.solegendary.reignofnether.building.NightSource;
 import com.solegendary.reignofnether.building.RangeIndicator;
-import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -24,13 +25,13 @@ public class RangeIndicatorProductionPlacement extends ProductionPlacement imple
         this.range = range;
         this.showOnlyWhenSelected = showOnlyWhenSelected;
         this.checkUpgraded = checkUpgraded;
-        updateBorderBps();
+        updateHighlightBps();
     }
 
     public void tick(Level tickLevel) {
         super.tick(tickLevel);
         if (tickLevel.isClientSide && tickAgeAfterBuilt > 0 && tickAgeAfterBuilt % 100 == 0)
-            updateBorderBps();
+            updateHighlightBps();
     }
 
     public int getRange() {
@@ -38,16 +39,16 @@ public class RangeIndicatorProductionPlacement extends ProductionPlacement imple
     }
 
     @Override
-    public void updateBorderBps() {
+    public void updateHighlightBps() {
         if (!level.isClientSide())
             return;
         this.borderBps.clear();
         this.borderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(centrePos,
-                range - TimeClientEvents.VISIBLE_BORDER_ADJ, level));
+                range - BlockClientEvents.VISIBLE_BORDER_ADJ, level, this instanceof NightSource));
     }
 
     @Override
-    public Set<BlockPos> getBorderBps() {
+    public Set<BlockPos> getHighlightBps() {
         return borderBps;
     }
 

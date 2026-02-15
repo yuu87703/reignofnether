@@ -73,6 +73,12 @@ public class EntityRegistrar {
                     .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
                     .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "stray_unit").toString()));
 
+    public static final RegistryObject<EntityType<BoggedUnit>> BOGGED_UNIT = ENTITIES.register("bogged_unit",
+            () -> EntityType.Builder.of(BoggedUnit::new, MobCategory.CREATURE)
+                    .sized(EntityType.SKELETON.getWidth(), EntityType.SKELETON.getHeight())
+                    .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
+                    .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "bogged_unit").toString()));
+
     public static final RegistryObject<EntityType<CreeperUnit>> CREEPER_UNIT = ENTITIES.register("creeper_unit",
             () -> EntityType.Builder.of(CreeperUnit::new, MobCategory.CREATURE)
                     .sized(EntityType.CREEPER.getWidth(), EntityType.CREEPER.getHeight())
@@ -350,6 +356,14 @@ public class EntityRegistrar {
                     .updateInterval(10)
                     .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wraith_snowball").toString()));
 
+    public static final RegistryObject<EntityType<MoltenBombProjectile>> MOLTEN_BOMB_PROJECTILE = ENTITIES.register("molten_bomb_projectile",
+            () -> EntityType.Builder.<MoltenBombProjectile>of(MoltenBombProjectile::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0.6f, 0.6f)
+                    .clientTrackingRange(UNIT_CLIENT_TRACKING_RANGE)
+                    .updateInterval(10)
+                    .build(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "molten_bomb_projectile").toString()));
+
     public static void init(FMLJavaModLoadingContext context) {
         ENTITIES.register(context.getModEventBus());
     }
@@ -360,6 +374,7 @@ public class EntityRegistrar {
             case SkeletonProd.itemName -> EntityRegistrar.SKELETON_UNIT.get();
             case ZombieProd.itemName -> EntityRegistrar.ZOMBIE_UNIT.get();
             case StrayProd.itemName -> EntityRegistrar.STRAY_UNIT.get();
+            case BoggedProd.itemName -> EntityRegistrar.BOGGED_UNIT.get();
             case HuskProd.itemName -> EntityRegistrar.HUSK_UNIT.get();
             case DrownedProd.itemName -> EntityRegistrar.DROWNED_UNIT.get();
             case SpiderProd.itemName -> EntityRegistrar.SPIDER_UNIT.get();

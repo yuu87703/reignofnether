@@ -7,8 +7,10 @@ import com.solegendary.reignofnether.ability.HeroAbility;
 import com.solegendary.reignofnether.ability.abilities.PromoteIllager;
 import com.solegendary.reignofnether.ability.heroAbilities.enchanter.*;
 import com.solegendary.reignofnether.building.RangeIndicator;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
@@ -390,13 +392,13 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                     }
                 }
             }
-            updateBorderBps();
         }
 
         if (auraEnabled && level().isClientSide && tickCount % 20 == 0) {
             List<Mob> mobs = MiscUtil.getEntitiesWithinRange(position(), MarchOfProgress.RADIUS, Mob.class, level());
             for (Mob mob : mobs) {
-                if (mob.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get())) {
+                if (mob.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()) ||
+                    mob.hasEffect(MobEffectRegistrar.TEMPORARY_EFFICIENCY.get())) {
                     level().addParticle(
                             ParticleRegistrar.BIG_ENCHANT.get(),
                             mob.position().x,
@@ -407,6 +409,39 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                             position().z - mob.position().z
                     );
                 }
+            }
+        }
+        if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
+            if (!lastOnPos.equals(getOnPos())) {
+                updateHighlightBps();
+            }
+            lastOnPos = getOnPos();
+        }
+    }
+
+    private Set<BlockPos> highlightBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
+
+    @Override public Set<BlockPos> getHighlightBps() { return highlightBps; }
+    @Override public void setHighlightBps(Set<BlockPos> bps) { highlightBps = bps; }
+
+    @Override public void updateHighlightBps() {
+        if (level().isClientSide()) {
+            highlightBps.clear();
+            for (Ability ability : getAbilities().get()) {
+                if (CursorClientEvents.getLeftClickAction() == ability.action) {
+                    setHighlightBps(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
+                            (int) (ability.range - 1),
+                            level()
+                    ));
+                }
+            }
+            if (auraEnabled) {
+                int radius = MarchOfProgress.RADIUS;
+                this.highlightBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
+                        radius - 1,
+                        level()
+                ));
             }
         }
     }
@@ -522,7 +557,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                     enchantAbility.isOffCooldown(this)) {
 
                 for (Mob mob : MiscUtil.getEntitiesWithinRange(this.position(), AUTOCAST_ENCHANT_RANGE, Mob.class, level())) {
-                    if (enchantAbility.canEnchant(mob)) {
+                    if (enchantAbility.canEnchant(mob) && mob instanceof Unit unit && unit.getOwnerName().equals(getOwnerName())) {
                         enchantAbility.use(level(), this, mob);
                     }
                 }
@@ -564,8 +599,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public void toggleAura() {
         auraEnabled = !auraEnabled;
         if (level().isClientSide) {
-            if (!auraEnabled)
-                auraBorderBps.clear();
+            updateHighlightBps();
         } else {
             if (auraEnabled) {
                 AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_SET, 1f);
@@ -575,31 +609,5 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
             }
         }
-    }
-
-    private final Set<BlockPos> auraBorderBps = new HashSet<>();
-
-    @Override
-    public void updateBorderBps() {
-        if (!level().isClientSide()) {
-            return;
-        }
-        this.auraBorderBps.clear();
-        if (auraEnabled) {
-            this.auraBorderBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
-                    MarchOfProgress.RADIUS - 1,
-                    level()
-            ));
-        }
-    }
-
-    @Override
-    public Set<BlockPos> getBorderBps() {
-        return auraBorderBps;
-    }
-
-    @Override
-    public boolean showOnlyWhenSelected() {
-        return true;
     }
 }

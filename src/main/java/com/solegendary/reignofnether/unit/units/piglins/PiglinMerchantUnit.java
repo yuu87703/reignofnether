@@ -8,13 +8,17 @@ import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyF
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.GreedIsGoodPassive;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.LootExplosion;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.ThrowTNT;
+import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.entities.ThrowableTntProjectile;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.ItemRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.resources.ResourceName;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
@@ -59,12 +63,9 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated {
+public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, HeroUnit, KeyframeAnimated, RangeIndicator {
     public final Abilities ABILITIES = new Abilities(
         List.of(
             new Pair<>(new ThrowTNT(), Keybindings.keyQ),
@@ -341,7 +342,20 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
         castTNTGoal.tick();
         castFancyFeastGoal.tick();
         castLootExplosionGoal.tick();
+
+        if (level().isClientSide() && HudClientEvents.hudSelectedEntity == this) {
+            if (!lastOnPos.equals(getOnPos())) {
+                updateHighlightBps();
+            }
+            lastOnPos = getOnPos();
+        }
     }
+
+    private Set<BlockPos> highlightBps = new HashSet<>();
+    private BlockPos lastOnPos = new BlockPos(0,0,0);
+
+    @Override public Set<BlockPos> getHighlightBps() { return highlightBps; }
+    @Override public void setHighlightBps(Set<BlockPos> bps) { highlightBps = bps; }
 
     @Override
     public void aiStep() {
@@ -414,6 +428,11 @@ public class PiglinMerchantUnit extends Piglin implements Unit, AttackerUnit, He
                 UnitAnimationAction.STOP,
                 null
         );
+        this.castLootExplosionGoal.setOnStartChanneling(() -> {
+            if (!this.level().isClientSide()) {
+                SoundClientboundPacket.playSoundAtPos(SoundAction.PIGLIN_MERCHANT_LOOT_EXPLOSION, blockPosition());
+            }
+        });
     }
 
     @Override

@@ -1389,6 +1389,16 @@ public class HudClientEvents {
             );
             renderedButtons.add(mapLockButton);
         }
+        Button highlightAnimalsButton = MinimapClientEvents.getHighlightAnimalsButton();
+        if (!highlightAnimalsButton.isHidden.get()) {
+            highlightAnimalsButton.render(evt.getGuiGraphics(),
+                    screenWidth - (highlightAnimalsButton.iconSize * 2),
+                    screenHeight - (highlightAnimalsButton.iconSize * 6),
+                    mouseX,
+                    mouseY
+            );
+            renderedButtons.add(highlightAnimalsButton);
+        }
         Button nightCirclesButton = MinimapClientEvents.getNightCirclesModeButton();
         if (!nightCirclesButton.isHidden.get()) {
             nightCirclesButton.render(evt.getGuiGraphics(),

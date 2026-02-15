@@ -18,13 +18,22 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class IntenseHeatPassive extends HeroAbility {
 
+    public static final float MAX_RANGE = 10;
+    public static final float MIN_RANGE = 2; // range at which max amp is applied
+
     public IntenseHeatPassive() {
-        super(3, 0, UnitAction.NONE, 0, 0, 0, false);
+        super(3, 0, UnitAction.NONE, 0, MAX_RANGE, 0, false);
     }
 
     public static final float TICK_MULTIPLIER_RANK_1 = 1.5f;
     public static final float TICK_MULTIPLIER_RANK_2 = 2.0f;
-    public static final float TICK_MULTIPLIER_RANK_3 = 2.5f;
+    public static final float TICK_MULTIPLIER_RANK_3 = 3.0f;
+
+    private int maxAmp = MAX_AMP_RANK_1;
+
+    public static final int MAX_AMP_RANK_1 = 20;
+    public static final int MAX_AMP_RANK_2 = 30;
+    public static final int MAX_AMP_RANK_3 = 35;
 
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
@@ -45,6 +54,21 @@ public class IntenseHeatPassive extends HeroAbility {
         return button;
     }
 
+    public int getMaxAmp() {
+        return maxAmp;
+    }
+
+    @Override
+    public void updateStatsForRank(HeroUnit hero) {
+        if (getRank(hero) == 1) {
+            maxAmp = MAX_AMP_RANK_1;
+        } else if (getRank(hero) == 2) {
+            maxAmp = MAX_AMP_RANK_2;
+        } else if (getRank(hero) == 3) {
+            maxAmp = MAX_AMP_RANK_3;
+        }
+    }
+
     @Override
     public Button getRankUpButton(HeroUnit hero) {
         return super.getRankUpButtonProtected(
@@ -58,7 +82,7 @@ public class IntenseHeatPassive extends HeroAbility {
         return List.of(
                 fcs(I18n.get("abilities.reignofnether.intense_heat") + " " + rankString(hero), true),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1", MAX_RANGE)),
                 fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip2"))
         );
     }
@@ -68,7 +92,7 @@ public class IntenseHeatPassive extends HeroAbility {
                 fcs(I18n.get("abilities.reignofnether.intense_heat"), true),
                 fcs(I18n.get("abilities.reignofnether.level_req", getLevelRequirement(hero)), getLevelReqStyle(hero)),
                 fcs(""),
-                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1")),
+                fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip1", MAX_RANGE)),
                 fcs(I18n.get("abilities.reignofnether.intense_heat.tooltip2")),
                 fcs(""),
                 fcs(I18n.get("abilities.reignofnether.intense_heat.rank1", TICK_MULTIPLIER_RANK_1), getRank(hero) == 0),

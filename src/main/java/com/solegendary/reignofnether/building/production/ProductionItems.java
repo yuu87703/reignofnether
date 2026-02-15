@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 public class ProductionItems {
     public static final CreeperProd CREEPER = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "creeper"), new CreeperProd());
     public static final SkeletonProd SKELETON = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "skeleton"), new SkeletonProd());
+    public static final BoggedProd BOGGED = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "bogged"), new BoggedProd());
     public static final ZombieProd ZOMBIE = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "zombie"), new ZombieProd());
     public static final StrayProd STRAY = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "stray"), new StrayProd());
     public static final HuskProd HUSK = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "husk"), new HuskProd());
@@ -70,6 +71,7 @@ public class ProductionItems {
     public static final ResearchHusks RESEARCH_HUSKS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_husks"), new ResearchHusks());
     public static final ResearchDrowned RESEARCH_DROWNED = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_drowned"), new ResearchDrowned());
     public static final ResearchStrays RESEARCH_STRAYS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_strays"), new ResearchStrays());
+    public static final ResearchBogged RESEARCH_BOGGED = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_bogged"), new ResearchBogged());
     public static final ResearchSlimeConversion RESEARCH_SLIME_CONVERSION = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "slime_conversion"), new ResearchSlimeConversion());
     public static final ResearchLingeringPotions RESEARCH_LINGERING_POTIONS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "lingering_potions"), new ResearchLingeringPotions());
     public static final ResearchWaterPotions RESEARCH_WATER_POTIONS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "water_potions"), new ResearchWaterPotions());
