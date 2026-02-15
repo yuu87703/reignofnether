@@ -66,8 +66,6 @@ public class BoggedProd extends ProductionItem {
                 ResourceCosts.getFormattedPopAndTime(cost),
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.bogged.tooltip1"), Style.EMPTY),
-                FormattedCharSequence.forward("", Style.EMPTY),
-                FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.bogged.tooltip1"), Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.bogged.tooltip2"), Style.EMPTY),
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("units.monsters.reignofnether.bogged.tooltip3"), Style.EMPTY)

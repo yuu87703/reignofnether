@@ -7,14 +7,10 @@
 
 
 
-
 New Heroes
 ----------
 
 Wildfire
-    Souls Aflame:
-    [❌] Intense heat not working on server?
-
 
 [❌] Overflowing graveyards
 
@@ -39,8 +35,8 @@ Bugfixes
 
 Quality of Life
 ---------------
-[🟡] Made dripstone blocks unpathable by units
-[❌] rtsapi commands now place neutral units and buildings if the owner name is not specified (instead of it being the player's name)
+[✔] Made dripstone blocks unpathable by units
+[✔] ownerName arguments for /rtsapi commands are now optional (the result will be neutral)
 [✔] Reworked the sound effect of the Piglin Merchant's loot explosion, thanks @GizmoVN!
 
 [✔] Added range indicators for all units with targeted ranged abilities
