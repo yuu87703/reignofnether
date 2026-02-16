@@ -25,12 +25,11 @@ Bugfixes
 [✔] Bogged are only 20hp instead of 30hp (only on production jars?)
 [✔] Weapons deal no extra damage (eg. elite zombies, netherite swords)
 [✔] The Wildfire can no longer equip netherite chestplates
-[❌] Fixed monster spawners not working
-[❌] Wildfire takes fall damage when hit while floating?
+[✔] Fixed monster spawners not working
 
 Quality of Life
 ---------------
-
+[🟡] Added spawn eggs for the Marauder and Bogged
 [✔] Added bonus damage tooltips to poison spiders, blazes and brutes/headhunters with fire aspect
 
 Balance
@@ -45,6 +44,8 @@ Balance
 [✔] Scorching Gaze's targets now have a glow effect applied to them
 [✔] Molten bomb mana cost reduced from 60 to 50
 [✔] Souls Aflame duration reduced from 50s to 45s
+[✔] The Wildfire and Blazes are now immune to fall damage
+[❌] The Wildfire no longer floats out of melee range while attacking
 
 Languages
 ---------

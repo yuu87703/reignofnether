@@ -97,6 +97,7 @@ public class CommonModEvents {
             event.accept(ItemRegistrar.ZOGLIN_UNIT);
             event.accept(ItemRegistrar.SKELETON_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.STRAY_UNIT_SPAWN_EGG);
+            event.accept(ItemRegistrar.BOGGED_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.CREEPER_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.SPIDER_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.POISON_SPIDER_UNIT_SPAWN_EGG);
@@ -115,6 +116,7 @@ public class CommonModEvents {
             event.accept(ItemRegistrar.GRUNT_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.BRUTE_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.HEADHUNTER_UNIT_SPAWN_EGG);
+            event.accept(ItemRegistrar.MARAUDER_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.HOGLIN_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.BLAZE_UNIT_SPAWN_EGG);
             event.accept(ItemRegistrar.WITHER_SKELETON_UNIT_SPAWN_EGG);

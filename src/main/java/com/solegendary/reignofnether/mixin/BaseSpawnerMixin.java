@@ -162,19 +162,18 @@ public class BaseSpawnerMixin {
                             }
 
                             var nearbyNeutralUnitsOfTypeSum = 0;
-                            var isHaveNearbyNonNeutralUnit = false;
+                            var hasNearbyNonNeutralUnit = false;
 
                             for (Mob mob : MiscUtil.getEntitiesWithinRange(new Vector3d(pPos.getX(), pPos.getY(), pPos.getZ()),
                                     ACTIVATION_RANGE, Mob.class, pServerLevel)) {
                                 if (!(mob instanceof Unit unit)) continue;
-                                if (!unit.getOwnerName().isBlank() || !entity.getName().equals(((Entity) unit).getName())) continue;
-                                nearbyNeutralUnitsOfTypeSum++;
-                                if (unit.getOwnerName().isBlank()) continue;
-                                isHaveNearbyNonNeutralUnit = true;
+                                if (unit.getOwnerName().isBlank() && mob.getType() == entity.getType()) nearbyNeutralUnitsOfTypeSum++;
+                                if (unit.getOwnerName().isBlank() || !entity.getName().equals(((Entity) unit).getName())) continue;
+                                if (!unit.getOwnerName().isBlank()) hasNearbyNonNeutralUnit = true;
                             }
 
                             if (nearbyNeutralUnitsOfTypeSum >= reignofnether$getMaxNearbyNeutralUnits(entity, nearbySameTypeSpawners) ||
-                                    !isHaveNearbyNonNeutralUnit) {
+                                    hasNearbyNonNeutralUnit) {
                                 this.delay(pServerLevel, pPos);
                                 return;
                             }

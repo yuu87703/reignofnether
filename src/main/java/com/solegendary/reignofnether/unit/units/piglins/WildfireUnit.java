@@ -676,4 +676,9 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         aabb.setMaxY(aabb.maxY + 1.2f);
         return aabb;
     }
+
+    @Override
+    public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
+        return false;
+    }
 }
