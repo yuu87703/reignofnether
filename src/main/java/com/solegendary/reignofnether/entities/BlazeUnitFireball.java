@@ -31,6 +31,8 @@ public class BlazeUnitFireball extends SmallFireball {
     private static final int MAX_TICKS = 60;
     private static final int MAX_TICKS_FIREWALL = (int) (FirewallShot.RANGE * 1.5f);
 
+    public static final int FIRE_SECONDS = 5;
+
     public BlazeUnitFireball(Level pLevel, LivingEntity pShooter, double pOffsetX, double pOffsetY, double pOffsetZ, boolean isFirewallShot) {
         super(pLevel, pShooter, pOffsetX, pOffsetY, pOffsetZ);
         this.isFirewallShot = isFirewallShot;
@@ -107,9 +109,9 @@ public class BlazeUnitFireball extends SmallFireball {
             Entity entity = pResult.getEntity();
             int i = entity.getRemainingFireTicks();
             if (i > 0) // if we just set to 100 every time, we reset the damage delay back to 20 ticks
-                entity.setRemainingFireTicks((i % 20) + 80);
+                entity.setRemainingFireTicks((i % 20) + (FIRE_SECONDS * 20) - 20);
             else
-                entity.setRemainingFireTicks(100);
+                entity.setRemainingFireTicks(FIRE_SECONDS * 20);
         }
     }
 

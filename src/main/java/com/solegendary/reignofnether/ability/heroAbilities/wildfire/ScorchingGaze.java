@@ -26,14 +26,13 @@ public class ScorchingGaze extends HeroAbility {
 
     public static final int RANGE = 15;
     public static final int SPREAD_RANGE = 3;
-    public static final int EXTRA_DURATION_PER_RANK = 3;
     public static final int DURATION_RANK_1 = 8;
-    public static final int DURATION_RANK_2 = DURATION_RANK_1 + (EXTRA_DURATION_PER_RANK);
-    public static final int DURATION_RANK_3 = DURATION_RANK_1 + (2 * EXTRA_DURATION_PER_RANK);
-    public int duration = DURATION_RANK_1;
+    public static final int DURATION_RANK_2 = 11;
+    public static final int DURATION_RANK_3 = 14;
+    public int durationSeconds = DURATION_RANK_1;
 
     public ScorchingGaze() {
-        super(3, 40, UnitAction.SCORCHING_GAZE, 20 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
+        super(3, 50, UnitAction.SCORCHING_GAZE, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, 0, true);
     }
 
     @Override
@@ -48,11 +47,11 @@ public class ScorchingGaze extends HeroAbility {
     @Override
     public void updateStatsForRank(HeroUnit hero) {
         if (getRank(hero) == 1) {
-            duration = DURATION_RANK_1;
+            durationSeconds = DURATION_RANK_1;
         } else if (getRank(hero) == 2) {
-            duration = DURATION_RANK_2;
+            durationSeconds = DURATION_RANK_2;
         } else if (getRank(hero) == 3) {
-            duration = DURATION_RANK_3;
+            durationSeconds = DURATION_RANK_3;
         }
     }
 

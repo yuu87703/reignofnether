@@ -44,6 +44,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -57,6 +58,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
@@ -605,13 +607,13 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         if (!this.level().isClientSide()) {
             SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_END, blockPosition());
         }
-        targetEntity.addEffect(new MobEffectInstance(
-                MobEffectRegistrar.SCORCHING_FIRE.get(),
-                getScorchingGaze().duration * 20,
-                getScorchingGaze().getRank(this) - 1)
-        );
-        targetEntity.setSecondsOnFire(getScorchingGaze().duration);
-        targetEntity.setSecondsOnFire(getScorchingGaze().duration);
+        int durationTicks = getScorchingGaze().durationSeconds * 20;
+        targetEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), durationTicks, getScorchingGaze().durationSeconds));
+        targetEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, durationTicks,0, true, true));
+        if (hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
+            targetEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), durationTicks + 20, 0, true, true));
+        }
+        targetEntity.setSecondsOnFire(getScorchingGaze().durationSeconds);
     }
 
     public void soulsAflame() {
@@ -657,6 +659,14 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     }
 
     @Override
+    public boolean wantsToPickUp(ItemStack itemStack) {
+        if (!itemStack.isEdible()) {
+            return false;
+        }
+        return super.wantsToPickUp(itemStack);
+    }
+
+    @Override
     public void setupEquipmentAndUpgradesServer() {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
     }
@@ -666,5 +676,15 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         AABB aabb = this.getBoundingBox().inflate(0.6f, 0, 0.6f);
         aabb.setMaxY(aabb.maxY + 1.2f);
         return aabb;
+    }
+
+    @Override
+    public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
+        return false;
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        // disallow rising into the air (sometimes out of melee range) when attacking a nearby target)
     }
 }

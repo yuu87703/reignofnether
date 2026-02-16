@@ -42,7 +42,7 @@ public class MoltenBomb extends HeroAbility {
     public static final int MAX_MAGMA_DURATION = 300;
 
     public MoltenBomb() {
-        super(3, 60, UnitAction.MOLTEN_BOMB, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, RADIUS_RANK_1, false);
+        super(3, 50, UnitAction.MOLTEN_BOMB, 30 * ResourceCost.TICKS_PER_SECOND, RANGE, RADIUS_RANK_1, false);
     }
 
     @Override
