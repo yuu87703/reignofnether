@@ -365,6 +365,9 @@ public class BuildingPlacement {
     // radius offset is the distance away from the building itself to have the returned pos
     // excludes positions inside the building so that workers  move out of the building foundations
     public BlockPos getClosestGroundPos(BlockPos bpTarget, int radiusOffset) {
+        return getClosestGroundPos(bpTarget, radiusOffset, false);
+    }
+    public BlockPos getClosestGroundPos(BlockPos bpTarget, int radiusOffset, boolean avoidAllBuildings) {
         float minDist = 999999;
         BlockPos minPos = this.minCorner;
         int minX = minPos.getX() - radiusOffset;
@@ -377,7 +380,7 @@ public class BuildingPlacement {
         for (int x = minX; x < maxX; x++) {
             for (int z = minZ; z < maxZ; z++) {
                 BlockPos bp = new BlockPos(x, minY, z);
-                if (!(getBuilding() instanceof AbstractBridge) && isPosInsideBuilding(bp))
+                if (!(getBuilding() instanceof AbstractBridge) && avoidAllBuildings ? BuildingUtils.isPosInsideAnyBuilding(level.isClientSide(), bp) : isPosInsideBuilding(bp))
                     continue;
 
                 float dist = (float) bpTarget.distToCenterSqr(bp.getX(), bp.getY(), bp.getZ());

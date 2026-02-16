@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.mixin;
 
 import com.solegendary.reignofnether.entities.BlazeUnitFireball;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.resources.ResourceSources;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -129,7 +130,8 @@ public abstract class LivingEntityMixin extends Entity {
             !pDamageSource.is(DamageTypeTags.BYPASSES_ARMOR) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_RESISTANCE) &&
             pDamageSource.is(DamageTypes.MOB_ATTACK)) &&
-            pDamageSource.getEntity() instanceof AttackerUnit attackerUnit) {
+            pDamageSource.getEntity() instanceof AttackerUnit attackerUnit &&
+            !ResourceSources.isHuntableAnimal((LivingEntity) (Object) this)) {
 
             ci.cancel();
 
