@@ -321,7 +321,7 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     public List<FormattedCharSequence> getAttackDamageStatTooltip() {
         return List.of(
                 fcs(I18n.get("unitstats.reignofnether.attack_damage"), true),
-                fcs(I18n.get("unitstats.reignofnether.attack_damage_bonus_buildings", "50%"))
+                fcs(I18n.get("unitstats.reignofnether.attack_damage_bonus_buildings", "100%"))
         );
     }
     @Override
