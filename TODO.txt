@@ -1,5 +1,5 @@
 
-1.20.1-1.3.0-beta-6
+1.20.1-1.3.0-beta-7
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -22,30 +22,17 @@ New Heroes
 
 Bugfixes
 --------
-[✔] Bogged are only 20hp instead of 30hp (only on production jars?)
-[✔] Weapons deal no extra damage (eg. elite zombies, netherite swords)
-[✔] The Wildfire can no longer equip netherite chestplates
-[✔] Fixed monster spawners not working
+[✔] Fixed grunts and villagers dealing too much damage to animals
+[✔] Workers no longer stand on other building foundations while working on adjacent buildings
+    - This sometimes got them stuck on the top of a building
 
 Quality of Life
 ---------------
-[✔] Added spawn eggs for the Marauder and Bogged
-[✔] Added bonus damage tooltips to poison spiders, blazes and brutes/headhunters with fire aspect
+
 
 Balance
 -------
-[✔] Hoglin increased from 70 to 75
-[✔] Hoglin attack damage reduced from 6 to 5
-[✔] Hoglin building bonus damage increased from 50% to 100%
 
-[✔] Scorching Gaze's duration is reduced by 2s whenever it spreads to another unit
-[✔] Scorching Gaze cooldown increased from 20s to 30s
-[✔] Scorching Gaze mana cost increased from 40 to 50
-[✔] Scorching Gaze's targets now have a glow effect applied to them
-[✔] Molten bomb mana cost reduced from 60 to 50
-[✔] Souls Aflame duration reduced from 50s to 45s
-[✔] The Wildfire and Blazes are now immune to fall damage
-[✔] The Wildfire no longer floats out of melee range while attacking
 
 Languages
 ---------
