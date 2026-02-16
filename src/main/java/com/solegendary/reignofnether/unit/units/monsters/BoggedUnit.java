@@ -8,6 +8,9 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -23,6 +26,14 @@ public class BoggedUnit extends SkeletonUnit implements Unit, AttackerUnit, Rang
 
     public BoggedUnit(EntityType<? extends Skeleton> entityType, Level level) {
         super(entityType, level);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MOVEMENT_SPEED, SkeletonUnit.movementSpeed)
+                .add(Attributes.MAX_HEALTH, SkeletonUnit.maxHealth)
+                .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
+                .add(Attributes.ARMOR, SkeletonUnit.armorValue);
     }
 
     public static final int POISON_DAMAGE = 6;

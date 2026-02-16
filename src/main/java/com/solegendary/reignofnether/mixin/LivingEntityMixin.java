@@ -14,6 +14,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -126,12 +127,17 @@ public abstract class LivingEntityMixin extends Entity {
             !pDamageSource.is(DamageTypeTags.WITCH_RESISTANT_TO) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_SHIELD) &&
             !pDamageSource.is(DamageTypeTags.BYPASSES_ARMOR) &&
-            !pDamageSource.is(DamageTypeTags.BYPASSES_RESISTANCE)) &&
+            !pDamageSource.is(DamageTypeTags.BYPASSES_RESISTANCE) &&
+            pDamageSource.is(DamageTypes.MOB_ATTACK)) &&
             pDamageSource.getEntity() instanceof AttackerUnit attackerUnit) {
 
             ci.cancel();
 
             float dmg = attackerUnit.getUnitAttackDamage();
+            boolean isMelee = pDamageSource.is(DamageTypes.MOB_ATTACK) && !pDamageSource.is(DamageTypeTags.IS_PROJECTILE);
+            if (isMelee)
+                dmg += AttackerUnit.getWeaponDamageModifier(attackerUnit);
+
             if (this instanceof Unit unit) {
                 dmg *= (1 - unit.getUnitPhysicalArmorPercentage());
                 if (pDamageSource.is(DamageTypeTags.IS_PROJECTILE))

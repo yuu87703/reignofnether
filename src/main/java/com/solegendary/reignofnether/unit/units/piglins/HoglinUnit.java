@@ -157,20 +157,20 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
 
     public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
 
-    final static public float attackDamage = 6.0f;
+    final static public float attackDamage = 5.0f;
     final static public float attacksPerSecond = 0.45f;
     final static public float attackRange = 2; // only used by ranged units or melee building attackers
     final static public float aggroRange = 10;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
 
-    final static public float maxHealth = 70.0f;
+    final static public float maxHealth = 75.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.31f;
     public int maxResources = 100;
 
     public float getBuildingDamageMultiplier() {
-        return 1.5f;
+        return 2.0f;
     }
 
     private Abilities abilities = ABILITIES.clone();

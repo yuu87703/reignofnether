@@ -21,11 +21,13 @@ import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.faction.Faction;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,6 +49,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public static final Abilities ABILITIES = new Abilities();
@@ -331,9 +335,17 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     }
 
     @Override
+    public List<FormattedCharSequence> getAttackDamageStatTooltip() {
+        return hasEnchantedNetheriteSword() ? List.of(
+                fcs(I18n.get("unitstats.reignofnether.attack_damage"), true),
+                fcs(I18n.get("unitstats.reignofnether.attack_damage_bonus_fire_damage", 3, 3))
+        ) : List.of(
+                fcs(I18n.get("unitstats.reignofnether.attack_damage"), true)
+        );
+    }
+
+    @Override
     public boolean hasBonusDamage() {
         return hasEnchantedNetheriteSword();
     }
-
-
 }

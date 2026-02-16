@@ -577,13 +577,14 @@ public class UnitServerEvents {
             }
             friendlyUnits.sort(Comparator.comparing(le -> le.position().distanceToSqr(evt.getEntity().position())));
             if (!friendlyUnits.isEmpty()) {
-                int amp = evt.getEntity().getEffect(MobEffectRegistrar.SCORCHING_FIRE.get()).getAmplifier();
-                int duration = (ScorchingGaze.DURATION_RANK_1 + (amp * ScorchingGaze.EXTRA_DURATION_PER_RANK)) * 20;
-                if (friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), duration, amp))) {
+                int durationSeconds = evt.getEntity().getEffect(MobEffectRegistrar.SCORCHING_FIRE.get()).getAmplifier() - 2;
+                int durationTicks = durationSeconds * 20;
+                if (durationSeconds > 0 && friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SCORCHING_FIRE.get(), durationTicks, durationSeconds))) {
                     MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 12, evt.getEntity().level(), evt.getEntity().position());
                     SoundClientboundPacket.playSoundAtPos(SoundAction.WILDFIRE_SCORCHING_GAZE_END, friendlyUnits.get(0).blockPosition());
+                    friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffects.GLOWING, durationTicks,0, true, true));
                     if (evt.getEntity().hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
-                        friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), duration + 20, 0, true, true));
+                        friendlyUnits.get(0).addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), durationTicks + 20, 0, true, true));
                     }
                 }
             }
@@ -887,20 +888,6 @@ public class UnitServerEvents {
             evt.setAmount(attackerUnit.getUnitAttackDamage());
         }
 
-        if (evt.getSource() == evt.getEntity().damageSources().lightningBolt()) {
-            if (evt.getEntity() instanceof CreeperUnit) {
-                evt.setCanceled(true);
-            } else {
-                evt.setAmount(evt.getAmount() / 2);
-            }
-        }
-
-        // ignore added weapon damage for workers
-        if (evt.getSource().getEntity() instanceof WorkerUnit && evt.getSource()
-            .getEntity() instanceof AttackerUnit attackerUnit) {
-            evt.setAmount(attackerUnit.getUnitAttackDamage());
-        }
-        
         if (evt.getSource() == evt.getEntity().damageSources().lightningBolt()) {
             if (evt.getEntity() instanceof CreeperUnit) {
                 evt.setCanceled(true);
