@@ -58,6 +58,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
@@ -680,5 +681,10 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     @Override
     public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
         return false;
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        // disallow rising into the air (sometimes out of melee range) when attacking a nearby target)
     }
 }

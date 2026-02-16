@@ -29,7 +29,7 @@ Bugfixes
 
 Quality of Life
 ---------------
-[🟡] Added spawn eggs for the Marauder and Bogged
+[✔] Added spawn eggs for the Marauder and Bogged
 [✔] Added bonus damage tooltips to poison spiders, blazes and brutes/headhunters with fire aspect
 
 Balance
@@ -45,7 +45,7 @@ Balance
 [✔] Molten bomb mana cost reduced from 60 to 50
 [✔] Souls Aflame duration reduced from 50s to 45s
 [✔] The Wildfire and Blazes are now immune to fall damage
-[❌] The Wildfire no longer floats out of melee range while attacking
+[✔] The Wildfire no longer floats out of melee range while attacking
 
 Languages
 ---------

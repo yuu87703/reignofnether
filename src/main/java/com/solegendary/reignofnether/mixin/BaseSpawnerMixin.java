@@ -168,7 +168,6 @@ public class BaseSpawnerMixin {
                                     ACTIVATION_RANGE, Mob.class, pServerLevel)) {
                                 if (!(mob instanceof Unit unit)) continue;
                                 if (unit.getOwnerName().isBlank() && mob.getType() == entity.getType()) nearbyNeutralUnitsOfTypeSum++;
-                                if (unit.getOwnerName().isBlank() || !entity.getName().equals(((Entity) unit).getName())) continue;
                                 if (!unit.getOwnerName().isBlank()) hasNearbyNonNeutralUnit = true;
                             }
 
