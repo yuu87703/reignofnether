@@ -28,11 +28,11 @@ Bugfixes
 
 Quality of Life
 ---------------
-[🟡] The Royal Guard and Enchanter now have the collision size of regular illagers (visual size unchanged)
+[✔] The Royal Guard and Enchanter now have the collision size of regular illagers (visual size unchanged)
 
 Balance
 -------
-
+[✔] All damage dealt to huntable animals by military units is halved
 
 Languages
 ---------
