@@ -50,6 +50,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
@@ -658,13 +659,9 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
         }
     }
 
+    // prevent vanilla logic for picking up items
     @Override
-    public boolean wantsToPickUp(ItemStack itemStack) {
-        if (!itemStack.isEdible()) {
-            return false;
-        }
-        return super.wantsToPickUp(itemStack);
-    }
+    protected void pickUpItem(ItemEntity pItemEntity) { }
 
     @Override
     public void setupEquipmentAndUpgradesServer() {

@@ -22,13 +22,13 @@ New Heroes
 
 Bugfixes
 --------
-[✔] Fixed grunts and villagers dealing too much damage to animals
-[✔] Workers no longer stand on other building foundations while working on adjacent buildings
-    - This sometimes got them stuck on the top of a building
+[✔] Heroes can no longer pick up weapons and armour
+[✔] Zombies summoned by necromancers no longer drop their weapons on death
+[✔] Fixed the player defeated announcement text
 
 Quality of Life
 ---------------
-
+[🟡] The Royal Guard and Enchanter now have the collision size of regular illagers (visual size unchanged)
 
 Balance
 -------
