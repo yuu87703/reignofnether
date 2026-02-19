@@ -26,9 +26,9 @@ Bugfixes
 [✔] Zombies summoned by necromancers no longer drop their weapons on death
 [✔] Fixed the player defeated announcement text
 [✔] Fixed grunts and villagers dealing too much damage to other units
-[🟡] Changing /gamerule groundYLevel no longer moves players that aren't in RTS cam (this was killing survival players!)
+[✔] Changing /gamerule groundYLevel no longer moves players that aren't in RTS cam (this was killing survival players!)
     - This also happened whenever another player logged in
-[❌] Destroying a farm now destroys all of its crop blocks
+[✔] Destroying a farm now destroys all of its crop blocks
 
 Quality of Life
 ---------------
