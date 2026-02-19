@@ -307,7 +307,7 @@ public class PlayerServerEvents {
             ResearchServerEvents.syncResearch(playerName);
             ResearchServerEvents.syncCheats(playerName);
         }
-        /*
+
         boolean inOrthoviewList = false;
         for (ServerPlayer orthoviewPlayer : orthoviewPlayers) {
             if (orthoviewPlayer.getId() == evt.getEntity().getId())  {
@@ -317,7 +317,6 @@ public class PlayerServerEvents {
         }
         if (!inOrthoviewList)
             orthoviewPlayers.add((ServerPlayer) evt.getEntity());
-         */
 
         if (!TutorialServerEvents.isEnabled()) {
             if (!isRTSPlayer(serverPlayer.getId())) {
