@@ -171,7 +171,7 @@ public class WardenUnit extends Warden implements Unit, AttackerUnit, RangeIndic
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
-    public static final float SONIC_BOOM_DAMAGE = 75f;
+    public static final float SONIC_BOOM_DAMAGE = 15f;
     public static final int SONIC_BOOM_RANGE = 10;
     public static final int SONIC_BOOM_CHANNEL_TICKS = 2 * ResourceCost.TICKS_PER_SECOND;
 

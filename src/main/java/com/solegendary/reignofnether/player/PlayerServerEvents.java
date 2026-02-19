@@ -307,10 +307,18 @@ public class PlayerServerEvents {
             ResearchServerEvents.syncResearch(playerName);
             ResearchServerEvents.syncCheats(playerName);
         }
+        /*
+        boolean inOrthoviewList = false;
         for (ServerPlayer orthoviewPlayer : orthoviewPlayers) {
-            if (orthoviewPlayer.getId() != evt.getEntity().getId()) continue;
-            orthoviewPlayers.add((ServerPlayer) evt.getEntity());
+            if (orthoviewPlayer.getId() == evt.getEntity().getId())  {
+                inOrthoviewList = true;
+                break;
+            }
         }
+        if (!inOrthoviewList)
+            orthoviewPlayers.add((ServerPlayer) evt.getEntity());
+         */
+
         if (!TutorialServerEvents.isEnabled()) {
             if (!isRTSPlayer(serverPlayer.getId())) {
                 serverPlayer.sendSystemMessage(Component.translatable("tutorial.reignofnether.welcome")
