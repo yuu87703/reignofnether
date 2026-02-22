@@ -1,5 +1,5 @@
 
-1.20.1-1.3.0-beta-8
+1.20.1-1.3.0
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -22,21 +22,28 @@ New Heroes
 
 Bugfixes
 --------
-[✔] Heroes can no longer pick up weapons and armour
-[✔] Zombies summoned by necromancers no longer drop their weapons on death
-[✔] Fixed the player defeated announcement text
-[✔] Fixed grunts and villagers dealing too much damage to other units
-[✔] Changing /gamerule groundYLevel no longer moves players that aren't in RTS cam (this was killing survival players!)
-    - This also happened whenever another player logged in
-[✔] Destroying a farm now destroys all of its crop blocks
+[✔] Campfires no longer do excessive damage
+[✔] Creative players out of RTS cam are no longer locked into flying and no longer have noclip
+[✔] Fixed the blizzard sound effect still continuing sometimes after the spell ends
+
+[❌] night rings are a bit bugged sometimes (see northern plaguelands on server)
+[❌] overlapping resources with a bridge makes it ungatherable
 
 Quality of Life
 ---------------
-[✔] The Royal Guard and Enchanter now have the collision size of regular illagers (visual size unchanged)
+[❌] checkpoints not showing up sometimes (only on server?)
 
 Balance
 -------
-[✔] All damage dealt to huntable animals by military units is halved
+[✔] The Wretched Wraith healing on snow raised from 0.25hp/layer to 0.33hp/layer
+[✔] Wretched Wraith bonus armour during blizzard increased from 30% to 50%
+[✔] Wretched Wraith Frostblink mana cost reduced from 40 to 30, and cooldown reduced from (20,16,12) to (20,15,10)
+[✔] Piglin Merchant TNT Throw range increased from 12 to 14
+[✔] Marauder HP reduced from 140 to 125
+[🟡] Marauder Cleaving Flail damage to secondary targets reduced from 7 to 5 and stun from 1.5s to 1s
+[🟡] Piglins lose their magma block immunity if they are actively on fire
+[🟡] Removed the piglin Fire Resistance upgrade
+[🟡] Wildfire's magma blocks duration reduced from 10-15s to 8-12s
 
 Languages
 ---------

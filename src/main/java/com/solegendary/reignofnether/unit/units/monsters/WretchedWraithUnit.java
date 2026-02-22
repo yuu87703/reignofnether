@@ -337,7 +337,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     public double getUnitPhysicalArmorPercentage() {
         double dmgAfterAbsorb = CombatRules.getDamageAfterAbsorb(
                 1,
-                getArmorValue() + (isBlizzardInProgress() ? 8 : 0),
+                getArmorValue() + (isBlizzardInProgress() ? 13 : 0),
                 (float)getAttributeValue(Attributes.ARMOR_TOUGHNESS));
         dmgAfterAbsorb += getDamageTakenIncrease();
         return Math.round((1 - dmgAfterAbsorb)/ 0.01d) * 0.01d;
@@ -416,7 +416,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
             snowToPlace = newSnowQueue;
             // heal while on wraith snow
             int layers = BlockUtils.getWraithSnowLayers(level().getBlockState(getOnPos().above()));
-            if (onGround() && layers > 0 && tickCount % (80 / layers) == 0) {
+            if (onGround() && layers > 0 && tickCount % (60 / layers) == 0) {
                 heal(1);
             }
         }
@@ -712,7 +712,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
         blizzardTicksLeft = Blizzard.CHANNEL_DURATION;
         if (!level().isClientSide) {
             AbilityClientboundPacket.doAbility(getId(), UnitAction.BLIZZARD, blizzardTicksLeft);
-            SoundClientboundPacket.playFadeableLoopingSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition(), 1.0f, getId());
+            SoundClientboundPacket.playFadeableLoopingSoundAtPos(SoundAction.WRETCHED_WRAITH_BLIZZARD, blockPosition(), 1.0f, getId(), Blizzard.CHANNEL_DURATION);
         }
     }
 

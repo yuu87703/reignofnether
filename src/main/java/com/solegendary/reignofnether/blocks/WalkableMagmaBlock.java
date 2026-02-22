@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class WalkableMagmaBlock extends Block {
-    private static final int BUBBLE_COLUMN_CHECK_DELAY = 20;
     public static final int DAMAGE_DELAY = 20; // higher == damage less often
     public static final int DAMAGE = 3;
 

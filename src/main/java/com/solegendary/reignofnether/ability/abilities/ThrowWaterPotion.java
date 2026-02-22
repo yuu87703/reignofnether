@@ -30,7 +30,6 @@ public class ThrowWaterPotion extends Ability {
 
     public final Potion potion = Potions.WATER;
 
-    //TODO Fix potionThrowRange for Witches gathering on a building
     public ThrowWaterPotion(int potionThrowRange) {
         super(
             UnitAction.THROW_WATER_POTION,

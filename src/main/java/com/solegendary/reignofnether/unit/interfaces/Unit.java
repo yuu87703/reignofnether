@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveEnchantment;
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyFeast;
+import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
@@ -256,9 +257,9 @@ public interface Unit {
                 unit.setMoveTarget(unit.getFollowTarget().blockPosition());
 
             // remove fire from piglin units if they have research
-            boolean hasImmunityResearch = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_FIRE_RESISTANCE);
-            if (hasImmunityResearch && unit.getFaction() == Faction.PIGLINS)
-                unitMob.setRemainingFireTicks(0);
+            //boolean hasImmunityResearch = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_FIRE_RESISTANCE);
+            //if (hasImmunityResearch && unit.getFaction() == Faction.PIGLINS)
+            //    unitMob.setRemainingFireTicks(0);
         }
 
         // slow regen for monster and piglin units
@@ -369,7 +370,8 @@ public interface Unit {
             BlockState bsOn = unitMob.level().getBlockState(unitMob.getOnPos());
             BlockState bsMagma = BlockRegistrar.WALKABLE_MAGMA_BLOCK.get().defaultBlockState();
             if (bsOn.getBlock() != BlockRegistrar.WALKABLE_MAGMA_BLOCK.get()) {
-                BlockServerEvents.addTempBlock((ServerLevel) unitMob.level(), unitMob.getOnPos(), bsMagma, bsOn, unitMob.getRandom().nextInt(200,300));
+                BlockServerEvents.addTempBlock((ServerLevel) unitMob.level(), unitMob.getOnPos(), bsMagma, bsOn, unitMob.getRandom()
+                        .nextInt(ScorchingGaze.MIN_MAGMA_DURATION, ScorchingGaze.MAX_MAGMA_DURATION));
             }
             MiscUtil.addParticleExplosion(ParticleTypes.LAVA, 1, unitMob.level(), unitMob.position());
             if (!unitMob.isOnFire()) {
