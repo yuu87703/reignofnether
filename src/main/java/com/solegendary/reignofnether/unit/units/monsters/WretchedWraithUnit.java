@@ -43,6 +43,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -357,7 +358,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
     @Override
     public float getDamageAfterMagicAbsorb(DamageSource pSource, float pDamage) {
         pDamage = super.getDamageAfterMagicAbsorb(pSource, pDamage);
-        if (pSource.is(DamageTypeTags.WITCH_RESISTANT_TO))
+        if (pSource.is(DamageTypeTags.WITCH_RESISTANT_TO) || pSource.is(DamageTypes.ON_FIRE))
             pDamage *= 0.7F;
         return pDamage;
     }
@@ -416,7 +417,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
             snowToPlace = newSnowQueue;
             // heal while on wraith snow
             int layers = BlockUtils.getWraithSnowLayers(level().getBlockState(getOnPos().above()));
-            if (onGround() && layers > 0 && tickCount % (60 / layers) == 0) {
+            if (onGround() && layers > 0 && tickCount % (80 / layers) == 0) {
                 heal(1);
             }
         }

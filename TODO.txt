@@ -32,9 +32,10 @@ Quality of Life
 
 Balance
 -------
-[✔] The Wretched Wraith healing on snow raised from 0.25hp/layer to 0.33hp/layer
 [✔] Wretched Wraith bonus armour during blizzard increased from 30% to 50%
 [✔] Wretched Wraith Frostblink mana cost reduced from 40 to 30, and cooldown reduced from (20,16,12) to (20,15,10)
+[✔] Spider resource cost reduced from (90 food, 25 wood, 25 ore) to (80 food, 20 wood, 20 ore)
+[✔] Spiders now glide smoothly up 1-block high steps without having to jump or climb
 
 [✔] Piglin Merchant TNT Throw range increased from 12 to 14
 [✔] Marauder HP reduced from 140 to 125
@@ -45,7 +46,10 @@ Balance
 [✔] Scorching gaze no longer causes 2x magma and fire block damage, but fire tick damage is raised to 3x
 
 [✔] Witch Water Potions are greatly improved, and now extinguish fires on all mobs and blocks within a 2 block radius
+[✔] Witch magic resistance reduced from 85% to 60%
 [✔] Raised water potion cooldown from 5s to 8s
+
+[🟡] Magic resistance now reduces fire tick damage
 
 Languages
 ---------

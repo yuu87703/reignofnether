@@ -183,8 +183,8 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry BOGGED = ResourceCostConfigEntry.Unit(50,45,0,18,1, ResourceCosts.BOGGED, "Bogged Config");
         public static final ResourceCostConfigEntry HUSK = ResourceCostConfigEntry.Unit(75,0,0,18,1, ResourceCosts.HUSK, "Husk Config");
         public static final ResourceCostConfigEntry DROWNED = ResourceCostConfigEntry.Unit(75,0,0,18,1, ResourceCosts.DROWNED, "Drowned Config");
-        public static final ResourceCostConfigEntry SPIDER = ResourceCostConfigEntry.Unit(90,25,25,25,2, ResourceCosts.SPIDER, "Spider Config");
-        public static final ResourceCostConfigEntry POISON_SPIDER = ResourceCostConfigEntry.Unit(90,25,25,25,2, ResourceCosts.POISON_SPIDER, "Poison Spider Config");
+        public static final ResourceCostConfigEntry SPIDER = ResourceCostConfigEntry.Unit(80,20,20,25,2, ResourceCosts.SPIDER, "Spider Config");
+        public static final ResourceCostConfigEntry POISON_SPIDER = ResourceCostConfigEntry.Unit(80,20,20,25,2, ResourceCosts.POISON_SPIDER, "Poison Spider Config");
         public static final ResourceCostConfigEntry SLIME = ResourceCostConfigEntry.Unit(40,40,40,25,2, ResourceCosts.SLIME, "Slime Config");
         public static final ResourceCostConfigEntry WARDEN = ResourceCostConfigEntry.Unit(275,0,125,50,5, ResourceCosts.WARDEN, "Warden Config");
         public static final ResourceCostConfigEntry NECROMANCER = ResourceCostConfigEntry.Unit(0,0,0,30, 5, ResourceCosts.NECROMANCER, "Necromancer Config");
