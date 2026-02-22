@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -27,11 +26,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Mixin(ThrownPotion.class)
@@ -107,18 +106,16 @@ public abstract class ThrownPotionMixin extends ThrowableItemProjectile {
             item.getItem() instanceof LingeringPotionItem &&
             this.getOwner() instanceof WitchUnit) {
             ci.cancel();
-        } else if (isWaterPotion() && pResult.getType() == HitResult.Type.ENTITY) {
-            dowseNearbyFires(((EntityHitResult)pResult).getEntity().blockPosition());
+        } else if (!this.level().isClientSide && isWaterPotion() && pResult.getType() == HitResult.Type.ENTITY) {
+            reignofnether$dowseNearbyFires(((EntityHitResult)pResult).getEntity().blockPosition());
         }
     }
 
     @Shadow private void dowseFire(BlockPos pPos) { }
-    @Shadow private void applyWater() { }
 
     @Inject(
             method = "onHitBlock",
-            at = @At("TAIL"),
-            cancellable = true
+            at = @At("TAIL")
     )
     protected void onHitBlock(BlockHitResult pResult, CallbackInfo ci) {
         if (!this.level().isClientSide) {
@@ -127,12 +124,13 @@ public abstract class ThrownPotionMixin extends ThrowableItemProjectile {
             BlockPos hitBp = pResult.getBlockPos();
             BlockPos adjBp = hitBp.relative(dir);
             if (isWater) {
-                dowseNearbyFires(adjBp);
+                reignofnether$dowseNearbyFires(adjBp);
             }
         }
     }
 
-    private void dowseNearbyFires(BlockPos bp) {
+    @Unique
+    private void reignofnether$dowseNearbyFires(BlockPos bp) {
         float radius = ResearchWaterPotions.DOWSE_RADIUS;
         for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(bp.getCenter(), radius, LivingEntity.class, level())) {
             if (entity.isOnFire() && entity.isAlive()) {
