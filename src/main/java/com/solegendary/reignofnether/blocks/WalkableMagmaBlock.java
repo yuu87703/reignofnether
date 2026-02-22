@@ -31,7 +31,7 @@ public class WalkableMagmaBlock extends Block {
     }
 
     public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
-        boolean isPiglinFaction = pEntity instanceof Unit unit && unit.getFaction() == Faction.PIGLINS;
+        boolean isPiglinFaction = pEntity instanceof Unit unit && unit.getFaction() == Faction.PIGLINS && !pEntity.isOnFire();
         boolean isDamageTick = pEntity.tickCount % DAMAGE_DELAY == 0;
 
         if (!pEntity.isSteppingCarefully() &&

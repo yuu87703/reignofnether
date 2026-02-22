@@ -26,7 +26,7 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class ThrowWaterPotion extends Ability {
 
-    public static final int CD_MAX_SECONDS = 5;
+    public static final int CD_MAX_SECONDS = 8;
 
     public final Potion potion = Potions.WATER;
 

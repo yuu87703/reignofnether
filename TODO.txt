@@ -25,25 +25,27 @@ Bugfixes
 [✔] Campfires no longer do excessive damage
 [✔] Creative players out of RTS cam are no longer locked into flying and no longer have noclip
 [✔] Fixed the blizzard sound effect still continuing sometimes after the spell ends
-
-[❌] night rings are a bit bugged sometimes (see northern plaguelands on server)
-[❌] overlapping resources with a bridge makes it ungatherable
+[✔] Building a bridge overlapping resource blocks no longer makes those resources ungatherable
 
 Quality of Life
 ---------------
-[❌] checkpoints not showing up sometimes (only on server?)
 
 Balance
 -------
 [✔] The Wretched Wraith healing on snow raised from 0.25hp/layer to 0.33hp/layer
 [✔] Wretched Wraith bonus armour during blizzard increased from 30% to 50%
 [✔] Wretched Wraith Frostblink mana cost reduced from 40 to 30, and cooldown reduced from (20,16,12) to (20,15,10)
+
 [✔] Piglin Merchant TNT Throw range increased from 12 to 14
 [✔] Marauder HP reduced from 140 to 125
-[🟡] Marauder Cleaving Flail damage to secondary targets reduced from 7 to 5 and stun from 1.5s to 1s
-[🟡] Piglins lose their magma block immunity if they are actively on fire
-[🟡] Removed the piglin Fire Resistance upgrade
-[🟡] Wildfire's magma blocks duration reduced from 10-15s to 8-12s
+[✔] Marauder Cleaving Flail damage to secondary targets reduced from 7 to 5 and stun from 1.5s to 1s
+[✔] Piglins lose their magma block immunity if they are actively on fire
+[✔] Removed the piglin Fire Resistance upgrade
+[✔] Wildfire Molten Bomb no longer deals explosion damage (this was actually unintended)
+[✔] Scorching gaze no longer causes 2x magma and fire block damage, but fire tick damage is raised to 3x
+
+[✔] Witch Water Potions are greatly improved, and now extinguish fires on all mobs and blocks within a 2 block radius
+[✔] Raised water potion cooldown from 5s to 8s
 
 Languages
 ---------
