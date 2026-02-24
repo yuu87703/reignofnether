@@ -286,7 +286,7 @@
     "abilities.reignofnether.scorching_gaze": "Scorching Gaze",
     "abilities.reignofnether.scorching_gaze.stats": "\uE004  %ds   \uE005  %ds   \uE008  %d",
     "abilities.reignofnether.scorching_gaze.tooltip1": "Focus a burning hatred for a single enemy, engulfing it in flames",
-    "abilities.reignofnether.scorching_gaze.tooltip2": "that doubles fire damage taken and leaves a trail of magma.",
+    "abilities.reignofnether.scorching_gaze.tooltip2": "that triples fire tick damage and leaves a trail of magma.",
     "abilities.reignofnether.scorching_gaze.tooltip3": "Units that die under this effect pass it to another nearby friendly unit.",
     "abilities.reignofnether.scorching_gaze.rank1": "Rank 1: Lasts %ds",
     "abilities.reignofnether.scorching_gaze.rank2": "Rank 2: Lasts %ds",
@@ -1502,7 +1502,7 @@
     "unitstats.reignofnether.armour": "Armor",
     "unitstats.reignofnether.armour_melee_and_ranged": "%d%% vs melee & ranged",
     "unitstats.reignofnether.armour_ranged": "%d%% vs ranged",
-    "unitstats.reignofnether.armour_magic": "%d%% vs magic & fire",
+    "unitstats.reignofnether.armour_magic": "%d%% vs magic",
     "unitstats.reignofnether.armour_all": "%d%% vs everything",
     "unitstats.reignofnether.movement_speed": "Movement speed",
 

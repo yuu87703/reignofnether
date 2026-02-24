@@ -342,7 +342,7 @@ public class MiscUtil {
         else if (unitMob instanceof WitherSkeletonUnit) {
             for (LivingEntity entity : entities) {
                 if (!(entity.position().distanceTo(new Vec3(unitPosition.x, unitPosition.y, unitPosition.z)) <= range) ||
-                        !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition()) || entity.hasEffect(MobEffects.WITHER)) {
+                        !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition()) || !entity.hasEffect(MobEffects.WITHER)) {
                     continue;
                 }
                 if (isIdleOrMoveAttackable(unitMob, entity, neutralAggro) && hasLineOfSightForAttacks(unitMob, entity)) {

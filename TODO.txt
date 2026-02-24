@@ -48,7 +48,7 @@ Balance
 [✔] Blaze firewalls can now create fire blocks over snow
 [✔] Fire Resistance now only affects Wither Skeletons and has been moved to the wither shrine
 [✔] Fire Resistance cost reduced from (200 wood, 200 ore, 100s) to (125 wood, 125 ore, 60s)
-[✔] Wither Skeletons now prioritise enemies that already have wither on them
+[✔] Wither Skeletons now prioritise enemies that already have wither on them when autoattacking
 [✔] Wither Skeletons now have 50% knockback resistance
 
 [✔] Witch Water Potions extinguish radius increased from 1 block to 2 blocks
@@ -56,7 +56,7 @@ Balance
 [✔] Witch magic resistance reduced from 85% to 60%
 [✔] Iron Golem HP reduced from 140 to 120, but ranged armour increased from 20% to 40%
 
-[✔] Magic resistance now reduces fire tick damage
+[✔] Magic resistance now also reduces fire tick damage
 
 Languages
 ---------
