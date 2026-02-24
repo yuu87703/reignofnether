@@ -256,11 +256,6 @@ public interface Unit {
             // enact target-following, and stop followTarget being reset
             if (unit.getFollowTarget() != null && unitMob.tickCount % 20 == 0)
                 unit.setMoveTarget(unit.getFollowTarget().blockPosition());
-
-            // remove fire from wither skeletons if they have research
-            boolean hasImmunityResearch = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_FIRE_RESISTANCE);
-            if (hasImmunityResearch && !((Mob) unit).hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()) && unit instanceof WitherSkeletonUnit)
-                unitMob.setRemainingFireTicks(0);
         }
 
         // slow regen for monster and piglin units
