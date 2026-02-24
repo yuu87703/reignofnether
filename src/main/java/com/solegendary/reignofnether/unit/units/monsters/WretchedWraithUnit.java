@@ -387,7 +387,8 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
                 .add(Attributes.MAX_HEALTH, WretchedWraithUnit.maxHealth)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
                 .add(Attributes.ARMOR, WretchedWraithUnit.armorValue)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5f);
+                .add(Attributes.ATTACK_KNOCKBACK, 0f)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0f);
     }
 
     public void tick() {
@@ -741,7 +742,7 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
 
     @Override
     public float getBonusMeleeRange() {
-        return 0.4f;
+        return 0.6f;
     }
 
     @Override

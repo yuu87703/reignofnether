@@ -1,5 +1,5 @@
 
-1.20.1-1.3.0
+1.20.1-1.3.0-beta-9
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -23,9 +23,10 @@ New Heroes
 Bugfixes
 --------
 [✔] Campfires no longer do excessive damage
-[✔] Creative players out of RTS cam are no longer locked into flying and no longer have noclip
+[✔] Creative players out of RTS cam are no longer locked into flying and noclip
 [✔] Fixed the blizzard sound effect still continuing sometimes after the spell ends
 [✔] Building a bridge overlapping resource blocks no longer makes those resources ungatherable
+[✔] Libraries no longer try to autocast Vigor enchantments on Evokers that already have it
 
 Quality of Life
 ---------------
@@ -34,22 +35,25 @@ Balance
 -------
 [✔] Wretched Wraith bonus armour during blizzard increased from 30% to 50%
 [✔] Wretched Wraith Frostblink mana cost reduced from 40 to 30, and cooldown reduced from (20,16,12) to (20,15,10)
+[✔] The Wretched Wraith can no longer cause or receive knockback
 [✔] Spider resource cost reduced from (90 food, 25 wood, 25 ore) to (80 food, 20 wood, 20 ore)
 [✔] Spiders now glide smoothly up 1-block high steps without having to jump or climb
 
 [✔] Piglin Merchant TNT Throw range increased from 12 to 14
-[✔] Marauder HP reduced from 140 to 125
 [✔] Marauder Cleaving Flail damage to secondary targets reduced from 7 to 5 and stun from 1.5s to 1s
 [✔] Piglins lose their magma block immunity if they are actively on fire
-[✔] Removed the piglin Fire Resistance upgrade
+[✔] Fire Resistance now only affects Wither Skeletons and has been moved to the wither shrine
+[✔] Fire Resistance cost reduced from (200 wood, 200 ore, 100s) to (125 wood, 125 ore, 60s)
 [✔] Wildfire Molten Bomb no longer deals explosion damage (this was actually unintended)
 [✔] Scorching gaze no longer causes 2x magma and fire block damage, but fire tick damage is raised to 3x
+[✔] Wither Skeletons now prioritise enemies that already have wither on them
 
 [✔] Witch Water Potions are greatly improved, and now extinguish fires on all mobs and blocks within a 2 block radius
 [✔] Witch magic resistance reduced from 85% to 60%
 [✔] Raised water potion cooldown from 5s to 8s
+[✔] Iron Golem HP reduced to 125, but ranged resistance increased from 20% to 40%
 
-[🟡] Magic resistance now reduces fire tick damage
+[✔] Magic resistance now reduces fire tick damage
 
 Languages
 ---------

@@ -28,6 +28,7 @@ import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.unit.units.piglins.WitherSkeletonUnit;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
@@ -256,10 +257,10 @@ public interface Unit {
             if (unit.getFollowTarget() != null && unitMob.tickCount % 20 == 0)
                 unit.setMoveTarget(unit.getFollowTarget().blockPosition());
 
-            // remove fire from piglin units if they have research
-            //boolean hasImmunityResearch = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_FIRE_RESISTANCE);
-            //if (hasImmunityResearch && unit.getFaction() == Faction.PIGLINS)
-            //    unitMob.setRemainingFireTicks(0);
+            // remove fire from wither skeletons if they have research
+            boolean hasImmunityResearch = ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_FIRE_RESISTANCE);
+            if (hasImmunityResearch && !((Mob) unit).hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()) && unit instanceof WitherSkeletonUnit)
+                unitMob.setRemainingFireTicks(0);
         }
 
         // slow regen for monster and piglin units

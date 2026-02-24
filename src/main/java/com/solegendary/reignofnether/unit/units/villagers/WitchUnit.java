@@ -162,7 +162,7 @@ public class WitchUnit extends Witch implements Unit, RangeIndicator {
     public float getDamageAfterMagicAbsorb(DamageSource pSource, float pDamage) {
         pDamage = super.getDamageAfterMagicAbsorb(pSource, pDamage);
         if (pSource.is(DamageTypeTags.WITCH_RESISTANT_TO)) {
-            pDamage *= 2.667; // 0.4 (60% less damage) after super's * 0.15
+            pDamage *= 2.67; // 0.4 (60% less damage) after super's * 0.15
         }
         if (pSource.is(DamageTypes.ON_FIRE)) {
             pDamage *= 0.4;
