@@ -30,6 +30,7 @@ Bugfixes
 
 Quality of Life
 ---------------
+[✔] Warped Nylium now counts as nether terrain for piglins
 
 Balance
 -------
@@ -41,17 +42,19 @@ Balance
 
 [✔] Piglin Merchant TNT Throw range increased from 12 to 14
 [✔] Marauder Cleaving Flail damage to secondary targets reduced from 7 to 5 and stun from 1.5s to 1s
-[✔] Piglins lose their magma block immunity if they are actively on fire
-[✔] Fire Resistance now only affects Wither Skeletons and has been moved to the wither shrine
-[✔] Fire Resistance cost reduced from (200 wood, 200 ore, 100s) to (125 wood, 125 ore, 60s)
+[✔] Piglin units lose their magma block immunity if they are actively on fire
 [✔] Wildfire Molten Bomb no longer deals explosion damage (this was actually unintended)
 [✔] Scorching gaze no longer causes 2x magma and fire block damage, but fire tick damage is raised to 3x
+[✔] Blaze firewalls can now create fire blocks over snow
+[✔] Fire Resistance now only affects Wither Skeletons and has been moved to the wither shrine
+[✔] Fire Resistance cost reduced from (200 wood, 200 ore, 100s) to (125 wood, 125 ore, 60s)
 [✔] Wither Skeletons now prioritise enemies that already have wither on them
+[✔] Wither Skeletons now have 50% knockback resistance
 
 [✔] Witch Water Potions extinguish radius increased from 1 block to 2 blocks
 [✔] Raised water potion cooldown from 5s to 8s
 [✔] Witch magic resistance reduced from 85% to 60%
-[✔] Iron Golem HP reduced to 125, but ranged resistance increased from 20% to 40%
+[✔] Iron Golem HP reduced from 140 to 120, but ranged armour increased from 20% to 40%
 
 [✔] Magic resistance now reduces fire tick damage
 

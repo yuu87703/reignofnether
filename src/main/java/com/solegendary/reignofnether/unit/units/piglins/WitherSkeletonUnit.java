@@ -185,7 +185,8 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
                 .add(Attributes.MAX_HEALTH, WitherSkeletonUnit.maxHealth)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5f)
-                .add(Attributes.ARMOR, WitherSkeletonUnit.armorValue);
+                .add(Attributes.ARMOR, WitherSkeletonUnit.armorValue)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5f);
     }
 
     @Override
@@ -195,7 +196,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
             if (hasImmunityResearch && !hasEffect(MobEffectRegistrar.SOULS_AFLAME.get()))
                 pRemainingFireTicks = 0;
         }
-        super.setSecondsOnFire(pRemainingFireTicks);
+        super.setRemainingFireTicks(pRemainingFireTicks);
     }
 
     @Override
