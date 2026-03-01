@@ -39,6 +39,7 @@ public class Avatar extends HeroAbility {
     public static final float ATTACK_SPLASH_RADIUS = 2.5f;
     public static final float ATTACK_SPLASH_MULT = 0.5f;
     public static final float BONUS_HEALTH = 100;
+    public static final float KNOCKBACK = 0.5f;
 
     public Avatar() {
         super(1, 100, UnitAction.AVATAR, CD_MAX_SECONDS, 0, 0, false);

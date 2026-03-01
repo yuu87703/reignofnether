@@ -58,8 +58,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -788,5 +790,18 @@ public interface Unit {
 
     default boolean uninterruptable() {
         return false;
+    }
+
+    default boolean hasLineOfSight(Vec3 pos) {
+        Entity thisEntity = (Entity) this;
+        Vec3 vec3 = new Vec3(thisEntity.getX(), thisEntity.getEyeY(), thisEntity.getZ());
+        Vec3 vec31 = new Vec3(pos.x, pos.y, pos.z);
+        if (vec31.distanceToSqr(vec3) > 16384) {
+            return false;
+        } else {
+            return thisEntity.level()
+                    .clip(new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, thisEntity))
+                    .getType() == HitResult.Type.MISS;
+        }
     }
 }

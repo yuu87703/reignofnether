@@ -17,6 +17,8 @@ public class SlimeUnitMoveControl extends MoveControl {
     private int jumpDelay;
     private final SlimeUnit slime;
     private float yRot;
+    private boolean hasLineOfSight = false;
+    private double lastDistToNodeSqr = Integer.MAX_VALUE;
 
     private static final Random RANDOM = new Random();
 
@@ -39,16 +41,24 @@ public class SlimeUnitMoveControl extends MoveControl {
         return this.slime.isTiny() ? SoundEvents.SLIME_JUMP_SMALL : SoundEvents.SLIME_JUMP;
     }
 
-    // TODO: don't 180 to look at a node we just passed
-
+    // if we have direct line of sight of the end pos, then dont worry about smart pathfinding (it's slower anyway)
     @Override
     public void tick() {
-        LivingEntity targetEntity = this.slime.getTarget();
-        if (targetEntity != null && this.slime.hasLineOfSight(targetEntity)) {
+        if (this.slime.tickCount % 5 == 0)
+            updateLineOfSight();
+
+        if (hasLineOfSight) {
             tickDumb();
         } else {
             tickSmart();
         }
+    }
+
+    private void updateLineOfSight() {
+        LivingEntity targetEntity = this.slime.getTarget();
+        BlockPos moveTarget = slime.getMoveGoal().getMoveTarget();
+        this.hasLineOfSight = moveTarget != null && this.slime.hasLineOfSight(moveTarget.above().getCenter()) ||
+                            (targetEntity != null && this.slime.hasLineOfSight(targetEntity));
     }
 
     // uses pathnavigation, but not very efficient, sometimes get stuck around corners and misses the target by a block or two
@@ -60,15 +70,13 @@ public class SlimeUnitMoveControl extends MoveControl {
         }
         this.operation = Operation.WAIT;
 
-        // if we are closer to the end goal than the next node is, advance the nodes
-        // advance more the larger we are so that big slimes don't overshoot their target
+        // if we are travelling away from the next node, we likely overshot it, so time to recalculate
         if (slime.getMoveGoal().getMoveTarget() != null) {
             Vec3 wanted = new Vec3(wantedX, wantedY, wantedZ);
-            double distWantedToEndSqr = wanted.distanceToSqr(slime.getMoveGoal().getMoveTarget().getCenter().multiply(new Vec3(1,0,1)));
-            double distUnitToEndSqr = slime.distanceToSqr(slime.getMoveGoal().getMoveTarget().getCenter().multiply(new Vec3(1,0,1)));
+            double distToNextNodeSqr = slime.distanceToSqr(wanted);
             PathNavigation nav = slime.getNavigation();
 
-            if (distUnitToEndSqr < distWantedToEndSqr && nav.getPath() != null) {
+            if (distToNextNodeSqr > lastDistToNodeSqr && nav.getPath() != null) {
                 int intWidth = Math.max(1, (int) slime.getBbWidth());
                 for (int x = 0; x < intWidth; x++) {
                     if (!nav.getPath().isDone())
@@ -76,6 +84,7 @@ public class SlimeUnitMoveControl extends MoveControl {
                 }
                 nav.tick();
             }
+            lastDistToNodeSqr = distToNextNodeSqr;
         }
         double dx = this.wantedX - this.mob.getX();
         double dz = this.wantedZ - this.mob.getZ();

@@ -102,9 +102,8 @@ public class MoltenBombProjectile extends Fireball {
         }
         List<Mob> mobs = MiscUtil.getEntitiesWithinRange(position(), moltenBomb.radius, Mob.class, level());
         for (Mob mob : mobs) {
-            if (mob.hurt(damageSources().explosion(this.getOwner(), this), moltenBomb.damage) && random.nextBoolean()) {
+            if (random.nextBoolean())
                 mob.setSecondsOnFire(5);
-            }
             if (this.getOwner() instanceof LivingEntity le && le.hasEffect(MobEffectRegistrar.SOULS_AFLAME.get())) {
                 mob.addEffect(new MobEffectInstance(MobEffectRegistrar.SOULS_AFLAME.get(), 120, 0, false, false));
             }

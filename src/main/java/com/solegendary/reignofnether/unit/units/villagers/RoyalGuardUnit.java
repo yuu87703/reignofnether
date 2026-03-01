@@ -389,8 +389,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
                         continue;
                     boolean hurt = hitEntity.hurt(this.damageSources().generic(), (float) ai.getValue() * Avatar.ATTACK_SPLASH_MULT);
                     if (hurt) {
-                        float kb = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-                        hitEntity.knockback(kb * 0.5F, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
+                        hitEntity.knockback(Avatar.KNOCKBACK, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
                         this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
                         this.setLastHurtMob(hitEntity);
                     }
@@ -611,8 +610,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
                 }
                 boolean hurt = hitEntity.hurt(this.damageSources().generic(), maceSlam.damage);
                 if (hurt) {
-                    float kb = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-                    hitEntity.knockback(kb * 0.5F, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
+                    hitEntity.knockback(MaceSlam.KNOCKBACK, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
                     this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
                     this.setLastHurtMob(hitEntity);
                 }

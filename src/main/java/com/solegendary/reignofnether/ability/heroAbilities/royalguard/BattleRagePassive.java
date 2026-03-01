@@ -44,13 +44,13 @@ public class BattleRagePassive extends HeroAbility {
     public void updateStatsForRank(HeroUnit hero) {
         if (getRank(hero) == 1) {
             maxHpRegen = 1.2f;
-            manaPerDmgTaken = 0.4f;
+            manaPerDmgTaken = 0.3f;
         } else if (getRank(hero) == 2) {
             maxHpRegen = 1.8f;
-            manaPerDmgTaken = 0.6f;
+            manaPerDmgTaken = 0.4f;
         } else if (getRank(hero) == 3) {
             maxHpRegen = 2.4f;
-            manaPerDmgTaken = 0.8f;
+            manaPerDmgTaken = 0.5f;
         }
     }
 

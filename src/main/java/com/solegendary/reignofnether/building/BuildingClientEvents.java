@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
-import com.solegendary.reignofnether.building.buildings.monsters.Laboratory;
 import com.solegendary.reignofnether.building.buildings.neutral.NeutralTransportPortal;
 import com.solegendary.reignofnether.building.buildings.piglins.CentralPortal;
 import com.solegendary.reignofnether.building.buildings.piglins.PortalBasic;
@@ -14,9 +13,6 @@ import com.solegendary.reignofnether.building.buildings.placements.BridgePlaceme
 import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
-import com.solegendary.reignofnether.building.buildings.villagers.Blacksmith;
-import com.solegendary.reignofnether.building.buildings.villagers.Castle;
-import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.building.buildings.villagers.TownCentre;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
@@ -29,7 +25,6 @@ import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.research.ResearchClient;
-import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.ResourceSources;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
@@ -352,7 +347,7 @@ public class BuildingClientEvents {
     }
 
     public static boolean isBuildingPlacementValid(BlockPos originPos) {
-        return !isBuildingPlacementInAir(originPos) &&
+        return !isBuildingPlacementInAirOrOnBarriers(originPos) &&
                 !isBuildingPlacementClipping(originPos) &&
                 (!isOverlappingAnyOtherBuilding() || SandboxClientEvents.isSandboxPlayer()) &&
                 isNonPiglinOrOnNetherBlocks(originPos) &&
@@ -365,7 +360,7 @@ public class BuildingClientEvents {
     public static void checkBuildingPlacementValidityWithMessages(BlockPos originPos) {
         if (!isBuildingPlacementWithinWorldBorder(originPos)) {
             showTemporaryMessage(I18n.get("building.reignofnether.outside_map"));
-        } else if (isBuildingPlacementInAir(originPos)) {
+        } else if (isBuildingPlacementInAirOrOnBarriers(originPos)) {
             showTemporaryMessage(I18n.get("building.reignofnether.ground_not_flat"));
         } else if (isBuildingPlacementClipping(originPos)) {
             showTemporaryMessage(I18n.get("building.reignofnether.ground_not_flat"));
@@ -402,9 +397,9 @@ public class BuildingClientEvents {
         return false;
     }
 
-    // 90% all solid blocks at the base of the building must be on top of solid blocks to be placeable
+    // 90% all solid blocks at the base of the building must be on top of solid non-barrier blocks to be placeable
     // excluding those under blocks which aren't solid anyway
-    private static boolean isBuildingPlacementInAir(BlockPos originPos) {
+    private static boolean isBuildingPlacementInAirOrOnBarriers(BlockPos originPos) {
         if (isBuildingToPlaceABridge() || GameruleClient.slantedBuilding) {
             return false;
         }
@@ -418,7 +413,9 @@ public class BuildingClientEvents {
 
                 if (bs.isSolid() && !(bsBelow.getBlock() instanceof IceBlock)) {
                     blocksBelow += 1;
-                    if (bsBelow.isSolid() && !(bsBelow.getBlock() instanceof LeavesBlock)) {
+                    if (bsBelow.isSolid() &&
+                            !(bsBelow.getBlock() instanceof LeavesBlock) &&
+                            !(bsBelow.getBlock() instanceof BarrierBlock)) {
                         solidBlocksBelow += 1;
                     }
                 }
@@ -465,7 +462,6 @@ public class BuildingClientEvents {
         if (buildingToPlace instanceof PortalBasic) {
             return true;
         }
-
         return isOnNetherBlocks(blocksToDraw, originPos);
     }
 
@@ -476,8 +472,6 @@ public class BuildingClientEvents {
             if (block.getBlockPos().getY() == 0 && MC.level != null) {
                 BlockPos bp = block.getBlockPos().offset(originPos).offset(0, 1, 0);
                 BlockState bs = block.getBlockState(); // building block
-                BlockState bsBelow = MC.level.getBlockState(bp.below()); // world block
-
                 if (bs.isSolid()) {
                     blocksBelow += 1;
                     if (NetherBlocks.isNetherBlock(MC.level, bp.below())) {

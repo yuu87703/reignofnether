@@ -210,7 +210,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
     protected void customServerAiStep() { }
     @Override
     public LivingEntity getTarget() {
-        return this.targetGoal.getTarget();
+        return this.targetGoal != null ? this.targetGoal.getTarget() : null;
     }
 
     public void tick() {

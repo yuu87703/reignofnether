@@ -90,7 +90,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     // NightSource
     @Override
     public int getNightRange() {
-        return this.getCustomBuilding().nightRadius;
+        return this.isBuilt ? this.getCustomBuilding().nightRadius : 0;
     }
 
     // RangeIndicator

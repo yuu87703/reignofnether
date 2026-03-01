@@ -917,14 +917,18 @@ public class PlayerServerEvents {
 
     public static void beaconVictory(String playerName) {
         if (SurvivalServerEvents.isEnabled()) {
-            if (AlliancesServerEvents.getAllAllies(playerName).isEmpty())
-                sendMessageToAllPlayers("server.reignofnether.victorious", true, playerName);
-            else
-                sendMessageToAllPlayers("server.reignofnether.victory_alliance", true, playerName);
-            PlayerClientboundPacket.victory(playerName);
-            for (String allyName : AlliancesServerEvents.getAllAllies(playerName))
-                PlayerClientboundPacket.victory(allyName);
-            SurvivalServerEvents.endCurrentWave();
+            try {
+                if (AlliancesServerEvents.getAllAllies(playerName).isEmpty())
+                    sendMessageToAllPlayers("server.reignofnether.victorious", true, playerName);
+                else
+                    sendMessageToAllPlayers("server.reignofnether.victory_alliance", true, playerName);
+                PlayerClientboundPacket.victory(playerName);
+                for (String allyName : AlliancesServerEvents.getAllAllies(playerName))
+                    PlayerClientboundPacket.victory(allyName);
+                SurvivalServerEvents.endCurrentWave();
+            } catch (ConcurrentModificationException e) {
+                System.err.println("ConcurrentModificationException during beaconVictory: " + e.getMessage());
+            }
         } else {
             for (RTSPlayer p : rtsPlayers) {
                 String n = p.name;

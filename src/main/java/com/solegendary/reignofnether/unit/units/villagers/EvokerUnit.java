@@ -428,7 +428,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     }
 
     public VillagerUnitModel.ArmPose getEvokerArmPose() {
-        Entity targetEntity = getTargetGoal().getTarget();
+        Entity targetEntity = getTargetGoal() != null ? getTargetGoal().getTarget() : null;
         if (this.isCastingSpell() || (targetEntity != null &&
             this.distanceTo(targetEntity) <= getAttackRange()) &&
             this.getAbilities().get().get(0).isOffCooldown(this)) {
