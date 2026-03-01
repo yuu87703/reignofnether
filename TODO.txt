@@ -33,8 +33,7 @@ Bugfixes
 Quality of Life
 ---------------
 [✔] Improved slime and magma cube pathfinding
-    - They will still sometimes get stuck at corners, but they no longer go in straight lines into walls and trees anymore
-
+    - They will still sometimes get stuck at corners, no longer go in straight lines into walls and trees anymore
 
 Balance
 -------
