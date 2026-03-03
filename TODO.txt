@@ -1,5 +1,5 @@
 
-1.20.1-1.3.0
+1.20.1-1.3.1
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -22,25 +22,14 @@ New Heroes
 
 Bugfixes
 --------
-[✔] Fixed a crash from putting a headhunter or evoker egg in a spawner
-[✔] Players can no longer build on barrier blocks
-[✔] Custom buildings no longer provide night range before being completed
-[✔] Fixed a possible crash from winning with a beacon
-[✔] You can no longer stack additional spawns at a unit spawner by pulling existing mobs away
 
-[✔] Fixed the royal guard's abilities not causing any knockback
 
 Quality of Life
 ---------------
-[✔] Improved slime and magma cube pathfinding
-    - They will still sometimes get stuck at corners, no longer go in straight lines into walls and trees anymore
+
 
 Balance
 -------
-[✔] The Wildfire's Molten Bomb no longer does any damage on impact
-[✔] The Royal Guard's mace slam mana cost increased from 40 to 60, but cooldown decreased from 30s to 20s
-[✔] The Royal Guard's taunting cry mana cost increased from 60 to 75, but cooldown decreased from 50s to 40s
-[✔] The Royal Guard's battle rage mana gain reduced from (0.4, 0.6, 0.8) to (0.3, 0.4, 0.5)
 
 
 Languages
