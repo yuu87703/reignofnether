@@ -382,6 +382,30 @@ public class PlayerClientEvents {
         CustomBuildingClientEvents.setCustomBuildingToEdit(null);
     }
 
+    public static void publishScenarioMap() {
+        rtsPlayers.clear();
+        HelperButtons.updateButtons();
+        SoundClientEvents.stopFadeableMusicInstance();
+        HudClientEvents.controlGroups.clear();
+        UnitClientEvents.getSelectedUnits().clear();
+        UnitClientEvents.getPreselectedUnits().clear();
+        UnitClientEvents.idleWorkerIds.clear();
+        ResearchClient.removeAllResearch();
+        ResearchClient.removeAllCheats();
+        BuildingClientEvents.getSelectedBuildings().clear();
+        ResourcesClientEvents.resourcesList.clear();
+        ClientGameModeHelper.gameMode = ClientGameModeHelper.DEFAULT_GAMEMODE;
+        ClientGameModeHelper.gameModeLocked = false;
+        SurvivalClientEvents.reset();
+        StartPosClientEvents.resetAll();
+        HeroClientEvents.fallenHeroes.clear();
+        AlliancesClient.playersWithAlliedControl.clear();
+        PlayerColors.reset();
+        PlayerDisplayClientEvents.resetDisplay();
+        TimeClientEvents.resetBloodMoon();
+        CustomBuildingClientEvents.setCustomBuildingToEdit(null);
+    }
+
     public static void setRTSLock(boolean lock) {
         rtsLocked = lock;
     }

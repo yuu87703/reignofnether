@@ -17,6 +17,7 @@ public enum PlayerAction {
     REMOVE_RTS_PLAYER,
     RESET_RTS,
     RESET_RTS_HARD,
+    PUBLISH_SCENARIO_MAP,
     SYNC_RTS_GAME_TIME,
     LOCK_RTS,
     UNLOCK_RTS,

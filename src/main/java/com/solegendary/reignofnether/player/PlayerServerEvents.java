@@ -9,6 +9,8 @@ import com.solegendary.reignofnether.building.buildings.neutral.Beacon;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamemode.GameModeClientboundPacket;
+import com.solegendary.reignofnether.gamerules.GameruleClientboundPacket;
+import com.solegendary.reignofnether.gamerules.GameruleServerEvents;
 import com.solegendary.reignofnether.guiscreen.TopdownGuiContainer;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
@@ -1020,16 +1022,7 @@ public class PlayerServerEvents {
                     sendMessageToAllPlayers("server.reignofnether.match_reset", true);
             }
             ResourcesServerEvents.resourcesList.clear();
-            BuildingServerEvents.netherZones.forEach(NetherZone::startRestoring);
-
-            // clear all saved data
-            saveRTSPlayers();
-            postGameRtsPlayers.clear();
-            saveBuildings(serverLevel);
-            BuildingServerEvents.saveNetherZones(serverLevel);
-            UnitServerEvents.saveGatherTargets(serverLevel);
-            ResourcesServerEvents.saveResources(serverLevel);
-            ResearchServerEvents.saveResearch();
+            saveAll();
 
             if (rtsLocked)
                 setRTSLock(false);
@@ -1044,6 +1037,54 @@ public class PlayerServerEvents {
         playerDefaultGameModes.replaceAll((key, oldValue) -> GameType.SPECTATOR);
         AlliancesServerEvents.playersWithAlliedControl.clear();
         TimeServerEvents.resetBloodMoon();
+    }
+
+    public static void publishScenarioMap() {
+        // TODO: error if no units or buildings are assigned to a player
+        // sendMessageToAllPlayers("server.reignofnether.scenario_published_error1");
+
+        synchronized (rtsPlayers) {
+            rtsPlayers.clear();
+
+            for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
+                if (building instanceof ProductionPlacement productionBuilding)
+                    productionBuilding.productionQueue.clear();
+            }
+            ResearchServerEvents.removeAllResearch();
+            ResearchServerEvents.removeAllCheats();
+            PlayerClientboundPacket.publishScenarioMap();
+            sendMessageToAllPlayers("server.reignofnether.scenario_published", true);
+            sendMessageToAllPlayers("server.reignofnether.scenario_published_tooltip1");
+            sendMessageToAllPlayers("server.reignofnether.scenario_published_tooltip2");
+            ResourcesServerEvents.resourcesList.clear();
+            saveAll();
+
+            if (rtsLocked)
+                setRTSLock(false);
+            AlliancesServerEvents.resetAllAlliances();
+            SurvivalServerEvents.reset();
+        }
+        HeroServerEvents.fallenHeroes.clear();
+
+        for (ServerPlayer player : serverLevel.players())
+            player.setGameMode(GameType.SPECTATOR);
+
+        playerDefaultGameModes.replaceAll((key, oldValue) -> GameType.SPECTATOR);
+        AlliancesServerEvents.playersWithAlliedControl.clear();
+        TimeServerEvents.resetBloodMoon();
+
+        serverLevel.getGameRules().getRule(GameRuleRegistrar.SCENARIO_MODE).set(true, serverLevel.getServer());
+        GameruleClientboundPacket.setScenarioMode(true);
+    }
+
+    private static void saveAll() {
+        saveRTSPlayers();
+        postGameRtsPlayers.clear();
+        saveBuildings(serverLevel);
+        BuildingServerEvents.saveNetherZones(serverLevel);
+        UnitServerEvents.saveGatherTargets(serverLevel);
+        ResourcesServerEvents.saveResources(serverLevel);
+        ResearchServerEvents.saveResearch();
     }
 
     public static void setRTSLock(boolean lock) {

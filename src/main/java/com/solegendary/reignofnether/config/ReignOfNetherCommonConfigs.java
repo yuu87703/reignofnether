@@ -327,7 +327,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry ENCHANT_MULTISHOT = ResourceCostConfigEntry.Ability(0,70, 35, ResourceCosts.ENCHANT_MULTISHOT, "Multishot Enchantment Config");
         public static final ResourceCostConfigEntry ENCHANT_VIGOR = ResourceCostConfigEntry.Ability(0,50, 50, ResourceCosts.ENCHANT_VIGOR, "Vigor Enchantment Config");
         public static final ResourceCostConfigEntry EQUIP_LEATHER_ARMOR = ResourceCostConfigEntry.Ability(0,0, 30, ResourceCosts.EQUIP_LEATHER_ARMOR, "Equip Leather Armor Config");
-        public static final ResourceCostConfigEntry EQUIP_CHAINMAIL_ARMOR = ResourceCostConfigEntry.Ability(0,0, 60, ResourceCosts.EQUIP_CHAINMAIL_ARMOR, "Equip Chainmail Armor Config");
+        public static final ResourceCostConfigEntry EQUIP_CHAINMAIL_ARMOR = ResourceCostConfigEntry.Ability(0,0, 45, ResourceCosts.EQUIP_CHAINMAIL_ARMOR, "Equip Chainmail Armor Config");
     }
     public interface Costs {}
 }

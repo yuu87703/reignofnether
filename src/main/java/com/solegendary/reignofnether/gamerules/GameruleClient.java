@@ -36,6 +36,7 @@ public class GameruleClient {
     public static double beaconWinMinutes = 10;
     public static boolean slantedBuilding = true;
     public static int allowedHeroes = 1;
+    public static boolean scenarioMode = false;
 
     public static boolean gamerulesMenuOpen = false;
 

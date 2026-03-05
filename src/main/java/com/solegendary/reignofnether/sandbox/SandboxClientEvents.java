@@ -459,8 +459,26 @@ public class SandboxClientEvents {
                 PlayerServerboundPacket::resetRTS,
                 null,
                 List.of(
-                    fcs(I18n.get("sandbox.reignofnether.exit1")),
-                    fcs(I18n.get("sandbox.reignofnether.exit2"))
+                        fcs(I18n.get("sandbox.reignofnether.exit1"), true)
+                )
+        );
+    }
+
+    public static Button getPublishScenarioButton() {
+        return new Button(
+                "Publish Scenario Map",
+                Button.itemIconSize,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/book.png"),
+                (Keybinding) null,
+                () -> false,
+                () -> false,
+                () -> true,
+                PlayerServerboundPacket::resetRTS,
+                null,
+                List.of(
+                        fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),
+                        fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip2")),
+                        fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip3"))
                 )
         );
     }

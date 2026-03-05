@@ -6,31 +6,45 @@
 [❌] Not done, including unmerged PRs
 
 
+[❌] New button in sandbox mode for every unit and building next to the allegiance button to mark it as player 1-8
+    - Should also be saved to building data
 
-New Heroes
-----------
+[🟡] New button next to the usual exit and reset button, when pressed:
+    [🟡] Sets /gamerule scenarioMode true
+    [🟡] Does not change building or unit allegiances
+    [❌] Disabled if there are no player 1-8 buildings set
 
-[❌] Overflowing graveyards
+When /gamerule scenarioMode true:
+    [🟡] All usual gamemode /gamerule options are hidden, only 'Start Game'
+        [❌] When pressed grants control of all player 1 units and buildings
+            Then next player after that to join takes control of player 2, etc.
+            Make sure player 1-8 attributes are removed after assignments
+    [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
+    [❌] time does not change
 
-[❌] Wraiths
-    - No knockback on melee attacks
-    - Enemies hit by wraiths enough times get feared (uncontrollable and issued a move-away command from the last wraith that hit it)
-    - 2 population
-    - built at dungeons
-    - needs a lab upgrade - possession?
+[❌] Command block API for UnitActionItem commands
 
+[❌] Command block API to grant victory to a player, all allies and defeat all enemies
+
+[?] New menu in sandbox for scenario settings
+    - Win conditions
+    - Opening message
+    - Starting resources
+    - Which players are allied to who at game start
 
 Bugfixes
 --------
-
+[❌] Spawners still spawning when units are nearby
 
 Quality of Life
 ---------------
-
+[❌] Spawners inside custom buildings should give you control
+    - And go to the rally point
+[❌] Nether zones on placed buildings no longer disappear after exiting sandbox mode
 
 Balance
 -------
-
+[❌] Chainmail chestplates at the superior blacksmith cost reduced from 60 ore to 45 ore
 
 Languages
 ---------
