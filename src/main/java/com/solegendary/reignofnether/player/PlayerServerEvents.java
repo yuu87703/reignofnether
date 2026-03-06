@@ -35,6 +35,7 @@ import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
+import net.minecraft.client.telemetry.TelemetryProperty;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -566,6 +567,52 @@ public class PlayerServerEvents {
     }
 
     @SubscribeEvent
+    public static void startRTSScenario(int playerId) {
+        synchronized (rtsPlayers) {
+            ServerPlayer serverPlayer = null;
+            for (ServerPlayer player : players)
+                if (player.getId() == playerId)
+                    serverPlayer = player;
+
+            int scenarioPlayerIndex = rtsPlayers.size() + 1;
+
+            Faction faction = Faction.NONE; // TODO: decide based on majority type of buildings/units owned
+
+            if (serverPlayer == null || faction == Faction.NONE) {
+                return;
+            }
+            if (rtsLocked) {
+                serverPlayer.sendSystemMessage(Component.literal(""));
+                serverPlayer.sendSystemMessage(Component.translatable("server.reignofnether.locked"));
+                serverPlayer.sendSystemMessage(Component.literal(""));
+                return;
+            }
+            if (isRTSPlayer(serverPlayer.getId())) {
+                serverPlayer.sendSystemMessage(Component.literal(""));
+                serverPlayer.sendSystemMessage(Component.translatable("server.reignofnether.already_started_scenario"));
+                serverPlayer.sendSystemMessage(Component.literal(""));
+                return;
+            }
+            rtsPlayers.add(RTSPlayer.getNewPlayer(
+                    serverPlayer.getName().getString(),
+                    faction,
+                    serverPlayer.getId(),
+                    0
+            ));
+
+
+            String playerName = serverPlayer.getName().getString();
+            ResourcesServerEvents.assignResources(playerName);
+            PlayerClientboundPacket.addRTSPlayer(playerName, faction, (long) serverPlayer.getId(), 0);
+
+            ResourcesServerEvents.resetResources(playerName); // TODO: set to ScenarioServerEvents resources
+            sendMessageToAllPlayers("server.reignofnether.started", true, playerName, scenarioPlayerIndex, faction.name());
+            PlayerClientboundPacket.syncRtsGameTime(rtsGameTicks);
+            saveRTSPlayers();
+        }
+    }
+
+    @SubscribeEvent
     public static void onPlayerChat(ServerChatEvent evt) {
         if (evt.getPlayer().hasPermissions(4)) {
             String msg = evt.getMessage().getString();
@@ -677,7 +724,8 @@ public class PlayerServerEvents {
 
     public static void enableOrthoview(int id) {
         ServerPlayer player = getPlayerById(id);
-        player.removeAllEffects();
+        if (player != null)
+            player.removeAllEffects();
 
         orthoviewPlayers.removeIf(p -> p.getId() == id);
         orthoviewPlayers.add(player);
@@ -752,7 +800,8 @@ public class PlayerServerEvents {
 
     public static void movePlayer(int playerId, double x, double y, double z) {
         ServerPlayer serverPlayer = getPlayerById(playerId);
-        serverPlayer.teleportTo(x, y, z);
+        if (serverPlayer != null && (serverPlayer.isCreative() || serverPlayer.isSpectator()))
+            serverPlayer.teleportTo(x, y, z);
     }
 
     public static void sendMessageToAllPlayers(String msg) {
@@ -1075,6 +1124,7 @@ public class PlayerServerEvents {
 
         serverLevel.getGameRules().getRule(GameRuleRegistrar.SCENARIO_MODE).set(true, serverLevel.getServer());
         GameruleClientboundPacket.setScenarioMode(true);
+        GameModeClientboundPacket.setAndLockAllClientGameModes(GameMode.SCENARIO);
     }
 
     private static void saveAll() {

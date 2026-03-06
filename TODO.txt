@@ -26,11 +26,12 @@ When /gamerule scenarioMode true:
 
 [❌] Command block API to grant victory to a player, all allies and defeat all enemies
 
-[?] New menu in sandbox for scenario settings
-    - Win conditions
-    - Opening message
-    - Starting resources
-    - Which players are allied to who at game start
+[❌] New menu in sandbox for scenario settings
+    - Allows creation of ScenarioRoles, each with options for:
+        - Text inputs for name and opening message
+        - Win conditions
+        - Starting resources
+        - Starting allies
 
 Bugfixes
 --------

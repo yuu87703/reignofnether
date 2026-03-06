@@ -11,6 +11,7 @@ public enum PlayerAction {
     START_RTS_MONSTERS,
     START_RTS_PIGLINS,
     START_RTS_SANDBOX,
+    START_RTS_SCENARIO, // faction decided serverside
     DEFEAT,
     VICTORY,
     ADD_RTS_PLAYER,

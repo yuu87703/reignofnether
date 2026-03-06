@@ -473,7 +473,7 @@ public class SandboxClientEvents {
                 () -> false,
                 () -> false,
                 () -> true,
-                PlayerServerboundPacket::resetRTS,
+                PlayerServerboundPacket::publishScenario,
                 null,
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),

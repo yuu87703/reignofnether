@@ -153,6 +153,13 @@ public class PlayerServerboundPacket {
         }
     }
 
+    public static void startRTSScenario() {
+        Minecraft MC = Minecraft.getInstance();
+        if (MC.player != null && MC.level != null) {
+            PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.START_RTS_SCENARIO, MC.player.getId()));
+        }
+    }
+
     public static void cancelStartRTSEveryone() {
         Minecraft MC = Minecraft.getInstance();
         if (MC.player != null && MC.level != null) {
@@ -162,6 +169,10 @@ public class PlayerServerboundPacket {
 
     public static void resetRTS() {
         PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.RESET_RTS, -1, 0d, 0d, 0d));
+    }
+
+    public static void publishScenario() {
+        PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.PUBLISH_SCENARIO_MAP, -1, 0d, 0d, 0d));
     }
 
     // resets and also removes all neutral units and buildings
@@ -180,14 +191,6 @@ public class PlayerServerboundPacket {
                 0d
             ));
         }
-    }
-
-    public static void lockRTS() {
-        PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.LOCK_RTS, -1, 0d, 0d, 0d));
-    }
-
-    public static void unlockRTS() {
-        PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.UNLOCK_RTS, -1, 0d, 0d, 0d));
     }
 
     public static void enableRTSSyncing() {
@@ -218,6 +221,15 @@ public class PlayerServerboundPacket {
         this.y = y;
         this.z = z;
     }
+
+    public PlayerServerboundPacket(PlayerAction action, int playerId) {
+        this.action = action;
+        this.playerId = playerId;
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
 
     public PlayerServerboundPacket(FriendlyByteBuf buffer) {
         this.action = buffer.readEnum(PlayerAction.class);
@@ -263,6 +275,10 @@ public class PlayerServerboundPacket {
                     PlayerServerEvents.startRTS(this.playerId, new Vec3(this.x, this.y, this.z), Faction.PIGLINS);
                 case START_RTS_SANDBOX ->
                     PlayerServerEvents.startRTS(this.playerId, new Vec3(this.x, this.y, this.z), Faction.NONE);
+                case START_RTS_SCENARIO ->
+                        PlayerServerEvents.startRTSScenario(this.playerId);
+                case PUBLISH_SCENARIO_MAP ->
+                        PlayerServerEvents.publishScenarioMap();
                 case START_RTS_EVERYONE -> StartPosServerEvents.startGameCountdown();
                 case CANCEL_START_RTS_EVERYONE -> StartPosServerEvents.cancelStartGameCountdown(false);
                 case DEFEAT -> PlayerServerEvents.defeat(this.playerId, Component.translatable("server.reignofnether.surrendered").getString());

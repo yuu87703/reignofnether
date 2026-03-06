@@ -44,7 +44,7 @@ public class StartButtons {
             () -> false,
             () -> false,
             () -> true,
-            () -> PlayerServerboundPacket.startRTS(Faction.NONE, 0d,0d,0d),
+            PlayerServerboundPacket::startRTSScenario,
             null,
             List.of(
                     fcs(LanguageUtil.getTranslation("hud.gamemode.reignofnether.start_scenario"))

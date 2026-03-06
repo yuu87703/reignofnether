@@ -154,6 +154,9 @@ public interface Unit {
     String getOwnerName();
     void setOwnerName(String name);
 
+    String getScenarioOwnerName();
+    void setScenarioOwnerName(String name);
+
     default double getDamageTakenIncrease() {
         MobEffectInstance mei = ((LivingEntity) this).getEffect(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get());
         double value = mei == null ? 0 : (mei.getAmplifier() + 1) * 0.05d;
