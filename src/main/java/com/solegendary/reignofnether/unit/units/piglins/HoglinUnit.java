@@ -19,6 +19,7 @@ import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitConvertClientboundPacket;
 import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
 import net.minecraft.client.resources.language.I18n;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
@@ -120,6 +121,12 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     public String getOwnerName() { return this.entityData.get(ownerDataAccessor); }
     public void setOwnerName(String name) { this.entityData.set(ownerDataAccessor, name); }
     public static final EntityDataAccessor<String> ownerDataAccessor =
+            SynchedEntityData.defineId(HoglinUnit.class, EntityDataSerializers.STRING);
+
+    // which scenario role does this unit use?
+    public String getScenarioRoleName() { return this.entityData.get(scenarioRoleDataAccessor); }
+    public void setScenarioRoleName(String name) { this.entityData.set(scenarioRoleDataAccessor, name); }
+    public static final EntityDataAccessor<String> scenarioRoleDataAccessor =
             SynchedEntityData.defineId(HoglinUnit.class, EntityDataSerializers.STRING);
 
     @Override

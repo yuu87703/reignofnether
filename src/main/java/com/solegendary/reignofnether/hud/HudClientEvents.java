@@ -38,6 +38,7 @@ import com.solegendary.reignofnether.resources.ResourcesClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxActionButtons;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxMenuType;
+import com.solegendary.reignofnether.scenario.ScenarioClientEvents;
 import com.solegendary.reignofnether.startpos.StartPosClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
@@ -1747,6 +1748,8 @@ public class HudClientEvents {
         if (PlayerDisplayClientEvents.isMouseOverHud(mouseX, mouseY))
             return true;
         if (CustomBuildingClientEvents.isMouseOverHud(mouseX, mouseY))
+            return true;
+        if (ScenarioClientEvents.isMouseOverHud(mouseX, mouseY))
             return true;
         return isMouseOverAnyButton();
     }

@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -98,6 +99,12 @@ public class WolfUnit extends Wolf implements Unit, AttackerUnit {
     public String getOwnerName() { return this.entityData.get(ownerDataAccessor); }
     public void setOwnerName(String name) { this.entityData.set(ownerDataAccessor, name); }
     public static final EntityDataAccessor<String> ownerDataAccessor =
+            SynchedEntityData.defineId(WolfUnit.class, EntityDataSerializers.STRING);
+
+    // which scenario role does this unit use?
+    public String getScenarioRoleName() { return this.entityData.get(scenarioRoleDataAccessor); }
+    public void setScenarioRoleName(String name) { this.entityData.set(scenarioRoleDataAccessor, name); }
+    public static final EntityDataAccessor<String> scenarioRoleDataAccessor =
             SynchedEntityData.defineId(WolfUnit.class, EntityDataSerializers.STRING);
 
     @Override

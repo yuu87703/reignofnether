@@ -104,6 +104,12 @@ public class DrownedUnit extends Drowned implements Unit, AttackerUnit {
     public static final EntityDataAccessor<String> ownerDataAccessor =
             SynchedEntityData.defineId(DrownedUnit.class, EntityDataSerializers.STRING);
 
+    // which scenario role does this unit use?
+    public String getScenarioRoleName() { return this.entityData.get(scenarioRoleDataAccessor); }
+    public void setScenarioRoleName(String name) { this.entityData.set(scenarioRoleDataAccessor, name); }
+    public static final EntityDataAccessor<String> scenarioRoleDataAccessor =
+            SynchedEntityData.defineId(DrownedUnit.class, EntityDataSerializers.STRING);
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

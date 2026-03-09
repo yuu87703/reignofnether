@@ -154,8 +154,8 @@ public interface Unit {
     String getOwnerName();
     void setOwnerName(String name);
 
-    String getScenarioOwnerName();
-    void setScenarioOwnerName(String name);
+    String getScenarioRoleName();
+    void setScenarioRoleName(String name);
 
     default double getDamageTakenIncrease() {
         MobEffectInstance mei = ((LivingEntity) this).getEffect(MobEffectRegistrar.DAMAGE_TAKEN_INCREASE.get());

@@ -117,6 +117,12 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
     public static final EntityDataAccessor<String> ownerDataAccessor =
             SynchedEntityData.defineId(StrayUnit.class, EntityDataSerializers.STRING);
 
+    // which scenario role does this unit use?
+    public String getScenarioRoleName() { return this.entityData.get(scenarioRoleDataAccessor); }
+    public void setScenarioRoleName(String name) { this.entityData.set(scenarioRoleDataAccessor, name); }
+    public static final EntityDataAccessor<String> scenarioRoleDataAccessor =
+            SynchedEntityData.defineId(StrayUnit.class, EntityDataSerializers.STRING);
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

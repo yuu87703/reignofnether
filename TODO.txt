@@ -22,9 +22,7 @@ When /gamerule scenarioMode true:
     [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
     [❌] time does not change
 
-[❌] Command block API for UnitActionItem commands
 
-[❌] Command block API to grant victory to a player, all allies and defeat all enemies
 
 [❌] New menu in sandbox for scenario settings
     - Allows creation of ScenarioRoles, each with options for:
@@ -32,6 +30,12 @@ When /gamerule scenarioMode true:
         - Win conditions
         - Starting resources
         - Starting allies
+
+[❌] Command block API for UnitActionItem commands
+
+[❌] Command block API to grant victory to a player, all allies and defeat all enemies
+
+
 
 Bugfixes
 --------
