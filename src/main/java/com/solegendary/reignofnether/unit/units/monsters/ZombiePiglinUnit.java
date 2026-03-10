@@ -102,15 +102,16 @@ public class ZombiePiglinUnit extends ZombifiedPiglin implements Unit, AttackerU
             SynchedEntityData.defineId(ZombiePiglinUnit.class, EntityDataSerializers.STRING);
 
     // which scenario role does this unit use?
-    public String getScenarioRoleName() { return this.entityData.get(scenarioRoleDataAccessor); }
-    public void setScenarioRoleName(String name) { this.entityData.set(scenarioRoleDataAccessor, name); }
-    public static final EntityDataAccessor<String> scenarioRoleDataAccessor =
-            SynchedEntityData.defineId(ZombiePiglinUnit.class, EntityDataSerializers.STRING);
+    public int getScenarioRoleIndex() { return this.entityData.get(scenarioRoleDataAccessor); }
+    public void setScenarioRoleIndex(int index) { this.entityData.set(scenarioRoleDataAccessor, index); }
+    public static final EntityDataAccessor<Integer> scenarioRoleDataAccessor =
+            SynchedEntityData.defineId(ZombiePiglinUnit.class, EntityDataSerializers.INT);
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
+        this.entityData.define(scenarioRoleDataAccessor, 0);
     }
 
     // combat stats

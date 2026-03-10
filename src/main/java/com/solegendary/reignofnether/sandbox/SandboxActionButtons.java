@@ -7,6 +7,9 @@ import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
+import com.solegendary.reignofnether.scenario.ScenarioClientEvents;
+import com.solegendary.reignofnether.scenario.ScenarioRole;
+import com.solegendary.reignofnether.scenario.ScenarioUtils;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -199,6 +202,35 @@ public class SandboxActionButtons {
                         fcs(I18n.get("hud.relationship.reignofnether.enemy"), relationship == Relationship.HOSTILE)
                 )
         );
+    }
+
+    public static Button getSetScenarioRoleButton() {
+        return new Button(
+                "Switch Building Scenario Role",
+                Button.itemIconSize,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_conditional.png"),
+                (Keybinding) null,
+                () -> ScenarioClientEvents.isMenuOpen,
+                () -> false,
+                () -> true,
+                () -> {},
+                () -> {},
+                List.of(
+                        fcs(I18n.get("sandbox.reignofnether.cycle_scenario_role", getHudSelectedScenarioRoleName()))
+                )
+        );
+    }
+
+    private static String getHudSelectedScenarioRoleName() {
+        if (HudClientEvents.hudSelectedEntity instanceof Unit unit) {
+            ScenarioRole role = ScenarioUtils.getScenarioRole(true, unit.getScenarioRoleIndex());
+            if (role != null) {
+                return role.name;
+            }
+        } else if (HudClientEvents.hudSelectedPlacement != null) {
+            return HudClientEvents.hudSelectedPlacement.scenarioRoleName;
+        }
+        return I18n.get("sandbox.reignofnether.scenario_role_none");
     }
 
     static {

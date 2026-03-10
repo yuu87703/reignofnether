@@ -566,7 +566,6 @@ public class PlayerServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void startRTSScenario(int playerId) {
         synchronized (rtsPlayers) {
             ServerPlayer serverPlayer = null;

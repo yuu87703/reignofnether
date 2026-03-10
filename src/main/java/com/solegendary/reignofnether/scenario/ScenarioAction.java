@@ -1,0 +1,13 @@
+package com.solegendary.reignofnether.scenario;
+
+public enum ScenarioAction {
+    SET_ROLE_STARTING_FOOD,
+    SET_ROLE_STARTING_WOOD,
+    SET_ROLE_STARTING_ORE,
+    SET_ROLE_NAME,
+    SET_ROLE_FACTION,
+    SET_ROLE_TEAM_NUMBER,
+    SET_UNIT_ROLE,
+    SET_BUILDING_ROLE,
+    SET_SCENARIO_NAME
+}

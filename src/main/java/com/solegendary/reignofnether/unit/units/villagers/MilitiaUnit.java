@@ -135,10 +135,10 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
             SynchedEntityData.defineId(MilitiaUnit.class, EntityDataSerializers.STRING);
 
     // which scenario role does this unit use?
-    public String getScenarioRoleName() { return this.entityData.get(scenarioRoleDataAccessor); }
-    public void setScenarioRoleName(String name) { this.entityData.set(scenarioRoleDataAccessor, name); }
-    public static final EntityDataAccessor<String> scenarioRoleDataAccessor =
-            SynchedEntityData.defineId(MilitiaUnit.class, EntityDataSerializers.STRING);
+    public int getScenarioRoleIndex() { return this.entityData.get(scenarioRoleDataAccessor); }
+    public void setScenarioRoleIndex(int index) { this.entityData.set(scenarioRoleDataAccessor, index); }
+    public static final EntityDataAccessor<Integer> scenarioRoleDataAccessor =
+            SynchedEntityData.defineId(MilitiaUnit.class, EntityDataSerializers.INT);
 
     // combat stats
     public float getMovementSpeed() {return isUsingBow() ? rangedMovementSpeed : movementSpeed;}
@@ -464,6 +464,7 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
+        this.entityData.define(scenarioRoleDataAccessor, 0);
         this.entityData.define(VILLAGER_DATA, new VillagerData(VillagerType.PLAINS, VillagerProfession.ARMORER, 1));
     }
 

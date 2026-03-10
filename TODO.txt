@@ -50,6 +50,7 @@ Quality of Life
 Balance
 -------
 [❌] Chainmail chestplates at the superior blacksmith cost reduced from 60 ore to 45 ore
+[❌] Cost of Hoglin Rider research increased from (350 food, 300 wood, 120s) to (450 food, 350 wood, 180s)
 
 Languages
 ---------

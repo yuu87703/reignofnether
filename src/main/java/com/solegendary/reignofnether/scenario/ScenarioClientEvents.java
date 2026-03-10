@@ -18,15 +18,15 @@ public class ScenarioClientEvents {
 
     public static boolean isMenuOpen = false;
 
-    private static final List<ScenarioRole> scenarioRoles = List.of(
-            new ScenarioRole(),
-            new ScenarioRole(),
-            new ScenarioRole(),
-            new ScenarioRole(),
-            new ScenarioRole(),
-            new ScenarioRole(),
-            new ScenarioRole(),
-            new ScenarioRole()
+    public static final List<ScenarioRole> scenarioRoles = List.of( // index 0 is treated as neutral
+            new ScenarioRole(1),
+            new ScenarioRole(2),
+            new ScenarioRole(3),
+            new ScenarioRole(4),
+            new ScenarioRole(5),
+            new ScenarioRole(6),
+            new ScenarioRole(7),
+            new ScenarioRole(8)
     );
 
     private static int scenarioRoleIndexToEdit = 0;
@@ -41,8 +41,8 @@ public class ScenarioClientEvents {
     public static void onDrawScreen(ScreenEvent.Render.Post evt) {
         hudZones.clear();
         renderedButtons.clear();
-        if (MC.screen instanceof TopdownGui) {
-            int blitX = 100;
+        if (MC.screen instanceof TopdownGui && isMenuOpen) {
+            int blitX = 200;
             int blitY = 40;
             int width = 310;
             int height = 200;
@@ -52,8 +52,6 @@ public class ScenarioClientEvents {
             renderedButtons.add(ScenarioMenu.renderCloseButton(evt, blitX + width - Button.itemIconSize - 12, blitY + 4));
             renderedButtons.add(ScenarioMenu.renderResetRoleButton(evt, blitX + width - Button.itemIconSize - 12, blitY + height - 26));
             renderedButtons.addAll(ScenarioMenu.renderCustomisationButtons(evt, blitX + 6, blitY + 38));
-
-            evt.getGuiGraphics().drawString(MC.font, "More options coming soon!", blitX + 10, blitY + height - 18, 0xFFFFFF);
 
             hudZones.add(new RectZone(blitX, blitY, blitX + width, blitY + height));
         }

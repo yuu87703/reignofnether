@@ -141,7 +141,7 @@ public class BuildingPlacement {
     protected int totalBlocks = 0;
     protected ArrayList<BuildingBlock> blockPlaceQueue = new ArrayList<>();
     public String ownerName;
-    public String scenarioOwnerName = "";
+    public String scenarioRoleName = "";
     public int serverBlocksPlaced = 1;
     private int totalBlocksEverBroken = 0;
 

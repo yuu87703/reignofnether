@@ -826,6 +826,7 @@ public class HudClientEvents {
             ArrayList<Button> actionButtons = new ArrayList<>();
 
             actionButtons.add(SandboxActionButtons.getSetRelationshipButton());
+            actionButtons.add(SandboxActionButtons.getSetScenarioRoleButton());
             if (hudSelectedPlacement != null) {
                 actionButtons.add(SandboxActionButtons.removeBuildingPlacement);
             }
@@ -1522,18 +1523,6 @@ public class HudClientEvents {
                     renderedButtons.add(gamemodeButton);
                 }
 
-                Button gamerulesButton = GameruleClient.getGamerulesButton();
-                if (MC.player != null && !gamerulesButton.isHidden.get() && !TutorialClientEvents.isEnabled()) {
-                    int xr = screenWidth - (StartButtons.ICON_SIZE * 8);
-                    int yr = 40;
-                    gamerulesButton.render(evt.getGuiGraphics(), xr, yr, mouseX, mouseY);
-                    renderedButtons.add(gamerulesButton);
-                    if (GameruleClient.gamerulesMenuOpen) {
-                        List<Button> gameruleButtons = GameruleClient.renderGamerulesGUI(evt.getGuiGraphics(), xr, yr, mouseX, mouseY);
-                        renderedButtons.addAll(gameruleButtons);
-                    }
-                }
-
                 if (ClientGameModeHelper.gameMode != GameMode.SANDBOX) {
 
                     if (!StartPosClientEvents.isEnabled()) {
@@ -1638,6 +1627,16 @@ public class HudClientEvents {
                 );
                 renderedButtons.add(publishScenarioButton);
             }
+            Button configureScenarioButton = SandboxClientEvents.getConfigureScenarioButton();
+            if (!configureScenarioButton.isHidden.get()) {
+                configureScenarioButton.render(evt.getGuiGraphics(),
+                        (int) (screenWidth - (StartButtons.ICON_SIZE * 6f)),
+                        StartButtons.ICON_SIZE / 2,
+                        mouseX,
+                        mouseY
+                );
+                renderedButtons.add(configureScenarioButton);
+            }
         }
 
         BeaconPlacement beacon = BuildingUtils.getBeacon(true);
@@ -1656,6 +1655,23 @@ public class HudClientEvents {
                         mouseY
                 );
                 renderedButtons.add(beaconButton);
+            }
+        }
+
+        // -------------------------------------------
+        // Game rules menu (spectator or sandbox only)
+        // -------------------------------------------
+        if (SandboxClientEvents.isSandboxPlayer() || !PlayerClientEvents.isRTSPlayer()) {
+            Button gamerulesButton = GameruleClient.getGamerulesButton();
+            if (MC.player != null && !gamerulesButton.isHidden.get() && !TutorialClientEvents.isEnabled()) {
+                int xr = screenWidth - (StartButtons.ICON_SIZE * 8);
+                int yr = PlayerClientEvents.isRTSPlayer() ? 40 : 10;
+                gamerulesButton.render(evt.getGuiGraphics(), xr, yr, mouseX, mouseY);
+                renderedButtons.add(gamerulesButton);
+                if (GameruleClient.gamerulesMenuOpen) {
+                    List<Button> gameruleButtons = GameruleClient.renderGamerulesGUI(evt.getGuiGraphics(), xr, yr, mouseX, mouseY);
+                    renderedButtons.addAll(gameruleButtons);
+                }
             }
         }
 
