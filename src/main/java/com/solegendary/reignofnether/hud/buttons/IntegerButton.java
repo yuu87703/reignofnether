@@ -36,6 +36,9 @@ public class IntegerButton extends Button {
     public IntegerButton(String label, Runnable onLeftClick, Runnable onRightClick, String tooltip) {
         this(label, onLeftClick, onRightClick, tooltip != null ? List.of(fcs(tooltip)) : null);
     }
+    public IntegerButton(String label, Runnable onLeftClick, Runnable onRightClick) {
+        this(label, onLeftClick, onRightClick, List.of());
+    }
     @Override
     public void render(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
         super.render(guiGraphics, x, y, mouseX, mouseY);

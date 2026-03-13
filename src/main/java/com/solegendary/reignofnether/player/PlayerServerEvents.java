@@ -421,7 +421,7 @@ public class PlayerServerEvents {
                 case VILLAGERS -> EntityRegistrar.VILLAGER_UNIT.get();
                 case MONSTERS -> EntityRegistrar.ZOMBIE_VILLAGER_UNIT.get();
                 case PIGLINS -> EntityRegistrar.GRUNT_UNIT.get();
-                case NONE -> null;
+                case NONE, NEUTRAL -> null;
             };
             rtsPlayers.add(RTSPlayer.getNewPlayer(
                     serverPlayer.getName().getString(),
@@ -536,7 +536,7 @@ public class PlayerServerEvents {
                 case VILLAGERS -> EntityRegistrar.VILLAGER_UNIT.get();
                 case MONSTERS -> EntityRegistrar.ZOMBIE_VILLAGER_UNIT.get();
                 case PIGLINS -> EntityRegistrar.GRUNT_UNIT.get();
-                case NONE -> null;
+                case NONE, NEUTRAL -> null;
             };
             RTSPlayer bot = RTSPlayer.getNewBot(name, faction);
             rtsPlayers.add(bot);
@@ -575,7 +575,7 @@ public class PlayerServerEvents {
 
             int scenarioPlayerIndex = rtsPlayers.size() + 1;
 
-            Faction faction = Faction.NONE; // TODO: decide based on majority type of buildings/units owned
+            Faction faction = Faction.NEUTRAL; // TODO: decide based on role config
 
             if (serverPlayer == null || faction == Faction.NONE) {
                 return;
@@ -598,14 +598,12 @@ public class PlayerServerEvents {
                     serverPlayer.getId(),
                     0
             ));
-
-
             String playerName = serverPlayer.getName().getString();
             ResourcesServerEvents.assignResources(playerName);
             PlayerClientboundPacket.addRTSPlayer(playerName, faction, (long) serverPlayer.getId(), 0);
 
             ResourcesServerEvents.resetResources(playerName); // TODO: set to ScenarioServerEvents resources
-            sendMessageToAllPlayers("server.reignofnether.started", true, playerName, scenarioPlayerIndex, faction.name());
+            sendMessageToAllPlayers("server.reignofnether.started_scenario", true, playerName, scenarioPlayerIndex, faction.name());
             PlayerClientboundPacket.syncRtsGameTime(rtsGameTicks);
             saveRTSPlayers();
         }

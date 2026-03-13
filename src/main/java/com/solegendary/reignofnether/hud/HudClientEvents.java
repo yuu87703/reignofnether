@@ -1461,7 +1461,7 @@ public class HudClientEvents {
         if (!PlayerClientEvents.isRTSPlayer() && !PlayerClientEvents.rtsLocked) {
 
             // scenario
-            if (MC.level.getGameRules().getRule(GameRuleRegistrar.SCENARIO_MODE).get()) {
+            if (GameruleClient.scenarioMode) {
                 StartButtons.scenarioStartButton.render(evt.getGuiGraphics(),
                         screenWidth - (StartButtons.ICON_SIZE * 2),
                         StartButtons.ICON_SIZE / 2,
@@ -1665,11 +1665,11 @@ public class HudClientEvents {
             Button gamerulesButton = GameruleClient.getGamerulesButton();
             if (MC.player != null && !gamerulesButton.isHidden.get() && !TutorialClientEvents.isEnabled()) {
                 int xr = screenWidth - (StartButtons.ICON_SIZE * 8);
-                int yr = PlayerClientEvents.isRTSPlayer() ? 40 : 10;
+                int yr = PlayerClientEvents.isRTSPlayer() ? StartButtons.ICON_SIZE / 2 : 40;
                 gamerulesButton.render(evt.getGuiGraphics(), xr, yr, mouseX, mouseY);
                 renderedButtons.add(gamerulesButton);
                 if (GameruleClient.gamerulesMenuOpen) {
-                    List<Button> gameruleButtons = GameruleClient.renderGamerulesGUI(evt.getGuiGraphics(), xr, yr, mouseX, mouseY);
+                    List<Button> gameruleButtons = GameruleClient.renderGamerulesGUI(evt.getGuiGraphics(), xr, 40, mouseX, mouseY);
                     renderedButtons.addAll(gameruleButtons);
                 }
             }

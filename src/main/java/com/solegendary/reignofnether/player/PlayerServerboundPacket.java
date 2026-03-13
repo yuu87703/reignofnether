@@ -81,11 +81,13 @@ public class PlayerServerboundPacket {
                 HudClientEvents.showTemporaryMessage(I18n.get("hud.reignofnether.invalid_start_location"));
                 return;
             }
+            if (faction == Faction.NEUTRAL)
+                faction = Faction.NONE;
             PlayerAction playerAction = switch (faction) {
                 case VILLAGERS -> PlayerAction.START_RTS_VILLAGERS;
                 case MONSTERS -> PlayerAction.START_RTS_MONSTERS;
                 case PIGLINS -> PlayerAction.START_RTS_PIGLINS;
-                case NONE -> PlayerAction.START_RTS_SANDBOX;
+                case NONE, NEUTRAL -> PlayerAction.START_RTS_SANDBOX;
             };
             PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(playerAction, MC.player.getId(), x, y, z));
             GameModeServerboundPacket.setAndLockAllClientGameModes(ClientGameModeHelper.gameMode);

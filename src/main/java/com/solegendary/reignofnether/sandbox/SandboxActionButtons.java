@@ -14,12 +14,10 @@ import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.util.ArrayUtil;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
@@ -222,13 +220,15 @@ public class SandboxActionButtons {
     }
 
     private static String getHudSelectedScenarioRoleName() {
+        ScenarioRole role = null;
         if (HudClientEvents.hudSelectedEntity instanceof Unit unit) {
-            ScenarioRole role = ScenarioUtils.getScenarioRole(true, unit.getScenarioRoleIndex());
-            if (role != null) {
-                return role.name;
-            }
+            role = ScenarioUtils.getScenarioRole(true, unit.getScenarioRoleIndex());
         } else if (HudClientEvents.hudSelectedPlacement != null) {
-            return HudClientEvents.hudSelectedPlacement.scenarioRoleName;
+            int index = HudClientEvents.hudSelectedPlacement.scenarioRoleIndex;
+            role = ScenarioUtils.getScenarioRole(true, index);
+        }
+        if (role != null) {
+            return role.name;
         }
         return I18n.get("sandbox.reignofnether.scenario_role_none");
     }

@@ -69,7 +69,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -141,7 +140,7 @@ public class BuildingPlacement {
     protected int totalBlocks = 0;
     protected ArrayList<BuildingBlock> blockPlaceQueue = new ArrayList<>();
     public String ownerName;
-    public String scenarioRoleName = "";
+    public int scenarioRoleIndex = 0;  // if 0, no role
     public int serverBlocksPlaced = 1;
     private int totalBlocksEverBroken = 0;
 

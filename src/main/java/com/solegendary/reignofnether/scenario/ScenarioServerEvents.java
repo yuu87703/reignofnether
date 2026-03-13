@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.scenario;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ScenarioServerEvents {
@@ -15,4 +16,13 @@ public class ScenarioServerEvents {
             new ScenarioRole(8)
     );
 
+    @Nullable
+    public static ScenarioRole getScenarioRole(int index) {
+        try {
+            return scenarioRoles.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
 }
+

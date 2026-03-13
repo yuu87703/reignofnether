@@ -154,7 +154,7 @@ public interface Unit {
     String getOwnerName();
     void setOwnerName(String name);
 
-    int getScenarioRoleIndex();
+    int getScenarioRoleIndex(); // if 0, no role
     void setScenarioRoleIndex(int index);
 
     default double getDamageTakenIncrease() {

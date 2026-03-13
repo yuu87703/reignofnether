@@ -47,7 +47,7 @@ public class GameruleClient {
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/repeating_command_block_back.png"),
                 (Keybinding) null,
                 () -> gamerulesMenuOpen,
-                () -> false,
+                () -> scenarioMode,
                 () -> !StartPosClientEvents.isStarting,
                 () -> gamerulesMenuOpen = !gamerulesMenuOpen,
                 null,

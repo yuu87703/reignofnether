@@ -22,9 +22,9 @@ When /gamerule scenarioMode true:
     [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
     [❌] time does not change
 
+[❌] Save all roles and scenario settings to map data
 
-
-[❌] New menu in sandbox for scenario settings
+[🟡] New menu in sandbox for scenario settings
     - Allows creation of ScenarioRoles, each with options for:
         - Text inputs for name and opening message
         - Win conditions
@@ -47,10 +47,13 @@ Quality of Life
     - And go to the rally point
 [❌] Nether zones on placed buildings no longer disappear after exiting sandbox mode
 
+[❌] The Enchanter can now enchant allied units of other factions with Sharpness and Power
+
 Balance
 -------
 [❌] Chainmail chestplates at the superior blacksmith cost reduced from 60 ore to 45 ore
 [❌] Cost of Hoglin Rider research increased from (350 food, 300 wood, 120s) to (450 food, 350 wood, 180s)
+[❌] Wildfire attack speed reduced from 0.75 to 0.6
 
 Languages
 ---------

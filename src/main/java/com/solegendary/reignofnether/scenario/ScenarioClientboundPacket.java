@@ -33,12 +33,6 @@ public class ScenarioClientboundPacket {
     public int intValue;
     public String strValue;
 
-    public static void setUnitRole(Unit unit, int roleIndex) {
-        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new ScenarioClientboundPacket(
-            ScenarioAction.SET_UNIT_ROLE, 0,0,0, false, roleIndex, "")
-        );
-    }
-
     public ScenarioClientboundPacket(ScenarioAction action, int x, int y, int z,
                                      boolean boolValue, int intValue, String strValue) {
         this.action = action;
@@ -90,8 +84,6 @@ public class ScenarioClientboundPacket {
                     case SET_ROLE_STARTING_ORE -> {
                     }
                     case SET_ROLE_NAME -> {
-                    }
-                    case SET_ROLE_FACTION -> {
                     }
                     case SET_ROLE_TEAM_NUMBER -> {
                     }

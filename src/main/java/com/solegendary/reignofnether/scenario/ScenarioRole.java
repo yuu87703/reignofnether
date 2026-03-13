@@ -15,7 +15,7 @@ public class ScenarioRole {
 
     public ScenarioRole(int index) {
         this.index = index;
-        this.name = "Player " + (index + 1);
-        this.teamNumber = index + 1;
+        this.name = "Player " + index;
+        this.teamNumber = index;
     }
 }
