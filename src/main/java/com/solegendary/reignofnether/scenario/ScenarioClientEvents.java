@@ -106,6 +106,20 @@ public class ScenarioClientEvents {
             BuildingClientEvents.addSelectedBuilding(selBuilding);
     }
 
+    public static void clearRoleUnits() {
+        for (LivingEntity le : UnitClientEvents.getAllUnits()) {
+            if (le instanceof Unit) {
+                ScenarioServerboundPacket.setUnitRole(0, le.getId());
+            }
+        }
+    }
+
+    public static void clearRoleBuildings() {
+        for (BuildingPlacement bpl : BuildingClientEvents.getBuildings()) {
+            ScenarioServerboundPacket.setBuildingRole(0, bpl.originPos);
+        }
+    }
+
     public static int getNumRoleUnits() {
         int count = 0;
         for (LivingEntity le : UnitClientEvents.getSelectedUnits()) {
@@ -133,16 +147,17 @@ public class ScenarioClientEvents {
         hudZones.clear();
         renderedButtons.clear();
         if (MC.screen instanceof TopdownGui && isMenuOpen) {
-            int width = 310;
-            int height = 200;
-            int blitX = MC.screen.width - width - 115;
-            int blitY = 10;
+            int width = 240;
+            int height = 185;
+            int blitX = MC.screen.width - width - 120;
+            int blitY = 5;
             MyRenderer.renderFrameWithBg(evt.getGuiGraphics(), blitX, blitY, width, height, 0xA0000000);
 
             ScenarioRole role = getScenarioRoleToEdit();
             if (role != null) {
                 renderedButtons.addAll(ScenarioMenu.renderRoleNameAndHelperButtons(evt, getScenarioRoleToEdit(), blitX + 18, blitY + 18));
                 renderedButtons.add(ScenarioMenu.renderCloseButton(evt, blitX + width - Button.itemIconSize - 12, blitY + 4));
+                renderedButtons.add(ScenarioMenu.renderHelpButton(evt, blitX + width - Button.itemIconSize - 12, blitY + 20));
                 renderedButtons.add(ScenarioMenu.renderResetRoleButton(evt, blitX + width - Button.itemIconSize - 12, blitY + height - 26));
                 renderedButtons.addAll(ScenarioMenu.renderCustomisationButtons(evt, blitX + 16, blitY + 50));
             }

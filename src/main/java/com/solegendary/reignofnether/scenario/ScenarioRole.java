@@ -9,9 +9,10 @@ import java.util.List;
 public class ScenarioRole {
     Faction faction = Faction.NONE;
     Resources startingResources = new Resources("", 0,0,0);
+    final int index;
     public String name;
-    int index;
-    int teamNumber;
+    public int teamNumber;
+    public boolean isNpc = false;
 
     public ScenarioRole(int index) {
         this.index = index;

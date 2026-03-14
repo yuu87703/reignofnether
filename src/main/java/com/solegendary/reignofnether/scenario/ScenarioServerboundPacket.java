@@ -57,6 +57,10 @@ public class ScenarioServerboundPacket {
         PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(scenarioAction, roleIndex, 0,0,0, false, 0, ""));
     }
 
+    public static void setRoleIsNpc(int roleIndex, boolean isNpc) {
+        PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SET_ROLE_NPC, roleIndex, 0,0,0, isNpc, 0, ""));
+    }
+
     public ScenarioServerboundPacket(ScenarioAction action, int roleIndex, int x, int y, int z,
                                    boolean boolValue, int intValue, String strValue) {
         this.action = action;
@@ -112,6 +116,7 @@ public class ScenarioServerboundPacket {
                 case SET_ROLE_FACTION_NEUTRAL -> role.faction = Faction.NEUTRAL;
                 case SET_ROLE_NAME -> role.name = strValue;
                 case SET_ROLE_TEAM_NUMBER -> role.teamNumber = intValue;
+                case SET_ROLE_NPC -> role.isNpc = boolValue;
                 case SET_UNIT_ROLE -> {
                     for (LivingEntity le : UnitServerEvents.getAllUnits())
                         if (le instanceof Unit unit && le.getId() == intValue)

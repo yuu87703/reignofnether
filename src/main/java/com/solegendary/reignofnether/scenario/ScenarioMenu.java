@@ -1,7 +1,10 @@
 package com.solegendary.reignofnether.scenario;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingAction;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingServerboundPacket;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.buttons.BooleanButton;
 import com.solegendary.reignofnether.hud.buttons.IntegerButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
@@ -63,10 +66,16 @@ public class ScenarioMenu {
                 () -> false,
                 () -> true,
                 () -> ScenarioClientEvents.cycleRoleUnits(false),
-                () -> ScenarioClientEvents.cycleRoleUnits(true),
+                () -> {
+                    if (Keybindings.shiftMod.isDown() && Keybindings.ctrlMod.isDown())
+                        ScenarioClientEvents.clearRoleUnits();
+                    else
+                        ScenarioClientEvents.cycleRoleUnits(true);
+                },
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.scenario.select_role_units", ScenarioClientEvents.getNumRoleUnits())),
-                        fcs(I18n.get("sandbox.reignofnether.scenario.select_all_shift"))
+                        fcs(I18n.get("sandbox.reignofnether.scenario.select_all_shift")),
+                        fcs(I18n.get("sandbox.reignofnether.scenario.clear_all"))
                 )
         );
         Button buildingsButton = new Button("Role Buildings",
@@ -77,13 +86,20 @@ public class ScenarioMenu {
                 () -> false,
                 () -> true,
                 () -> ScenarioClientEvents.cycleRoleBuildings(false),
-                () -> ScenarioClientEvents.cycleRoleBuildings(true),
+                () -> {
+                    if (Keybindings.shiftMod.isDown() && Keybindings.ctrlMod.isDown())
+                        ScenarioClientEvents.clearRoleBuildings();
+                    else
+                        ScenarioClientEvents.cycleRoleBuildings(true);
+                },
                 List.of(
                     fcs(I18n.get("sandbox.reignofnether.scenario.select_role_buildings", ScenarioClientEvents.getNumRoleBuildings())),
-                    fcs(I18n.get("sandbox.reignofnether.scenario.select_all_shift"))
+                    fcs(I18n.get("sandbox.reignofnether.scenario.select_all_shift")),
+                    fcs(I18n.get("sandbox.reignofnether.scenario.clear_all"))
                 )
         );
-        xr += Button.DEFAULT_ICON_SIZE * 2;
+        xr -= Button.DEFAULT_ICON_FRAME_SIZE;
+        yr += 30;
         renderButton(unitsButton, xr, yr, evt);
         xr += Button.DEFAULT_ICON_FRAME_SIZE;
         renderButton(buildingsButton, xr, yr, evt);
@@ -108,6 +124,27 @@ public class ScenarioMenu {
         return closeButton;
     }
 
+    public static Button renderHelpButton(ScreenEvent.Render.Post evt, int x, int y) {
+        Button closeButton = new Button("Scenario Help",
+                Button.itemIconSize,
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/help.png"),
+                (Keybinding) null,
+                () -> false,
+                () -> false,
+                () -> true,
+                null,
+                null,
+                List.of(
+                    fcs("sandbox.reignofnether.scenario.help_tooltip1"),
+                    fcs("sandbox.reignofnether.scenario.help_tooltip2"),
+                    fcs("sandbox.reignofnether.scenario.help_tooltip3")
+                )
+        );
+        closeButton.frameResource = null;
+        renderButton(closeButton, x, y, evt);
+        return closeButton;
+    }
+
     public static Button renderResetRoleButton(ScreenEvent.Render.Post evt, int x, int y) {
         Button deregisterButton = new Button("Reset Scenario Role",
                 Button.itemIconSize,
@@ -121,8 +158,7 @@ public class ScenarioMenu {
                 },
                 null,
                 List.of(
-                        fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip1"), true),
-                        fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip2"))
+                        fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip1"), true)
                 )
         );
         deregisterButton.frameResource = null;
@@ -145,7 +181,7 @@ public class ScenarioMenu {
         // Scenario opening message
         //
         // Per role:
-        // - Team number
+        // - NPC role (prevents players choosing it to start)
 
         Button factionButton = new Button(
             "Toggle Faction",
@@ -279,6 +315,18 @@ public class ScenarioMenu {
         );
         setTeamButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/sweet_berries.png");
         buttonsCol1.add(setTeamButton);
+
+        Button npcRoleButton = new BooleanButton(
+                role.isNpc ? I18n.get("sandbox.reignofnether.scenario.npc_role_true") :
+                            I18n.get("sandbox.reignofnether.scenario.npc_role_false"),
+                role.isNpc,
+                () -> {
+                    role.isNpc = !role.isNpc;
+                    ScenarioServerboundPacket.setRoleIsNpc(role.index, role.isNpc);
+                },
+                I18n.get("sandbox.reignofnether.scenario.npc_role_tooltip")
+        );
+        buttonsCol1.add(npcRoleButton);
 
         y += 20;
         for (Button button : buttonsCol1) {
