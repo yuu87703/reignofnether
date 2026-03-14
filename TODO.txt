@@ -12,7 +12,7 @@
 [🟡] New button next to the usual exit and reset button, when pressed:
     [🟡] Sets /gamerule scenarioMode true
     [🟡] Does not change building or unit allegiances
-    [❌] Disabled if there are no player 1-8 buildings set
+    [❌] Disabled if there are no role 1-8 buildings set
 
 When /gamerule scenarioMode true:
     [🟡] All usual gamemode /gamerule options are hidden, only 'Start Game'
@@ -30,6 +30,8 @@ When /gamerule scenarioMode true:
         - Win conditions
         - Starting resources
         - Starting allies
+
+[❌] Show different colours for each different assigned role
 
 [❌] Command block API for UnitActionItem commands
 

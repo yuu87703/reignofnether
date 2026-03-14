@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.scenario.ScenarioClientEvents;
 import com.solegendary.reignofnether.scenario.ScenarioRole;
+import com.solegendary.reignofnether.scenario.ScenarioServerboundPacket;
 import com.solegendary.reignofnether.scenario.ScenarioUtils;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
@@ -208,15 +209,40 @@ public class SandboxActionButtons {
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_conditional.png"),
                 (Keybinding) null,
-                () -> ScenarioClientEvents.isMenuOpen,
+                () -> false,
                 () -> false,
                 () -> true,
-                () -> {},
-                () -> {},
+                () -> cycleRoleIndex(false),
+                () -> cycleRoleIndex(true),
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.cycle_scenario_role", getHudSelectedScenarioRoleName()))
                 )
         );
+    }
+
+    private static void cycleRoleIndex(boolean reverse) {
+        int currentRoleIndex = 0;
+        if (HudClientEvents.hudSelectedPlacement != null) {
+            currentRoleIndex = HudClientEvents.hudSelectedPlacement.scenarioRoleIndex;
+        } else if (HudClientEvents.hudSelectedEntity instanceof Unit unit) {
+            currentRoleIndex = unit.getScenarioRoleIndex();
+        }
+        currentRoleIndex += reverse ? -1 : 1;
+        if (currentRoleIndex > ScenarioClientEvents.scenarioRoles.size())
+            currentRoleIndex = 0;
+        if (currentRoleIndex < 0)
+            currentRoleIndex = ScenarioClientEvents.scenarioRoles.size();
+
+        for (LivingEntity le : UnitClientEvents.getSelectedUnits()) {
+            if (le instanceof Unit unit) {
+                ScenarioServerboundPacket.setUnitRole(currentRoleIndex, le.getId());
+                unit.setScenarioRoleIndex(currentRoleIndex);
+            }
+        }
+        for (BuildingPlacement bpl : BuildingClientEvents.getSelectedBuildings()) {
+            ScenarioServerboundPacket.setBuildingRole(currentRoleIndex, bpl.originPos);
+            bpl.scenarioRoleIndex = currentRoleIndex;
+        }
     }
 
     private static String getHudSelectedScenarioRoleName() {
