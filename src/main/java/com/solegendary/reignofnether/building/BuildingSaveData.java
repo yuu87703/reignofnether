@@ -71,6 +71,7 @@ public class BuildingSaveData extends SavedData {
                 int upgradeLevel = btag.getInt("upgradeLevel");
                 PortalPlacement.PortalType portalType = PortalPlacement.PortalType.valueOf(btag.getString("portalType"));
                 BlockPos portalDestination = new BlockPos(btag.getInt("xp"), btag.getInt("yp"), btag.getInt("zp"));
+                int scenarioRoleIndex = btag.getInt("scenarioRoleIndex");
 
                 if (building != null) {
                     data.buildings.add(new BuildingSave(pos,
@@ -83,7 +84,8 @@ public class BuildingSaveData extends SavedData {
                             isBuilt,
                             upgradeLevel,
                             portalType,
-                            portalDestination
+                            portalDestination,
+                            scenarioRoleIndex
                     ));
                     ReignOfNether.LOGGER.info("BuildingSaveData.load: " + ownerName + "|" + building.name);
                 }
@@ -120,6 +122,7 @@ public class BuildingSaveData extends SavedData {
             cTag.putInt("xp", b.portalDestination != null ? b.portalDestination.getX() : 0);
             cTag.putInt("yp", b.portalDestination != null ? b.portalDestination.getY() : 0);
             cTag.putInt("zp", b.portalDestination != null ? b.portalDestination.getZ() : 0);
+            cTag.putInt("scenarioRoleIndex", b.scenarioRoleIndex);
             list.add(cTag);
 
             //ReignOfNether.LOGGER.info("BuildingSaveData.save: " + b.ownerName + "|" + buildingName);

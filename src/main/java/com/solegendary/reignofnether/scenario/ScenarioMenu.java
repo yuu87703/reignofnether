@@ -25,8 +25,9 @@ public class ScenarioMenu {
     public static List<Button> renderRoleNameAndCycleButtons(ScreenEvent.Render.Post evt, ScenarioRole role, int x, int y) {
         int xr = x + 5;
         int yr = y;
-        evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.player_number", role.index), true), xr, yr, 0xFFFFFF);
-        evt.getGuiGraphics().drawString(MC.font, fcs(role.name), xr, yr + 18, 0xFFFFFF);
+        evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_number", role.index), true), xr, yr, 0xFFFFFF);
+        evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_name"), true), xr, yr + 20, 0xFFFFFF);
+        evt.getGuiGraphics().drawString(MC.font, fcs(role.name), xr + 33, yr + 20, 0xFFFFFF);
 
         Button cycleButtonBackward = new Button("Cycle Role Backward",
                 Button.itemIconSize,
@@ -141,7 +142,10 @@ public class ScenarioMenu {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> ScenarioClientEvents.isMenuOpen = false,
+                () -> {
+                    ScenarioClientEvents.isMenuOpen = false;
+                    ScenarioServerboundPacket.saveScenario();
+                },
                 null,
                 List.of()
         );

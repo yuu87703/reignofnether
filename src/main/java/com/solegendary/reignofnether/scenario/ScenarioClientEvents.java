@@ -26,7 +26,8 @@ public class ScenarioClientEvents {
 
     public static boolean isMenuOpen = false;
 
-    public static final List<ScenarioRole> scenarioRoles = List.of( // index 0 is treated as neutral
+    // index 0 is treated as neutral
+    public static final ArrayList<ScenarioRole> scenarioRoles = new ArrayList<>(List.of(
             new ScenarioRole(1),
             new ScenarioRole(2),
             new ScenarioRole(3),
@@ -35,8 +36,7 @@ public class ScenarioClientEvents {
             new ScenarioRole(6),
             new ScenarioRole(7),
             new ScenarioRole(8)
-    );
-
+    ));
     private static int roleIndexToEdit = 0; // list index, not role.index
     private static final ArrayList<Button> renderedButtons = new ArrayList<>();
     private static final ArrayList<RectZone> hudZones = new ArrayList<>();

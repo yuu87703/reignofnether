@@ -121,7 +121,8 @@ public class BuildingServerEvents {
                     b.isBuilt,
                     b.getUpgradeLevel(),
                     portalType,
-                    b instanceof PortalPlacement portal && portal.hasDestination() ? portal.destination : new BlockPos(0,0,0)
+                    b instanceof PortalPlacement portal && portal.hasDestination() ? portal.destination : new BlockPos(0,0,0),
+                    b.scenarioRoleIndex
             ));
             //ReignOfNether.LOGGER.info("saved buildings/nether in serverevents: " + b.originPos);
         });

@@ -69,6 +69,10 @@ public class ScenarioServerboundPacket {
         PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SET_ROLE_NAME, roleIndex, 0,0,0, false, 0, name));
     }
 
+    public static void saveScenario() {
+        PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SAVE_SCENARIO, 0, 0,0,0, false, 0, ""));
+    }
+
     public ScenarioServerboundPacket(ScenarioAction action, int roleIndex, int x, int y, int z,
                                    boolean boolValue, int intValue, String strValue) {
         this.action = action;
@@ -137,6 +141,7 @@ public class ScenarioServerboundPacket {
                 }
                 case SET_SCENARIO_NAME -> {
                 }
+                case SAVE_SCENARIO -> ScenarioServerEvents.saveScenarioRoles();
             }
             success.set(true);
         });
