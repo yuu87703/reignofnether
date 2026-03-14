@@ -1,8 +1,6 @@
 package com.solegendary.reignofnether.scenario;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.custombuilding.CustomBuildingAction;
-import com.solegendary.reignofnether.building.custombuilding.CustomBuildingServerboundPacket;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.buttons.BooleanButton;
 import com.solegendary.reignofnether.hud.buttons.IntegerButton;
@@ -24,7 +22,7 @@ public class ScenarioMenu {
 
     private static Minecraft MC = Minecraft.getInstance();
 
-    public static List<Button> renderRoleNameAndHelperButtons(ScreenEvent.Render.Post evt, ScenarioRole role, int x, int y) {
+    public static List<Button> renderRoleNameAndCycleButtons(ScreenEvent.Render.Post evt, ScenarioRole role, int x, int y) {
         int xr = x + 5;
         int yr = y;
         evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.player_number", role.index), true), xr, yr, 0xFFFFFF);
@@ -52,12 +50,15 @@ public class ScenarioMenu {
                 null,
                 List.of()
         );
-        xr += 120;
+        xr += 110;
         yr -= 7;
         renderButton(cycleButtonBackward, xr, yr, evt);
         xr += Button.DEFAULT_ICON_FRAME_SIZE;
         renderButton(cycleButtonForward, xr, yr, evt);
+        return List.of(cycleButtonBackward, cycleButtonForward);
+    }
 
+    public static List<Button> renderCustomisationButtonsColumn2(ScreenEvent.Render.Post evt, int x, int y) {
         Button unitsButton = new Button("Role Units",
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath("minecraft", "textures/item/spawn_egg.png"),
@@ -73,7 +74,7 @@ public class ScenarioMenu {
                         ScenarioClientEvents.cycleRoleUnits(true);
                 },
                 List.of(
-                        fcs(I18n.get("sandbox.reignofnether.scenario.select_role_units", ScenarioClientEvents.getNumRoleUnits())),
+                        fcs(I18n.get("sandbox.reignofnether.scenario.select_role_units")),
                         fcs(I18n.get("sandbox.reignofnether.scenario.select_all_shift")),
                         fcs(I18n.get("sandbox.reignofnether.scenario.clear_all"))
                 )
@@ -93,18 +94,43 @@ public class ScenarioMenu {
                         ScenarioClientEvents.cycleRoleBuildings(true);
                 },
                 List.of(
-                    fcs(I18n.get("sandbox.reignofnether.scenario.select_role_buildings", ScenarioClientEvents.getNumRoleBuildings())),
-                    fcs(I18n.get("sandbox.reignofnether.scenario.select_all_shift")),
-                    fcs(I18n.get("sandbox.reignofnether.scenario.clear_all"))
+                        fcs(I18n.get("sandbox.reignofnether.scenario.select_role_buildings")),
+                        fcs(I18n.get("sandbox.reignofnether.scenario.select_all_shift")),
+                        fcs(I18n.get("sandbox.reignofnether.scenario.clear_all"))
                 )
         );
-        xr -= Button.DEFAULT_ICON_FRAME_SIZE;
-        yr += 30;
-        renderButton(unitsButton, xr, yr, evt);
-        xr += Button.DEFAULT_ICON_FRAME_SIZE;
-        renderButton(buildingsButton, xr, yr, evt);
+        int xr = x;
+        int yr = y;
 
-        return List.of(cycleButtonBackward, cycleButtonForward, buildingsButton, unitsButton);
+        renderButton(unitsButton, xr, yr, evt);
+        String unitLabel = I18n.get("sandbox.reignofnether.scenario.role_units", ScenarioClientEvents.getNumRoleUnits());
+        evt.getGuiGraphics().drawString(MC.font, unitLabel, xr + 27, yr + 7, 0xFFFFFF);
+
+        yr += Button.DEFAULT_ICON_FRAME_SIZE;
+
+        renderButton(buildingsButton, xr, yr, evt);
+        String buildingLabel = I18n.get("sandbox.reignofnether.scenario.role_buildings", ScenarioClientEvents.getNumRoleBuildings());
+        evt.getGuiGraphics().drawString(MC.font, buildingLabel, xr + 27, yr + 7, 0xFFFFFF);
+
+        yr += Button.DEFAULT_ICON_FRAME_SIZE;
+
+        ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+        if (role != null) {
+            Button npcRoleButton = new BooleanButton(
+                    role.isNpc ? I18n.get("sandbox.reignofnether.scenario.npc_role_true") :
+                                I18n.get("sandbox.reignofnether.scenario.npc_role_false"),
+                    role.isNpc,
+                    () -> {
+                        role.isNpc = !role.isNpc;
+                        ScenarioServerboundPacket.setRoleIsNpc(role.index, role.isNpc);
+                    },
+                    I18n.get("sandbox.reignofnether.scenario.npc_role_tooltip")
+            );
+            renderButton(npcRoleButton, xr, yr, evt);
+            return List.of(buildingsButton, unitsButton, npcRoleButton);
+        } else {
+            return List.of();
+        }
     }
 
     public static Button renderCloseButton(ScreenEvent.Render.Post evt, int x, int y) {
@@ -135,9 +161,9 @@ public class ScenarioMenu {
                 null,
                 null,
                 List.of(
-                    fcs("sandbox.reignofnether.scenario.help_tooltip1"),
-                    fcs("sandbox.reignofnether.scenario.help_tooltip2"),
-                    fcs("sandbox.reignofnether.scenario.help_tooltip3")
+                    fcs(I18n.get("sandbox.reignofnether.scenario.help_tooltip1")),
+                    fcs(I18n.get("sandbox.reignofnether.scenario.help_tooltip2")),
+                    fcs(I18n.get("sandbox.reignofnether.scenario.help_tooltip3"))
                 )
         );
         closeButton.frameResource = null;
@@ -154,7 +180,23 @@ public class ScenarioMenu {
                 () -> false,
                 () -> true,
                 () -> {
-                    // TODO: reset the currently selected role to default and remove it from all units/buildings
+                    ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+                    if (role != null) {
+                        role.faction = NEUTRAL;
+                        ScenarioServerboundPacket.setRoleFaction(role.index, NEUTRAL);
+                        role.startingResources.food = 0;
+                        ScenarioServerboundPacket.setStartingResources(role.index, ResourceName.FOOD, 0);
+                        role.startingResources.wood = 0;
+                        ScenarioServerboundPacket.setStartingResources(role.index, ResourceName.WOOD, 0);
+                        role.startingResources.ore = 0;
+                        ScenarioServerboundPacket.setStartingResources(role.index, ResourceName.ORE, 0);
+                        role.teamNumber = role.index;
+                        ScenarioServerboundPacket.setTeamNumber(role.index, role.teamNumber);
+                        role.isNpc = false;
+                        ScenarioServerboundPacket.setRoleIsNpc(role.index, false);
+                        role.name = "Player " + role.index;
+                        ScenarioServerboundPacket.setRoleName(role.index, role.name);
+                    }
                 },
                 null,
                 List.of(
@@ -166,11 +208,10 @@ public class ScenarioMenu {
         return deregisterButton;
     }
 
-    public static List<Button> renderCustomisationButtons(ScreenEvent.Render.Post evt, int x, int y) {
+    public static List<Button> renderCustomisationButtonsColumn1(ScreenEvent.Render.Post evt, int x, int y) {
         int origX = x;
         int origY = y;
-        ArrayList<Button> buttonsCol1 = new ArrayList<>();
-        ArrayList<Button> buttonsCol2 = new ArrayList<>();
+        ArrayList<Button> buttons = new ArrayList<>();
         ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
 
         if (role == null)
@@ -263,7 +304,7 @@ public class ScenarioMenu {
                 }
         );
         setStartingFoodButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/wheat.png");
-        buttonsCol1.add(setStartingFoodButton);
+        buttons.add(setStartingFoodButton);
 
         Button setStartingWoodButton = new IntegerButton(
                 I18n.get("sandbox.reignofnether.scenario.starting_wood") + ": " + role.startingResources.wood,
@@ -279,7 +320,7 @@ public class ScenarioMenu {
                 }
         );
         setStartingWoodButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/wood.png");
-        buttonsCol1.add(setStartingWoodButton);
+        buttons.add(setStartingWoodButton);
 
         Button setStartingOreButton = new IntegerButton(
                 I18n.get("sandbox.reignofnether.scenario.starting_ore") + ": " + role.startingResources.ore,
@@ -295,7 +336,7 @@ public class ScenarioMenu {
                 }
         );
         setStartingOreButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/iron_ore.png");
-        buttonsCol1.add(setStartingOreButton);
+        buttons.add(setStartingOreButton);
 
         Button setTeamButton = new IntegerButton(
                 I18n.get("sandbox.reignofnether.scenario.team_number", role.teamNumber),
@@ -303,45 +344,26 @@ public class ScenarioMenu {
                     role.teamNumber += 1;
                     if (role.teamNumber > ScenarioClientEvents.scenarioRoles.size())
                         role.teamNumber = 1;
-                    ScenarioServerboundPacket.setStartingResources(role.index, ResourceName.FOOD, role.teamNumber);
+                    ScenarioServerboundPacket.setTeamNumber(role.index, role.teamNumber);
                 },
                 () -> {
                     role.teamNumber -= 1;
                     if (role.teamNumber < 1)
                         role.teamNumber = ScenarioClientEvents.scenarioRoles.size();
-                    ScenarioServerboundPacket.setStartingResources(role.index, ResourceName.FOOD, role.teamNumber);
+                    ScenarioServerboundPacket.setTeamNumber(role.index, role.teamNumber);
                 },
                 I18n.get("sandbox.reignofnether.scenario.team_number_tooltip")
         );
         setTeamButton.iconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/sweet_berries.png");
-        buttonsCol1.add(setTeamButton);
-
-        Button npcRoleButton = new BooleanButton(
-                role.isNpc ? I18n.get("sandbox.reignofnether.scenario.npc_role_true") :
-                            I18n.get("sandbox.reignofnether.scenario.npc_role_false"),
-                role.isNpc,
-                () -> {
-                    role.isNpc = !role.isNpc;
-                    ScenarioServerboundPacket.setRoleIsNpc(role.index, role.isNpc);
-                },
-                I18n.get("sandbox.reignofnether.scenario.npc_role_tooltip")
-        );
-        buttonsCol1.add(npcRoleButton);
+        buttons.add(setTeamButton);
 
         y += 20;
-        for (Button button : buttonsCol1) {
+        for (Button button : buttons) {
             renderButton(button, x, y, evt);
             y += 18;
         }
-        x += 150;
-        y = origY;
-        for (Button button : buttonsCol2) {
-            renderButton(button, x, y, evt);
-            y += 18;
-        }
-        buttonsCol1.addAll(buttonsCol2);
-        buttonsCol1.add(factionButton);
-        return buttonsCol1;
+        buttons.add(factionButton);
+        return buttons;
     }
 
     private static void renderButton(Button button, int x, int y, ScreenEvent.Render.Post evt) {

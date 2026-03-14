@@ -47,6 +47,10 @@ public class ScenarioServerboundPacket {
             PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(scenarioAction, roleIndex, 0,0,0, false, amount, ""));
     }
 
+    public static void setTeamNumber(int roleIndex, int teamNumber) {
+        PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SET_ROLE_TEAM_NUMBER, roleIndex, 0,0,0, false, teamNumber, ""));
+    }
+
     public static void setRoleFaction(int roleIndex, Faction faction) {
         ScenarioAction scenarioAction = switch (faction) {
             case VILLAGERS -> ScenarioAction.SET_ROLE_FACTION_VILLAGER;
@@ -59,6 +63,10 @@ public class ScenarioServerboundPacket {
 
     public static void setRoleIsNpc(int roleIndex, boolean isNpc) {
         PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SET_ROLE_NPC, roleIndex, 0,0,0, isNpc, 0, ""));
+    }
+
+    public static void setRoleName(int roleIndex, String name) {
+        PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SET_ROLE_NAME, roleIndex, 0,0,0, false, 0, name));
     }
 
     public ScenarioServerboundPacket(ScenarioAction action, int roleIndex, int x, int y, int z,

@@ -43,7 +43,7 @@ public class ScenarioClientEvents {
 
     public static void cycleRoleIndexToEdit(boolean reverse) {
         roleIndexToEdit += reverse ? -1 : 1;
-        if (roleIndexToEdit <= 0)
+        if (roleIndexToEdit < 0)
             roleIndexToEdit = scenarioRoles.size() - 1;
         else if (roleIndexToEdit >= scenarioRoles.size())
             roleIndexToEdit = 0;
@@ -147,19 +147,20 @@ public class ScenarioClientEvents {
         hudZones.clear();
         renderedButtons.clear();
         if (MC.screen instanceof TopdownGui && isMenuOpen) {
-            int width = 240;
-            int height = 185;
+            int width = 254;
+            int height = 154;
             int blitX = MC.screen.width - width - 120;
             int blitY = 5;
             MyRenderer.renderFrameWithBg(evt.getGuiGraphics(), blitX, blitY, width, height, 0xA0000000);
 
             ScenarioRole role = getScenarioRoleToEdit();
             if (role != null) {
-                renderedButtons.addAll(ScenarioMenu.renderRoleNameAndHelperButtons(evt, getScenarioRoleToEdit(), blitX + 18, blitY + 18));
+                renderedButtons.addAll(ScenarioMenu.renderRoleNameAndCycleButtons(evt, getScenarioRoleToEdit(), blitX + 14, blitY + 14));
+                renderedButtons.add(ScenarioMenu.renderHelpButton(evt, blitX + width - Button.itemIconSize - 32, blitY + 4));
                 renderedButtons.add(ScenarioMenu.renderCloseButton(evt, blitX + width - Button.itemIconSize - 12, blitY + 4));
-                renderedButtons.add(ScenarioMenu.renderHelpButton(evt, blitX + width - Button.itemIconSize - 12, blitY + 20));
+                renderedButtons.addAll(ScenarioMenu.renderCustomisationButtonsColumn1(evt, blitX + 16, blitY + 50));
+                renderedButtons.addAll(ScenarioMenu.renderCustomisationButtonsColumn2(evt, blitX + 140, blitY + 50));
                 renderedButtons.add(ScenarioMenu.renderResetRoleButton(evt, blitX + width - Button.itemIconSize - 12, blitY + height - 26));
-                renderedButtons.addAll(ScenarioMenu.renderCustomisationButtons(evt, blitX + 16, blitY + 50));
             }
             hudZones.add(new RectZone(blitX, blitY, blitX + width, blitY + height));
         }
