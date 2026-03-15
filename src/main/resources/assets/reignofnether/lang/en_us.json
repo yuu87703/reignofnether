@@ -1466,6 +1466,7 @@
     "sandbox.reignofnether.scenario.npc_role_true": "NPC Role: True",
     "sandbox.reignofnether.scenario.npc_role_false": "NPC Role: False",
     "sandbox.reignofnether.scenario.npc_role_tooltip": "Players can't play as NPC roles",
+    "sandbox.reignofnether.scenario.close_and_save": "Close & Save",
     "sandbox.reignofnether.scenario.help_tooltip1": "Configure the roles that players can choose to play your",
     "sandbox.reignofnether.scenario.help_tooltip2": "scenario map as. When a scenario map starts, all units ",
     "sandbox.reignofnether.scenario.help_tooltip3": "and buildings with this role are assigned to the player.",

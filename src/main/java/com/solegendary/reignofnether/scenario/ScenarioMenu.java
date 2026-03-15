@@ -27,7 +27,7 @@ public class ScenarioMenu {
         int yr = y;
         evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_number", role.index), true), xr, yr, 0xFFFFFF);
         evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_name"), true), xr, yr + 20, 0xFFFFFF);
-        evt.getGuiGraphics().drawString(MC.font, fcs(role.name), xr + 33, yr + 20, 0xFFFFFF);
+        evt.getGuiGraphics().drawString(MC.font, fcs(role.name), xr + 34, yr + 20, 0xFFFFFF);
 
         Button cycleButtonBackward = new Button("Cycle Role Backward",
                 Button.itemIconSize,
@@ -135,7 +135,7 @@ public class ScenarioMenu {
     }
 
     public static Button renderCloseButton(ScreenEvent.Render.Post evt, int x, int y) {
-        Button closeButton = new Button("Close Scenario Menu",
+        Button closeButton = new Button("Close & Save Scenario",
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/cross_square.png"),
                 (Keybinding) null,
@@ -147,7 +147,7 @@ public class ScenarioMenu {
                     ScenarioServerboundPacket.saveScenario();
                 },
                 null,
-                List.of()
+                List.of(fcs(I18n.get("sandbox.reignofnether.scenario.close_and_save")))
         );
         closeButton.frameResource = null;
         renderButton(closeButton, x, y, evt);

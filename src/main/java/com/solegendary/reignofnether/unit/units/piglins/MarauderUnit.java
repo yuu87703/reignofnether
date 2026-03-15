@@ -133,7 +133,7 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
-        this.entityData.define(scenarioRoleDataAccessor, 0);
+        this.entityData.define(scenarioRoleDataAccessor, -1);
     }
 
     // combat stats

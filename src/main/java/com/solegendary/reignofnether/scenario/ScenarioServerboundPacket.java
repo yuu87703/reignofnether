@@ -87,6 +87,7 @@ public class ScenarioServerboundPacket {
 
     public ScenarioServerboundPacket(FriendlyByteBuf buffer) {
         this.action = buffer.readEnum(ScenarioAction.class);
+        this.roleIndex = buffer.readInt();
         this.x = buffer.readInt();
         this.y = buffer.readInt();
         this.z = buffer.readInt();
@@ -97,6 +98,7 @@ public class ScenarioServerboundPacket {
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(this.action);
+        buffer.writeInt(this.roleIndex);
         buffer.writeInt(this.x);
         buffer.writeInt(this.y);
         buffer.writeInt(this.z);
@@ -112,8 +114,7 @@ public class ScenarioServerboundPacket {
             if (!SandboxServer.isAnyoneASandboxPlayer())
                 return;
 
-
-            ScenarioRole role = ScenarioServerEvents.getScenarioRole(roleIndex);
+            ScenarioRole role = ScenarioUtils.getScenarioRole(false, roleIndex);
             if (role == null && this.action != ScenarioAction.SET_SCENARIO_NAME) {
                 return;
             }

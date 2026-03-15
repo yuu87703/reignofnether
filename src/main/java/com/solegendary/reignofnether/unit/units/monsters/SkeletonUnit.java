@@ -129,7 +129,7 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
-        this.entityData.define(scenarioRoleDataAccessor, 0);
+        this.entityData.define(scenarioRoleDataAccessor, -1);
     }
 
     // combat stats

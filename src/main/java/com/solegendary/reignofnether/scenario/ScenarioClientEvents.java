@@ -28,14 +28,14 @@ public class ScenarioClientEvents {
 
     // index 0 is treated as neutral
     public static final ArrayList<ScenarioRole> scenarioRoles = new ArrayList<>(List.of(
+            new ScenarioRole(0),
             new ScenarioRole(1),
             new ScenarioRole(2),
             new ScenarioRole(3),
             new ScenarioRole(4),
             new ScenarioRole(5),
             new ScenarioRole(6),
-            new ScenarioRole(7),
-            new ScenarioRole(8)
+            new ScenarioRole(7)
     ));
     private static int roleIndexToEdit = 0; // list index, not role.index
     private static final ArrayList<Button> renderedButtons = new ArrayList<>();
@@ -122,7 +122,7 @@ public class ScenarioClientEvents {
 
     public static int getNumRoleUnits() {
         int count = 0;
-        for (LivingEntity le : UnitClientEvents.getSelectedUnits()) {
+        for (LivingEntity le : UnitClientEvents.getAllUnits()) {
             ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
             if (role != null && le instanceof Unit unit && unit.getScenarioRoleIndex() == role.index) {
                 count++;

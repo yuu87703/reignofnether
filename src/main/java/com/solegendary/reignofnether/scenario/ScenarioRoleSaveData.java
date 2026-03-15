@@ -39,26 +39,11 @@ public class ScenarioRoleSaveData extends SavedData {
         ListTag ltag = (ListTag) tag.get("scenarioRoles");
 
         if (ltag != null) {
-            for (Tag ctag : ltag) {
-                CompoundTag rtag = (CompoundTag) ctag;
-                int index = rtag.getInt("index");
-                String name = rtag.getString("name");
-                Faction faction = Faction.valueOf(rtag.getString("faction"));
-                int startingFood = rtag.getInt("startingFood");
-                int startingWood = rtag.getInt("startingWood");
-                int startingOre = rtag.getInt("startingOre");
-                Resources resources = new Resources("", startingFood, startingWood, startingOre);
-                int teamNumber = rtag.getInt("teamNumber");
-                boolean isNpc = rtag.getBoolean("isNpc");
-                data.scenarioRoleSaves.add(ScenarioRole.getFromSave(
-                    index,
-                    name,
-                    faction,
-                    resources,
-                    teamNumber,
-                    isNpc
-                ));
-                ReignOfNether.LOGGER.info("ScenarioSaveData.load: " + name);
+            for (Tag rtag : ltag) {
+                CompoundTag ctag = (CompoundTag) rtag;
+                int index = ctag.getInt("index");
+                data.scenarioRoleSaves.add(ScenarioRole.getFromSave(index, ctag));
+                ReignOfNether.LOGGER.info("ScenarioSaveData.load: index " + index);
             }
         }
         return data;
@@ -68,16 +53,8 @@ public class ScenarioRoleSaveData extends SavedData {
     public CompoundTag save(CompoundTag tag) {
         ListTag list = new ListTag();
         this.scenarioRoleSaves.forEach(r -> {
-            CompoundTag cTag = new CompoundTag();
-            cTag.putInt("index", r.index);
-            cTag.putString("name", r.name);
-            cTag.putString("faction", r.faction.name());
-            cTag.putInt("startingFood", r.startingResources.food);
-            cTag.putInt("startingWood", r.startingResources.wood);
-            cTag.putInt("startingOre", r.startingResources.ore);
-            cTag.putInt("teamNumber", r.teamNumber);
-            cTag.putBoolean("isNpc", r.isNpc);
-            list.add(cTag);
+            r.packNbt();
+            list.add(r.nbt);
         });
         tag.put("scenarioRoles", list);
         return tag;

@@ -169,7 +169,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
-        this.entityData.define(scenarioRoleDataAccessor, 0);
+        this.entityData.define(scenarioRoleDataAccessor, -1);
     }
 
     // combat stats

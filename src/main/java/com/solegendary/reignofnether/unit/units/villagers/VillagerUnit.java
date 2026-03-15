@@ -536,7 +536,7 @@ public class VillagerUnit extends Vindicator implements Unit, WorkerUnit, Attack
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
-        this.entityData.define(scenarioRoleDataAccessor, 0);
+        this.entityData.define(scenarioRoleDataAccessor, -1);
         this.entityData.define(VILLAGER_DATA, new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
     }
 

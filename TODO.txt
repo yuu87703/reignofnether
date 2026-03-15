@@ -22,7 +22,7 @@ When /gamerule scenarioMode true:
     [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
     [❌] time does not change
 
-[❌] Save all roles and scenario settings to map data
+[🟡] Save all roles and scenario settings to map data
 
 [🟡] New menu in sandbox for scenario settings
     - Allows creation of ScenarioRoles, each with options for:
