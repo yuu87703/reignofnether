@@ -484,11 +484,7 @@ public class SandboxClientEvents {
                 () -> true,
                 ScenarioClientEvents::pressedPublishScenarioButton,
                 () -> ScenarioClientEvents.confirmPublishScenario = false,
-                List.of(
-                        fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),
-                        fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip2")),
-                        fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip3"))
-                )
+                tooltips
         );
     }
 
