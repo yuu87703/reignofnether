@@ -4,13 +4,17 @@ import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.util.MyMath;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,6 +22,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ScenarioClientEvents {
@@ -25,6 +30,8 @@ public class ScenarioClientEvents {
     private static final Minecraft MC = Minecraft.getInstance();
 
     public static boolean isMenuOpen = false;
+
+    public static boolean confirmPublishScenario = false;
 
     // index 0 is treated as neutral
     public static final ArrayList<ScenarioRole> scenarioRoles = new ArrayList<>(List.of(
@@ -59,64 +66,110 @@ public class ScenarioClientEvents {
     }
 
     public static void cycleRoleUnits(boolean reverse) {
-        int id1 = 0;
-        LivingEntity selUnit = null;
         List<LivingEntity> selUnits = UnitClientEvents.getSelectedUnits();
-        if (selUnits.size() > 0) {
-            selUnit = selUnits.get(0);
-            id1 = selUnits.get(0).getId();
-        }
+        LivingEntity selUnit = selUnits.isEmpty() ? null : selUnits.get(0);
+        int id1 = selUnit != null ? selUnit.getId() : -1;
+
+        ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+
+        List<LivingEntity> eligible = new ArrayList<>();
+        for (LivingEntity le : UnitClientEvents.getAllUnits())
+            if (role != null && le instanceof Unit unit && unit.getScenarioRoleIndex() == role.index)
+                eligible.add(le);
+
+        eligible.sort(Comparator.comparingInt(LivingEntity::getId));
+
+        if (eligible.isEmpty()) return;
+
         UnitClientEvents.clearSelectedUnits();
-        for (LivingEntity le : UnitClientEvents.getAllUnits()) {
-            ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
-            if (role != null && le instanceof Unit unit && unit.getScenarioRoleIndex() == role.index) {
+
+        if (Keybindings.shiftMod.isDown()) {
+            for (LivingEntity le : eligible)
                 UnitClientEvents.addSelectedUnit(le);
-                int id2 = le.getId();
-                if (!Keybindings.shiftMod.isDown() &&
-                        ((id2 < id1 && reverse) || (id2 > id1 && !reverse)))
-                    return;
+            return;
+        }
+        if (id1 < 0) { // Nothing selected — pick first (or last if reversing)
+            UnitClientEvents.addSelectedUnit(reverse ? eligible.get(eligible.size() - 1) : eligible.get(0));
+            return;
+        }
+        int currentIndex = -1;
+        for (int i = 0; i < eligible.size(); i++) {
+            if (eligible.get(i).getId() == id1) {
+                currentIndex = i;
+                break;
             }
         }
-        if (selUnit != null && UnitClientEvents.getSelectedUnits().isEmpty())
-            UnitClientEvents.addSelectedUnit(selUnit);
+        int nextIndex;
+        if (currentIndex < 0)
+            nextIndex = reverse ? eligible.size() - 1 : 0;
+        else
+            nextIndex = (currentIndex + (reverse ? -1 : 1) + eligible.size()) % eligible.size();
+        UnitClientEvents.addSelectedUnit(eligible.get(nextIndex));
+
+        if (!UnitClientEvents.getSelectedUnits().isEmpty()) {
+            OrthoviewClientEvents.centreCameraOnPos(UnitClientEvents.getSelectedUnits().get(0).position());
+        }
     }
 
     public static void cycleRoleBuildings(boolean reverse) {
-        int totalCoords1 = 0;
-        BuildingPlacement selBuilding = null;
-        List<BuildingPlacement> selBuildings = BuildingClientEvents.getSelectedBuildings();
-        if (selBuildings.size() > 0) {
-            selBuilding = selBuildings.get(0);
-            BlockPos bp1 = selBuilding.originPos;
-            totalCoords1 += bp1.getX() + bp1.getY() + bp1.getZ();
-        }
+        List<BuildingPlacement> selBpls = BuildingClientEvents.getSelectedBuildings();
+        BuildingPlacement selBpl = selBpls.isEmpty() ? null : selBpls.get(0);
+        long originHash = selBpl != null ? MyMath.getBlockPosHash(selBpl.originPos) : 0;
+
+        ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+
+        List<BuildingPlacement> eligible = new ArrayList<>();
+        for (BuildingPlacement bpl : BuildingClientEvents.getBuildings())
+            if (role != null && bpl.scenarioRoleIndex == role.index)
+                eligible.add(bpl);
+
+        eligible.sort(Comparator.comparingInt(bpl -> bpl.originPos.getX() * 100 + bpl.originPos.getY() + bpl.originPos.getZ()));
+
+        if (eligible.isEmpty()) return;
+
         BuildingClientEvents.clearSelectedBuildings();
-        for (BuildingPlacement bpl : BuildingClientEvents.getBuildings()) {
-            ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
-            if (role != null && bpl.scenarioRoleIndex == role.index) {
+
+        if (Keybindings.shiftMod.isDown()) {
+            for (BuildingPlacement bpl : eligible)
                 BuildingClientEvents.addSelectedBuilding(bpl);
-                BlockPos bp2 = bpl.originPos;
-                int totalCoords2 = bp2.getX() + bp2.getY() + bp2.getZ();
-                if (!Keybindings.shiftMod.isDown() &&
-                        ((totalCoords2 < totalCoords1 && reverse) || (totalCoords2 > totalCoords1 && !reverse)))
-                    return;
+            return;
+        }
+        if (originHash == 0) { // Nothing selected — pick first (or last if reversing)
+            BuildingClientEvents.addSelectedBuilding(reverse ? eligible.get(eligible.size() - 1) : eligible.get(0));
+            return;
+        }
+        int currentIndex = -1;
+        for (int i = 0; i < eligible.size(); i++) {
+            if (originHash == MyMath.getBlockPosHash(eligible.get(i).originPos)) {
+                currentIndex = i;
+                break;
             }
         }
-        if (selBuilding != null && BuildingClientEvents.getSelectedBuildings().isEmpty())
-            BuildingClientEvents.addSelectedBuilding(selBuilding);
+        int nextIndex;
+        if (currentIndex < 0)
+            nextIndex = reverse ? eligible.size() - 1 : 0;
+        else
+            nextIndex = (currentIndex + (reverse ? -1 : 1) + eligible.size()) % eligible.size();
+        BuildingClientEvents.addSelectedBuilding(eligible.get(nextIndex));
+
+        if (!BuildingClientEvents.getSelectedBuildings().isEmpty()) {
+            OrthoviewClientEvents.centreCameraOnPos(BuildingClientEvents.getSelectedBuildings().get(0).centrePos);
+        }
     }
 
     public static void clearRoleUnits() {
         for (LivingEntity le : UnitClientEvents.getAllUnits()) {
-            if (le instanceof Unit) {
-                ScenarioServerboundPacket.setUnitRole(0, le.getId());
+            if (le instanceof Unit unit) {
+                ScenarioServerboundPacket.setUnitRole(-1, le.getId());
+                unit.setScenarioRoleIndex(-1);
             }
         }
     }
 
     public static void clearRoleBuildings() {
         for (BuildingPlacement bpl : BuildingClientEvents.getBuildings()) {
-            ScenarioServerboundPacket.setBuildingRole(0, bpl.originPos);
+            ScenarioServerboundPacket.setBuildingRole(-1, bpl.originPos);
+            bpl.scenarioRoleIndex = -1;
         }
     }
 
@@ -140,6 +193,20 @@ public class ScenarioClientEvents {
             }
         }
         return count;
+    }
+
+    public static void pressedPublishScenarioButton() {
+        if (!confirmPublishScenario) {
+            confirmPublishScenario = true;
+        } else {
+            if (getNumRoleBuildings() == 0 && getNumRoleUnits() == 0) {
+                HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_error"));
+            } else {
+                PlayerServerboundPacket.publishScenario();
+                isMenuOpen = false;
+            }
+            confirmPublishScenario = false;
+        }
     }
 
     @SubscribeEvent

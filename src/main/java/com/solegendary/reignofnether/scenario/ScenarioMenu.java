@@ -1,12 +1,14 @@
 package com.solegendary.reignofnether.scenario;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.buttons.BooleanButton;
 import com.solegendary.reignofnether.hud.buttons.IntegerButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.resources.ResourceName;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +27,7 @@ public class ScenarioMenu {
     public static List<Button> renderRoleNameAndCycleButtons(ScreenEvent.Render.Post evt, ScenarioRole role, int x, int y) {
         int xr = x + 5;
         int yr = y;
-        evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_number", role.index), true), xr, yr, 0xFFFFFF);
+        evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_number", role.index + 1), true), xr, yr, 0xFFFFFF);
         evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_name"), true), xr, yr + 20, 0xFFFFFF);
         evt.getGuiGraphics().drawString(MC.font, fcs(role.name), xr + 34, yr + 20, 0xFFFFFF);
 
@@ -69,10 +71,12 @@ public class ScenarioMenu {
                 () -> true,
                 () -> ScenarioClientEvents.cycleRoleUnits(false),
                 () -> {
-                    if (Keybindings.shiftMod.isDown() && Keybindings.ctrlMod.isDown())
+                    if (Keybindings.shiftMod.isDown() && Keybindings.ctrlMod.isDown()) {
                         ScenarioClientEvents.clearRoleUnits();
-                    else
+                        UnitClientEvents.clearSelectedUnits();
+                    } else {
                         ScenarioClientEvents.cycleRoleUnits(true);
+                    }
                 },
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.scenario.select_role_units")),
@@ -89,10 +93,12 @@ public class ScenarioMenu {
                 () -> true,
                 () -> ScenarioClientEvents.cycleRoleBuildings(false),
                 () -> {
-                    if (Keybindings.shiftMod.isDown() && Keybindings.ctrlMod.isDown())
+                    if (Keybindings.shiftMod.isDown() && Keybindings.ctrlMod.isDown()) {
                         ScenarioClientEvents.clearRoleBuildings();
-                    else
+                        BuildingClientEvents.clearSelectedBuildings();
+                    } else {
                         ScenarioClientEvents.cycleRoleBuildings(true);
+                    }
                 },
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.scenario.select_role_buildings")),
@@ -183,7 +189,10 @@ public class ScenarioMenu {
                 () -> false,
                 () -> false,
                 () -> true,
+                null,
                 () -> {
+                    if (!Keybindings.shiftMod.isDown() || !Keybindings.ctrlMod.isDown())
+                        return;
                     ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
                     if (role != null) {
                         role.faction = NEUTRAL;
@@ -194,17 +203,16 @@ public class ScenarioMenu {
                         ScenarioServerboundPacket.setStartingResources(role.index, ResourceName.WOOD, 0);
                         role.startingResources.ore = 0;
                         ScenarioServerboundPacket.setStartingResources(role.index, ResourceName.ORE, 0);
-                        role.teamNumber = role.index;
+                        role.teamNumber = role.index + 1;
                         ScenarioServerboundPacket.setTeamNumber(role.index, role.teamNumber);
                         role.isNpc = false;
                         ScenarioServerboundPacket.setRoleIsNpc(role.index, false);
-                        role.name = "Player " + role.index;
+                        role.name = "Player " + (role.index + 1);
                         ScenarioServerboundPacket.setRoleName(role.index, role.name);
                     }
                 },
-                null,
                 List.of(
-                        fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip1"), true)
+                    fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip1"), true)
                 )
         );
         deregisterButton.frameResource = null;

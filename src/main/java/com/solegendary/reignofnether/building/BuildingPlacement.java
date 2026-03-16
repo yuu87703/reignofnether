@@ -140,7 +140,7 @@ public class BuildingPlacement {
     protected int totalBlocks = 0;
     protected ArrayList<BuildingBlock> blockPlaceQueue = new ArrayList<>();
     public String ownerName;
-    public int scenarioRoleIndex = 0;  // if 0, no role
+    public int scenarioRoleIndex = -1;  // if -1, no role
     public int serverBlocksPlaced = 1;
     private int totalBlocksEverBroken = 0;
 
@@ -154,7 +154,7 @@ public class BuildingPlacement {
     private final int ANIMAL_SPAWN_RANGE_MIN = 15;
 
     protected long tickAgeAfterBuilt = 0; // not saved
-    protected long tickAge = 0; // not saved
+    public long tickAge = 0; // not saved
 
     public final BlockPos minCorner;
     public final BlockPos maxCorner;

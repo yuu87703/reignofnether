@@ -31,6 +31,7 @@ import com.solegendary.reignofnether.util.ArrayUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -465,16 +466,24 @@ public class SandboxClientEvents {
     }
 
     public static Button getPublishScenarioButton() {
+        List<FormattedCharSequence> tooltips = ScenarioClientEvents.confirmPublishScenario ? List.of(
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip2")),
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip3"))
+        ) : List.of(
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_confirm"))
+        );
         return new Button(
                 "Publish Scenario Map",
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/book.png"),
                 (Keybinding) null,
-                () -> false,
+                () -> ScenarioClientEvents.confirmPublishScenario,
                 () -> false,
                 () -> true,
-                PlayerServerboundPacket::publishScenario,
-                null,
+                ScenarioClientEvents::pressedPublishScenarioButton,
+                () -> ScenarioClientEvents.confirmPublishScenario = false,
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),
                         fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip2")),
