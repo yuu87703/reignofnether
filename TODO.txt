@@ -15,11 +15,13 @@
     [✔] Does not change building or unit allegiances
     [✔] Disabled if there are no role 1-8 buildings set
 
+
+
 When /gamerule scenarioMode true:
     [🟡] All usual gamemode /gamerule options are hidden, only 'Start Game'
         [🟡] Can be clicked to cycle through roles (icon changes to the same faction and tooltip shows the name)
         [🟡] When pressed grants control of all the selected role's units and buildings
-        [❌] Cannot select a role that has no units/buildings assigned, or that another player already chose
+        [🟡] Cannot select a role that has no units/buildings assigned, or that another player already chose
             [🟡] Save role selection to RTSPlayer and RTSPlayerSaveData
     [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
     [❌] time does not change
@@ -39,6 +41,8 @@ When /gamerule scenarioMode true:
 
 [❌] Command block API to grant victory to a player, all allies and defeat all enemies
 
+
+[❌] BUG: ScenarioClientEvents.getNumRoleUnits() not working, and not assigning correctly?
 
 
 Bugfixes

@@ -85,9 +85,12 @@ public class ScenarioClientEvents {
                 scenarioRoles.get(roleIndexToPlay).name,
                 scenarioRoles.get(roleIndexToPlay).faction.name())));
 
-        if (isRoleTaken())
-            tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.taken_scenario_role")));
-
+        for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
+            if (rtsPlayer.scenarioRoleIndex == roleIndexToPlay) {
+                tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.taken_scenario_role", rtsPlayer.name)));
+                break;
+            }
+        }
         tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.cycle_scenario_role")));
 
         return new ButtonBuilder("Change Scenario Role")
@@ -109,7 +112,12 @@ public class ScenarioClientEvents {
     public static Button getScenarioStartButton() {
         return new ButtonBuilder("Start Scenario")
                 .iconResource(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tick.png"))
-                .isEnabled(ScenarioClientEvents::isRoleTaken)
+                .isEnabled(() -> {
+                    for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers)
+                        if (rtsPlayer.scenarioRoleIndex == roleIndexToPlay)
+                            return false;
+                    return true;
+                })
                 .onLeftClick(() -> PlayerServerboundPacket.startRTSScenario(roleIndexToPlay))
                 .onRightClick(() -> {
                     roleIndexToPlay += 1;
@@ -119,13 +127,6 @@ public class ScenarioClientEvents {
                 .tooltipLines(List.of(
                         fcs(I18n.get("hud.gamemode.reignofnether.start_scenario"), true)
                 )).build();
-    }
-
-    private static boolean isRoleTaken() {
-        for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers)
-            if (rtsPlayer.scenarioRoleIndex == roleIndexToPlay)
-                return false;
-        return true;
     }
 
     public static void cycleRoleUnits(boolean reverse) {
