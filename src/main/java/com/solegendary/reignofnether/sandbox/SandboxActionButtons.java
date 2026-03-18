@@ -228,10 +228,10 @@ public class SandboxActionButtons {
             currentRoleIndex = unit.getScenarioRoleIndex();
         }
         currentRoleIndex += reverse ? -1 : 1;
-        if (currentRoleIndex >= ScenarioClientEvents.scenarioRoles.size())
+        if (currentRoleIndex > ScenarioClientEvents.scenarioRoles.size() - 1)
             currentRoleIndex = -1;
         if (currentRoleIndex < -1)
-            currentRoleIndex = ScenarioClientEvents.scenarioRoles.size();
+            currentRoleIndex = ScenarioClientEvents.scenarioRoles.size() - 1;
 
         for (LivingEntity le : UnitClientEvents.getSelectedUnits()) {
             if (le instanceof Unit unit) {

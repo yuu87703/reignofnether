@@ -6,26 +6,27 @@
 [❌] Not done, including unmerged PRs
 
 
-[🟡] New button in sandbox mode for every unit and building next to the allegiance button to mark it as player 1-8
-    - Should also be saved to building data
+[✔] New button in sandbox mode for every unit and building next to the allegiance button to mark it as player 1-8
+    [🟡] Should also be saved to building data
+    [❌] Use start menu colours for each icon
 
-[🟡] New button next to the usual exit and reset button, when pressed:
-    [🟡] Sets /gamerule scenarioMode true
-    [🟡] Does not change building or unit allegiances
-    [🟡] Disabled if there are no role 1-8 buildings set
+[✔] New button next to the usual exit and reset button, when pressed:
+    [✔] Sets /gamerule scenarioMode true
+    [✔] Does not change building or unit allegiances
+    [✔] Disabled if there are no role 1-8 buildings set
 
 When /gamerule scenarioMode true:
     [🟡] All usual gamemode /gamerule options are hidden, only 'Start Game'
-        [❌] Can be right clicked to cycle through roles (icon changes to the same faction and tooltip shows the name)
-        [❌] When pressed grants control of all the selected role's units and buildings
+        [🟡] Can be clicked to cycle through roles (icon changes to the same faction and tooltip shows the name)
+        [🟡] When pressed grants control of all the selected role's units and buildings
         [❌] Cannot select a role that has no units/buildings assigned, or that another player already chose
-            [❌] Save role selection to RTSPlayer
+            [🟡] Save role selection to RTSPlayer and RTSPlayerSaveData
     [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
     [❌] time does not change
 
-[🟡] Save all roles and scenario settings to map data
+[✔] Save all roles and scenario settings to map data
 
-[🟡] New menu in sandbox for scenario settings
+[✔] New menu in sandbox for scenario settings
     - Allows creation of ScenarioRoles, each with options for:
         - Text inputs for name and opening message
         - Win conditions

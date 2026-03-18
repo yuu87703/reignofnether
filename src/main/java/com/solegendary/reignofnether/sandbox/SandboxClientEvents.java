@@ -28,6 +28,7 @@ import com.solegendary.reignofnether.unit.units.monsters.ZombieVillagerUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GruntUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import com.solegendary.reignofnether.util.ArrayUtil;
+import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
@@ -192,12 +193,7 @@ public class SandboxClientEvents {
         return new Button(
                 "Toggle Faction",
                 Button.itemIconSize,
-                switch (faction) {
-                    case VILLAGERS -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/villager.png");
-                    case MONSTERS -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/creeper.png");
-                    case PIGLINS -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/grunt.png");
-                    case NONE, NEUTRAL -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/sheep.png");
-                },
+                MiscUtil.getFactionIcon(faction),
                 (Keybinding) null,
                 () -> false,
                 () -> false,
@@ -479,7 +475,7 @@ public class SandboxClientEvents {
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/book.png"),
                 (Keybinding) null,
-                () -> ScenarioClientEvents.confirmPublishScenario,
+                () -> !ScenarioClientEvents.confirmPublishScenario,
                 () -> false,
                 () -> true,
                 ScenarioClientEvents::pressedPublishScenarioButton,

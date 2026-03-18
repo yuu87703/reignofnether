@@ -347,14 +347,12 @@ public class HudClientEvents {
                     } else {
                         name = ReignOfNetherRegistries.BUILDING.getKey(building.getBuilding()).toString();
                     }
-                    buildingButtons.add(new Button(name,
-                        iconSize,
-                        building.getBuilding().icon,
-                        building,
-                        () -> hudSelectedPlacement.getBuilding() == building.getBuilding(),
-                        () -> false,
-                        () -> true,
-                        () -> {
+
+                    buildingButtons.add(new ButtonBuilder(name)
+                        .iconSize(iconSize)
+                        .iconResource(building.getBuilding().icon)
+                        .isSelected(() -> hudSelectedPlacement.getBuilding() == building.getBuilding())
+                        .onLeftClick(() -> {
                             // click to select this unit type as a group
                             if (hudSelectedPlacement.getBuilding() == building.getBuilding()) {
                                 BuildingClientEvents.clearSelectedBuildings();
@@ -362,10 +360,9 @@ public class HudClientEvents {
                             } else { // select this one specific unit
                                 hudSelectedPlacement = building;
                             }
-                        },
-                        null,
-                        null
-                    ));
+                        })
+                        .build()
+                    );
                 }
             }
 
@@ -697,15 +694,13 @@ public class HudClientEvents {
                     buttonImagePath = "textures/mobheads/" + unitName + ".png";
                 }
 
-                Button button = new Button(unitName,
-                    iconSize,
-                    unit instanceof Unit ? ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, buttonImagePath) : null,
-                    unit,
-                    () -> hudSelectedEntity == null || getModifiedEntityName(hudSelectedEntity).equals(
-                        getModifiedEntityName(unit)),
-                    () -> false,
-                    () -> true,
-                    () -> {
+                Button button = new ButtonBuilder(unitName)
+                    .iconSize(iconSize)
+                    .iconResource(unit instanceof Unit ? ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, buttonImagePath) : null)
+                    .entity(unit)
+                    .isSelected(() -> hudSelectedEntity == null || getModifiedEntityName(hudSelectedEntity).equals(
+                            getModifiedEntityName(unit)))
+                    .onLeftClick(() -> {
                         // select this one specific unit
                         if (Keybindings.shiftMod.isDown()) {
                             UnitClientEvents.getSelectedUnits().remove(hudSelectedEntity);
@@ -715,10 +710,10 @@ public class HudClientEvents {
                         } else { // click to select this unit type as a group
                             HudClientEvents.setHudSelectedEntity(unit);
                         }
-                    },
-                    null,
-                    List.of(fcs(capitaliseAndSpace(getModifiedEntityName(unit))))
-                );
+                    })
+                    .tooltipLines(List.of(fcs(capitaliseAndSpace(getModifiedEntityName(unit)))))
+                    .build();
+
                 if (unit.isVehicle() && unit instanceof Unit) {
                     String passengerName = MiscUtil.getSimpleEntityName(unit.getFirstPassenger());
                     button.bgIconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID,
@@ -1462,13 +1457,23 @@ public class HudClientEvents {
 
             // scenario
             if (GameruleClient.scenarioMode) {
-                StartButtons.scenarioStartButton.render(evt.getGuiGraphics(),
+                Button scenarioStartButton = ScenarioClientEvents.getScenarioStartButton();
+                scenarioStartButton.render(evt.getGuiGraphics(),
                         screenWidth - (StartButtons.ICON_SIZE * 2),
                         StartButtons.ICON_SIZE / 2,
                         mouseX,
                         mouseY
                 );
-                renderedButtons.add(StartButtons.scenarioStartButton);
+                renderedButtons.add(scenarioStartButton);
+
+                Button cycleRoleToPlayButton = ScenarioClientEvents.getCycleRoleToPlayButton();
+                cycleRoleToPlayButton.render(evt.getGuiGraphics(),
+                        screenWidth - (StartButtons.ICON_SIZE * 4),
+                        StartButtons.ICON_SIZE / 2,
+                        mouseX,
+                        mouseY
+                );
+                renderedButtons.add(cycleRoleToPlayButton);
             } else { // normal gamemodes
                 Button startPosButton = StartPosClientEvents.getPositionsButton();
                 if (!startPosButton.isHidden.get()) {

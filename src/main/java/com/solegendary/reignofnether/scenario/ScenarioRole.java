@@ -8,8 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 public class ScenarioRole {
     final int index;
     public String name;
-    Faction faction = Faction.NONE;
-    Resources startingResources = new Resources("", 0,0,0);
+    public Faction faction = Faction.NEUTRAL;
+    public Resources startingResources = new Resources("", 0,0,0);
     public int teamNumber;
     public boolean isNpc = false;
 

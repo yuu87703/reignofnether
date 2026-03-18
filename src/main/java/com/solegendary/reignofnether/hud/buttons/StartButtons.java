@@ -35,22 +35,6 @@ public class StartButtons {
                     fcs(LanguageUtil.getTranslation("hud.gamemode.reignofnether.sandbox_confirm"))
             )
     );
-
-    public static Button scenarioStartButton = new Button(
-            "Scenario",
-            ICON_SIZE,
-            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tick.png"),
-            (Keybinding) null,
-            () -> false,
-            () -> false,
-            () -> true,
-            PlayerServerboundPacket::startRTSScenario,
-            null,
-            List.of(
-                    fcs(LanguageUtil.getTranslation("hud.gamemode.reignofnether.start_scenario"))
-            )
-    );
-
     public static Button villagerStartButton = new Button(
         "Villagers",
             ICON_SIZE,

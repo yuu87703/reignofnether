@@ -22,6 +22,9 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.Resources;
 import com.solegendary.reignofnether.resources.ResourcesServerEvents;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
+import com.solegendary.reignofnether.scenario.ScenarioRole;
+import com.solegendary.reignofnether.scenario.ScenarioServerEvents;
+import com.solegendary.reignofnether.scenario.ScenarioUtils;
 import com.solegendary.reignofnether.startpos.StartPosServerEvents;
 import com.solegendary.reignofnether.survival.SurvivalServerEvents;
 import com.solegendary.reignofnether.time.TimeServerEvents;
@@ -566,20 +569,19 @@ public class PlayerServerEvents {
         }
     }
 
-    public static void startRTSScenario(int playerId) {
+    public static void startRTSScenario(int playerId, int roleIndex) {
         synchronized (rtsPlayers) {
             ServerPlayer serverPlayer = null;
             for (ServerPlayer player : players)
                 if (player.getId() == playerId)
                     serverPlayer = player;
 
-            int scenarioPlayerIndex = rtsPlayers.size() + 1;
+            ScenarioRole role = ScenarioUtils.getScenarioRole(false, roleIndex);
 
-            Faction faction = Faction.NEUTRAL; // TODO: decide based on role config
-
-            if (serverPlayer == null || faction == Faction.NONE) {
+            if (serverPlayer == null || role == null) {
                 return;
             }
+
             if (rtsLocked) {
                 serverPlayer.sendSystemMessage(Component.literal(""));
                 serverPlayer.sendSystemMessage(Component.translatable("server.reignofnether.locked"));
@@ -592,18 +594,39 @@ public class PlayerServerEvents {
                 serverPlayer.sendSystemMessage(Component.literal(""));
                 return;
             }
-            rtsPlayers.add(RTSPlayer.getNewPlayer(
+            for (RTSPlayer rtsPlayer : rtsPlayers) {
+                if (rtsPlayer.scenarioRoleIndex == roleIndex) {
+                    serverPlayer.sendSystemMessage(Component.literal(""));
+                    serverPlayer.sendSystemMessage(Component.translatable("server.reignofnether.scenario_role_taken"));
+                    serverPlayer.sendSystemMessage(Component.literal(""));
+                    return;
+                }
+            }
+            RTSPlayer rtsPlayer = RTSPlayer.getNewScenarioPlayer(
                     serverPlayer.getName().getString(),
-                    faction,
+                    role.faction,
                     serverPlayer.getId(),
-                    0
-            ));
+                    roleIndex
+            );
+            rtsPlayers.add(rtsPlayer);
             String playerName = serverPlayer.getName().getString();
-            ResourcesServerEvents.assignResources(playerName);
-            PlayerClientboundPacket.addRTSPlayer(playerName, faction, (long) serverPlayer.getId(), 0);
+            ResourcesServerEvents.assignScenarioResources(rtsPlayer);
+            PlayerClientboundPacket.addRTSPlayer(playerName, role.faction, (long) serverPlayer.getId(), 0);
 
-            ResourcesServerEvents.resetResources(playerName); // TODO: set to ScenarioServerEvents resources
-            sendMessageToAllPlayers("server.reignofnether.started_scenario", true, playerName, scenarioPlayerIndex, faction.name());
+            for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
+                if (building.scenarioRoleIndex == roleIndex) {
+                    building.ownerName = playerName;
+                    BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), playerName);
+                }
+            }
+            for (LivingEntity le : UnitServerEvents.getAllUnits()) {
+                if (le instanceof Unit unit && unit.getScenarioRoleIndex() == roleIndex) {
+                    unit.setOwnerName(playerName);
+                    UnitSyncClientboundPacket.sendSyncOwnerNamePacket(unit);
+                }
+            }
+
+            sendMessageToAllPlayers("server.reignofnether.started_scenario", true, playerName, role.name, role.faction.name());
             PlayerClientboundPacket.syncRtsGameTime(rtsGameTicks);
             saveRTSPlayers();
         }

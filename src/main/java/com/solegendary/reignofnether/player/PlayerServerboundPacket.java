@@ -155,10 +155,10 @@ public class PlayerServerboundPacket {
         }
     }
 
-    public static void startRTSScenario() {
+    public static void startRTSScenario(int roleIndex) {
         Minecraft MC = Minecraft.getInstance();
         if (MC.player != null && MC.level != null) {
-            PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.START_RTS_SCENARIO, MC.player.getId()));
+            PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.START_RTS_SCENARIO, MC.player.getId(), (double) roleIndex, 0d, 0d));
         }
     }
 
@@ -278,7 +278,7 @@ public class PlayerServerboundPacket {
                 case START_RTS_SANDBOX ->
                     PlayerServerEvents.startRTS(this.playerId, new Vec3(this.x, this.y, this.z), Faction.NONE);
                 case START_RTS_SCENARIO ->
-                        PlayerServerEvents.startRTSScenario(this.playerId);
+                        PlayerServerEvents.startRTSScenario(this.playerId, (int) this.x);
                 case PUBLISH_SCENARIO_MAP ->
                         PlayerServerEvents.publishScenarioMap();
                 case START_RTS_EVERYONE -> StartPosServerEvents.startGameCountdown();

@@ -1,20 +1,30 @@
 package com.solegendary.reignofnether.scenario;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.ButtonBuilder;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.hud.RectZone;
+import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
+import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.util.LanguageUtil;
+import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,6 +34,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class ScenarioClientEvents {
 
@@ -45,6 +57,7 @@ public class ScenarioClientEvents {
             new ScenarioRole(7)
     ));
     private static int roleIndexToEdit = 0; // list index, not role.index
+    private static int roleIndexToPlay = 0; // list index, not role.index
     private static final ArrayList<Button> renderedButtons = new ArrayList<>();
     private static final ArrayList<RectZone> hudZones = new ArrayList<>();
 
@@ -63,6 +76,56 @@ public class ScenarioClientEvents {
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
+    }
+
+    public static Button getCycleRoleToPlayButton() {
+        List<FormattedCharSequence> tooltipLines = new ArrayList<>();
+
+        tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.choose_scenario_role",
+                scenarioRoles.get(roleIndexToPlay).name,
+                scenarioRoles.get(roleIndexToPlay).faction.name())));
+
+        if (isRoleTaken())
+            tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.taken_scenario_role")));
+
+        tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.cycle_scenario_role")));
+
+        return new ButtonBuilder("Change Scenario Role")
+                .iconResource(MiscUtil.getFactionIcon(scenarioRoles.get(roleIndexToPlay).faction))
+                .onLeftClick(() -> {
+                    roleIndexToPlay += 1;
+                    if (roleIndexToPlay >= scenarioRoles.size())
+                        roleIndexToPlay = 0;
+                })
+                .onRightClick(() -> {
+                    roleIndexToPlay -= 1;
+                    if (roleIndexToPlay < 0)
+                        roleIndexToPlay = scenarioRoles.size() - 1;
+                })
+                .tooltipLines(tooltipLines)
+                .build();
+    }
+
+    public static Button getScenarioStartButton() {
+        return new ButtonBuilder("Start Scenario")
+                .iconResource(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tick.png"))
+                .isEnabled(ScenarioClientEvents::isRoleTaken)
+                .onLeftClick(() -> PlayerServerboundPacket.startRTSScenario(roleIndexToPlay))
+                .onRightClick(() -> {
+                    roleIndexToPlay += 1;
+                    if (roleIndexToPlay >= scenarioRoles.size())
+                        roleIndexToPlay = 0;
+                })
+                .tooltipLines(List.of(
+                        fcs(I18n.get("hud.gamemode.reignofnether.start_scenario"), true)
+                )).build();
+    }
+
+    private static boolean isRoleTaken() {
+        for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers)
+            if (rtsPlayer.scenarioRoleIndex == roleIndexToPlay)
+                return false;
+        return true;
     }
 
     public static void cycleRoleUnits(boolean reverse) {
