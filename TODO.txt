@@ -24,7 +24,7 @@ When /gamerule scenarioMode true:
         [🟡] Cannot select a role that has no units/buildings assigned, or that another player already chose
             [🟡] Save role selection to RTSPlayer and RTSPlayerSaveData
     [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
-    [❌] time does not change
+    [🟡] time does not change
 
 [✔] Save all roles and scenario settings to map data
 
@@ -41,8 +41,6 @@ When /gamerule scenarioMode true:
 
 [❌] Command block API to grant victory to a player, all allies and defeat all enemies
 
-
-[❌] BUG: ScenarioClientEvents.getNumRoleUnits() not working, and not assigning correctly?
 
 
 Bugfixes

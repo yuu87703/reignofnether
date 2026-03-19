@@ -1410,6 +1410,7 @@
     "hud.gamemode.reignofnether.start_scenario": "Start Scenario",
     "hud.gamemode.reignofnether.choose_scenario_role": "Role: %s (%s)",
     "hud.gamemode.reignofnether.taken_scenario_role": "(Taken by %s)",
+    "hud.gamemode.reignofnether.npc_scenario_role": "(NPC only)",
     "hud.gamemode.reignofnether.cycle_scenario_role": "(Click to change)",
 
     "hud.gamerule.reignofnether.shift_click": "(Hold shift to adjust faster)",
@@ -1451,7 +1452,8 @@
     "sandbox.reignofnether.publish_scenario_tooltip3": "Disables all other gamemode & gamerule options",
     "sandbox.reignofnether.publish_scenario_tooltip_confirm": "Are you sure?",
     "sandbox.reignofnether.publish_scenario_tooltip_cancel": "(Right-click to cancel)",
-    "sandbox.reignofnether.publish_scenario_tooltip_error": "No units or buildings set to any role!",
+    "sandbox.reignofnether.publish_scenario_tooltip_error1": "No units or buildings set to any role!",
+    "sandbox.reignofnether.publish_scenario_tooltip_error2": "You need at least one non-NPC role!",
     "sandbox.reignofnether.configure_scenario": "Configure Scenario Roles",
     "sandbox.reignofnether.cycle_scenario_role": "Scenario Role: %s",
     "sandbox.reignofnether.scenario_role_none": "None",
@@ -1478,6 +1480,7 @@
     "sandbox.reignofnether.scenario.help_tooltip1": "Configure the roles that players can choose to play your",
     "sandbox.reignofnether.scenario.help_tooltip2": "scenario map as. When a scenario map starts, all units ",
     "sandbox.reignofnether.scenario.help_tooltip3": "and buildings with this role are assigned to the player.",
+    "sandbox.reignofnether.scenario.npc_role_error": "This role is only for NPCs!",
 
     "sandbox.reignofnether.custom_buildings_info.tooltip1": "Custom buildings saved with RTS",
     "sandbox.reignofnether.custom_buildings_info.tooltip2": "structure blocks are shown here",

@@ -464,18 +464,18 @@ public class SandboxClientEvents {
     public static Button getPublishScenarioButton() {
         List<FormattedCharSequence> tooltips = ScenarioClientEvents.confirmPublishScenario ? List.of(
                 fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),
-                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip2")),
-                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip3"))
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_confirm"))
         ) : List.of(
                 fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip1"), true),
-                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_confirm"))
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip2")),
+                fcs(I18n.get("sandbox.reignofnether.publish_scenario_tooltip3"))
         );
         return new Button(
                 "Publish Scenario Map",
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/book.png"),
                 (Keybinding) null,
-                () -> !ScenarioClientEvents.confirmPublishScenario,
+                () -> ScenarioClientEvents.confirmPublishScenario,
                 () -> false,
                 () -> true,
                 ScenarioClientEvents::pressedPublishScenarioButton,

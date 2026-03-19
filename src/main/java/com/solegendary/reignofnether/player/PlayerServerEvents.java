@@ -581,7 +581,11 @@ public class PlayerServerEvents {
             if (serverPlayer == null || role == null) {
                 return;
             }
-
+            if (role.isNpc) {
+                serverPlayer.sendSystemMessage(Component.literal(""));
+                serverPlayer.sendSystemMessage(Component.translatable("sandbox.reignofnether.scenario.npc_role_error"));
+                serverPlayer.sendSystemMessage(Component.literal(""));
+            }
             if (rtsLocked) {
                 serverPlayer.sendSystemMessage(Component.literal(""));
                 serverPlayer.sendSystemMessage(Component.translatable("server.reignofnether.locked"));

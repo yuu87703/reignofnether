@@ -80,21 +80,24 @@ public class ScenarioClientEvents {
 
     public static Button getCycleRoleToPlayButton() {
         List<FormattedCharSequence> tooltipLines = new ArrayList<>();
+        ScenarioRole role = scenarioRoles.get(roleIndexToPlay);
+        tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.choose_scenario_role", role.name, role.faction.name())));
 
-        tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.choose_scenario_role",
-                scenarioRoles.get(roleIndexToPlay).name,
-                scenarioRoles.get(roleIndexToPlay).faction.name())));
-
-        for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
-            if (rtsPlayer.scenarioRoleIndex == roleIndexToPlay) {
-                tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.taken_scenario_role", rtsPlayer.name)));
-                break;
+        if (role.isNpc) {
+            tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.npc_scenario_role")));
+        } else {
+            for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers) {
+                if (rtsPlayer.scenarioRoleIndex == roleIndexToPlay) {
+                    tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.taken_scenario_role", rtsPlayer.name)));
+                    break;
+                }
             }
         }
         tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.cycle_scenario_role")));
 
         return new ButtonBuilder("Change Scenario Role")
                 .iconResource(MiscUtil.getFactionIcon(scenarioRoles.get(roleIndexToPlay).faction))
+                .isEnabled(() -> !role.isNpc)
                 .onLeftClick(() -> {
                     roleIndexToPlay += 1;
                     if (roleIndexToPlay >= scenarioRoles.size())
@@ -259,12 +262,23 @@ public class ScenarioClientEvents {
         return count;
     }
 
+    public static int getNumPlayerRoles() {
+        int count = 0;
+        for (ScenarioRole role : scenarioRoles) {
+            if (!role.isNpc)
+                count++;
+        }
+        return count;
+    }
+
     public static void pressedPublishScenarioButton() {
         if (!confirmPublishScenario) {
             confirmPublishScenario = true;
         } else {
             if (getNumRoleBuildings() == 0 && getNumRoleUnits() == 0) {
-                HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_error"));
+                HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_error1"));
+            } else if (getNumPlayerRoles() <= 0) {
+                HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_error2"));
             } else {
                 PlayerServerboundPacket.publishScenario();
                 isMenuOpen = false;
