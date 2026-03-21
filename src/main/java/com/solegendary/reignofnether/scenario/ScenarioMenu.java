@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solegendary.reignofnether.faction.Faction.*;
+import static com.solegendary.reignofnether.scenario.ScenarioClientEvents.getScenarioRoleToEdit;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class ScenarioMenu {
@@ -110,19 +111,21 @@ public class ScenarioMenu {
         int xr = x;
         int yr = y;
 
+        ScenarioRole roleToEdit = getScenarioRoleToEdit();
+
         renderButton(unitsButton, xr, yr, evt);
-        String unitLabel = I18n.get("sandbox.reignofnether.scenario.role_units", ScenarioClientEvents.getNumRoleUnits());
+        String unitLabel = I18n.get("sandbox.reignofnether.scenario.role_units", ScenarioClientEvents.getNumScenarioUnits(roleToEdit));
         evt.getGuiGraphics().drawString(MC.font, unitLabel, xr + 27, yr + 7, 0xFFFFFF);
 
         yr += Button.DEFAULT_ICON_FRAME_SIZE;
 
         renderButton(buildingsButton, xr, yr, evt);
-        String buildingLabel = I18n.get("sandbox.reignofnether.scenario.role_buildings", ScenarioClientEvents.getNumRoleBuildings());
+        String buildingLabel = I18n.get("sandbox.reignofnether.scenario.role_buildings", ScenarioClientEvents.getNumScenarioBuildings(roleToEdit));
         evt.getGuiGraphics().drawString(MC.font, buildingLabel, xr + 27, yr + 7, 0xFFFFFF);
 
         yr += Button.DEFAULT_ICON_FRAME_SIZE;
 
-        ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+        ScenarioRole role = getScenarioRoleToEdit();
         if (role != null) {
             Button npcRoleButton = new BooleanButton(
                     role.isNpc ? I18n.get("sandbox.reignofnether.scenario.npc_role_true") :
@@ -194,7 +197,7 @@ public class ScenarioMenu {
                 () -> {
                     if (!Keybindings.shiftMod.isDown() || !Keybindings.ctrlMod.isDown())
                         return;
-                    ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+                    ScenarioRole role = getScenarioRoleToEdit();
                     if (role != null) {
                         role.faction = NEUTRAL;
                         ScenarioServerboundPacket.setRoleFaction(role.index, NEUTRAL);
@@ -213,7 +216,8 @@ public class ScenarioMenu {
                     }
                 },
                 List.of(
-                    fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip1"), true)
+                        fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip1"), true),
+                        fcs(I18n.get("sandbox.reignofnether.scenario.reset_role.tooltip2"))
                 )
         );
         deregisterButton.frameResource = null;
@@ -225,7 +229,7 @@ public class ScenarioMenu {
         int origX = x;
         int origY = y;
         ArrayList<Button> buttons = new ArrayList<>();
-        ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+        ScenarioRole role = getScenarioRoleToEdit();
 
         if (role == null)
             return List.of();

@@ -3,13 +3,11 @@ package com.solegendary.reignofnether.scenario;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
-import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.ButtonBuilder;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.hud.RectZone;
-import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
@@ -17,7 +15,6 @@ import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.util.LanguageUtil;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
 import com.solegendary.reignofnether.util.MyRenderer;
@@ -78,6 +75,7 @@ public class ScenarioClientEvents {
         }
     }
 
+    @Nullable
     public static Button getCycleRoleToPlayButton() {
         List<FormattedCharSequence> tooltipLines = new ArrayList<>();
         ScenarioRole role = scenarioRoles.get(roleIndexToPlay);
@@ -95,27 +93,54 @@ public class ScenarioClientEvents {
         }
         tooltipLines.add(fcs(I18n.get("hud.gamemode.reignofnether.cycle_scenario_role")));
 
+        if ((getNumScenarioUnits() == 0 && getNumScenarioBuildings() == 0) || getNumPlayerRoles() <= 0) {
+            return null;
+        }
+
+
+
         return new ButtonBuilder("Change Scenario Role")
-                .iconResource(MiscUtil.getFactionIcon(scenarioRoles.get(roleIndexToPlay).faction))
-                .isEnabled(() -> !role.isNpc)
+                .iconResource(MiscUtil.getFactionIcon(role.faction))
                 .onLeftClick(() -> {
                     roleIndexToPlay += 1;
                     if (roleIndexToPlay >= scenarioRoles.size())
                         roleIndexToPlay = 0;
+                    goToNextVisibleRole(false);
                 })
                 .onRightClick(() -> {
                     roleIndexToPlay -= 1;
                     if (roleIndexToPlay < 0)
                         roleIndexToPlay = scenarioRoles.size() - 1;
+                    goToNextVisibleRole(true);
                 })
                 .tooltipLines(tooltipLines)
                 .build();
+    }
+
+    private static void goToNextVisibleRole(boolean reverse) {
+        int i = 0;
+        ScenarioRole role = ScenarioUtils.getScenarioRole(true, roleIndexToPlay);
+        if (role != null) {
+            while (getNumScenarioUnits(role) == 0 && getNumScenarioBuildings(role) == 0) {
+                roleIndexToPlay += reverse ? -1 : 1;
+                if (roleIndexToPlay >= scenarioRoles.size())
+                    roleIndexToPlay = 0;
+                if (roleIndexToPlay < 0)
+                    roleIndexToPlay = scenarioRoles.size() - 1;
+                role = ScenarioUtils.getScenarioRole(true, roleIndexToPlay);
+                if (i++ > scenarioRoles.size() * 2 || role == null)
+                    return;
+            }
+        }
     }
 
     public static Button getScenarioStartButton() {
         return new ButtonBuilder("Start Scenario")
                 .iconResource(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tick.png"))
                 .isEnabled(() -> {
+                    ScenarioRole role = ScenarioUtils.getScenarioRole(true, roleIndexToPlay);
+                    if (role == null || role.isNpc || (getNumScenarioUnits(role) == 0 && getNumScenarioBuildings(role) == 0))
+                        return false;
                     for (RTSPlayer rtsPlayer : PlayerClientEvents.rtsPlayers)
                         if (rtsPlayer.scenarioRoleIndex == roleIndexToPlay)
                             return false;
@@ -240,10 +265,29 @@ public class ScenarioClientEvents {
         }
     }
 
-    public static int getNumRoleUnits() {
+    public static int getNumScenarioUnits() {
         int count = 0;
         for (LivingEntity le : UnitClientEvents.getAllUnits()) {
-            ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+            if (le instanceof Unit unit && unit.getScenarioRoleIndex() >= 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int getNumScenarioBuildings() {
+        int count = 0;
+        for (BuildingPlacement bpl : BuildingClientEvents.getBuildings()) {
+            if (bpl.scenarioRoleIndex >= 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int getNumScenarioUnits(ScenarioRole role) {
+        int count = 0;
+        for (LivingEntity le : UnitClientEvents.getAllUnits()) {
             if (role != null && le instanceof Unit unit && unit.getScenarioRoleIndex() == role.index) {
                 count++;
             }
@@ -251,10 +295,9 @@ public class ScenarioClientEvents {
         return count;
     }
 
-    public static int getNumRoleBuildings() {
+    public static int getNumScenarioBuildings(ScenarioRole role) {
         int count = 0;
         for (BuildingPlacement bpl : BuildingClientEvents.getBuildings()) {
-            ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
             if (role != null && bpl.scenarioRoleIndex == role.index) {
                 count++;
             }
@@ -275,7 +318,7 @@ public class ScenarioClientEvents {
         if (!confirmPublishScenario) {
             confirmPublishScenario = true;
         } else {
-            if (getNumRoleBuildings() == 0 && getNumRoleUnits() == 0) {
+            if (getNumScenarioBuildings() == 0 && getNumScenarioUnits() == 0) {
                 HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_error1"));
             } else if (getNumPlayerRoles() <= 0) {
                 HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_error2"));

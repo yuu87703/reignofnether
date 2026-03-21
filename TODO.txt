@@ -18,11 +18,13 @@
 
 
 When /gamerule scenarioMode true:
-    [🟡] All usual gamemode /gamerule options are hidden, only 'Start Game'
+    [🟡] All usual gamemode /gamerule options are hidden, only 'Start Game' and 'Change Role'
         [🟡] Can be clicked to cycle through roles (icon changes to the same faction and tooltip shows the name)
         [🟡] When pressed grants control of all the selected role's units and buildings
         [🟡] Cannot select a role that has no units/buildings assigned, or that another player already chose
             [🟡] Save role selection to RTSPlayer and RTSPlayerSaveData
+        [❌] When role is cycled, move camera to the first found building (or unit if no building)
+
     [🟡] Can revert to usual options by manually setting /gamerule scenarioMode false
     [🟡] time does not change
 

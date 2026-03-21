@@ -203,7 +203,7 @@ public class SandboxActionButtons {
         );
     }
 
-    public static Button getSetScenarioRoleButton() {
+    public static Button getCycleScenarioRoleButton() {
         return new Button(
                 "Switch Building Scenario Role",
                 Button.itemIconSize,
@@ -212,15 +212,15 @@ public class SandboxActionButtons {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> cycleRoleIndex(false),
-                () -> cycleRoleIndex(true),
+                () -> cycleUnitOrBuildingRoleIndex(false),
+                () -> cycleUnitOrBuildingRoleIndex(true),
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.cycle_scenario_role", getHudSelectedScenarioRoleName()))
                 )
         );
     }
 
-    private static void cycleRoleIndex(boolean reverse) {
+    private static void cycleUnitOrBuildingRoleIndex(boolean reverse) {
         int currentRoleIndex = 0;
         if (HudClientEvents.hudSelectedPlacement != null) {
             currentRoleIndex = HudClientEvents.hudSelectedPlacement.scenarioRoleIndex;

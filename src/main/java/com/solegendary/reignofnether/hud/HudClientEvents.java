@@ -29,7 +29,6 @@ import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
-import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.ResourceSources;
@@ -821,7 +820,7 @@ public class HudClientEvents {
             ArrayList<Button> actionButtons = new ArrayList<>();
 
             actionButtons.add(SandboxActionButtons.getSetRelationshipButton());
-            actionButtons.add(SandboxActionButtons.getSetScenarioRoleButton());
+            actionButtons.add(SandboxActionButtons.getCycleScenarioRoleButton());
             if (hudSelectedPlacement != null) {
                 actionButtons.add(SandboxActionButtons.removeBuildingPlacement);
             }
@@ -1467,13 +1466,15 @@ public class HudClientEvents {
                 renderedButtons.add(scenarioStartButton);
 
                 Button cycleRoleToPlayButton = ScenarioClientEvents.getCycleRoleToPlayButton();
-                cycleRoleToPlayButton.render(evt.getGuiGraphics(),
-                        screenWidth - (StartButtons.ICON_SIZE * 4),
-                        StartButtons.ICON_SIZE / 2,
-                        mouseX,
-                        mouseY
-                );
-                renderedButtons.add(cycleRoleToPlayButton);
+                if (cycleRoleToPlayButton != null) {
+                    cycleRoleToPlayButton.render(evt.getGuiGraphics(),
+                            screenWidth - (StartButtons.ICON_SIZE * 4),
+                            StartButtons.ICON_SIZE / 2,
+                            mouseX,
+                            mouseY
+                    );
+                    renderedButtons.add(cycleRoleToPlayButton);
+                }
             } else { // normal gamemodes
                 Button startPosButton = StartPosClientEvents.getPositionsButton();
                 if (!startPosButton.isHidden.get()) {
