@@ -50,6 +50,8 @@ Bugfixes
 --------
 [🟡] Spawners still spawning when units are nearby
 
+[❌] rts-hard-reset doesn't destroy buildings but rts-reset does?
+
 Quality of Life
 ---------------
 [❌] Spawners inside custom buildings should give you control

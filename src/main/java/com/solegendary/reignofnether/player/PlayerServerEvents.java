@@ -10,7 +10,6 @@ import com.solegendary.reignofnether.building.buildings.placements.ProductionPla
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamemode.GameModeClientboundPacket;
 import com.solegendary.reignofnether.gamerules.GameruleClientboundPacket;
-import com.solegendary.reignofnether.gamerules.GameruleServerEvents;
 import com.solegendary.reignofnether.guiscreen.TopdownGuiContainer;
 import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
@@ -38,7 +37,6 @@ import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.util.MiscUtil;
-import net.minecraft.client.telemetry.TelemetryProperty;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -1119,12 +1117,6 @@ public class PlayerServerEvents {
             return;
         }
 
-        for (ScenarioRole role1 : ScenarioServerEvents.scenarioRoles)
-            for (ScenarioRole role2 : ScenarioServerEvents.scenarioRoles)
-                if (role1.index != role2.index && role1.teamNumber == role2.teamNumber &&
-                    !AlliancesServerEvents.isAllied(role1.name, role2.name))
-                    AlliancesServerEvents.addAlliance(role1.name, role2.name);
-
         for (LivingEntity le : UnitServerEvents.getAllUnits()) {
             if (le instanceof Unit unit) {
                 ScenarioRole role = ScenarioUtils.getScenarioRole(false, unit.getScenarioRoleIndex());
@@ -1156,7 +1148,7 @@ public class PlayerServerEvents {
 
             if (rtsLocked)
                 setRTSLock(false);
-            AlliancesServerEvents.resetAllAlliances();
+            AlliancesServerEvents.applyScenarioAlliances();
             SurvivalServerEvents.reset();
         }
         HeroServerEvents.fallenHeroes.clear();
