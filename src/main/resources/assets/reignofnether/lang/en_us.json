@@ -1481,6 +1481,7 @@
     "sandbox.reignofnether.scenario.help_tooltip2": "scenario map as. When a scenario map starts, all units ",
     "sandbox.reignofnether.scenario.help_tooltip3": "and buildings with this role are assigned to the player.",
     "sandbox.reignofnether.scenario.npc_role_error": "This role is only for NPCs!",
+    "sandbox.reignofnether.scenario.saved_all_roles": "Saved all scenario roles!",
 
     "sandbox.reignofnether.custom_buildings_info.tooltip1": "Custom buildings saved with RTS",
     "sandbox.reignofnether.custom_buildings_info.tooltip2": "structure blocks are shown here",

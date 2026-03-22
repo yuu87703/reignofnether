@@ -4,10 +4,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
-import com.solegendary.reignofnether.hud.Button;
-import com.solegendary.reignofnether.hud.ButtonBuilder;
-import com.solegendary.reignofnether.hud.HudClientEvents;
-import com.solegendary.reignofnether.hud.RectZone;
+import com.solegendary.reignofnether.hud.*;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
@@ -38,7 +35,18 @@ public class ScenarioClientEvents {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
-    public static boolean isMenuOpen = false;
+    private static boolean isMenuOpen = false;
+
+    public static boolean isMenuOpen() {
+        return isMenuOpen;
+    }
+    public static void setMenuOpen(boolean value) {
+        isMenuOpen = value;
+        if (!isMenuOpen)
+            ScenarioMenu.unregisterRoleNameInput();
+        else
+            ScenarioMenu.registerRoleNameInput();
+    }
 
     public static boolean confirmPublishScenario = false;
 
@@ -64,6 +72,8 @@ public class ScenarioClientEvents {
             roleIndexToEdit = scenarioRoles.size() - 1;
         else if (roleIndexToEdit >= scenarioRoles.size())
             roleIndexToEdit = 0;
+        if (isMenuOpen())
+            ScenarioMenu.reregisterRoleNameInput();
     }
 
     @Nullable
@@ -96,8 +106,6 @@ public class ScenarioClientEvents {
         if ((getNumScenarioUnits() == 0 && getNumScenarioBuildings() == 0) || getNumPlayerRoles() <= 0) {
             return null;
         }
-
-
 
         return new ButtonBuilder("Change Scenario Role")
                 .iconResource(MiscUtil.getFactionIcon(role.faction))
@@ -324,7 +332,7 @@ public class ScenarioClientEvents {
                 HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.publish_scenario_tooltip_error2"));
             } else {
                 PlayerServerboundPacket.publishScenario();
-                isMenuOpen = false;
+                setMenuOpen(false);
             }
             confirmPublishScenario = false;
         }
@@ -334,9 +342,9 @@ public class ScenarioClientEvents {
     public static void onDrawScreen(ScreenEvent.Render.Post evt) {
         hudZones.clear();
         renderedButtons.clear();
-        if (MC.screen instanceof TopdownGui && isMenuOpen) {
+        if (MC.screen instanceof TopdownGui && isMenuOpen()) {
             int width = 254;
-            int height = 154;
+            int height = 160;
             int blitX = MC.screen.width - width - 120;
             int blitY = 5;
             MyRenderer.renderFrameWithBg(evt.getGuiGraphics(), blitX, blitY, width, height, 0xA0000000);
@@ -346,8 +354,8 @@ public class ScenarioClientEvents {
                 renderedButtons.addAll(ScenarioMenu.renderRoleNameAndCycleButtons(evt, getScenarioRoleToEdit(), blitX + 14, blitY + 14));
                 renderedButtons.add(ScenarioMenu.renderHelpButton(evt, blitX + width - Button.itemIconSize - 32, blitY + 4));
                 renderedButtons.add(ScenarioMenu.renderCloseButton(evt, blitX + width - Button.itemIconSize - 12, blitY + 4));
-                renderedButtons.addAll(ScenarioMenu.renderCustomisationButtonsColumn1(evt, blitX + 16, blitY + 50));
-                renderedButtons.addAll(ScenarioMenu.renderCustomisationButtonsColumn2(evt, blitX + 140, blitY + 50));
+                renderedButtons.addAll(ScenarioMenu.renderCustomisationButtonsColumn1(evt, blitX + 16, blitY + 56));
+                renderedButtons.addAll(ScenarioMenu.renderCustomisationButtonsColumn2(evt, blitX + 140, blitY + 56));
                 renderedButtons.add(ScenarioMenu.renderResetRoleButton(evt, blitX + width - Button.itemIconSize - 12, blitY + height - 26));
             }
             hudZones.add(new RectZone(blitX, blitY, blitX + width, blitY + height));

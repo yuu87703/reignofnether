@@ -1795,9 +1795,10 @@ public class HudClientEvents {
     // for some reason some bound vanilla keys like Q and E don't trigger KeyPressed but still trigger keyReleased
     @SubscribeEvent
     public static void onKeyRelease(ScreenEvent.KeyReleased.KeyReleased.Post evt) {
-        if (MC.screen == null || !MC.screen.getTitle().getString().contains("topdowngui_container")) {
+        if (TextInputClientEvents.isAnyInputFocused())
             return;
-        }
+        if (MC.screen == null || !MC.screen.getTitle().getString().contains("topdowngui_container"))
+            return;
         for (Button button : renderedButtons)
             button.checkPressed(evt.getKeyCode());
     }
@@ -1860,9 +1861,10 @@ public class HudClientEvents {
     // MANAGE CONTROL GROUPS
     @SubscribeEvent
     public static void onKeyPress(ScreenEvent.KeyPressed.KeyPressed.Pre evt) {
-        if (!(MC.screen instanceof TopdownGui)) {
+        if (TextInputClientEvents.isAnyInputFocused())
             return;
-        }
+        if (!(MC.screen instanceof TopdownGui))
+            return;
 
         // Prevent spectator mode options from showing up
         if (OrthoviewClientEvents.isEnabled()) {

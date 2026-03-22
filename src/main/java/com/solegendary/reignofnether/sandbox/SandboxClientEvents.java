@@ -490,10 +490,10 @@ public class SandboxClientEvents {
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_conditional.png"),
                 (Keybinding) null,
-                () -> ScenarioClientEvents.isMenuOpen,
+                ScenarioClientEvents::isMenuOpen,
                 () -> false,
                 () -> true,
-                () -> ScenarioClientEvents.isMenuOpen = !ScenarioClientEvents.isMenuOpen,
+                () -> ScenarioClientEvents.setMenuOpen(!ScenarioClientEvents.isMenuOpen()),
                 null,
                 List.of(
                         fcs(I18n.get("sandbox.reignofnether.configure_scenario"))

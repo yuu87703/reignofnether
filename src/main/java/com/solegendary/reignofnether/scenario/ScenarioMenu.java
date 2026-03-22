@@ -3,6 +3,8 @@ package com.solegendary.reignofnether.scenario;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.HudClientEvents;
+import com.solegendary.reignofnether.hud.TextInputClientEvents;
 import com.solegendary.reignofnether.hud.buttons.BooleanButton;
 import com.solegendary.reignofnether.hud.buttons.IntegerButton;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -11,6 +13,7 @@ import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ScreenEvent;
@@ -26,12 +29,42 @@ public class ScenarioMenu {
 
     private static Minecraft MC = Minecraft.getInstance();
 
+    private static EditBox roleNameInput = registerRoleNameInput();
+
+    public static void reregisterRoleNameInput() {
+        unregisterRoleNameInput();
+        registerRoleNameInput();
+    }
+
+    public static EditBox registerRoleNameInput() {
+        if (roleNameInput == null) {
+            roleNameInput = TextInputClientEvents.register(0, 0, 120, 12);
+            roleNameInput.setMaxLength(32);
+            roleNameInput.setFocused(true);
+            roleNameInput.setBordered(true);
+            ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
+            if (role != null) {
+                roleNameInput.setValue(role.name);
+                roleNameInput.setResponder(value -> role.name = value);
+            }
+        }
+        return roleNameInput;
+    }
+
+    public static void unregisterRoleNameInput() {
+        TextInputClientEvents.unregister(roleNameInput);
+        roleNameInput = null;
+    }
+
     public static List<Button> renderRoleNameAndCycleButtons(ScreenEvent.Render.Post evt, ScenarioRole role, int x, int y) {
         int xr = x + 5;
         int yr = y;
         evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_number", role.index + 1), true), xr, yr, 0xFFFFFF);
-        evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_name"), true), xr, yr + 20, 0xFFFFFF);
-        evt.getGuiGraphics().drawString(MC.font, fcs(role.name), xr + 34, yr + 20, 0xFFFFFF);
+        evt.getGuiGraphics().drawString(MC.font, fcs(I18n.get("sandbox.reignofnether.scenario.role_name"), true), xr, yr + 24, 0xFFFFFF);
+
+        roleNameInput.setX(xr + 35);
+        roleNameInput.setY(yr + 22);
+        roleNameInput.render(evt.getGuiGraphics(), evt.getMouseX(), evt.getMouseY(), evt.getPartialTick());
 
         Button cycleButtonBackward = new Button("Cycle Role Backward",
                 Button.itemIconSize,
@@ -153,8 +186,9 @@ public class ScenarioMenu {
                 () -> false,
                 () -> true,
                 () -> {
-                    ScenarioClientEvents.isMenuOpen = false;
+                    ScenarioClientEvents.setMenuOpen(false);
                     ScenarioServerboundPacket.saveScenario();
+                    HudClientEvents.showTemporaryMessage(I18n.get("sandbox.reignofnether.scenario.saved_all_roles"));
                 },
                 null,
                 List.of(fcs(I18n.get("sandbox.reignofnether.scenario.close_and_save")))

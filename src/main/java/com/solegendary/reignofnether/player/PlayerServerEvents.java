@@ -612,6 +612,13 @@ public class PlayerServerEvents {
                     serverPlayer.getId(),
                     roleIndex
             );
+            for (RTSPlayer rtsPlayer1 : rtsPlayers) {
+                if (rtsPlayer1.scenarioRoleIndex != roleIndex) {
+                    ScenarioRole otherRole = ScenarioUtils.getScenarioRole(false, rtsPlayer1.scenarioRoleIndex);
+                    if (otherRole != null && otherRole.teamNumber == role.teamNumber)
+                        AlliancesServerEvents.addAlliance(rtsPlayer1.name, rtsPlayer.name);
+                }
+            }
             rtsPlayers.add(rtsPlayer);
             String playerName = serverPlayer.getName().getString();
             ResourcesServerEvents.assignScenarioResources(rtsPlayer);

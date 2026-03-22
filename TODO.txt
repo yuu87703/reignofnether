@@ -30,7 +30,7 @@ When /gamerule scenarioMode true:
 
 [✔] Save all roles and scenario settings to map data
 
-[✔] New menu in sandbox for scenario settings
+[ ] New menu in sandbox for scenario settings
     - Allows creation of ScenarioRoles, each with options for:
         - Text inputs for name and opening message
         - Win conditions
@@ -47,7 +47,7 @@ When /gamerule scenarioMode true:
 
 Bugfixes
 --------
-[❌] Spawners still spawning when units are nearby
+[🟡] Spawners still spawning when units are nearby
 
 Quality of Life
 ---------------
@@ -61,9 +61,9 @@ Quality of Life
 
 Balance
 -------
-[❌] Chainmail chestplates at the superior blacksmith cost reduced from 60 ore to 45 ore
-[❌] Cost of Hoglin Rider research increased from (350 food, 300 wood, 120s) to (450 food, 350 wood, 180s)
-[❌] Wildfire attack speed reduced from 0.75 to 0.6
+[✔] Chainmail chestplates at the superior blacksmith cost reduced from 60 ore to 45 ore
+[✔] Cost of Hoglin Rider research increased from (350 food, 300 wood, 120s) to (450 food, 350 wood, 180s)
+[✔] Wildfire attack speed reduced from 0.75 to 0.6
 
 Languages
 ---------
