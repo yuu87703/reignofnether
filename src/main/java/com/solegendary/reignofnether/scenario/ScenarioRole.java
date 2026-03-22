@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 
 // Role that a player can take in a scenario map
 public class ScenarioRole {
-    final int index;
+    public final int index;
     public String name;
     public Faction faction = Faction.NEUTRAL;
     public Resources startingResources = new Resources("", 0,0,0);

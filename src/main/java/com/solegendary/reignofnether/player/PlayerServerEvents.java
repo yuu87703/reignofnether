@@ -613,13 +613,6 @@ public class PlayerServerEvents {
                     serverPlayer.getId(),
                     roleIndex
             );
-            for (RTSPlayer rtsPlayer1 : rtsPlayers) {
-                if (rtsPlayer1.scenarioRoleIndex != roleIndex) {
-                    ScenarioRole otherRole = ScenarioUtils.getScenarioRole(false, rtsPlayer1.scenarioRoleIndex);
-                    if (otherRole != null && otherRole.teamNumber == role.teamNumber)
-                        AlliancesServerEvents.addAlliance(rtsPlayer1.name, rtsPlayer.name);
-                }
-            }
             rtsPlayers.add(rtsPlayer);
             String playerName = serverPlayer.getName().getString();
             ResourcesServerEvents.assignScenarioResources(rtsPlayer);
@@ -1126,21 +1119,23 @@ public class PlayerServerEvents {
             return;
         }
 
+        for (ScenarioRole role1 : ScenarioServerEvents.scenarioRoles)
+            for (ScenarioRole role2 : ScenarioServerEvents.scenarioRoles)
+                if (role1.index != role2.index && role1.teamNumber == role2.teamNumber &&
+                    !AlliancesServerEvents.isAllied(role1.name, role2.name))
+                    AlliancesServerEvents.addAlliance(role1.name, role2.name);
+
         for (LivingEntity le : UnitServerEvents.getAllUnits()) {
             if (le instanceof Unit unit) {
                 ScenarioRole role = ScenarioUtils.getScenarioRole(false, unit.getScenarioRoleIndex());
-                if (role != null) {
-                    unit.setOwnerName(role.name);
-                    UnitSyncClientboundPacket.sendSyncScenarioRoleIndexPacket(unit);
-                }
+                unit.setOwnerName(role != null ? role.name : "");
+                UnitSyncClientboundPacket.sendSyncScenarioRoleIndexPacket(unit);
             }
         }
         for (BuildingPlacement bpl : BuildingServerEvents.getBuildings()) {
             ScenarioRole role = ScenarioUtils.getScenarioRole(false, bpl.scenarioRoleIndex);
-            if (role != null) {
-                bpl.ownerName = role.name;
-                BuildingClientEvents.syncBuilding(bpl, bpl.getBlocksPlaced(), bpl.ownerName, bpl.scenarioRoleIndex);
-            }
+            bpl.ownerName = role != null ? role.name : "";
+            BuildingClientEvents.syncBuilding(bpl, bpl.getBlocksPlaced(), bpl.ownerName, bpl.scenarioRoleIndex);
         }
 
         synchronized (rtsPlayers) {
