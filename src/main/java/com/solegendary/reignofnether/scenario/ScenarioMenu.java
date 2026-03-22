@@ -38,12 +38,13 @@ public class ScenarioMenu {
 
     public static EditBox registerRoleNameInput() {
         if (roleNameInput == null) {
-            roleNameInput = TextInputClientEvents.register(0, 0, 120, 12);
-            roleNameInput.setMaxLength(32);
-            roleNameInput.setFocused(true);
-            roleNameInput.setBordered(true);
             ScenarioRole role = ScenarioClientEvents.getScenarioRoleToEdit();
             if (role != null) {
+                roleNameInput = TextInputClientEvents.register(0, 0, 120, 12,
+                        value -> ScenarioServerboundPacket.setRoleName(role.index, value));
+                roleNameInput.setMaxLength(32);
+                roleNameInput.setFocused(true);
+                roleNameInput.setBordered(true);
                 roleNameInput.setValue(role.name);
                 roleNameInput.setResponder(value -> role.name = value);
             }

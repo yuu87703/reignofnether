@@ -1,12 +1,17 @@
 package com.solegendary.reignofnether.scenario;
 
 import com.solegendary.reignofnether.ReignOfNether;
-import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientboundPacket;
+import com.solegendary.reignofnether.building.BuildingClientEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.PacketHandler;
-import net.minecraft.core.BlockPos;
+import com.solegendary.reignofnether.unit.UnitClientEvents;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -14,7 +19,6 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -80,9 +84,29 @@ public class ScenarioServerEvents {
     public static void syncScenarioRoles() {
         for (ScenarioRole role : scenarioRoles) {
             PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new ScenarioClientboundPacket(
-                    ScenarioAction.LOAD_SCENARIO, role.nbt
+                    ScenarioAction.LOAD_SCENARIO_ROLE, role.nbt
             ));
         }
+    }
+
+    public static int getNumScenarioUnits() {
+        int count = 0;
+        for (LivingEntity le : UnitServerEvents.getAllUnits()) {
+            if (le instanceof Unit unit && unit.getScenarioRoleIndex() >= 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int getNumScenarioBuildings() {
+        int count = 0;
+        for (BuildingPlacement bpl : BuildingServerEvents.getBuildings()) {
+            if (bpl.scenarioRoleIndex >= 0) {
+                count++;
+            }
+        }
+        return count;
     }
 }
 

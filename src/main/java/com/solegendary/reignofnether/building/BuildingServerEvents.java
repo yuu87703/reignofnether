@@ -163,8 +163,8 @@ public class BuildingServerEvents {
                     b.ownerName,
                     b.isDiagonalBridge
                 );
-
                 if (building != null) {
+                    building.scenarioRoleIndex = b.scenarioRoleIndex;
                     building.isBuilt = b.isBuilt;
                     BuildingServerEvents.getBuildings().add(building);
 
@@ -316,6 +316,7 @@ public class BuildingServerEvents {
                     building,
                     rotation,
                     ownerName,
+                    -1,
                     newBuilding.blockPlaceQueue.size(),
                     isDiagonalBridge,
                     0,
@@ -502,6 +503,7 @@ public class BuildingServerEvents {
                     building.getBuilding(),
                     building.rotation,
                     building.ownerName,
+                    building.scenarioRoleIndex,
                     building.blockPlaceQueue.size(),
                     building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                     building.getUpgradeLevel(),
@@ -520,6 +522,7 @@ public class BuildingServerEvents {
                         building.getBuilding(),
                         building.rotation,
                         building.ownerName,
+                        building.scenarioRoleIndex,
                         building.blockPlaceQueue.size(),
                         building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                         building.getUpgradeLevel(),
@@ -585,7 +588,7 @@ public class BuildingServerEvents {
         if (buildingSyncTicks <= 0) {
             buildingSyncTicks = BUILDING_SYNC_TICKS_MAX;
             for (BuildingPlacement building : buildings)
-                BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), building.ownerName);
+                BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), building.ownerName, building.scenarioRoleIndex);
         }
         // need to remove from the list first as destroy() will read it to check defeats
         List<BuildingPlacement> buildingsToDestroy = new ArrayList<>();
@@ -755,6 +758,7 @@ public class BuildingServerEvents {
                         building.getBuilding(),
                         building.rotation,
                         building.ownerName,
+                        building.scenarioRoleIndex,
                         building.blockPlaceQueue.size(),
                         building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                         building.getUpgradeLevel(),

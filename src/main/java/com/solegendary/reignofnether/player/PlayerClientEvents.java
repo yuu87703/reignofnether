@@ -13,6 +13,7 @@ import com.solegendary.reignofnether.hud.playerdisplay.PlayerDisplayClientEvents
 import com.solegendary.reignofnether.hud.buttons.HelperButtons;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
+import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourcesClientEvents;
@@ -346,7 +347,7 @@ public class PlayerClientEvents {
     }
 
     public static void resetRTS(boolean hardReset) {
-        boolean isSandbox = SandboxClientEvents.isSandboxPlayer();
+        boolean isSandboxOrScenario = SandboxClientEvents.isSandboxPlayer() || GameruleClient.scenarioMode;
         rtsPlayers.clear();
         HelperButtons.updateButtons();
         SoundClientEvents.stopFadeableMusicInstance();
@@ -354,9 +355,9 @@ public class PlayerClientEvents {
         HudClientEvents.controlGroups.clear();
         UnitClientEvents.getSelectedUnits().clear();
         UnitClientEvents.getPreselectedUnits().clear();
-        if (!isSandbox)
+        if (!isSandboxOrScenario)
             UnitClientEvents.getAllUnits().removeIf(u -> (hardReset || (u instanceof Unit unit && !Unit.hasAnchor(unit))));
-        if (!isSandbox)
+        if (!isSandboxOrScenario)
             for (LivingEntity entity : UnitClientEvents.getAllUnits())
                 if (entity instanceof Unit unit)
                     unit.setOwnerName("");
@@ -364,9 +365,9 @@ public class PlayerClientEvents {
         ResearchClient.removeAllResearch();
         ResearchClient.removeAllCheats();
         BuildingClientEvents.getSelectedBuildings().clear();
-        if (!isSandbox)
+        if (!isSandboxOrScenario)
             BuildingClientEvents.getBuildings().removeIf(b -> b.getBuilding().shouldDestroyOnReset || hardReset);
-        if (!isSandbox)
+        if (!isSandboxOrScenario)
             for (BuildingPlacement building : BuildingClientEvents.getBuildings())
                 building.ownerName = "";
         ResourcesClientEvents.resourcesList.clear();

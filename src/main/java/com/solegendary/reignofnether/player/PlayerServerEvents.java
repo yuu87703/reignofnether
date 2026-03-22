@@ -263,6 +263,7 @@ public class PlayerServerEvents {
             if (entity instanceof Unit unit) {
                 UnitSyncClientboundPacket.sendSyncResourcesPacket(unit);
                 UnitSyncClientboundPacket.sendSyncOwnerNamePacket(unit);
+                UnitSyncClientboundPacket.sendSyncScenarioRoleIndexPacket(unit);
                 UnitSyncClientboundPacket.sendSyncAnchorPosPacket(entity, unit.getAnchor());
             }
             if (entity instanceof HeroUnit hero) {
@@ -627,7 +628,7 @@ public class PlayerServerEvents {
             for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                 if (building.scenarioRoleIndex == roleIndex) {
                     building.ownerName = playerName;
-                    BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), playerName);
+                    BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), playerName, building.scenarioRoleIndex);
                 }
             }
             for (LivingEntity le : UnitServerEvents.getAllUnits()) {
@@ -1062,19 +1063,19 @@ public class PlayerServerEvents {
     public static void resetRTS(boolean hardReset) {
         StartPosServerEvents.cancelStartGameCountdown(true);
 
-        boolean isSandbox = SandboxServer.isAnyoneASandboxPlayer();
+        boolean isSandboxOrScenario = SandboxServer.isAnyoneASandboxPlayer() || serverLevel.getGameRules().getRule(GameRuleRegistrar.SCENARIO_MODE).get();
 
         synchronized (rtsPlayers) {
             rtsPlayers.clear();
 
             for (LivingEntity entity : UnitServerEvents.getAllUnits())
-                if (hardReset || (entity instanceof Unit unit && !Unit.hasAnchor(unit) && !isSandbox))
+                if (hardReset || (entity instanceof Unit unit && !Unit.hasAnchor(unit) && !isSandboxOrScenario))
                     entity.kill();
 
-            if (!isSandbox)
+            if (!isSandboxOrScenario)
                 UnitServerEvents.getAllUnits().removeIf(u -> (hardReset || (u instanceof Unit unit && !Unit.hasAnchor(unit))));
 
-            if (!isSandbox)
+            if (!isSandboxOrScenario)
                 for (LivingEntity entity : UnitServerEvents.getAllUnits())
                     if (entity instanceof Unit unit)
                         unit.setOwnerName("");
@@ -1082,13 +1083,13 @@ public class PlayerServerEvents {
             for (BuildingPlacement building : BuildingServerEvents.getBuildings()) {
                 if (building instanceof ProductionPlacement productionBuilding)
                     productionBuilding.productionQueue.clear();
-                if ((building.getBuilding().shouldDestroyOnReset || hardReset) && !isSandbox)
+                if ((building.getBuilding().shouldDestroyOnReset || hardReset) && !isSandboxOrScenario)
                     building.destroy((ServerLevel) building.getLevel());
             }
-            if (!isSandbox)
+            if (!isSandboxOrScenario)
                 BuildingServerEvents.getBuildings().removeIf(b -> b.getBuilding().shouldDestroyOnReset || hardReset);
 
-            if (!isSandbox)
+            if (!isSandboxOrScenario)
                 for (BuildingPlacement building : BuildingServerEvents.getBuildings())
                     building.ownerName = "";
 
@@ -1120,8 +1121,8 @@ public class PlayerServerEvents {
     }
 
     public static void publishScenarioMap() {
-        // TODO: error if no units or buildings are assigned to a player
-        // sendMessageToAllPlayers("server.reignofnether.scenario_published_error1");
+        if (ScenarioServerEvents.getNumScenarioUnits() == 0 && ScenarioServerEvents.getNumScenarioBuildings() == 0)
+            sendMessageToAllPlayers("server.reignofnether.scenario_published_error1");
 
         synchronized (rtsPlayers) {
             rtsPlayers.clear();

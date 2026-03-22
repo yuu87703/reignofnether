@@ -5,22 +5,36 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class TextInputClientEvents {
 
     private static final List<EditBox> registeredInputs = new ArrayList<>();
+    private static final Map<EditBox, Consumer<String>> defocusResponders = new HashMap<>();
 
     public static EditBox register(int x, int y, int width, int height) {
+        return register(x, y, width, height, null);
+    }
+
+    public static EditBox register(int x, int y, int width, int height, Consumer<String> onDefocus) {
         EditBox input = new EditBox(Minecraft.getInstance().font, x, y, width, height, Component.literal(""));
         registeredInputs.add(input);
+        if (onDefocus != null)
+            defocusResponders.put(input, onDefocus);
         return input;
     }
 
     public static void unregister(EditBox input) {
+        if (defocusResponders.containsKey(input))
+            defocusResponders.get(input).accept(input.getValue());
         registeredInputs.remove(input);
+        defocusResponders.remove(input);
     }
 
     public static boolean isAnyInputFocused() {
@@ -45,8 +59,11 @@ public class TextInputClientEvents {
 
     @SubscribeEvent
     public static void onKeyPressed(ScreenEvent.KeyPressed.Post evt) {
-        for (EditBox input : registeredInputs)
+        for (EditBox input : registeredInputs) {
             input.keyPressed(evt.getKeyCode(), evt.getScanCode(), evt.getModifiers());
+            if (evt.getKeyCode() == GLFW.GLFW_KEY_ENTER)
+                input.setFocused(false);
+        }
     }
 
     @SubscribeEvent
@@ -61,7 +78,13 @@ public class TextInputClientEvents {
         for (EditBox input : registeredInputs) {
             input.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton());
             boolean isMouseOver = input.isMouseOver(evt.getMouseX(), evt.getMouseY());
+            boolean wasFocused = input.isFocused();
             input.setFocused(isMouseOver);
+            if (wasFocused && !input.isFocused()) {
+                Consumer<String> responder = defocusResponders.get(input);
+                if (responder != null)
+                    responder.accept(input.getValue());
+            }
         }
     }
 }

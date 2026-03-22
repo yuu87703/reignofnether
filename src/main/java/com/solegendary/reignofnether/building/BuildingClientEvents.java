@@ -1110,12 +1110,14 @@ public class BuildingClientEvents {
         }
     }
 
-    public static void syncBuilding(BuildingPlacement serverBuilding, int blocksPlaced, String ownerName) {
-        for (BuildingPlacement building : buildings)
+    public static void syncBuilding(BuildingPlacement serverBuilding, int blocksPlaced, String ownerName, int scenarioRoleIndex) {
+        for (BuildingPlacement building : buildings) {
             if (building.originPos.equals(serverBuilding.originPos)) {
                 building.setServerBlocksPlaced(blocksPlaced);
                 building.ownerName = ownerName;
+                building.scenarioRoleIndex = scenarioRoleIndex;
             }
+        }
     }
 
     public static Relationship getPlayerToBuildingRelationship(BuildingPlacement building) {

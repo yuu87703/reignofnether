@@ -388,6 +388,13 @@ public class UnitClientEvents {
                     unit.setOwnerName(ownerName);
     }
 
+    public static void syncScenarioRoleIndex(int entityId, int scenarioRoleIndex) {
+        for (LivingEntity entity : allUnits)
+            if (entity.getId() == entityId && MC.level != null)
+                if (entity instanceof Unit unit)
+                    unit.setScenarioRoleIndex(scenarioRoleIndex);
+    }
+
     /**
      * Update data on a unit from serverside, mainly to ensure unit HUD data is up-to-date
      * Only try to update health and pos if out of view

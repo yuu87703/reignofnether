@@ -36,7 +36,7 @@ public class ScenarioClientboundPacket {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 
                 switch (this.action) {
-                    case LOAD_SCENARIO -> {
+                    case LOAD_SCENARIO_ROLE -> {
                         int index = roleNbt.getInt("index");
                         for (int i = 0; i < ScenarioClientEvents.scenarioRoles.size(); i++) {
                             if (ScenarioClientEvents.scenarioRoles.get(i).index == index) {

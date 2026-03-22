@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.scenario;
 
+import com.solegendary.reignofnether.building.BuildingClientboundPacket;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.building.BuildingUtils;
@@ -9,13 +10,17 @@ import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
+
+import static com.solegendary.reignofnether.scenario.ScenarioAction.*;
 
 public class ScenarioServerboundPacket {
 
@@ -29,7 +34,7 @@ public class ScenarioServerboundPacket {
     public String strValue;
 
     public static void setUnitRole(int roleIndex, int unitId) {
-        PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SET_UNIT_ROLE, roleIndex, unitId,0,0, false, 0, ""));
+        PacketHandler.INSTANCE.sendToServer(new ScenarioServerboundPacket(ScenarioAction.SET_UNIT_ROLE, roleIndex, 0,0,0, false, unitId, ""));
     }
 
     public static void setBuildingRole(int roleIndex, BlockPos bp) {
@@ -107,6 +112,13 @@ public class ScenarioServerboundPacket {
         buffer.writeUtf(this.strValue);
     }
 
+    private static final List<ScenarioAction> NON_ROLE_EDIT_ACTIONS = List.of(
+            SET_SCENARIO_NAME,
+            SET_UNIT_ROLE,
+            SET_BUILDING_ROLE,
+            SAVE_SCENARIO
+    );
+
     // server-side packet-consuming functions
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         final var success = new AtomicBoolean(false);
@@ -115,9 +127,8 @@ public class ScenarioServerboundPacket {
                 return;
 
             ScenarioRole role = ScenarioUtils.getScenarioRole(false, roleIndex);
-            if (role == null && this.action != ScenarioAction.SET_SCENARIO_NAME) {
+            if (role == null && !NON_ROLE_EDIT_ACTIONS.contains(action))
                 return;
-            }
 
             switch (this.action) {
                 case SET_ROLE_STARTING_FOOD -> role.startingResources.food = intValue;
@@ -127,18 +138,27 @@ public class ScenarioServerboundPacket {
                 case SET_ROLE_FACTION_MONSTER -> role.faction = Faction.MONSTERS;
                 case SET_ROLE_FACTION_PIGLIN -> role.faction = Faction.PIGLINS;
                 case SET_ROLE_FACTION_NEUTRAL -> role.faction = Faction.NEUTRAL;
-                case SET_ROLE_NAME -> role.name = strValue;
+                case SET_ROLE_NAME -> {
+                    role.name = strValue;
+                    // since this is sent from a text input that is updated on defocus, save here in case the user pressed close & save while still focused
+                    ScenarioServerEvents.saveScenarioRoles();
+                }
                 case SET_ROLE_TEAM_NUMBER -> role.teamNumber = intValue;
                 case SET_ROLE_NPC -> role.isNpc = boolValue;
                 case SET_UNIT_ROLE -> {
-                    for (LivingEntity le : UnitServerEvents.getAllUnits())
-                        if (le instanceof Unit unit && le.getId() == intValue)
-                            unit.setScenarioRoleIndex(intValue);
+                    for (LivingEntity le : UnitServerEvents.getAllUnits()) {
+                        if (le instanceof Unit unit && le.getId() == intValue) {
+                            unit.setScenarioRoleIndex(roleIndex);
+                            UnitSyncClientboundPacket.sendSyncScenarioRoleIndexPacket(unit);
+                        }
+                    }
                 }
                 case SET_BUILDING_ROLE -> {
-                    BuildingPlacement buildingPlacement = BuildingUtils.findBuilding(false, new BlockPos(x,y,z));
-                    if (buildingPlacement != null)
-                        buildingPlacement.scenarioRoleIndex = roleIndex;
+                    BuildingPlacement bpl = BuildingUtils.findBuilding(false, new BlockPos(x,y,z));
+                    if (bpl != null) {
+                        bpl.scenarioRoleIndex = roleIndex;
+                        BuildingClientboundPacket.syncBuilding(bpl.originPos, bpl.getBlocksPlaced(), bpl.ownerName, bpl.scenarioRoleIndex);
+                    }
                 }
                 case SET_SCENARIO_NAME -> {
                 }

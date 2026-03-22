@@ -15,5 +15,5 @@ public enum ScenarioAction {
     SET_BUILDING_ROLE,
     SET_SCENARIO_NAME,
     SAVE_SCENARIO,
-    LOAD_SCENARIO
+    LOAD_SCENARIO_ROLE
 }
