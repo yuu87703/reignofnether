@@ -1121,8 +1121,27 @@ public class PlayerServerEvents {
     }
 
     public static void publishScenarioMap() {
-        if (ScenarioServerEvents.getNumScenarioUnits() == 0 && ScenarioServerEvents.getNumScenarioBuildings() == 0)
+        if (ScenarioServerEvents.getNumScenarioUnits() == 0 && ScenarioServerEvents.getNumScenarioBuildings() == 0) {
             sendMessageToAllPlayers("server.reignofnether.scenario_published_error1");
+            return;
+        }
+
+        for (LivingEntity le : UnitServerEvents.getAllUnits()) {
+            if (le instanceof Unit unit) {
+                ScenarioRole role = ScenarioUtils.getScenarioRole(false, unit.getScenarioRoleIndex());
+                if (role != null) {
+                    unit.setOwnerName(role.name);
+                    UnitSyncClientboundPacket.sendSyncScenarioRoleIndexPacket(unit);
+                }
+            }
+        }
+        for (BuildingPlacement bpl : BuildingServerEvents.getBuildings()) {
+            ScenarioRole role = ScenarioUtils.getScenarioRole(false, bpl.scenarioRoleIndex);
+            if (role != null) {
+                bpl.ownerName = role.name;
+                BuildingClientEvents.syncBuilding(bpl, bpl.getBlocksPlaced(), bpl.ownerName, bpl.scenarioRoleIndex);
+            }
+        }
 
         synchronized (rtsPlayers) {
             rtsPlayers.clear();
