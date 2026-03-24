@@ -1085,7 +1085,7 @@ public class HudClientEvents {
                     blitY + 5,
                     0xFFFFFF
                 );
-            } else if (!TutorialClientEvents.isEnabled()) {
+            } else if (!PlayerClientEvents.isRTSPlayer() && !TutorialClientEvents.isEnabled()) {
                 evt.getGuiGraphics().drawString(
                     MC.font,
                     I18n.get("hud.reignofnether.you_are_spectator"),
