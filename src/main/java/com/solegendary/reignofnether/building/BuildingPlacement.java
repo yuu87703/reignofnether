@@ -300,7 +300,8 @@ public class BuildingPlacement {
     }
 
     public void addToBlockPlaceQueue(BuildingBlock block) {
-        this.blockPlaceQueue.add(block);
+        if (!block.getBlockState().isAir())
+            this.blockPlaceQueue.add(block);
     }
 
     public ArrayList<WorkerUnit> getBuilders(Level level) {
@@ -502,7 +503,7 @@ public class BuildingPlacement {
                     validBlocks.sort(Comparator.comparing(bb -> bb.getBlockPos().distSqr(builderPos)));
                 }
             }
-            this.blockPlaceQueue.add(validBlocks.get(0));
+            addToBlockPlaceQueue(validBlocks.get(0));
         }
     }
 

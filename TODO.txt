@@ -51,6 +51,8 @@ Bugfixes
 
 [❌] rts-hard-reset doesn't destroy buildings but rts-reset does?
 
+[✔] Fixed an issue where custom buildings sometimes did not complete all of their blocks
+
 Quality of Life
 ---------------
 [❌] Spawners inside custom buildings should give you control
@@ -59,7 +61,11 @@ Quality of Life
 
 [❌] The Enchanter can now enchant allied units of other factions with Sharpness and Power
 
-[❌] Invisible block that units avoid
+[❌] Add op checks for these actions in PlayerServerboundPacket:
+                case RESET_RTS -> PlayerServerEvents.resetRTS(false);
+                case RESET_RTS_HARD -> PlayerServerEvents.resetRTS(true);
+                case LOCK_RTS -> PlayerServerEvents.setRTSLock(true);
+                case UNLOCK_RTS -> PlayerServerEvents.setRTSLock(false);
 
 Balance
 -------
