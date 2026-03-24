@@ -16,7 +16,6 @@
     [✔] Disabled if there are no role 1-8 buildings set
 
 
-
 When /gamerule scenarioMode true:
     [🟡] All usual gamemode /gamerule options are hidden, only 'Start Game' and 'Change Role'
         [🟡] Can be clicked to cycle through roles (icon changes to the same faction and tooltip shows the name)
@@ -29,7 +28,6 @@ When /gamerule scenarioMode true:
     [🟡] time does not change
 
 [✔] Save all roles and scenario settings to map data
-    [❌]- not saving roles?
 
 [ ] New menu in sandbox for scenario settings
     - Allows creation of ScenarioRoles, each with options for:
@@ -44,6 +42,7 @@ When /gamerule scenarioMode true:
 
 [❌] Command block API to grant victory to a player, all allies and defeat all enemies
 
+[❌] Fire events for addons to use when a scenario starts
 
 
 Bugfixes
