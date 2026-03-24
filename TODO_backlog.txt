@@ -11,6 +11,7 @@ Features
     - built at dungeons
     - needs a lab upgrade - possession?
 
+[❌] Invisible block that units avoid
 
 [❌] Let villagers repair iron golems with ore for 1hp per ore, masons repair faster
 
