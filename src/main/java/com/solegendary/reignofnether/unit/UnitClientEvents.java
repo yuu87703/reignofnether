@@ -322,9 +322,12 @@ public class UnitClientEvents {
             var selUnits = new LinkedList<LivingEntity>();
             loop:
             for (LivingEntity livingEntity : selectedUnits) {
-                if (!(livingEntity instanceof Unit unit)) continue;
-                for (Ability ability : unit.getAbilities().get()) {
-                    if (ability.isCasting(unit) && ability.oneClickOneUse && ability.action == action) continue loop;
+                if (livingEntity instanceof Unit unit) {
+                    for (Ability ability : unit.getAbilities().get()) {
+                        if (ability.isCasting(unit) && ability.oneClickOneUse && ability.action == action) continue loop;
+                    }
+                } else if (!NonUnitClientEvents.canControlAllMobs()) {
+                    continue;
                 }
                 selUnits.add(livingEntity);
             }
