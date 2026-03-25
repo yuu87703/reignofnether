@@ -37,42 +37,35 @@ When /gamerule scenarioMode true:
         - Starting allies
 
 [❌] Show different colours for each different assigned role
-
 [❌] Command block API for UnitActionItem commands
-
+[❌] /rtsapi-summon <Owner> <CreatureName> <coords> [<nbt>]
 [❌] Command block API to grant victory to a player, all allies and defeat all enemies
-
 [❌] Fire events for addons to use when a scenario starts
 
 
 Bugfixes
 --------
-[🟡] Spawners still spawning when units are nearby
+[✔] Spawners no longer spawn units when there are nearby player-owned units
+[✔] Fixed an issue where custom buildings sometimes did not complete all of their blocks
+[✔] Fixed neutral/hostile units not showing where they are moving to in sandbox mode
+[✔] Fixed not being able to control non-RoN units in sandbox or when the wouldyoukindly cheat was enabled
+[✔] Nether zones on placed buildings no longer disappear after exiting sandbox mode
 
 [❌] rts-hard-reset doesn't destroy buildings but rts-reset does?
 
-[✔] Fixed an issue where custom buildings sometimes did not complete all of their blocks
-
-[✔] Fixed neutral/hostile units not showing where they are moving to in sandbox mode
-
-[✔] Fixed not being able to control non-RoN units in sandbox or when the wouldyoukindly cheat was enabled
 
 Quality of Life
 ---------------
-[❌] Spawners inside custom buildings should give you control
-    - And go to the rally point
-[❌] Nether zones on placed buildings no longer disappear after exiting sandbox mode
 
-[❌] The Enchanter can now enchant allied units of other factions with Sharpness and Power
-
-[❌] Add op checks for these actions in PlayerServerboundPacket:
-                case RESET_RTS -> PlayerServerEvents.resetRTS(false);
-                case RESET_RTS_HARD -> PlayerServerEvents.resetRTS(true);
-                case LOCK_RTS -> PlayerServerEvents.setRTSLock(true);
-                case UNLOCK_RTS -> PlayerServerEvents.setRTSLock(false);
+[✔] /rts-reset and /rts-reset-hard can now only be run by opped players
 
 Balance
 -------
+[🟡] The Enchanter can now enchant allied units of other factions:
+     - Skeletons and Headhunters get power (+1 damage)
+     - Brutes get sharpness (+1 damage)
+     - Any unit wearing a chestplate (except Marauders and Hoglins)
+     - Grunts and Zombie villagers can be enchanted with Efficiency
 [✔] Chainmail chestplates at the superior blacksmith cost reduced from 60 ore to 45 ore
 [✔] Cost of Hoglin Rider research increased from (350 food, 300 wood, 120s) to (450 food, 350 wood, 180s)
 [✔] Wildfire attack speed reduced from 0.75 to 0.6

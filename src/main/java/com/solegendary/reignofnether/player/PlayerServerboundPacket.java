@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -249,6 +250,11 @@ public class PlayerServerboundPacket {
         buffer.writeDouble(this.z);
     }
 
+    private static final List<PlayerAction> opOnlyActions = List.of(
+            PlayerAction.RESET_RTS,
+            PlayerAction.RESET_RTS_HARD
+    );
+
     // server-side packet-consuming functions
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         final var success = new AtomicBoolean(false);
@@ -261,6 +267,10 @@ public class PlayerServerboundPacket {
                 return;
             } else if (playerId != -1 && player.getId() != playerId) {
                 ReignOfNether.LOGGER.warn("PlayerServerboundPacket: Tried to process packet from " + player.getName() + " for id: " + this.playerId);
+                success.set(false);
+                return;
+            } else if (opOnlyActions.contains(action) && !player.hasPermissions(4)) {
+                ReignOfNether.LOGGER.warn("PlayerServerboundPacket: Non-op player " + player.getName() + " tried to run action: " + this.action.name());
                 success.set(false);
                 return;
             }
