@@ -181,7 +181,7 @@ public class CommandsServerEvents {
                 ))))
             .then(Commands.argument("ownerSelector", EntityArgument.player())
                 .then(Commands.argument("reason", StringArgumentType.string())
-                    .executes(ctx -> victoryPlayer(
+                    .executes(ctx -> defeatPlayer(
                         StringArgumentType.getString(ctx, "ownerName"),
                         StringArgumentType.getString(ctx, "reason")
                     ))))

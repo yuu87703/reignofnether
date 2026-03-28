@@ -29,18 +29,21 @@ When /gamerule scenarioMode true:
 
 [✔] Save all roles and scenario settings to map data
 
-[ ] New menu in sandbox for scenario settings
-    - Allows creation of ScenarioRoles, each with options for:
-        - Text inputs for name and opening message
-        - Win conditions
-        - Starting resources
-        - Starting allies
-
 [❌] Show different colours for each different assigned role
-[❌] Command block API for UnitActionItem commands
-[❌] /rtsapi-summon <Owner> <CreatureName> <coords> [<nbt>]
-[❌] Command block API to grant victory to a player, all allies and defeat all enemies
+[🟡] Command block API for UnitActionItem commands
+[🟡] Command block API to grant victory to a player, all allies and defeat all enemies
 [❌] Fire events for addons to use when a scenario starts
+[❌] /rtsapi-summon <Owner> <CreatureName> <coords> [<nbt>]
+
+[❌] Custom Building commands
+    - Use EditBox from TextInputClientEvents
+    - Replace "More options coming soon" with a toggle to switch to the commands page
+    - On commands page:
+         - List of command string inputs (by default 1 empty)
+         - On left of each, trigger condition
+            - On built, on destroy, periodically while built (with extra timer button)
+         - On right of each, delete button
+         - Below last list, add new command line
 
 
 Bugfixes
