@@ -139,14 +139,14 @@ public class PlayerClientEvents {
             return 1;
         }));
         evt.getDispatcher().register(Commands.literal("rts-reset").executes((command) -> {
-            if (MC.player != null && MC.player.hasPermissions(4)) {
+            if (MC.player != null && MC.player.hasPermissions(2)) {
                 PlayerServerboundPacket.resetRTS();
                 return 1;
             }
             return 0;
         }));
         evt.getDispatcher().register(Commands.literal("rts-hard-reset").executes((command) -> {
-            if (MC.player != null && MC.player.hasPermissions(4)) {
+            if (MC.player != null && MC.player.hasPermissions(2)) {
                 PlayerServerboundPacket.resetRTSHard();
                 return 1;
             }

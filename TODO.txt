@@ -51,13 +51,15 @@ Bugfixes
 [✔] Fixed not being able to control non-RoN units in sandbox or when the wouldyoukindly cheat was enabled
 [✔] Nether zones on placed buildings no longer disappear after exiting sandbox mode
 
+[❌] Units aren't considered garrisoned after reloading a save (pillagers in watchtower)
+
 [❌] rts-hard-reset doesn't destroy buildings but rts-reset does?
 
 
 Quality of Life
 ---------------
-
-[✔] /rts-reset and /rts-reset-hard can now only be run by opped players
+[✔] In sandbox mode, pressing F3 will show info for the moused-over block
+[✔] /rts-reset and /rts-reset-hard can now only be run with permission level 2 or higher (ie. command blocks or higher)
 
 Balance
 -------

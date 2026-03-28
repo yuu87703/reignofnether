@@ -8,6 +8,7 @@ import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.attackwarnings.AttackWarningClientEvents;
+import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
@@ -15,6 +16,7 @@ import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuildingClientEvents;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.config.ConfigClientEvents;
+import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.gamemode.ClientGameModeHelper;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
@@ -74,6 +76,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.client.event.ScreenEvent;
@@ -131,6 +134,8 @@ public class HudClientEvents {
     private final static int frameBgColour = 0xA0000000;
 
     private static final ArrayList<RectZone> hudZones = new ArrayList<>();
+
+    private static boolean showPreselectedBlockInfo = true;
 
     public static void setLowestCdHudEntity() {
         if (UnitClientEvents.getSelectedUnits().isEmpty() || hudSelectedEntity == null) {
@@ -1799,6 +1804,8 @@ public class HudClientEvents {
             return;
         if (MC.screen == null || !MC.screen.getTitle().getString().contains("topdowngui_container"))
             return;
+        if (evt.getKeyCode() == GLFW.GLFW_KEY_F3)
+            showPreselectedBlockInfo = !showPreselectedBlockInfo;
         for (Button button : renderedButtons)
             button.checkPressed(evt.getKeyCode());
     }
@@ -2038,6 +2045,22 @@ public class HudClientEvents {
                     group.entityIds.removeIf(id -> id == oldUnitIds[k]);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderOverLay(RenderGuiOverlayEvent.Pre evt) {
+        if (MC.screen != null && MC.level != null && SandboxClientEvents.isSandboxPlayer() && showPreselectedBlockInfo) {
+            int y = 5;
+            for (ControlGroup controlGroup : controlGroups) {
+                if (!controlGroup.buildingBps.isEmpty() || !controlGroup.entityIds.isEmpty()) {
+                    y += 20;
+                    break;
+                }
+            }
+            BlockPos bp = CursorClientEvents.getPreselectedBlockPos();
+            evt.getGuiGraphics().drawString(MC.font, "BlockPos: " + bp.toShortString(), 100, y, 0xFFFFFF);
+            evt.getGuiGraphics().drawString(MC.font, MC.level.getBlockState(bp).getBlock().toString().replaceFirst("Block", ""), 100, y + 10, 0xFFFFFF);
         }
     }
 }

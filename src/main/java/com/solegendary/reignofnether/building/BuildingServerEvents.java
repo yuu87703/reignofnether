@@ -167,7 +167,9 @@ public class BuildingServerEvents {
                     building.scenarioRoleIndex = b.scenarioRoleIndex;
                     building.isBuilt = b.isBuilt;
                     BuildingServerEvents.getBuildings().add(building);
-
+                    if (building instanceof GarrisonableBuilding garr) {
+                        garrisonableBuildings.add(garr);
+                    }
                     if (building instanceof ProductionPlacement pb) {
                         pb.setRallyPoint(b.rallyPoint);
                     }
