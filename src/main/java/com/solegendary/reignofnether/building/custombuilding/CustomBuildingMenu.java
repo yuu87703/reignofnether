@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.building.custombuilding;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.ButtonBuilder;
 import com.solegendary.reignofnether.hud.PortraitRendererBuilding;
 import com.solegendary.reignofnether.hud.buttons.BooleanButton;
 import com.solegendary.reignofnether.hud.buttons.IntegerButton;
@@ -68,6 +69,16 @@ public class CustomBuildingMenu {
 
     public static Button renderDeregisterButton(ScreenEvent.Render.Post evt, int x, int y) {
         CustomBuilding building = getCustomBuildingToEdit();
+
+        boolean confirm = CustomBuildingClientEvents.deregisterConfirm;
+        List<FormattedCharSequence> tooltips = confirm ? List.of(
+            fcs(I18n.get("sandbox.reignofnether.custom_buildings.deregister.tooltip1"), true),
+            fcs(I18n.get("sandbox.reignofnether.custom_buildings.deregister.confirm"))
+        ) : List.of(
+            fcs(I18n.get("sandbox.reignofnether.custom_buildings.deregister.tooltip1"), true),
+            fcs(I18n.get("sandbox.reignofnether.custom_buildings.deregister.tooltip2"))
+        );
+
         Button deregisterButton = new Button("Deregister Custom Building",
                 Button.itemIconSize,
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/barrier.png"),
@@ -76,22 +87,48 @@ public class CustomBuildingMenu {
                 () -> false,
                 () -> true,
                 () -> {
-                    CustomBuildingServerboundPacket.deregisterBuilding(building.name);
-                    CustomBuildingClientEvents.customBuildings.removeIf(b -> b.name.equals(building.name));
-                    BuildingClientEvents.clearSelectedBuildings();
-                    BuildingClientEvents.getBuildings().removeIf(b -> b.getBuilding().name.equals(building.name));
-                    setCustomBuildingToEdit(null);
+                    if (!CustomBuildingClientEvents.deregisterConfirm) {
+                        CustomBuildingClientEvents.deregisterConfirm = true;
+                    } else {
+                        CustomBuildingServerboundPacket.deregisterBuilding(building.name);
+                        CustomBuildingClientEvents.customBuildings.removeIf(b -> b.name.equals(building.name));
+                        BuildingClientEvents.clearSelectedBuildings();
+                        BuildingClientEvents.getBuildings().removeIf(b -> b.getBuilding().name.equals(building.name));
+                        setCustomBuildingToEdit(null);
+                    }
                 },
-                null,
-                List.of(
-                        fcs(I18n.get("sandbox.reignofnether.custom_buildings.deregister.tooltip1"), true),
-                        fcs(I18n.get("sandbox.reignofnether.custom_buildings.deregister.tooltip2"))
-                )
+                () -> CustomBuildingClientEvents.deregisterConfirm = false,
+                tooltips
+
         );
         deregisterButton.frameResource = null;
         renderButton(deregisterButton, x, y, evt);
         return deregisterButton;
     }
+
+    public static Button renderCommandsMenuButton(ScreenEvent.Render.Post evt, int x, int y) {
+        List<FormattedCharSequence> tooltips = CustomBuildingClientEvents.showCommandsMenu ?
+            List.of(fcs(I18n.get("sandbox.reignofnether.custom_buildings.switch_to_general_menu"))) :
+            List.of(fcs(I18n.get("sandbox.reignofnether.custom_buildings.switch_to_commands_menu")));
+
+        Button commandsMenuButton = new ButtonBuilder("Toggle Commands Menu")
+                .iconResource(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/blocks/command_block_back.png"))
+                .onLeftClick(() -> CustomBuildingClientEvents.showCommandsMenu = !CustomBuildingClientEvents.showCommandsMenu)
+                .tooltipLines(tooltips)
+                .build();
+        renderButton(commandsMenuButton, x, y, evt);
+
+        CustomBuilding building = getCustomBuildingToEdit();
+        int commandCount = 0;
+        if (building != null)
+            for (CustomBuildingCommand command : building.commands)
+                if (command.condition != CustomBuildingCommand.TriggerCondition.NONE && !command.command.isBlank())
+                    commandCount += 1;
+
+        evt.getGuiGraphics().drawString(MC.font, I18n.get("sandbox.reignofnether.custom_buildings.commands_count", commandCount) ,x + 25, y + 7, 0xFFFFFF);
+        return commandsMenuButton;
+    }
+
 
     private static void renderButton(Button button, int x, int y, ScreenEvent.Render.Post evt) {
         if (!button.isHidden.get()) {
@@ -101,12 +138,11 @@ public class CustomBuildingMenu {
         }
     }
 
-    public static List<Button> renderCustomisationButtons(ScreenEvent.Render.Post evt, int x, int y) {
+    public static List<Button> renderCustomisationButtons(ScreenEvent.Render.Post evt, CustomBuilding customBuilding, int x, int y) {
         int origX = x;
         int origY = y;
         ArrayList<Button> buttonsCol1 = new ArrayList<>();
         ArrayList<Button> buttonsCol2 = new ArrayList<>();
-        CustomBuilding customBuilding = getCustomBuildingToEdit();
 
         buttonsCol1.add(new BooleanButton(
                 I18n.get("sandbox.reignofnether.custom_buildings.set_buildable_by_villagers.label"), customBuilding.buildableByVillagers,
@@ -289,7 +325,7 @@ public class CustomBuildingMenu {
             renderButton(button, x, y, evt);
             y += 18;
         }
-        x += 150;
+        x += 148;
         y = origY;
         for (Button button : buttonsCol2) {
             renderButton(button, x, y, evt);
@@ -315,5 +351,10 @@ public class CustomBuildingMenu {
             tooltips.add(fcsIcons(I18n.get("sandbox.reignofnether.custom_buildings.garrison_warning.multiple_exits")));
         }
         return tooltips;
+    }
+
+    public static List<Button> renderCommandsButtonsAndInputs(ScreenEvent.Render.Post evt, CustomBuilding customBuilding, int x, int y) {
+        //TODO
+        return List.of();
     }
 }

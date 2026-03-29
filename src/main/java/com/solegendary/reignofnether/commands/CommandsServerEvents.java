@@ -25,15 +25,23 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitActionItem;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.RotationArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.server.level.ServerPlayer;
@@ -181,7 +189,7 @@ public class CommandsServerEvents {
                 ))))
             .then(Commands.argument("ownerSelector", EntityArgument.player())
                 .then(Commands.argument("reason", StringArgumentType.string())
-                    .executes(ctx -> defeatPlayer(
+                    .executes(ctx -> victoryPlayer(
                         StringArgumentType.getString(ctx, "ownerName"),
                         StringArgumentType.getString(ctx, "reason")
                     ))))
@@ -201,6 +209,41 @@ public class CommandsServerEvents {
                         StringArgumentType.getString(ctx, "ownerName"),
                         StringArgumentType.getString(ctx, "reason")
                     ))))
+        );
+
+        dispatcher.register(Commands.literal("rtsapi-summon")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.argument("ownerName", StringArgumentType.string())
+                        .then(Commands.argument("entity", ResourceLocationArgument.id())
+                                .suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(
+                                        BuiltInRegistries.ENTITY_TYPE.keySet().stream(), builder))
+                                .executes(ctx -> summonEntity(
+                                        ctx,
+                                        StringArgumentType.getString(ctx, "ownerName"),
+                                        ResourceLocationArgument.getId(ctx, "entity"),
+                                        BlockPos.containing(ctx.getSource().getPosition()),
+                                        null
+                                ))
+                                .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                        .executes(ctx -> summonEntity(
+                                                ctx,
+                                                StringArgumentType.getString(ctx, "ownerName"),
+                                                ResourceLocationArgument.getId(ctx, "entity"),
+                                                BlockPosArgument.getLoadedBlockPos(ctx, "pos"),
+                                                null
+                                        ))
+                                        .then(Commands.argument("nbt", CompoundTagArgument.compoundTag())
+                                                .executes(ctx -> summonEntity(
+                                                        ctx,
+                                                        StringArgumentType.getString(ctx, "ownerName"),
+                                                        ResourceLocationArgument.getId(ctx, "entity"),
+                                                        BlockPosArgument.getLoadedBlockPos(ctx, "pos"),
+                                                        CompoundTagArgument.getCompoundTag(ctx, "nbt")
+                                                ))
+                                        )
+                                )
+                        )
+                )
         );
     }
 
@@ -367,15 +410,16 @@ public class CommandsServerEvents {
             String reason
     ) {
         int playersDefeated = 0;
+        ArrayList<String> playersToDefeat = new ArrayList<>();
         synchronized (PlayerServerEvents.rtsPlayers) {
-            if (PlayerServerEvents.isRTSPlayer(ownerName)) {
-                for (RTSPlayer rtsPlayer : PlayerServerEvents.rtsPlayers) {
-                    if (!rtsPlayer.name.equals(ownerName) && !AlliancesServerEvents.isAllied(rtsPlayer.name, ownerName)) {
-                        PlayerServerEvents.defeat(ownerName, reason);
-                        playersDefeated += 1;
-                    }
-                }
-            }
+            if (PlayerServerEvents.isRTSPlayer(ownerName))
+                for (RTSPlayer rtsPlayer : PlayerServerEvents.rtsPlayers)
+                    if (!rtsPlayer.name.equals(ownerName) && !AlliancesServerEvents.isAllied(rtsPlayer.name, ownerName))
+                        playersToDefeat.add(rtsPlayer.name);
+        }
+        for (String playerName : playersToDefeat) {
+            PlayerServerEvents.defeat(playerName, reason);
+            playersDefeated += 1;
         }
         return playersDefeated;
     }
@@ -391,6 +435,41 @@ public class CommandsServerEvents {
             }
         }
         return 0;
+    }
+
+    private static int summonEntity(
+            CommandContext<CommandSourceStack> ctx,
+            String ownerName,
+            ResourceLocation entityId,
+            BlockPos pos,
+            CompoundTag nbt
+    ) {
+        ServerLevel level = ctx.getSource().getLevel();
+
+        CompoundTag tag = nbt != null ? nbt.copy() : new CompoundTag();
+        tag.putString("id", entityId.toString());
+
+        Entity entity = EntityType.loadEntityRecursive(tag, level, e -> {
+                    e.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5,
+                            e.getYRot(), e.getXRot());
+                    return e;
+                });
+
+        if (entity == null) {
+            ctx.getSource().sendFailure(Component.literal("Failed to create entity: " + entityId));
+            return 0;
+        }
+        level.addFreshEntity(entity);
+
+        if (entity instanceof Unit unit) {
+            unit.setOwnerName(ownerName);
+            UnitSyncClientboundPacket.sendSyncOwnerNamePacket(unit);
+        }
+
+        ctx.getSource().sendSuccess(
+                () -> Component.literal("Summoned " + entityId + " for " + ownerName + " at " + formatPos(pos)), true
+        );
+        return 1;
     }
 
     private static Rotation parseRotation(String input) throws CommandSyntaxException {

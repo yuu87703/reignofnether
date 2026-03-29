@@ -1489,6 +1489,7 @@
     "sandbox.reignofnether.custom_buildings_info.building_menu": "(Right-click to customise)",
     "sandbox.reignofnether.custom_buildings.deregister.tooltip1": "De-register building",
     "sandbox.reignofnether.custom_buildings.deregister.tooltip2": "WARNING: removes all buildings of this type!",
+    "sandbox.reignofnether.custom_buildings.deregister.confirm": "Are you sure?",
     "sandbox.reignofnether.custom_buildings.change_icon.tooltip1": "Change portrait block",
     "sandbox.reignofnether.custom_buildings.set_capturable.label": "Capturable",
     "sandbox.reignofnether.custom_buildings.set_capturable.tooltip1": "Capturable by whoever has the most nearby troops",
@@ -1524,6 +1525,12 @@
     "sandbox.reignofnether.custom_buildings.garrison_warning.no_entry": "\uE009   No    garrison    entry    block    detected!",
     "sandbox.reignofnether.custom_buildings.garrison_warning.multiple_exits": "\uE009   Multiple    garrison    exit    blocks    detected!",
     "sandbox.reignofnether.custom_buildings.garrison_warning.multiple_entries": "\uE009   Multiple    garrison    entry    blocks    detected!",
+
+    "sandbox.reignofnether.custom_buildings.switch_to_commands_menu": "Switch to Commands Menu",
+    "sandbox.reignofnether.custom_buildings.switch_to_general_menu": "Switch to General Menu",
+    "sandbox.reignofnether.custom_buildings.commands_count": "Commands Set: %d",
+    "sandbox.reignofnether.custom_buildings.commands.multiple_entries": "\uE009   Multiple    garrison    entry    blocks    detected!",
+    "sandbox.reignofnether.custom_buildings.commands.multiple_entries": "\uE009   Multiple    garrison    entry    blocks    detected!",
 
     "startpos.reignofnether.positions_button.tooltip1": "Starting Locations",
     "startpos.reignofnether.positions_button.tooltip2": "%d/%d locations taken",

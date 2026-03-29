@@ -30,10 +30,10 @@ When /gamerule scenarioMode true:
 [✔] Save all roles and scenario settings to map data
 
 [❌] Show different colours for each different assigned role
-[🟡] Command block API for UnitActionItem commands
-[🟡] Command block API to grant victory to a player, all allies and defeat all enemies
 [❌] Fire events for addons to use when a scenario starts
-[❌] /rtsapi-summon <Owner> <CreatureName> <coords> [<nbt>]
+[✔] Command block API for UnitActionItem commands
+[✔] Command block API to grant victory to a player, all allies and defeat all enemies
+[✔] /rtsapi-summon <Owner> <CreatureName> <coords> [<nbt>]
 
 [❌] Custom Building commands
     - Use EditBox from TextInputClientEvents
@@ -53,6 +53,8 @@ Bugfixes
 [✔] Fixed neutral/hostile units not showing where they are moving to in sandbox mode
 [✔] Fixed not being able to control non-RoN units in sandbox or when the wouldyoukindly cheat was enabled
 [✔] Nether zones on placed buildings no longer disappear after exiting sandbox mode
+
+[✔] Added a confirm step to the de-register custom building button
 
 [❌] Units aren't considered garrisoned after reloading a save (pillagers in watchtower)
 
