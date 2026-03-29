@@ -13,6 +13,7 @@ import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
@@ -155,6 +156,10 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     public Goal getAttackBuildingGoal() { return attackBuildingGoal; }
     public void setAttackMoveTarget(@Nullable BlockPos bp) { this.attackMoveTarget = bp; }
     public void setFollowTarget(@Nullable LivingEntity target) { this.followTarget = target; }
+
+    private EnemySearchBehaviour attackSearchBehaviour = EnemySearchBehaviour.NONE;
+    public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
+    public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
 
     // ConvertableUnit
     private boolean shouldDiscard = false;

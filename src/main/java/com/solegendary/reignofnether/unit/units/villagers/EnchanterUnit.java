@@ -127,6 +127,10 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
     public int getMaxResources() {return maxResources;}
 
+    private EnemySearchBehaviour attackSearchBehaviour = EnemySearchBehaviour.NONE;
+    public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
+    public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
+
     private GenericTargetedSpellGoal castEnchantCivilGoal;
     public GenericTargetedSpellGoal getCastEnchantCivilGoal() { return castEnchantCivilGoal; }
     private GenericTargetedSpellGoal castEnchantMilitaryGoal;

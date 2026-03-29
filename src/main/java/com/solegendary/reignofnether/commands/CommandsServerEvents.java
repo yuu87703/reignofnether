@@ -17,13 +17,16 @@ import com.solegendary.reignofnether.building.custombuilding.CustomBuildingServe
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.player.RTSPlayer;
+import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceName;
 import com.solegendary.reignofnether.resources.Resources;
 import com.solegendary.reignofnether.resources.ResourcesServerEvents;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
+import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitActionItem;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import net.minecraft.commands.CommandSourceStack;
@@ -245,6 +248,60 @@ public class CommandsServerEvents {
                         )
                 )
         );
+
+        dispatcher.register(Commands.literal("rtsapi-add-research")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.argument("researchItem", ResourceLocationArgument.id())
+                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(
+                                ReignOfNetherRegistries.PRODUCTION_ITEM.keySet().stream(), builder))
+                        .then(Commands.argument("playerName", StringArgumentType.string())
+                                .executes(ctx -> addResearch(
+                                        ctx,
+                                        ResourceLocationArgument.getId(ctx, "researchItem"),
+                                        StringArgumentType.getString(ctx, "playerName")
+                                ))
+                        )
+                        .then(Commands.argument("playerSelector", EntityArgument.player())
+                                .executes(ctx -> addResearch(
+                                        ctx,
+                                        ResourceLocationArgument.getId(ctx, "researchItem"),
+                                        getPlayerName(EntityArgument.getPlayer(ctx, "playerSelector"))
+                                ))
+                        )
+                )
+        );
+
+        dispatcher.register(Commands.literal("rtsapi-remove-research")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.argument("researchItem", ResourceLocationArgument.id())
+                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(
+                                ReignOfNetherRegistries.PRODUCTION_ITEM.keySet().stream(), builder))
+                        .then(Commands.argument("playerName", StringArgumentType.string())
+                                .executes(ctx -> removeResearch(
+                                        ctx,
+                                        ResourceLocationArgument.getId(ctx, "researchItem"),
+                                        StringArgumentType.getString(ctx, "playerName")
+                                ))
+                        )
+                        .then(Commands.argument("playerSelector", EntityArgument.player())
+                                .executes(ctx -> removeResearch(
+                                        ctx,
+                                        ResourceLocationArgument.getId(ctx, "researchItem"),
+                                        getPlayerName(EntityArgument.getPlayer(ctx, "playerSelector"))
+                                ))
+                        )
+                )
+        );
+
+        dispatcher.register(Commands.literal("rtsapi-set-unit-enemy-search")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.argument("ownerName", StringArgumentType.string())
+                        .then(searchBehaviourTail(ctx -> StringArgumentType.getString(ctx, "ownerName")))
+                )
+                .then(Commands.argument("ownerSelector", EntityArgument.player())
+                        .then(searchBehaviourTail(ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "ownerSelector"))))
+                )
+        );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> placeBuildingTail(NameResolver ownerResolver) {
@@ -340,6 +397,30 @@ public class CommandsServerEvents {
                                             ))
                                     )
                                 )
+                        )
+                );
+    }
+
+    private static ArgumentBuilder<CommandSourceStack, ?> searchBehaviourTail(NameResolver ownerResolver) {
+        return Commands.argument("selectFrom", BlockPosArgument.blockPos())
+                .then(Commands.argument("selectTo", BlockPosArgument.blockPos())
+                        .then(Commands.argument("behaviour", StringArgumentType.word())
+                                .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                        List.of(
+                                                EnemySearchBehaviour.NEAREST_ENEMY_BUILDING.name(),
+                                                EnemySearchBehaviour.NEAREST_ENEMY_UNIT.name(),
+                                                EnemySearchBehaviour.NEAREST_ENEMY_WORKER.name(),
+                                                EnemySearchBehaviour.NONE.name()
+                                        ),
+                                        builder
+                                ))
+                                .executes(ctx -> setUnitSearchBehaviour(
+                                        ctx,
+                                        ownerResolver.resolve(ctx),
+                                        BlockPosArgument.getLoadedBlockPos(ctx, "selectFrom"),
+                                        BlockPosArgument.getLoadedBlockPos(ctx, "selectTo"),
+                                        StringArgumentType.getString(ctx, "behaviour")
+                                ))
                         )
                 );
     }
@@ -675,6 +756,67 @@ public class CommandsServerEvents {
             true
         );
         return 1;
+    }
+
+    private static int addResearch(
+            CommandContext<CommandSourceStack> ctx,
+            ResourceLocation researchItemName,
+            String playerName
+    ) {
+        ResearchServerEvents.addResearch(playerName, researchItemName);
+        ResearchServerEvents.syncResearch(playerName);
+        ctx.getSource().sendSuccess(
+                () -> Component.literal("Added research '" + researchItemName + "' for " + playerName),
+                true
+        );
+        return 1;
+    }
+
+    private static int removeResearch(
+            CommandContext<CommandSourceStack> ctx,
+            ResourceLocation researchItemName,
+            String playerName
+    ) {
+        ResearchServerEvents.removeResearch(playerName, researchItemName);
+        ResearchServerEvents.syncResearch(playerName);
+        ctx.getSource().sendSuccess(
+                () -> Component.literal("Removed research '" + researchItemName + "' for " + playerName),
+                true
+        );
+        return 1;
+    }
+
+    private static int setUnitSearchBehaviour(
+            CommandContext<CommandSourceStack> ctx,
+            String ownerName,
+            BlockPos from,
+            BlockPos to,
+            String behaviourName
+    ) {
+        EnemySearchBehaviour behaviour = EnemySearchBehaviour.valueOf(behaviourName.trim().toUpperCase());
+        BlockPos min = min(from, to);
+        BlockPos max = max(from, to);
+
+        int changed = 0;
+        for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
+            if (entity instanceof AttackerUnit attacker
+                    && entity instanceof Unit unit
+                    && unit.getOwnerName().equals(ownerName)
+                    && isWithin(entity.getOnPos(), min, max)) {
+                attacker.setEnemySearchBehaviour(behaviour);
+                changed++;
+            }
+        }
+        if (changed == 0) {
+            ctx.getSource().sendFailure(Component.literal("No attacker units owned by '" + ownerName + "' found in selection"));
+        } else {
+            int finalChanged = changed;
+            ctx.getSource().sendSuccess(
+                    () -> Component.literal("Set search behaviour to " + behaviour.name() + " for " + finalChanged + " unit(s)"),
+                    true
+            );
+        }
+        return changed;
     }
 
     private static int[] collectUnitIds(BlockPos from, BlockPos to) {

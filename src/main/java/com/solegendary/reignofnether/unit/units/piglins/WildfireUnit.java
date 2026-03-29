@@ -134,6 +134,10 @@ public class WildfireUnit extends Blaze implements Unit, AttackerUnit, RangedAtt
     public int getMaxResources() {return maxResources;}
     public MountGoal getMountGoal() {return mountGoal;}
 
+    private EnemySearchBehaviour attackSearchBehaviour = EnemySearchBehaviour.NONE;
+    public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
+    public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
+
     private MoveToTargetBlockGoal moveGoal;
     private SelectedTargetGoal<? extends LivingEntity> targetGoal;
     private ReturnResourcesGoal returnResourcesGoal;

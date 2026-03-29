@@ -355,6 +355,7 @@ public class CustomBuildingMenu {
 
     public static List<Button> renderCommandsButtonsAndInputs(ScreenEvent.Render.Post evt, CustomBuilding customBuilding, int x, int y) {
         //TODO
+        evt.getGuiGraphics().drawString(MC.font, fcs("Coming soon!"), x + 10, y + 10, 0xFFFFFF);
         return List.of();
     }
 }

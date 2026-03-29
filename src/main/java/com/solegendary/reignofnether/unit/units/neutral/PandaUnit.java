@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
@@ -223,6 +224,10 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     public void setFollowTarget(@Nullable LivingEntity target) {
         this.followTarget = target;
     }
+
+    private EnemySearchBehaviour attackSearchBehaviour = EnemySearchBehaviour.NONE;
+    public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
+    public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
 
     // endregion
 

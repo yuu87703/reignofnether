@@ -18,10 +18,7 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
-import com.solegendary.reignofnether.unit.Checkpoint;
-import com.solegendary.reignofnether.unit.Relationship;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
-import com.solegendary.reignofnether.unit.UnitServerEvents;
+import com.solegendary.reignofnether.unit.*;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
@@ -128,6 +125,10 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
     public Goal getAttackGoal() {return attackGoal;}
     public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
     public int getMaxResources() {return maxResources;}
+
+    private EnemySearchBehaviour attackSearchBehaviour = EnemySearchBehaviour.NONE;
+    public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
+    public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
 
     private GenericUntargetedSpellGoal castTauntingCryGoal;
     public GenericUntargetedSpellGoal getCastTauntingCryGoal() { return castTauntingCryGoal; }

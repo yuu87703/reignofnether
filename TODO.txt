@@ -34,8 +34,10 @@ When /gamerule scenarioMode true:
 [✔] Command block API for UnitActionItem commands
 [✔] Command block API to grant victory to a player, all allies and defeat all enemies
 [✔] /rtsapi-summon <Owner> <CreatureName> <coords> [<nbt>]
+[❌] /rtsapi-set-rts-camera <PlayerName> true/false
 
 [❌] Custom Building commands
+    [❌] GUI menu:
     - Use EditBox from TextInputClientEvents
     - Replace "More options coming soon" with a toggle to switch to the commands page
     - On commands page:
@@ -45,6 +47,8 @@ When /gamerule scenarioMode true:
          - On right of each, delete button
          - Below last list, add new command line
 
+    [❌] Send packets to server
+    [❌] Save and load data
 
 Bugfixes
 --------
@@ -65,6 +69,9 @@ Quality of Life
 ---------------
 [✔] In sandbox mode, pressing F3 will show info for the moused-over block
 [✔] /rts-reset and /rts-reset-hard can now only be run with permission level 2 or higher (ie. command blocks or higher)
+[❌] Add gamerule to lock alliances during a game
+     - While enabled alliances can only be made/broken with non-RTSPlayer players
+[❌] Ready check instead of start game countdown
 
 Balance
 -------

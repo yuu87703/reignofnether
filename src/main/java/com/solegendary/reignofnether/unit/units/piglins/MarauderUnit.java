@@ -160,6 +160,10 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public void setAttackMoveTarget(@Nullable BlockPos bp) { this.attackMoveTarget = bp; }
     public void setFollowTarget(@Nullable LivingEntity target) { this.followTarget = target; }
 
+    private EnemySearchBehaviour attackSearchBehaviour = EnemySearchBehaviour.NONE;
+    public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
+    public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
+
     // endregion
 
     public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}

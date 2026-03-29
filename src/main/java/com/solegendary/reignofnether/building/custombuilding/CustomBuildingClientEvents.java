@@ -125,7 +125,7 @@ public class CustomBuildingClientEvents {
             } else {
                 renderedButtons.addAll(CustomBuildingMenu.renderCommandsButtonsAndInputs(evt, customBuildingToEdit, blitX + 6, blitY + 38));
             }
-            renderedButtons.add(CustomBuildingMenu.renderCommandsMenuButton(evt, blitX + 10, blitY + height - 30));
+            renderedButtons.add(CustomBuildingMenu.renderCommandsMenuButton(evt, blitX + 10, blitY + height - 32));
             hudZones.add(new RectZone(blitX, blitY, blitX + width, blitY + height));
         }
     }

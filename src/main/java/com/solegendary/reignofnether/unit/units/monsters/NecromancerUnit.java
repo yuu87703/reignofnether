@@ -22,6 +22,7 @@ import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
+import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
@@ -122,6 +123,10 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
     public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
     public int getMaxResources() {return maxResources;}
     public MountGoal getMountGoal() {return mountGoal;}
+
+    private EnemySearchBehaviour attackSearchBehaviour = EnemySearchBehaviour.NONE;
+    public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
+    public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
 
     private MoveToTargetBlockGoal moveGoal;
     private SelectedTargetGoal<? extends LivingEntity> targetGoal;
