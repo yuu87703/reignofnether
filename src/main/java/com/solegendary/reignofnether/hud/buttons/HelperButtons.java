@@ -51,7 +51,7 @@ public class HelperButtons {
         chatButton = new Button(
                 "Chat",
                 ICON_SIZE,
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/book.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/speech_bubble.png"),
                 (Keybinding) null,
                 () -> false,
                 () -> false,

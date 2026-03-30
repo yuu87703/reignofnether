@@ -16,6 +16,7 @@ import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.hero.HeroServerboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
+import com.solegendary.reignofnether.hud.TextInputClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -321,9 +322,12 @@ public class UnitClientEvents {
             var selUnits = new LinkedList<LivingEntity>();
             loop:
             for (LivingEntity livingEntity : selectedUnits) {
-                if (!(livingEntity instanceof Unit unit)) continue;
-                for (Ability ability : unit.getAbilities().get()) {
-                    if (ability.isCasting(unit) && ability.oneClickOneUse && ability.action == action) continue loop;
+                if (livingEntity instanceof Unit unit) {
+                    for (Ability ability : unit.getAbilities().get()) {
+                        if (ability.isCasting(unit) && ability.oneClickOneUse && ability.action == action) continue loop;
+                    }
+                } else if (!NonUnitClientEvents.canControlAllMobs()) {
+                    continue;
                 }
                 selUnits.add(livingEntity);
             }
@@ -385,6 +389,13 @@ public class UnitClientEvents {
             if (entity.getId() == entityId && MC.level != null)
                 if (entity instanceof Unit unit)
                     unit.setOwnerName(ownerName);
+    }
+
+    public static void syncScenarioRoleIndex(int entityId, int scenarioRoleIndex) {
+        for (LivingEntity entity : allUnits)
+            if (entity.getId() == entityId && MC.level != null)
+                if (entity instanceof Unit unit)
+                    unit.setScenarioRoleIndex(scenarioRoleIndex);
     }
 
     /**
@@ -951,6 +962,8 @@ public class UnitClientEvents {
 
     @SubscribeEvent
     public static void onButtonPress(ScreenEvent.KeyPressed.Pre evt) {
+        if (TextInputClientEvents.isAnyInputFocused())
+            return;
         if (evt.getKeyCode() == GLFW.GLFW_KEY_DELETE) {
             boolean isSandboxPlayer = MC.player != null && SandboxClientEvents.isSandboxPlayer(MC.player.getName().getString());
             LivingEntity entity = hudSelectedEntity;

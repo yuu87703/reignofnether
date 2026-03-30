@@ -9,6 +9,7 @@ import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.BridgePlacement;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
+import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -143,7 +144,7 @@ public class MiscUtil {
     }
 
     public static void addUnitCheckpoint(Unit unit, BlockPos blockPos, boolean green) {
-        if (((Entity) unit).level().isClientSide() && !unit.getOwnerName().isEmpty()) {
+        if (((Entity) unit).level().isClientSide()) {
             boolean clearExisting = !Keybindings.shiftMod.isDown();
             if (clearExisting)
                 unit.getCheckpoints().clear();
@@ -152,7 +153,7 @@ public class MiscUtil {
     }
     public static void addUnitCheckpoint(Unit unit, int id, boolean green) {
         Level level = ((Entity) unit).level();
-        if (level.isClientSide() && !Keybindings.shiftMod.isDown() && !unit.getOwnerName().isEmpty()) {
+        if (level.isClientSide() && !Keybindings.shiftMod.isDown()) {
             unit.getCheckpoints().clear();
             unit.getCheckpoints().add(new Checkpoint(level.getEntity(id), green));
         }
@@ -891,5 +892,14 @@ public class MiscUtil {
         Calendar calendar = Calendar.getInstance();
         return (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) == 31) ||
                 (calendar.get(Calendar.MONTH) + 1 == 1 && calendar.get(Calendar.DATE) == 1);
+    }
+
+    public static ResourceLocation getFactionIcon(Faction faction) {
+        return switch (faction) {
+            case VILLAGERS -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/villager.png");
+            case MONSTERS -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/creeper.png");
+            case PIGLINS -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/grunt.png");
+            case NONE, NEUTRAL -> ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/sheep.png");
+        };
     }
 }

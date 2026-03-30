@@ -353,6 +353,12 @@ public class OrthoviewClientEvents {
         TutorialClientEvents.updateStage();
     }
 
+    public static void tryToSetCamera(String playerName, boolean value) {
+        if (MC.player != null && MC.player.getName().getString().equals(playerName) && value != enabled) {
+            tryToToggleEnable();
+        }
+    }
+
     public static void centreCameraOnPos(BlockPos bp) {
         centreCameraOnPos(new Vec3(bp.getX(), bp.getY(), bp.getZ()));
     }

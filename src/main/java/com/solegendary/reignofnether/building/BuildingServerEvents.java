@@ -121,7 +121,8 @@ public class BuildingServerEvents {
                     b.isBuilt,
                     b.getUpgradeLevel(),
                     portalType,
-                    b instanceof PortalPlacement portal && portal.hasDestination() ? portal.destination : new BlockPos(0,0,0)
+                    b instanceof PortalPlacement portal && portal.hasDestination() ? portal.destination : new BlockPos(0,0,0),
+                    b.scenarioRoleIndex
             ));
             //ReignOfNether.LOGGER.info("saved buildings/nether in serverevents: " + b.originPos);
         });
@@ -162,11 +163,13 @@ public class BuildingServerEvents {
                     b.ownerName,
                     b.isDiagonalBridge
                 );
-
                 if (building != null) {
+                    building.scenarioRoleIndex = b.scenarioRoleIndex;
                     building.isBuilt = b.isBuilt;
                     BuildingServerEvents.getBuildings().add(building);
-
+                    if (building instanceof GarrisonableBuilding garr) {
+                        garrisonableBuildings.add(garr);
+                    }
                     if (building instanceof ProductionPlacement pb) {
                         pb.setRallyPoint(b.rallyPoint);
                     }
@@ -315,6 +318,7 @@ public class BuildingServerEvents {
                     building,
                     rotation,
                     ownerName,
+                    -1,
                     newBuilding.blockPlaceQueue.size(),
                     isDiagonalBridge,
                     0,
@@ -501,6 +505,7 @@ public class BuildingServerEvents {
                     building.getBuilding(),
                     building.rotation,
                     building.ownerName,
+                    building.scenarioRoleIndex,
                     building.blockPlaceQueue.size(),
                     building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                     building.getUpgradeLevel(),
@@ -519,6 +524,7 @@ public class BuildingServerEvents {
                         building.getBuilding(),
                         building.rotation,
                         building.ownerName,
+                        building.scenarioRoleIndex,
                         building.blockPlaceQueue.size(),
                         building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                         building.getUpgradeLevel(),
@@ -584,7 +590,7 @@ public class BuildingServerEvents {
         if (buildingSyncTicks <= 0) {
             buildingSyncTicks = BUILDING_SYNC_TICKS_MAX;
             for (BuildingPlacement building : buildings)
-                BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), building.ownerName);
+                BuildingClientboundPacket.syncBuilding(building.originPos, building.getBlocksPlaced(), building.ownerName, building.scenarioRoleIndex);
         }
         // need to remove from the list first as destroy() will read it to check defeats
         List<BuildingPlacement> buildingsToDestroy = new ArrayList<>();
@@ -754,6 +760,7 @@ public class BuildingServerEvents {
                         building.getBuilding(),
                         building.rotation,
                         building.ownerName,
+                        building.scenarioRoleIndex,
                         building.blockPlaceQueue.size(),
                         building instanceof BridgePlacement bridge && bridge.isDiagonalBridge,
                         building.getUpgradeLevel(),

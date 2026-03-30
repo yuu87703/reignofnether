@@ -47,6 +47,7 @@ public class CustomBuilding extends Building {
     public int numGarrisonZones = 0;
     public int numGarrisonEntries = 0;
     public int numGarrisonExits = 0;
+    public ArrayList<CustomBuildingCommand> commands = new ArrayList<>(List.of(new CustomBuildingCommand()));
 
     public CustomBuilding(String structureName, Vec3i structureSize, Block portraitBlock, CompoundTag structureNbt) {
         this(structureName, structureSize, portraitBlock, structureNbt, null);
