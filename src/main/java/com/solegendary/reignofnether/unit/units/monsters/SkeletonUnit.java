@@ -40,6 +40,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -146,7 +147,7 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
     public float getMovementSpeed() {return movementSpeed;}
-    public float getUnitAttackDamage() {return attackDamage;}
+    public float getUnitAttackDamage() {return attackDamage + getPowerLevel();}
     public float getUnitMaxHealth() {return maxHealth;}
 
     @Nullable
@@ -317,6 +318,11 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
         getMainHandItem().setDamageValue(0);
     }
 
+    public int getPowerLevel() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+    }
+
     @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
@@ -326,5 +332,10 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
     @Override
     protected PathNavigation createNavigation(Level level) {
         return new AmphibiousPathNavigation(this, level);
+    }
+
+    @Override
+    public boolean hasBonusDamage() {
+        return getPowerLevel() > 0;
     }
 }

@@ -44,6 +44,7 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -151,7 +152,7 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
-    public float getUnitAttackDamage() {return attackDamage;}
+    public float getUnitAttackDamage() {return attackDamage + getSharpnessLevel();}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
     public Goal getAttackGoal() { return attackGoal; }
@@ -357,8 +358,13 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         );
     }
 
+    public int getSharpnessLevel() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getEnchantmentLevel(Enchantments.SHARPNESS);
+    }
+
     @Override
     public boolean hasBonusDamage() {
-        return hasEnchantedNetheriteSword();
+        return hasEnchantedNetheriteSword() || getSharpnessLevel() > 0;
     }
 }

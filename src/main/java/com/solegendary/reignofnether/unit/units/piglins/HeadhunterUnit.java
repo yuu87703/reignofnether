@@ -153,7 +153,7 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
     public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return attackRange;}
-    public float getUnitAttackDamage() {return attackDamage + (hasFlameTrident() ? 1 : 0);}
+    public float getUnitAttackDamage() {return attackDamage + (hasFlameTrident() ? 1 : 0) + getPowerLevel();}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
     public Goal getAttackGoal() { return attackGoal; }
@@ -361,8 +361,13 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
         );
     }
 
+    public int getPowerLevel() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+    }
+
     @Override
     public boolean hasBonusDamage() {
-        return hasFlameTrident();
+        return hasFlameTrident() || getPowerLevel() > 0;
     }
 }
