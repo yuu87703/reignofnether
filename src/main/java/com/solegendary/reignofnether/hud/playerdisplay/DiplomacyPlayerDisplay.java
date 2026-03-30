@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -197,7 +198,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                () -> isPlayerLoggedIn() && !GameruleClient.lockAlliances,
+                this::isPlayerLoggedIn,
                 this::requestAlliance,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.request_alliance"), Style.EMPTY))
@@ -234,7 +235,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                () -> isAllied() && !GameruleClient.lockAlliances,
+                this::isAllied,
                 this::disbandAlliance,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.disband_alliance"), Style.EMPTY))
@@ -313,6 +314,10 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
     }
 
     private void requestAlliance() {
+        if (GameruleClient.lockAlliances && MC.player != null) {
+            MC.player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock"));
+            return;
+        }
         AllianceServerboundPacket.doAllianceAction(AllianceAction.REQUEST, playerName);
         AlliancesClient.outboundPendingAlliances.add(playerName);
     }
@@ -327,6 +332,10 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
     }
 
     private void disbandAlliance() {
+        if (GameruleClient.lockAlliances && MC.player != null) {
+            MC.player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock"));
+            return;
+        }
         AllianceServerboundPacket.doAllianceAction(AllianceAction.DISBAND, playerName);
     }
 

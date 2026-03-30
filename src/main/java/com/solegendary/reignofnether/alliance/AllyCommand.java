@@ -58,7 +58,7 @@ public class AllyCommand {
 
         if (context.getSource().getLevel().getGameRules().getRule(GameRuleRegistrar.LOCK_ALLIANCES).get() &&
             (PlayerServerEvents.isRTSPlayer(playerName) || PlayerServerEvents.isRTSPlayer(allyPlayerName))) {
-            player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock", playerName));
+            player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock"));
             return 0;
         }
 
@@ -130,7 +130,7 @@ public class AllyCommand {
 
         if (context.getSource().getLevel().getGameRules().getRule(GameRuleRegistrar.LOCK_ALLIANCES).get() &&
                 (PlayerServerEvents.isRTSPlayer(playerName) || PlayerServerEvents.isRTSPlayer(allyPlayerName))) {
-            player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock", playerName));
+            player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock"));
             return 0;
         }
 
