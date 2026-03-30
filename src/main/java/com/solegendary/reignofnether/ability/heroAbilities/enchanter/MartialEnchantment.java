@@ -163,7 +163,10 @@ public class MartialEnchantment extends AbstractEnchantment {
                 EntityRegistrar.MILITIA_UNIT.get(),
                 EntityRegistrar.VINDICATOR_UNIT.get(),
                 EntityRegistrar.PILLAGER_UNIT.get(),
-                EntityRegistrar.EVOKER_UNIT.get()
+                EntityRegistrar.EVOKER_UNIT.get(),
+                EntityRegistrar.SKELETON_UNIT.get(),
+                EntityRegistrar.HEADHUNTER_UNIT.get(),
+                EntityRegistrar.BRUTE_UNIT.get()
         );
     }
 
