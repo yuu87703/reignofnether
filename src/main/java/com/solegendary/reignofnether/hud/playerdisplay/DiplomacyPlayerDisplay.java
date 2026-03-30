@@ -234,7 +234,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                this::isAllied,
+                () -> isAllied() && !GameruleClient.lockAlliances,
                 this::disbandAlliance,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.disband_alliance"), Style.EMPTY))

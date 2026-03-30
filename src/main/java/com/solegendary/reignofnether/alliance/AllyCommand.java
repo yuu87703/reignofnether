@@ -128,6 +128,12 @@ public class AllyCommand {
         String playerName = player.getName().getString();
         String allyPlayerName = allyPlayer.getName().getString();
 
+        if (context.getSource().getLevel().getGameRules().getRule(GameRuleRegistrar.LOCK_ALLIANCES).get() &&
+                (PlayerServerEvents.isRTSPlayer(playerName) || PlayerServerEvents.isRTSPlayer(allyPlayerName))) {
+            player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock", playerName));
+            return 0;
+        }
+
         if (player.equals(allyPlayer)) {
             context.getSource().sendFailure(Component.translatable("alliance.reignofnether.disband_self"));
             return 0;
