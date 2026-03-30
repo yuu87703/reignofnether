@@ -93,6 +93,12 @@ public class GameruleServerEvents {
                 double value = ((Integer) args.get("value").getResult()).doubleValue();
                 GameruleClientboundPacket.setAllowedHeroes((long) value);
             }
+        } else if (nodes.get(1).getNode().getName().equals("lockAlliances")) {
+            Map<String, ParsedArgument<CommandSourceStack, ?>> args = evt.getParseResults().getContext().getArguments();
+            if (args.containsKey("value")) {
+                boolean value = (boolean) args.get("value").getResult();
+                GameruleClientboundPacket.setLockAlliances(value);
+            }
         } else if (nodes.get(1).getNode().getName().equals("scenarioMode")) {
             Map<String, ParsedArgument<CommandSourceStack, ?>> args = evt.getParseResults().getContext().getArguments();
             if (args.containsKey("value")) {
