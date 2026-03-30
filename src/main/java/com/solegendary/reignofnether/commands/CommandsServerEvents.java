@@ -15,6 +15,7 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuildingServerEvents;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
+import com.solegendary.reignofnether.player.PlayerClientboundPacket;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.player.RTSPlayer;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
@@ -36,7 +37,6 @@ import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.arguments.coordinates.RotationArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -88,14 +88,38 @@ public class CommandsServerEvents {
         );
 
         dispatcher.register(Commands.literal("rtsapi-set-unit-owner")
-            .requires(source -> source.hasPermission(2))
-            .then(unitSelectionTail(ctx -> ""))
-            .then(Commands.argument("ownerName", StringArgumentType.string())
-                .then(unitSelectionTail(ctx -> StringArgumentType.getString(ctx, "ownerName")))
-            )
-            .then(Commands.argument("ownerSelector", EntityArgument.player())
-                .then(unitSelectionTail(ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "ownerSelector"))))
-            )
+                .requires(source -> source.hasPermission(2))
+                .then(setUnitOwnerTail(ctx -> ""))
+                .then(Commands.argument("ownerName", StringArgumentType.string())
+                        .then(setUnitOwnerTail(ctx -> StringArgumentType.getString(ctx, "ownerName")))
+                        .then(Commands.argument("newOwnerName", StringArgumentType.string())
+                                .then(setUnitOwnerTail(
+                                        ctx -> StringArgumentType.getString(ctx, "ownerName"),
+                                        ctx -> StringArgumentType.getString(ctx, "newOwnerName")
+                                ))
+                        )
+                        .then(Commands.argument("newOwnerSelector", EntityArgument.player())
+                                .then(setUnitOwnerTail(
+                                        ctx -> StringArgumentType.getString(ctx, "ownerName"),
+                                        ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "newOwnerSelector"))
+                                ))
+                        )
+                )
+                .then(Commands.argument("ownerSelector", EntityArgument.player())
+                        .then(setUnitOwnerTail(ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "ownerSelector"))))
+                        .then(Commands.argument("newOwnerName", StringArgumentType.string())
+                                .then(setUnitOwnerTail(
+                                        ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "ownerSelector")),
+                                        ctx -> StringArgumentType.getString(ctx, "newOwnerName")
+                                ))
+                        )
+                        .then(Commands.argument("newOwnerSelector", EntityArgument.player())
+                                .then(setUnitOwnerTail(
+                                        ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "ownerSelector")),
+                                        ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "newOwnerSelector"))
+                                ))
+                        )
+                )
         );
 
         dispatcher.register(Commands.literal("rtsapi-set-building-owner")
@@ -301,6 +325,24 @@ public class CommandsServerEvents {
                 .then(Commands.argument("ownerSelector", EntityArgument.player())
                         .then(searchBehaviourTail(ctx -> getPlayerName(EntityArgument.getPlayer(ctx, "ownerSelector"))))
                 )
+        );
+
+        dispatcher.register(Commands.literal("rtsapi-set-camera")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.argument("playerName", StringArgumentType.string())
+                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                .executes(ctx -> setRTSCamera(
+                                        ctx,
+                                        StringArgumentType.getString(ctx, "playerName"),
+                                        BoolArgumentType.getBool(ctx, "value")
+                                ))))
+                .then(Commands.argument("playerSelector", EntityArgument.player())
+                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                .executes(ctx -> setRTSCamera(
+                                        ctx,
+                                        StringArgumentType.getString(ctx, "playerSelector"),
+                                        BoolArgumentType.getBool(ctx, "value")
+                                ))))
         );
     }
 
@@ -564,16 +606,21 @@ public class CommandsServerEvents {
         };
     }
 
-    private static ArgumentBuilder<CommandSourceStack, ?> unitSelectionTail(NameResolver ownerResolver) {
+    private static ArgumentBuilder<CommandSourceStack, ?> setUnitOwnerTail(NameResolver ownerResolver) {
+        return setUnitOwnerTail(null, ownerResolver);
+    }
+
+    private static ArgumentBuilder<CommandSourceStack, ?> setUnitOwnerTail(NameResolver currentOwnerResolver, NameResolver newOwnerResolver) {
         return Commands.argument("from", BlockPosArgument.blockPos())
-            .then(Commands.argument("to", BlockPosArgument.blockPos())
-                .executes(ctx -> setUnitOwner(
-                    ctx,
-                    ownerResolver.resolve(ctx),
-                    BlockPosArgument.getLoadedBlockPos(ctx, "from"),
-                    BlockPosArgument.getLoadedBlockPos(ctx, "to")
-                ))
-            );
+                .then(Commands.argument("to", BlockPosArgument.blockPos())
+                        .executes(ctx -> setUnitOwner(
+                                ctx,
+                                currentOwnerResolver != null ? currentOwnerResolver.resolve(ctx) : null,
+                                newOwnerResolver.resolve(ctx),
+                                BlockPosArgument.getLoadedBlockPos(ctx, "from"),
+                                BlockPosArgument.getLoadedBlockPos(ctx, "to")
+                        ))
+                );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> buildingSelectionTail(NameResolver ownerResolver) {
@@ -658,6 +705,7 @@ public class CommandsServerEvents {
 
     private static int setUnitOwner(
         CommandContext<CommandSourceStack> ctx,
+        String currentOwnerName,
         String ownerName,
         BlockPos from,
         BlockPos to
@@ -667,7 +715,9 @@ public class CommandsServerEvents {
 
         List<Integer> ids = new ArrayList<>();
         for (LivingEntity entity : UnitServerEvents.getAllUnits()) {
-            if (entity instanceof Unit unit && isWithin(entity.getOnPos(), min, max)) {
+            if (entity instanceof Unit unit &&
+                (currentOwnerName == null || unit.getOwnerName().equals(currentOwnerName)) &&
+                isWithin(entity.getOnPos(), min, max)) {
                 ids.add(entity.getId());
             }
         }
@@ -817,6 +867,19 @@ public class CommandsServerEvents {
             );
         }
         return changed;
+    }
+
+    private static int setRTSCamera(
+            CommandContext<CommandSourceStack> ctx,
+            String playerName,
+            Boolean value
+    ) {
+        PlayerClientboundPacket.setRTSCamera(playerName, value);
+        ctx.getSource().sendSuccess(
+                () -> Component.literal("Set RTS camera '" + value + "' for " + playerName),
+                true
+        );
+        return 1;
     }
 
     private static int[] collectUnitIds(BlockPos from, BlockPos to) {

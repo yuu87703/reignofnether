@@ -132,6 +132,8 @@ public class GameruleServerEvents {
             GameruleClientboundPacket.setSlantedBuilding(slantedBuilding);
             int allowHeroes = server.getGameRules().getRule(GameRuleRegistrar.ALLOWED_HEROES).get();
             GameruleClientboundPacket.setAllowedHeroes(allowHeroes);
+            boolean lockAlliances = server.getGameRules().getRule(GameRuleRegistrar.LOCK_ALLIANCES).get();
+            GameruleClientboundPacket.setLockAlliances(lockAlliances);
             boolean scenarioMode = server.getGameRules().getRule(GameRuleRegistrar.SCENARIO_MODE).get();
             GameruleClientboundPacket.setScenarioMode(scenarioMode);
         }

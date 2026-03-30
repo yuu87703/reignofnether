@@ -4,6 +4,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.alliance.AllianceAction;
 import com.solegendary.reignofnether.alliance.AllianceServerboundPacket;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
+import com.solegendary.reignofnether.gamerules.GameruleClient;
 import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.hud.RectZone;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -196,7 +197,7 @@ public class DiplomacyPlayerDisplay extends AbstractPlayerDisplay {
                 (Keybinding) null,
                 () -> false,
                 () -> false,
-                this::isPlayerLoggedIn,
+                () -> isPlayerLoggedIn() && !GameruleClient.lockAlliances,
                 this::requestAlliance,
                 null,
                 List.of(FormattedCharSequence.forward(I18n.get("alliances.reignofnether.tooltip.request_alliance"), Style.EMPTY))

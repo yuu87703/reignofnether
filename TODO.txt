@@ -34,7 +34,9 @@ When /gamerule scenarioMode true:
 [✔] Command block API for UnitActionItem commands
 [✔] Command block API to grant victory to a player, all allies and defeat all enemies
 [✔] /rtsapi-summon <Owner> <CreatureName> <coords> [<nbt>]
-[❌] /rtsapi-set-rts-camera <PlayerName> true/false
+[✔] /rtsapi-add/remove-research <ResearchItem> <PlayerName>
+[✔] /rtsapi-set-rts-camera <PlayerName> true/false
+[🟡] Change /rtsapi-set-unit-owner to target oldOwner -> newOwner
 
 [❌] Custom Building commands
     [❌] GUI menu:
@@ -60,7 +62,7 @@ Bugfixes
 
 [✔] Added a confirm step to the de-register custom building button
 
-[❌] Units aren't considered garrisoned after reloading a save (pillagers in watchtower)
+[✔] Units aren't considered garrisoned after reloading a save (pillagers in watchtower)
 
 [❌] rts-hard-reset doesn't destroy buildings but rts-reset does?
 
@@ -69,8 +71,9 @@ Quality of Life
 ---------------
 [✔] In sandbox mode, pressing F3 will show info for the moused-over block
 [✔] /rts-reset and /rts-reset-hard can now only be run with permission level 2 or higher (ie. command blocks or higher)
-[❌] Add gamerule to lock alliances during a game
-     - While enabled alliances can only be made/broken with non-RTSPlayer players
+[✔] The default for /gamerule allowedHeroes is now 2
+[✔] Added /gamerule lockAlliances true/false
+     - While enabled, alliances can only be made/broken with players who have not yet joined the match
 [❌] Ready check instead of start game countdown
 
 Balance

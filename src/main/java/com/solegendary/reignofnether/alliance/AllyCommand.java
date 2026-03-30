@@ -7,6 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.solegendary.reignofnether.gamemode.GameMode;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
@@ -54,6 +55,12 @@ public class AllyCommand {
         ServerPlayer allyPlayer = EntityArgument.getPlayer(context, "player");
         String playerName = player.getName().getString();
         String allyPlayerName = allyPlayer.getName().getString();
+
+        if (context.getSource().getLevel().getGameRules().getRule(GameRuleRegistrar.LOCK_ALLIANCES).get() &&
+            (PlayerServerEvents.isRTSPlayer(playerName) || PlayerServerEvents.isRTSPlayer(allyPlayerName))) {
+            player.sendSystemMessage(Component.translatable("alliance.reignofnether.alliances_lock", playerName));
+            return 0;
+        }
 
         if (player.equals(allyPlayer)) {
             player.sendSystemMessage(Component.translatable("alliance.reignofnether.ally_self", playerName));

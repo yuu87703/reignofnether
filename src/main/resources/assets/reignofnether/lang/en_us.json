@@ -624,6 +624,7 @@
     "commands.reignofnether.gamerule.pvp_modes_only": "Disable Wave Survival and Sandbox",
     "commands.reignofnether.gamerule.beacon_win_minutes": "Time needed to win with beacon control",
     "commands.reignofnether.gamerule.slanted_buildings": "Allow building on non-flat terrain",
+    "commands.reignofnether.gamerule.lock_alliances": "Disallow changing allies during a match",
     "commands.reignofnether.gamerule.allowed_heroes": "How many heroes players can train",
 
     "commands.reignofnether.error.unknown_building": "Unknown building name",
@@ -1332,6 +1333,7 @@
     "alliance.reignofnether.ally_request_cancelled_self": "\nRetracted alliance request to %s.\n",
     "alliance.reignofnether.ally_request_cancelled": "\n%s has retracted their alliance request.\n",
     "alliance.reignofnether.no_request": "\nNo pending alliance request from %s.\n",
+    "alliance.reignofnether.alliances_lock": "\nYou may not change alliances during a match (gamerule lockAlliances is on).\n",
     "alliance.reignofnether.disbanded": "\nYour alliance with %s has been disbanded.\n",
     "alliance.reignofnether.disbanding": "\nDisbanding alliance with %s in 30 seconds...\n",
     "alliance.reignofnether.disband_self": "\nYou cannot disband yourself.\n",
