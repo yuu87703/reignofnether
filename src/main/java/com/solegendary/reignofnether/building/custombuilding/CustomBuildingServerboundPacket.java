@@ -32,6 +32,14 @@ public class CustomBuildingServerboundPacket {
         PacketHandler.INSTANCE.sendToServer(new CustomBuildingServerboundPacket(action, buildingName, false, 0, strValue));
     }
 
+    public static void customiseBuilding(CustomBuildingAction action, String buildingName) {
+        PacketHandler.INSTANCE.sendToServer(new CustomBuildingServerboundPacket(action, buildingName, false, 0, ""));
+    }
+
+    public static void customiseBuilding(CustomBuildingAction action, String buildingName, int intValue, String strValue) {
+        PacketHandler.INSTANCE.sendToServer(new CustomBuildingServerboundPacket(action, buildingName, false, intValue, strValue));
+    }
+
     public CustomBuildingServerboundPacket(CustomBuildingAction action,
                                            String buildingName,
                                            boolean boolValue,
@@ -87,6 +95,11 @@ public class CustomBuildingServerboundPacket {
                     case SET_ORE_COST -> customBuilding.cost.ore = this.intValue;
                     case SET_GARRISON_CAPACITY -> customBuilding.garrisonCapacity = this.intValue;
                     case SET_GARRISON_RANGE -> customBuilding.garrisonRange = this.intValue;
+                    case ADD_COMMAND -> customBuilding.addCommand();
+                    case DELETE_COMMAND -> customBuilding.deleteCommand(this.intValue);
+                    case SET_COMMAND_TEXT -> customBuilding.setCommandText(this.intValue, this.strValue);
+                    case SET_COMMAND_COOLDOWN -> customBuilding.setCommandCooldownSeconds(this.intValue, this.strValue);
+                    case SET_COMMAND_TRIGGER -> customBuilding.setCommandTrigger(this.intValue, this.strValue);
                 }
             }
             success.set(true);

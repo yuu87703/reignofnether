@@ -233,4 +233,54 @@ public class CustomBuilding extends Building {
 
         CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_PORTRAIT_BLOCK, name, getPortraitBlockRegistryKey());
     }
+
+    public void addCommand() {
+        this.commands.add(new CustomBuildingCommand());
+    }
+
+    public void deleteCommand(int index) {
+        try {
+            this.commands.remove(index);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBoundsException in deleteCommand");
+        }
+    }
+
+    public void setCommandText(int index, String text) {
+        try {
+            this.commands.get(index).command = text;
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBoundsException in setCommandText");
+        }
+    }
+
+    public void setCommandCooldownSeconds(int index, String cooldownSecondsStr) {
+        int cooldownSeconds;
+        try {
+            cooldownSeconds = Integer.parseInt(cooldownSecondsStr);
+        } catch (NumberFormatException e) {
+            System.out.println("NumberFormatException in setCommandCooldown");
+            return;
+        }
+        try {
+            this.commands.get(index).tickCooldownMax = cooldownSeconds * 20;
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBoundsException in setCommandCooldown");
+        }
+    }
+
+    public void setCommandTrigger(int index, String triggerStr) {
+        CustomBuildingCommand.TriggerCondition triggerCond;
+        try {
+            triggerCond = CustomBuildingCommand.TriggerCondition.valueOf(triggerStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException in setCommandTrigger");
+            return;
+        }
+        try {
+            this.commands.get(index).condition = triggerCond;
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBoundsException in setCommandTrigger");
+        }
+    }
 }

@@ -25,6 +25,7 @@ public class CustomBuildingClientboundPacket {
     public BlockPos structureSize;
     public CompoundTag structureNbt;
     public CompoundTag attributesNbt;
+    // TODO: commandsNbt
 
     public static void registerCustomBuilding(CustomBuilding building) {
         registerCustomBuilding("", building);

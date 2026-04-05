@@ -329,7 +329,6 @@ public class ZombieVillagerUnit extends Vindicator implements Unit, WorkerUnit, 
     @Override
     public List<Button> getAbilityButtons() {
         List<Button> abilities = new ArrayList<>(getAbilities().getButtons(this));
-        //TODO Remove need for I18n
         if (FMLEnvironment.dist == Dist.CLIENT) {
             abilities.addAll(getBuildingButtons());
         }

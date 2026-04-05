@@ -48,6 +48,8 @@ public class CustomBuildingClientEvents {
         else
             customBuildingToEdit = null;
         CustomBuildingClientEvents.deregisterConfirm = false;
+        if (showCommandsMenu)
+            CustomBuildingMenu.forceRefreshCommandEditBoxes();
     }
 
     public static CustomBuilding getCustomBuildingToEdit() {
@@ -112,9 +114,9 @@ public class CustomBuildingClientEvents {
         renderedButtons.clear();
         if (customBuildingToEdit != null && MC.screen instanceof TopdownGui) {
             int blitX = 100;
-            int blitY = 40;
+            int blitY = 30;
             int width = 310;
-            int height = 200;
+            int height = 225;
             MyRenderer.renderFrameWithBg(evt.getGuiGraphics(), blitX, blitY, width, height, 0xA0000000);
 
             renderedButtons.add(CustomBuildingMenu.renderIconButtonNameAndPortrait(evt, customBuildingToEdit, blitX + 18, blitY + 18));
