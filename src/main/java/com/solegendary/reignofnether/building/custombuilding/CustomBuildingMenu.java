@@ -9,7 +9,6 @@ import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -122,7 +121,7 @@ public class CustomBuildingMenu {
         int commandCount = 0;
         if (building != null)
             for (CustomBuildingCommand command : building.commands)
-                if (command.condition != CustomBuildingCommand.TriggerCondition.NONE && !command.command.isBlank())
+                if (command.condition != CustomBuildingCommand.TriggerCondition.NONE && !command.commandStr.isBlank())
                     commandCount += 1;
 
         evt.getGuiGraphics().drawString(MC.font, I18n.get("sandbox.reignofnether.custom_buildings.commands_count", commandCount) ,x + 25, y + 7, 0xFFFFFF);
@@ -378,7 +377,7 @@ public class CustomBuildingMenu {
                     .value("10")
                     .isNumber(true)
                     .onDefocus(value -> {
-                        customBuilding.commands.get(idx).command = value;
+                        customBuilding.commands.get(idx).commandStr = value;
                         CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
                     })
                     .tooltipLines(List.of(fcs(I18n.get("sandbox.reignofnether.custom_buildings.commands.cooldown"))))
@@ -389,9 +388,9 @@ public class CustomBuildingMenu {
 
             MyEditBox textBox = new MyEditBox.Builder(editBoxX + COOLDOWN_EDIT_BOX_WIDTH + 5, rowY, TEXT_EDIT_BOX_WIDTH, EDIT_BOX_HEIGHT)
                     .maxLength(256)
-                    .value(customBuilding.commands.get(idx).command)
+                    .value(customBuilding.commands.get(idx).commandStr)
                     .onDefocus(value -> {
-                        customBuilding.commands.get(idx).command = value;
+                        customBuilding.commands.get(idx).commandStr = value;
                         CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_TEXT, customBuilding.name, idx, value);
                     })
                     .commandSuggestions(true)

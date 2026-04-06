@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.building.buildings.placements;
 import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.custombuilding.CustomBuilding;
+import com.solegendary.reignofnether.building.custombuilding.CustomBuildingCommand;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.BlockPos;
@@ -65,6 +66,37 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
         updateHighlightBps();
         if (getMaxNetherRange() > 0)
             setNetherZone(new NetherZone(new BlockPos(centrePos.getX(), originPos.getY() + 1, centrePos.getZ()), getMaxNetherRange(), getStartingNetherRange()), true);
+
+        if (!this.level.isClientSide())
+            for (CustomBuildingCommand command : getCustomBuilding().commands)
+                if (command.condition == CustomBuildingCommand.TriggerCondition.ON_BUILD_COMPLETE)
+                    command.run(this);
+    }
+
+    @Override
+    public void destroy(ServerLevel serverLevel) {
+        super.destroy(serverLevel);
+        for (CustomBuildingCommand command : getCustomBuilding().commands)
+            if (command.condition == CustomBuildingCommand.TriggerCondition.ON_DESTROY)
+                command.run(this);
+    }
+
+    @Override
+    protected boolean checkIfCaptured(ServerLevel serverLevel) {
+        boolean captured = super.checkIfCaptured(serverLevel);
+        if (captured)
+            for (CustomBuildingCommand command : getCustomBuilding().commands)
+                if (command.condition == CustomBuildingCommand.TriggerCondition.ON_CAPTURE)
+                    command.run(this);
+        return captured;
+    }
+
+    @Override
+    public void tick(Level tickLevel) {
+        super.tick(tickLevel);
+        if (!tickLevel.isClientSide())
+            for (CustomBuildingCommand command : getCustomBuilding().commands)
+                command.tick(this);
     }
 
     @Nullable

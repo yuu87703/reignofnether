@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.building.custombuilding;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 
@@ -20,10 +21,23 @@ public class CustomBuildingCommand {
 
     private int tickCooldown = 0;
     public int tickCooldownMax = 20;
-    public String command = "";
+    public String commandStr = "";
     public TriggerCondition condition = TriggerCondition.NONE;
 
     public CustomBuildingCommand() { }
+
+    public static CustomBuildingCommand getFromNbt(CompoundTag tag) {
+        CustomBuildingCommand command = new CustomBuildingCommand();
+        command.tickCooldown = tag.getInt("tickCooldown");
+        command.tickCooldownMax = tag.getInt("tickCooldownMax");
+        command.commandStr = tag.getString("commandStr");
+        command.condition = TriggerCondition.valueOf(tag.getString("condition"));
+        return command;
+    }
+
+    public int getTickCooldown() {
+        return tickCooldown;
+    }
 
     public void tick(BuildingPlacement bpl) {
         if (bpl.tickAge % 20 == 0 && tickCooldown > 0)
@@ -49,7 +63,7 @@ public class CustomBuildingCommand {
                     .withPosition(Vec3.atCenterOf(bpl.originPos))
                     .withLevel(level)
                     .withSuppressedOutput();
-            level.getServer().getCommands().performPrefixedCommand(source, command);
+            level.getServer().getCommands().performPrefixedCommand(source, commandStr);
         }
     }
 }

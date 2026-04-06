@@ -120,7 +120,8 @@ public class CustomBuildingServerEvents {
                     b.structureNbt,
                     b.name,
                     b.structureSize,
-                    b.attributesNbt
+                    b.attributesNbt,
+                    b.commandsNbt
             ));
         });
         customBuildingData.save();
@@ -130,7 +131,7 @@ public class CustomBuildingServerEvents {
     public static void loadCustomBuildings(ServerLevel level) {
         CustomBuildingSaveData customBuildingData = CustomBuildingSaveData.getInstance(level);
         customBuildingData.customBuildings.forEach(bSave -> {
-            CustomBuilding building = new CustomBuilding(bSave.buildingName, bSave.structureSize, Blocks.COMMAND_BLOCK, bSave.structureNbt, bSave.attributesNbt);
+            CustomBuilding building = new CustomBuilding(bSave.buildingName, bSave.structureSize, Blocks.COMMAND_BLOCK, bSave.structureNbt, bSave.attributesNbt, bSave.commandsNbt);
             boolean buildingExists = false;
             for (CustomBuilding customBuilding : customBuildings) {
                 if (customBuilding.name.equals(building.name)) {

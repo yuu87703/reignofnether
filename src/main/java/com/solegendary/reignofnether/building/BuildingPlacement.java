@@ -1208,9 +1208,9 @@ public class BuildingPlacement {
         refreshBlocks();
     }
 
-    private void checkIfCaptured(ServerLevel serverLevel) {
+    protected boolean checkIfCaptured(ServerLevel serverLevel) {
         if (PlayerServerEvents.rtsPlayers.isEmpty())
-            return;
+            return false;
 
         List<Mob> nearbyUnits = MiscUtil.getEntitiesWithinRange(
                 new Vector3d(centrePos.getX(), minCorner.getY(), centrePos.getZ()),
@@ -1245,8 +1245,11 @@ public class BuildingPlacement {
 
                 if (this instanceof BeaconPlacement beacon)
                     beacon.sendWarning("capture_warning");
+
+                return true;
             }
         }
+        return false;
     }
 
     public String getUpgradedName() {
