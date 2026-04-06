@@ -23,6 +23,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     private final ArrayList<BlockPos> garrisonEntries = new ArrayList<>();
     private final ArrayList<BlockPos> garrisonExits = new ArrayList<>();
     private final Random random = new Random();
+    public final ArrayList<CustomBuildingCommand> commands;
 
     public static final List<Block> INVULNERABLE_BLOCKS = List.of(
             BlockRegistrar.GARRISON_EXIT_BLOCK.get(),
@@ -50,6 +51,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
                 garrisonExits.add(bb.getBlockPos());
             }
         }
+        this.commands = getCustomBuilding().commands;
     }
 
     public CustomBuilding getCustomBuilding() {
@@ -68,7 +70,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
             setNetherZone(new NetherZone(new BlockPos(centrePos.getX(), originPos.getY() + 1, centrePos.getZ()), getMaxNetherRange(), getStartingNetherRange()), true);
 
         if (!this.level.isClientSide())
-            for (CustomBuildingCommand command : getCustomBuilding().commands)
+            for (CustomBuildingCommand command : commands)
                 if (command.condition == CustomBuildingCommand.TriggerCondition.ON_BUILD_COMPLETE)
                     command.run(this);
     }
@@ -76,7 +78,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     @Override
     public void destroy(ServerLevel serverLevel) {
         super.destroy(serverLevel);
-        for (CustomBuildingCommand command : getCustomBuilding().commands)
+        for (CustomBuildingCommand command : commands)
             if (command.condition == CustomBuildingCommand.TriggerCondition.ON_DESTROY)
                 command.run(this);
     }
@@ -85,7 +87,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     protected boolean checkIfCaptured(ServerLevel serverLevel) {
         boolean captured = super.checkIfCaptured(serverLevel);
         if (captured)
-            for (CustomBuildingCommand command : getCustomBuilding().commands)
+            for (CustomBuildingCommand command : commands)
                 if (command.condition == CustomBuildingCommand.TriggerCondition.ON_CAPTURE)
                     command.run(this);
         return captured;
@@ -95,7 +97,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     public void tick(Level tickLevel) {
         super.tick(tickLevel);
         if (!tickLevel.isClientSide())
-            for (CustomBuildingCommand command : getCustomBuilding().commands)
+            for (CustomBuildingCommand command : commands)
                 command.tick(this);
     }
 

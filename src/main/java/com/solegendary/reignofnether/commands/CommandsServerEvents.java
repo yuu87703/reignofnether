@@ -340,7 +340,7 @@ public class CommandsServerEvents {
                         .then(Commands.argument("value", BoolArgumentType.bool())
                                 .executes(ctx -> setRTSCamera(
                                         ctx,
-                                        StringArgumentType.getString(ctx, "playerSelector"),
+                                        getPlayerName(EntityArgument.getPlayer(ctx, "playerSelector")),
                                         BoolArgumentType.getBool(ctx, "value")
                                 ))))
         );

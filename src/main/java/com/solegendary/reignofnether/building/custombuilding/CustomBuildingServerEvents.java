@@ -116,6 +116,7 @@ public class CustomBuildingServerEvents {
         customBuildingData.customBuildings.clear();
         customBuildings.forEach(b -> {
             b.packAttributesNbt();
+            b.packCommandsNbt();
             customBuildingData.customBuildings.add(new CustomBuildingSave(
                     b.structureNbt,
                     b.name,

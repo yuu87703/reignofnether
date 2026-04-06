@@ -377,11 +377,16 @@ public class CustomBuildingMenu {
 
             MyEditBox cdBox = new MyEditBox.Builder(editBoxX, rowY, COOLDOWN_EDIT_BOX_WIDTH, EDIT_BOX_HEIGHT)
                     .maxLength(4)
-                    .value("10")
+                    .value("1")
                     .isNumber(true)
                     .onDefocus(value -> {
-                        cmd.commandStr = value;
-                        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
+                        try {
+                            cmd.tickCooldownMax = Integer.parseInt(value);
+                            CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
+                        } catch (NumberFormatException e) {
+                            cmd.tickCooldownMax = 1;
+                            CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, "1");
+                        }
                     })
                     .tooltipLines(List.of(fcs(I18n.get("sandbox.reignofnether.custom_buildings.commands.cooldown"))))
                     .build();
@@ -394,7 +399,7 @@ public class CustomBuildingMenu {
                     .value(cmd.commandStr)
                     .onDefocus(value -> {
                         cmd.commandStr = value;
-                        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
+                        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_TEXT, customBuilding.name, idx, value);
                     })
                     .responder(value -> {
                         cmd.commandStr = value;
