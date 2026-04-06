@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.building.custombuilding;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.hud.*;
@@ -9,6 +10,7 @@ import com.solegendary.reignofnether.keybinds.Keybinding;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -356,7 +358,7 @@ public class CustomBuildingMenu {
     private static final int COMMAND_ROW_HEIGHT = 16;
     private static final int EDIT_BOX_HEIGHT = 12;
     private static final int CONDITION_BUTTON_WIDTH = 32;
-    private static final int TEXT_EDIT_BOX_WIDTH = 200;
+    private static final int TEXT_EDIT_BOX_WIDTH = 180;
     private static final int COOLDOWN_EDIT_BOX_WIDTH = 34;
 
     private static final ArrayList<MyEditBox> commandEditBoxes = new ArrayList<>();
@@ -371,13 +373,14 @@ public class CustomBuildingMenu {
         for (int i = 0; i < customBuilding.commands.size(); i++) {
             final int idx = i;
             int rowY = y + i * (COMMAND_ROW_HEIGHT + 2) + (COMMAND_ROW_HEIGHT - EDIT_BOX_HEIGHT) / 2;
+            CustomBuildingCommand cmd = customBuilding.commands.get(idx);
 
             MyEditBox cdBox = new MyEditBox.Builder(editBoxX, rowY, COOLDOWN_EDIT_BOX_WIDTH, EDIT_BOX_HEIGHT)
                     .maxLength(4)
                     .value("10")
                     .isNumber(true)
                     .onDefocus(value -> {
-                        customBuilding.commands.get(idx).commandStr = value;
+                        cmd.commandStr = value;
                         CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
                     })
                     .tooltipLines(List.of(fcs(I18n.get("sandbox.reignofnether.custom_buildings.commands.cooldown"))))
@@ -388,10 +391,14 @@ public class CustomBuildingMenu {
 
             MyEditBox textBox = new MyEditBox.Builder(editBoxX + COOLDOWN_EDIT_BOX_WIDTH + 5, rowY, TEXT_EDIT_BOX_WIDTH, EDIT_BOX_HEIGHT)
                     .maxLength(256)
-                    .value(customBuilding.commands.get(idx).commandStr)
+                    .value(cmd.commandStr)
                     .onDefocus(value -> {
-                        customBuilding.commands.get(idx).commandStr = value;
-                        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_TEXT, customBuilding.name, idx, value);
+                        cmd.commandStr = value;
+                        CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
+                    })
+                    .responder(value -> {
+                        cmd.commandStr = value;
+                        cmd.updateValidityAndExceptions();
                     })
                     .commandSuggestions(true)
                     .build();
@@ -467,6 +474,20 @@ public class CustomBuildingMenu {
             renderButton(condButton, x + 6, rowY - 3, evt);
             buttons.add(condButton);
 
+            ArrayList<FormattedCharSequence> exceptions = new ArrayList<>();
+            exceptions.add(fcs(I18n.get("sandbox.reignofnether.custom_buildings.commands.invalid"), true));
+            for (CommandSyntaxException exception : cmd.getExceptions().values())
+                exceptions.add(fcs(exception.getMessage()));
+            Button validIndicator = new ButtonBuilder("Validity " + idx)
+                    .iconResource(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/warning.png"))
+                    .tooltipLines(exceptions)
+                    .isHidden(cmd::isValid)
+                    .iconSize(10)
+                    .build();
+            validIndicator.frameResource = null;
+            renderButton(validIndicator, x + COOLDOWN_EDIT_BOX_WIDTH + TEXT_EDIT_BOX_WIDTH + 40, rowY - 3, evt);
+            buttons.add(validIndicator);
+
             Button deleteButton = new ButtonBuilder("Delete Command " + idx)
                     .iconResource(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/cross.png"))
                     .onLeftClick(() -> {
@@ -480,11 +501,10 @@ public class CustomBuildingMenu {
                     .iconSize(10)
                     .build();
             deleteButton.frameResource = null;
-            renderButton(deleteButton, x + COOLDOWN_EDIT_BOX_WIDTH + TEXT_EDIT_BOX_WIDTH + 40, rowY - 3, evt);
+            renderButton(deleteButton, x + COOLDOWN_EDIT_BOX_WIDTH + TEXT_EDIT_BOX_WIDTH + 60, rowY - 3, evt);
             buttons.add(deleteButton);
         }
 
-        // add new command button
         if (customBuilding.commands.size() < MAX_COMMANDS) {
             int addBtnY = y + customBuilding.commands.size() * (COMMAND_ROW_HEIGHT + 2) + 4;
             Button addButton = new ButtonBuilder("Add Command")

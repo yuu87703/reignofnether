@@ -2,18 +2,12 @@ package com.solegendary.reignofnether.hud;
 
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 public class TextInputClientEvents {
 
@@ -59,16 +53,20 @@ public class TextInputClientEvents {
     public static void onKeyPressed(ScreenEvent.KeyPressed.Post evt) {
         for (MyEditBox input : registeredInputs) {
             input.keyPressed(evt.getKeyCode(), evt.getScanCode(), evt.getModifiers());
+            boolean wasFocused = input.isFocused();
             if (evt.getKeyCode() == GLFW.GLFW_KEY_ENTER)
                 input.setFocused(false);
+            if (wasFocused && !input.isFocused())
+                handleDefocus(input);
         }
     }
 
     @SubscribeEvent
     public static void onCharTyped(ScreenEvent.CharacterTyped.Post evt) {
-        for (MyEditBox input : registeredInputs)
+        for (MyEditBox input : registeredInputs) {
             if (input.isFocused())
                 input.charTyped(evt.getCodePoint(), evt.getModifiers());
+        }
     }
 
     @SubscribeEvent
@@ -78,10 +76,24 @@ public class TextInputClientEvents {
             boolean isMouseOver = input.isMouseOver(evt.getMouseX(), evt.getMouseY());
             boolean wasFocused = input.isFocused();
             input.setFocused(isMouseOver);
-            if (wasFocused && !input.isFocused()) {
-                if (input.onDefocus != null)
-                    input.onDefocus.accept(input.getValue());
+            if (wasFocused && !input.isFocused())
+                handleDefocus(input);
+        }
+    }
+
+    private static void handleDefocus(MyEditBox input) {
+        if (input.onDefocus != null) {
+            if (input.isPositiveNumber) {
+                input.setValue(input.getValue().replaceFirst("^0+(?!$)", ""));
+                try {
+                    int intValue = Integer.parseInt(input.getValue());
+                    if (intValue <= 0)
+                        input.setValue("1");
+                } catch (NumberFormatException e) {
+                    input.setValue("1");
+                }
             }
+            input.onDefocus.accept(input.getValue());
         }
     }
 }

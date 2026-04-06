@@ -1,7 +1,6 @@
 package com.solegendary.reignofnether.hud;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
@@ -14,20 +13,20 @@ public class MyEditBox extends EditBox {
 
     public Consumer<String> onDefocus;
     public List<FormattedCharSequence> tooltipLines;
-    public boolean isNumber;
+    public boolean isPositiveNumber;
     public CommandSuggestions commandSuggestions;
 
     private MyEditBox(Builder builder) {
         super(Minecraft.getInstance().font, builder.x, builder.y, builder.width, builder.height, Component.literal(""));
         this.onDefocus = builder.onDefocus;
         this.tooltipLines = builder.tooltipLines;
-        this.isNumber = builder.isNumber;
+        this.isPositiveNumber = builder.isNumber;
 
         setBordered(builder.bordered);
         setMaxLength(builder.maxLength);
 
         if (builder.isNumber)
-            setFilter(value -> value.matches("-?\\d+"));
+            setFilter(value -> value.matches("\\d*"));
         if (builder.filter != null)
             setFilter(builder.filter);
         if (builder.value != null)
