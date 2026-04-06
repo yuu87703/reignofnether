@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.building;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.attackwarnings.AttackWarningClientboundPacket;
 import com.solegendary.reignofnether.building.buildings.monsters.DarkWatchtower;
@@ -1241,12 +1242,13 @@ public class BuildingPlacement {
                 }
             }
             if (highestPop > 0 && highestPopPlayer != null) {
+                boolean capturedByAlly = AlliancesServerEvents.isAllied(ownerName, highestPopPlayer);
                 ownerName = highestPopPlayer;
 
                 if (this instanceof BeaconPlacement beacon)
                     beacon.sendWarning("capture_warning");
 
-                return true;
+                return !capturedByAlly;
             }
         }
         return false;

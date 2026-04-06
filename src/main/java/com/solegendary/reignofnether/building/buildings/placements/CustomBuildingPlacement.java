@@ -23,7 +23,7 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
     private final ArrayList<BlockPos> garrisonEntries = new ArrayList<>();
     private final ArrayList<BlockPos> garrisonExits = new ArrayList<>();
     private final Random random = new Random();
-    public final ArrayList<CustomBuildingCommand> commands;
+    public final ArrayList<CustomBuildingCommand> commands = new ArrayList<>();
 
     public static final List<Block> INVULNERABLE_BLOCKS = List.of(
             BlockRegistrar.GARRISON_EXIT_BLOCK.get(),
@@ -51,7 +51,14 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
                 garrisonExits.add(bb.getBlockPos());
             }
         }
-        this.commands = getCustomBuilding().commands;
+        for (CustomBuildingCommand command : getCustomBuilding().commands) {
+            CustomBuildingCommand newCommand = new CustomBuildingCommand();
+            newCommand.tickCooldown = command.tickCooldown;
+            newCommand.tickCooldownMax = command.tickCooldownMax;
+            newCommand.commandStr = command.commandStr;
+            newCommand.condition = command.condition;
+            this.commands.add(newCommand);
+        }
     }
 
     public CustomBuilding getCustomBuilding() {
@@ -88,9 +95,17 @@ public class CustomBuildingPlacement extends BuildingPlacement implements RangeI
         boolean captured = super.checkIfCaptured(serverLevel);
         if (captured)
             for (CustomBuildingCommand command : commands)
-                if (command.condition == CustomBuildingCommand.TriggerCondition.ON_CAPTURE)
+                if (command.condition == CustomBuildingCommand.TriggerCondition.ON_CAPTURE && command.isOffCooldown())
                     command.run(this);
         return captured;
+    }
+
+    @Override
+    public void onBlockBreak(ServerLevel level, BlockPos pos, boolean breakBlocks) {
+        super.onBlockBreak(level, pos, breakBlocks);
+        for (CustomBuildingCommand command : commands)
+            if (command.condition == CustomBuildingCommand.TriggerCondition.ON_DAMAGE_TAKEN && command.isOffCooldown())
+                command.run(this);
     }
 
     @Override

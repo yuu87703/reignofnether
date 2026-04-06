@@ -25,18 +25,17 @@ Scenario roles:
          - Below last list, add new command line
     [🟡] Send packets to server
     [🟡] Save and load data
-    [❌] Save fields on close not just defocus
 
 Bugfixes
 --------
 [❌] rts-hard-reset doesn't destroy buildings but rts-reset does?
-
+[❌] Castles still give a hero slot even when /gamerule allowedHeroes = 1
+[❌] In wave survival non-piglin factions attack portals
 [🟡] Fixed player selector not working for /rtsapi-set-camera
 
 Quality of Life
 ---------------
 [❌] Make range, attack damage and attack speed part of entity data
-
 [❌] Ready check instead of start game countdown
 
 Balance

@@ -18,6 +18,8 @@ public class TextInputClientEvents {
     }
 
     public static void deregisterEditBox(MyEditBox input) {
+        if (input.isFocused() && input.onDefocus != null)
+            input.onDefocus.accept(input.getValue());
         registeredInputs.remove(input);
     }
 

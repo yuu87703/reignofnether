@@ -144,7 +144,7 @@ public class CustomBuilding extends Building {
         this.commandsNbt.clear();
         for (CustomBuildingCommand command : commands) {
             CompoundTag ctag = new CompoundTag();
-            ctag.putInt("tickCooldown", command.getTickCooldown());
+            ctag.putInt("tickCooldown", command.tickCooldown);
             ctag.putInt("tickCooldownMax", command.tickCooldownMax);
             ctag.putString("commandStr", command.commandStr);
             ctag.putString("condition", command.condition.toString());
@@ -291,6 +291,7 @@ public class CustomBuilding extends Building {
         }
         try {
             this.commands.get(index).tickCooldownMax = cooldownSeconds * 20;
+            this.commands.get(index).tickCooldown = cooldownSeconds * 20;
         } catch (IndexOutOfBoundsException e) {
             System.out.println("IndexOutOfBoundsException in setCommandCooldown");
         }

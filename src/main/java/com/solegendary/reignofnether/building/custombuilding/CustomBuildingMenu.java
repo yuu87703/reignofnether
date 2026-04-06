@@ -377,14 +377,14 @@ public class CustomBuildingMenu {
 
             MyEditBox cdBox = new MyEditBox.Builder(editBoxX, rowY, COOLDOWN_EDIT_BOX_WIDTH, EDIT_BOX_HEIGHT)
                     .maxLength(4)
-                    .value("1")
+                    .value(String.valueOf(cmd.tickCooldownMax / 20))
                     .isNumber(true)
                     .onDefocus(value -> {
                         try {
-                            cmd.tickCooldownMax = Integer.parseInt(value);
+                            cmd.tickCooldownMax = Integer.parseInt(value) * 20;
                             CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
                         } catch (NumberFormatException e) {
-                            cmd.tickCooldownMax = 1;
+                            cmd.tickCooldownMax = 20;
                             CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, "1");
                         }
                     })
@@ -392,7 +392,7 @@ public class CustomBuildingMenu {
                     .build();
 
             TextInputClientEvents.registerEditBox(cdBox);
-            commandEditBoxes.add(cdBox);
+            commandCooldownEditBoxes.add(cdBox);
 
             MyEditBox textBox = new MyEditBox.Builder(editBoxX + COOLDOWN_EDIT_BOX_WIDTH + 5, rowY, TEXT_EDIT_BOX_WIDTH, EDIT_BOX_HEIGHT)
                     .maxLength(256)
@@ -409,7 +409,7 @@ public class CustomBuildingMenu {
                     .build();
 
             TextInputClientEvents.registerEditBox(textBox);
-            commandCooldownEditBoxes.add(textBox);
+            commandEditBoxes.add(textBox);
         }
     }
 

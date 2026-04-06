@@ -28,7 +28,7 @@ public class CustomBuildingCommand {
         NONE
     }
 
-    private int tickCooldown = 0;
+    public int tickCooldown = 20;
     public int tickCooldownMax = 20;
     public String commandStr = "";
     public TriggerCondition condition = TriggerCondition.NONE;
@@ -75,8 +75,8 @@ public class CustomBuildingCommand {
         this.isValid = true;
     }
 
-    public int getTickCooldown() {
-        return tickCooldown;
+    public boolean isOffCooldown() {
+        return tickCooldown <= 0;
     }
 
     public void tick(BuildingPlacement bpl) {
@@ -100,7 +100,7 @@ public class CustomBuildingCommand {
         if (bpl.level instanceof ServerLevel level) {
             CommandSourceStack source = level.getServer()
                     .createCommandSourceStack()
-                    .withPosition(Vec3.atCenterOf(bpl.originPos))
+                    .withPosition(bpl.minCorner.offset(-1, 0, -1).getCenter())
                     .withLevel(level)
                     .withSuppressedOutput();
             level.getServer().getCommands().performPrefixedCommand(source, commandStr);
