@@ -45,6 +45,7 @@ public class CustomBuilding extends Building {
     public boolean buildableByVillagers = false;
     public boolean buildableByMonsters = false;
     public boolean buildableByPiglins = false;
+    public boolean netherTerrainOnly = false;
     public int garrisonCapacity = 0;
     public int garrisonRange = 20;
     public int numGarrisonZones = 0;
@@ -88,7 +89,7 @@ public class CustomBuilding extends Building {
             this.unpackAttributesNbt();
         }
         this.packCommandsNbt();
-        if (!commandsNbt.isEmpty()) {
+        if (commandsNbt != null) {
             this.commandsNbt = commandsNbt;
             this.unpackCommandsNbt();
         }
@@ -115,6 +116,7 @@ public class CustomBuilding extends Building {
         attributesNbt.putBoolean("buildableByVillagers", this.buildableByVillagers);
         attributesNbt.putBoolean("buildableByMonsters", this.buildableByMonsters);
         attributesNbt.putBoolean("buildableByPiglins", this.buildableByPiglins);
+        attributesNbt.putBoolean("netherTerrainOnly", this.netherTerrainOnly);
         attributesNbt.putInt("foodCost", this.cost.food);
         attributesNbt.putInt("woodCost", this.cost.wood);
         attributesNbt.putInt("oreCost", this.cost.ore);
@@ -133,6 +135,7 @@ public class CustomBuilding extends Building {
         this.buildableByVillagers = attributesNbt.getBoolean("buildableByVillagers");
         this.buildableByMonsters = attributesNbt.getBoolean("buildableByMonsters");
         this.buildableByPiglins = attributesNbt.getBoolean("buildableByPiglins");
+        this.netherTerrainOnly = attributesNbt.getBoolean("netherTerrainOnly");
         this.cost.food = attributesNbt.getInt("foodCost");
         this.cost.wood = attributesNbt.getInt("woodCost");
         this.cost.ore = attributesNbt.getInt("oreCost");

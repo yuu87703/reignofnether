@@ -10,12 +10,10 @@ Scenario roles:
     [❌] Use start menu colours for each role
     [❌] When role is cycled, move camera to the first found building (or unit if no building)
 
-
 [❌] Show different colours for each different assigned role
 [❌] Fire events for addons to use when a scenario starts
 
-[❌] Custom Building commands
-    [🟡] GUI menu:
+[✔] Custom Building commands
     - Use EditBox from TextInputClientEvents
     - On commands page:
          - List of command string inputs (by default 1 empty)
@@ -23,20 +21,19 @@ Scenario roles:
             - On built, on destroy, periodically while built (with extra timer button)
          - On right of each, delete button
          - Below last list, add new command line
-    [🟡] Send packets to server
-    [🟡] Save and load data
+    - Send packets to server
+    - Save and load data
 
 Bugfixes
 --------
 [❌] rts-hard-reset doesn't destroy buildings but rts-reset does?
-[❌] Castles still give a hero slot even when /gamerule allowedHeroes = 1
-[❌] In wave survival non-piglin factions attack portals
-[🟡] Fixed player selector not working for /rtsapi-set-camera
+[✔] Fixed player selector not working for /rtsapi-set-camera
 
 Quality of Life
 ---------------
 [❌] Make range, attack damage and attack speed part of entity data
 [❌] Ready check instead of start game countdown
+[✔] Added a "Nether terrain only" option to custom buildings
 
 Balance
 -------

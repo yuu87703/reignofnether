@@ -1511,6 +1511,8 @@
     "sandbox.reignofnether.custom_buildings.set_buildable_by_monsters.tooltip1": "Buildable during a match by zombie villagers",
     "sandbox.reignofnether.custom_buildings.set_buildable_by_piglins.label": "Buildable by Piglins",
     "sandbox.reignofnether.custom_buildings.set_buildable_by_piglins.tooltip1": "Buildable during a match by grunts",
+    "sandbox.reignofnether.custom_buildings.set_nether_terrain_only.label": "Nether terrain only",
+    "sandbox.reignofnether.custom_buildings.set_nether_terrain_only.tooltip1": "Buildable only on nether terrain",
     "sandbox.reignofnether.custom_buildings.set_food_cost.label": "Food Cost",
     "sandbox.reignofnether.custom_buildings.set_food_cost.tooltip1": "If neutral, grants 25%% to the player who destroys this",
     "sandbox.reignofnether.custom_buildings.set_wood_cost.label": "Wood Cost",

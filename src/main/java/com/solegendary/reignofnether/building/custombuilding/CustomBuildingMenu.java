@@ -169,6 +169,14 @@ public class CustomBuildingMenu {
                 },
                 I18n.get("sandbox.reignofnether.custom_buildings.set_buildable_by_piglins.tooltip1")
         ));
+        buttonsCol1.add(new BooleanButton(
+                I18n.get("sandbox.reignofnether.custom_buildings.set_nether_terrain_only.label"), customBuilding.netherTerrainOnly,
+                () -> {
+                    CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_NETHER_TERRAIN_ONLY, customBuilding.name, !customBuilding.netherTerrainOnly);
+                    customBuilding.netherTerrainOnly = !customBuilding.netherTerrainOnly;
+                },
+                I18n.get("sandbox.reignofnether.custom_buildings.set_nether_terrain_only.tooltip1")
+        ));
 
         Button setFoodCostButton = new IntegerButton(
                 I18n.get("sandbox.reignofnether.custom_buildings.set_food_cost.label") + ": " + customBuilding.cost.food,
