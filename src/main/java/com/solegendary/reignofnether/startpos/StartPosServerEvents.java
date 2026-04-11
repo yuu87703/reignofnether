@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.blocks.RTSStartBlock;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.player.RTSPlayer;
+import com.solegendary.reignofnether.rtsmap.RTSMapInfo;
 import com.solegendary.reignofnether.rtsmap.RTSMapInfoServerEvents;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
@@ -53,6 +54,9 @@ public class StartPosServerEvents {
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent evt) {
         if (evt.getPlacedBlock().getBlock() instanceof RTSStartBlock rtsStartBlock) {
+            if (RTSMapInfoServerEvents.usingMapInfoStartPositions() && evt.getLevel().getServer() != null) {
+                evt.getLevel().getServer().sendSystemMessage(Component.translatable("startpos.reignofnether.max_positions"));
+            }
             if (startPoses.size() < MAX_START_POSES) {
                 StartPos newStartPos = new StartPos(evt.getPos(), rtsStartBlock.defaultMapColor().id);
                 startPoses.add(newStartPos);
@@ -173,7 +177,7 @@ public class StartPosServerEvents {
     }
 
     public static void savePositions(ServerLevel serverLevel) {
-        if (RTSMapInfoServerEvents.rtsMapInfo == null) {
+        if (!RTSMapInfoServerEvents.usingMapInfoStartPositions()) {
             StartPosSaveData startPosData = StartPosSaveData.getInstance(serverLevel);
             startPosData.startPoses.clear();
             startPosData.startPoses.addAll(startPoses);
@@ -202,7 +206,7 @@ public class StartPosServerEvents {
     }
 
     public static void loadPositionsFromMapInfo() {
-        if (RTSMapInfoServerEvents.rtsMapInfo == null)
+        if (!RTSMapInfoServerEvents.usingMapInfoStartPositions())
             return;
         int playerColorIndex = 0;
         List<StartPos> oldStartPoses = new ArrayList<>(startPoses);

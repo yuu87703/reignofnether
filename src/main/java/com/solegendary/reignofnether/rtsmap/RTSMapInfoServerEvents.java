@@ -13,6 +13,10 @@ public class RTSMapInfoServerEvents {
 
     public static RTSMapInfo rtsMapInfo = null;
 
+    public static boolean usingMapInfoStartPositions() {
+        return rtsMapInfo != null && rtsMapInfo.supportsMode(rtsMapInfo.getDefaultMode());
+    }
+
     @SubscribeEvent
     public static void loadInfo(ServerStartedEvent evt) {
         ServerLevel level = evt.getServer().getLevel(Level.OVERWORLD);
