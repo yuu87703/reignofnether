@@ -25,6 +25,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 // manages start block and readied start (startRTSEveryone) actions
 
@@ -203,6 +205,7 @@ public class StartPosServerEvents {
         if (RTSMapInfoServerEvents.rtsMapInfo == null)
             return;
         int playerColorIndex = 0;
+        List<StartPos> oldStartPoses = new ArrayList<>(startPoses);
         startPoses.clear();
         for (List<BlockPos> teamStartPoses : RTSMapInfoServerEvents.rtsMapInfo.getTeams()) {
             for (BlockPos startBlockPos : teamStartPoses) {
@@ -210,7 +213,16 @@ public class StartPosServerEvents {
                 startPos.isFromStartBlock = false;
                 startPoses.add(startPos);
             }
+            playerColorIndex += 1;
+            if (playerColorIndex >= PlayerColors.colors.length)
+                playerColorIndex = 0;
         }
+        Set<BlockPos> newBlockPoses = startPoses.stream()
+                .map(sp -> sp.pos)
+                .collect(Collectors.toSet());
+        for (StartPos oldStartPos : oldStartPoses)
+            if (!newBlockPoses.contains(oldStartPos.pos))
+                StartPosClientboundPacket.removePos(oldStartPos.pos);
         for (StartPos startPos : startPoses)
             StartPosClientboundPacket.addPos(startPos);
     }

@@ -24,7 +24,7 @@ Scenario roles:
     - Send packets to server
     - Save and load data
 
-[❌] rtsmap.json support
+[🟡] rtsmap.json support
     - Read the rtsmap.json into a java class on map load
     - Write an /rts-set-team-mode command that can choose the mode available from map.json (or error if it wasn't specified)
     - If there is a map.json present and team mode chosen, use the given start positions and ignore start blocks
