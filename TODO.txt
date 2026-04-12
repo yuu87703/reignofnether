@@ -33,11 +33,16 @@ Bugfixes
 --------
 [✔] Fixed player selector not working for /rtsapi-set-camera
 
+[✔] Workers no longer automatically gather wood from bridges
+
+
 Quality of Life
 ---------------
 [❌] Make range, attack damage and attack speed part of entity data
 [❌] Ready check instead of start game countdown
 [✔] Added a "Nether terrain only" option to custom buildings
+
+[❌] Ravager artillery now have an attack-ground button
 
 Balance
 -------

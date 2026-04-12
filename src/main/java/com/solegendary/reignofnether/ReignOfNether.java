@@ -68,6 +68,7 @@ public class ReignOfNether {
         // Registering all components
         EnchantmentRegistrar.init(mlctx);
 
+        AttributeRegistrar.init(mlctx);
         ItemRegistrar.init(mlctx);
         EntityRegistrar.init(mlctx);
         ContainerRegistrar.init(mlctx);

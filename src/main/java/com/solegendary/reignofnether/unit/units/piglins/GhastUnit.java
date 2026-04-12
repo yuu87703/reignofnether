@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.ability.abilities.AttackGround;
 import com.solegendary.reignofnether.entities.GhastUnitFireball;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.AttributeRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -148,20 +149,12 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
         this.entityData.define(scenarioRoleDataAccessor, -1);
     }
 
-    // combat stats
-    public float getMovementSpeed() {return movementSpeed;}
-    public float getUnitMaxHealth() {return maxHealth;}
-
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.GHAST;}
     public boolean getWillRetaliate() {return willRetaliate;}
     public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
-    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
-    public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
-    public float getAttackRange() {return attackRange;}
-    public float getUnitAttackDamage() {return attackDamage;}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
     public Goal getAttackGoal() { return attackGoal; }
@@ -196,7 +189,6 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
     private final List<ItemStack> items = new ArrayList<>();
 
     public static final int EXPLOSION_POWER = 2;
-    public static final int FIREBALL_FIRE_BLOCKS = 2;
 
     private static final int SHOOTING_FACE_TICKS_MAX = 14;
     private int shootingFaceTicksLeft = 0;
@@ -220,7 +212,7 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
     public float getDamageAfterMagicAbsorb(DamageSource pSource, float pDamage) {
         pDamage = super.getDamageAfterMagicAbsorb(pSource, pDamage);
         if (pSource.is(DamageTypeTags.WITCH_RESISTANT_TO) || pSource.is(DamageTypes.ON_FIRE))
-            pDamage *= 0.5F;
+            pDamage *= (1 - getUnitMagicArmorPercentage());
         return pDamage;
     }
 
@@ -232,7 +224,13 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
                 .add(Attributes.ATTACK_DAMAGE, GhastUnit.attackDamage)
                 .add(Attributes.MOVEMENT_SPEED, GhastUnit.movementSpeed)
                 .add(Attributes.MAX_HEALTH, GhastUnit.maxHealth)
-                .add(Attributes.ARMOR, GhastUnit.armorValue);
+                .add(Attributes.ARMOR, GhastUnit.armorValue)
+                .add(AttributeRegistrar.ATTACK_DAMAGE.get(), attackDamage)
+                .add(AttributeRegistrar.ATTACKS_PER_SECOND.get(), attacksPerSecond)
+                .add(AttributeRegistrar.ATTACK_RANGE.get(), attackRange)
+                .add(AttributeRegistrar.AGGRO_RANGE.get(), aggroRange)
+                .add(AttributeRegistrar.RANGED_DAMAGE_RESIST.get(), 0)
+                .add(AttributeRegistrar.MAGIC_DAMAGE_RESIST.get(), 0.5f);
     }
 
     @Override // prevent vanilla logic for picking up items

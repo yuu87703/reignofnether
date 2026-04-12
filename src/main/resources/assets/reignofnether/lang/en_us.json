@@ -44,6 +44,20 @@
     "item.reignofnether.throwable_tnt": "Throwable TNT",
     "item.reignofnether.thrown_hero_experience_bottle": "Bottle O'Hero Experience",
 
+    "attribute.reignofnether.attack_damage": "Attack Damage",
+    "attribute.reignofnether.attacks_per_second": "Attacks per Second",
+    "attribute.reignofnether.attack_range": "Attack Range",
+    "attribute.reignofnether.aggro_range": "Aggro Range",
+    "attribute.reignofnether.ranged_damage_resist": "Ranged Damage Resist",
+    "attribute.reignofnether.magic_damage_resist": "Magic Damage Resist",
+
+    "attribute.reignofnether.max_mana": "Max Mana",
+    "attribute.reignofnether.mana_regen_per_second": "Mana Regen per Second",
+    "attribute.reignofnether.max_mana_bonus_per_level": "Max Mana Bonus per Level",
+    "attribute.reignofnether.max_health_bonus_per_level": "Max Health Bonus per Level",
+    "attribute.reignofnether.attack_damage_bonus_per_level": "Attack Damage Bonus per Level",
+
+
     "sounds.reignofnether.under_attack": "Under attack!",
     "sounds.reignofnether.victory": "Victory!",
     "sounds.reignofnether.defeat": "Defeat",

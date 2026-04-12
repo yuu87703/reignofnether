@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.ability.abilities.Roar;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.keybinds.Keybindings;
+import com.solegendary.reignofnether.registrars.AttributeRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
@@ -144,13 +145,7 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
     public boolean getWillRetaliate() {return willRetaliate;}
     public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
     public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
-    public float getBaseAttacksPerSecond() {return attacksPerSecond;}
-    public float getAggroRange() {return aggroRange;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
-    public float getAttackRange() {return attackRange;}
-    public float getMovementSpeed() {return movementSpeed;}
-    public float getUnitAttackDamage() {return attackDamage;}
-    public float getUnitMaxHealth() {return maxHealth;}
 
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.RAVAGER;}
@@ -207,7 +202,13 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
                 .add(Attributes.ARMOR, RavagerUnit.armorValue)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.75)
-                .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange());
+                .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
+                .add(AttributeRegistrar.ATTACK_DAMAGE.get(), attackDamage)
+                .add(AttributeRegistrar.ATTACKS_PER_SECOND.get(), attacksPerSecond)
+                .add(AttributeRegistrar.ATTACK_RANGE.get(), attackRange)
+                .add(AttributeRegistrar.AGGRO_RANGE.get(), aggroRange)
+                .add(AttributeRegistrar.RANGED_DAMAGE_RESIST.get(), 0)
+                .add(AttributeRegistrar.MAGIC_DAMAGE_RESIST.get(), 0);
     }
 
     // prevent shield blocks from stunning and triggering a roar
