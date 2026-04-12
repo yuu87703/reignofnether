@@ -58,6 +58,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -74,6 +76,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector3d;
 import org.lwjgl.glfw.GLFW;
 
@@ -1267,6 +1270,25 @@ public class UnitClientEvents {
                 }
             }
         }
+    }
+
+    public static void syncUnitAttribute(int entityId, String attrDesc, double attrValue) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) return;
+
+        Entity entity = mc.level.getEntity(entityId);
+        if (!(entity instanceof LivingEntity living)) return;
+
+        Attribute attr = ForgeRegistries.ATTRIBUTES.getValues().stream()
+                .filter(a -> a.getDescriptionId().equals(attrDesc))
+                .findFirst()
+                .orElse(null);
+        if (attr == null) return;
+
+        AttributeInstance instance = living.getAttribute(attr);
+        if (instance == null) return;
+
+        instance.setBaseValue(attrValue);
     }
 
     /*

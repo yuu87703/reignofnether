@@ -192,8 +192,8 @@ public interface Unit {
 
     // SOURCE: inherent unit stats and vanilla mechanics (like resistance)
     default double getUnitMagicArmorPercentage() {
-        Mob mob = (Mob) this;
-        return 1 - mob.getDamageAfterMagicAbsorb(mob.damageSources().magic(), 1);
+        AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.MAGIC_DAMAGE_RESIST.get());
+        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.MAGIC_DAMAGE_RESIST.get().getDefaultValue());
     }
 
     // SOURCE: resistance mob effect
