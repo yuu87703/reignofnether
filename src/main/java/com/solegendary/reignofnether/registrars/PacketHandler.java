@@ -95,10 +95,6 @@ public final class PacketHandler {
                 .encoder(UnitSyncServerboundPacket::encode).decoder(UnitSyncServerboundPacket::new)
                 .consumerMainThread(UnitSyncServerboundPacket::handle).add();
 
-        INSTANCE.messageBuilder(UnitSyncAttributeClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(UnitSyncAttributeClientboundPacket::encode).decoder(UnitSyncAttributeClientboundPacket::new)
-                .consumerMainThread(UnitSyncAttributeClientboundPacket::handle).add();
-
         INSTANCE.messageBuilder(UnitAnimationClientboundPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(UnitAnimationClientboundPacket::encode).decoder(UnitAnimationClientboundPacket::new)
                 .consumerMainThread(UnitAnimationClientboundPacket::handle).add();

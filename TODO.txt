@@ -46,8 +46,20 @@ Quality of Life
 
 [✔] Added a "Nether terrain only" option to custom buildings
 
-[✔] Almost all RoN units now have stats adjustable via /attributes
-    - Except for: Evokers, Marauders, Militia (due to their unique mechanics)
+attack damage
+attacks per second
+aggro range
+ranged armour %
+magic armour %
+movement speed
+
+for heroes:
+max mana
+mana regen per second
+max health
+attack damage bonus per level
+max health bonus per level
+max mana bonus per level
 
 Balance
 -------

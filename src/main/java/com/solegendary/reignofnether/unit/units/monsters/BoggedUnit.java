@@ -45,9 +45,6 @@ public class BoggedUnit extends SkeletonUnit implements Unit, AttackerUnit, Rang
 
     public static final int POISON_DAMAGE = 6;
 
-    @Override
-    public float getUnitAttackDamage() {return attackDamage;}
-
     final static public float attackDamage = 2.0f;
 
     @Override

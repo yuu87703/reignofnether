@@ -272,7 +272,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
     }
 
     public float getUnitAttackDamage() {
-        return attackDamagePerSize * getSize();
+        return AttackerUnit.super.getUnitAttackDamage() + (attackDamagePerSize * getSize());
     }
     public float getUnitMaxHealth() { return getMaxHealthForSize(getSize()); }
     public float getKnockbackResistance() {
@@ -295,8 +295,8 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         this.refreshDimensions();
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(getUnitMaxHealth());
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(getMovementSpeed());
-        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(getUnitAttackDamage());
-        this.getAttribute(AttributeRegistrar.ATTACK_DAMAGE.get()).setBaseValue(getUnitAttackDamage());
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(0);
+        this.getAttribute(AttributeRegistrar.ATTACK_DAMAGE.get()).setBaseValue(0);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(getKnockbackResistance());
         this.getAttribute(Attributes.ARMOR).setBaseValue(pSize == 1 ? 0 : armorPerSize * pSize);
 
