@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.abilities.AttackGround;
 import com.solegendary.reignofnether.ability.abilities.Eject;
 import com.solegendary.reignofnether.ability.abilities.Roar;
 import com.solegendary.reignofnether.building.BuildingPlacement;
@@ -217,7 +218,6 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
 
     public void tick() {
         this.setCanPickUpLoot(false);
-
         super.tick();
         Unit.tick(this);
         AttackerUnit.tick(this);

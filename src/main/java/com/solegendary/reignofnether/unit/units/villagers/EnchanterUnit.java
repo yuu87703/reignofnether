@@ -30,6 +30,7 @@ import com.solegendary.reignofnether.unit.modelling.animations.EnchanterAnimatio
 import com.solegendary.reignofnether.unit.modelling.renderers.EnchanterRenderer;
 import com.solegendary.reignofnether.unit.modelling.renderers.RoyalGuardRenderer;
 import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
+import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -324,22 +325,6 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     }
 
     @Override
-    public void setStatsForLevel(boolean heal) {
-        AttributeInstance aiMaxHealth = this.getAttribute(Attributes.MAX_HEALTH);
-        float newHealth = getBaseHealth() + ((getHeroLevel() - 1) * getHealthBonusPerLevel());
-        if (aiMaxHealth != null)
-            aiMaxHealth.setBaseValue(newHealth);
-        AttributeInstance aiAttackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (aiAttackDamage != null)
-            aiAttackDamage.setBaseValue(getBaseAttack() + ((getHeroLevel() - 1) * getAttackBonusPerLevel()));
-        this.setMaxMana(getBaseMaxMana() + ((getHeroLevel() - 1) * getManaBonusPerLevel()));
-        if (heal)
-            this.setHealth(this.getMaxHealth());
-        if (getHealth() > getMaxHealth())
-            setHealth(getMaxHealth());
-    }
-
-    @Override
     public boolean removeWhenFarAway(double d) { return false; }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -350,13 +335,14 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 .add(Attributes.MAX_HEALTH, EnchanterUnit.maxHealth)
                 .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
+                .add(AttributeRegistrar.BASE_MAX_HEALTH.get(), EnchanterUnit.maxHealth)
                 .add(AttributeRegistrar.ATTACK_DAMAGE.get(), attackDamage)
                 .add(AttributeRegistrar.ATTACKS_PER_SECOND.get(), attacksPerSecond)
                 .add(AttributeRegistrar.ATTACK_RANGE.get(), attackRange)
                 .add(AttributeRegistrar.AGGRO_RANGE.get(), aggroRange)
                 .add(AttributeRegistrar.RANGED_DAMAGE_RESIST.get(), 0)
                 .add(AttributeRegistrar.MAGIC_DAMAGE_RESIST.get(), magicDamageResist)
-                .add(AttributeRegistrar.MAX_MANA.get(), baseMaxMana)
+                .add(AttributeRegistrar.BASE_MAX_MANA.get(), baseMaxMana)
                 .add(AttributeRegistrar.MANA_REGEN_PER_SECOND.get(), manaRegenPerSecond)
                 .add(AttributeRegistrar.MAX_MANA_BONUS_PER_LEVEL.get(), manaBonusPerLevel)
                 .add(AttributeRegistrar.MAX_HEALTH_BONUS_PER_LEVEL.get(), maxHealthBonusPerLevel)

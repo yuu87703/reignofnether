@@ -47,9 +47,15 @@ public class AttributeRegistrar {
                             .setSyncable(true)
             );
 
-    public static final RegistryObject<Attribute> MAX_MANA =
-            ATTRIBUTES.register("max_mana",
-                    () -> new RangedAttribute("attribute.reignofnether.max_mana", 100, 1, 999999)
+    public static final RegistryObject<Attribute> BASE_MAX_HEALTH =
+            ATTRIBUTES.register("base_max_health",
+                    () -> new RangedAttribute("attribute.reignofnether.base_max_health", 100, 1, 999999)
+                            .setSyncable(true)
+            );
+
+    public static final RegistryObject<Attribute> BASE_MAX_MANA =
+            ATTRIBUTES.register("base_max_mana",
+                    () -> new RangedAttribute("attribute.reignofnether.base_max_mana", 100, 1, 999999)
                             .setSyncable(true)
             );
 

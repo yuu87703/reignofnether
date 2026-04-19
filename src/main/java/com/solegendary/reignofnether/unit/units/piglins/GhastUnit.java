@@ -20,7 +20,6 @@ import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.faction.Faction;
-import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.resources.language.I18n;
@@ -195,8 +194,8 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
     public boolean isShooting() { return shootingFaceTicksLeft > 0; }
     public void showShootingFace() { shootingFaceTicksLeft = SHOOTING_FACE_TICKS_MAX; }
 
-    private RangedFlyingAttackGroundGoal<?> attackGroundGoal;
-    @Override public RangedFlyingAttackGroundGoal<?> getRangedAttackGroundGoal() {
+    private RangedAttackGroundGoal<?> attackGroundGoal;
+    @Override public RangedAttackGroundGoal<?> getRangedAttackGroundGoal() {
         return attackGroundGoal;
     }
     private RangedAttackBuildingGoal<?> attackBuildingGoal;
@@ -327,7 +326,7 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
         this.moveGoal = new FlyingMoveToTargetGoal(this, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, true);
         this.attackGoal = new UnitBowAttackGoal<>(this);
-        this.attackGroundGoal = new RangedFlyingAttackGroundGoal<>(this, this.attackGoal);
+        this.attackGroundGoal = new RangedAttackGroundGoal<>(this, this.attackGoal);
         this.attackBuildingGoal = new RangedAttackBuildingGoal<>(this, this.attackGoal);
     }
 
@@ -342,7 +341,6 @@ public class GhastUnit extends Ghast implements Unit, AttackerUnit, RangedAttack
         this.goalSelector.addGoal(3, moveGoal);
     }
 
-    // for some reason this.getNavigation().stop(); doesn't stop spider units from moving
     @Override
     public void resetBehaviours() {
         this.getRangedAttackGroundGoal().stop();

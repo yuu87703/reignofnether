@@ -51,7 +51,8 @@
     "attribute.reignofnether.ranged_damage_resist": "Ranged Damage Resist",
     "attribute.reignofnether.magic_damage_resist": "Magic Damage Resist",
 
-    "attribute.reignofnether.max_mana": "Max Mana",
+    "attribute.reignofnether.base_max_health": "Base Max Health",
+    "attribute.reignofnether.base_max_mana": "Base Max Mana",
     "attribute.reignofnether.mana_regen_per_second": "Mana Regen per Second",
     "attribute.reignofnether.max_mana_bonus_per_level": "Max Mana Bonus per Level",
     "attribute.reignofnether.max_health_bonus_per_level": "Max Health Bonus per Level",

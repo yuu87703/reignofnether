@@ -54,7 +54,8 @@ magic armour %
 movement speed
 
 for heroes:
-max mana
+base max health
+base max mana
 mana regen per second
 max health
 attack damage bonus per level
