@@ -367,7 +367,7 @@ public class CustomBuildingMenu {
     private static final int EDIT_BOX_HEIGHT = 12;
     private static final int CONDITION_BUTTON_WIDTH = 32;
     private static final int TEXT_EDIT_BOX_WIDTH = 180;
-    private static final int COOLDOWN_EDIT_BOX_WIDTH = 34;
+    private static final int COOLDOWN_EDIT_BOX_WIDTH = 40;
 
     private static final ArrayList<MyEditBox> commandEditBoxes = new ArrayList<>();
     private static final ArrayList<MyEditBox> commandCooldownEditBoxes = new ArrayList<>();
@@ -384,16 +384,16 @@ public class CustomBuildingMenu {
             CustomBuildingCommand cmd = customBuilding.commands.get(idx);
 
             MyEditBox cdBox = new MyEditBox.Builder(editBoxX, rowY, COOLDOWN_EDIT_BOX_WIDTH, EDIT_BOX_HEIGHT)
-                    .maxLength(4)
-                    .value(String.valueOf(cmd.tickCooldownMax / 20))
+                    .maxLength(5)
+                    .value(String.valueOf(cmd.tickCooldownMax))
                     .isNumber(true)
                     .onDefocus(value -> {
                         try {
-                            cmd.tickCooldownMax = Integer.parseInt(value) * 20;
+                            cmd.tickCooldownMax = Integer.parseInt(value);
                             CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, value);
                         } catch (NumberFormatException e) {
-                            cmd.tickCooldownMax = 20;
-                            CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, "1");
+                            cmd.tickCooldownMax = 100;
+                            CustomBuildingServerboundPacket.customiseBuilding(CustomBuildingAction.SET_COMMAND_COOLDOWN, customBuilding.name, idx, "100");
                         }
                     })
                     .tooltipLines(List.of(fcs(I18n.get("sandbox.reignofnether.custom_buildings.commands.cooldown"))))
@@ -440,7 +440,6 @@ public class CustomBuildingMenu {
         if (!customBuilding.commands.isEmpty())
             if (commandEditBoxes.isEmpty() || commandCooldownEditBoxes.isEmpty())
                 registerCommandEditBoxes(customBuilding, x, y);
-
 
         for (int i = 0; i < customBuilding.commands.size(); i++) {
             final int idx = i;

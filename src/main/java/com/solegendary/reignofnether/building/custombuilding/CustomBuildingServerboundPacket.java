@@ -99,7 +99,7 @@ public class CustomBuildingServerboundPacket {
                     case ADD_COMMAND -> customBuilding.addCommand();
                     case DELETE_COMMAND -> customBuilding.deleteCommand(this.intValue);
                     case SET_COMMAND_TEXT -> customBuilding.setCommandText(this.intValue, this.strValue);
-                    case SET_COMMAND_COOLDOWN -> customBuilding.setCommandCooldownSeconds(this.intValue, this.strValue);
+                    case SET_COMMAND_COOLDOWN -> customBuilding.setCommandCooldownTicks(this.intValue, this.strValue);
                     case SET_COMMAND_TRIGGER -> customBuilding.setCommandTrigger(this.intValue, this.strValue);
                 }
             }

@@ -145,7 +145,6 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.HEADHUNTER;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getUnitAttackDamage() {return AttackerUnit.super.getUnitAttackDamage() + (hasFlameTrident() ? 1 : 0) + getPowerLevel();}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
@@ -162,8 +161,6 @@ public class HeadhunterUnit extends PiglinBrute implements Unit, AttackerUnit, R
     private UnitBowAttackGoal<? extends LivingEntity> attackGoal;
 
     // endregion
-
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
 
     final static public float attackDamage = 6.0f;
     final static public float attacksPerSecond = 0.3f;

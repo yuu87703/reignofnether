@@ -116,7 +116,7 @@ public class CustomBuildingClientEvents {
         if (customBuildingToEdit != null && MC.screen instanceof TopdownGui) {
             int blitX = 100;
             int blitY = 30;
-            int width = 310;
+            int width = 315;
             int height = 225;
             MyRenderer.renderFrameWithBg(evt.getGuiGraphics(), blitX, blitY, width, height, 0xA0000000);
 

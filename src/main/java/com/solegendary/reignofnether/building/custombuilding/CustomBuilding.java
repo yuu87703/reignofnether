@@ -284,17 +284,17 @@ public class CustomBuilding extends Building {
         }
     }
 
-    public void setCommandCooldownSeconds(int index, String cooldownSecondsStr) {
-        int cooldownSeconds;
+    public void setCommandCooldownTicks(int index, String cooldownTicksStr) {
+        int cooldownTicks;
         try {
-            cooldownSeconds = Integer.parseInt(cooldownSecondsStr);
+            cooldownTicks = Integer.parseInt(cooldownTicksStr);
         } catch (NumberFormatException e) {
             System.out.println("NumberFormatException in setCommandCooldown");
             return;
         }
         try {
-            this.commands.get(index).tickCooldownMax = cooldownSeconds * 20;
-            this.commands.get(index).tickCooldown = cooldownSeconds * 20;
+            this.commands.get(index).tickCooldownMax = cooldownTicks;
+            this.commands.get(index).tickCooldown = cooldownTicks;
         } catch (IndexOutOfBoundsException e) {
             System.out.println("IndexOutOfBoundsException in setCommandCooldown");
         }

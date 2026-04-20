@@ -117,8 +117,6 @@ public class SilverfishUnit extends Silverfish implements Unit, AttackerUnit {
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
-    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
 
     public ResourceCost getCost() {return ResourceCost.Unit(0,0, 0, 0,0);}

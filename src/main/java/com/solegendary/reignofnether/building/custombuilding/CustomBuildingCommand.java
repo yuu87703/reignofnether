@@ -6,11 +6,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.GarrisonableBuilding;
+import com.solegendary.reignofnether.player.PlayerServerEvents;
+import com.solegendary.reignofnether.player.RTSPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
@@ -28,8 +31,8 @@ public class CustomBuildingCommand {
         NONE
     }
 
-    public int tickCooldown = 20;
-    public int tickCooldownMax = 20;
+    public int tickCooldown = 100;
+    public int tickCooldownMax = 100;
     public String commandStr = "";
     public TriggerCondition condition = TriggerCondition.NONE;
     public boolean isValid = true; // updated whenever commandStr is updated
@@ -80,8 +83,8 @@ public class CustomBuildingCommand {
     }
 
     public void tick(BuildingPlacement bpl) {
-        if (bpl.tickAge % 20 == 0 && tickCooldown > 0)
-            tickCooldown -= 20;
+        if (tickCooldown > 0)
+            tickCooldown -= 1;
         if (tickCooldown <= 0 && checkTickingCondition(bpl)) {
             tickCooldown = tickCooldownMax;
             run(bpl);
@@ -98,11 +101,24 @@ public class CustomBuildingCommand {
 
     public void run(BuildingPlacement bpl) {
         if (bpl.level instanceof ServerLevel level) {
-            CommandSourceStack source = level.getServer()
-                    .createCommandSourceStack()
-                    .withPosition(bpl.minCorner.offset(-1, 0, -1).getCenter())
-                    .withLevel(level)
-                    .withSuppressedOutput();
+
+            ServerPlayer player = level.getServer().getPlayerList().getPlayerByName(bpl.ownerName);
+
+            CommandSourceStack source;
+            if (player != null) {
+                source = level.getServer()
+                        .createCommandSourceStack()
+                        .withPosition(bpl.minCorner.offset(-1, 0, -1).getCenter())
+                        .withLevel(level)
+                        .withSuppressedOutput()
+                        .withSource(player);
+            } else {
+                source = level.getServer()
+                        .createCommandSourceStack()
+                        .withPosition(bpl.minCorner.offset(-1, 0, -1).getCenter())
+                        .withLevel(level)
+                        .withSuppressedOutput();
+            }
             level.getServer().getCommands().performPrefixedCommand(source, commandStr);
         }
     }

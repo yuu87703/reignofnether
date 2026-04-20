@@ -140,7 +140,6 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.MARAUDER;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getUnitAttackDamage() {
         if (useCleavingHitDamage) {
@@ -159,8 +158,6 @@ public class MarauderUnit extends PiglinBrute implements Unit, AttackerUnit, Key
     public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
 
     // endregion
-
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
 
     final static public float attackDamage = 7.0f;
     final static public float bigHitDamage = 10.0f;

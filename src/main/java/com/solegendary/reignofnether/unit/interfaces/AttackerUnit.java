@@ -39,8 +39,12 @@ import java.util.List;
 public interface AttackerUnit {
 
     public boolean getWillRetaliate();
-    public float getAttackCooldown();
-    public float getAttacksPerSecond();
+    public default float getAttacksPerSecond() {
+        return 20f / getAttackCooldown();
+    }
+    public default float getAttackCooldown() {
+        return ((20 / getBaseAttacksPerSecond()) * getAttackCooldownMultiplier());
+    }
     public boolean getAggressiveWhenIdle();
     public default float getBaseAttacksPerSecond() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.ATTACKS_PER_SECOND.get());

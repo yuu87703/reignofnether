@@ -1,5 +1,5 @@
 
-1.20.1-1.3.2
+1.20.1-1.3.2a
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -13,54 +13,24 @@ Scenario roles:
 [❌] Show different colours for each different assigned role
 [❌] Fire events for addons to use when a scenario starts
 
-[✔] Custom Building commands
-    - Use EditBox from TextInputClientEvents
-    - On commands page:
-         - List of command string inputs (by default 1 empty)
-         - On left of each, trigger condition
-            - On built, on destroy, periodically while built (with extra timer button)
-         - On right of each, delete button
-         - Below last list, add new command line
-    - Send packets to server
-    - Save and load data
-
-[🟡] rtsmap.json support
-    - Read the rtsmap.json into a java class on map load
-    - Write an /rts-set-team-mode command that can choose the mode available from map.json (or error if it wasn't specified)
-    - If there is a map.json present and team mode chosen, use the given start positions and ignore start blocks
-
 Bugfixes
 --------
-[✔] Fixed player selector not working for /rtsapi-set-camera
-
-[✔] Workers no longer automatically gather wood from bridges
-
+[✔] Fixed /attribute for attacks_per_second, except for:
+    - Slimes & Magma Cubes
+    - Evokers
+    - Pillagers
+    - Militia
 
 Quality of Life
 ---------------
 [❌] Ready check instead of start game countdown
-
 [❌] Ravager artillery now have an attack-ground button
-
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 
-[✔] Added a "Nether terrain only" option to custom buildings
+[✔] The executor of custom building commands are now the player that owns the building
+    - If the owner is non-existent or logged out, the executor will be the server
 
-attack damage
-attacks per second
-aggro range
-ranged armour %
-magic armour %
-movement speed
-
-for heroes:
-base max health
-base max mana
-mana regen per second
-max health
-attack damage bonus per level
-max health bonus per level
-max mana bonus per level
+[✔] Custom building command cooldowns are now set by ticks instead of seconds
 
 Balance
 -------

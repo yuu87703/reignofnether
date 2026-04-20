@@ -148,15 +148,14 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
     public ResourceCost getCost() {return ResourceCosts.MILITIA;}
     public boolean getWillRetaliate() {return willRetaliate;}
     public float getAttackCooldown() {return ((20 / (isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond)) * getAttackCooldownMultiplier());}
-    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public float getBaseAttacksPerSecond() {return isUsingBow() ? rangedAttacksPerSecond : attacksPerSecond;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getAttackRange() {return isUsingBow() ? AttackerUnit.super.getAttackRange() : 2;}
     public float getUnitAttackDamage() {
         if (isUsingBow()) {
-            return rangedAttackDamage + getPowerLevel();
+            return AttackerUnit.super.getUnitAttackDamage() + getPowerLevel();
         } else {
-            return attackDamage + getSharpnessLevel();
+            return AttackerUnit.super.getUnitAttackDamage() + getSharpnessLevel();
         }
     }
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
@@ -195,7 +194,6 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
     public boolean bowEnchanted = false;
 
     final static public float attackDamage = 3.0f;
-    final static public float rangedAttackDamage = 3.0f;
     final static public float attacksPerSecond = 0.5f;
     final static public float rangedAttacksPerSecond = 0.3f;
     final static public float attackRange = 10; // only used by ranged units or melee building attackers
@@ -236,9 +234,6 @@ public class MilitiaUnit extends Vindicator implements Unit, AttackerUnit, Range
         AttributeModifier mod = new AttributeModifier(UUID.randomUUID().toString(), damageMod, AttributeModifier.Operation.ADDITION);
         weaponStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, mod, EquipmentSlot.MAINHAND);
         this.setItemSlot(EquipmentSlot.MAINHAND, weaponStack);
-        AttributeInstance ai1 = getAttribute(Attributes.ATTACK_DAMAGE);
-        if (ai1 != null)
-            ai1.setBaseValue(useBow ? rangedAttackDamage : attackDamage);
         AttributeInstance ai2 = getAttribute(Attributes.MOVEMENT_SPEED);
         if (ai2 != null)
             ai2.setBaseValue(useBow ? rangedMovementSpeed : movementSpeed);

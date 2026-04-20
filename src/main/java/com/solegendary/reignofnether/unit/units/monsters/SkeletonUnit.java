@@ -141,8 +141,6 @@ public class SkeletonUnit extends Skeleton implements Unit, AttackerUnit, Ranged
 
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
-    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public float getUnitAttackDamage() {return AttackerUnit.super.getUnitAttackDamage() + getPowerLevel();}
 

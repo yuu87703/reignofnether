@@ -141,7 +141,6 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.HOGLIN;}
     public boolean getWillRetaliate() {return willRetaliate;}
-    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
@@ -160,8 +159,6 @@ public class HoglinUnit extends Hoglin implements Unit, AttackerUnit, Convertabl
     public void setShouldDiscard(boolean discard) { this.shouldDiscard = discard; }
 
     // endregion
-
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
 
     final static public float attackDamage = 5.0f;
     final static public float attacksPerSecond = 0.45f;

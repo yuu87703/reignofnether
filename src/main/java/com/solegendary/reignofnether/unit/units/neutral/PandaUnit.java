@@ -175,8 +175,6 @@ public class PandaUnit extends Panda implements Unit, AttackerUnit {
     }
 
     public boolean getWillRetaliate() { return willRetaliate; }
-    public float getAttackCooldown() {return ((20 / attacksPerSecond) * getAttackCooldownMultiplier());}
-    public float getAttacksPerSecond() {return 20f / getAttackCooldown();}
     public boolean getAggressiveWhenIdle() { return aggressiveWhenIdle && !isVehicle(); }
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() { return getAttackBuildingGoal() != null; }

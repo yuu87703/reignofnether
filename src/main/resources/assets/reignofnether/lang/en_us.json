@@ -1556,7 +1556,7 @@
     "sandbox.reignofnether.custom_buildings.commands.trigger.none": "Trigger: None",
     "sandbox.reignofnether.custom_buildings.commands.add": "Add new command",
     "sandbox.reignofnether.custom_buildings.commands.delete": "Delete command",
-    "sandbox.reignofnether.custom_buildings.commands.cooldown": "Cooldown (seconds)",
+    "sandbox.reignofnether.custom_buildings.commands.cooldown": "Cooldown (ticks)",
     "sandbox.reignofnether.custom_buildings.commands.invalid": "Invalid Command",
 
     "startpos.reignofnether.positions_button.tooltip1": "Starting Locations",
