@@ -5,16 +5,13 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.solegendary.reignofnether.building.BuildingPlacement;
-import com.solegendary.reignofnether.building.GarrisonableBuilding;
-import com.solegendary.reignofnether.player.PlayerServerEvents;
-import com.solegendary.reignofnether.player.RTSPlayer;
+import com.solegendary.reignofnether.building.addon.GarrisonableBuildingAddon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,9 +89,10 @@ public class CustomBuildingCommand {
     }
 
     public boolean checkTickingCondition(BuildingPlacement bpl) {
+        GarrisonableBuildingAddon gba;
         return switch (condition) {
             case OFF_COOLDOWN_IF_COMPLETE -> bpl.isBuilt;
-            case OFF_COOLDOWN_IF_GARRISONED -> bpl instanceof GarrisonableBuilding garr && !garr.getOccupants().isEmpty();
+            case OFF_COOLDOWN_IF_GARRISONED -> (gba = bpl.getBuilding().getActiveAddon(GarrisonableBuildingAddon.class)) != null && !gba.getOccupants(bpl).isEmpty();
             default -> false;
         };
     }
