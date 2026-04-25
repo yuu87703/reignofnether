@@ -29,7 +29,6 @@ import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.faction.Faction;
-import com.solegendary.reignofnether.unit.units.piglins.WitherSkeletonUnit;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
@@ -319,8 +318,11 @@ public interface Unit {
         }
 
         if (unitMob.tickCount % 20 == 0) {
-            if (unit.hasEffectWithDuration(MobEffectRegistrar.UNCONTROLLABLE.get())) {
+            if (unit.hasEffectWithDuration(MobEffectRegistrar.ANGRY.get())) {
                 addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
+            }
+            if (unit.hasEffectWithDuration(MobEffectRegistrar.FEARFUL.get())) {
+                addParticlesAroundSelf(unit, ParticleTypes.SCULK_SOUL);
             }
         }
 

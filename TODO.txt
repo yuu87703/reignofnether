@@ -20,7 +20,7 @@
 
 Bugfixes
 --------
-
+[❌] Tridents summoned from commands no longer pierce all units
 
 Quality of Life
 ---------------
@@ -28,11 +28,11 @@ Quality of Life
 [❌] Ravager artillery now have an attack-ground button
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 
-
+[❌] Attribute modifiers now correctly apply to units
 
 Balance
 -------
-
+[🟡] The wretched wraith now fully immune to knockback and has no collision at all times
 
 Languages
 ---------

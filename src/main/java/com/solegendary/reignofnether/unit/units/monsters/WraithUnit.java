@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +58,6 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     @Override public Object2ObjectArrayMap<Ability, Integer> getCharges() { return charges; }
 
     Ability autocast;
-
 
     private int eatingTicksLeft = 0;
     public void setEatingTicksLeft(int amount) { eatingTicksLeft = amount; }
@@ -221,7 +221,7 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
                 .add(Attributes.ARMOR, WraithUnit.armorValue)
                 .add(Attributes.ATTACK_KNOCKBACK, 0f)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.66f)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0f)
                 .add(AttributeRegistrar.ATTACK_DAMAGE.get(), attackDamage)
                 .add(AttributeRegistrar.ATTACKS_PER_SECOND.get(), attacksPerSecond)
                 .add(AttributeRegistrar.ATTACK_RANGE.get(), attackRange)
@@ -270,6 +270,15 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         this.readUnitSaveData(pCompound);
     }
 
+    @Override
+    public SunlightEffect getSunlightEffect() {
+        if (hasItemInSlot(EquipmentSlot.HEAD) && getItemBySlot(EquipmentSlot.HEAD).getItem() != Items.CARVED_PUMPKIN) {
+            return SunlightEffect.SLOWNESS_II;
+        } else {
+            return SunlightEffect.FIRE;
+        }
+    }
+
     public void initialiseGoals() {
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
@@ -278,7 +287,6 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
         this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
-
     }
 
     @Override
@@ -292,5 +300,23 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         this.targetSelector.addGoal(2, targetGoal);
         this.goalSelector.addGoal(3, moveGoal);
         this.goalSelector.addGoal(4, new RandomLookAroundUnitGoal(this));
+    }
+
+    @Override
+    public boolean isPushable() {
+        return true;
+    }
+
+    @Override
+    protected void doPush(Entity entity) {
+        if (entity.getClass() == this.getClass()) {
+            super.doPush(entity);
+        }
+    }
+    @Override
+    public void push(Entity entity) {
+        if (entity.getClass() == this.getClass()) {
+            super.push(entity);
+        }
     }
 }

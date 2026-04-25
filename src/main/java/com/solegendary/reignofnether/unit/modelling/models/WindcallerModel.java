@@ -6,18 +6,21 @@ package com.solegendary.reignofnether.unit.modelling.models;// Made with Blockbe
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.solegendary.reignofnether.ReignOfNether;
-import net.minecraft.client.model.EntityModel;
+import com.solegendary.reignofnether.unit.modelling.animations.WindcallerAnimations;
+import com.solegendary.reignofnether.unit.units.villagers.WindcallerUnit;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 // Made with Blockbench 5.0.7
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
-public class WindcallerModel<T extends Entity> extends EntityModel<T> {
+public class WindcallerModel<T extends Entity> extends KeyframeHierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(ReignOfNether.MOD_ID, "windcaller_layer"), "main");
 	private final ModelPart bone;
@@ -91,8 +94,44 @@ public class WindcallerModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public ModelPart root() {
+		return this.bone;
+	}
 
+	@Override
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		WindcallerUnit windcaller = ((WindcallerUnit) entity);
+
+		if (windcaller.animateScale > 0 && windcaller.animateScaleReducing) {
+			windcaller.animateScale -= 0.02f;
+		}
+		if (windcaller.animateScale <= 0) {
+			windcaller.animateScale = 1.0f;
+			windcaller.activeAnimDef = null;
+			windcaller.activeAnimState = null;
+			windcaller.animateScaleReducing = false;
+			windcaller.stopAllAnimations();
+		}
+
+		AttributeInstance ms = windcaller.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (ms == null)
+			return;
+		float speed = (float) ms.getValue() * 10;
+
+		// any once-off animation like attack or cast spell
+		if (windcaller.activeAnimDef != null && windcaller.activeAnimState != null && windcaller.animateTicks > 0) {
+			restartThenAnimate(windcaller, windcaller.activeAnimState, windcaller.activeAnimDef, ageInTicks, windcaller.animateScale, windcaller.animateSpeed);
+		}
+		// walk animation
+		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
+			restart(windcaller, windcaller.walkAnimState, ageInTicks);
+			animateWalk(WindcallerAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
+		}
+		// idle animation
+		else {
+			restartThenAnimate(windcaller, windcaller.idleAnimState, WindcallerAnimations.IDLE, ageInTicks);
+		}
 	}
 
 	@Override

@@ -764,7 +764,20 @@ public class WretchedWraithUnit extends Monster implements Unit, AttackerUnit, H
 
     @Override
     public boolean isPushable() {
-        return !isBlizzardInProgress() && !isFrostBlinkInProgress();
+        return true;
+    }
+
+    @Override
+    protected void doPush(Entity entity) {
+        if (entity.getClass() == this.getClass()) {
+            super.doPush(entity);
+        }
+    }
+    @Override
+    public void push(Entity entity) {
+        if (entity.getClass() == this.getClass()) {
+            super.push(entity);
+        }
     }
 
     @Override

@@ -642,6 +642,7 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
                 Unit.fullResetBehaviours((Unit) attackerUnit);
                 attackerUnit.setUnitAttackTargetForced(this);
                 ((LivingEntity) attackerUnit).addEffect(new MobEffectInstance(MobEffectRegistrar.UNCONTROLLABLE.get(), tauntingCry.duration));
+                ((LivingEntity) attackerUnit).addEffect(new MobEffectInstance(MobEffectRegistrar.ANGRY.get(), tauntingCry.duration));
             }
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, tauntingCry.duration, 2));
             this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, tauntingCry.duration, 2));
