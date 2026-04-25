@@ -787,6 +787,8 @@ public class UnitServerEvents {
         }
         if (sourceEntity instanceof WretchedWraithUnit)
             return true;
+        if (sourceEntity instanceof WraithUnit)
+            return true;
         if (sourceEntity instanceof SlimeUnit slimeUnit && slimeUnit.isTiny())
             return true;
         if (projectile instanceof Fireball && sourceEntity instanceof BlazeUnit)

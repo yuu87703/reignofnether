@@ -6,15 +6,18 @@ package com.solegendary.reignofnether.unit.modelling.models;// Made with Blockbe
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.solegendary.reignofnether.ReignOfNether;
-import net.minecraft.client.model.EntityModel;
+import com.solegendary.reignofnether.unit.modelling.animations.WraithAnimations;
+import com.solegendary.reignofnether.unit.units.monsters.WraithUnit;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
-public class WraithModel<T extends Entity> extends EntityModel<T> {
+public class WraithModel<T extends Entity> extends KeyframeHierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(ReignOfNether.MOD_ID, "wraith_layer"), "main");
 	private final ModelPart bodyrotation;
@@ -55,8 +58,44 @@ public class WraithModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public ModelPart root() {
+		return this.bodyrotation;
+	}
 
+	@Override
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		WraithUnit wraith = ((WraithUnit) entity);
+
+		if (wraith.animateScale > 0 && wraith.animateScaleReducing) {
+			wraith.animateScale -= 0.02f;
+		}
+		if (wraith.animateScale <= 0) {
+			wraith.animateScale = 1.0f;
+			wraith.activeAnimDef = null;
+			wraith.activeAnimState = null;
+			wraith.animateScaleReducing = false;
+			wraith.stopAllAnimations();
+		}
+
+		AttributeInstance ms = wraith.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (ms == null)
+			return;
+		float speed = (float) ms.getValue() * 10;
+
+		// any once-off animation like attack or cast spell
+		if (wraith.activeAnimDef != null && wraith.activeAnimState != null && wraith.animateTicks > 0) {
+			restartThenAnimate(wraith, wraith.activeAnimState, wraith.activeAnimDef, ageInTicks, wraith.animateScale, wraith.getAnimationSpeed());
+		}
+		// walk animation
+		else if (!entity.isInWaterOrBubble() && limbSwingAmount > 0.001f) {
+			restart(wraith, wraith.walkAnimState, ageInTicks);
+			animateWalk(WraithAnimations.WALK, limbSwing, limbSwingAmount, speed, speed);
+		}
+		// idle animation
+		else {
+			restartThenAnimate(wraith, wraith.idleAnimState, WraithAnimations.IDLE, ageInTicks);
+		}
 	}
 
 	@Override
