@@ -133,6 +133,8 @@ public class ReignOfNetherCommonConfigs {
         ResearchCosts.RESEARCH_DROWNED.define(BUILDER);
         ResearchCosts.RESEARCH_STRAYS.define(BUILDER);
         ResearchCosts.RESEARCH_BOGGED.define(BUILDER);
+        ResearchCosts.RESEARCH_OVERFLOWING_GRAVEYARD.define(BUILDER);
+        ResearchCosts.RESEARCH_MASS_BURIALS.define(BUILDER);
         ResearchCosts.RESEARCH_SLIME_CONVERSION.define(BUILDER);
         ResearchCosts.RESEARCH_LINGERING_POTIONS.define(BUILDER);
         ResearchCosts.RESEARCH_HEALING_POTIONS.define(BUILDER);
@@ -293,6 +295,8 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry RESEARCH_DROWNED = ResourceCostConfigEntry.Research(500,0,500, 200, ResourceCosts.RESEARCH_DROWNED, "Drowned Research Config");
         public static final ResourceCostConfigEntry RESEARCH_STRAYS = ResourceCostConfigEntry.Research(500,500,0, 200, ResourceCosts.RESEARCH_STRAYS, "Stray Research Config");
         public static final ResourceCostConfigEntry RESEARCH_BOGGED = ResourceCostConfigEntry.Research(300,300,0, 140, ResourceCosts.RESEARCH_BOGGED, "Bogged Research Config");
+        public static final ResourceCostConfigEntry RESEARCH_OVERFLOWING_GRAVEYARD = ResourceCostConfigEntry.Research(0,75,75, 60, ResourceCosts.RESEARCH_OVERFLOWING_GRAVEYARD, "Overflowing Graveyard Research Config");
+        public static final ResourceCostConfigEntry RESEARCH_MASS_BURIALS = ResourceCostConfigEntry.Research(0,300,300, 140, ResourceCosts.RESEARCH_MASS_BURIALS, "Mass Burials Research Config");
         public static final ResourceCostConfigEntry RESEARCH_SLIME_CONVERSION = ResourceCostConfigEntry.Research(300,0,300, 140, ResourceCosts.RESEARCH_SLIME_CONVERSION, "Slime Conversion Research Config");
         public static final ResourceCostConfigEntry RESEARCH_LINGERING_POTIONS = ResourceCostConfigEntry.Research(0,250,250, 140, ResourceCosts.RESEARCH_LINGERING_POTIONS, "Extended Lingering Potion Research Config");
         public static final ResourceCostConfigEntry RESEARCH_HEALING_POTIONS = ResourceCostConfigEntry.Research(0,350,350, 180, ResourceCosts.RESEARCH_HEALING_POTIONS, "Healing Potion Research Config");

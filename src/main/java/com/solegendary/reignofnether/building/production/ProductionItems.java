@@ -74,6 +74,8 @@ public class ProductionItems {
     public static final ResearchDrowned RESEARCH_DROWNED = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_drowned"), new ResearchDrowned());
     public static final ResearchStrays RESEARCH_STRAYS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_strays"), new ResearchStrays());
     public static final ResearchBogged RESEARCH_BOGGED = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_bogged"), new ResearchBogged());
+    public static final ResearchOverflowingGraveyard RESEARCH_OVERFLOWING_GRAVEYARD = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_overflowing_graveyard"), new ResearchOverflowingGraveyard());
+    public static final ResearchMassBurials RESEARCH_MASS_BURIAL = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "research_mass_burial"), new ResearchMassBurials());
     public static final ResearchSlimeConversion RESEARCH_SLIME_CONVERSION = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "slime_conversion"), new ResearchSlimeConversion());
     public static final ResearchLingeringPotions RESEARCH_LINGERING_POTIONS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "lingering_potions"), new ResearchLingeringPotions());
     public static final ResearchWaterPotions RESEARCH_WATER_POTIONS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "water_potions"), new ResearchWaterPotions());

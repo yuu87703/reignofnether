@@ -2,8 +2,7 @@ package com.solegendary.reignofnether.building;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.EnchantAbility;
-import com.solegendary.reignofnether.ability.EnchantEquipAbilityClientsidePacket;
-import com.solegendary.reignofnether.ability.EnchantEquipAbilityServersidePacket;
+import com.solegendary.reignofnether.ability.BuildingAbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.EquipAbility;
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.building.addon.GarrisonableBuildingAddon;
@@ -538,12 +537,12 @@ public class BuildingServerEvents {
             if (building.getBuilding() instanceof Library) {
                 EnchantAbility ability = building.getDataStorage().getData(Library.AUTO_CAST_ENCHANT);
                 if (ability != null) {
-                    EnchantEquipAbilityClientsidePacket.setAutocastEnchantOrEquipServerside(ability.action, building.originPos);
+                    BuildingAbilityClientboundPacket.doAbility(ability.action, building.originPos);
                 }
             }else if (building.getBuilding() instanceof Blacksmith) {
                 EquipAbility ability = building.getDataStorage().getData(Blacksmith.AUTO_CAST_EQUIP);
                 if (ability != null) {
-                    EnchantEquipAbilityClientsidePacket.setAutocastEnchantOrEquipServerside(ability.action, building.originPos);
+                    BuildingAbilityClientboundPacket.doAbility(ability.action, building.originPos);
                 }
             }
         }

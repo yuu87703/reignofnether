@@ -120,6 +120,8 @@ public class ResourceCosts {
     public static final ResourceCost RESEARCH_DROWNED = new ResourceCost(ID, "RESEARCH_DROWNED");
     public static final ResourceCost RESEARCH_STRAYS = new ResourceCost(ID, "RESEARCH_STRAYS");
     public static final ResourceCost RESEARCH_BOGGED = new ResourceCost(ID, "RESEARCH_BOGGED");
+    public static final ResourceCost RESEARCH_OVERFLOWING_GRAVEYARD = new ResourceCost(ID, "RESEARCH_OVERFLOWING_GRAVEYARD");
+    public static final ResourceCost RESEARCH_MASS_BURIALS = new ResourceCost(ID, "RESEARCH_MASS_BURIALS");
     public static final ResourceCost RESEARCH_SLIME_CONVERSION = new ResourceCost(ID, "RESEARCH_SLIME_CONVERSION");
     public static final ResourceCost RESEARCH_LINGERING_POTIONS = new ResourceCost(ID, "RESEARCH_LINGERING_POTIONS");
     public static final ResourceCost RESEARCH_HEALING_POTIONS = new ResourceCost(ID, "RESEARCH_HEALING_POTIONS");
@@ -309,6 +311,8 @@ public class ResourceCosts {
         RESEARCH_DROWNED.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_DROWNED);
         RESEARCH_STRAYS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_STRAYS);
         RESEARCH_BOGGED.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_BOGGED);
+        RESEARCH_OVERFLOWING_GRAVEYARD.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_OVERFLOWING_GRAVEYARD);
+        RESEARCH_MASS_BURIALS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_MASS_BURIALS);
         RESEARCH_SLIME_CONVERSION.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_SLIME_CONVERSION);
         RESEARCH_LINGERING_POTIONS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_LINGERING_POTIONS);
         RESEARCH_WATER_POTIONS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_WATER_POTIONS);

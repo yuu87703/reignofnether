@@ -30,6 +30,9 @@ public enum UnitAction {
     // special abilities - these can also be assigned to cursor actions
     EXPLODE,
     CALL_LIGHTNING, // actually not from a unit, but we'll make an exception
+    TOGGLE_GRAVEYARD_RELEASE,
+    SET_GRAVEYARD_RELEASE_ON,
+    SET_GRAVEYARD_RELEASE_OFF,
     TELEPORT,
     MOUNT,
     MOUNT_SPIDER,
