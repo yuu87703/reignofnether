@@ -1,9 +1,10 @@
 package com.solegendary.reignofnether.building.buildings.monsters;
 
+import com.solegendary.reignofnether.ability.abilities.SetGraveyardReleaseOff;
+import com.solegendary.reignofnether.ability.abilities.SetGraveyardReleaseOn;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.buildings.placements.GraveyardPlacement;
-import com.solegendary.reignofnether.building.buildings.placements.HealingFountainPlacement;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.keybinds.Keybinding;
@@ -45,6 +46,9 @@ public class Graveyard extends ProductionBuilding {
 
         this.explodeChance = 0.2f;
 
+        this.abilities.add(new SetGraveyardReleaseOff(), Keybindings.keyO);
+        this.abilities.add(new SetGraveyardReleaseOn(), Keybindings.keyO);
+
         this.productions.add(ProductionItems.ZOMBIE, Keybindings.keyQ);
         this.productions.add(ProductionItems.HUSK, Keybindings.keyQ);
         this.productions.add(ProductionItems.DROWNED, Keybindings.keyW);
@@ -52,6 +56,11 @@ public class Graveyard extends ProductionBuilding {
         this.productions.add(ProductionItems.STRAY, Keybindings.keyE);
         this.productions.add(ProductionItems.BOGGED, Keybindings.keyR);
         this.productions.add(ProductionItems.RESEARCH_OVERFLOWING_GRAVEYARD, Keybindings.keyT);
+    }
+
+    @Override
+    public String getUpgradedName(BuildingPlacement placement) {
+        return I18n.get("buildings.monsters.reignofnether.graveyard.upgraded");
     }
 
     @Override

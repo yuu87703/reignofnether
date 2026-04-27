@@ -42,7 +42,7 @@ public class EquipLeatherChestplate extends EquipAbility {
                 () -> true,
                 () -> CursorClientEvents.setLeftClickAction(EQUIP_ACTION),
                 () -> {
-                    BuildingAbilityServerboundPacket.setAutocastEnchantOrEquipServerside(EQUIP_ACTION, placement.originPos);
+                    BuildingAbilityServerboundPacket.doAbility(EQUIP_ACTION, placement.originPos);
                     if (placement.getDataStorage().getData(Blacksmith.AUTO_CAST_EQUIP) == this)
                         placement.getDataStorage().setData(Blacksmith.AUTO_CAST_EQUIP, null);
                     else

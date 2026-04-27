@@ -3,6 +3,7 @@ package com.solegendary.reignofnether.ability;
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.buildings.placements.GraveyardPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.Blacksmith;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.registrars.PacketHandler;
@@ -21,7 +22,7 @@ public class BuildingAbilityServerboundPacket {
     UnitAction abilityAction;
     BlockPos buildingPos;
 
-    public static void setAutocastEnchantOrEquipServerside(UnitAction ability, BlockPos buildingPos) {
+    public static void doAbility(UnitAction ability, BlockPos buildingPos) {
         Minecraft MC = Minecraft.getInstance();
         if (MC.player != null)
             PacketHandler.INSTANCE.sendToServer(new BuildingAbilityServerboundPacket(ability, buildingPos));
@@ -89,6 +90,13 @@ public class BuildingAbilityServerboundPacket {
                     else
                         building.getDataStorage().setData(Blacksmith.AUTO_CAST_EQUIP, equipAbility);
                 }
+            }
+            else if (building instanceof GraveyardPlacement gy) {
+                if (abilityAction == UnitAction.SET_GRAVEYARD_RELEASE_ON)
+                    gy.autoRelease = true;
+                else if (abilityAction == UnitAction.SET_GRAVEYARD_RELEASE_OFF)
+                    gy.autoRelease = false;
+                BuildingAbilityClientboundPacket.doAbility(abilityAction, buildingPos);
             }
             success.set(true);
         });

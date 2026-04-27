@@ -175,10 +175,8 @@ public class BuildingServerEvents {
                     b.isDiagonalBridge
                 );
 
-                // Maybe add inside the BuildingPlacement Constructor
-                building.dataStorage = b.dataStorage;
-
                 if (building != null) {
+                    building.dataStorage = b.dataStorage;
                     building.scenarioRoleIndex = b.scenarioRoleIndex;
                     building.isBuilt = b.isBuilt;
                     BuildingServerEvents.getBuildings().add(building);
@@ -264,13 +262,27 @@ public class BuildingServerEvents {
 
     @Nullable
     public static BuildingPlacement placeBuilding(
+            Building building,
+            BlockPos pos,
+            Rotation rotation,
+            String ownerName,
+            int[] builderUnitIds,
+            boolean queue,
+            boolean isDiagonalBridge
+    ) {
+        return placeBuilding(building, pos, rotation, ownerName, builderUnitIds, queue, isDiagonalBridge, false);
+    }
+
+    @Nullable
+    public static BuildingPlacement placeBuilding(
         Building building,
         BlockPos pos,
         Rotation rotation,
         String ownerName,
         int[] builderUnitIds,
         boolean queue,
-        boolean isDiagonalBridge
+        boolean isDiagonalBridge,
+        boolean fromCommand // ignore resources, terrain or any other restrictions and self-build
     ) {
         BuildingPlacement newBuilding = BuildingUtils.getNewBuildingPlacement(building,
             serverLevel,
@@ -301,15 +313,16 @@ public class BuildingServerEvents {
                     }
                 }
 
-                if (!canAffordPop) {
+                if (!canAffordPop && !fromCommand) {
                     ResourcesClientboundPacket.warnInsufficientPopulation(ownerName);
                     return null;
                 }
             }
 
-            if (newBuilding.canAfford(ownerName)) {
-                if (serverLevel.getGameRules().getRule(GameRuleRegistrar.SLANTED_BUILDING).get() &&
-                    !(newBuilding.getBuilding() instanceof AbstractBridge)) {
+            if (fromCommand || newBuilding.canAfford(ownerName)) {
+                if (fromCommand ||
+                    (serverLevel.getGameRules().getRule(GameRuleRegistrar.SLANTED_BUILDING).get() &&
+                    !(newBuilding.getBuilding() instanceof AbstractBridge))) {
                     BuildingUtils.clearBuildingArea(newBuilding);
                 }
                 buildings.add(newBuilding);
@@ -344,13 +357,15 @@ public class BuildingServerEvents {
                     pos,
                     false
                 );
-                ResourcesServerEvents.addSubtractResources(new Resources(ownerName,
-                    -newBuilding.getBuilding().cost.food,
-                    -newBuilding.getBuilding().cost.wood,
-                    -newBuilding.getBuilding().cost.ore
-                ));
+                if (!fromCommand) {
+                    ResourcesServerEvents.addSubtractResources(new Resources(ownerName,
+                            -newBuilding.getBuilding().cost.food,
+                            -newBuilding.getBuilding().cost.wood,
+                            -newBuilding.getBuilding().cost.ore
+                    ));
+                }
 
-                if (ownerName.isEmpty() || ownerName.equals("Enemy"))
+                if ((SandboxServer.isAnyoneASandboxPlayer() && (ownerName.isEmpty() || ownerName.equals("Enemy"))) || fromCommand)
                     newBuilding.selfBuilding = true;
 
                 assignBuilderUnits(builderUnitIds, queue, newBuilding);
@@ -363,7 +378,6 @@ public class BuildingServerEvents {
                         moveNonBuildersAwayFromBuildingFoundations(entity, builderUnitIds, newBuilding);
                     }
                 }
-
             } else if (!PlayerServerEvents.isBot(ownerName)) {
                 warnInsufficientResources(newBuilding);
             }
@@ -657,6 +671,15 @@ public class BuildingServerEvents {
         int nzSizeAfter = netherZones.size();
         if (nzSizeBefore != nzSizeAfter) {
             saveNetherZones(serverLevel);
+        }
+
+        for (BuildingPlacement bpl : getBuildings()) {
+            if (bpl instanceof GraveyardPlacement gy && gy.getUpgradeLevel() > 0 && gy.autoRelease) {
+                int currentPop = UnitServerEvents.getCurrentPopulation(gy.ownerName);
+                int popSupply = BuildingServerEvents.getTotalPopulationSupply(gy.ownerName);
+                if (popSupply > currentPop)
+                    gy.releaseNextUnit();
+            }
         }
     }
 

@@ -2,6 +2,8 @@ package com.solegendary.reignofnether.ability;
 
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
+import com.solegendary.reignofnether.building.buildings.monsters.Graveyard;
+import com.solegendary.reignofnether.building.buildings.placements.GraveyardPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.Blacksmith;
 import com.solegendary.reignofnether.building.buildings.villagers.Library;
 import com.solegendary.reignofnether.registrars.PacketHandler;
@@ -64,6 +66,12 @@ public class BuildingAbilityClientboundPacket {
                 if (ability instanceof EquipAbility equipAbility) {
                     building.getDataStorage().setData(Blacksmith.AUTO_CAST_EQUIP, equipAbility);
                 }
+            }
+            else if (building instanceof GraveyardPlacement gy) {
+                if (abilityAction == UnitAction.SET_GRAVEYARD_RELEASE_ON)
+                    gy.autoRelease = true;
+                else if (abilityAction == UnitAction.SET_GRAVEYARD_RELEASE_OFF)
+                    gy.autoRelease = false;
             }
             success.set(true);
         });

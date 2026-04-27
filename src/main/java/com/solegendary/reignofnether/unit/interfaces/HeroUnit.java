@@ -110,31 +110,31 @@ public interface HeroUnit extends Unit {
 
     default float getHealthBonusPerLevel() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.MAX_HEALTH_BONUS_PER_LEVEL.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.MAX_HEALTH_BONUS_PER_LEVEL.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.MAX_HEALTH_BONUS_PER_LEVEL.get().getDefaultValue());
     }
     default float getAttackBonusPerLevel() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.ATTACK_DAMAGE_BONUS_PER_LEVEL.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.ATTACK_DAMAGE_BONUS_PER_LEVEL.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.ATTACK_DAMAGE_BONUS_PER_LEVEL.get().getDefaultValue());
     }
     default float getBaseHealth() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.BASE_MAX_HEALTH.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.BASE_MAX_HEALTH.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.BASE_MAX_HEALTH.get().getDefaultValue());
     }
     default float getBaseAttack() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.ATTACK_DAMAGE.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.ATTACK_DAMAGE.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.ATTACK_DAMAGE.get().getDefaultValue());
     }
     default float getBaseMaxMana() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.BASE_MAX_MANA.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.BASE_MAX_MANA.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.BASE_MAX_MANA.get().getDefaultValue());
     }
     default float getManaRegenPerSecond() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.MANA_REGEN_PER_SECOND.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.MANA_REGEN_PER_SECOND.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.MANA_REGEN_PER_SECOND.get().getDefaultValue());
     }
     default float getManaBonusPerLevel() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.MAX_MANA_BONUS_PER_LEVEL.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.MAX_MANA_BONUS_PER_LEVEL.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.MAX_MANA_BONUS_PER_LEVEL.get().getDefaultValue());
     }
 
     float getMana();

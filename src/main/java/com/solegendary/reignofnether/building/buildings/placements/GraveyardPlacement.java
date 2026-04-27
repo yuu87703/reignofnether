@@ -1,8 +1,12 @@
 package com.solegendary.reignofnether.building.buildings.placements;
 
 import com.solegendary.reignofnether.building.*;
+import com.solegendary.reignofnether.building.buildings.monsters.Graveyard;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
+import com.solegendary.reignofnether.research.ResearchClient;
+import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -61,44 +65,49 @@ public class GraveyardPlacement extends ProductionPlacement {
         return null;
     }
 
-    public void createSkull(EntityType<? extends Mob> entityType) {
-        Block skullBlock = getSkullBlock(entityType);
-        if (skullBlock == null) return;
-
-        // Count total skulls already placed; enforce global cap of 10
+    public int getTotalSkulls() {
         int totalSkulls = 0;
         for (BlockPos relativeBase : skullPoses) {
             BlockPos worldBase = relativeBase.offset(originPos);
-            for (int stackOffset = 0; stackOffset < 10; stackOffset++) {
-                if (level.getBlockState(worldBase.above(stackOffset)).getBlock() instanceof SkullBlock)
+            for (int y = 0; y < 4; y++) {
+                if (level.getBlockState(worldBase.above(y)).getBlock() instanceof SkullBlock)
                     totalSkulls++;
                 else
                     break;
             }
         }
-        if (totalSkulls >= 10) return;
+        return totalSkulls;
+    }
 
-        // Spread first: find the slot with the lowest stack height and place there
-        int minHeight = Integer.MAX_VALUE;
-        BlockPos bestSlot = null;
-        for (BlockPos relativeBase : skullPoses) {
-            BlockPos worldBase = relativeBase.offset(originPos);
-            int height = 0;
-            for (int stackOffset = 0; stackOffset < 10; stackOffset++) {
-                if (level.getBlockState(worldBase.above(stackOffset)).getBlock() instanceof SkullBlock)
-                    height++;
-                else
-                    break;
-            }
-            if (height < minHeight) {
-                minHeight = height;
-                bestSlot = worldBase;
+    public int getMaxSkulls() {
+        if (this.level.isClientSide()) {
+            return ResearchClient.hasResearch(ProductionItems.RESEARCH_MASS_BURIAL) ?
+                    Graveyard.OVERFLOW_AMOUNT_UPGRADED : Graveyard.OVERFLOW_AMOUNT;
+        } else {
+            return ResearchServerEvents.playerHasResearch(this.ownerName, ProductionItems.RESEARCH_MASS_BURIAL) ?
+                    Graveyard.OVERFLOW_AMOUNT_UPGRADED : Graveyard.OVERFLOW_AMOUNT;
+        }
+    }
+
+    public void createSkull(EntityType<? extends Mob> entityType) {
+        Block skullBlock = getSkullBlock(entityType);
+        if (skullBlock == null) return;
+        if (getTotalSkulls() >= getMaxSkulls()) return;
+
+        // Find the slot with the lowest stack height and place there
+        BlockPos skullPos = null;
+        outerloop:
+        for (int y = 1; y < 4; y++) {
+            for (BlockPos relativeBase : skullPoses) {
+                BlockPos worldBase = relativeBase.offset(originPos);
+                if (!(level.getBlockState(worldBase.above(y)).getBlock() instanceof SkullBlock)) {
+                    skullPos = worldBase.above(y);
+                    break outerloop;
+                }
             }
         }
-
-        if (bestSlot != null) {
-            level.setBlock(bestSlot.above(minHeight), skullBlock.defaultBlockState(), 3);
-        }
+        if (skullPos != null)
+            level.setBlockAndUpdate(skullPos, skullBlock.defaultBlockState());
     }
 
     public void releaseNextUnit() {
@@ -109,22 +118,22 @@ public class GraveyardPlacement extends ProductionPlacement {
             BlockPos worldBase = skullPoses.get(i).offset(originPos);
 
             // Find the highest occupied skull in this slot
-            BlockPos highestSkull = null;
+            BlockPos highestPos = null;
             Block highestBlock = null;
-            for (int stackOffset = 0; stackOffset < 4; stackOffset++) {
-                BlockPos candidate = worldBase.above(stackOffset);
+            for (int y = 1; y < 4; y++) {
+                BlockPos candidate = worldBase.above(y);
                 Block block = level.getBlockState(candidate).getBlock();
                 if (block instanceof SkullBlock) {
-                    highestSkull = candidate;
+                    highestPos = candidate;
                     highestBlock = block;
                 } else if (level.getBlockState(candidate).isAir()) {
                     break; // Stack ends here
                 }
             }
 
-            if (highestSkull != null && highestBlock != null) {
+            if (highestPos != null) {
                 EntityType<? extends Unit> entityType = getEntityType(highestBlock);
-                level.removeBlock(highestSkull, false);
+                level.removeBlock(highestPos, false);
                 if (entityType != null) {
                     this.produceUnit((ServerLevel) level, entityType, this.ownerName, true);
                 }

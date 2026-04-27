@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.research.researchItems;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.Buildings;
 import com.solegendary.reignofnether.building.buildings.monsters.Graveyard;
@@ -41,8 +42,8 @@ public class ResearchMassBurials extends ProductionItem {
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new StartProductionButton(
             ResearchMassBurials.itemName,
-            ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/wither_rose.png"),
-            ResourceLocation.fromNamespaceAndPath("minecraft", "textures/hud/icon_frame_bronze.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/research/mass_burials.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame_bronze.png"),
             hotkey,
                 () -> prodBuilding.getUpgradeLevel() > 0,
             () -> BuildingClientEvents.hasFinishedBuilding(Buildings.STRONGHOLD),
@@ -62,8 +63,8 @@ public class ResearchMassBurials extends ProductionItem {
     public StopProductionButton getCancelButton(ProductionPlacement prodBuilding, boolean first) {
         return new StopProductionButton(
             ResearchMassBurials.itemName,
-            ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/wither_rose.png"),
-            ResourceLocation.fromNamespaceAndPath("minecraft", "textures/hud/icon_frame_bronze.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/research/mass_burials.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame_bronze.png"),
             prodBuilding,
             this,
             first

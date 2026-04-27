@@ -219,7 +219,7 @@ public class CommandsServerEvents {
             .then(Commands.argument("ownerSelector", EntityArgument.player())
                 .then(Commands.argument("reason", StringArgumentType.string())
                     .executes(ctx -> victoryPlayer(
-                        StringArgumentType.getString(ctx, "ownerName"),
+                        EntityArgument.getPlayer(ctx, "ownerSelector"),
                         StringArgumentType.getString(ctx, "reason")
                     ))))
         );
@@ -235,7 +235,7 @@ public class CommandsServerEvents {
             .then(Commands.argument("ownerSelector", EntityArgument.player())
                 .then(Commands.argument("reason", StringArgumentType.string())
                     .executes(ctx -> defeatPlayer(
-                        StringArgumentType.getString(ctx, "ownerName"),
+                        EntityArgument.getPlayer(ctx, "ownerSelector"),
                         StringArgumentType.getString(ctx, "reason")
                     ))))
         );
@@ -540,6 +540,13 @@ public class CommandsServerEvents {
     }
 
     private static int victoryPlayer(
+            ServerPlayer player,
+            String reason
+    ) {
+        return victoryPlayer(player.getName().getString(), reason);
+    }
+
+    private static int victoryPlayer(
             String ownerName,
             String reason
     ) {
@@ -556,6 +563,13 @@ public class CommandsServerEvents {
             playersDefeated += 1;
         }
         return playersDefeated;
+    }
+
+    private static int defeatPlayer(
+            ServerPlayer player,
+            String reason
+    ) {
+        return defeatPlayer(player.getName().getString(), reason);
     }
 
     private static int defeatPlayer(
@@ -678,7 +692,8 @@ public class CommandsServerEvents {
             ownerName,
             new int[0],
             false,
-            false
+            false,
+            true
         );
         if (placement == null) {
             ctx.getSource().sendFailure(Component.literal("Unable to place building at " + formatPos(pos)));
