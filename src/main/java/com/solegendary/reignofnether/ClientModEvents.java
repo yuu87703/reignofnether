@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether;
 
 import com.solegendary.reignofnether.blocks.GarrisonBlockRenderer;
+import com.solegendary.reignofnether.blocks.SkullTypes;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.placements.PortalPlacement;
@@ -18,10 +19,17 @@ import com.solegendary.reignofnether.unit.units.neutral.*;
 import com.solegendary.reignofnether.unit.units.piglins.*;
 import com.solegendary.reignofnether.unit.units.villagers.*;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.SkullModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -31,6 +39,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import java.util.HashSet;
 
 @Mod.EventBusSubscriber(modid = ReignOfNether.MOD_ID, bus = Bus.MOD, value = Dist.CLIENT)
 public class ClientModEvents {
@@ -132,6 +142,57 @@ public class ClientModEvents {
                     RenderType.cutout()
             );
         });
+        evt.enqueueWork(() -> {
+            SkullBlockRenderer.SKIN_BY_TYPE.put(
+                    SkullTypes.DROWNED,
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "textures/entity/zombie/drowned.png")
+            );
+        });
+        evt.enqueueWork(() -> {
+            SkullBlockRenderer.SKIN_BY_TYPE.put(
+                    SkullTypes.HUSK,
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "textures/entity/zombie/husk.png")
+            );
+        });
+        evt.enqueueWork(() -> {
+            SkullBlockRenderer.SKIN_BY_TYPE.put(
+                    SkullTypes.STRAY,
+                    ResourceLocation.fromNamespaceAndPath("minecraft", "textures/entity/skeleton/stray.png")
+            );
+        });
+        evt.enqueueWork(() -> {
+            SkullBlockRenderer.SKIN_BY_TYPE.put(
+                    SkullTypes.BOGGED,
+                    ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/entities/bogged_overlay.png")
+            );
+        });
+
+        BlockEntityType.SKULL.validBlocks = new HashSet<>(BlockEntityType.SKULL.validBlocks);
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.DROWNED_HEAD.get());
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.HUSK_HEAD.get());
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.STRAY_SKULL.get());
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.BOGGED_SKULL.get());
+    }
+
+    @SubscribeEvent
+    public static void onCreateSkullModels(EntityRenderersEvent.CreateSkullModels event) {
+        EntityModelSet modelSet = event.getEntityModelSet();
+        event.registerSkullModel(
+                SkullTypes.DROWNED,
+                new SkullModel(modelSet.bakeLayer(ModelLayers.ZOMBIE_HEAD))
+        );
+        event.registerSkullModel(
+                SkullTypes.HUSK,
+                new SkullModel(modelSet.bakeLayer(ModelLayers.ZOMBIE_HEAD))
+        );
+        event.registerSkullModel(
+                SkullTypes.STRAY,
+                new SkullModel(modelSet.bakeLayer(ModelLayers.SKELETON_SKULL))
+        );
+        event.registerSkullModel(
+                SkullTypes.BOGGED,
+                new SkullModel(modelSet.bakeLayer(ModelLayers.SKELETON_SKULL))
+        );
     }
 
     @SubscribeEvent

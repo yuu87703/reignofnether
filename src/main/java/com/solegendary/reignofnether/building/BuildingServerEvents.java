@@ -289,7 +289,7 @@ public class BuildingServerEvents {
         if (newBuilding != null && !buildingExists) {
             // Handle special building (Iron Golem)
             if (newBuilding.getBuilding() instanceof IronGolemBuilding) {
-                int currentPop = UnitServerEvents.getCurrentPopulation(serverLevel, ownerName);
+                int currentPop = UnitServerEvents.getCurrentPopulation(ownerName);
                 int popSupply = BuildingServerEvents.getTotalPopulationSupply(ownerName);
 
                 boolean canAffordPop = false;

@@ -65,7 +65,7 @@ public abstract class ProductionItem {
         if (getCost(level.isClientSide(), ownerName).population == 0)
             return true;
 
-        int currentPop = UnitServerEvents.getCurrentPopulation((ServerLevel) level, ownerName);
+        int currentPop = UnitServerEvents.getCurrentPopulation(ownerName);
         int popSupply = BuildingServerEvents.getTotalPopulationSupply(ownerName);
 
         for (Resources resources : ResourcesServerEvents.resourcesList)
@@ -85,7 +85,7 @@ public abstract class ProductionItem {
             currentPop = UnitClientEvents.getCurrentPopulation(ownerName);
             popSupply = BuildingClientEvents.getTotalPopulationSupply(ownerName);
         } else {
-            currentPop = UnitServerEvents.getCurrentPopulation((ServerLevel) level, ownerName);
+            currentPop = UnitServerEvents.getCurrentPopulation(ownerName);
             popSupply = BuildingServerEvents.getTotalPopulationSupply(ownerName);
         }
         return currentPop <= popSupply;
@@ -95,7 +95,7 @@ public abstract class ProductionItem {
         if (getCost(level.isClientSide(), ownerName).population == 0)
             return true;
 
-        int currentPop = UnitServerEvents.getCurrentPopulation((ServerLevel) level, ownerName);
+        int currentPop = UnitServerEvents.getCurrentPopulation(ownerName);
         int popSupply = BuildingServerEvents.getTotalPopulationSupply(ownerName);
 
         for (Resources resources : ResourcesServerEvents.resourcesList) {

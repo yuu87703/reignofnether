@@ -32,7 +32,6 @@ public class WindcallerModel<T extends Entity> extends KeyframeHierarchicalModel
 	private final ModelPart Staff;
 	private final ModelPart RLeg;
 	private final ModelPart Lleg;
-	private final ModelPart bb_main;
 
 	public WindcallerModel(ModelPart root) {
 		this.bone = root.getChild("bone");
@@ -44,7 +43,6 @@ public class WindcallerModel<T extends Entity> extends KeyframeHierarchicalModel
 		this.Staff = this.Rarm.getChild("Staff");
 		this.RLeg = this.bone.getChild("RLeg");
 		this.Lleg = this.bone.getChild("Lleg");
-		this.bb_main = root.getChild("bb_main");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -87,8 +85,6 @@ public class WindcallerModel<T extends Entity> extends KeyframeHierarchicalModel
 		PartDefinition RLeg = bone.addOrReplaceChild("RLeg", CubeListBuilder.create().texOffs(0, 22).mirror().addBox(-1.0F, -1.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.0F, 1.0F, -1.0F));
 
 		PartDefinition Lleg = bone.addOrReplaceChild("Lleg", CubeListBuilder.create().texOffs(0, 22).mirror().addBox(-1.0F, -1.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(1.0F, 1.0F, -1.0F));
-
-		PartDefinition bb_main = partdefinition.addOrReplaceChild("bb_main", CubeListBuilder.create().texOffs(77, 19).addBox(-26.0F, -35.5F, -0.75F, 5.0F, 35.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 128, 64);
 	}
@@ -137,6 +133,5 @@ public class WindcallerModel<T extends Entity> extends KeyframeHierarchicalModel
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		bb_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

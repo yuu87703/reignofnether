@@ -1404,6 +1404,10 @@
     "block.reignofnether.garrison_zone_block": "Garrison Zone Block",
     "block.reignofnether.wraith_snow_layer_block": "Wraith Snow Layer Block",
     "block.reignofnether.unextinguishable_soul_fire_block": "Unextinguishable Soul Fire Block",
+    "block.reignofnether.drowned_head": "Drowned Head",
+    "block.reignofnether.husk_head": "Husk Head",
+    "block.reignofnether.stray_skull": "Stray Skull",
+    "block.reignofnether.bogged_skull": "Bogged Skull",
 
     "block.reignofnether.rts_start_block_black": "Black RTS Start Block",
     "block.reignofnether.rts_start_block_blue": "Blue RTS Start Block",

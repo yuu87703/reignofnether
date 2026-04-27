@@ -22,6 +22,9 @@ Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
 
+[❌] Bogged and wither skeletons can now be enchanted by the enchanter (granting +1 damage)
+[❌] Tridents summoned from commands no longer pierce all units
+
 Quality of Life
 ---------------
 [❌] Ready check instead of start game countdown

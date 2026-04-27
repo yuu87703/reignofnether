@@ -221,7 +221,7 @@ public class UnitServerEvents {
         }
     }
 
-    public static int getCurrentPopulation(ServerLevel level, String ownerName) {
+    public static int getCurrentPopulation(String ownerName) {
         int currentPopulation = 0;
         for (LivingEntity entity : allUnits)
             if (entity instanceof Unit unit) {
