@@ -203,7 +203,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry MILITIA = ResourceCostConfigEntry.Unit(50,0,0,15,1, ResourceCosts.MILITIA, "Militia Config");
         public static final ResourceCostConfigEntry IRON_GOLEM = ResourceCostConfigEntry.Unit(0,50,250,45,4, ResourceCosts.IRON_GOLEM, "Iron Golem Config");
         public static final ResourceCostConfigEntry PILLAGER = ResourceCostConfigEntry.Unit(120,80,0,32,3, ResourceCosts.PILLAGER, "Pillager Config");
-        public static final ResourceCostConfigEntry WINDCALLER = ResourceCostConfigEntry.Unit(120,50,50,32,3, ResourceCosts.WINDCALLER, "Pillager Config");
+        public static final ResourceCostConfigEntry WINDCALLER = ResourceCostConfigEntry.Unit(150,60,60,32,3, ResourceCosts.WINDCALLER, "Windcaller Config");
         public static final ResourceCostConfigEntry VINDICATOR = ResourceCostConfigEntry.Unit(170,0,0,32,3, ResourceCosts.VINDICATOR, "Vindicator Config");
         public static final ResourceCostConfigEntry WITCH = ResourceCostConfigEntry.Unit(90,90,90,35,3, ResourceCosts.WITCH, "Witch Config");
         public static final ResourceCostConfigEntry EVOKER = ResourceCostConfigEntry.Unit(150,0,120,35,3, ResourceCosts.EVOKER, "Evoker Config");

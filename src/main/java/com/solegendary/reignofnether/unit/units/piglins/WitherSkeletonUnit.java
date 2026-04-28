@@ -42,6 +42,7 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -136,6 +137,7 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
     public ResourceCost getCost() {return ResourceCosts.WITHER_SKELETON;}
     public boolean getWillRetaliate() {return willRetaliate;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
+    public float getUnitAttackDamage() {return AttackerUnit.super.getUnitAttackDamage() + getSharpnessLevel();}
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public boolean canAttackBuildings() {return getAttackBuildingGoal() != null;}
     public Goal getAttackGoal() { return attackGoal; }
@@ -357,7 +359,13 @@ public class WitherSkeletonUnit extends WitherSkeleton implements Unit, Attacker
         setItemSlot(getEquipmentSlotForItem(itemStack), itemStack);
     }
 
+    public int getSharpnessLevel() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getEnchantmentLevel(Enchantments.SHARPNESS);
+    }
 
-
-
+    @Override
+    public boolean hasBonusDamage() {
+        return getSharpnessLevel() > 0;
+    }
 }
