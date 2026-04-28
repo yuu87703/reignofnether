@@ -25,9 +25,12 @@ Bugfixes
 
 [🟡] The Wraith can no longer be built at the dungeon (it's unfinished!)
 [🟡] Pillagers now correctly cost (120 food, 80 wood)
+[🟡] Logging into a world in sandbox mode now enables all cheats clientside
+    - This was previously only enabling it serverside, causing desyncs
 
 Quality of Life
 ---------------
+
 [❌] Ready check instead of start game countdown
 [❌] Ravager artillery now have an attack-ground button
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
