@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
+import com.solegendary.reignofnether.building.buildings.placements.GraveyardPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.production.*;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
@@ -35,10 +36,17 @@ public class SkeletonProd extends GraveyardUnitProductionItem {
         super(cost);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide()) {
-                if (ResearchServerEvents.playerHasResearch(placement.ownerName, ProductionItems.RESEARCH_STRAYS))
-                    placement.produceUnit((ServerLevel) level, EntityRegistrar.STRAY_UNIT.get(), placement.ownerName, true);
-                else
-                    placement.produceUnit((ServerLevel) level, EntityRegistrar.SKELETON_UNIT.get(), placement.ownerName, true);
+                if (placement instanceof GraveyardPlacement gy && placement.getUpgradeLevel() > 0) {
+                    if (ResearchServerEvents.playerHasResearch(placement.ownerName, ProductionItems.RESEARCH_STRAYS))
+                        gy.createSkull(EntityRegistrar.STRAY_UNIT.get());
+                    else
+                        gy.createSkull(EntityRegistrar.SKELETON_UNIT.get());
+                } else {
+                    if (ResearchServerEvents.playerHasResearch(placement.ownerName, ProductionItems.RESEARCH_STRAYS))
+                        placement.produceUnit((ServerLevel) level, EntityRegistrar.STRAY_UNIT.get(), placement.ownerName, true);
+                    else
+                        placement.produceUnit((ServerLevel) level, EntityRegistrar.SKELETON_UNIT.get(), placement.ownerName, true);
+                }
             }
         };
     }

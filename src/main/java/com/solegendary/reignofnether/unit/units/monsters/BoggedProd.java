@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.building.buildings.placements.GraveyardPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.production.*;
 import com.solegendary.reignofnether.hud.buttons.UnitSpawnButton;
@@ -26,8 +27,13 @@ public class BoggedProd extends GraveyardUnitProductionItem {
     public BoggedProd() {
         super(cost);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
-            if (!level.isClientSide())
-                placement.produceUnit((ServerLevel) level, EntityRegistrar.BOGGED_UNIT.get(), placement.ownerName, true);
+            if (!level.isClientSide()) {
+                if (placement instanceof GraveyardPlacement gy && placement.getUpgradeLevel() > 0) {
+                    gy.createSkull(EntityRegistrar.BOGGED_UNIT.get());
+                } else {
+                    placement.produceUnit((ServerLevel) level, EntityRegistrar.BOGGED_UNIT.get(), placement.ownerName, true);
+                }
+            }
         };
     }
 

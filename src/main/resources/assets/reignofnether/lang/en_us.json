@@ -1410,6 +1410,10 @@
     "block.reignofnether.husk_head": "Husk Head",
     "block.reignofnether.stray_skull": "Stray Skull",
     "block.reignofnether.bogged_skull": "Bogged Skull",
+    "block.reignofnether.drowned_wall_head": "Drowned Wall Head",
+    "block.reignofnether.husk_wall_head": "Husk Wall Head",
+    "block.reignofnether.stray_wall_skull": "Stray Wall Skull",
+    "block.reignofnether.bogged_wall_skull": "Bogged Wall Skull",
 
     "block.reignofnether.rts_start_block_black": "Black RTS Start Block",
     "block.reignofnether.rts_start_block_blue": "Blue RTS Start Block",

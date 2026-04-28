@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.monsters;
 
 import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.building.BuildingServerboundPacket;
+import com.solegendary.reignofnether.building.buildings.placements.GraveyardPlacement;
 import com.solegendary.reignofnether.building.buildings.placements.ProductionPlacement;
 import com.solegendary.reignofnether.building.production.*;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
@@ -33,8 +34,13 @@ public class StrayProd extends GraveyardUnitProductionItem {
     public StrayProd() {
         super(cost);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
-            if (!level.isClientSide())
-                placement.produceUnit((ServerLevel) level, EntityRegistrar.STRAY_UNIT.get(), placement.ownerName, true);
+            if (!level.isClientSide()) {
+                if (placement instanceof GraveyardPlacement gy && placement.getUpgradeLevel() > 0) {
+                    gy.createSkull(EntityRegistrar.STRAY_UNIT.get());
+                } else {
+                    placement.produceUnit((ServerLevel) level, EntityRegistrar.STRAY_UNIT.get(), placement.ownerName, true);
+                }
+            }
         };
     }
 

@@ -9,7 +9,8 @@
 
 
 [❌] Overflowing graveyards
-    - sync from serverside on login
+    - fix population usage and errors
+    - fix rotations
 
 [❌] Wraiths
     - No knockback on melee attacks

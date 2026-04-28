@@ -151,12 +151,12 @@ public class Castle extends ProductionBuilding implements GarrisonableBuildingAd
 
     @Override
     public BlockPos getEntryPosition(BuildingPlacement placement) {
-        return placement.originPos.offset(GarrisonableBuildingAddon.rotatePos(new BlockPos(5, 16, 5), placement.rotation));
+        return placement.originPos.offset(BuildingUtils.rotatePos(new BlockPos(5, 16, 5), placement.rotation));
     }
 
     @Override
     public BlockPos getExitPosition(BuildingPlacement placement) {
-        return placement.originPos.offset(GarrisonableBuildingAddon.rotatePos(new BlockPos(5, 2, 5), placement.rotation));
+        return placement.originPos.offset(BuildingUtils.rotatePos(new BlockPos(5, 2, 5), placement.rotation));
     }
 
     @Override
