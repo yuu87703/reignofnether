@@ -49,15 +49,15 @@ public interface AttackerUnit {
     public boolean getAggressiveWhenIdle();
     public default float getBaseAttacksPerSecond() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.ATTACKS_PER_SECOND.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.ATTACKS_PER_SECOND.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.ATTACKS_PER_SECOND.get().getDefaultValue());
     }
     public default float getAggroRange() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.AGGRO_RANGE.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.AGGRO_RANGE.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.AGGRO_RANGE.get().getDefaultValue());
     }
     public default float getAttackRange() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.ATTACK_RANGE.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.ATTACK_RANGE.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.ATTACK_RANGE.get().getDefaultValue());
     }
     public default float getUnitAttackDamage() {
         float bonus = 0;
@@ -65,7 +65,7 @@ public interface AttackerUnit {
             bonus = heroUnit.getAttackBonusPerLevel() * heroUnit.getHeroLevel();
         }
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.ATTACK_DAMAGE.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.ATTACK_DAMAGE.get().getDefaultValue()) + bonus;
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.ATTACK_DAMAGE.get().getDefaultValue()) + bonus;
     }
     public BlockPos getAttackMoveTarget();
     public boolean canAttackBuildings();

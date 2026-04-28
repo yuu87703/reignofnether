@@ -104,7 +104,7 @@ public class CustomBuildingCommand {
 
             CommandSourceStack source;
             if (player != null) {
-                source = level.getServer()
+                source = player
                         .createCommandSourceStack()
                         .withPosition(bpl.minCorner.offset(-1, 0, -1).getCenter())
                         .withLevel(level)

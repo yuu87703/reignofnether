@@ -89,6 +89,26 @@ public class ScenarioServerEvents {
         }
     }
 
+    public static int getNumScenarioUnits(ScenarioRole role) {
+        int count = 0;
+        for (LivingEntity le : UnitServerEvents.getAllUnits()) {
+            if (role != null && le instanceof Unit unit && unit.getScenarioRoleIndex() == role.index) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int getNumScenarioBuildings(ScenarioRole role) {
+        int count = 0;
+        for (BuildingPlacement bpl : BuildingServerEvents.getBuildings()) {
+            if (role != null && bpl.scenarioRoleIndex == role.index) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public static int getNumScenarioUnits() {
         int count = 0;
         for (LivingEntity le : UnitServerEvents.getAllUnits()) {

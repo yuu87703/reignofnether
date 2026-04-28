@@ -1,36 +1,39 @@
 
-1.20.1-1.3.2a
+1.20.1-1.3.2c
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
 [❌] Not done, including unmerged PRs
 
 
-Scenario roles:
-    [❌] Use start menu colours for each role
-    [❌] When role is cycled, move camera to the first found building (or unit if no building)
 
-[❌] Show different colours for each different assigned role
-[❌] Fire events for addons to use when a scenario starts
+
+[❌] Overflowing graveyards
+    - sync from serverside on login
+
+[❌] Wraiths
+    - No knockback on melee attacks
+    - Enemies hit by wraiths enough times get feared (uncontrollable and issued a move-away command from the last wraith that hit it)
+    - 2 population
+    - built at dungeons
+    - needs a lab upgrade - possession?
+
 
 Bugfixes
 --------
-[✔] Fixed /attribute for attacks_per_second, except for:
-    - Slimes & Magma Cubes
-    - Evokers
-    - Pillagers
-    - Militia
+[❌] Tridents summoned from commands no longer pierce all units
+
+[🟡] The Wraith can no longer be built at the dungeon (it's unfinished!)
+[🟡] Pillagers now correctly cost (120 food, 80 wood)
+[🟡] Logging into a world in sandbox mode now enables all cheats clientside
+    - This was previously only enabling it serverside, causing desyncs
 
 Quality of Life
 ---------------
+
 [❌] Ready check instead of start game countdown
 [❌] Ravager artillery now have an attack-ground button
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
-
-[✔] The executor of custom building commands are now the player that owns the building
-    - If the owner is non-existent or logged out, the executor will be the server
-
-[✔] Custom building command cooldowns are now set by ticks instead of seconds
 
 Balance
 -------

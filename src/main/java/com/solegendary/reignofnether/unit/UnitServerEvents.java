@@ -221,7 +221,7 @@ public class UnitServerEvents {
         }
     }
 
-    public static int getCurrentPopulation(ServerLevel level, String ownerName) {
+    public static int getCurrentPopulation(String ownerName) {
         int currentPopulation = 0;
         for (LivingEntity entity : allUnits)
             if (entity instanceof Unit unit) {
@@ -664,7 +664,9 @@ public class UnitServerEvents {
                             MobEffectRegistrar.DISARM.get(),
                             MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get(),
                             MobEffectRegistrar.SCORCHING_FIRE.get(),
-                            MobEffectRegistrar.SOULS_AFLAME.get()
+                            MobEffectRegistrar.SOULS_AFLAME.get(),
+                            MobEffectRegistrar.ANGRY.get(),
+                            MobEffectRegistrar.FEARFUL.get()
                     )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)
@@ -786,6 +788,8 @@ public class UnitServerEvents {
             );
         }
         if (sourceEntity instanceof WretchedWraithUnit)
+            return true;
+        if (sourceEntity instanceof WraithUnit)
             return true;
         if (sourceEntity instanceof SlimeUnit slimeUnit && slimeUnit.isTiny())
             return true;
@@ -1021,7 +1025,7 @@ public class UnitServerEvents {
             evt.setCanceled(true);
         if (evt.getEntity() instanceof GhastUnit)
             evt.setCanceled(true);
-        else if (evt.getEntity() instanceof WretchedWraithUnit wraith && wraith.isBlizzardInProgress())
+        else if (evt.getEntity() instanceof WraithUnit)
             evt.setCanceled(true);
         else if (evt.getEntity() instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield)
             evt.setCanceled(true);

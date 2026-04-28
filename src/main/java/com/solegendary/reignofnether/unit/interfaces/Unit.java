@@ -29,7 +29,6 @@ import com.solegendary.reignofnether.unit.packets.UnitSyncClientboundPacket;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.faction.Faction;
-import com.solegendary.reignofnether.unit.units.piglins.WitherSkeletonUnit;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.client.resources.language.I18n;
@@ -147,7 +146,7 @@ public interface Unit {
 
     public default float getMovementSpeed() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(Attributes.MOVEMENT_SPEED);
-        return (float) (attr != null ?  attr.getBaseValue() : Attributes.MOVEMENT_SPEED.getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : Attributes.MOVEMENT_SPEED.getDefaultValue());
     }
     public default float getUnitMaxHealth() {
         float bonus = 0;
@@ -155,7 +154,7 @@ public interface Unit {
             bonus = heroUnit.getHealthBonusPerLevel() * heroUnit.getHeroLevel();
         }
         AttributeInstance attr = ((LivingEntity) this).getAttribute(Attributes.MAX_HEALTH);
-        return (float) (attr != null ?  attr.getBaseValue() : Attributes.MAX_HEALTH.getDefaultValue()) + bonus;
+        return (float) (attr != null ?  attr.getValue() : Attributes.MAX_HEALTH.getDefaultValue()) + bonus;
     }
 
     public ResourceCost getCost();
@@ -187,13 +186,13 @@ public interface Unit {
     // SOURCE: inherent unit stats and abilities
     default double getUnitRangedArmorPercentage() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.RANGED_DAMAGE_RESIST.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.RANGED_DAMAGE_RESIST.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.RANGED_DAMAGE_RESIST.get().getDefaultValue());
     }
 
     // SOURCE: inherent unit stats and vanilla mechanics (like resistance)
     default double getUnitMagicArmorPercentage() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(AttributeRegistrar.MAGIC_DAMAGE_RESIST.get());
-        return (float) (attr != null ?  attr.getBaseValue() : AttributeRegistrar.MAGIC_DAMAGE_RESIST.get().getDefaultValue());
+        return (float) (attr != null ?  attr.getValue() : AttributeRegistrar.MAGIC_DAMAGE_RESIST.get().getDefaultValue());
     }
 
     // SOURCE: resistance mob effect
@@ -319,8 +318,11 @@ public interface Unit {
         }
 
         if (unitMob.tickCount % 20 == 0) {
-            if (unit.hasEffectWithDuration(MobEffectRegistrar.UNCONTROLLABLE.get())) {
+            if (unit.hasEffectWithDuration(MobEffectRegistrar.ANGRY.get())) {
                 addParticlesAroundSelf(unit, ParticleTypes.ANGRY_VILLAGER);
+            }
+            if (unit.hasEffectWithDuration(MobEffectRegistrar.FEARFUL.get())) {
+                addParticlesAroundSelf(unit, ParticleTypes.SCULK_SOUL);
             }
         }
 

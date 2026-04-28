@@ -14,10 +14,14 @@ public class TextInputClientEvents {
     private static final List<MyEditBox> registeredInputs = new ArrayList<>();
 
     public static void registerEditBox(MyEditBox box) {
+        if (box == null)
+            return;
         registeredInputs.add(box);
     }
 
     public static void deregisterEditBox(MyEditBox input) {
+        if (input == null)
+            return;
         if (input.isFocused() && input.onDefocus != null)
             input.onDefocus.accept(input.getValue());
         registeredInputs.remove(input);
