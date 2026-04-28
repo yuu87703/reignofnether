@@ -39,6 +39,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -139,6 +140,7 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
     // combat stats
     public boolean getWillRetaliate() {return willRetaliate;}
     public boolean getAggressiveWhenIdle() {return aggressiveWhenIdle && !isVehicle();}
+    public float getUnitAttackDamage() {return AttackerUnit.super.getUnitAttackDamage() + getPowerLevel();}
 
     @Nullable
     public ResourceCost getCost() {return ResourceCosts.STRAY;}
@@ -313,5 +315,15 @@ public class StrayUnit extends Stray implements Unit, AttackerUnit, RangedAttack
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         return pSpawnData;
+    }
+
+    public int getPowerLevel() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+    }
+
+    @Override
+    public boolean hasBonusDamage() {
+        return getPowerLevel() > 0;
     }
 }
