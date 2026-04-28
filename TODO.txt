@@ -1,5 +1,5 @@
 
-1.20.1-1.3.2b
+1.20.1-1.3.2c
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -23,13 +23,8 @@ Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
 
-[✔] All skeleton forms (including wither skeletons) can now be enchanted by the enchanter (granting +1 damage)
-[✔] Commands that place buildings no longer require or consume resources for the player that it's placed for
-[✔] Fixed piglin buildings not spreading nether when placed under neutral or NPC control
-[✔] Fixed evokers attacking too fast
-[✔] Fixed /rts-victory/defeat with selectors not working
-[✔] Fixed buildings and nether zones transferring saves between singleplayer maps
-[✔] Fixed being unable to get a victory screen in a singleplayer scenario
+[🟡] The Wraith can no longer be built at the dungeon (it's unfinished!)
+[🟡] Pillagers now correctly cost (120 food, 80 wood)
 
 Quality of Life
 ---------------
@@ -37,14 +32,8 @@ Quality of Life
 [❌] Ravager artillery now have an attack-ground button
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 
-[✔] Attribute modifiers now correctly apply to units
-[✔] The executor of custom building commands are now the player that owns the building
-    - This was implemented incorrectly in the last patch
-[✔] NPCs in scenarios are now added as RTS Players, so you can see them in the diplomacy menu
-
 Balance
 -------
-[✔] The wretched wraith now fully immune to knockback and has no collision at all times
 
 
 Languages
