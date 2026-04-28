@@ -237,6 +237,8 @@ public class BuildingServerEvents {
         if (level != null) {
             saveNetherZones(level);
             saveBuildings(level);
+            netherZones.clear();
+            buildings.clear();
         }
     }
 
