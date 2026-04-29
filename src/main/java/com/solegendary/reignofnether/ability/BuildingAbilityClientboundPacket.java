@@ -46,7 +46,7 @@ public class BuildingAbilityClientboundPacket {
         final var success = new AtomicBoolean(false);
         ctx.get().enqueueWork(() -> {
             BuildingPlacement building = BuildingUtils.findBuilding(true, buildingPos);
-            if (building.getBuilding() instanceof Library) {
+            if (building != null && building.getBuilding() instanceof Library) {
                 Ability ability = null;
                 for (Ability abl : building.getAbilities())
                     if (abl.action == abilityAction)
@@ -58,7 +58,7 @@ public class BuildingAbilityClientboundPacket {
                         building.getDataStorage().setData(Library.AUTO_CAST_ENCHANT, enchantAbility);
                 }
             }
-            else if (building.getBuilding() instanceof Blacksmith blacksmith) {
+            else if (building != null && building.getBuilding() instanceof Blacksmith) {
                 Ability ability = null;
                 for (Ability abl : building.getAbilities())
                     if (abl.action == abilityAction)

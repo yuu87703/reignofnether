@@ -1,5 +1,5 @@
 
-1.20.1-1.3.3
+1.20.1-1.3.2d
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -33,8 +33,6 @@ Quality of Life
 
 Balance
 -------
-[✔] The wretched wraith now fully immune to knockback and has no collision at all times
-
 
 Languages
 ---------

@@ -615,10 +615,11 @@ public class BuildingServerEvents {
     public static void onLivingSpawn(MobSpawnEvent.FinalizeSpawn evt) {
         if (evt.getSpawnType() == MobSpawnType.SPAWNER) {
             if (evt.getSpawner() != null && evt.getSpawner().getSpawnerBlockEntity() != null) {
-                BlockEntity be = evt.getSpawner().getSpawnerBlockEntity();
                 BlockPos bp = evt.getSpawner().getSpawnerBlockEntity().getBlockPos();
-                if (BuildingUtils.findBuilding(false, bp).getBuilding() instanceof Dungeon ||
-                    BuildingUtils.findBuilding(false, bp).getBuilding() instanceof FlameSanctuary) {
+                BuildingPlacement bpl = BuildingUtils.findBuilding(false, bp);
+                if (bpl != null &&
+                   (bpl.getBuilding() instanceof Dungeon ||
+                    bpl.getBuilding() instanceof FlameSanctuary)) {
                     evt.getEntity().discard();
                 }
             }
