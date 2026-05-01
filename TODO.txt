@@ -1,5 +1,5 @@
 
-1.20.1-1.3.2c
+1.20.1-1.3.2e
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -9,7 +9,8 @@
 
 
 [❌] Overflowing graveyards
-    - sync from serverside on login
+    - fix population usage and errors
+    - fix rotations
 
 [❌] Wraiths
     - No knockback on melee attacks
@@ -23,10 +24,11 @@ Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
 
-[🟡] The Wraith can no longer be built at the dungeon (it's unfinished!)
-[🟡] Pillagers now correctly cost (120 food, 80 wood)
-[🟡] Logging into a world in sandbox mode now enables all cheats clientside
-    - This was previously only enabling it serverside, causing desyncs
+[✔] Using the gamemode switcher with F3+F4 no longer messes up your cursor
+[✔] Fixed a crash related to castle promotions
+[✔] Rejoining a singleplayer scenario no longer revokes your RTS player status
+[✔] Scenario alliances auto-set after publishing a map are now saved on exit
+    - This was causing units set under allied roles to fight each other before the game began
 
 Quality of Life
 ---------------
@@ -37,7 +39,6 @@ Quality of Life
 
 Balance
 -------
-
 
 Languages
 ---------

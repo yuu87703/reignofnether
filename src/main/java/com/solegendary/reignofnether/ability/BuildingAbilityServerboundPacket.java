@@ -57,7 +57,7 @@ public class BuildingAbilityServerboundPacket {
             }
 
             BuildingPlacement building = BuildingUtils.findBuilding(false, buildingPos);
-            if (building.getBuilding() instanceof Library) {
+            if (building != null && building.getBuilding() instanceof Library) {
                 if (!player.getName().getString().equals(building.ownerName)) {
                     ReignOfNether.LOGGER.warn("EnchantEquipAbilityServerboundPacket: Tried to process packet from " + player.getName() + " for: " + building.ownerName);
                     success.set(false);
@@ -74,7 +74,7 @@ public class BuildingAbilityServerboundPacket {
                         building.getDataStorage().setData(Library.AUTO_CAST_ENCHANT, enchantAbility);
                 }
             }
-            else if (building.getBuilding() instanceof Blacksmith blacksmith) {
+            else if (building != null && building.getBuilding() instanceof Blacksmith) {
                 if (!player.getName().getString().equals(building.ownerName)) {
                     ReignOfNether.LOGGER.warn("EnchantEquipAbilityServerboundPacket: Tried to process packet from " + player.getName() + " for: " + building.ownerName);
                     success.set(false);

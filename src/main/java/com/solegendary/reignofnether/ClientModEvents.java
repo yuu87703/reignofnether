@@ -172,24 +172,28 @@ public class ClientModEvents {
         BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.HUSK_HEAD.get());
         BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.STRAY_SKULL.get());
         BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.BOGGED_SKULL.get());
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.DROWNED_WALL_HEAD.get());
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.HUSK_WALL_HEAD.get());
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.STRAY_WALL_SKULL.get());
+        BlockEntityType.SKULL.validBlocks.add(BlockRegistrar.BOGGED_WALL_SKULL.get());
     }
 
     @SubscribeEvent
-    public static void onCreateSkullModels(EntityRenderersEvent.CreateSkullModels event) {
-        EntityModelSet modelSet = event.getEntityModelSet();
-        event.registerSkullModel(
+    public static void onCreateSkullModels(EntityRenderersEvent.CreateSkullModels evt) {
+        EntityModelSet modelSet = evt.getEntityModelSet();
+        evt.registerSkullModel(
                 SkullTypes.DROWNED,
                 new SkullModel(modelSet.bakeLayer(ModelLayers.ZOMBIE_HEAD))
         );
-        event.registerSkullModel(
+        evt.registerSkullModel(
                 SkullTypes.HUSK,
                 new SkullModel(modelSet.bakeLayer(ModelLayers.ZOMBIE_HEAD))
         );
-        event.registerSkullModel(
+        evt.registerSkullModel(
                 SkullTypes.STRAY,
                 new SkullModel(modelSet.bakeLayer(ModelLayers.SKELETON_SKULL))
         );
-        event.registerSkullModel(
+        evt.registerSkullModel(
                 SkullTypes.BOGGED,
                 new SkullModel(modelSet.bakeLayer(ModelLayers.SKELETON_SKULL))
         );

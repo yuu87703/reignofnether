@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.ability.heroAbilities.enchanter.ProtectiveE
 import com.solegendary.reignofnether.ability.heroAbilities.piglinmerchant.FancyFeast;
 import com.solegendary.reignofnether.ability.heroAbilities.wildfire.ScorchingGaze;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
+import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingUtils;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
 import com.solegendary.reignofnether.building.production.ProductionItems;
@@ -295,8 +296,9 @@ public interface Unit {
             }
         }
 
-        if (le.isInWater() && // stuck in bridge
-                BuildingUtils.findBuilding(le.level().isClientSide(), le.getOnPos().above()).getBuilding() instanceof AbstractBridge) {
+        // stuck in bridge
+        BuildingPlacement bpl = BuildingUtils.findBuilding(le.level().isClientSide(), le.getOnPos().above());
+        if (le.isInWater() && bpl != null && bpl.getBuilding() instanceof AbstractBridge) {
             le.setDeltaMovement(0, 0.2, 0);
         }
 

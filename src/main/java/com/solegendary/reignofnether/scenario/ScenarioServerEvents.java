@@ -1,6 +1,7 @@
 package com.solegendary.reignofnether.scenario;
 
 import com.solegendary.reignofnether.ReignOfNether;
+import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
 import com.solegendary.reignofnether.building.BuildingClientEvents;
 import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
@@ -66,6 +67,7 @@ public class ScenarioServerEvents {
             if (!scenarioRoleSaveData.scenarioRoleSaves.isEmpty()) {
                 scenarioRoles.clear();
                 scenarioRoles.addAll(scenarioRoleSaveData.scenarioRoleSaves);
+                AlliancesServerEvents.applyScenarioAlliances();
             }
             ReignOfNether.LOGGER.info("loaded scenario roles in serverevents");
         }

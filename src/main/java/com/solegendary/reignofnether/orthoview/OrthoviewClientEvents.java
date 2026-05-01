@@ -268,6 +268,14 @@ public class OrthoviewClientEvents {
             return;
         }
 
+        long windowHandle = MC.getWindow().getWindow();
+        int cursorMode = GLFW.glfwGetInputMode(windowHandle, GLFW.GLFW_CURSOR);
+        boolean grabbed = cursorMode == GLFW.GLFW_CURSOR_DISABLED;
+        if (MC.screen == null && !grabbed && MC.isWindowActive()) {
+            MC.mouseHandler.releaseMouse();
+            MC.mouseHandler.grabMouse();
+        }
+
         if (isEnabled() && MC.gameMode != null && (
             MC.gameMode.getPlayerMode() == GameType.ADVENTURE || MC.gameMode.getPlayerMode() == GameType.SURVIVAL
         )) {
