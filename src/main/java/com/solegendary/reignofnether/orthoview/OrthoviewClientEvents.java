@@ -271,7 +271,7 @@ public class OrthoviewClientEvents {
         long windowHandle = MC.getWindow().getWindow();
         int cursorMode = GLFW.glfwGetInputMode(windowHandle, GLFW.GLFW_CURSOR);
         boolean grabbed = cursorMode == GLFW.GLFW_CURSOR_DISABLED;
-        if (MC.screen == null && !grabbed) {
+        if (MC.screen == null && !grabbed && MC.isWindowActive()) {
             MC.mouseHandler.releaseMouse();
             MC.mouseHandler.grabMouse();
         }
