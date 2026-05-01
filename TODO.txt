@@ -1,5 +1,5 @@
 
-1.20.1-1.3.3
+1.20.1-1.3.2e
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -23,6 +23,11 @@
 Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
+
+[✔] Fixed a crash related to castle promotions
+[✔] Rejoining a singleplayer scenario no longer revokes your RTS player status
+[✔] Scenario alliances auto-set after publishing a map are now saved on exit
+    - This was causing units set under allied roles to fight each other before the game began
 
 Quality of Life
 ---------------

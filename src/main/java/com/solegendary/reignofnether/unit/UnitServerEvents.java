@@ -119,6 +119,8 @@ public class UnitServerEvents {
 
     public static final ArrayList<TargetResourcesSave> savedTargetResources = new ArrayList<>();
 
+    private static boolean isServerStopping = false;
+
     private static final int SAVE_TICKS_MAX = 600;
     private static int saveTicks = 0;
     @SubscribeEvent
@@ -137,6 +139,7 @@ public class UnitServerEvents {
 
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent evt) {
+        isServerStopping = true;
         ServerLevel level = evt.getServer().getLevel(Level.OVERWORLD);
         if (level != null) {
             saveFallenHeroUnits(level);
@@ -395,6 +398,8 @@ public class UnitServerEvents {
 
     @SubscribeEvent
     public static void onEntityLeave(EntityLeaveLevelEvent evt) {
+        if (isServerStopping) return;
+
         if (evt.getEntity() instanceof Unit && evt.getEntity() instanceof LivingEntity entity
             && !evt.getLevel().isClientSide) {
 

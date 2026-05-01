@@ -51,7 +51,8 @@ public class Castle extends ProductionBuilding implements GarrisonableBuildingAd
         return null;
     }, livingEntity -> {
         CompoundTag tag = new CompoundTag();
-        tag.putUUID("entity_uuid", livingEntity.getUUID());
+        if (livingEntity != null)
+            tag.putUUID("entity_uuid", livingEntity.getUUID());
         return tag;
     });
 
