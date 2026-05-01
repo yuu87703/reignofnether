@@ -24,6 +24,7 @@ Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
 
+[✔] Using the gamemode switcher with F3+F4 no longer messes up your cursor
 [✔] Fixed a crash related to castle promotions
 [✔] Rejoining a singleplayer scenario no longer revokes your RTS player status
 [✔] Scenario alliances auto-set after publishing a map are now saved on exit
