@@ -867,6 +867,7 @@
     "server.resources.reignofnether.not_enough_ore": "You don't have enough ore",
     "server.resources.reignofnether.not_enough_pop": "You don't have enough population supply",
     "server.resources.reignofnether.max_pop": "You have reached the maximum population",
+    "server.resources.reignofnether.full_graveyard": "This graveyard is too full",
 
     "server.resources.reignofnether.sent_food": "You gave %d food to %s!",
     "server.resources.reignofnether.received_food": "You received %d food from %s!",
