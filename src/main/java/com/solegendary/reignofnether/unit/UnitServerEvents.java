@@ -673,7 +673,8 @@ public class UnitServerEvents {
                             MobEffectRegistrar.SCORCHING_FIRE.get(),
                             MobEffectRegistrar.SOULS_AFLAME.get(),
                             MobEffectRegistrar.ANGRY.get(),
-                            MobEffectRegistrar.FEARFUL.get()
+                            MobEffectRegistrar.FEARFUL.get(),
+                            MobEffectRegistrar.PARTIALLY_POSSESSED.get()
                     )) {
                         MobEffectInstance mei = entity.getEffect(me);
                         if (mei != null)
