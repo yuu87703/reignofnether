@@ -13,14 +13,8 @@
     - fix rotations
 
 [❌] Wraiths
-    [❌] ambient, hurt and death sounds
-    Fear
-        [❌] sound
     Possess
-        [❌] standard black particle effects for partial possesss
-        [❌] one click one cast not working
-        [❌] test particles work for other players
-        [❌] sounds on channel, partial and full possession
+        [❌] sound on channel
 
 Bugfixes
 --------

@@ -13,8 +13,11 @@ import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitClientEvents;
+import com.solegendary.reignofnether.unit.goals.GenericTargetedSpellGoal;
+import com.solegendary.reignofnether.unit.goals.GenericUntargetedSpellGoal;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
 import com.solegendary.reignofnether.unit.units.monsters.WraithUnit;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.resources.language.I18n;
@@ -29,6 +32,7 @@ import java.util.List;
 public class Possess extends Ability {
 
     public static final int RANGE = 6;
+    public static final int BONUS_CHANNELING_RANGE = 6;
 
     public static final int BASE_CHANNEL_TICKS = 60;
     public static final int CHANNEL_TICKS_PER_POP_COST = 20;
@@ -44,6 +48,16 @@ public class Possess extends Ability {
             true,
             true
         );
+    }
+
+    @Override
+    public boolean isCasting(Unit unit) {
+        if (unit instanceof WraithUnit wraithUnit) {
+            GenericTargetedSpellGoal goal = wraithUnit.getPossessGoal();
+            if (goal != null)
+                return goal.isCasting();
+        }
+        return false;
     }
 
     @Override

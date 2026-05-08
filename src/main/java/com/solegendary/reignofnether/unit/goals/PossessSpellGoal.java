@@ -20,7 +20,7 @@ public class PossessSpellGoal extends GenericTargetedSpellGoal {
                    Consumer<LivingEntity> onEntityCast) {
         super(wraith, channelTicks, range, animAction, onEntityCast, null, null);
         this.wraithUnit = wraith;
-        this.bonusChannelingRange = 8;
+        this.bonusChannelingRange = Possess.BONUS_CHANNELING_RANGE;
         this.setOnStartChanneling((castPos) -> {
             // TODO start ambient sound
             if (targetEntity instanceof Unit unit)

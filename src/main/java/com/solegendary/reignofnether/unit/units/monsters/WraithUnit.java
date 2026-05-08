@@ -8,8 +8,11 @@ import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
@@ -27,6 +30,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -338,12 +343,26 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     }
 
     @Override
+    public MobType getMobType() {
+        return MobType.UNDEAD;
+    }
+
+    @Override
     public SunlightEffect getSunlightEffect() {
         if (hasItemInSlot(EquipmentSlot.HEAD) && getItemBySlot(EquipmentSlot.HEAD).getItem() != Items.CARVED_PUMPKIN) {
             return SunlightEffect.SLOWNESS_II;
         } else {
             return SunlightEffect.FIRE;
         }
+    }
+    @Override protected SoundEvent getAmbientSound() {
+        return SoundRegistrar.WRAITH_AMBIENT.get();
+    }
+    @Override protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return SoundRegistrar.WRAITH_HURT.get();
+    }
+    @Override protected SoundEvent getDeathSound() {
+        return SoundRegistrar.WRAITH_DEATH.get();
     }
 
     public void initialiseGoals() {
@@ -410,6 +429,10 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         if (targetUnit.uninterruptable())
             return;
 
+        if (!this.level().isClientSide()) {
+            SoundClientboundPacket.playSoundAtPos(SoundAction.WRAITH_FEAR, blockPosition());
+        }
+
         // Calculate a flee position 5 blocks directly away from this wraith
         Vec3 toTarget = targetEntity.position().subtract(this.position()).normalize();
         Vec3 fleePos = targetEntity.position().add(toTarget.scale(Fear.DURATION_SECONDS * 2));
@@ -433,14 +456,20 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         if (targetEntity instanceof Unit unit && unit.getCost().population <= (amp + 1) * Possess.POP_PER_WRAITH) {
             targetEntity.removeEffect(MobEffectRegistrar.PARTIALLY_POSSESSED.get());
             unit.setOwnerName(this.getOwnerName());
-            MiscUtil.addParticleExplosion(ParticleTypes.SCULK_SOUL, 30, level(), targetEntity.getEyePosition(), 0.15f);
+            MiscUtil.addParticleExplosion(ParticleTypes.SCULK_SOUL, 40, level(), targetEntity.getEyePosition(), 0.15f);
+            if (!this.level().isClientSide())
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WRAITH_POSSESS_FULL, targetEntity.blockPosition());
         } else {
             targetEntity.addEffect(new MobEffectInstance(
                     MobEffectRegistrar.PARTIALLY_POSSESSED.get(),
                     Possess.PARTIAL_POSSESS_DURATION_SECONDS * 20,
-                    amp
+                    amp,
+                    false,
+                    true
             ));
             MiscUtil.addParticleExplosion(ParticleTypes.SCULK_SOUL, 10, level(), targetEntity.getEyePosition(), 0.10f);
+            if (!this.level().isClientSide())
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WRAITH_POSSESS_PARTIAL, targetEntity.blockPosition());
         }
     }
 }
