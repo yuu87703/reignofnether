@@ -18,9 +18,11 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.WraithAnimations;
+import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -234,7 +236,7 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
                 activeAnimDef = WraithAnimations.POSSESS;
                 activeAnimState = attackAnimState;
                 animateScale = 1.0f;
-                animateSpeed = 0.2f;
+                animateSpeed = 0.15f;
                 startAnimation(activeAnimDef);
             }
             default -> {
@@ -431,14 +433,14 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         if (targetEntity instanceof Unit unit && unit.getCost().population <= (amp + 1) * Possess.POP_PER_WRAITH) {
             targetEntity.removeEffect(MobEffectRegistrar.PARTIALLY_POSSESSED.get());
             unit.setOwnerName(this.getOwnerName());
-            // TODO: big particle soul explosion
+            MiscUtil.addParticleExplosion(ParticleTypes.SCULK_SOUL, 30, level(), targetEntity.getEyePosition(), 0.15f);
         } else {
             targetEntity.addEffect(new MobEffectInstance(
                     MobEffectRegistrar.PARTIALLY_POSSESSED.get(),
                     Possess.PARTIAL_POSSESS_DURATION_SECONDS * 20,
                     amp
             ));
-            // TODO: small particle soul explosion
+            MiscUtil.addParticleExplosion(ParticleTypes.SCULK_SOUL, 10, level(), targetEntity.getEyePosition(), 0.10f);
         }
     }
 }

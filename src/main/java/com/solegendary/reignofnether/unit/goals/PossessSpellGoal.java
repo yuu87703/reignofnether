@@ -14,9 +14,12 @@ import java.util.function.Consumer;
 
 public class PossessSpellGoal extends GenericTargetedSpellGoal {
 
+    WraithUnit wraithUnit;
+
     public PossessSpellGoal(WraithUnit wraith, int channelTicks, int range, UnitAnimationAction animAction,
                    Consumer<LivingEntity> onEntityCast) {
         super(wraith, channelTicks, range, animAction, onEntityCast, null, null);
+        this.wraithUnit = wraith;
         this.bonusChannelingRange = 8;
         this.setOnStartChanneling((castPos) -> {
             // TODO start ambient sound
@@ -28,8 +31,11 @@ public class PossessSpellGoal extends GenericTargetedSpellGoal {
     @Override
     public void tick() {
         super.tick();
-        if (isCasting && castTarget != null)
+        if (isCasting && targetEntity != null) {
+            if (targetEntity instanceof Unit unit && unit.getOwnerName().equals(wraithUnit.getOwnerName()))
+                Unit.fullResetBehaviours(wraithUnit);
             doPossessParticles();
+        }
     }
 
     @Override
@@ -51,7 +57,7 @@ public class PossessSpellGoal extends GenericTargetedSpellGoal {
         double distSqrt = Math.sqrt(dist);
         if (dist == 0) return;
 
-        double speed = distSqrt * 0.24;
+        double speed = distSqrt * 0.225;
         double vx = (dx / dist) * speed;
         double vy = (dy / dist) * speed;
         double vz = (dz / dist) * speed;

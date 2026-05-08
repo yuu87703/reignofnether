@@ -841,11 +841,15 @@ public class MiscUtil {
     }
 
     public static void addParticleExplosion(SimpleParticleType particleType, int amount, Level level, Vec3 pos) {
+        addParticleExplosion(particleType, amount, level, pos, 0.2f);
+    }
+
+    public static void addParticleExplosion(SimpleParticleType particleType, int amount, Level level, Vec3 pos, double velocityScale) {
         RandomSource rand = RandomSource.create();
         for (int j = 0; j < amount; ++j) {
-            double d0 = rand.nextGaussian() * 0.2;
-            double d1 = rand.nextGaussian() * 0.2;
-            double d2 = rand.nextGaussian() * 0.2;
+            double d0 = rand.nextGaussian() * velocityScale;
+            double d1 = rand.nextGaussian() * velocityScale;
+            double d2 = rand.nextGaussian() * velocityScale;
             if (level.isClientSide()) {
                 level.addParticle(particleType, pos.x, pos.y, pos.z, d0, d1, d2);
             } else {

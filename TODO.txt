@@ -13,14 +13,14 @@
     - fix rotations
 
 [❌] Wraiths
-    - No knockback on melee attacks
-    - Enemies hit by wraiths enough times get feared (uncontrollable and issued a move-away command from the last wraith that hit it)
-    - 2 population
-    - built at dungeons
-    - needs a lab upgrade - possession?
-    [❌] Add mob effect for partial possession
-        - Causes stacking slow and prevents deletion
-
+    [❌] ambient, hurt and death sounds
+    Fear
+        [❌] sound
+    Possess
+        [❌] standard black particle effects for partial possesss
+        [❌] one click one cast not working
+        [❌] test particles work for other players
+        [❌] sounds on channel, partial and full possession
 
 Bugfixes
 --------
