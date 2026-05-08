@@ -23,7 +23,7 @@ public class GenericTargetedSpellGoal extends MoveToTargetBlockGoal {
     protected Ability ability; // used for syncing cooldown with clientside
     protected int channelTicks = 0; // how long have we spent trying to cast this spell
     public boolean isCasting() { return isCasting; }
-    protected final int channelTicksMax; // max time required to cast a spell
+    protected int channelTicksMax; // max time required to cast a spell
     protected boolean isCasting = false;
     protected BlockPos castTarget = null; // pos that the spell will be cast at
     public float range;

@@ -4,7 +4,6 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.Fear;
 import com.solegendary.reignofnether.ability.abilities.Possess;
-import com.solegendary.reignofnether.ability.abilities.SpinWebs;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
@@ -26,6 +25,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -36,6 +36,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -98,7 +99,7 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     private GenericTargetedSpellGoal fearGoal;
     public GenericTargetedSpellGoal getFearGoal() { return fearGoal; }
     private GenericTargetedSpellGoal possessGoal;
-    public GenericTargetedSpellGoal getPossessGoal() { return fearGoal; }
+    public GenericTargetedSpellGoal getPossessGoal() { return possessGoal; }
 
     @Nullable
     public Fear getFearAbility() {
@@ -191,7 +192,7 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     public int getAttackWindupTicks() { return 8; }
 
     @Override
-    public float getAnimationSpeed() { return 1.0f; }
+    public float getAnimationSpeed() { return animateSpeed; }
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -215,16 +216,25 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         animateScaleReducing = false;
         switch (animAction) {
             case ATTACK_UNIT, ATTACK_BUILDING -> {
-                activeAnimDef = WraithAnimations.ATTACK;
+                if (getFearAbility() != null && getFearAbility().isAutocasting(this) && getFearAbility().isOffCooldown(this))
+                    activeAnimDef = WraithAnimations.FEAR;
+                else
+                    activeAnimDef = WraithAnimations.ATTACK;
                 activeAnimState = attackAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
             }
             case CAST_SPELL -> {
+                activeAnimDef = WraithAnimations.FEAR;
+                activeAnimState = attackAnimState;
+                animateScale = 1.0f;
+                startAnimation(activeAnimDef);
+            }
+            case CAST_SPELL_ALT -> {
                 activeAnimDef = WraithAnimations.POSSESS;
                 activeAnimState = attackAnimState;
                 animateScale = 1.0f;
-                animateSpeed = 0.5f;
+                animateSpeed = 0.2f;
                 startAnimation(activeAnimDef);
             }
             default -> {
@@ -342,8 +352,21 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
         this.attackGoal = new MeleeWindupAttackUnitGoal(this, false);
         this.attackBuildingGoal = new MeleeWindupAttackBuildingGoal(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
-        this.fearGoal = new GenericTargetedSpellGoal(this, 0, Fear.RANGE, this::onCastFear, null, null);
-        this.possessGoal = new GenericTargetedSpellGoal(this, Possess.BASE_CHANNEL_TICKS, Possess.RANGE, this::onCastPossess, null, null);
+        this.fearGoal = new GenericTargetedSpellGoal(this,
+                0,
+                Fear.RANGE,
+                UnitAnimationAction.CAST_SPELL,
+                this::onCastFear,
+                null,
+                null
+        );
+        this.possessGoal = new PossessSpellGoal(this,
+                Possess.BASE_CHANNEL_TICKS,
+                Possess.RANGE,
+                UnitAnimationAction.CAST_SPELL_ALT,
+                this::onCastPossess
+        );
+        this.possessGoal.instantLook = true;
     }
 
     @Override
@@ -378,15 +401,44 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     }
 
     public void onCastFear(LivingEntity targetEntity) {
+        if (level().isClientSide())
+            return;
+        if (!(targetEntity instanceof Unit targetUnit))
+            return;
+        if (targetUnit.uninterruptable())
+            return;
 
+        // Calculate a flee position 5 blocks directly away from this wraith
+        Vec3 toTarget = targetEntity.position().subtract(this.position()).normalize();
+        Vec3 fleePos = targetEntity.position().add(toTarget.scale(Fear.DURATION_SECONDS * 2));
+        BlockPos fleeBp = new BlockPos((int) fleePos.x, (int) fleePos.y, (int) fleePos.z);
+
+        Unit.fullResetBehaviours(targetUnit);
+        targetUnit.getMoveGoal().setMoveTarget(fleeBp);
+        targetEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.UNCONTROLLABLE.get(), Fear.DURATION_SECONDS * 20, 0, true, false));
+        targetEntity.addEffect(new MobEffectInstance(MobEffectRegistrar.FEARFUL.get(), Fear.DURATION_SECONDS * 20, 0, true, false));
     }
+
 
     public void onCastPossess(LivingEntity targetEntity) {
-
-    }
-
-    // check current possession stacks, if >= popCost, take control of the unit, otherwise add stacks
-    public void doPossess(LivingEntity targetEntity) {
-
+        MobEffectInstance mei = targetEntity.getEffect(MobEffectRegistrar.PARTIALLY_POSSESSED.get());
+        int amp = 0;
+        if (mei != null) {
+            amp = mei.getAmplifier() + 1;
+        }
+        // play possess sound
+        kill();
+        if (targetEntity instanceof Unit unit && unit.getCost().population <= (amp + 1) * Possess.POP_PER_WRAITH) {
+            targetEntity.removeEffect(MobEffectRegistrar.PARTIALLY_POSSESSED.get());
+            unit.setOwnerName(this.getOwnerName());
+            // TODO: big particle soul explosion
+        } else {
+            targetEntity.addEffect(new MobEffectInstance(
+                    MobEffectRegistrar.PARTIALLY_POSSESSED.get(),
+                    Possess.PARTIAL_POSSESS_DURATION_SECONDS * 20,
+                    amp
+            ));
+            // TODO: small particle soul explosion
+        }
     }
 }
