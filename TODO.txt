@@ -8,13 +8,13 @@
 
 
 
-[❌] Overflowing graveyards
-    - fix population usage and errors
-    - fix rotations
+Overflowing graveyards
+    [❌] save release setting
 
-[❌] Wraiths
+Wraiths
     Possess
-        [❌] sound on channel
+        [🟡] test bonus channeling range is enforced and chasing mechanics
+        [❌] glow on target
 
 Bugfixes
 --------
@@ -30,10 +30,13 @@ Quality of Life
 [❌] Ravager artillery now have an attack-ground button
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 
+[❌] Added /gamerule coopMode - if true, having no human RTS opponents will not result in a victory
 [❌] /rtsapi commands now work from datapacks
-
 [❌] /rtsapi commands building name arguments are now case and underscore insensitive
     - Eg. if your custom building is named "Villager House" then you can write "villager_house" and it will still be recognised
+
+[✔] Reworked the Wretched Wraith sounds using MC Dungeons sound effects
+    - Regular wraiths now use the old Wretched Wraith's sounds
 
 Balance
 -------

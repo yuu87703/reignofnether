@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.blocks.NightCircleMode;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.Relationship;
@@ -27,6 +28,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.BoggedUnit;
 import com.solegendary.reignofnether.unit.units.monsters.PhantomSummon;
+import com.solegendary.reignofnether.unit.units.monsters.WraithUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.unit.units.piglins.WitherSkeletonUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
@@ -332,37 +334,34 @@ public class MiscUtil {
                 it -> it.position().distanceTo(pos)
         ));
 
-        // prioritise unpoisoned enemies for bogged
+        // Determine priority effect filter for specific unit types
+        Predicate<LivingEntity> priorityFilter = null;
         if (unitMob instanceof BoggedUnit) {
+            priorityFilter = e -> !e.hasEffect(MobEffects.POISON);
+        } else if (unitMob instanceof WraithUnit) {
+            priorityFilter = e -> !e.hasEffect(MobEffectRegistrar.FEARFUL.get());
+        } else if (unitMob instanceof WitherSkeletonUnit) {
+            priorityFilter = e -> e.hasEffect(MobEffects.WITHER);
+        }
+
+        Vec3 unitVec = new Vec3(unitPosition.x, unitPosition.y, unitPosition.z);
+
+        Predicate<LivingEntity> baseFilter = e ->
+                e.position().distanceTo(unitVec) <= range &&
+                e.level().getWorldBorder().isWithinBounds(e.blockPosition());
+
+        // Try priority pass first, then fall back to base filter
+        List<Predicate<LivingEntity>> passes = priorityFilter != null
+                ? List.of(baseFilter.and(priorityFilter), baseFilter)
+                : List.of(baseFilter);
+
+        for (Predicate<LivingEntity> filter : passes) {
             for (LivingEntity entity : entities) {
-                if (!(entity.position().distanceTo(new Vec3(unitPosition.x, unitPosition.y, unitPosition.z)) <= range) ||
-                        !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition()) || entity.hasEffect(MobEffects.POISON)) {
-                    continue;
-                }
-                if (isIdleOrMoveAttackable(unitMob, entity, neutralAggro) && hasLineOfSightForAttacks(unitMob, entity)) {
+                if (filter.test(entity) &&
+                        isIdleOrMoveAttackable(unitMob, entity, neutralAggro) &&
+                        hasLineOfSightForAttacks(unitMob, entity)) {
                     return entity;
                 }
-            }
-        }
-        // prioritise withered enemies for wither skeletons
-        else if (unitMob instanceof WitherSkeletonUnit) {
-            for (LivingEntity entity : entities) {
-                if (!(entity.position().distanceTo(new Vec3(unitPosition.x, unitPosition.y, unitPosition.z)) <= range) ||
-                        !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition()) || !entity.hasEffect(MobEffects.WITHER)) {
-                    continue;
-                }
-                if (isIdleOrMoveAttackable(unitMob, entity, neutralAggro) && hasLineOfSightForAttacks(unitMob, entity)) {
-                    return entity;
-                }
-            }
-        }
-        for (LivingEntity entity : entities) {
-            if (!(entity.position().distanceTo(new Vec3(unitPosition.x, unitPosition.y, unitPosition.z)) <= range) ||
-                    !entity.level().getWorldBorder().isWithinBounds(entity.blockPosition())) {
-                continue;
-            }
-            if (isIdleOrMoveAttackable(unitMob, entity, neutralAggro) && hasLineOfSightForAttacks(unitMob, entity)) {
-                return entity;
             }
         }
         return null;
