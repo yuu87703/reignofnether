@@ -84,6 +84,10 @@ public class SoundRegistrar {
             SOUND_EVENTS.register("wraith_fear", () ->
                     SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wraith_fear")));
 
+    public static final RegistryObject<SoundEvent> WRAITH_POSSESS_CHANNEL =
+            SOUND_EVENTS.register("wraith_possess_channel", () ->
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wraith_possess_channel")));
+
     public static final RegistryObject<SoundEvent> WRAITH_POSSESS_PARTIAL =
             SOUND_EVENTS.register("wraith_possess_partial", () ->
                     SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "wraith_possess_partial")));

@@ -161,6 +161,7 @@ public class SoundClientEvents {
         SOUND_MAP.put(SoundAction.WILDFIRE_SOULS_AFLAME, SoundRegistrar.WILDFIRE_SOULS_AFLAME.get());
         SOUND_MAP.put(SoundAction.PIGLIN_MERCHANT_LOOT_EXPLOSION, SoundRegistrar.PIGLIN_MERCHANT_LOOT_EXPLOSION.get());
         SOUND_MAP.put(SoundAction.WRAITH_FEAR, SoundRegistrar.WRAITH_FEAR.get());
+        SOUND_MAP.put(SoundAction.WRAITH_POSSESS_CHANNEL, SoundRegistrar.WRAITH_POSSESS_CHANNEL.get());
         SOUND_MAP.put(SoundAction.WRAITH_POSSESS_PARTIAL, SoundRegistrar.WRAITH_POSSESS_PARTIAL.get());
         SOUND_MAP.put(SoundAction.WRAITH_POSSESS_FULL, SoundRegistrar.WRAITH_POSSESS_FULL.get());
     }

@@ -170,7 +170,7 @@
     "abilities.reignofnether.fear.tooltip2": "away for %d seconds. Cannot be used on heroes.",
     "abilities.reignofnether.possess": "Possess",
     "abilities.reignofnether.possess.tooltip1": "Channel to sacrifice the wraith to take permanent control of a non-hero unit.",
-    "abilities.reignofnether.possess.tooltip2": "While channeling, the target is slowed and the wraith can't move.",
+    "abilities.reignofnether.possess.tooltip2": "The possession is stopped if the wraith dies or is too far out of range",
     "abilities.reignofnether.possess.tooltip3": "Larger units require multiple wraiths and more time to possess.",
     "abilities.reignofnether.possess.error": "Cannot only be used on non-hero enemies.",
     "abilities.reignofnether.wither_cloud": "Wither Cloud",

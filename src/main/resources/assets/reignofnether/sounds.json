@@ -108,6 +108,10 @@
             "reignofnether:wraith_fear_03"
         ]
     },
+    "wraith_possess_channel": {
+        "subtitle": "sounds.reignofnether.wraith_possess_channel",
+        "sounds": [ "reignofnether:wraith_possess_channel" ]
+    },
     "wraith_possess_partial": {
         "subtitle": "sounds.reignofnether.wraith_possess_partial",
         "sounds": [ "reignofnether:wraith_possess_partial" ]

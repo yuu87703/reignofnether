@@ -503,9 +503,9 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         int msColour = 0xFFFFFFFF;
         double msAttr = ((Mob) unit).getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
         if (msAttr < unit.getMovementSpeed() || (unit instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield)) {
-            msColour = 0xFFFC3838;
-        } else if (msAttr > unit.getMovementSpeed()) {
             msColour = 0xFF2BFF2B;
+        } else if (msAttr > unit.getMovementSpeed()) {
+            msColour = 0xFFFC3838;
         }
         renderedStats.add(new RenderedStat(
                 ResourceLocation.fromNamespaceAndPath("reignofnether","textures/icons/items/boots.png"),

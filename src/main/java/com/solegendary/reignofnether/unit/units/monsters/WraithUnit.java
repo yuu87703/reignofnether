@@ -258,6 +258,14 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     }
 
     @Override
+    public void kill() {
+        if (!level().isClientSide()) {
+            SoundClientboundPacket.stopSoundWithId(getId());
+        }
+        super.kill();
+    }
+
+    @Override
     protected boolean onSoulSpeedBlock() {
         return false;
     }
@@ -273,7 +281,7 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
                 .add(Attributes.FOLLOW_RANGE, Unit.getFollowRange())
                 .add(Attributes.ARMOR, WraithUnit.armorValue)
                 .add(Attributes.ATTACK_KNOCKBACK, 0f)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0f)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 9999.0f)
                 .add(AttributeRegistrar.ATTACK_DAMAGE.get(), attackDamage)
                 .add(AttributeRegistrar.ATTACKS_PER_SECOND.get(), attacksPerSecond)
                 .add(AttributeRegistrar.ATTACK_RANGE.get(), attackRange)
