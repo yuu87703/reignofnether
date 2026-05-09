@@ -27,8 +27,8 @@ Quality of Life
 ---------------
 
 [❌] Ready check instead of start game countdown
-[❌] Ravager artillery now have an attack-ground button
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
+
 
 [❌] Added /gamerule coopMode - if true, having no human RTS opponents will not result in a victory
 [❌] /rtsapi commands now work from datapacks
@@ -37,6 +37,10 @@ Quality of Life
 
 [✔] Reworked the Wretched Wraith sounds using MC Dungeons sound effects
     - Regular wraiths now use the old Wretched Wraith's sounds
+
+[✔] Ravager artillery now have an attack-ground button
+    - This will fire arrows upward as though they were shooting at a building
+    [❌] not showing checkpoint
 
 Balance
 -------

@@ -61,6 +61,7 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
     static {
         ABILITIES.add(new Roar(), Keybindings.keyQ);
         ABILITIES.add(new Eject(), Keybindings.keyW);
+        ABILITIES.add(new AttackGround(PillagerUnit.attackRange), Keybindings.keyE);
     }
 
     //region
@@ -285,8 +286,6 @@ public class RavagerUnit extends Ravager implements Unit, AttackerUnit {
     public void roar() {
         if (this.isAlive()) {
             if (!level().isClientSide()) {
-                LivingEntity livingentity;
-
                 List<Mob> nearbyMobs = MiscUtil.getEntitiesWithinRange(
                         new Vector3d(this.position().x, this.position().y, this.position().z),
                         ROAR_RANGE,

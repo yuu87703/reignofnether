@@ -25,7 +25,7 @@ import java.util.List;
 
 public class GraveyardPlacement extends ProductionPlacement {
 
-    public boolean autoRelease = true;
+    public boolean autoRelease = false;
 
     private static List<BlockPos> skullPoses = List.of(
             new BlockPos(1,1,3),
