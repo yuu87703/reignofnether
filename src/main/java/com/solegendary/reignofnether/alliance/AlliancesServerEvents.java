@@ -121,9 +121,10 @@ public class AlliancesServerEvents {
             if (role == null || !role.isNpc)
                 eligiblePlayers.add(rtsPlayer.name);
         }
-        for (int i = 0; i < eligiblePlayers.size(); i++)
-            for (int j = i + 1; j < eligiblePlayers.size(); j++)
-                addAlliance(eligiblePlayers.get(i), eligiblePlayers.get(j));
+        for (String player1 : eligiblePlayers)
+            for (String player2 : eligiblePlayers)
+                if (!player1.equals(player2))
+                    addAlliance(player1, player2);
     }
 
     public static void resetAllAlliances() {
