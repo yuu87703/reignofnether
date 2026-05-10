@@ -110,6 +110,22 @@ public class AlliancesServerEvents {
         }
     }
 
+    // ally all RTS players, unless they have an NPC scenario role
+    public static void applyCoopAlliances() {
+        alliances.clear();
+
+        List<String> eligiblePlayers = new ArrayList<>();
+
+        for (RTSPlayer rtsPlayer : PlayerServerEvents.rtsPlayers) {
+            ScenarioRole role = ScenarioUtils.getScenarioRole(false, rtsPlayer.scenarioRoleIndex);
+            if (role == null || !role.isNpc)
+                eligiblePlayers.add(rtsPlayer.name);
+        }
+        for (int i = 0; i < eligiblePlayers.size(); i++)
+            for (int j = i + 1; j < eligiblePlayers.size(); j++)
+                addAlliance(eligiblePlayers.get(i), eligiblePlayers.get(j));
+    }
+
     public static void resetAllAlliances() {
         alliances.clear();
         AllianceClientboundPacket.resetAlliances();
