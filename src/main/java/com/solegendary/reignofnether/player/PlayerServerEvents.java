@@ -505,16 +505,24 @@ public class PlayerServerEvents {
                 }
             }
 
+            boolean coopMode = serverLevel.getGameRules().getRule(GameRuleRegistrar.COOP_MODE).get();
+
             if (!TutorialServerEvents.isEnabled() && !readiedStart) {
                 serverPlayer.sendSystemMessage(Component.literal(""));
                 if (faction == Faction.NONE)
                     sendMessageToAllPlayers("server.reignofnether.started_sandbox", true, playerName);
+                else if (coopMode)
+                    sendMessageToAllPlayers("server.reignofnether.started_ally", true, playerName);
                 else
                     sendMessageToAllPlayers("server.reignofnether.started", true, playerName);
                 sendMessageToAllPlayers("server.reignofnether.total_players", false, rtsPlayers.size());
             }
+            if (coopMode)
+                AlliancesServerEvents.applyCoopAlliances();
+
             PlayerClientboundPacket.syncRtsGameTime(rtsGameTicks);
             saveRTSPlayers();
+
         }
     }
 
