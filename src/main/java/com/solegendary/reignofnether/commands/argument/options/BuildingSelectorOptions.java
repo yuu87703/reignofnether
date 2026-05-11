@@ -33,12 +33,12 @@ import java.util.stream.Stream;
 
 public class BuildingSelectorOptions {
 	
-	public static final DynamicCommandExceptionType ERROR_UNKNOWN_OPTION = new DynamicCommandExceptionType((p_121520_) -> Component.translatable("argument.building.options.unknown", p_121520_));
-	public static final DynamicCommandExceptionType ERROR_INAPPLICABLE_OPTION = new DynamicCommandExceptionType((p_121516_) -> Component.translatable("argument.building.options.inapplicable", p_121516_));
-	public static final SimpleCommandExceptionType ERROR_RANGE_NEGATIVE = new SimpleCommandExceptionType(Component.translatable("argument.building.options.distance.negative"));
-	public static final SimpleCommandExceptionType ERROR_LIMIT_TOO_SMALL = new SimpleCommandExceptionType(Component.translatable("argument.building.options.limit.too_small"));
-	public static final DynamicCommandExceptionType ERROR_SORT_UNKNOWN = new DynamicCommandExceptionType((p_121508_) -> Component.translatable("argument.building.options.sort.irreversible", p_121508_));
-	public static final DynamicCommandExceptionType ERROR_BUILDING_TYPE_INVALID = new DynamicCommandExceptionType((p_121452_) -> Component.translatable("argument.building.options.type.invalid", p_121452_));
+	public static final DynamicCommandExceptionType ERROR_UNKNOWN_OPTION = new DynamicCommandExceptionType((p_121520_) -> Component.translatable("argument.reignofnether.building.options.unknown.error", p_121520_));
+	public static final DynamicCommandExceptionType ERROR_INAPPLICABLE_OPTION = new DynamicCommandExceptionType((p_121516_) -> Component.translatable("argument.reignofnether.building.options.inapplicable.error", p_121516_));
+	public static final SimpleCommandExceptionType ERROR_RANGE_NEGATIVE = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.building.options.distance.negative.error"));
+	public static final SimpleCommandExceptionType ERROR_LIMIT_TOO_SMALL = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.building.options.limit.too_small.error"));
+	public static final DynamicCommandExceptionType ERROR_SORT_UNKNOWN = new DynamicCommandExceptionType((p_121508_) -> Component.translatable("argument.reignofnether.building.options.sort.irreversible.error", p_121508_));
+	public static final DynamicCommandExceptionType ERROR_BUILDING_TYPE_INVALID = new DynamicCommandExceptionType((p_121452_) -> Component.translatable("argument.reignofnether.building.options.type.invalid.error", p_121452_));
 	private static final Map<String, BuildingSelectorOptions.Option> OPTIONS = Maps.newHashMap();
 	private static final SimpleCommandExceptionType UNKNOWN_BUILDING =
 		new SimpleCommandExceptionType(Component.translatable("commands.reignofnether.error.unknown_building"));
@@ -59,14 +59,14 @@ public class BuildingSelectorOptions {
 					p_121421_.getReader().setCursor(i);
 					throw ERROR_RANGE_NEGATIVE.createWithContext(p_121421_.getReader());
 				}
-			}, (p_121419_) -> p_121419_.getDistance().isAny(), Component.translatable("argument.building.options.distance.description"));
-			register("rotation", (selector) -> selector.setRotation(selector.getReader().readString()), (p_121411_) -> p_121411_.getRotation() == null, Component.translatable("argument.building.options.rotation.description"));
-			register("x", (p_121413_) -> p_121413_.setX(p_121413_.getReader().readDouble()), (p_121411_) -> p_121411_.getX() == null, Component.translatable("argument.building.options.x.description"));
-			register("y", (p_121409_) -> p_121409_.setY(p_121409_.getReader().readDouble()), (p_121407_) -> p_121407_.getY() == null, Component.translatable("argument.building.options.y.description"));
-			register("z", (p_121405_) -> p_121405_.setZ(p_121405_.getReader().readDouble()), (p_121403_) -> p_121403_.getZ() == null, Component.translatable("argument.building.options.z.description"));
-			register("dx", (p_121401_) -> p_121401_.setDeltaX(p_121401_.getReader().readDouble()), (p_121399_) -> p_121399_.getDeltaX() == null, Component.translatable("argument.building.options.dx.description"));
-			register("dy", (p_121397_) -> p_121397_.setDeltaY(p_121397_.getReader().readDouble()), (p_121395_) -> p_121395_.getDeltaY() == null, Component.translatable("argument.building.options.dy.description"));
-			register("dz", (p_121562_) -> p_121562_.setDeltaZ(p_121562_.getReader().readDouble()), (p_121560_) -> p_121560_.getDeltaZ() == null, Component.translatable("argument.building.options.dz.description"));
+			}, (p_121419_) -> p_121419_.getDistance().isAny(), Component.translatable("argument.reignofnether.building.options.distance.description"));
+			register("rotation", (selector) -> selector.setRotation(selector.getReader().readString()), (p_121411_) -> p_121411_.getRotation() == null, Component.translatable("argument.reignofnether.building.options.rotation.description"));
+			register("x", (p_121413_) -> p_121413_.setX(p_121413_.getReader().readDouble()), (p_121411_) -> p_121411_.getX() == null, Component.translatable("argument.reignofnether.building.options.x.description"));
+			register("y", (p_121409_) -> p_121409_.setY(p_121409_.getReader().readDouble()), (p_121407_) -> p_121407_.getY() == null, Component.translatable("argument.reignofnether.building.options.y.description"));
+			register("z", (p_121405_) -> p_121405_.setZ(p_121405_.getReader().readDouble()), (p_121403_) -> p_121403_.getZ() == null, Component.translatable("argument.reignofnether.building.options.z.description"));
+			register("dx", (p_121401_) -> p_121401_.setDeltaX(p_121401_.getReader().readDouble()), (p_121399_) -> p_121399_.getDeltaX() == null, Component.translatable("argument.reignofnether.building.options.dx.description"));
+			register("dy", (p_121397_) -> p_121397_.setDeltaY(p_121397_.getReader().readDouble()), (p_121395_) -> p_121395_.getDeltaY() == null, Component.translatable("argument.reignofnether.building.options.dy.description"));
+			register("dz", (p_121562_) -> p_121562_.setDeltaZ(p_121562_.getReader().readDouble()), (p_121560_) -> p_121560_.getDeltaZ() == null, Component.translatable("argument.reignofnether.building.options.dz.description"));
 			register("limit", (p_121550_) -> {
 				int i = p_121550_.getReader().getCursor();
 				int j = p_121550_.getReader().readInt();
@@ -77,7 +77,7 @@ public class BuildingSelectorOptions {
 					p_121550_.setMaxResults(j);
 					p_121550_.setLimited(true);
 				}
-			}, (p_121548_) -> !p_121548_.isLimited(), Component.translatable("argument.building.options.limit.description"));
+			}, (p_121548_) -> !p_121548_.isLimited(), Component.translatable("argument.reignofnether.building.options.limit.description"));
 			register("sort", (p_247983_) -> {
 				int i = p_247983_.getReader().getCursor();
 				String s = p_247983_.getReader().readUnquotedString();
@@ -95,7 +95,7 @@ public class BuildingSelectorOptions {
 				
 				p_247983_.setOrder(biconsumer);
 				p_247983_.setSorted(true);
-			}, (p_121544_) -> !p_121544_.isSorted(), Component.translatable("argument.building.options.sort.description"));
+			}, (p_121544_) -> !p_121544_.isSorted(), Component.translatable("argument.reignofnether.building.options.sort.description"));
 			register("type", (p_121534_) -> {
 				p_121534_.setSuggestions((ctx, builder) ->
 					SharedSuggestionProvider.suggestResource(
@@ -119,7 +119,7 @@ public class BuildingSelectorOptions {
 					throw UNKNOWN_BUILDING.create();
 				}
 				p_121534_.limitToType(building.name);
-			}, (p_121532_) -> !p_121532_.isTypeLimited(), Component.translatable("argument.building.options.type.description"));
+			}, (p_121532_) -> !p_121532_.isTypeLimited(), Component.translatable("argument.reignofnether.building.options.type.description"));
 		}
 	}
 	

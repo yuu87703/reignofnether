@@ -26,12 +26,12 @@ import java.util.concurrent.CompletableFuture;
 
 public class BuildingArgument implements ArgumentType<BuildingSelector> {
 	
-	public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_BUILDING = new SimpleCommandExceptionType(Component.translatable("argument.building.toomany"));
-	public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_PLAYER = new SimpleCommandExceptionType(Component.translatable("argument.player.toomany"));
-	public static final SimpleCommandExceptionType ERROR_ONLY_PLAYERS_ALLOWED = new SimpleCommandExceptionType(Component.translatable("argument.player.buildings"));
-	public static final SimpleCommandExceptionType NO_BUILDINGS_FOUND = new SimpleCommandExceptionType(Component.translatable("argument.building.notfound.building"));
-	public static final SimpleCommandExceptionType NO_PLAYERS_FOUND = new SimpleCommandExceptionType(Component.translatable("argument.building.notfound.player"));
-	public static final SimpleCommandExceptionType ERROR_SELECTORS_NOT_ALLOWED = new SimpleCommandExceptionType(Component.translatable("argument.building.selector.not_allowed"));
+	public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_BUILDING = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.building.toomany.error"));
+	public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_PLAYER = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.player.toomany.error"));
+	public static final SimpleCommandExceptionType ERROR_ONLY_PLAYERS_ALLOWED = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.player.buildings.error"));
+	public static final SimpleCommandExceptionType NO_BUILDINGS_FOUND = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.building.notfound.building.error"));
+	public static final SimpleCommandExceptionType NO_PLAYERS_FOUND = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.building.notfound.player.error"));
+	public static final SimpleCommandExceptionType ERROR_SELECTORS_NOT_ALLOWED = new SimpleCommandExceptionType(Component.translatable("argument.reignofnether.building.selector.not_allowed.error"));
 	private static final Collection<String> EXAMPLES = Arrays.asList("@b", "@b[type=foo]");
 	final boolean single;
 	

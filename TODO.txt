@@ -1,5 +1,5 @@
 
-1.20.1-1.3.3-prerelease-2
+1.20.1-1.3.3-prerelease-3
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -29,16 +29,18 @@ Quality of Life
 ---------------
 [❌] Ready check instead of start game countdown
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
-
 [❌] /rtsapi commands now work from datapacks
-[❌] /rtsapi commands building name arguments are now case and underscore insensitive
+
+[✔] Added the @b
+
+[✔] /rtsapi commands building name arguments are now case and underscore insensitive
     - Eg. if your custom building is named "Villager House" then you can write "villager_house" and it will still be recognised
 
 [✔] Reworked the Wretched Wraith sounds using MC Dungeons sound effects
     - Regular wraiths now use the old Wretched Wraith's sounds
 
-[🟡] Added /gamerule coopMode, if enabled:
-    - All human RTS players are allied at the start of a match
+[✔] Added /gamerule coopMode, if enabled:
+    - All human RTS players are locked in as allies at the start of a match
     - Victory can only be achieved by using /rtsapi-victory or building a beacon
     - Scenario NPC roles are not allied, unless they are on the same team number
 
@@ -46,7 +48,7 @@ Balance
 -------
 [✔] Ravager roars now respect knockback resistance attributes
 [✔] Ravager roar radius increased from 4 to 5
-[🟡] Fixed a bug where Spider Web research was actually using the cost of Spider Jockey research
+[✔] Fixed a bug where Spider Web research was actually using the cost of Spider Jockey research
     - This changes the cost from (300 food, 250 wood, 100s) to (300 wood, 300 ore, 140s)
 
 [✔] Ravager Artilleries now have increased attack range against larger buildings
