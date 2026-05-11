@@ -1001,7 +1001,7 @@ public class UnitClientEvents {
     public static void onButtonPress(ScreenEvent.KeyPressed.Pre evt) {
         if (TextInputClientEvents.isAnyInputFocused())
             return;
-        if (evt.getKeyCode() == GLFW.GLFW_KEY_DELETE) {
+        if (evt.getKeyCode() == GLFW.GLFW_KEY_DELETE || (evt.getKeyCode() == GLFW.GLFW_KEY_D && Keybindings.altMod.isDown() && Keybindings.ctrlMod.isDown())) {
             boolean isSandboxPlayer = MC.player != null && SandboxClientEvents.isSandboxPlayer(MC.player.getName().getString());
             LivingEntity entity = hudSelectedEntity;
             if ((entity != null && getPlayerToEntityRelationship(entity) == Relationship.OWNED || isSandboxPlayer) &&

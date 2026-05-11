@@ -31,10 +31,13 @@ Quality of Life
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 [❌] /rtsapi commands now work from datapacks
 
-[✔] Added the @b
 
-[✔] /rtsapi commands building name arguments are now case and underscore insensitive
-    - Eg. if your custom building is named "Villager House" then you can write "villager_house" and it will still be recognised
+[✔] Added a revamped `/rtsapi building destroy|place|owner` command set, featuring:
+    - @b building selector, with options for distance, limit, sorting, coordinates, type and rotation
+    - @r random selector
+    - @p nearest selector
+    - Dynamic building name suggestions including custom buildings
+    - Thanks to @xiao for writing this!
 
 [✔] Reworked the Wretched Wraith sounds using MC Dungeons sound effects
     - Regular wraiths now use the old Wretched Wraith's sounds
@@ -43,6 +46,8 @@ Quality of Life
     - All human RTS players are locked in as allies at the start of a match
     - Victory can only be achieved by using /rtsapi-victory or building a beacon
     - Scenario NPC roles are not allied, unless they are on the same team number
+
+[✔] You can now press Ctrl+Alt+D to delete units and buildings instead of the delete key
 
 Balance
 -------
