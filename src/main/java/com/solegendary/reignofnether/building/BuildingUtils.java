@@ -366,5 +366,4 @@ public class BuildingUtils {
             return new BlockPos(pos.getX(), pos.getY(), -pos.getZ());
         }
     }
-
 }

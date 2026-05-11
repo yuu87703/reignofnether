@@ -6,11 +6,8 @@
 [❌] Not done, including unmerged PRs
 
 
-
-
 Overflowing graveyards
     [❌] save release setting
-    [❌] on server seems queue is broken
 
 Wraiths
     - Fear
@@ -24,6 +21,7 @@ Bugfixes
 
 [✔] Fixed scenarios NPCs not allying with the player when set to the same scenario team number
 [✔] Scenario alliances are now only enforced if the map was published as a scenario (gamerule scenarioMode is on)
+
 
 Quality of Life
 ---------------
@@ -59,7 +57,6 @@ Balance
 [✔] Ravager Artilleries now have increased attack range against larger buildings
 [✔] Ravager Artilleries now have an attack-ground button
     - This will fire arrows upward as though they were shooting at a building
-
 
 Languages
 ---------
