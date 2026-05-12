@@ -839,9 +839,7 @@ public class CommandsServerEvents {
 			ctx.getSource().sendFailure(Component.literal("Unable to place building at " + formatPos(pos)));
 			return 0;
 		}
-		if (autoBuild) {
-			placement.selfBuilding = true;
-		}
+		placement.selfBuilding = autoBuild;
 		ctx.getSource().sendSuccess(
 			() -> Component.literal("Placed " + building.name + " for " + ownerName + " at " + formatPos(pos)),
 			true

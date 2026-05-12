@@ -68,6 +68,9 @@ public class RangedAttackGroundGoal<T extends Mob> extends Goal {
         } else {
             reachedTarget = false;
         }
+        if (groundTarget != null) {
+            ((Unit) mob).getTargetGoal().setTarget(null);
+        }
     }
 
     public void tick() {

@@ -21,6 +21,8 @@ Bugfixes
 
 [✔] Fixed scenarios NPCs not allying with the player when set to the same scenario team number
 [✔] Scenario alliances are now only enforced if the map was published as a scenario (gamerule scenarioMode is on)
+[✔] Fixed units not being removed on death clientside when you rejoined a singleplayer world
+[🟡] Fixed the autobuild argument on building placement commands
 
 
 Quality of Life
@@ -28,7 +30,6 @@ Quality of Life
 [❌] Ready check instead of start game countdown
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 [❌] /rtsapi commands now work from datapacks
-
 
 [✔] Added a revamped `/rtsapi building destroy|place|owner` command set, featuring:
     - @b building selector, with options for distance, limit, sorting, coordinates, type and rotation

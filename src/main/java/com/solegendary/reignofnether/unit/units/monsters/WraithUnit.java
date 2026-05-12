@@ -13,6 +13,7 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
 import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
+import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
@@ -90,7 +91,7 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     public UsePortalGoal getUsePortalGoal() { return usePortalGoal; }
     public boolean canUsePortal() { return getUsePortalGoal() != null; }
 
-    public Faction getFaction() {return Faction.PIGLINS;}
+    public Faction getFaction() {return Faction.MONSTERS;}
     public Abilities getAbilities() {return abilities;}
     public List<ItemStack> getItems() {return items;};
     public MoveToTargetBlockGoal getMoveGoal() {return moveGoal;}
@@ -353,6 +354,18 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
     @Override
     public MobType getMobType() {
         return MobType.UNDEAD;
+    }
+
+    @Override
+    protected boolean isSunBurnTick() {
+        return NightUtils.isSunBurnTick(this);
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (isSunBurnTick())
+            this.setSecondsOnFire(8);
     }
 
     @Override

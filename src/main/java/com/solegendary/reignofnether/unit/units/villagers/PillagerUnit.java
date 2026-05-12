@@ -207,8 +207,14 @@ public class PillagerUnit extends Pillager implements Unit, AttackerUnit, Ranged
 
     public PillagerUnit(EntityType<? extends Pillager> entityType, Level level) {
         super(entityType, level);
-
         updateAbilityButtons();
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity pTarget) {
+        super.setTarget(pTarget);
+        if (pTarget != null && getRangedAttackGroundGoal() != null)
+            getRangedAttackGroundGoal().stop();
     }
 
     @Override

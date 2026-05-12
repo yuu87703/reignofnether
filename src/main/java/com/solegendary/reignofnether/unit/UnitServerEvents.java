@@ -182,6 +182,7 @@ public class UnitServerEvents {
     @SubscribeEvent
     public static void onServerStarted(ServerStartedEvent evt) {
         ServerLevel level = evt.getServer().getLevel(Level.OVERWORLD);
+        isServerStopping = false;
 
         if (level != null) {
             HeroUnitSaveData heroData = HeroUnitSaveData.getInstance(level);
