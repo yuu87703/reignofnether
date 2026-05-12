@@ -1039,7 +1039,7 @@ rightClickActionTaken = true;
                             lastPos = cp.getPos();
                         } else {
                             MyRenderer.drawLine(evt.getPoseStack(), vertexConsumerLine, lastPos, cp.getPos(), cp.isGreen ? 0 : 1, cp.isGreen ? 1 : 0, 0, a);
-                            if (MC.level.getBlockState(cp.bp.offset(0,1,0)).getBlock() instanceof SnowLayerBlock) {
+                            if (MiscUtil.isSnowLayerBlock(MC.level.getBlockState(cp.bp.offset(0,1,0)).getBlock())) {
                                 AABB aabb = new AABB(cp.bp);
                                 aabb = aabb.setMaxY(aabb.maxY + 0.13f);
                                 MyRenderer.drawSolidBox(
@@ -1067,7 +1067,7 @@ rightClickActionTaken = true;
                         Vec3 apVec3 = new Vec3(ap.getX() + 0.5f, ap.getY() + 1.0f, ap.getZ() + 0.5f);
                         MyRenderer.drawLine(evt.getPoseStack(), vertexConsumerLine, firstPos, apVec3, 1, 1, 0, a);
 
-                        if (MC.level.getBlockState(ap.offset(0,1,0)).getBlock() instanceof SnowLayerBlock) {
+                        if (MiscUtil.isSnowLayerBlock(MC.level.getBlockState(ap.offset(0,1,0)).getBlock())) {
                             AABB aabb = new AABB(ap);
                             aabb = aabb.setMaxY(aabb.maxY + 0.13f);
                             MyRenderer.drawSolidBox(
@@ -1096,7 +1096,7 @@ rightClickActionTaken = true;
                         if (blockTarget != null) {
                             Vec3 btVec3 = new Vec3(blockTarget.getX() + 0.5f, blockTarget.getY() + 1.0f, blockTarget.getZ() + 0.5f);
                             MyRenderer.drawLine(evt.getPoseStack(), vertexConsumerLine, firstPos, btVec3, 1, 0, 0, a);
-                            if (MC.level.getBlockState(blockTarget.offset(0,1,0)).getBlock() instanceof SnowLayerBlock) {
+                            if (MiscUtil.isSnowLayerBlock(MC.level.getBlockState(blockTarget.offset(0,1,0)).getBlock())) {
                                 AABB aabb = new AABB(blockTarget);
                                 aabb = aabb.setMaxY(aabb.maxY + 0.13f);
                                 MyRenderer.drawSolidBox(
@@ -1135,7 +1135,7 @@ rightClickActionTaken = true;
                 MyRenderer.drawLine(evt.getPoseStack(), vertexConsumerLineFd, lineStart, lineEnd, 0, 1, 0, a);
 
                 for (BlockPos bp : FormationDragMove.getFormationTargets()) {
-                    if (MC.level.getBlockState(bp.offset(0, 1, 0)).getBlock() instanceof SnowLayerBlock) {
+                    if (MiscUtil.isSnowLayerBlock(MC.level.getBlockState(bp.offset(0, 1, 0)).getBlock())) {
                         AABB aabb = new AABB(bp);
                         aabb = aabb.setMaxY(aabb.maxY + 0.13f);
                         MyRenderer.drawSolidBox(

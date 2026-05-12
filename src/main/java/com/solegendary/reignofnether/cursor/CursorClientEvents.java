@@ -481,7 +481,7 @@ public class CursorClientEvents {
 
                 ResourceLocation rl = ResourceLocation.parse("forge:textures/white.png");
                 var vertexConsumer = MC.renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(rl));
-                if (MC.level.getBlockState(getPreselectedBlockPos().offset(0, 1, 0)).getBlock() instanceof SnowLayerBlock) {
+                if (MiscUtil.isSnowLayerBlock(MC.level.getBlockState(getPreselectedBlockPos().offset(0, 1, 0)).getBlock())) {
                     AABB aabb = new AABB(preselectedBlockPos);
                     aabb = aabb.setMaxY(aabb.maxY + 0.13f);
                     MyRenderer.drawSolidBox(evt.getPoseStack(), vertexConsumer, aabb, null, 1, 1, 1, rightClickDown ? 0.3f : 0.15f, ResourceLocation.parse("forge:textures/white.png"));
@@ -532,7 +532,7 @@ public class CursorClientEvents {
                     result = null;
                 else if (!MiscUtil.isSolidBlocking(level, result.getBlockPos()) && bs.getFluidState().isEmpty())
                     result = null;
-                else if (bs.getBlock() instanceof SnowLayerBlock)
+                else if (MiscUtil.isSnowLayerBlock(bs.getBlock()))
                     result = null;
             }
             return result;
@@ -593,7 +593,7 @@ public class CursorClientEvents {
                 BlockState bs = MC.level.getBlockState(block);
                 if ((MiscUtil.isSolidBlocking(MC.level, block) || isBlockSelectableResource) &&
                         (!(bs.getBlock() instanceof LeavesBlock) || !OrthoviewClientEvents.shouldHideLeaves()) &&
-                        !(bs.getBlock() instanceof SnowLayerBlock) &&
+                        !(MiscUtil.isSnowLayerBlock(bs.getBlock())) &&
                         MyMath.rayIntersectsAABBCustom(cursorWorldPosNear, lookVector, new AABB(block)) &&
                         dist < smallestDist) {
                     smallestDist = dist;

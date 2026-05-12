@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.ability.heroAbilities.necromancer.BloodMoon;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.blocks.BlockClientEvents;
+import com.solegendary.reignofnether.blocks.WraithSnowLayerBlock;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.addon.GarrisonableBuildingAddon;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
@@ -67,6 +68,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -911,5 +913,10 @@ public class MiscUtil {
 
     public static boolean isConnected() {
         return Minecraft.getInstance().getConnection() != null;
+    }
+
+    public static boolean isSnowLayerBlock(Block block) {
+        return block instanceof WraithSnowLayerBlock ||
+                block instanceof SnowLayerBlock;
     }
 }
