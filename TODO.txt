@@ -11,9 +11,10 @@ Overflowing graveyards
 
 Wraiths
     - Fear
-    - Posses
+    - Possess
     - Passive phasing
     - Push/knockback immunity
+    [❌] disallow deleting a unit that is affected by partial possession
 
 Bugfixes
 --------

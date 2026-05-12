@@ -17,6 +17,7 @@ import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
@@ -478,8 +479,13 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
             targetEntity.removeEffect(MobEffectRegistrar.PARTIALLY_POSSESSED.get());
             unit.setOwnerName(this.getOwnerName());
             MiscUtil.addParticleExplosion(ParticleTypes.SCULK_SOUL, 40, level(), targetEntity.getEyePosition(), 0.15f);
-            if (!this.level().isClientSide())
+            if (!this.level().isClientSide()) {
+                Unit.fullResetBehaviours(unit);
+                for (LivingEntity entity : UnitServerEvents.getAllUnits())
+                    if (entity instanceof Unit unit1 && unit1.getTargetGoal().getTarget() == unit)
+                        Unit.fullResetBehaviours(unit1);
                 SoundClientboundPacket.playSoundAtPos(SoundAction.WRAITH_POSSESS_FULL, targetEntity.blockPosition());
+            }
         } else {
             targetEntity.addEffect(new MobEffectInstance(
                     MobEffectRegistrar.PARTIALLY_POSSESSED.get(),

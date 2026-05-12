@@ -29,6 +29,7 @@ import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
 import com.solegendary.reignofnether.player.PlayerServerboundPacket;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -1165,8 +1166,11 @@ rightClickActionTaken = true;
             boolean isSandboxPlayer = MC.player != null && SandboxClientEvents.isSandboxPlayer(MC.player.getName().getString());
             LivingEntity entity = hudSelectedEntity;
             if ((entity != null && getPlayerToEntityRelationship(entity) == Relationship.OWNED || isSandboxPlayer) &&
-                    !(entity instanceof CreeperUnit))
-                sendUnitCommand(UnitAction.DELETE);
+                    !(entity instanceof CreeperUnit)) {
+                if (entity != null && !entity.hasEffect(MobEffectRegistrar.PARTIALLY_POSSESSED.get())) {
+                    sendUnitCommand(UnitAction.DELETE);
+                }
+            }
         }
     }
 

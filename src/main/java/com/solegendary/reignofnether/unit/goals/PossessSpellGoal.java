@@ -45,12 +45,13 @@ public class PossessSpellGoal extends GenericTargetedSpellGoal {
     @Override
     public void tick() {
         super.tick();
-        if (isCasting && targetEntity != null) {
-            if (targetEntity instanceof Unit unit && unit.getOwnerName().equals(wraithUnit.getOwnerName()))
+        if (isCasting && targetEntity instanceof Unit unit) {
+            if (unit.getOwnerName().equals(wraithUnit.getOwnerName())) {
                 Unit.fullResetBehaviours(wraithUnit);
-            doPossessParticles();
-            if (wraithUnit.tickCount % 10 == 0) {
-                targetEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 15, 0, true, false));
+            } else {
+                doPossessParticles();
+                if (wraithUnit.tickCount % 10 == 0)
+                    targetEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 15, 0, true, false));
             }
         }
     }
