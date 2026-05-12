@@ -480,9 +480,9 @@ public class WraithUnit extends Monster implements Unit, AttackerUnit, KeyframeA
             unit.setOwnerName(this.getOwnerName());
             MiscUtil.addParticleExplosion(ParticleTypes.SCULK_SOUL, 40, level(), targetEntity.getEyePosition(), 0.15f);
             if (!this.level().isClientSide()) {
-                Unit.fullResetBehaviours(unit);
+                Unit.fullResetBehaviours(unit); // stop the unit's actions and stop all allied units from attacking it
                 for (LivingEntity entity : UnitServerEvents.getAllUnits())
-                    if (entity instanceof Unit unit1 && unit1.getTargetGoal().getTarget() == unit)
+                    if (entity instanceof Unit unit1 && unit1.getTargetGoal().getTarget() == unit && unit1.getOwnerName().equals(unit.getOwnerName()))
                         Unit.fullResetBehaviours(unit1);
                 SoundClientboundPacket.playSoundAtPos(SoundAction.WRAITH_POSSESS_FULL, targetEntity.blockPosition());
             }
