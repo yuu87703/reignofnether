@@ -273,7 +273,7 @@ public class BuildingPlacement {
             bpls = BuildingServerEvents.getBuildings();
 
         for (BuildingPlacement bpl : bpls)
-            if (bpl.getBuilding().isTypeOf(this.getBuilding()) && bpl != this)
+            if (bpl.getBuilding().isTypeOf(this.getBuilding()) && bpl != this && bpl.ownerName.equals(this.ownerName))
                 tickAge -= 1;
     }
 
