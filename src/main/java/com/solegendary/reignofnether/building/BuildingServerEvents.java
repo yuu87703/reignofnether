@@ -367,7 +367,7 @@ public class BuildingServerEvents {
                     ));
                 }
 
-                if ((SandboxServer.isAnyoneASandboxPlayer() && (ownerName.isEmpty() || ownerName.equals("Enemy"))) || fromCommand)
+                if (SandboxServer.isAnyoneASandboxPlayer() && (ownerName.isEmpty() || ownerName.equals("Enemy")))
                     newBuilding.selfBuilding = true;
 
                 assignBuilderUnits(builderUnitIds, queue, newBuilding);
