@@ -43,6 +43,7 @@ public class Buildings {
     public static final Watchtower WATCHTOWER = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "watchtower"), new Watchtower());
     public static final Barracks BARRACKS = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "barracks"), new Barracks());
     public static final Blacksmith BLACKSMITH = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "blacksmith"), new Blacksmith());
+    public static final WitchHut WITCH_HUT = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "witch_hut"), new WitchHut());
     public static final ArcaneTower ARCANE_TOWER = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "arcane_tower"), new ArcaneTower());
     public static final Library LIBRARY = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "library"), new Library());
     public static final Castle CASTLE = register(ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "castle"), new Castle());

@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.building.BuildingPlacement;
 import com.solegendary.reignofnether.building.BuildingServerEvents;
 import com.solegendary.reignofnether.building.NetherZone;
 import com.solegendary.reignofnether.building.data.DataType;
+import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -27,9 +28,11 @@ public interface NetherConvertingAddon extends BuildingAddon {
         if (placement.getDataStorage().getData(NETHER_ZONE_DATA_TYPE) == null) {
             placement.getDataStorage().setData(NETHER_ZONE_DATA_TYPE, nz);
             if (!placement.level.isClientSide()) {
-                BuildingServerEvents.netherZones.add(nz);
-                if (save)
-                    BuildingServerEvents.saveNetherZones((ServerLevel) placement.level);
+                if (placement.level.getGameRules().getRule(GameRuleRegistrar.DO_NETHER_CONVERSION).get()) {
+                    BuildingServerEvents.netherZones.add(nz);
+                    if (save)
+                        BuildingServerEvents.saveNetherZones((ServerLevel) placement.level);
+                }
             }
         }
     }

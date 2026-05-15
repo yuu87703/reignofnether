@@ -16,6 +16,7 @@ import com.solegendary.reignofnether.building.buildings.placements.ProductionPla
 import com.solegendary.reignofnether.building.buildings.placements.SculkCatalystPlacement;
 import com.solegendary.reignofnether.building.buildings.villagers.IronGolemBuilding;
 import com.solegendary.reignofnether.building.production.ActiveProduction;
+import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.entities.BlazeUnitFireball;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
@@ -25,6 +26,7 @@ import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
+import com.solegendary.reignofnether.research.researchItems.ResearchSlimeConversion;
 import com.solegendary.reignofnether.resources.*;
 import com.solegendary.reignofnether.sandbox.SandboxServer;
 import com.solegendary.reignofnether.sounds.SoundAction;
@@ -495,8 +497,8 @@ public class UnitServerEvents {
 
         boolean drownedInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffectRegistrar.ZOMBIE_INFECTED.get()) ||
                 lastHurtByMob instanceof DrownedUnit;
-        boolean slimeInfected = evt.getEntity().getActiveEffectsMap().containsKey(MobEffects.CONFUSION) ||
-                ((lastHurtByMob instanceof SlimeUnit) && !(lastHurtByMob instanceof MagmaCubeUnit));
+        boolean slimeInfected = (evt.getEntity().getActiveEffectsMap().containsKey(MobEffectRegistrar.SLIME_INFECTED.get()) ||
+                ((lastHurtByMob instanceof SlimeUnit) && !(lastHurtByMob instanceof MagmaCubeUnit)));
 
         if (lastHurtByMob instanceof Unit unit && (drownedInfected || slimeInfected)) {
 
@@ -515,7 +517,7 @@ public class UnitServerEvents {
                     entityType = EntityRegistrar.DROWNED_UNIT.get();
                 }
             }
-            if (slimeInfected && entityType == null) {
+            if (slimeInfected && entityType == null && ResearchServerEvents.playerHasResearch(unit.getOwnerName(), ProductionItems.RESEARCH_SLIME_CONVERSION)) {
                 entityType = EntityRegistrar.SLIME_UNIT.get();
             }
 

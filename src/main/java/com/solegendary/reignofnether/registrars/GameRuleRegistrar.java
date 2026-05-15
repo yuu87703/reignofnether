@@ -21,6 +21,7 @@ public class GameRuleRegistrar {
     public static GameRules.Key<GameRules.BooleanValue> LOCK_ALLIANCES;
     public static GameRules.Key<GameRules.BooleanValue> SCENARIO_MODE;
     public static GameRules.Key<GameRules.BooleanValue> COOP_MODE;
+    public static GameRules.Key<GameRules.BooleanValue> DO_NETHER_CONVERSION;
 
     public static void init() {
         // do cut trees convert their logs into falling logs?
@@ -86,6 +87,10 @@ public class GameRuleRegistrar {
         // all players are allied and cannot change alliances, normal victory is disabled and can only be achieved via commands
         COOP_MODE = GameRules.register("coopMode", GameRules.Category.PLAYER,
                 GameRules.BooleanValue.create(false)
+        );
+        // all players are allied and cannot change alliances, normal victory is disabled and can only be achieved via commands
+        DO_NETHER_CONVERSION = GameRules.register("doNetherConversion", GameRules.Category.UPDATES,
+                GameRules.BooleanValue.create(true)
         );
     }
 }

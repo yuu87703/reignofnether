@@ -7,9 +7,6 @@
 
 
 
-Witch's Hut
------------
-[❌] Move witch and all related upgrades into this building
 
 Windcaller
 ----------
@@ -23,20 +20,39 @@ Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
 
+[✔] Fixed Mausoleums still having only 40 range if it was not the first building you built
+[✔] Slimes can no longer convert enemy units without their upgrade research
+[✔] Slimes no longer permanently lose movement speed if they consume another slime under daylight
+[✔] Llamas are no longer using wolf stats
+[✔] Fixed mob spawners not working again
+[✔] Fixed vanilla world generation options not working (including superflat!)
+    - Thanks @rics9t
 
 
 Quality of Life
 ---------------
+[✔] Flattened default world generation
+    - Also thanks to @rics9t
+
+[✔] Added /gamerule doNetherConversion,
+    - If disabled, portals no longer create nether zones, and any existing zones will begin to revert
+
 [❌] Ready check instead of start game countdown
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 [❌] /rtsapi commands now work from datapacks
 [❌] Add an @enemy and @owner argument to custom building commands
 
 
-
 Balance
 -------
+[✔] Enchanter efficiency raised from 50% increased worker speed to 75%
 
+[✔] Evokers can now mount ravagers
+    - They can't summon Vexes or switch fang types while mounted
+
+[❌] Witches and all related upgrades have been moved into a new Witch Hut building
+    - Witch Huts cost (175 wood, 50 ore) and require a Barracks
+    - Arcane Tower cost changed from (200 wood, 100 ore) to (100 wood, 200 ore)
 
 Languages
 ---------

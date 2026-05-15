@@ -107,7 +107,7 @@ public class Mausoleum extends ProductionBuilding implements NightSourceAddon, R
         int nRange = nightRangeReduced;
         long oldestMausoleumAge = 0;
         for (BuildingPlacement bpl : bpls)
-            if (bpl.ownerName.equals(placement.ownerName))
+            if (bpl.getBuilding().isTypeOf(this) && bpl.ownerName.equals(placement.ownerName))
                 if (bpl.tickAge > oldestMausoleumAge)
                     oldestMausoleumAge = bpl.tickAge;
         if (placement.tickAge >= oldestMausoleumAge)

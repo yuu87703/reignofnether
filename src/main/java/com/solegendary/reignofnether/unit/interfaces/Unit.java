@@ -145,6 +145,10 @@ public interface Unit {
     SelectedTargetGoal<?> getTargetGoal();
     ReturnResourcesGoal getReturnResourcesGoal();
 
+    public default float getBaseMovementSpeed() {
+        AttributeInstance attr = ((LivingEntity) this).getAttribute(Attributes.MOVEMENT_SPEED);
+        return (float) (attr != null ?  attr.getBaseValue() : Attributes.MOVEMENT_SPEED.getDefaultValue());
+    }
     public default float getMovementSpeed() {
         AttributeInstance attr = ((LivingEntity) this).getAttribute(Attributes.MOVEMENT_SPEED);
         return (float) (attr != null ?  attr.getValue() : Attributes.MOVEMENT_SPEED.getDefaultValue());

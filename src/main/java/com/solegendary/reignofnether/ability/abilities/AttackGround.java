@@ -9,12 +9,15 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.goals.RangedAttackGroundGoal;
 import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
+import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
+import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.RavagerUnit;
 import com.solegendary.reignofnether.util.LanguageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -51,7 +54,7 @@ public class AttackGround extends Ability {
                 },
                 () -> {
                     if (unit instanceof RavagerUnit ravagerUnit)
-                        return !ravagerUnit.isVehicle();
+                        return !(ravagerUnit.getFirstPassenger() instanceof PillagerUnit);
                     return false;
                 },
                 () -> true,
