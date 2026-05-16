@@ -168,11 +168,12 @@ public class BaseSpawnerMixin {
                             for (LivingEntity le : UnitServerEvents.getAllUnits()) {
                                 if (!(le instanceof Unit unit) || le.isDeadOrDying()) continue;
                                 double range = (double) ACTIVATION_RANGE / 2;
-                                boolean anchoredInRange = unit.getAnchor() != null &&
+                                boolean anchoredInRange = Unit.hasAnchor(unit) &&
                                         unit.getAnchor().distToCenterSqr(pPos.getCenter()) < range * range;
+                                boolean inRange = le.distanceToSqr(pPos.getCenter()) < range * range;
                                 if (anchoredInRange && unit.getOwnerName().isBlank() && le.getType() == entity.getType()) {
                                     nearbyNeutralUnitsOfTypeSum++;
-                                } else if (!unit.getOwnerName().isBlank()) {
+                                } else if (inRange && !unit.getOwnerName().isBlank()) {
                                     hasNearbyNonNeutralUnit = true;
                                 }
                             }

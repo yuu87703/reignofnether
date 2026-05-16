@@ -68,6 +68,7 @@ public class FactionRegistries {
         register(Faction.VILLAGERS, Buildings.WATCHTOWER, Keybindings.keyT);
         register(Faction.VILLAGERS, Buildings.BARRACKS, Keybindings.keyY);
         register(Faction.VILLAGERS, Buildings.BLACKSMITH, Keybindings.keyU);
+        register(Faction.VILLAGERS, Buildings.WITCH_HUT, null);
         register(Faction.VILLAGERS, Buildings.ARCANE_TOWER, Keybindings.keyI);
         register(Faction.VILLAGERS, Buildings.LIBRARY, Keybindings.keyO);
         register(Faction.VILLAGERS, Buildings.CASTLE, Keybindings.keyP);

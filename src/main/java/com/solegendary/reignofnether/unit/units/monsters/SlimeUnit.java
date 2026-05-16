@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.ability.abilities.ConsumeSlime;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
+import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -292,7 +293,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         this.reapplyPosition();
         this.refreshDimensions();
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(getUnitMaxHealth());
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(getMovementSpeed());
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(getBaseMovementSpeed());
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(0);
         this.getAttribute(AttributeRegistrar.ATTACK_DAMAGE.get()).setBaseValue(0);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(getKnockbackResistance());
@@ -524,7 +525,7 @@ public class SlimeUnit extends Slime implements Unit, AttackerUnit {
         }
         if (result && getSize() >= 2 && pEntity instanceof LivingEntity && !(this instanceof MagmaCubeUnit) && !this.level().isClientSide())
             if (ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_SLIME_CONVERSION))
-                ((LivingEntity)pEntity).addEffect(new MobEffectInstance(MobEffects.CONFUSION, CONVERT_DEBUFF_DURATION_SECONDS * 20, 0), this);
+                ((LivingEntity)pEntity).addEffect(new MobEffectInstance(MobEffectRegistrar.SLIME_INFECTED.get(), CONVERT_DEBUFF_DURATION_SECONDS * 20, 0), this);
         return result;
     }
 

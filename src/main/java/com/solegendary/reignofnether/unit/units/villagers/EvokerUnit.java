@@ -61,7 +61,8 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
     static {
         ABILITIES.add(new SetFangsLine());
         ABILITIES.add(new SetFangsCircle());
-        ABILITIES.add(new CastSummonVexes(), Keybindings.keyQ);
+        ABILITIES.add(new CastSummonVexes(), Keybindings.keyE);
+        ABILITIES.add(new MountRavager(), Keybindings.keyR);
     }
 
     //region
@@ -111,12 +112,14 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
     public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
     public int getMaxResources() {return maxResources;}
+    public MountGoal getMountGoal() { return mountGoal; }
 
     private MoveToTargetBlockGoal moveGoal;
     private SelectedTargetGoal<? extends LivingEntity> targetGoal;
     public BuildRepairGoal buildRepairGoal;
     public GatherResourcesGoal gatherResourcesGoal;
     private ReturnResourcesGoal returnResourcesGoal;
+    public MountGoal mountGoal;
 
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public LivingEntity getFollowTarget() { return followTarget; }
@@ -236,6 +239,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
 
     @Override
     public void resetBehaviours() {
+        this.mountGoal.stop();
         this.castFangsGoal.stop();
         this.castSummonVexesGoal.stop();
         if (attackGoal != null && !this.abilities.get().isEmpty() && this.abilities.get().get(0).isOffCooldown(this))
@@ -249,6 +253,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
         AttackerUnit.tick(this);
         this.castFangsGoal.tick();
         this.castSummonVexesGoal.tick();
+        this.mountGoal.tick();
         PromoteIllager.checkAndApplyBuff(this);
 
         for (Ability ability : getAbilities().get()) {
@@ -288,6 +293,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
         this.garrisonGoal = new GarrisonGoal(this);
         this.attackGoal = new UnitBowAttackGoal<>(this);
         this.returnResourcesGoal = new ReturnResourcesGoal(this);
+        this.mountGoal = new MountGoal(this);
         this.castFangsGoal = new GenericTargetedSpellGoal(this,
             FANGS_CHANNEL_SECONDS * ResourceCost.TICKS_PER_SECOND, FANGS_RANGE_LINE,
             this::createEvokerFangs, null, null
@@ -311,6 +317,7 @@ public class EvokerUnit extends Evoker implements Unit, AttackerUnit, RangedAtta
         this.goalSelector.addGoal(2, returnResourcesGoal);
         this.goalSelector.addGoal(2, garrisonGoal);
         this.targetSelector.addGoal(2, targetGoal);
+        this.goalSelector.addGoal(2, mountGoal);
         this.goalSelector.addGoal(3, moveGoal);
         this.goalSelector.addGoal(4, new RandomLookAroundUnitGoal(this));
     }

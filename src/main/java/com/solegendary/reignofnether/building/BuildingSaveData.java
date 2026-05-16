@@ -161,6 +161,7 @@ public class BuildingSaveData extends SavedData {
             case PumpkinFarm.buildingName -> building = Buildings.PUMPKIN_FARM;
             case HauntedHouse.buildingName -> building = Buildings.HAUNTED_HOUSE;
             case Blacksmith.buildingName -> building = Buildings.BLACKSMITH;
+            case WitchHut.buildingName -> building = Buildings.WITCH_HUT;
             case TownCentre.buildingName -> building = Buildings.TOWN_CENTRE;
             case IronGolemBuilding.buildingName -> building = Buildings.IRON_GOLEM_BUILDING;
             case Mausoleum.buildingName -> building = Buildings.MAUSOLEUM;

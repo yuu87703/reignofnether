@@ -89,6 +89,7 @@ public class ResourceCosts {
     public static final ResourceCost WHEAT_FARM = new ResourceCost(ID, "WHEAT_FARM");
     public static final ResourceCost BARRACKS = new ResourceCost(ID, "BARRACKS");
     public static final ResourceCost BLACKSMITH = new ResourceCost(ID, "BLACKSMITH");
+    public static final ResourceCost WITCH_HUT = new ResourceCost(ID, "WITCH_HUT");
     public static final ResourceCost ARCANE_TOWER = new ResourceCost(ID, "ARCANE_TOWER");
     public static final ResourceCost LIBRARY = new ResourceCost(ID, "LIBRARY");
     public static final ResourceCost WATCHTOWER = new ResourceCost(ID, "WATCHTOWER");
@@ -284,6 +285,7 @@ public class ResourceCosts {
         WHEAT_FARM.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.WHEAT_FARM);
         BARRACKS.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.BARRACKS);
         BLACKSMITH.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.BLACKSMITH);
+        WITCH_HUT.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.WITCH_HUT);
         ARCANE_TOWER.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.ARCANE_TOWER);
         LIBRARY.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.LIBRARY);
         WATCHTOWER.bakeValues(ReignOfNetherCommonConfigs.BuildingCosts.WATCHTOWER);

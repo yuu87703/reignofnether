@@ -41,6 +41,8 @@ public class MobEffectRegistrar {
     // Causes a mob to turn into a zombie villager, drowned, zombie piglin or zoglin upon death depending on the unit type
     public static final RegistryObject<MobEffect> ZOMBIE_INFECTED = MOB_EFFECTS.register("zombie_infected", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0x000000));
 
+    public static final RegistryObject<MobEffect> SLIME_INFECTED = MOB_EFFECTS.register("slime_infected", () -> new InstantenousMobEffect(MobEffectCategory.HARMFUL, 0x000000));
+
     public static final RegistryObject<MobEffect> MINOR_MOVEMENT_SPEED = MOB_EFFECTS.register("minor_speed", () -> new InstantenousMobEffect(MobEffectCategory.BENEFICIAL, 3402751)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, "e6b9720b-131d-4c17-b029-ab8161e8da97", 0.05, AttributeModifier.Operation.MULTIPLY_BASE));
 

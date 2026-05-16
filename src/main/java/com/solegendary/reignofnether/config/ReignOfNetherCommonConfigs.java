@@ -102,6 +102,7 @@ public class ReignOfNetherCommonConfigs {
         BuildingCosts.BARRACKS.define(BUILDER);
         BuildingCosts.BLACKSMITH.define(BUILDER);
         BuildingCosts.ARCANE_TOWER.define(BUILDER);
+        BuildingCosts.WITCH_HUT.define(BUILDER);
         BuildingCosts.LIBRARY.define(BUILDER);
         BuildingCosts.WATCHTOWER.define(BUILDER);
         BuildingCosts.CASTLE.define(BUILDER);
@@ -270,6 +271,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry WHEAT_FARM = ResourceCostConfigEntry.Building(0,150,0, 0, ResourceCosts.WHEAT_FARM, "Wheat Farm Config");
         public static final ResourceCostConfigEntry BARRACKS = ResourceCostConfigEntry.Building(0,150,0, 0, ResourceCosts.BARRACKS, "Barracks Config");
         public static final ResourceCostConfigEntry BLACKSMITH = ResourceCostConfigEntry.Building(0,100,300, 0, ResourceCosts.BLACKSMITH, "Blacksmith Config");
+        public static final ResourceCostConfigEntry WITCH_HUT = ResourceCostConfigEntry.Building(0,175,50, 0, ResourceCosts.WITCH_HUT, "Witch Hut Config");
         public static final ResourceCostConfigEntry ARCANE_TOWER = ResourceCostConfigEntry.Building(0,200,100, 0, ResourceCosts.ARCANE_TOWER, "Arcane Tower Config");
         public static final ResourceCostConfigEntry LIBRARY = ResourceCostConfigEntry.Building(0,300,100, 0, ResourceCosts.LIBRARY, "Library Config");
         public static final ResourceCostConfigEntry WATCHTOWER = ResourceCostConfigEntry.Building(0,100,75, 0, ResourceCosts.WATCHTOWER, "Watchtower Config");

@@ -42,10 +42,7 @@ import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.*;
 import com.solegendary.reignofnether.unit.packets.UnitActionServerboundPacket;
 import com.solegendary.reignofnether.unit.packets.UnitSyncServerboundPacket;
-import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
-import com.solegendary.reignofnether.unit.units.monsters.PhantomSummon;
-import com.solegendary.reignofnether.unit.units.monsters.WardenUnit;
-import com.solegendary.reignofnether.unit.units.monsters.ZoglinUnit;
+import com.solegendary.reignofnether.unit.units.monsters.*;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.unit.units.piglins.HeadhunterUnit;
@@ -69,6 +66,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -746,13 +744,10 @@ rightClickActionTaken = false;
                 BuildingPlacement preSelBuilding = BuildingClientEvents.getPreselectedBuilding();
 
                 // right click -> mount friendly unit
-                if (preselectedUnits.size() == 1 && canMountUnit(hudSelectedEntity, preselectedUnits.get(0))) {
-                    if (hudSelectedEntity instanceof PillagerUnit && getPreselectedUnits().get(0) instanceof RavagerUnit)
-                        sendUnitCommand(UnitAction.MOUNT_RAVAGER);
-                    if (hudSelectedEntity instanceof HeadhunterUnit && getPreselectedUnits().get(0) instanceof HoglinUnit)
-                        sendUnitCommand(UnitAction.MOUNT_HOGLIN);
-                    if (hudSelectedEntity instanceof Unit && hudSelectedEntity instanceof Skeleton && getPreselectedUnits().get(0) instanceof RavagerUnit)
-                        sendUnitCommand(UnitAction.MOUNT_SPIDER);
+                if (preselectedUnits.size() == 1) {
+                    UnitAction action = getMountAction(hudSelectedEntity, preselectedUnits.get(0));
+                    if (action != null)
+                        sendUnitCommand(action);
                 }
                 // right click -> garrison friendly building
                 else if (preSelBuilding != null && preSelBuilding.getBuilding().hasActiveAddon(GarrisonableBuildingAddon.class) &&
@@ -1410,21 +1405,22 @@ rightClickActionTaken = true;
     }
 
     // used only for right click mounting shortcut
-    public static boolean canMountUnit(LivingEntity passenger, LivingEntity vehicle) {
+    @Nullable
+    public static UnitAction getMountAction(LivingEntity passenger, LivingEntity vehicle) {
         if (!(passenger instanceof Unit) || !(vehicle instanceof Unit))
-            return false;
+            return null;
         if (!((Unit) passenger).getOwnerName().equals(((Unit) vehicle).getOwnerName()))
-            return false;
-        if (hudSelectedEntity instanceof PillagerUnit && getPreselectedUnits().get(0) instanceof RavagerUnit &&
+            return null;
+        if ((hudSelectedEntity instanceof PillagerUnit || hudSelectedEntity instanceof EvokerUnit) && vehicle instanceof RavagerUnit &&
             ResearchClient.hasResearch(ProductionItems.RESEARCH_RAVAGER_CAVALRY))
-            return true;
-        if (hudSelectedEntity instanceof HeadhunterUnit && getPreselectedUnits().get(0) instanceof HoglinUnit &&
+            return UnitAction.MOUNT_RAVAGER;
+        if (hudSelectedEntity instanceof HeadhunterUnit && vehicle instanceof HoglinUnit &&
             ResearchClient.hasResearch(ProductionItems.RESEARCH_HOGLIN_CAVALRY))
-            return true;
-        if (hudSelectedEntity instanceof Unit && hudSelectedEntity instanceof Skeleton && getPreselectedUnits().get(0) instanceof RavagerUnit &&
+            return UnitAction.MOUNT_HOGLIN;
+        if (hudSelectedEntity instanceof Unit && hudSelectedEntity instanceof AbstractSkeleton && vehicle instanceof SpiderUnit &&
             ResearchClient.hasResearch(ProductionItems.RESEARCH_SPIDER_JOCKEYS))
-            return true;
-        return false;
+            return UnitAction.MOUNT_SPIDER;
+        return null;
     }
 
     public static List<LivingEntity> getMilitaryUnitsOnScreen() {

@@ -36,8 +36,8 @@ import static com.solegendary.reignofnether.util.MiscUtil.fcsIcons;
 
 public class CivilEnchantment extends AbstractEnchantment {
 
-    public static final float EFFICIENCY_SPEED_MULTIPLIER = 1.5f;
-    public static final float SUPER_EFFICIENCY_SPEED_MULTIPLIER = 2.0f; // with enchanter aura
+    public static final float EFFICIENCY_SPEED_MULTIPLIER = 1.75f;
+    public static final float SUPER_EFFICIENCY_SPEED_MULTIPLIER = 2.5f; // with enchanter aura
 
     public static final int RANGE = 10;
 
