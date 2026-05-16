@@ -37,7 +37,8 @@ Quality of Life
 [✔] Added /gamerule doNetherConversion,
     - If disabled, portals no longer create nether zones, and any existing zones will begin to revert
 
-[❌] Ready check instead of start game countdown
+[✔] Ready check instead of start game countdown
+
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 [❌] /rtsapi commands now work from datapacks
 [❌] Add an @enemy and @owner argument to custom building commands
