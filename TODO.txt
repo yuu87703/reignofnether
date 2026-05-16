@@ -26,7 +26,9 @@ Bugfixes
     - Thanks @Kaffeeundcode for all these fixes!
 
 [✔] Fixed right click attacking not working
+[✔] Fixed piercing arrows hitting allies behind the main target
 [✔] Fixed start blocks having no colours on the minimap
+    - This does not fix it in save data, so if your map's start block are black, destroy and replace them
 
 Quality of Life
 ---------------
