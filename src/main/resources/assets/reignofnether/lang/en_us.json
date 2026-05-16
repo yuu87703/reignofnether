@@ -557,9 +557,10 @@
     "buildings.piglins.reignofnether.infernal_portal.tooltip1": "A decorated portal reserved for champions of the Nether.",
     "buildings.piglins.reignofnether.infernal_portal.tooltip2": "Trains new and revives fallen Piglin heroes.",
 
-    "buildings.villagers.reignofnether.witch_hut": "Witch",
-    "buildings.villagers.reignofnether.witch_hut.tooltip1": "A quaint little cottage that houses Witches.",
-    "buildings.villagers.reignofnether.witch_hut.tooltip2": "Requires a Barracks.",
+    "buildings.villagers.reignofnether.witch_hut": "Witch Hut",
+    "buildings.villagers.reignofnether.witch_hut.tooltip1": "A quaint little cottage that houses Witches",
+    "buildings.villagers.reignofnether.witch_hut.tooltip2": "and can upgrade and research new potions.",
+    "buildings.villagers.reignofnether.witch_hut.tooltip3": "Requires a Barracks.",
     "buildings.villagers.reignofnether.arcane_tower": "Arcane Tower",
     "buildings.villagers.reignofnether.arcane_tower.tooltip1": "A magical tower that is home to Witches and Evokers.",
     "buildings.villagers.reignofnether.arcane_tower.tooltip2": "Requires a Barracks.",

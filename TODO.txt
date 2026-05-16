@@ -20,13 +20,13 @@ Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
 
-[✔] Fixed royal guards shrinking back to normal size when their chunk was unloaded
-[🟡] Fixed mouse drift when vsync was disabled in RTS camera
-[🟡] Fixed several production items having broken tooltips when queued
+[✔] Fixed royal guards with ultimate active shrinking to normal size when their chunk was unloaded
+[✔] Fixed mouse drift when vsync was disabled in RTS camera
+[✔] Fixed several production items having broken tooltips when queued
     - Thanks @Kaffeeundcode for all these fixes!
 
 [✔] Fixed right click attacking not working
-
+[✔] Fixed start blocks having no colours on the minimap
 
 Quality of Life
 ---------------

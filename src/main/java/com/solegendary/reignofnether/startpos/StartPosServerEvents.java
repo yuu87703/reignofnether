@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -58,7 +59,11 @@ public class StartPosServerEvents {
                 evt.getLevel().getServer().sendSystemMessage(Component.translatable("startpos.reignofnether.max_positions"));
             }
             if (startPoses.size() < MAX_START_POSES) {
-                StartPos newStartPos = new StartPos(evt.getPos(), rtsStartBlock.defaultMapColor().id);
+                StartPos newStartPos = new StartPos(evt.getPos(),
+                        rtsStartBlock.getMapColor(rtsStartBlock.defaultBlockState(),
+                        evt.getLevel(), evt.getPos(),
+                        rtsStartBlock.defaultMapColor()).col
+                );
                 startPoses.add(newStartPos);
                 StartPosClientboundPacket.addPos(newStartPos);
             } else {
