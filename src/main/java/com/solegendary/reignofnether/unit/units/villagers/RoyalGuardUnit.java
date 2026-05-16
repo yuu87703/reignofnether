@@ -475,9 +475,9 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
         super.addAdditionalSaveData(pCompound);
         this.addUnitSaveData(pCompound);
         // Persist avatar state so it survives chunk unloads
-        pCompound.putInt("AvatarTicksLeft", avatarTicksLeft);
-        pCompound.putBoolean("AvatarScalingStarted", avatarScalingStarted);
-        pCompound.putInt("AvatarScaleTicks", avatarScaleTicks);
+        pCompound.putInt("avatarTicksLeft", avatarTicksLeft);
+        pCompound.putBoolean("avatarScalingStarted", avatarScalingStarted);
+        pCompound.putInt("avatarScaleTicks", avatarScaleTicks);
     }
 
     @Override
@@ -486,9 +486,12 @@ public class RoyalGuardUnit extends Vindicator implements AttackerUnit, HeroUnit
         this.readUnitSaveData(pCompound);
         this.setNeedsStatSync(true);
         // Restore avatar state after chunk reload
-        avatarTicksLeft = pCompound.getInt("AvatarTicksLeft");
-        avatarScalingStarted = pCompound.getBoolean("AvatarScalingStarted");
-        avatarScaleTicks = pCompound.getInt("AvatarScaleTicks");
+        if (pCompound.contains("avatarTicksLeft"))
+            avatarTicksLeft = pCompound.getInt("avatarTicksLeft");
+        if (pCompound.contains("avatarScalingStarted"))
+            avatarScalingStarted = pCompound.getBoolean("avatarScalingStarted");
+        if (pCompound.contains("avatarScaleTicks"))
+            avatarScaleTicks = pCompound.getInt("avatarScaleTicks");
     }
 
     public MaceSlam getMaceSlam() {

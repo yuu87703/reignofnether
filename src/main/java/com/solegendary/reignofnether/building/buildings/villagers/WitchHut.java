@@ -44,6 +44,9 @@ public class WitchHut extends ProductionBuilding {
         this.explodeChance = 0.2f;
 
         this.productions.add(ProductionItems.WITCH, Keybindings.keyQ);
+        this.productions.add(ProductionItems.RESEARCH_LINGERING_POTIONS, Keybindings.keyW);
+        this.productions.add(ProductionItems.RESEARCH_HEALING_POTIONS, Keybindings.keyE);
+        this.productions.add(ProductionItems.RESEARCH_WATER_POTIONS, Keybindings.keyR);
     }
 
     public Faction getFaction() {return Faction.VILLAGERS;}
@@ -64,8 +67,9 @@ public class WitchHut extends ProductionBuilding {
                         ResourceCosts.getFormattedCost(cost),
                         FormattedCharSequence.forward("", Style.EMPTY),
                         FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.witch_hut.tooltip1"), Style.EMPTY),
+                        FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.witch_hut.tooltip2"), Style.EMPTY),
                         FormattedCharSequence.forward("", Style.EMPTY),
-                        FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.witch_hut.tooltip2"), Style.EMPTY)
+                        FormattedCharSequence.forward(I18n.get("buildings.villagers.reignofnether.witch_hut.tooltip3"), Style.EMPTY)
                 ),
                 this
         );

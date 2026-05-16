@@ -34,7 +34,6 @@ public class StartPosClientEvents {
     public static int startPosIndex = -1;
     public static Faction selectedFaction = Faction.NONE;
     public static boolean isStarting = false; // game is counting down to start
-    public static boolean readyCheckActive = false; // ready-check phase is active
 
     public static boolean isEnabled() {
         return ClientGameModeHelper.gameMode == GameMode.CLASSIC && !startPoses.isEmpty();
@@ -42,70 +41,14 @@ public class StartPosClientEvents {
 
     public static boolean isSelectedPosReservedByOther() {
         return getPos() != null &&
-               !getPos().playerName.isEmpty() &&
-               MC.player != null &&
-               !getPos().playerName.equals(MC.player.getName().getString()) &&
-               getPos().faction != Faction.NONE;
+                !getPos().playerName.isEmpty() &&
+                MC.player != null &&
+                !getPos().playerName.equals(MC.player.getName().getString()) &&
+                getPos().faction != Faction.NONE;
     }
 
     public static boolean hasReservedPos() {
         return getPos() != null && selectedFaction != Faction.NONE;
-    }
-
-    /**
-     * Check if the current client player is ready.
-     */
-    public static boolean isPlayerReady() {
-        if (MC.player == null) return false;
-        String playerName = MC.player.getName().getString();
-        for (StartPos startPos : startPoses) {
-            if (startPos.playerName.equals(playerName) && startPos.faction != Faction.NONE) {
-                return startPos.ready;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if all reserved players are ready (for client-side tooltip display).
-     */
-    public static boolean areAllPlayersReady() {
-        boolean hasReservedPlayer = false;
-        for (StartPos startPos : startPoses) {
-            if (startPos.faction != Faction.NONE) {
-                hasReservedPlayer = true;
-                if (!startPos.ready) {
-                    return false;
-                }
-            }
-        }
-        return hasReservedPlayer;
-    }
-
-    /**
-     * Count how many reserved players are ready.
-     */
-    public static int getReadyCount() {
-        int count = 0;
-        for (StartPos startPos : startPoses) {
-            if (startPos.faction != Faction.NONE && startPos.ready) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Count how many positions are reserved.
-     */
-    public static int getReservedCount() {
-        int count = 0;
-        for (StartPos startPos : startPoses) {
-            if (startPos.faction != Faction.NONE) {
-                count++;
-            }
-        }
-        return count;
     }
 
     public static Button getPositionsButton() {
@@ -156,7 +99,7 @@ public class StartPosClientEvents {
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
                 null,
                 () -> false,
-                () -> !isEnabled() || isStarting || readyCheckActive,
+                () -> !isEnabled() || isStarting,
                 () -> {
                     if (PlayerClientEvents.rtsLocked) return false;
                     for (StartPos startPos : startPoses) {
@@ -193,7 +136,7 @@ public class StartPosClientEvents {
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
                 null,
                 () -> false,
-                () -> !isEnabled() || (!isStarting && !readyCheckActive),
+                () -> !isEnabled() || !isStarting,
                 () -> {
                     for (StartPos startPos : startPoses) {
                         if (startPos.faction != Faction.NONE) {
@@ -208,40 +151,6 @@ public class StartPosClientEvents {
                         fcs(I18n.get("startpos.reignofnether.cancel_start_button"), true)
                 )
         );
-    }
-
-    /**
-     * Button for players to signal they are ready during the ready-check phase.
-     */
-    public static Button getReadyButton() {
-        return new Button("Ready",
-                14,
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tick.png"),
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
-                null,
-                () -> isPlayerReady(),
-                () -> !readyCheckActive || !hasReservedPos() || isStarting,
-                () -> true,
-                () -> {
-                    if (MC.player != null) {
-                        StartPosServerboundPacket.toggleReady(MC.player.getName().getString());
-                    }
-                },
-                null,
-                getReadyButtonTooltip()
-        );
-    }
-
-    private static List<FormattedCharSequence> getReadyButtonTooltip() {
-        ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
-        if (isPlayerReady()) {
-            fcsList.add(fcs(I18n.get("startpos.reignofnether.ready_button.unready"), true));
-        } else {
-            fcsList.add(fcs(I18n.get("startpos.reignofnether.ready_button.ready"), true));
-        }
-        fcsList.add(fcs(I18n.get("startpos.reignofnether.ready_button.tooltip2",
-                getReadyCount(), getReservedCount())));
-        return fcsList;
     }
 
     public static StartPos getPos() {
@@ -323,7 +232,6 @@ public class StartPosClientEvents {
         startPosIndex = -1;
         selectedFaction = Faction.NONE;
         isStarting = false;
-        readyCheckActive = false;
         for (StartPos startPos : startPoses)
             startPos.reset();
     }
@@ -353,7 +261,7 @@ public class StartPosClientEvents {
             (Keybinding) null,
             () -> selectedFaction == Faction.VILLAGERS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS || !isEnabled(),
-            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting && !readyCheckActive,
+            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting,
             () -> {
                 StartPos startPos = getPos();
                 if (startPos != null && MC.player != null) {
@@ -380,7 +288,7 @@ public class StartPosClientEvents {
             (Keybinding) null,
             () -> selectedFaction == Faction.MONSTERS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS || !isEnabled(),
-            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting && !readyCheckActive,
+            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting,
             () -> {
                 StartPos startPos = getPos();
                 if (startPos != null && MC.player != null) {
@@ -407,7 +315,7 @@ public class StartPosClientEvents {
             (Keybinding) null,
             () -> selectedFaction == Faction.PIGLINS,
             () -> TutorialClientEvents.isEnabled() || !PlayerClientEvents.canStartRTS || !isEnabled(),
-            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting && !readyCheckActive,
+            () -> !isSelectedPosReservedByOther() && getPos() != null && !isStarting,
             () -> {
                 StartPos startPos = getPos();
                 if (startPos != null && MC.player != null) {

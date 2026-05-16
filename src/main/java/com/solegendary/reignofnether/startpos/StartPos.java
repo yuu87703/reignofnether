@@ -11,7 +11,6 @@ public class StartPos {
     public String playerName = ""; // name of player who has reserved this spot
     public int colorId;
     public boolean isFromStartBlock = true;
-    public boolean ready = false; // whether this player has signalled ready for the ready-check
 
     public StartPos(BlockPos pos, int colorId) {
         this.pos = pos;
@@ -28,7 +27,6 @@ public class StartPos {
     public void reset() {
         this.faction = Faction.NONE;
         this.playerName = "";
-        this.ready = false;
     }
 
     public ResourceLocation getIcon() {
