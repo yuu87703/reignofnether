@@ -1512,21 +1512,6 @@ public class HudClientEvents {
                     );
                     renderedButtons.add(cancelStartButton);
                 }
-
-                // Ready button: shown during ready-check phase when player has reserved a spot
-                if (StartPosClientEvents.readyCheckActive && StartPosClientEvents.hasReservedPos()) {
-                    Button readyButton = StartPosClientEvents.getReadyButton();
-                    if (!readyButton.isHidden.get()) {
-                        readyButton.render(evt.getGuiGraphics(),
-                                screenWidth - (StartButtons.ICON_SIZE * 2),
-                                40,
-                                mouseX,
-                                mouseY
-                        );
-                        renderedButtons.add(readyButton);
-                    }
-                }
-
                 Button diffsButton = ConfigClientEvents.getDiffsButton();
                 if (!diffsButton.isHidden.get()) {
                     diffsButton.render(evt.getGuiGraphics(),

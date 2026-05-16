@@ -649,7 +649,7 @@ public class UnitClientEvents {
             // select all nearby units of the same type when the same unit is double-clicked
             // only works for owned units
             else if (selectedUnits.size() == 1 && MC.level != null && !Keybindings.shiftMod.isDown() &&
-               ((System.currentTimeMillis() - lastLeftClickTime) < DOUBLE_CLICK_TIME_MS || Keybindings.ctrlMod.isDown()) &&
+                    ((System.currentTimeMillis() - lastLeftClickTime) < DOUBLE_CLICK_TIME_MS || Keybindings.ctrlMod.isDown()) &&
                      !preselectedUnits.isEmpty() && selectedUnits.contains(preselectedUnits.get(0))) {
 
                 lastLeftClickTime = 0;
@@ -739,15 +739,19 @@ public class UnitClientEvents {
             }
 			if (MinimapClientEvents.isPointInsideMinimap(evt.getMouseX(), evt.getMouseY()))
 				return;
-rightClickActionTaken = false;
+
+            rightClickActionTaken = false;
             if (!selectedUnits.isEmpty()) {
                 BuildingPlacement preSelBuilding = BuildingClientEvents.getPreselectedBuilding();
 
                 // right click -> mount friendly unit
+                UnitAction mountAction = null;
                 if (preselectedUnits.size() == 1) {
-                    UnitAction action = getMountAction(hudSelectedEntity, preselectedUnits.get(0));
-                    if (action != null)
-                        sendUnitCommand(action);
+                    mountAction = getMountAction(hudSelectedEntity, preselectedUnits.get(0));
+                }
+                if (mountAction != null) {
+                    sendUnitCommand(mountAction);
+                    rightClickActionTaken = true;
                 }
                 // right click -> garrison friendly building
                 else if (preSelBuilding != null && preSelBuilding.getBuilding().hasActiveAddon(GarrisonableBuildingAddon.class) &&
@@ -755,6 +759,7 @@ rightClickActionTaken = false;
                         hudSelectedEntity instanceof Unit unit && unit.canGarrison() &&
                         preSelBuilding.ownerName.equals(unit.getOwnerName())) {
                     sendUnitCommand(UnitAction.GARRISON);
+                    rightClickActionTaken = true;
                 }
                 // right click -> attack unfriendly unit
                 else if (preselectedUnits.size() == 1 &&
@@ -769,7 +774,7 @@ rightClickActionTaken = false;
                      } else {
                          sendUnitCommand(UnitAction.ATTACK);
                      }
-rightClickActionTaken = true;
+                     rightClickActionTaken = true;
                 }
                 // right click -> attack unfriendly building
                 else if (hudSelectedEntity instanceof AttackerUnit &&
@@ -779,7 +784,7 @@ rightClickActionTaken = true;
                         ((GameruleClient.neutralAggro && getPlayerToBuildingRelationship(preSelBuilding) == Relationship.NEUTRAL) ||
                         getPlayerToBuildingRelationship(preSelBuilding) == Relationship.HOSTILE)) {
                     sendUnitCommand(UnitAction.ATTACK_BUILDING);
-rightClickActionTaken = true;
+                    rightClickActionTaken = true;
                 }
                 // right click -> return resources
                 else if (hudSelectedEntity instanceof Unit unit &&
@@ -788,6 +793,7 @@ rightClickActionTaken = true;
                         preSelBuilding != null && preSelBuilding.getBuilding().canAcceptResources && preSelBuilding.isBuilt &&
                         unit.getOwnerName().equals(preSelBuilding.ownerName)) {
                     sendUnitCommand(UnitAction.RETURN_RESOURCES);
+                    rightClickActionTaken = true;
                 }
                 // right click -> build or repair preselected building
                 else if (hudSelectedEntity instanceof WorkerUnit && preSelBuilding != null &&
