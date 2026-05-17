@@ -1333,7 +1333,7 @@ public class UnitClientEvents {
             } else if (entity instanceof GhastUnit gUnit && gUnit.getId() == entityId && startAnimation) {
                 gUnit.showShootingFace();
             } else if (entity instanceof BruteUnit bUnit && bUnit.getId() == entityId) {
-                bUnit.isHoldingUpShield = startAnimation;
+                bUnit.setHoldingUpShield(startAnimation);
             } else if (entity instanceof WorkerUnit wUnit && entity instanceof AttackerUnit aUnit && entity.getId() == entityId) {
                 if (startAnimation && MC.level != null) {
                     if (entity instanceof VillagerUnit vUnit && vUnit.getUnitProfession() == VillagerUnitProfession.HUNTER && vUnit.isVeteran())

@@ -4,7 +4,7 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.abilities.Eject;
-import com.solegendary.reignofnether.ability.abilities.SpiderClimbing;
+import com.solegendary.reignofnether.ability.abilities.ToggleSpiderClimbing;
 import com.solegendary.reignofnether.ability.abilities.SpinWebs;
 import com.solegendary.reignofnether.blocks.BlockServerEvents;
 import com.solegendary.reignofnether.building.RangeIndicator;
@@ -15,11 +15,13 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.ConvertableUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.faction.Faction;
+import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyMath;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -58,7 +60,7 @@ import java.util.Set;
 public class SpiderUnit extends Spider implements Unit, AttackerUnit, ConvertableUnit, RangeIndicator {
     public static final Abilities ABILITIES = new Abilities();
     static {
-        ABILITIES.add(new SpiderClimbing(), Keybindings.keyQ);
+        ABILITIES.add(new ToggleSpiderClimbing(), Keybindings.keyQ);
         ABILITIES.add(new Eject(), Keybindings.keyW);
         ABILITIES.add(new SpinWebs(), Keybindings.keyE);
     }
@@ -136,11 +138,17 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
     public static final EntityDataAccessor<Integer> scenarioRoleDataAccessor =
             SynchedEntityData.defineId(SpiderUnit.class, EntityDataSerializers.INT);
 
+    public boolean isWallClimbing() { return this.entityData.get(wallClimbingAccessor); }
+    public void setWallClimbing(boolean value) { this.entityData.set(wallClimbingAccessor, value); }
+    public static final EntityDataAccessor<Boolean> wallClimbingAccessor =
+            SynchedEntityData.defineId(SpiderUnit.class, EntityDataSerializers.BOOLEAN);
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
         this.entityData.define(scenarioRoleDataAccessor, -1);
+        this.entityData.define(wallClimbingAccessor, true);
     }
 
     // combat stats
@@ -171,8 +179,6 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
 
-    private boolean wallClimbing = true;
-
     public int maxResources = 100;
 
     private AbstractMeleeAttackUnitGoal attackGoal;
@@ -196,21 +202,18 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
         this.setMaxUpStep(1.0F);
     }
 
-    public boolean isWallClimbing() { return wallClimbing; }
-
-    public boolean toggleWallClimbing() {
-        wallClimbing = !wallClimbing;
-        if (wallClimbing) {
+    public void toggleWallClimbing() {
+        setWallClimbing(!isWallClimbing());
+        if (isWallClimbing()) {
             this.navigation = new WallClimberNavigation(this, level());
         } else {
             this.navigation = new GroundPathNavigation(this, level());
         }
-        return wallClimbing;
     }
 
     @Override
     public boolean isClimbing() {
-        if (wallClimbing)
+        if (isWallClimbing())
             return super.isClimbing();
         else
             return false;

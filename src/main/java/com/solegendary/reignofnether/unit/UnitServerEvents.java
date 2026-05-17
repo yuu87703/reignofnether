@@ -1035,7 +1035,7 @@ public class UnitServerEvents {
             evt.setCanceled(true);
         else if (evt.getEntity() instanceof WraithUnit)
             evt.setCanceled(true);
-        else if (evt.getEntity() instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield)
+        else if (evt.getEntity() instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield())
             evt.setCanceled(true);
         else if (knockbackIgnoreIds.removeIf(i -> i == evt.getEntity().getId()))
             evt.setCanceled(true);

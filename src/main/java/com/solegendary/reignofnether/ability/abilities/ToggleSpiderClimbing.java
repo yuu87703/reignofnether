@@ -8,27 +8,27 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.SpiderUnit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
-import com.solegendary.reignofnether.unit.units.villagers.EvokerUnit;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitCommand;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
-public class SpiderClimbing extends Ability {
+public class ToggleSpiderClimbing extends Ability {
 
-    public SpiderClimbing() {
+    public ToggleSpiderClimbing() {
         super(
-            UnitAction.NONE,
+            UnitAction.TOGGLE_SPIDER_CLIMBING,
             0,
             0,
             0,
             false,
             false
         );
-        this.autocastEnableAction = UnitAction.ENABLE_SPIDER_CLIMBING;
-        this.autocastDisableAction = UnitAction.DISABLE_SPIDER_CLIMBING;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SpiderClimbing extends Ability {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> toggleAutocast(unit),
+                () -> sendUnitCommand(UnitAction.TOGGLE_SPIDER_CLIMBING),
                 null,
                 List.of(
                         spiderUnit.isWallClimbing() ?
@@ -62,13 +62,10 @@ public class SpiderClimbing extends Ability {
     }
 
     @Override
-    public void setAutocast(boolean value, Unit unit) {
-        if (!(unit instanceof SpiderUnit spiderUnit))
+    public void use(Level level, Unit unitUsing, BlockPos targetBp) {
+        if (!(unitUsing instanceof SpiderUnit spiderUnit))
             return;
-        super.setAutocast(value, unit);
-        if ((isAutocasting(unit) && !spiderUnit.isWallClimbing()) ||
-            (!isAutocasting(unit) && spiderUnit.isWallClimbing()))
-            spiderUnit.toggleWallClimbing();
+        spiderUnit.toggleWallClimbing();
         spiderUnit.updateAbilityButtons();
     }
 

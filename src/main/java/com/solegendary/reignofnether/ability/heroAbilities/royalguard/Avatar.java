@@ -116,7 +116,7 @@ public class Avatar extends HeroAbility {
     }
 
     private void use(Level level, Unit unitUsing) {
-        boolean isAvatarActive = ((RoyalGuardUnit) unitUsing).avatarTicksLeft > 0;
+        boolean isAvatarActive = ((RoyalGuardUnit) unitUsing).getAvatarTicksLeft() > 0;
         if (level.isClientSide()) {
             if (isAvatarActive) {
                 HudClientEvents.showTemporaryMessage(I18n.get("abilities.reignofnether.avatar.already_active"));
@@ -125,7 +125,7 @@ public class Avatar extends HeroAbility {
         if (!isAvatarActive) {
             ((RoyalGuardUnit) unitUsing).getCastAvatarGoal().setAbility(this);
             ((RoyalGuardUnit) unitUsing).getCastAvatarGoal().startCasting();
-            ((RoyalGuardUnit) unitUsing).avatarScalingStarted = true;
+            ((RoyalGuardUnit) unitUsing).setAvatarScalingStarted(true);
             if (!level.isClientSide()) {
                 SoundClientboundPacket.playSoundAtPos(SoundAction.BLOODLUST, ((LivingEntity) unitUsing).getOnPos().above());
                 HeroClientboundPacket.activateAbilityClientside(((RoyalGuardUnit) unitUsing).getId(), 3);
