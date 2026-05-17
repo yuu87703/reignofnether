@@ -142,8 +142,9 @@ public interface GarrisonableBuildingAddon extends BuildingAddon{
         else
             entities = UnitServerEvents.getAllUnits();
 
+        List<LivingEntity> entitiesCopy = new ArrayList<>(entities); // defensive copy
         int numOccupants = 0;
-        for (LivingEntity entity : entities) {
+        for (LivingEntity entity : entitiesCopy) {
             if (building.isPosInsideBuilding(entity.getOnPos().above())) {
                 if (building.getBuilding() instanceof CustomBuilding) {
                     Block onBlock = entity.level().getBlockState(entity.getOnPos().above()).getBlock();
