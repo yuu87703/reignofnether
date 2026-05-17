@@ -133,7 +133,7 @@ public class AbilityClientboundPacket {
                     } else if (this.unitAction == UnitAction.MARCH_OF_PROGRESS_SET) {
                         boolean enable = value == 1f;
                         if (unit instanceof EnchanterUnit enchanterUnit) {
-                            enchanterUnit.auraEnabled = enable;
+                            enchanterUnit.setAuraEnabled(enable);
                             if (enable) {
                                 enchanterUnit.playSingleAnimation(UnitAnimationAction.ULTIMATE);
                             }
