@@ -1,5 +1,5 @@
 
-1.20.1-1.3.3d
+1.20.1-1.3.4
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -20,15 +20,8 @@ Bugfixes
 --------
 [❌] Tridents summoned from commands no longer pierce all units
 
-[🟡] Piglin shields and spider climbing toggles are now saved between server restarts and chunk reloads
-[🟡] Fixed some scenario alliances not working again
-[🟡] Fixed /rts-victory not working with player selectors
-
 Quality of Life
 ---------------
-
-[🟡] /rts-reset and /rts-hard-reset can now be used from command blocks
-
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 [❌] /rtsapi and /rts-reset commands now work from datapacks
 [❌] Add an @enemy and @owner argument to custom building commands
