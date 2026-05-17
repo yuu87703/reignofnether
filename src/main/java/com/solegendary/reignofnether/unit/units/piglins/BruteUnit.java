@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.piglins;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
 import com.solegendary.reignofnether.ability.abilities.Bloodlust;
 import com.solegendary.reignofnether.ability.abilities.ToggleShield;
 import com.solegendary.reignofnether.building.BuildingPlacement;
@@ -16,13 +17,11 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
-import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
-import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import com.solegendary.reignofnether.faction.Faction;
-import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -133,16 +132,22 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public static final EntityDataAccessor<Integer> scenarioRoleDataAccessor =
             SynchedEntityData.defineId(BruteUnit.class, EntityDataSerializers.INT);
 
+    public boolean isHoldingUpShield() { return this.entityData.get(holdingUpShieldAccessor); }
+    public void setHoldingUpShield(boolean value) { this.entityData.set(holdingUpShieldAccessor, value); }
+    public static final EntityDataAccessor<Boolean> holdingUpShieldAccessor =
+            SynchedEntityData.defineId(BruteUnit.class, EntityDataSerializers.BOOLEAN);
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
         this.entityData.define(scenarioRoleDataAccessor, -1);
+        this.entityData.define(holdingUpShieldAccessor, false);
     }
 
     // combat stats
     public float getMovementSpeed() {
-        return isHoldingUpShield ?
+        return isHoldingUpShield() ?
                 Unit.super.getMovementSpeed() * ToggleShield.MOVESPEED_MULTIPLIER :
                 Unit.super.getMovementSpeed();
     }
@@ -178,21 +183,18 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
 
     public int maxResources = 100;
 
-    public boolean isHoldingUpShield = false;
-
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
 
     public BruteUnit(EntityType<? extends PiglinBrute> entityType, Level level) {
         super(entityType, level);
-
         updateAbilityButtons();
     }
 
     @Override
     public double getUnitRangedArmorPercentage() {
         double baseResist = Unit.super.getUnitRangedArmorPercentage();
-        if (isHoldingUpShield) {
+        if (isHoldingUpShield()) {
             return 1 - ((1 - ToggleShield.PROJECTILE_DAMAGE_RESIST) * (1 - baseResist));
         } else {
             return baseResist;
@@ -203,13 +205,8 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
         if (this.getItemBySlot(EquipmentSlot.OFFHAND).getItem() != Items.SHIELD)
             return;
 
-        isHoldingUpShield = !isHoldingUpShield;
+        setHoldingUpShield(!isHoldingUpShield());
         if (!level().isClientSide()) {
-            if (isHoldingUpShield)
-                UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.NON_KEYFRAME_START, this);
-            else
-                UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.NON_KEYFRAME_STOP, this);
-
             BlockPos bp = getMoveGoal().getMoveTarget();
             getMoveGoal().stopMoving();
             getMoveGoal().setMoveTarget(bp);
@@ -263,12 +260,15 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         this.addUnitSaveData(pCompound);
+        pCompound.putBoolean("isHoldingupShield", isHoldingUpShield());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readUnitSaveData(pCompound);
+        if (pCompound.contains("isHoldingupShield"))
+            setHoldingUpShield(pCompound.getBoolean("isHoldingupShield"));
     }
 
     public void initialiseGoals() {

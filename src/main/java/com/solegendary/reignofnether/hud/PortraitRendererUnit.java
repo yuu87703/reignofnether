@@ -497,12 +497,12 @@ public class PortraitRendererUnit<T extends LivingEntity, M extends EntityModel<
         if (unit instanceof Slime) {
             msInt *= 0.45f;
         }
-        if (unit instanceof BruteUnit pbUnit && pbUnit.isHoldingUpShield) {
+        if (unit instanceof BruteUnit pbUnit && pbUnit.isHoldingUpShield()) {
             msInt *= ToggleShield.MOVESPEED_MULTIPLIER;
         }
         int msColour = 0xFFFFFFFF;
         double msAttr = ((Mob) unit).getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
-        if (msAttr < unit.getMovementSpeed() || (unit instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield)) {
+        if (msAttr < unit.getMovementSpeed() || (unit instanceof BruteUnit bruteUnit && bruteUnit.isHoldingUpShield())) {
             msColour = 0xFF2BFF2B;
         } else if (msAttr > unit.getMovementSpeed()) {
             msColour = 0xFFFC3838;

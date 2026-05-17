@@ -117,6 +117,14 @@
     "abilities.reignofnether.roar.tooltip1": "\uE006  %d   \uE004  %ds  \uE005   ",
     "abilities.reignofnether.roar.tooltip2": "Emit a deafening roar, knocking away, damaging",
     "abilities.reignofnether.roar.tooltip3": "and briefly slowing down all nearby enemies. ",
+
+    "abilities.reignofnether.flying_enable": "Lift off",
+    "abilities.reignofnether.flying_enable.tooltip1": "Have the windcaller start flying in the air.",
+    "abilities.reignofnether.flying_enable.tooltip2": "Disables levitating attacks and spell casting.",
+    "abilities.reignofnether.flying_disable": "Land",
+    "abilities.reignofnether.flying_disable.tooltip1": "Have the windcaller start walking on the ground.",
+    "abilities.reignofnether.flying_disable.tooltip2": "Enables levitating attacks and spell casting.",
+
     "abilities.reignofnether.evoker_fangs_circular": "Evoker Fangs (Circular)",
     "abilities.reignofnether.evoker_fangs_circular.tooltip1": "\uE006  %d  \uE004  %ds  \uE005  ",
     "abilities.reignofnether.evoker_fangs_circular.tooltip2": "Have this evoker summon a circle of snapping",
@@ -210,6 +218,8 @@
     "abilities.reignofnether.consume.error3": "Can only eat equal or smaller Cubes or Slimes",
     "abilities.reignofnether.spider_climbing_on": "Wall climbing: ON",
     "abilities.reignofnether.spider_climbing_off": "Wall climbing: OFF",
+    "abilities.reignofnether.flying_on": "Land",
+    "abilities.reignofnether.flying_off": "Lift-off",
 
     "abilities.reignofnether.raise_dead": "Raise Dead",
     "abilities.reignofnether.raise_dead.stats": "\uE004  %ds   \uE008  %d",

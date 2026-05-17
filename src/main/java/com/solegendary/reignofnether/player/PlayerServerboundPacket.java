@@ -178,11 +178,6 @@ public class PlayerServerboundPacket {
         PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.PUBLISH_SCENARIO_MAP, -1, 0d, 0d, 0d));
     }
 
-    // resets and also removes all neutral units and buildings
-    public static void resetRTSHard() {
-        PacketHandler.INSTANCE.sendToServer(new PlayerServerboundPacket(PlayerAction.RESET_RTS_HARD, -1, 0d, 0d, 0d));
-    }
-
     public static void surrender() {
         Minecraft MC = Minecraft.getInstance();
         if (MC.player != null) {

@@ -105,7 +105,7 @@ public class PortraitRendererModifiers {
         } else if (entity instanceof RoyalGuardUnit royalGuardUnit) {
             yOffset = -14;
             scale = -16;
-            float avatarPercent = (float) royalGuardUnit.avatarScaleTicks / royalGuardUnit.AVATAR_SCALE_TICKS_MAX;
+            float avatarPercent = (float) royalGuardUnit.getAvatarScaleTicks() / royalGuardUnit.AVATAR_SCALE_TICKS_MAX;
             yOffset -= (26 * avatarPercent);
         } else if (entity instanceof GruntUnit ||
                 entity instanceof BruteUnit ||

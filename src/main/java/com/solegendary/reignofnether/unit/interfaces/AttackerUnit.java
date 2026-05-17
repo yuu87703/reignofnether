@@ -356,7 +356,8 @@ public interface AttackerUnit {
             buildings = BuildingServerEvents.getBuildings();
 
         ArrayList<BuildingPlacement> eligibleTargets = new ArrayList<>();
-        for (BuildingPlacement buildingPlacement : buildings) {
+        List<BuildingPlacement> buildingsCopy = new ArrayList<>(buildings); // defensive copy
+        for (BuildingPlacement buildingPlacement : buildingsCopy) {
             if (!unit.getOwnerName().equals(buildingPlacement.ownerName) &&
                     !AlliancesServerEvents.isAllied(unit.getOwnerName(), buildingPlacement.ownerName) &&
                     !buildingPlacement.ownerName.isBlank() &&
@@ -377,10 +378,11 @@ public interface AttackerUnit {
         if (mob.level().isClientSide())
             units = UnitClientEvents.getAllUnits();
         else
-            units = UnitClientEvents.getAllUnits();
+            units = UnitServerEvents.getAllUnits();
 
         ArrayList<LivingEntity> eligibleTargets = new ArrayList<>();
-        for (LivingEntity entity : units) {
+        List<LivingEntity> unitsCopy = new ArrayList<>(units); // defensive copy
+        for (LivingEntity entity : unitsCopy) {
             if (entity instanceof Unit otherUnit &&
                     (!workersOnly || entity instanceof WorkerUnit) &&
                     !unit.getOwnerName().equals(otherUnit.getOwnerName()) &&

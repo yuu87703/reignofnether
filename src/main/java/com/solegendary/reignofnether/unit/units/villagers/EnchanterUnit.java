@@ -27,10 +27,6 @@ import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.EnchanterAnimations;
-import com.solegendary.reignofnether.unit.modelling.renderers.EnchanterRenderer;
-import com.solegendary.reignofnether.unit.modelling.renderers.RoyalGuardRenderer;
-import com.solegendary.reignofnether.unit.units.monsters.CreeperUnit;
-import com.solegendary.reignofnether.unit.units.monsters.NecromancerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -46,7 +42,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -175,11 +170,17 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     public static final EntityDataAccessor<Integer> scenarioRoleDataAccessor =
             SynchedEntityData.defineId(EnchanterUnit.class, EntityDataSerializers.INT);
 
+    public boolean isAuraEnabled() { return this.entityData.get(auraEnabledAccessor); }
+    public void setAuraEnabled(boolean value) { this.entityData.set(auraEnabledAccessor, value); }
+    public static final EntityDataAccessor<Boolean> auraEnabledAccessor =
+            SynchedEntityData.defineId(EnchanterUnit.class, EntityDataSerializers.BOOLEAN);
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
         this.entityData.define(scenarioRoleDataAccessor, -1);
+        this.entityData.define(auraEnabledAccessor, false);
     }
 
     // combat stats
@@ -260,8 +261,6 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     private static final double KNOCKBACK_RESISTANCE = 0.5d;
     private static final float AUTOCAST_ENCHANT_RANGE = 15;
 
-    public boolean auraEnabled = false;
-
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
     public AnimationState activeAnimState = null;
@@ -296,7 +295,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                 startAnimation(activeAnimDef);
             }
             case ULTIMATE -> {
-                if (auraEnabled) {
+                if (isAuraEnabled()) {
                     activeAnimDef = EnchanterAnimations.ULTIMATE;
                     activeAnimState = spellActivateAnimState;
                     animateScale = 1.0f;
@@ -383,10 +382,10 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
         if (tickCount % 30 == 0) {
             doAutocastEnchant();
         }
-        if (auraEnabled && tickCount % 20 == 0) {
+        if (isAuraEnabled() && tickCount % 20 == 0) {
             setMana(getMana() - MarchOfProgress.MANA_COST_PER_SECOND);
             if (getMana() <= 0) {
-                auraEnabled = false;
+                setAuraEnabled(false);
                 if (!level().isClientSide)
                     SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_DEACTIVATE, blockPosition(), 1.5f);
             } else {
@@ -402,7 +401,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
             }
         }
 
-        if (auraEnabled && level().isClientSide && tickCount % 20 == 0) {
+        if (isAuraEnabled() && level().isClientSide && tickCount % 20 == 0) {
             List<Mob> mobs = MiscUtil.getEntitiesWithinRange(position(), MarchOfProgress.RADIUS, Mob.class, level());
             for (Mob mob : mobs) {
                 if (mob.hasEffect(MobEffectRegistrar.ENCHANTMENT_AMPLIFIER.get()) ||
@@ -444,7 +443,7 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
                     ));
                 }
             }
-            if (auraEnabled) {
+            if (isAuraEnabled()) {
                 int radius = MarchOfProgress.RADIUS;
                 this.highlightBps.addAll(MiscUtil.getRangeIndicatorCircleBlocks(blockPosition(),
                         radius - 1,
@@ -606,11 +605,11 @@ public class EnchanterUnit extends Vindicator implements AttackerUnit, HeroUnit,
     }
 
     public void toggleAura() {
-        auraEnabled = !auraEnabled;
+        setAuraEnabled(!isAuraEnabled());
         if (level().isClientSide) {
             updateHighlightBps();
         } else {
-            if (auraEnabled) {
+            if (isAuraEnabled()) {
                 AbilityClientboundPacket.doAbility(getId(), UnitAction.MARCH_OF_PROGRESS_SET, 1f);
                 SoundClientboundPacket.playSoundAtPos(SoundAction.BEACON_ACTIVATE, blockPosition(), 1.5f);
             } else {

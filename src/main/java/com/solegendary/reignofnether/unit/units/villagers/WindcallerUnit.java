@@ -2,34 +2,27 @@ package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.AbilityClientboundPacket;
-import com.solegendary.reignofnether.ability.HeroAbility;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.BloodMoon;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.InsomniaCurse;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.RaiseDead;
-import com.solegendary.reignofnether.ability.heroAbilities.necromancer.SoulSiphonPassive;
-import com.solegendary.reignofnether.building.BuildingPlacement;
+import com.solegendary.reignofnether.ability.abilities.ToggleFlying;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.entities.NecromancerProjectile;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
-import com.solegendary.reignofnether.hero.HeroClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
-import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.time.NightUtils;
-import com.solegendary.reignofnether.time.TimeServerEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
-import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
 import com.solegendary.reignofnether.unit.goals.*;
-import com.solegendary.reignofnether.unit.interfaces.*;
-import com.solegendary.reignofnether.unit.modelling.animations.NecromancerAnimations;
+import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
+import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
+import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
+import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.WindcallerAnimations;
+import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
@@ -38,28 +31,23 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -68,9 +56,10 @@ import java.util.List;
 import java.util.Set;
 
 public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, RangedAttackerUnit, KeyframeAnimated, RangeIndicator {
-    public final Abilities ABILITIES = new Abilities(
-
-    );
+    public static final Abilities ABILITIES = new Abilities();
+    static {
+        ABILITIES.add(new ToggleFlying(), Keybindings.keyQ);
+    }
 
     //region
     @Override
@@ -124,6 +113,11 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     private ReturnResourcesGoal returnResourcesGoal;
     public MountGoal mountGoal;
 
+    private GenericUntargetedSpellGoal enableFlyingGoal;
+    public GenericUntargetedSpellGoal getEnableFlyingGoal() { return enableFlyingGoal; }
+    private GenericUntargetedSpellGoal disableFlyingGoal;
+    public GenericUntargetedSpellGoal getDnableFlyingGoal() { return disableFlyingGoal; }
+
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public LivingEntity getFollowTarget() { return followTarget; }
     public boolean getHoldPosition() { return holdPosition; }
@@ -147,11 +141,17 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     public static final EntityDataAccessor<Integer> scenarioRoleDataAccessor =
             SynchedEntityData.defineId(WindcallerUnit.class, EntityDataSerializers.INT);
 
+    public boolean isFlying() { return this.entityData.get(isFlyingAccessor); }
+    public void setFlying(boolean value) { this.entityData.set(isFlyingAccessor, value); }
+    public static final EntityDataAccessor<Boolean> isFlyingAccessor =
+            SynchedEntityData.defineId(WindcallerUnit.class, EntityDataSerializers.BOOLEAN);
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
         this.entityData.define(scenarioRoleDataAccessor, -1);
+        this.entityData.define(isFlyingAccessor, false);
     }
 
     // combat stats
@@ -245,6 +245,19 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         updateAbilityButtons();
     }
 
+    public void toggleFlying() {
+        setFlying(!isFlying());
+        if (isFlying()) {
+            this.navigation = new FlyingPathNavigation(this, level());
+            if (!level().isClientSide())
+                UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.CHARGE_SPELL, this);
+        } else {
+            this.navigation = new GroundPathNavigation(this, level());
+            if (!level().isClientSide())
+                UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.STOP, this);
+        }
+    }
+
     // prevent vanilla logic for picking up items
     @Override
     protected void pickUpItem(ItemEntity pItemEntity) { }
@@ -299,26 +312,15 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         this.addUnitSaveData(pCompound);
+        pCompound.putBoolean("isFlying", isFlying());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readUnitSaveData(pCompound);
-    }
-
-    public RaiseDead getRaiseDead() {
-        for (Ability ability : abilities.get())
-            if (ability instanceof RaiseDead)
-                return (RaiseDead) ability;
-        return null;
-    }
-
-    public SoulSiphonPassive getSoulSiphon() {
-        for (Ability ability : abilities.get())
-            if (ability instanceof SoulSiphonPassive)
-                return (SoulSiphonPassive) ability;
-        return null;
+        if (pCompound.contains("isFlying"))
+            setFlying(pCompound.getBoolean("isFlying"));
     }
 
     @Override

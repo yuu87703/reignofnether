@@ -343,7 +343,7 @@ public class CommandsServerEvents {
 			.then(Commands.argument("ownerSelector", EntityArgument.player())
 				.then(Commands.argument("reason", StringArgumentType.string())
 					.executes(ctx -> victoryPlayer(
-						StringArgumentType.getString(ctx, "ownerName"),
+						StringArgumentType.getString(ctx, "ownerSelector"),
 						StringArgumentType.getString(ctx, "reason")
 					))))
 		);
@@ -478,6 +478,15 @@ public class CommandsServerEvents {
 								ctx,
 								StringArgumentType.getString(ctx, "mode")
 						)))
+		);
+
+		dispatcher.register(Commands.literal("rts-reset")
+				.requires(source -> source.hasPermission(2))
+				.executes(ctx -> PlayerServerEvents.resetRTS(false))
+		);
+		dispatcher.register(Commands.literal("rts-hard-reset")
+				.requires(source -> source.hasPermission(2))
+				.executes(ctx -> PlayerServerEvents.resetRTS(true))
 		);
 	}
 	

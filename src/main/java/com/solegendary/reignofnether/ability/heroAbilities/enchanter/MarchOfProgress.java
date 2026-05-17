@@ -53,7 +53,7 @@ public class MarchOfProgress extends HeroAbility {
         AbilityButton button = new AbilityButton("March of Progress",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/march_of_progress.png"),
                 hotkey,
-                () -> ((EnchanterUnit) unit).auraEnabled,
+                () -> ((EnchanterUnit) unit).isAuraEnabled(),
                 () -> getRank(hero) == 0,
                 () -> true,
                 () -> sendUnitCommand(UnitAction.MARCH_OF_PROGRESS_TOGGLE),

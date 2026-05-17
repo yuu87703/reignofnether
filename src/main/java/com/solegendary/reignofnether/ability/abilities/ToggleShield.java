@@ -11,14 +11,17 @@ import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.BruteUnit;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+import static com.solegendary.reignofnether.unit.UnitClientEvents.sendUnitCommand;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class ToggleShield extends Ability {
@@ -30,14 +33,12 @@ public class ToggleShield extends Ability {
 
     public ToggleShield() {
         super(
-                UnitAction.NONE,
+                UnitAction.TOGGLE_SHIELD_RAISE,
                 CD_MAX_SECONDS * ResourceCost.TICKS_PER_SECOND,
                 0,
                 0,
                 false
         );
-        this.autocastEnableAction = UnitAction.ENABLE_SHIELD_RAISE;
-        this.autocastDisableAction = UnitAction.DISABLE_SHIELD_RAISE;
     }
 
     @Override
@@ -48,11 +49,11 @@ public class ToggleShield extends Ability {
                 "Shield Stance",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/items/shield.png"),
                 hotkey,
-                () -> bruteUnit.isHoldingUpShield,
+                bruteUnit::isHoldingUpShield,
                 () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_BRUTE_SHIELDS) ||
                         bruteUnit.getItemBySlot(EquipmentSlot.OFFHAND).getItem() != Items.SHIELD,
                 () -> true,
-                () -> toggleAutocast(unit),
+                () -> sendUnitCommand(UnitAction.TOGGLE_SHIELD_RAISE),
                 null,
                 List.of(
                         fcs(I18n.get("abilities.reignofnether.shield_stance"), true),
@@ -67,13 +68,10 @@ public class ToggleShield extends Ability {
     }
 
     @Override
-    public void setAutocast(boolean value, Unit unit) {
-        if (!(unit instanceof BruteUnit bruteUnit))
+    public void use(Level level, Unit unitUsing, BlockPos targetBp) {
+        if (!(unitUsing instanceof BruteUnit bruteUnit))
             return;
-        super.setAutocast(value, unit);
-        if ((isAutocasting(unit) && !bruteUnit.isHoldingUpShield) ||
-            (!isAutocasting(unit) && bruteUnit.isHoldingUpShield))
-            bruteUnit.toggleShield();
+        bruteUnit.toggleShield();
         bruteUnit.updateAbilityButtons();
     }
 

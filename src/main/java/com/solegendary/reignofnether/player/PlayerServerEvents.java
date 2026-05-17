@@ -1087,7 +1087,7 @@ public class PlayerServerEvents {
         })));
     }
 
-    public static void resetRTS(boolean hardReset) {
+    public static int resetRTS(boolean hardReset) {
         ReignOfNether.LOGGER.info("[Player] resetRTS: hardReset={}", hardReset);
         StartPosServerEvents.cancelStartGameCountdown(true);
 
@@ -1146,6 +1146,7 @@ public class PlayerServerEvents {
         playerDefaultGameModes.replaceAll((key, oldValue) -> GameType.SPECTATOR);
         AlliancesServerEvents.playersWithAlliedControl.clear();
         TimeServerEvents.resetBloodMoon();
+        return 1;
     }
 
     public static void publishScenarioMap() {
@@ -1166,6 +1167,7 @@ public class PlayerServerEvents {
             bpl.ownerName = role != null ? role.name : "";
             BuildingClientEvents.syncBuilding(bpl, bpl.getBlocksPlaced(), bpl.ownerName, bpl.scenarioRoleIndex);
         }
+        serverLevel.getGameRules().getRule(GameRuleRegistrar.SCENARIO_MODE).set(true, serverLevel.getServer());
 
         synchronized (rtsPlayers) {
             rtsPlayers.clear();
@@ -1200,7 +1202,6 @@ public class PlayerServerEvents {
         AlliancesServerEvents.playersWithAlliedControl.clear();
         TimeServerEvents.resetBloodMoon();
 
-        serverLevel.getGameRules().getRule(GameRuleRegistrar.SCENARIO_MODE).set(true, serverLevel.getServer());
         GameruleClientboundPacket.setScenarioMode(true);
         GameModeClientboundPacket.setAndLockAllClientGameModes(GameMode.SCENARIO);
     }
