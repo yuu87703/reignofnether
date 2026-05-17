@@ -275,12 +275,15 @@ public class SpiderUnit extends Spider implements Unit, AttackerUnit, Convertabl
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         this.addUnitSaveData(pCompound);
+        pCompound.putBoolean("isWallClimbing", isWallClimbing());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readUnitSaveData(pCompound);
+        if (pCompound.contains("isWallClimbing"))
+            setWallClimbing(pCompound.getBoolean("isWallClimbing"));
     }
 
     @Override

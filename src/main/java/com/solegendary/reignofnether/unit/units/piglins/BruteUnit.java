@@ -260,12 +260,15 @@ public class BruteUnit extends PiglinBrute implements Unit, AttackerUnit {
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         this.addUnitSaveData(pCompound);
+        pCompound.putBoolean("isHoldingupShield", isHoldingUpShield());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readUnitSaveData(pCompound);
+        if (pCompound.contains("isHoldingupShield"))
+            setHoldingUpShield(pCompound.getBoolean("isHoldingupShield"));
     }
 
     public void initialiseGoals() {

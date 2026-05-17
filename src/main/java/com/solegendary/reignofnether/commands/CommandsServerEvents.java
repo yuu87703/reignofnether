@@ -479,6 +479,15 @@ public class CommandsServerEvents {
 								StringArgumentType.getString(ctx, "mode")
 						)))
 		);
+
+		dispatcher.register(Commands.literal("rts-reset")
+				.requires(source -> source.hasPermission(2))
+				.executes(ctx -> PlayerServerEvents.resetRTS(false))
+		);
+		dispatcher.register(Commands.literal("rts-hard-reset")
+				.requires(source -> source.hasPermission(2))
+				.executes(ctx -> PlayerServerEvents.resetRTS(true))
+		);
 	}
 	
 	private static ArgumentBuilder<CommandSourceStack, ?> placeBuildingTail(NameResolver ownerResolver) {

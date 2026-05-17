@@ -151,6 +151,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         super.defineSynchedData();
         this.entityData.define(ownerDataAccessor, "");
         this.entityData.define(scenarioRoleDataAccessor, -1);
+        this.entityData.define(isFlyingAccessor, false);
     }
 
     // combat stats
@@ -311,12 +312,15 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         this.addUnitSaveData(pCompound);
+        pCompound.putBoolean("isFlying", isFlying());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readUnitSaveData(pCompound);
+        if (pCompound.contains("isFlying"))
+            setFlying(pCompound.getBoolean("isFlying"));
     }
 
     @Override

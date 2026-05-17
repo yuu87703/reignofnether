@@ -1087,7 +1087,7 @@ public class PlayerServerEvents {
         })));
     }
 
-    public static void resetRTS(boolean hardReset) {
+    public static int resetRTS(boolean hardReset) {
         ReignOfNether.LOGGER.info("[Player] resetRTS: hardReset={}", hardReset);
         StartPosServerEvents.cancelStartGameCountdown(true);
 
@@ -1146,6 +1146,7 @@ public class PlayerServerEvents {
         playerDefaultGameModes.replaceAll((key, oldValue) -> GameType.SPECTATOR);
         AlliancesServerEvents.playersWithAlliedControl.clear();
         TimeServerEvents.resetBloodMoon();
+        return 1;
     }
 
     public static void publishScenarioMap() {
