@@ -23,7 +23,7 @@ public class ToggleFlying extends Ability {
 
     public ToggleFlying() {
         super(
-                UnitAction.NONE,
+                UnitAction.TOGGLE_FLYING,
                 0,
                 0,
                 0,

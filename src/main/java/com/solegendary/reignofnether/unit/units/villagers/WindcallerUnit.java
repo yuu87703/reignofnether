@@ -10,12 +10,13 @@ import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
+import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
-import com.solegendary.reignofnether.time.NightUtils;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
+import com.solegendary.reignofnether.unit.controls.FlyingUnitMoveControl;
 import com.solegendary.reignofnether.unit.goals.*;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.KeyframeAnimated;
@@ -23,20 +24,21 @@ import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.modelling.animations.WindcallerAnimations;
 import com.solegendary.reignofnether.unit.packets.UnitAnimationClientboundPacket;
+import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -47,6 +49,8 @@ import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -93,12 +97,14 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     public UsePortalGoal getUsePortalGoal() { return usePortalGoal; }
     public boolean canUsePortal() { return getUsePortalGoal() != null; }
 
-    public Faction getFaction() {return Faction.MONSTERS;}
+    public Faction getFaction() {return Faction.VILLAGERS;}
     public Abilities getAbilities() {return abilities;};
     public List<ItemStack> getItems() {return items;};
-    public MoveToTargetBlockGoal getMoveGoal() {return moveGoal;}
+    public MoveToTargetBlockGoal getMoveGoal() {
+        return isFlying() ? flyingMoveGoal : moveGoal;
+    }
     public SelectedTargetGoal<? extends LivingEntity> getTargetGoal() {return targetGoal;}
-    public Goal getAttackBuildingGoal() {return attackBuildingGoal;}
+    public Goal getAttackBuildingGoal() {return null;}
     public Goal getAttackGoal() {return attackGoal;}
     public ReturnResourcesGoal getReturnResourcesGoal() {return returnResourcesGoal;}
     public int getMaxResources() {return maxResources;}
@@ -108,15 +114,13 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     public EnemySearchBehaviour getEnemySearchBehaviour() { return attackSearchBehaviour; }
     public void setEnemySearchBehaviour(EnemySearchBehaviour behaviour) { attackSearchBehaviour = behaviour; }
 
+    private final MoveControl groundMoveControl;
+    private final MoveControl flyingMoveControl;
     private MoveToTargetBlockGoal moveGoal;
+    private FlyingMoveToTargetGoal flyingMoveGoal;
     private SelectedTargetGoal<? extends LivingEntity> targetGoal;
     private ReturnResourcesGoal returnResourcesGoal;
     public MountGoal mountGoal;
-
-    private GenericUntargetedSpellGoal enableFlyingGoal;
-    public GenericUntargetedSpellGoal getEnableFlyingGoal() { return enableFlyingGoal; }
-    private GenericUntargetedSpellGoal disableFlyingGoal;
-    public GenericUntargetedSpellGoal getDnableFlyingGoal() { return disableFlyingGoal; }
 
     public BlockPos getAttackMoveTarget() { return attackMoveTarget; }
     public LivingEntity getFollowTarget() { return followTarget; }
@@ -167,25 +171,23 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
 
     // endregion
 
-    final static public float attackDamage = 4.0f;
-    final static public float attacksPerSecond = 0.35f;
-    final static public float maxHealth = 100.0f;
+    final static public float attackDamage = 5.0f;
+    final static public float attacksPerSecond = 0.3f;
+    final static public float maxHealth = 40.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.25f;
+    final static public float movementSpeedFlying = 0.28f;
     final static public float attackRange = 12.0F; // only used by ranged units or melee building attackers
     final static public float aggroRange = 12;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
     public int maxResources = 100;
 
-    public int souls = 0;
-
     public int fogRevealDuration = 0; // set > 0 for the client who is attacked by this unit
     public int getFogRevealDuration() { return fogRevealDuration; }
     public void setFogRevealDuration(int duration) { fogRevealDuration = duration; }
 
     private UnitRangedAttackGoal<? extends LivingEntity> attackGoal;
-    private MeleeAttackBuildingGoal attackBuildingGoal;
 
     private Abilities abilities = ABILITIES.clone();
     private final List<ItemStack> items = new ArrayList<>();
@@ -202,6 +204,9 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
 
     // animation attack peak starts at 44% the way through, but we need to set it to 22% for some reason?
     final static private int ATTACK_WINDUP_TICKS = 6; // (int) (NecromancerAnimations.ATTACK.lengthInSeconds() * 20f * 0.22f);
+
+    // when the windcaller is landing, issuing a move command to preserve its movement goal won't work so store it here until landing
+    private BlockPos pendingGroundMoveTarget = null;
 
     // non-looping animations
     public AnimationDefinition activeAnimDef = null;
@@ -242,20 +247,85 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
 
     public WindcallerUnit(EntityType<? extends Pillager> entityType, Level level) {
         super(entityType, level);
+        this.groundMoveControl = this.moveControl;
+        this.flyingMoveControl = new FlyingUnitMoveControl(this);
         updateAbilityButtons();
     }
 
     public void toggleFlying() {
         setFlying(!isFlying());
+        updateFlyingStates(true);
+    }
+
+    public void updateFlyingStates(boolean doAnimation) {
         if (isFlying()) {
             this.navigation = new FlyingPathNavigation(this, level());
-            if (!level().isClientSide())
+            BlockPos moveTarget = this.moveGoal.getMoveTarget();
+            this.moveGoal.stopMoving();
+            this.flyingMoveGoal.stopMoving();
+            this.moveControl = flyingMoveControl;
+            if (moveTarget != null)
+                this.getMoveGoal().setMoveTarget(MiscUtil.getHighestGroundBlock(level(), moveTarget));
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeedFlying);
+            if (!level().isClientSide() && doAnimation)
                 UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.CHARGE_SPELL, this);
         } else {
             this.navigation = new GroundPathNavigation(this, level());
-            if (!level().isClientSide())
+            BlockPos moveTarget = this.flyingMoveGoal.getMoveTarget();
+            this.moveGoal.stopMoving();
+            this.flyingMoveGoal.stopMoving();
+            this.moveControl = groundMoveControl;
+            if (moveTarget != null)
+                pendingGroundMoveTarget = MiscUtil.getHighestGroundBlock(level(), moveTarget);
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeed);
+            if (!level().isClientSide() && doAnimation)
                 UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.STOP, this);
         }
+    }
+
+    @Override
+    protected void checkFallDamage(double pY, boolean pOnGround, BlockState pState, BlockPos pPos) { }
+
+    @Override
+    public void travel(Vec3 pTravelVector) {
+        if (!isFlying()) {
+            super.travel(pTravelVector);
+        }
+        else if (this.isControlledByLocalInstance()) {
+            if (this.isInWater()) {
+                this.moveRelative(0.02F, pTravelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.800000011920929));
+            } else if (this.isInLava()) {
+                this.moveRelative(0.02F, pTravelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
+            } else {
+                BlockPos ground = this.getBlockPosBelowThatAffectsMyMovement();
+                float f = 0.91F;
+                if (this.onGround()) {
+                    f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+                }
+
+                float f1 = 0.16277137F / (f * f * f);
+                f = 0.91F;
+                if (this.onGround()) {
+                    f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+                }
+
+                this.moveRelative(this.onGround() ? 0.1F * f1 : 0.02F, pTravelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale((double)f));
+            }
+        }
+        this.calculateEntityAnimation(false);
+    }
+
+    public boolean onClimbable() {
+        if (isFlying())
+            return false;
+        else
+            return super.onClimbable();
     }
 
     // prevent vanilla logic for picking up items
@@ -265,6 +335,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     @Override
     public void resetBehaviours() {
         animateScaleReducing = true;
+        pendingGroundMoveTarget = null;
     }
 
     @Override
@@ -300,6 +371,59 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             }
             lastOnPos = getOnPos();
         }
+        updateRotation();
+
+        if (level().isClientSide() && isFlying()) {
+            spawnFlyingCloudParticles();
+        }
+
+        // Apply deferred ground target once the windcaller has actually landed
+        if (!isFlying() && onGround() && pendingGroundMoveTarget != null) {
+            moveGoal.setMoveTarget(pendingGroundMoveTarget);
+            pendingGroundMoveTarget = null;
+        }
+    }
+
+    /**
+     * Spawns a wispy cloud-like particle effect at the feet of the windcaller while flying.
+     * Called each tick on the client side only.
+     */
+    private void spawnFlyingCloudParticles() {
+        double px = this.getX();
+        double py = this.getY();
+        double pz = this.getZ();
+
+        // Spawn a loose ring of cloud puffs around the feet
+        int numPuffs = 1;
+        for (int i = 0; i < numPuffs; i++) {
+            double angle = (this.tickCount * 0.25 + (Math.PI * 2.0 / numPuffs) * i) % (Math.PI * 2.0);
+            double radius = 0.3 + this.random.nextDouble() * 0.2;
+            double ox = Math.cos(angle) * radius;
+            double oz = Math.sin(angle) * radius;
+            double oy = -0.1 + this.random.nextDouble() * 0.1; // slightly below/at foot level
+
+            // Gentle upward and outward drift
+            double vx = ox * 0.015;
+            double vy = 0.005 + this.random.nextDouble() * 0.01;
+            double vz = oz * 0.015;
+
+            this.level().addParticle(
+                    ParticleTypes.CLOUD,
+                    px + ox, py + oy, pz + oz,
+                    vx, vy, vz
+            );
+        }
+
+        // Occasional extra wisp for density variation
+        if (this.tickCount % 10 == 0) {
+            double ox = (this.random.nextDouble() - 0.5) * 0.5;
+            double oz = (this.random.nextDouble() - 0.5) * 0.5;
+            this.level().addParticle(
+                    ParticleTypes.CLOUD,
+                    px + ox, py - 0.05, pz + oz,
+                    0, 0.008, 0
+            );
+        }
     }
 
     private Set<BlockPos> highlightBps = new HashSet<>();
@@ -319,23 +443,36 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readUnitSaveData(pCompound);
-        if (pCompound.contains("isFlying"))
+        if (pCompound.contains("isFlying")) {
             setFlying(pCompound.getBoolean("isFlying"));
+            updateFlyingStates(false);
+        }
     }
 
-    @Override
-    protected boolean isSunBurnTick() {
-        return NightUtils.isSunBurnTick(this);
-    }
+    public void updateRotation() {
+        LivingEntity target = this.getTarget();
+        Vec3 dMove = this.getDeltaMovement();
+        double x = 0;
+        double z = 0;
 
-    @Override
-    public SunlightEffect getSunlightEffect() {
-        return SunlightEffect.SLOWNESS_I;
+        if (target != null) {
+            x = target.getX() - this.getX();
+            z = target.getZ() - this.getZ();
+        } else if (dMove.distanceTo(new Vec3(0,0,0)) > 0) {
+            x = dMove.x();
+            z = dMove.z();
+        }
+
+        if (Math.abs(x) > 0.05f || Math.abs(z) > 0.05f) {
+            this.setYRot(-((float) Mth.atan2(x, z)) * 57.295776F);
+            this.yBodyRot = this.getYRot();
+        }
     }
 
     public void initialiseGoals() {
         this.usePortalGoal = new UsePortalGoal(this);
         this.moveGoal = new MoveToTargetBlockGoal(this, false, 0);
+        this.flyingMoveGoal = new FlyingMoveToTargetGoal(this, 0);
         this.targetGoal = new SelectedTargetGoal<>(this, true, false);
         this.garrisonGoal = new GarrisonGoal(this);
         this.attackGoal = new UnitRangedAttackGoal<>(this, ATTACK_WINDUP_TICKS);
@@ -352,6 +489,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         this.goalSelector.addGoal(2, garrisonGoal);
         this.targetSelector.addGoal(2, targetGoal);
         this.goalSelector.addGoal(3, moveGoal);
+        this.goalSelector.addGoal(3, flyingMoveGoal);
     }
 
     @Override

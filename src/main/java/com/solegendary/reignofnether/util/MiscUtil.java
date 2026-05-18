@@ -391,7 +391,7 @@ public class MiscUtil {
 
         // Prevents certain attacks based on specific unit and goal conditions
         if (targetEntity instanceof Unit unit &&
-                unit.getMoveGoal() instanceof FlyingMoveToTargetGoal &&
+                unit.isFlyingUnit() &&
                 unitMob instanceof AttackerUnit attackerUnit &&
                 attackerUnit.getAttackGoal() instanceof AbstractMeleeAttackUnitGoal) {
             return false;
@@ -819,7 +819,7 @@ public class MiscUtil {
     }
 
     public static boolean isOnNetherTerrain(LivingEntity le) {
-        if (le instanceof FlyingMob) {
+        if (le instanceof Unit unit && unit.isFlyingUnit()) {
             BlockPos groundPos = getHighestNonAirBlock(le.level(), le.getOnPos(), false);
             return NetherBlocks.isNetherBlock(le.level(), groundPos);
         }

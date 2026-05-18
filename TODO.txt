@@ -11,10 +11,12 @@
 Windcaller
 ----------
 [❌] Very squishy and weak attack, but while walking, causes levitation on hit like breezes
-[❌] Toggle between flying and walking
+[🟡] Toggle between flying and walking
 [❌] Spell castable only on ground
     - Gale force (upgrade required): blows back units for 2s, the more windcallers used, the stronger and longer it lasts
 
+[❌] can't attack move (projectile stops clipping if there's no target I guess?)
+[❌] Sounds https://minecraft.wiki/w/Dungeons:Wind_Caller
 
 Bugfixes
 --------
