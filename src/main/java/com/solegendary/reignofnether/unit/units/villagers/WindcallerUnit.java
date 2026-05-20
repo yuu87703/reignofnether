@@ -10,9 +10,12 @@ import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
+import com.solegendary.reignofnether.registrars.SoundRegistrar;
 import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.EnemySearchBehaviour;
 import com.solegendary.reignofnether.unit.UnitAnimationAction;
@@ -33,8 +36,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -257,7 +262,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         updateFlyingStates(true);
     }
 
-    public void updateFlyingStates(boolean doAnimation) {
+    public void updateFlyingStates(boolean doAnimationAndSound) {
         if (isFlying()) {
             this.navigation = new FlyingPathNavigation(this, level());
             BlockPos moveTarget = this.moveGoal.getMoveTarget();
@@ -265,10 +270,16 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             this.flyingMoveGoal.stopMoving();
             this.moveControl = flyingMoveControl;
             if (moveTarget != null)
-                this.getMoveGoal().setMoveTarget(MiscUtil.getHighestGroundBlock(level(), moveTarget));
+                this.getMoveGoal().setMoveTarget(MiscUtil.getHighestGroundBlock(level(), moveTarget).above());
+            else
+                this.getMoveGoal().setMoveTarget(blockPosition());
+            if (onGround())
+                this.setDeltaMovement(0,1,0);
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeedFlying);
-            if (!level().isClientSide() && doAnimation)
+            if (!level().isClientSide() && doAnimationAndSound) {
                 UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.CHARGE_SPELL, this);
+                SoundClientboundPacket.playSoundAtPos(SoundAction.WINDCALLER_LIFT, blockPosition());
+            }
         } else {
             this.navigation = new GroundPathNavigation(this, level());
             BlockPos moveTarget = this.flyingMoveGoal.getMoveTarget();
@@ -278,7 +289,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             if (moveTarget != null)
                 pendingGroundMoveTarget = MiscUtil.getHighestGroundBlock(level(), moveTarget);
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeed);
-            if (!level().isClientSide() && doAnimation)
+            if (!level().isClientSide() && doAnimationAndSound)
                 UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.STOP, this);
         }
     }
@@ -379,7 +390,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
 
         // Apply deferred ground target once the windcaller has actually landed
         if (!isFlying() && onGround() && pendingGroundMoveTarget != null) {
-            moveGoal.setMoveTarget(pendingGroundMoveTarget);
+            moveGoal.setMoveTarget(pendingGroundMoveTarget.above());
             pendingGroundMoveTarget = null;
         }
     }
@@ -447,6 +458,16 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             setFlying(pCompound.getBoolean("isFlying"));
             updateFlyingStates(false);
         }
+    }
+
+    @Override protected SoundEvent getAmbientSound() {
+        return SoundRegistrar.WINDCALLER_AMBIENT.get();
+    }
+    @Override protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return SoundRegistrar.WINDCALLER_HURT.get();
+    }
+    @Override protected SoundEvent getDeathSound() {
+        return SoundRegistrar.WINDCALLER_DEATH.get();
     }
 
     public void updateRotation() {

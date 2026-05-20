@@ -20,13 +20,12 @@ Windcaller
 
 Bugfixes
 --------
-[❌] Tridents summoned from commands no longer pierce all units
+
 
 Quality of Life
 ---------------
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
-[❌] /rtsapi and /rts-reset commands now work from datapacks
-[❌] Add an @enemy and @owner argument to custom building commands
+[❌] Waypoint looping (by shift clicking back onto a previous waypoint it will automatically cycle the list once it reaches the end)
 
 
 Balance

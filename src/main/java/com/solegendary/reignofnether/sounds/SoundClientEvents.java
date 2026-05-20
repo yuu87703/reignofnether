@@ -164,5 +164,8 @@ public class SoundClientEvents {
         SOUND_MAP.put(SoundAction.WRAITH_POSSESS_CHANNEL, SoundRegistrar.WRAITH_POSSESS_CHANNEL.get());
         SOUND_MAP.put(SoundAction.WRAITH_POSSESS_PARTIAL, SoundRegistrar.WRAITH_POSSESS_PARTIAL.get());
         SOUND_MAP.put(SoundAction.WRAITH_POSSESS_FULL, SoundRegistrar.WRAITH_POSSESS_FULL.get());
+        SOUND_MAP.put(SoundAction.WINDCALLER_LIFT, SoundRegistrar.WINDCALLER_LIFT.get());
+        SOUND_MAP.put(SoundAction.WINDCALLER_YELL, SoundRegistrar.WINDCALLER_YELL.get());
+        SOUND_MAP.put(SoundAction.WINDCALLER_WIND_ATTACK, SoundRegistrar.WINDCALLER_WIND_ATTACK.get());
     }
 }
