@@ -5,6 +5,7 @@ import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.ToggleFlying;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.entities.NecromancerProjectile;
+import com.solegendary.reignofnether.entities.WindcallerProjectile;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
 import com.solegendary.reignofnether.hud.HudClientEvents;
@@ -242,6 +243,12 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             }
             case CHARGE_SPELL -> {
                 activeAnimDef = WindcallerAnimations.LIFT;
+                activeAnimState = spellChargeAnimState;
+                animateScale = 1.0f;
+                startAnimation(activeAnimDef);
+            }
+            case CAST_SPELL -> {
+                activeAnimDef = WindcallerAnimations.SPELL;
                 activeAnimState = spellChargeAnimState;
                 animateScale = 1.0f;
                 startAnimation(activeAnimDef);
@@ -526,7 +533,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         double x = pTarget.getX() - this.getX();
         double y = pTarget.getY(0.5) - this.getY(0.5);
         double z = pTarget.getZ() - this.getZ();
-        NecromancerProjectile proj = new NecromancerProjectile(this.level(), this, x, y, z);
+        WindcallerProjectile proj = new WindcallerProjectile(this.level(), this, x, y, z);
         proj.setPos(this.getEyePosition());
 
         level().addFreshEntity(proj);

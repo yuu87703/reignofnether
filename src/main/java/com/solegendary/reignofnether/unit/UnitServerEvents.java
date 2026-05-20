@@ -19,6 +19,7 @@ import com.solegendary.reignofnether.building.production.ActiveProduction;
 import com.solegendary.reignofnether.building.production.ProductionItem;
 import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.entities.BlazeUnitFireball;
+import com.solegendary.reignofnether.entities.WindcallerProjectile;
 import com.solegendary.reignofnether.hero.HeroServerEvents;
 import com.solegendary.reignofnether.player.PlayerServerEvents;
 import com.solegendary.reignofnether.registrars.BlockRegistrar;
@@ -804,6 +805,8 @@ public class UnitServerEvents {
         if (projectile instanceof Fireball && sourceEntity instanceof BlazeUnit)
             return true;
         if (projectile instanceof AbstractArrow)
+            return true;
+        if (projectile instanceof WindcallerProjectile)
             return true;
         if (projectile instanceof BlazeUnitFireball)
             return true;
