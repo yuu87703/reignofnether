@@ -4,7 +4,6 @@ import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
 import com.solegendary.reignofnether.ability.abilities.ToggleFlying;
 import com.solegendary.reignofnether.building.RangeIndicator;
-import com.solegendary.reignofnether.entities.NecromancerProjectile;
 import com.solegendary.reignofnether.entities.WindcallerProjectile;
 import com.solegendary.reignofnether.faction.Faction;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientboundPacket;
@@ -12,7 +11,6 @@ import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
-import com.solegendary.reignofnether.resources.BlockUtils;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import com.solegendary.reignofnether.sounds.SoundAction;
@@ -32,7 +30,6 @@ import com.solegendary.reignofnether.util.MiscUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -177,8 +174,10 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
 
     // endregion
 
+    final static public int LEVITATE_TICKS = 80;
+
     final static public float attackDamage = 5.0f;
-    final static public float attacksPerSecond = 0.3f;
+    final static public float attacksPerSecond = 0.25f;
     final static public float maxHealth = 40.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.25f;
@@ -392,7 +391,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         updateRotation();
 
         if (level().isClientSide() && isFlying()) {
-            spawnFlyingCloudParticles();
+            MiscUtil.spawnFlyingCloudParticles(this);
         }
 
         // Apply deferred ground target once the windcaller has actually landed
@@ -402,47 +401,6 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         }
     }
 
-    /**
-     * Spawns a wispy cloud-like particle effect at the feet of the windcaller while flying.
-     * Called each tick on the client side only.
-     */
-    private void spawnFlyingCloudParticles() {
-        double px = this.getX();
-        double py = this.getY();
-        double pz = this.getZ();
-
-        // Spawn a loose ring of cloud puffs around the feet
-        int numPuffs = 1;
-        for (int i = 0; i < numPuffs; i++) {
-            double angle = (this.tickCount * 0.25 + (Math.PI * 2.0 / numPuffs) * i) % (Math.PI * 2.0);
-            double radius = 0.3 + this.random.nextDouble() * 0.2;
-            double ox = Math.cos(angle) * radius;
-            double oz = Math.sin(angle) * radius;
-            double oy = -0.1 + this.random.nextDouble() * 0.1; // slightly below/at foot level
-
-            // Gentle upward and outward drift
-            double vx = ox * 0.015;
-            double vy = 0.005 + this.random.nextDouble() * 0.01;
-            double vz = oz * 0.015;
-
-            this.level().addParticle(
-                    ParticleTypes.CLOUD,
-                    px + ox, py + oy, pz + oz,
-                    vx, vy, vz
-            );
-        }
-
-        // Occasional extra wisp for density variation
-        if (this.tickCount % 10 == 0) {
-            double ox = (this.random.nextDouble() - 0.5) * 0.5;
-            double oz = (this.random.nextDouble() - 0.5) * 0.5;
-            this.level().addParticle(
-                    ParticleTypes.CLOUD,
-                    px + ox, py - 0.05, pz + oz,
-                    0, 0.008, 0
-            );
-        }
-    }
 
     private Set<BlockPos> highlightBps = new HashSet<>();
     private BlockPos lastOnPos = new BlockPos(0,0,0);
@@ -526,13 +484,26 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.PAPER)); // prevent burning in sunlight
     }
 
-    // override to make inaccuracy 0
     @Override
     public void performUnitRangedAttack(LivingEntity pTarget, float velocity) {
+        if (pTarget == null)
+            return;
 
-        double x = pTarget.getX() - this.getX();
-        double y = pTarget.getY(0.5) - this.getY(0.5);
-        double z = pTarget.getZ() - this.getZ();
+        // Lead the shot by predicting where the target will be when the projectile arrives
+        Vec3 shooterPos = this.getEyePosition();
+        Vec3 targetPos = pTarget.getEyePosition().subtract(0,0.5,0);
+        Vec3 targetDelta = pTarget.getDeltaMovement();
+
+        if (pTarget.onGround())
+            targetDelta = targetDelta.multiply(1,0,1);
+
+        double distanceTicks = shooterPos.distanceTo(targetPos) * 1.5f;
+        Vec3 predictedPos = targetPos.add(targetDelta.scale(distanceTicks * 1.5f));
+
+        double x = predictedPos.x() - shooterPos.x();
+        double y = predictedPos.y() - shooterPos.y();
+        double z = predictedPos.z() - shooterPos.z();
+
         WindcallerProjectile proj = new WindcallerProjectile(this.level(), this, x, y, z);
         proj.setPos(this.getEyePosition());
 

@@ -34,12 +34,14 @@ import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.unit.units.piglins.WitherSkeletonUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import com.solegendary.reignofnether.unit.units.villagers.VillagerUnitProfession;
+import com.solegendary.reignofnether.unit.units.villagers.WindcallerUnit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -90,6 +92,8 @@ import static net.minecraft.util.Mth.sin;
 
 
 public class MiscUtil {
+
+    private static final Random RANDOM = new Random();
 
     private static final int[] DYE_COLORS = {
             0xF0F0F0, 0xEB8844, 0xC354CD, 0x6689D3,
@@ -344,6 +348,8 @@ public class MiscUtil {
             priorityFilter = e -> !e.hasEffect(MobEffectRegistrar.FEARFUL.get());
         } else if (unitMob instanceof WitherSkeletonUnit) {
             priorityFilter = e -> e.hasEffect(MobEffects.WITHER);
+        } else if (unitMob instanceof WindcallerUnit) {
+            priorityFilter = e -> !e.hasEffect(MobEffects.LEVITATION);
         }
 
         Vec3 unitVec = new Vec3(unitPosition.x, unitPosition.y, unitPosition.z);
@@ -858,6 +864,46 @@ public class MiscUtil {
             }
         }
     }
+
+    // called for flying windcallers and levitating mobs
+    public static void spawnFlyingCloudParticles(Entity entity) {
+        double px = entity.getX();
+        double py = entity.getY();
+        double pz = entity.getZ();
+
+        // Spawn a loose ring of cloud puffs around the feet
+        int numPuffs = 1;
+        for (int i = 0; i < numPuffs; i++) {
+            double angle = (entity.tickCount * 0.25 + (Math.PI * 2.0 / numPuffs) * i) % (Math.PI * 2.0);
+            double radius = 0.3 + RANDOM.nextDouble() * 0.2;
+            double ox = Math.cos(angle) * radius;
+            double oz = Math.sin(angle) * radius;
+            double oy = -0.1 + RANDOM.nextDouble() * 0.1; // slightly below/at foot level
+
+            // Gentle upward and outward drift
+            double vx = ox * 0.015;
+            double vy = 0.005 + RANDOM.nextDouble() * 0.01;
+            double vz = oz * 0.015;
+
+            entity.level().addParticle(
+                    ParticleTypes.CLOUD,
+                    px + ox, py + oy, pz + oz,
+                    vx, vy, vz
+            );
+        }
+
+        // Occasional extra wisp for density variation
+        if (entity.tickCount % 10 == 0) {
+            double ox = (RANDOM.nextDouble() - 0.5) * 0.5;
+            double oz = (RANDOM.nextDouble() - 0.5) * 0.5;
+            entity.level().addParticle(
+                    ParticleTypes.CLOUD,
+                    px + ox, py - 0.05, pz + oz,
+                    0, 0.008, 0
+            );
+        }
+    }
+
 
     public static ResourceLocation getTextureForBlock(@NotNull Block block) {
         if (block == Blocks.COMMAND_BLOCK)

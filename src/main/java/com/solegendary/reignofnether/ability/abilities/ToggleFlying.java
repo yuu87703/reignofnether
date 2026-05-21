@@ -45,8 +45,8 @@ public class ToggleFlying extends Ability {
             return null;
 
         ResourceLocation rl = windcallerUnit.isFlying() ?
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tutorial_arrow_down.png") :
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tutorial_arrow_up.png");
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/flying_land.png") :
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/icons/abilities/flying_lift.png");
 
         List<FormattedCharSequence> tooltips = windcallerUnit.isFlying() ?
                 List.of(fcs(I18n.get("abilities.reignofnether.flying_disable"))) :

@@ -10,19 +10,18 @@
 
 Windcaller
 ----------
-[❌] Very squishy and weak attack, but while walking, causes levitation on hit like breezes
+[❌] Very squishy and weak attack, but while walking, causes levitation on hit like shulkers
 [🟡] Toggle between flying and walking
 [❌] Spell castable only on ground
     - Gale force (upgrade required): blows back units for 2s, the more windcallers used, the stronger and longer it lasts
 
-[❌] can't attack move (projectile stops clipping if there's no target I guess?)
-
-[❌] Toggled abilities (windcaller, brute shields, etc.) switch ALL selected units
-
 
 Bugfixes
 --------
-[❌] Reworked the shrine of prosperity to stop units getting stuck
+[🟡] Reworked the shrine of prosperity to stop units getting stuck on the carpets
+[🟡] Custom buildings no longer spawn animals randomly
+[🟡] Fixed skeletons not moving correctly near water
+[❌] Projectiles no longer pass through their target if the owner moved before it landed
 
 Quality of Life
 ---------------
@@ -35,6 +34,10 @@ Balance
 [❌] Witches and all related upgrades have been moved into a new Witch Hut building
     - Witch Huts cost (175 wood, 50 ore) and require a Barracks
     - Arcane Tower cost changed from (200 wood, 100 ore) to (100 wood, 200 ore)
+
+[✔] Necromancers now lead their shots against moving targets so they're much more accurate
+
+
 
 Languages
 ---------
