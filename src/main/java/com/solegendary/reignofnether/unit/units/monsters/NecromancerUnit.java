@@ -500,7 +500,7 @@ public class NecromancerUnit extends Skeleton implements Unit, AttackerUnit, Ran
             targetDelta = targetDelta.multiply(1,0,1);
 
         double distanceTicks = shooterPos.distanceTo(targetPos) * 1.5f;
-        Vec3 predictedPos = targetPos.add(targetDelta.scale(distanceTicks * 1.5f));
+        Vec3 predictedPos = targetPos.add(targetDelta.multiply(distanceTicks * 1.5f, distanceTicks, distanceTicks * 1.5f));
 
         double x = predictedPos.x() - shooterPos.x();
         double y = predictedPos.y() - shooterPos.y();

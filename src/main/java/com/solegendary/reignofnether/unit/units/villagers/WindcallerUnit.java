@@ -498,7 +498,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             targetDelta = targetDelta.multiply(1,0,1);
 
         double distanceTicks = shooterPos.distanceTo(targetPos) * 1.5f;
-        Vec3 predictedPos = targetPos.add(targetDelta.scale(distanceTicks * 1.5f));
+        Vec3 predictedPos = targetPos.add(targetDelta.multiply(distanceTicks * 1.5f, distanceTicks, distanceTicks * 1.5f));
 
         double x = predictedPos.x() - shooterPos.x();
         double y = predictedPos.y() - shooterPos.y();
@@ -509,7 +509,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
 
         level().addFreshEntity(proj);
 
-        this.playSound(SoundEvents.SHULKER_SHOOT, 3.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.playSound(SoundRegistrar.WINDCALLER_WIND_ATTACK.get(), 2.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 
         if (!level().isClientSide() && pTarget instanceof Unit unit)
             FogOfWarClientboundPacket.revealRangedUnit(unit.getOwnerName(), this.getId());

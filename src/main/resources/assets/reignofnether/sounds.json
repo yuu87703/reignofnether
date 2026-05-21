@@ -217,9 +217,7 @@
     "windcaller_wind_attack": {
         "subtitle": "sounds.reignofnether.windcaller_wind_attack",
         "sounds": [
-            "reignofnether:windcaller_wind_attack_01",
-            "reignofnether:windcaller_wind_attack_02",
-            "reignofnether:windcaller_wind_attack_03"
+            "reignofnether:windcaller_wind_attack_01"
         ]
     },
     "windcaller_lift": {

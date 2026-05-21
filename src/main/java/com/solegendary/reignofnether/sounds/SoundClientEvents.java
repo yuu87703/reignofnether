@@ -29,6 +29,11 @@ public class SoundClientEvents {
 
     private static final Minecraft MC = Minecraft.getInstance();
 
+    private static final Map<SoundAction, List<Long>> recentSoundTimes = new HashMap<>();
+    private static final int SOUND_DEDUPE_WINDOW_TICKS = 5;
+    private static final float SOUND_VOLUME_DIMINISH_FACTOR = 0.7f; // each stack multiplies by this
+    private static final int SOUND_MAX_STACKS = 10; // volume floors at diminish^maxStacks
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent evt) {
         if (evt.phase != TickEvent.Phase.END) {
@@ -38,6 +43,15 @@ public class SoundClientEvents {
             songTicksLeft -= 1;
             if (customSong != null && songTicksLeft <= 0)
                 stopFadeableMusicInstance();
+        }
+
+        // Periodically prune stale sound deduplication keys
+        long currentTick = MC.level != null ? MC.level.getGameTime() : -1;
+        if (currentTick > 0 && currentTick % 20 == 0) {
+            recentSoundTimes.entrySet().removeIf(e -> {
+                e.getValue().removeIf(t -> currentTick - t > SOUND_DEDUPE_WINDOW_TICKS);
+                return e.getValue().isEmpty();
+            });
         }
     }
 
@@ -90,9 +104,23 @@ public class SoundClientEvents {
     public static void playSoundAtPos(SoundAction soundAction, BlockPos bp, float volume) {
         SoundEvent soundEvent = SOUND_MAP.get(soundAction);
         ClientLevel level = Minecraft.getInstance().level;
-        if (level != null) {
-            level.playLocalSound(bp.getX(), bp.getY(), bp.getZ(), soundEvent, SoundSource.NEUTRAL, volume, 1.0F, false);
-        }
+        if (level == null) return;
+
+        long currentTick = level.getGameTime();
+
+        // Get or create the list of recent play times for this action
+        List<Long> times = recentSoundTimes.computeIfAbsent(soundAction, k -> new ArrayList<>());
+
+        // Prune entries outside the deduplication window
+        times.removeIf(t -> currentTick - t > SOUND_DEDUPE_WINDOW_TICKS);
+
+        // Calculate diminished volume based on how many have already played this window
+        int stacks = Math.min(times.size(), SOUND_MAX_STACKS);
+        float diminishedVolume = volume * (float) Math.pow(SOUND_VOLUME_DIMINISH_FACTOR, stacks);
+
+        times.add(currentTick);
+
+        level.playLocalSound(bp.getX(), bp.getY(), bp.getZ(), soundEvent, SoundSource.NEUTRAL, diminishedVolume, 1.0F, false);
     }
 
     public static void playFadeableSoundAtPos(SoundAction soundAction, BlockPos bp, float volume, int id, int tickDuration) {

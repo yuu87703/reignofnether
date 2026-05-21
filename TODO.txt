@@ -21,7 +21,6 @@ Bugfixes
 [🟡] Reworked the shrine of prosperity to stop units getting stuck on the carpets
 [🟡] Custom buildings no longer spawn animals randomly
 [🟡] Fixed skeletons not moving correctly near water
-[❌] Projectiles no longer pass through their target if the owner moved before it landed
 
 Quality of Life
 ---------------

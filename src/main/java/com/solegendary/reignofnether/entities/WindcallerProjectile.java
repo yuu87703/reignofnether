@@ -2,6 +2,8 @@ package com.solegendary.reignofnether.entities;
 
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
+import com.solegendary.reignofnether.sounds.SoundAction;
+import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.villagers.WindcallerUnit;
@@ -25,8 +27,6 @@ public class WindcallerProjectile extends AbstractMagicProjectile {
 
     public WindcallerProjectile(Level pLevel, LivingEntity pShooter, double offsetX, double offsetY, double offsetZ) {
         super(EntityRegistrar.WINDCALLER_PROJECTILE.get(), pShooter, offsetX, offsetY, offsetZ, pLevel, ParticleTypes.CLOUD);
-        //if (pShooter instanceof Unit unit)
-        //    unit.getTargetGoal().setTarget(null);
     }
 
     @Override
