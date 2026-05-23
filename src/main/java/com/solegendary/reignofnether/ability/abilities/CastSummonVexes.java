@@ -83,7 +83,7 @@ public class CastSummonVexes extends Ability {
         int vigorLevel = evokerUnit.getVigorLevel();
         if (vigorLevel > 0)
             cooldown *= Math.pow(VigorEnchantment.CD_MULTIPLIER, vigorLevel);
-        super.setCooldown(cooldown, unit);
+        super.setCooldown(cooldown, evokerUnit);
     }
 
 
@@ -95,7 +95,7 @@ public class CastSummonVexes extends Ability {
         int vigorLevel = evokerUnit.getVigorLevel();
         if (vigorLevel > 0)
             cd *= Math.pow(VigorEnchantment.CD_MULTIPLIER, vigorLevel);
-        setCooldown(cd, unit);
+        setCooldown(cd, evokerUnit);
     }
 
     @Override

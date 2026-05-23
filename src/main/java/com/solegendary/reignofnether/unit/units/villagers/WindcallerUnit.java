@@ -521,6 +521,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             return;
 
         // Lead the shot by predicting where the target will be when the projectile arrives
+        /*
         Vec3 shooterPos = this.getEyePosition();
         Vec3 targetPos = pTarget.getEyePosition().subtract(0,0.5,0);
         Vec3 targetDelta = pTarget.getDeltaMovement();
@@ -534,6 +535,11 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         double x = predictedPos.x() - shooterPos.x();
         double y = predictedPos.y() - shooterPos.y();
         double z = predictedPos.z() - shooterPos.z();
+         */
+
+        double x = pTarget.getX() - this.getX();
+        double y = pTarget.getY(0.5) - this.getY(0.5);
+        double z = pTarget.getZ() - this.getZ();
 
         WindcallerProjectile proj = new WindcallerProjectile(this.level(), this, x, y, z);
         proj.setPos(this.getEyePosition());
