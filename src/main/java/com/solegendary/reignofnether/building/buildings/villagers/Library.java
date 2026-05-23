@@ -101,7 +101,8 @@ public class Library extends ProductionBuilding implements RangeIndicatorAddon {
         this.abilities.add(ENCHANT_GUST, Keybindings.keyY);
 
         this.productions.add(ProductionItems.RESEARCH_EVOKER_VEXES, Keybindings.keyU);
-        this.productions.add(ProductionItems.RESEARCH_GRAND_LIBRARY, Keybindings.keyI);
+        this.productions.add(ProductionItems.RESEARCH_FAST_WINDCALLERS, Keybindings.keyI);
+        this.productions.add(ProductionItems.RESEARCH_GRAND_LIBRARY, Keybindings.keyO);
 
         setActiveAddon(RangeIndicatorAddon.class, this, true);
     }
@@ -217,6 +218,6 @@ public class Library extends ProductionBuilding implements RangeIndicatorAddon {
 
     @Override
     public boolean showOnlyWhenSelected(BuildingPlacement placement) {
-        return false;
+        return true;
     }
 }

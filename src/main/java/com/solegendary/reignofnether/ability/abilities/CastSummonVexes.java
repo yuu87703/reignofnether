@@ -47,20 +47,22 @@ public class CastSummonVexes extends Ability {
     @Override
     public AbilityButton getButton(Keybinding hotkey, Unit unit) {
         EvokerUnit evokerUnit = getEvoker(unit);
-        if (evokerUnit == null) return null;
         return new AbilityButton(
                 "Summon Vexes",
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/vex.png"),
                 hotkey,
                 () -> {
-                    if (evokerUnit.getCastSummonVexesGoal() != null)
+                    if (evokerUnit != null && evokerUnit.getCastSummonVexesGoal() != null)
                         return evokerUnit.getCastSummonVexesGoal().isCasting()|| isAutocasting(unit);
                     return false;
                 },
-                () -> !ResearchClient.hasResearch(ProductionItems.RESEARCH_EVOKER_VEXES),
+                () -> evokerUnit == null || !ResearchClient.hasResearch(ProductionItems.RESEARCH_EVOKER_VEXES),
                 () -> true,
                 () -> UnitClientEvents.sendUnitCommand(UnitAction.CAST_SUMMON_VEXES),
-                () -> toggleAutocast(unit),
+                () -> {
+                    if (evokerUnit != null)
+                        toggleAutocast(evokerUnit);
+                },
                 List.of(
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.summon_vexes"), Style.EMPTY.withBold(true)),
                         FormattedCharSequence.forward(I18n.get("abilities.reignofnether.summon_vexes.tooltip1", CD_MAX_SECONDS), MyRenderer.iconStyle),
@@ -70,7 +72,7 @@ public class CastSummonVexes extends Ability {
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"),Style.EMPTY)
                 ),
                 this,
-                unit
+                        evokerUnit
         );
     }
 

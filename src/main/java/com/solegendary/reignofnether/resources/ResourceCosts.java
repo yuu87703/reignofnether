@@ -131,6 +131,7 @@ public class ResourceCosts {
     public static final ResourceCost RESEARCH_HEALING_POTIONS = new ResourceCost(ID, "RESEARCH_HEALING_POTIONS");
     public static final ResourceCost RESEARCH_WATER_POTIONS = new ResourceCost(ID, "RESEARCH_WATER_POTIONS");
     public static final ResourceCost RESEARCH_EVOKER_VEXES = new ResourceCost(ID, "RESEARCH_EVOKER_VEXES");
+    public static final ResourceCost RESEARCH_FAST_WINDCALLERS = new ResourceCost(ID, "RESEARCH_FAST_WINDCALLERS");
     public static final ResourceCost RESEARCH_CASTLE_FLAG = new ResourceCost(ID, "RESEARCH_CASTLE_FLAG");
     public static final ResourceCost RESEARCH_GRAND_LIBRARY = new ResourceCost(ID, "RESEARCH_GRAND_LIBRARY");
     public static final ResourceCost RESEARCH_SILVERFISH = new ResourceCost(ID, "RESEARCH_SILVERFISH");
@@ -326,6 +327,7 @@ public class ResourceCosts {
         RESEARCH_WATER_POTIONS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_WATER_POTIONS);
         RESEARCH_HEALING_POTIONS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_HEALING_POTIONS);
         RESEARCH_EVOKER_VEXES.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_EVOKER_VEXES);
+        RESEARCH_FAST_WINDCALLERS.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_FAST_WINDCALLERS);
         RESEARCH_CASTLE_FLAG.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_CASTLE_FLAG);
         RESEARCH_GRAND_LIBRARY.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_GRAND_LIBRARY);
         RESEARCH_SILVERFISH.bakeValues(ReignOfNetherCommonConfigs.ResearchCosts.RESEARCH_SILVERFISH);

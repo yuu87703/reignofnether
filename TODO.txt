@@ -1,5 +1,5 @@
 
-1.20.1-1.3.4
+1.20.1-1.3.4-beta-1
 
 [✔] Done and tested
 [🟡] Partially done and/or needs testing
@@ -28,15 +28,17 @@ Quality of Life
 
 Balance
 -------
-[🟡] Witches and all related upgrades have been moved into a new Witch Hut building
-    - Witch Huts cost (175 wood, 50 ore) and require a Barracks
+[✔] Witches and all related upgrades have been moved into a new Witch Hut building
+    - Witch Huts cost (200 wood, 50 ore) and require a Barracks
     - Arcane Tower cost changed from (200 wood, 100 ore) to (100 wood, 200 ore)
 
 [✔] Necromancers now lead their shots against moving targets so they're much more accurate
 
 [✔] Infernal portals now build 20% slower (they were building faster than other factions' altars)
 
-[🟡] Evokers can now summon vexes while mounted on Ravagers
+[✔] Evokers no longer require a Library (however, windcallers do)
+
+[✔] Evokers can now summon vexes while mounted on Ravagers
 
 Languages
 ---------
