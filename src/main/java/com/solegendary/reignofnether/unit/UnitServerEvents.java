@@ -807,13 +807,22 @@ public class UnitServerEvents {
             return true;
         if (projectile instanceof AbstractArrow)
             return true;
-        if (projectile instanceof WindcallerProjectile)
+        if (projectile instanceof WindcallerProjectile proj && !(proj.getOwner() instanceof WindcallerUnit windcallerUnit && windcallerUnit.getPunchLevel() > 0))
             return true;
         if (projectile instanceof BlazeUnitFireball)
             return true;
 
         return evt.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) && evt.getSource().isIndirect()
-            && (!(sourceEntity instanceof EvokerUnit));
+                && (!(sourceEntity instanceof EvokerUnit));
+    }
+
+    private static boolean shouldIncreaseKnockback(LivingDamageEvent evt) {
+        Entity projectile = evt.getSource().getDirectEntity();
+
+        if (projectile instanceof WindcallerProjectile proj && proj.getOwner() instanceof WindcallerUnit windcallerUnit)
+            return windcallerUnit.getPunchLevel() > 1;
+
+        return false;
     }
 
     public static Entity spawnMob(
@@ -859,6 +868,9 @@ public class UnitServerEvents {
 
         if (shouldIgnoreKnockback(evt)) {
             knockbackIgnoreIds.add(evt.getEntity().getId());
+        }
+        if (shouldIncreaseKnockback(evt)) {
+            knockbackIncreaseIds.add(evt.getEntity().getId());
         }
 
         // halve friendly fire from your own/friendly creepers (but still cause knockback)
@@ -1030,6 +1042,7 @@ public class UnitServerEvents {
     }
 
     public static ArrayList<Integer> knockbackIgnoreIds = new ArrayList<>();
+    public static ArrayList<Integer> knockbackIncreaseIds = new ArrayList<>();
 
     @SubscribeEvent
     public static void onLivingKnockBack(LivingKnockBackEvent evt) {
@@ -1043,6 +1056,9 @@ public class UnitServerEvents {
             evt.setCanceled(true);
         else if (knockbackIgnoreIds.removeIf(i -> i == evt.getEntity().getId()))
             evt.setCanceled(true);
+
+        if (!evt.isCanceled() && knockbackIncreaseIds.removeIf(i -> i == evt.getEntity().getId()))
+            evt.setStrength(evt.getStrength() * 2);
     }
 
     public static void debug1(BlockPos pos) {

@@ -2,6 +2,7 @@ package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
+import com.solegendary.reignofnether.ability.abilities.EnchantGust;
 import com.solegendary.reignofnether.ability.abilities.ToggleFlying;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.entities.WindcallerProjectile;
@@ -35,7 +36,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -51,6 +51,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -481,7 +482,11 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     @Override
     public void setupEquipmentAndUpgradesServer() {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.PAPER)); // prevent burning in sunlight
+    }
+
+    public int getPunchLevel() {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.getEnchantmentLevel(Enchantments.PUNCH_ARROWS);
     }
 
     @Override

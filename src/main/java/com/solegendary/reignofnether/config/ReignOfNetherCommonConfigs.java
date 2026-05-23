@@ -178,6 +178,7 @@ public class ReignOfNetherCommonConfigs {
         AbilityCosts.ENCHANT_SHARPNESS.define(BUILDER);
         AbilityCosts.ENCHANT_MULTISHOT.define(BUILDER);
         AbilityCosts.ENCHANT_VIGOR.define(BUILDER);
+        AbilityCosts.ENCHANT_GUST.define(BUILDER);
         AbilityCosts.EQUIP_LEATHER_ARMOR.define(BUILDER);
         AbilityCosts.EQUIP_CHAINMAIL_ARMOR.define(BUILDER);
         SPEC = BUILDER.build();
@@ -209,7 +210,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry MILITIA = ResourceCostConfigEntry.Unit(50,0,0,15,1, ResourceCosts.MILITIA, "Militia Config");
         public static final ResourceCostConfigEntry IRON_GOLEM = ResourceCostConfigEntry.Unit(0,50,250,45,4, ResourceCosts.IRON_GOLEM, "Iron Golem Config");
         public static final ResourceCostConfigEntry PILLAGER = ResourceCostConfigEntry.Unit(120,80,0,32,3, ResourceCosts.PILLAGER, "Pillager Config");
-        public static final ResourceCostConfigEntry WINDCALLER = ResourceCostConfigEntry.Unit(150,60,60,32,3, ResourceCosts.WINDCALLER, "Windcaller Config");
+        public static final ResourceCostConfigEntry WINDCALLER = ResourceCostConfigEntry.Unit(150,60,60,35,3, ResourceCosts.WINDCALLER, "Windcaller Config");
         public static final ResourceCostConfigEntry VINDICATOR = ResourceCostConfigEntry.Unit(170,0,0,32,3, ResourceCosts.VINDICATOR, "Vindicator Config");
         public static final ResourceCostConfigEntry WITCH = ResourceCostConfigEntry.Unit(90,90,90,35,3, ResourceCosts.WITCH, "Witch Config");
         public static final ResourceCostConfigEntry EVOKER = ResourceCostConfigEntry.Unit(150,0,120,35,3, ResourceCosts.EVOKER, "Evoker Config");
@@ -348,6 +349,7 @@ public class ReignOfNetherCommonConfigs {
         public static final ResourceCostConfigEntry ENCHANT_SHARPNESS = ResourceCostConfigEntry.Ability(0,40, 60, ResourceCosts.ENCHANT_SHARPNESS, "Sharpness Enchantment Config");
         public static final ResourceCostConfigEntry ENCHANT_MULTISHOT = ResourceCostConfigEntry.Ability(0,70, 35, ResourceCosts.ENCHANT_MULTISHOT, "Multishot Enchantment Config");
         public static final ResourceCostConfigEntry ENCHANT_VIGOR = ResourceCostConfigEntry.Ability(0,50, 50, ResourceCosts.ENCHANT_VIGOR, "Vigor Enchantment Config");
+        public static final ResourceCostConfigEntry ENCHANT_GUST = ResourceCostConfigEntry.Ability(0,50, 50, ResourceCosts.ENCHANT_GUST, "Gust Enchantment Config");
         public static final ResourceCostConfigEntry EQUIP_LEATHER_ARMOR = ResourceCostConfigEntry.Ability(0,0, 30, ResourceCosts.EQUIP_LEATHER_ARMOR, "Equip Leather Armor Config");
         public static final ResourceCostConfigEntry EQUIP_CHAINMAIL_ARMOR = ResourceCostConfigEntry.Ability(0,0, 40, ResourceCosts.EQUIP_CHAINMAIL_ARMOR, "Equip Chainmail Armor Config");
     }

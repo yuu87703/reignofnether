@@ -1,5 +1,6 @@
 package com.solegendary.reignofnether.entities;
 
+import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
 import com.solegendary.reignofnether.sounds.SoundAction;
@@ -14,8 +15,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
@@ -38,7 +41,9 @@ public class WindcallerProjectile extends AbstractMagicProjectile {
                     !le.hasEffect(MobEffects.LEVITATION) &&
                     aUnit instanceof WindcallerUnit windcallerUnit &&
                     windcallerUnit.onGround()) {
-                le.addEffect(new MobEffectInstance(MobEffects.LEVITATION, WindcallerUnit.LEVITATE_TICKS, 1, true, false));
+                ItemStack itemStack = ((LivingEntity) this.getOwner()).getItemBySlot(EquipmentSlot.MAINHAND);
+                int gustLevel = itemStack.getEnchantmentLevel(EnchantmentRegistrar.GUST.get());
+                le.addEffect(new MobEffectInstance(MobEffects.LEVITATION, WindcallerUnit.LEVITATE_TICKS, gustLevel, true, false));
             }
             MiscUtil.addParticleExplosion(ParticleTypes.CLOUD, 10, level(), position());
             discard();

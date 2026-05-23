@@ -10,17 +10,15 @@
 
 Windcaller
 ----------
-[❌] Very squishy and weak attack, but while walking, causes levitation on hit like shulkers
-[🟡] Toggle between flying and walking
-[❌] Spell castable only on ground
-    - Gale force (upgrade required): blows back units for 2s, the more windcallers used, the stronger and longer it lasts
-
+[✔] Very squishy and weak attack, but while walking, causes levitation on hit like shulkers
+[✔] Toggle between flying and walking
+[✔] Enchantment from library and enchanter
 
 Bugfixes
 --------
-[🟡] Reworked the shrine of prosperity to stop units getting stuck on the carpets
+[✔] Reworked the shrine of prosperity to stop units getting stuck on the carpets
 [🟡] Custom buildings no longer spawn animals randomly
-[🟡] Fixed skeletons not moving correctly near water
+[✔] Fixed skeletons not moving correctly near water
 
 Quality of Life
 ---------------
@@ -30,13 +28,15 @@ Quality of Life
 
 Balance
 -------
-[❌] Witches and all related upgrades have been moved into a new Witch Hut building
+[🟡] Witches and all related upgrades have been moved into a new Witch Hut building
     - Witch Huts cost (175 wood, 50 ore) and require a Barracks
     - Arcane Tower cost changed from (200 wood, 100 ore) to (100 wood, 200 ore)
 
 [✔] Necromancers now lead their shots against moving targets so they're much more accurate
 
+[✔] Infernal portals now build 20% slower (they were building faster than other factions' altars)
 
+[🟡] Evokers can now summon vexes while mounted on Ravagers
 
 Languages
 ---------
