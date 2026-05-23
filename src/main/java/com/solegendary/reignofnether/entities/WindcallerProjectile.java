@@ -15,10 +15,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -64,5 +61,10 @@ public class WindcallerProjectile extends AbstractMagicProjectile {
                 discard();
             }
         }
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pPose) {
+        return EntityDimensions.scalable(1.0f, 1.0f);
     }
 }

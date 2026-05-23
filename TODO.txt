@@ -6,7 +6,9 @@
 [❌] Not done, including unmerged PRs
 
 
-
+[❌] Ravager vex button has no cooldown
+[❌] Arrows knock away windcaller projectiles
+[❌]
 
 Windcaller
 ----------
@@ -17,7 +19,7 @@ Windcaller
 Bugfixes
 --------
 [✔] Reworked the shrine of prosperity to stop units getting stuck on the carpets
-[🟡] Custom buildings no longer spawn animals randomly
+[✔] Custom buildings no longer spawn animals randomly
 [✔] Fixed skeletons not moving correctly near water
 
 Quality of Life
@@ -33,11 +35,8 @@ Balance
     - Arcane Tower cost changed from (200 wood, 100 ore) to (100 wood, 200 ore)
 
 [✔] Necromancers now lead their shots against moving targets so they're much more accurate
-
 [✔] Infernal portals now build 20% slower (they were building faster than other factions' altars)
-
-[✔] Evokers no longer require a Library (however, windcallers do)
-
+[✔] Evokers no longer require a Library
 [✔] Evokers can now summon vexes while mounted on Ravagers
 
 Languages

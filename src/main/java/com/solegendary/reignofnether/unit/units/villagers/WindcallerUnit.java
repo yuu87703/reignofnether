@@ -538,7 +538,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
          */
 
         double x = pTarget.getX() - this.getX();
-        double y = pTarget.getY(0.5) - this.getY(0.5);
+        double y = isFlying() ? (pTarget.getY() - this.getEyeY()) : (pTarget.getEyeY() - 0.5 - this.getEyeY());
         double z = pTarget.getZ() - this.getZ();
 
         WindcallerProjectile proj = new WindcallerProjectile(this.level(), this, x, y, z);
