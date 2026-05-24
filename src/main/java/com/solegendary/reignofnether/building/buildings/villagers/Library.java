@@ -6,7 +6,6 @@ import com.solegendary.reignofnether.ability.abilities.*;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
-import com.solegendary.reignofnether.building.addon.GarrisonableBuildingAddon;
 import com.solegendary.reignofnether.building.addon.RangeIndicatorAddon;
 import com.solegendary.reignofnether.building.data.DataType;
 import com.solegendary.reignofnether.building.production.ProductionBuilding;
@@ -101,7 +100,7 @@ public class Library extends ProductionBuilding implements RangeIndicatorAddon {
         this.abilities.add(ENCHANT_GUST, Keybindings.keyY);
 
         this.productions.add(ProductionItems.RESEARCH_EVOKER_VEXES, Keybindings.keyU);
-        this.productions.add(ProductionItems.RESEARCH_FAST_WINDCALLERS, Keybindings.keyI);
+        this.productions.add(ProductionItems.RESEARCH_UPGRADED_WINDCALLERS, Keybindings.keyI);
         this.productions.add(ProductionItems.RESEARCH_GRAND_LIBRARY, Keybindings.keyO);
 
         setActiveAddon(RangeIndicatorAddon.class, this, true);

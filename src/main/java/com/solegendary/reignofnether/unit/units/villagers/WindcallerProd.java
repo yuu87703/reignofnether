@@ -16,7 +16,6 @@ import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Vec3i;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
@@ -36,7 +35,7 @@ public class WindcallerProd extends ProductionItem {
         super(cost);
         this.onComplete = (Level level, ProductionPlacement placement) -> {
             if (!level.isClientSide()) {
-                boolean hasResearch = ResearchServerEvents.playerHasResearch(placement.ownerName, ProductionItems.RESEARCH_FAST_WINDCALLERS);
+                boolean hasResearch = ResearchServerEvents.playerHasResearch(placement.ownerName, ProductionItems.RESEARCH_UPGRADED_WINDCALLERS);
                 placement.produceUnit(
                         (ServerLevel) level,
                         EntityRegistrar.WINDCALLER_UNIT.get(),

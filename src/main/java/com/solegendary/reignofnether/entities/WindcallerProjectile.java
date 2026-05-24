@@ -1,22 +1,19 @@
 package com.solegendary.reignofnether.entities;
 
 import com.solegendary.reignofnether.alliance.AlliancesServerEvents;
+import com.solegendary.reignofnether.building.production.ProductionItems;
 import com.solegendary.reignofnether.registrars.EnchantmentRegistrar;
 import com.solegendary.reignofnether.registrars.EntityRegistrar;
-import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
-import com.solegendary.reignofnether.sounds.SoundAction;
-import com.solegendary.reignofnether.sounds.SoundClientboundPacket;
+import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.HeroUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.villagers.WindcallerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -48,7 +45,7 @@ public class WindcallerProjectile extends AbstractMagicProjectile {
                     (!(pResult.getEntity() instanceof Unit unit) || !AlliancesServerEvents.isAlliedOrOwned(windcallerUnit.getOwnerName(), unit.getOwnerName())) &&
                     pResult.getEntity() instanceof LivingEntity le &&
                     !le.hasEffect(MobEffects.LEVITATION) &&
-                    windcallerUnit.onGround() &&
+                    (windcallerUnit.onGround() || ResearchServerEvents.playerHasResearch(windcallerUnit.getOwnerName(), ProductionItems.RESEARCH_UPGRADED_WINDCALLERS)) &&
                     !(pResult.getEntity() instanceof HeroUnit) &&
                     !levitationDealt) {
                 ItemStack itemStack = ((LivingEntity) this.getOwner()).getItemBySlot(EquipmentSlot.MAINHAND);

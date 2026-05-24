@@ -2,7 +2,6 @@ package com.solegendary.reignofnether.unit.units.villagers;
 
 import com.solegendary.reignofnether.ability.Abilities;
 import com.solegendary.reignofnether.ability.Ability;
-import com.solegendary.reignofnether.ability.abilities.EnchantGust;
 import com.solegendary.reignofnether.ability.abilities.ToggleFlying;
 import com.solegendary.reignofnether.building.RangeIndicator;
 import com.solegendary.reignofnether.building.production.ProductionItems;
@@ -13,7 +12,6 @@ import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.registrars.AttributeRegistrar;
 import com.solegendary.reignofnether.registrars.SoundRegistrar;
-import com.solegendary.reignofnether.research.ResearchClient;
 import com.solegendary.reignofnether.research.ResearchServerEvents;
 import com.solegendary.reignofnether.resources.ResourceCost;
 import com.solegendary.reignofnether.resources.ResourceCosts;
@@ -40,7 +38,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -57,7 +54,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -183,13 +179,14 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     final static public int LEVITATE_TICKS = 80;
 
     final static public float attackDamage = 5.0f;
-    final static public float attacksPerSecond = 0.25f;
+    final static public float attacksPerSecondFlying = 0.25f;
+    final static public float attacksPerSecond = 0.30f;
     final static public float maxHealth = 40.0f;
     final static public float armorValue = 0.0f;
     final static public float movementSpeed = 0.25f;
-    final static public float movementSpeedFlying = 0.28f;
-    final static public float movementSpeedFlyingUpgraded = 0.33f;
-    final static public float attackRange = 12.0F; // only used by ranged units or melee building attackers
+    final static public float movementSpeedFlying = 0.30f;
+    final static public float attackRange = 12.0F;
+    final static public float attackRangeFlying = 14.0F;
     final static public float aggroRange = 12;
     final static public boolean willRetaliate = true; // will attack when hurt by an enemy
     final static public boolean aggressiveWhenIdle = true;
@@ -289,10 +286,10 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             if (onGround())
                 this.setDeltaMovement(0,1,0);
 
-            if (!level().isClientSide()) {
-                boolean hasSpeedUpgrade = ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_FAST_WINDCALLERS);
-                this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(hasSpeedUpgrade ? movementSpeedFlyingUpgraded : movementSpeedFlying);
-            }
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeedFlying);
+            this.getAttribute(AttributeRegistrar.ATTACKS_PER_SECOND.get()).setBaseValue(attacksPerSecondFlying);
+            this.getAttribute(AttributeRegistrar.ATTACK_RANGE.get()).setBaseValue(attackRangeFlying);
+
             if (!level().isClientSide() && doAnimationAndSound) {
                 UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.CHARGE_SPELL, this);
                 SoundClientboundPacket.playSoundAtPos(SoundAction.WINDCALLER_LIFT, blockPosition());
@@ -305,20 +302,13 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
             this.moveControl = groundMoveControl;
             if (moveTarget != null)
                 pendingGroundMoveTarget = MiscUtil.getHighestGroundBlock(level(), moveTarget);
+
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeed);
+            this.getAttribute(AttributeRegistrar.ATTACKS_PER_SECOND.get()).setBaseValue(attacksPerSecond);
+            this.getAttribute(AttributeRegistrar.ATTACK_RANGE.get()).setBaseValue(attackRange);
+
             if (!level().isClientSide() && doAnimationAndSound)
                 UnitAnimationClientboundPacket.sendBasicPacket(UnitAnimationAction.STOP, this);
-        }
-    }
-
-    public void updateMovementspeed() {
-        if (isFlying()) {
-            if (!level().isClientSide()) {
-                boolean hasSpeedUpgrade = ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_FAST_WINDCALLERS);
-                this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(hasSpeedUpgrade ? movementSpeedFlyingUpgraded : movementSpeedFlying);
-            }
-        } else {
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeed);
         }
     }
 
@@ -504,7 +494,7 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
     public void setupEquipmentAndUpgradesServer() {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 
-        if (ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_FAST_WINDCALLERS) && !isFlying()) {
+        if (ResearchServerEvents.playerHasResearch(getOwnerName(), ProductionItems.RESEARCH_UPGRADED_WINDCALLERS) && !isFlying()) {
             setFlying(true);
             updateFlyingStates(false);
         }
