@@ -6,6 +6,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.RangedAttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
+import com.solegendary.reignofnether.unit.units.villagers.WindcallerUnit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -141,6 +142,8 @@ public class UnitBowAttackGoal<T extends net.minecraft.world.entity.Mob> extends
                     attackRange += targetGarr.getExternalAttackRangeBonus();
                 else if (target instanceof GhastUnit ghastUnit)
                     attackRange += ghastUnit.getAttackerRangeBonus(this.mob);
+                else if (target instanceof WindcallerUnit windcallerUnit)
+                    attackRange += windcallerUnit.getAttackerRangeBonus(this.mob);
             }
 
             double distToTarget = this.mob.distanceTo(target);

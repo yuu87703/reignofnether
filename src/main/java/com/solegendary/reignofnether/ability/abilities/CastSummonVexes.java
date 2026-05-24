@@ -71,8 +71,8 @@ public class CastSummonVexes extends Ability {
                 FormattedCharSequence.forward("", Style.EMPTY),
                 FormattedCharSequence.forward(I18n.get("abilities.reignofnether.autocast"),Style.EMPTY)
                 ),
-                this,
-                        evokerUnit
+                evokerUnit != null ? evokerUnit.getSummonVexes() : this,
+                evokerUnit
         );
     }
 
@@ -120,7 +120,7 @@ public class CastSummonVexes extends Ability {
     private void use(Unit unitUsing) {
         EvokerUnit evokerUnit = getEvoker(unitUsing);
         if (evokerUnit != null) {
-            evokerUnit.getCastSummonVexesGoal().setAbility(this);
+            evokerUnit.getCastSummonVexesGoal().setAbility(evokerUnit.getSummonVexes());
             evokerUnit.getCastSummonVexesGoal().startCasting();
         }
     }

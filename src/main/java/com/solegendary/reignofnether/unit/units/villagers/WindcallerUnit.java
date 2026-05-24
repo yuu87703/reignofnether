@@ -55,6 +55,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -488,6 +489,19 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
         this.targetSelector.addGoal(2, targetGoal);
         this.goalSelector.addGoal(3, moveGoal);
         this.goalSelector.addGoal(3, flyingMoveGoal);
+    }
+
+    public int getAttackerRangeBonus(Mob attacker) {
+        Vec2 attackerPos = new Vec2((float) attacker.getX(), (float) attacker.getZ());
+        Vec2 ghastPos = new Vec2((float) this.getX(), (float) this.getZ());
+        double horizDist = Math.sqrt(attackerPos.distanceToSqr(ghastPos));
+        double vertiDist = Math.max(0, this.getY() - attacker.getY());
+
+        // if we're directly under the ghast, just allow anything to attack it
+        if (horizDist < 4)
+            return (int) (vertiDist * 0.5f);
+        else
+            return (int) (vertiDist * 0.25f);
     }
 
     @Override

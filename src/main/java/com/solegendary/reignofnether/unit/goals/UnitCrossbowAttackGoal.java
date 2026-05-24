@@ -7,6 +7,7 @@ import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.piglins.GhastUnit;
 import com.solegendary.reignofnether.unit.units.villagers.PillagerUnit;
+import com.solegendary.reignofnether.unit.units.villagers.WindcallerUnit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -189,6 +190,8 @@ public class UnitCrossbowAttackGoal<T extends Monster & RangedAttackMob & Crossb
                 attackRange += targetGarr.getExternalAttackRangeBonus();
             else if (target instanceof GhastUnit ghastUnit)
                 attackRange += ghastUnit.getAttackerRangeBonus(this.mob);
+            else if (target instanceof WindcallerUnit windcallerUnit)
+                attackRange += windcallerUnit.getAttackerRangeBonus(this.mob);
 
             // dont consider garrison range here so the unit still moves towards the edge of the building
             if (!this.mob.isPassenger()) {
