@@ -46,7 +46,7 @@ Balance
 
 [✔] The Wretched Wraith regen on snow increased to 0.5hp/s + 0.25hp per additional layer of snow
 
-[✔] Wildfire Molten Bomb now aggroes neutral units that it hits
+[✔] Wildfire Molten Bombs now aggro neutral units
 
 [✔] Wraiths slow down enemies while channeling possession on them
 [✔] Necromancer phantom range increased from 12 to 15

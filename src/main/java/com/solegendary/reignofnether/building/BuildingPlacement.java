@@ -48,6 +48,9 @@ import com.solegendary.reignofnether.tutorial.TutorialServerEvents;
 import com.solegendary.reignofnether.unit.UnitAction;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.BuildRepairGoal;
+import com.solegendary.reignofnether.unit.goals.MeleeAttackBuildingGoal;
+import com.solegendary.reignofnether.unit.goals.RangedAttackBuildingGoal;
+import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.interfaces.WorkerUnit;
 import com.solegendary.reignofnether.unit.units.monsters.SilverfishUnit;
@@ -1240,6 +1243,18 @@ public class BuildingPlacement {
                 if (this instanceof BeaconPlacement beacon)
                     beacon.sendWarning("capture_warning");
 
+                for (LivingEntity le : UnitServerEvents.getAllUnits()) {
+                    if (le instanceof AttackerUnit attackerUnit &&
+                        le instanceof Unit unit &&
+                            AlliancesServerEvents.isAlliedOrOwned(ownerName, unit.getOwnerName())) {
+                        if (attackerUnit.getAttackBuildingGoal() instanceof MeleeAttackBuildingGoal mabg &&
+                                mabg.getBuildingTarget() == this)
+                            mabg.stopAttacking();
+                        else if (attackerUnit.getAttackBuildingGoal() instanceof RangedAttackBuildingGoal<?> rabg &&
+                                rabg.getBuildingTarget() == this)
+                            rabg.stop();
+                    }
+                }
                 return !capturedByAlly;
             }
         }
