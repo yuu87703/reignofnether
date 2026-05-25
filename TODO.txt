@@ -21,8 +21,7 @@ Bugfixes
 [✔] Custom buildings no longer spawn animals randomly
 [✔] Fixed skeletons not moving correctly near water
 [✔] Wildfire Molten Bombs now aggro neutral units
-[❌] phantoms cant attack custom buildings
-[❌] You can hear unit abilities from across the map
+[🟡] Fixed most ability sounds being audible across the map
 
 Quality of Life
 ---------------
@@ -31,31 +30,30 @@ Quality of Life
 
 [✔] Possessed neutral units lose their anchors
 [✔] Friendly units stop attacking a neutral building that's been captured
-[✔] Added /gamerule buildingsOutsideBorder (default true)
+[🟡] Added /gamerule buildingsOutsideBorder (default true)
     - When enabled, buildings will not be auto-destroyed if they are outside the world border
-    - You can't select buildings outside the world border unless you're in sandbox
 
 Balance
 -------
+
+Villagers
 [✔] Witches and all related upgrades have been moved into a new Witch Hut building
     - Witch Huts cost (200 wood, 50 ore) and require a Barracks
     - Arcane Tower cost changed from (200 wood, 100 ore) to (100 wood, 200 ore)
-
-[✔] Necromancers now lead their shots against moving targets so they're much more accurate
-[✔] Infernal portals now build 20% slower (they were building faster than other factions' altars)
-[✔] Mass Burials research increased in cost from (300 wood, 300 ore) to (400 wood, 400 ore)
 [✔] Evokers no longer require a Library
 [✔] Evokers can now summon vexes while mounted on Ravagers
-
-[✔] The Wretched Wraith regen on snow increased to 0.5hp/s + 0.25hp per additional layer of snow
-
-
-
-[✔] Wraiths slow down enemies while channeling possession on them
-[✔] Necromancer phantom range increased from 12 to 15
-
-[✔] The enchanter now gains 40 exp for each enchantment cast
+[✔] The Enchanter now gains 40 exp for each enchantment cast
     - For reference, level 1 -> 2 requires 320 exp
+
+Monsters
+[✔] The Wretched Wraith regen on snow increased to 0.5hp/s + 0.25hp per additional layer of snow
+[✔] Wraiths slow down enemies while channeling possession on them
+[✔] Necromancers now lead their shots against moving targets so they're much more accurate
+[✔] Necromancer phantom range increased from 12 to 15
+[✔] Mass Burials research increased in cost from (300 wood, 300 ore) to (400 wood, 400 ore)
+
+Piglins
+[✔] Infernal portals now build 20% slower (they were building faster than other factions' altars)
 
 
 
