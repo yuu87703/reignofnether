@@ -361,7 +361,7 @@ public interface AttackerUnit {
             if (!unit.getOwnerName().equals(buildingPlacement.ownerName) &&
                     !AlliancesServerEvents.isAllied(unit.getOwnerName(), buildingPlacement.ownerName) &&
                     !buildingPlacement.ownerName.isBlank() &&
-                    !buildingPlacement.getBuilding().invulnerable) {
+                    buildingPlacement.isAttackable()) {
                 eligibleTargets.add(buildingPlacement);
             }
         }

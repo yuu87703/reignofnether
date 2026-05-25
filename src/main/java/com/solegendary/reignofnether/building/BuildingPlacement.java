@@ -1356,4 +1356,8 @@ public class BuildingPlacement {
     public boolean isOutsideWorldBorder() {
         return !this.level.getWorldBorder().isWithinBounds(centrePos);
     }
+
+    public boolean isAttackable() {
+        return !isOutsideWorldBorder() && !building.invulnerable;
+    }
 }

@@ -19,12 +19,10 @@ import com.solegendary.reignofnether.registrars.EntityRegistrar;
 import com.solegendary.reignofnether.registrars.GameRuleRegistrar;
 import com.solegendary.reignofnether.blocks.NightCircleMode;
 import com.solegendary.reignofnether.registrars.MobEffectRegistrar;
-import com.solegendary.reignofnether.time.TimeClientEvents;
 import com.solegendary.reignofnether.unit.Checkpoint;
 import com.solegendary.reignofnether.unit.Relationship;
 import com.solegendary.reignofnether.unit.UnitServerEvents;
 import com.solegendary.reignofnether.unit.goals.AbstractMeleeAttackUnitGoal;
-import com.solegendary.reignofnether.unit.goals.FlyingMoveToTargetGoal;
 import com.solegendary.reignofnether.unit.interfaces.AttackerUnit;
 import com.solegendary.reignofnether.unit.interfaces.Unit;
 import com.solegendary.reignofnether.unit.units.monsters.BoggedUnit;
@@ -81,7 +79,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.lwjgl.glfw.GLFW;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -427,7 +424,7 @@ public class MiscUtil {
 
         for (BuildingPlacement building : buildings) {
             // Check if the building is attackable, taking into account the relationship
-            if (isBuildingAttackable(unitMob, building) && !(building.getBuilding() instanceof AbstractBridge)) {
+            if (isBuildingAutoAttackable(unitMob, building) && !(building.getBuilding() instanceof AbstractBridge)) {
                 BlockPos attackPos = building.getClosestGroundPos(unitMob.blockPosition(), 1);
                 double dist = Math.sqrt(unitMob.blockPosition().distSqr(attackPos));
                 if (dist < closestDist) {
@@ -443,8 +440,8 @@ public class MiscUtil {
     // owned -> neutral ✔ (if neutral aggro on)
     // neutral -> owned ✔ (if neutral aggro on)
     // owned -> owned ✔ (if hostile)
-    private static boolean isBuildingAttackable(Mob unitMob, BuildingPlacement building) {
-        if (building.getBuilding().invulnerable)
+    private static boolean isBuildingAutoAttackable(Mob unitMob, BuildingPlacement building) {
+        if (!building.isAttackable())
             return false;
 
         Relationship relationship = UnitServerEvents.getUnitToBuildingRelationship((Unit) unitMob, building);

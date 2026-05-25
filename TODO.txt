@@ -28,10 +28,12 @@ Quality of Life
 ---------------
 [❌] Review packets that can be modified to only send to some players for performance, TRACKING_ENTITY for updating units only for players who have it loaded clientside
 [❌] Waypoint looping (by shift clicking back onto a previous waypoint it will automatically cycle the list once it reaches the end)
-[❌] Gamerule for deleting units/buildings outside of world border on reset/border change
 
 [✔] Possessed neutral units lose their anchors
 [✔] Friendly units stop attacking a neutral building that's been captured
+[✔] Added /gamerule buildingsOutsideBorder (default true)
+    - When enabled, buildings will not be auto-destroyed if they are outside the world border
+    - You can't select buildings outside the world border unless you're in sandbox
 
 Balance
 -------
