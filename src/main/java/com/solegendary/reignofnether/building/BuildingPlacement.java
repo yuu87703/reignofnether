@@ -562,7 +562,7 @@ public class BuildingPlacement {
     public void destroyRandomBlocks(int amount) {
         if (getLevel().isClientSide())
             return;
-        if (building.invulnerable)
+        if (!isAttackable())
             return;
         var placedBlocks = new ArrayList<BuildingBlock>();
         for (BuildingBlock block : blocks) {
