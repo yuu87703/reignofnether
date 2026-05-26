@@ -44,7 +44,7 @@ public class SoundClientEvents {
     private static final float SOUND_VOLUME_DIMINISH_FACTOR = 0.7f; // each stack multiplies by this
     private static final int SOUND_MAX_STACKS = 10; // volume floors at diminish^maxStacks
 
-    public static final float SOUND_RANGE = 128; // all sounds have this max range
+    public static final float SOUND_RANGE = 96; // all sounds have this max range
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent evt) {
