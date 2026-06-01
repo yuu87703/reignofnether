@@ -8,7 +8,6 @@ import com.solegendary.reignofnether.ability.abilities.CallToArmsUnit;
 import com.solegendary.reignofnether.alliance.AlliancesClient;
 import com.solegendary.reignofnether.api.ReignOfNetherRegistries;
 import com.solegendary.reignofnether.attackwarnings.AttackWarningClientEvents;
-import com.solegendary.reignofnether.blocks.BlockClientEvents;
 import com.solegendary.reignofnether.building.*;
 import com.solegendary.reignofnether.building.addon.GarrisonableBuildingAddon;
 import com.solegendary.reignofnether.building.buildings.placements.BeaconPlacement;
@@ -41,6 +40,7 @@ import com.solegendary.reignofnether.sandbox.SandboxActionButtons;
 import com.solegendary.reignofnether.sandbox.SandboxClientEvents;
 import com.solegendary.reignofnether.sandbox.SandboxMenuType;
 import com.solegendary.reignofnether.scenario.ScenarioClientEvents;
+import com.solegendary.reignofnether.startpos.StartPos;
 import com.solegendary.reignofnether.startpos.StartPosClientEvents;
 import com.solegendary.reignofnether.survival.SurvivalClientEvents;
 import com.solegendary.reignofnether.tutorial.TutorialClientEvents;
@@ -63,6 +63,7 @@ import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.resources.language.I18n;
@@ -77,6 +78,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
@@ -1482,6 +1484,7 @@ public class HudClientEvents {
                     renderedButtons.add(cycleRoleToPlayButton);
                 }
             } else { // normal gamemodes
+                /*
                 Button startPosButton = StartPosClientEvents.getPositionsButton();
                 if (!startPosButton.isHidden.get()) {
                     startPosButton.render(evt.getGuiGraphics(),
@@ -1492,25 +1495,26 @@ public class HudClientEvents {
                     );
                     renderedButtons.add(startPosButton);
                 }
-                Button startButton = StartPosClientEvents.getStartButton();
-                if (!startButton.isHidden.get()) {
-                    startButton.render(evt.getGuiGraphics(),
+                 */
+                Button readyButton = StartPosClientEvents.getReadyButton();
+                if (!readyButton.isHidden.get()) {
+                    readyButton.render(evt.getGuiGraphics(),
                             screenWidth - (StartButtons.ICON_SIZE * 4),
                             40,
                             mouseX,
                             mouseY
                     );
-                    renderedButtons.add(startButton);
+                    renderedButtons.add(readyButton);
                 }
-                Button cancelStartButton = StartPosClientEvents.getCancelStartButton();
-                if (!cancelStartButton.isHidden.get()) {
-                    cancelStartButton.render(evt.getGuiGraphics(),
+                Button unreadyButton = StartPosClientEvents.getUnreadyButton();
+                if (!unreadyButton.isHidden.get()) {
+                    unreadyButton.render(evt.getGuiGraphics(),
                             screenWidth - (StartButtons.ICON_SIZE * 4),
                             40,
                             mouseX,
                             mouseY
                     );
-                    renderedButtons.add(cancelStartButton);
+                    renderedButtons.add(unreadyButton);
                 }
                 Button diffsButton = ConfigClientEvents.getDiffsButton();
                 if (!diffsButton.isHidden.get()) {
@@ -1746,6 +1750,31 @@ public class HudClientEvents {
                 0xFFFFFF
             );
             renderedButtons.add(idleWorkerButton);
+        }
+
+        // -------------------------
+        // Minimap start pos buttons
+        // -------------------------
+        Map<Vec2, Button> startPosMapButtons = new HashMap<>();
+
+        for (StartPos startPos : StartPosClientEvents.startPoses) {
+            int xc = startPos.pos.getX();
+            int zc = startPos.pos.getZ();
+
+            // Render the Button overlaid at the map screen position:
+            if (MinimapClientEvents.isWorldXZinsideMap(xc, zc)) {
+                Button button = startPos.getButton(MC.player.getName().getString());
+                startPosMapButtons.put(new Vec2(xc, zc), button);
+            }
+        }
+
+        for (Vec2 vec2 : startPosMapButtons.keySet()) {
+            Vec2 screenPos = MinimapClientEvents.worldPosToMinimapScreen((int) vec2.x, (int) vec2.y);
+            int btnX = (int) screenPos.x - Button.DEFAULT_ICON_FRAME_SIZE / 2;
+            int btnY = (int) screenPos.y - Button.DEFAULT_ICON_FRAME_SIZE / 2;
+            Button button = startPosMapButtons.get(vec2);
+            button.render(evt.getGuiGraphics(), btnX, btnY, HudClientEvents.mouseX, HudClientEvents.mouseY);
+            renderedButtons.add(button);
         }
 
         // ------------------------------------------------------
