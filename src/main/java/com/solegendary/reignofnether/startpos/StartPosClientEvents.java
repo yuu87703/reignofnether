@@ -240,6 +240,8 @@ public class StartPosClientEvents {
                             StartPosServerboundPacket.reservePos(getPos().pos, Faction.VILLAGERS, MC.player.getName().getString());
                     } else {
                         selectedFaction = Faction.NONE;
+                        if (getPos() != null)
+                            StartPosServerboundPacket.reservePos(getPos().pos, Faction.NONE, MC.player.getName().getString());
                     }
                 }
             },
@@ -266,6 +268,8 @@ public class StartPosClientEvents {
                             StartPosServerboundPacket.reservePos(getPos().pos, Faction.MONSTERS, MC.player.getName().getString());
                     } else {
                         selectedFaction = Faction.NONE;
+                        if (getPos() != null)
+                            StartPosServerboundPacket.reservePos(getPos().pos, Faction.NONE, MC.player.getName().getString());
                     }
                 }
             },
@@ -292,6 +296,8 @@ public class StartPosClientEvents {
                             StartPosServerboundPacket.reservePos(getPos().pos, Faction.PIGLINS, MC.player.getName().getString());
                     } else {
                         selectedFaction = Faction.NONE;
+                        if (getPos() != null)
+                            StartPosServerboundPacket.reservePos(getPos().pos, Faction.NONE, MC.player.getName().getString());
                     }
                 }
             },
