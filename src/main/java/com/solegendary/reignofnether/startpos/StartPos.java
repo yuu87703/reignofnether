@@ -88,7 +88,7 @@ public class StartPos {
                 .isSelected(() -> StartPosClientEvents.getPos() == this)
                 .isEnabled(() -> playerName.isBlank() || localPlayerName.equals(playerName))
                 .onLeftClick(() -> {
-                    if (!enabled)
+                    if (!enabled || !playerName.isBlank())
                         return;
                     if (StartPosClientEvents.getPos() == this)
                         StartPosServerboundPacket.unreservePos(pos);

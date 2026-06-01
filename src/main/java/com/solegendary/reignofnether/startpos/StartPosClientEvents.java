@@ -41,14 +41,6 @@ public class StartPosClientEvents {
         return ClientGameModeHelper.gameMode == GameMode.CLASSIC && !startPoses.isEmpty();
     }
 
-    public static boolean isSelectedPosReservedByOther() {
-        return getPos() != null &&
-                !getPos().playerName.isEmpty() &&
-                MC.player != null &&
-                !getPos().playerName.equals(MC.player.getName().getString()) &&
-                getPos().faction != Faction.NONE;
-    }
-
     public static void setPlayerReady(String playerName, boolean ready) {
         for (StartPos startPos : startPoses) {
             if (startPos.playerName.equals(playerName)) {
@@ -57,7 +49,7 @@ public class StartPosClientEvents {
                     if (MC.player != null) {
                         if (startPos.ready) {
                             MC.player.sendSystemMessage(Component.translatable("startpos.reignofnether.player_ready",
-                                    playerName, getNumPlayersReady(), startPoses.size()));
+                                    playerName, getNumPlayersReady(), getNumEnabledPoses()));
                         } else {
                             MC.player.sendSystemMessage(Component.translatable("startpos.reignofnether.player_not_ready", playerName));
                         }
@@ -113,11 +105,17 @@ public class StartPosClientEvents {
 
     private static int getNumPlayersReady() {
         int readyPlayers = 0;
-        for (StartPos startPose : startPoses) {
+        for (StartPos startPose : startPoses)
             if (startPose.faction != Faction.NONE && startPose.ready && !startPose.playerName.isBlank())
                 readyPlayers++;
-        }
         return readyPlayers;
+    }
+    private static int getNumEnabledPoses() {
+        int enabledPoses = 0;
+        for (StartPos startPose : startPoses)
+            if (startPose.enabled)
+                enabledPoses++;
+        return enabledPoses;
     }
 
     private static List<FormattedCharSequence> getReadyButtonTooltip() {
