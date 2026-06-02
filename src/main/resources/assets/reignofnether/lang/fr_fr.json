@@ -1459,11 +1459,6 @@
     "sandbox.reignofnether.custom_buildings.garrison_warning.multiple_exits": "\uE009   Multiples    blocs    sortie    garnison    détectés !",
     "sandbox.reignofnether.custom_buildings.garrison_warning.multiple_entries": "\uE009   Multiples    blocs    entrée    garnison    détectés !",
 
-    "startpos.reignofnether.positions_button.tooltip1": "Emplacements de Départ",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d emplacements pris",
-    "startpos.reignofnether.positions_button.tooltip3": "Clic pour voir prochain emplacement",
-    "startpos.reignofnether.positions_button.tooltip4": "Pris par %s",
-    "startpos.reignofnether.positions_button.tooltip5": "Maj-clic pour voir votre emplacement",
     "startpos.reignofnether.start_button.amount_ready": "(%d/%d joueurs)",
     "startpos.reignofnether.start_button.no_reserved_pos": "Vous n'avez pas réservé de place !",
     "startpos.reignofnether.cancel_start_button": "Annuler démarrage partie",

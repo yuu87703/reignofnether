@@ -1253,11 +1253,6 @@
     "sandbox.reignofnether.custom_buildings.set_invulnerable.tooltip1": "نمی‌تونه اتک یا دمیج بشه",
     "sandbox.reignofnether.custom_buildings.change_icon.tooltip1": "چنج پرترت بلاک",
 
-    "startpos.reignofnether.positions_button.tooltip1": "مکان های شروع",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d مکان ها برداشته شده",
-    "startpos.reignofnether.positions_button.tooltip3": "کلیک برای دیدن مکان بعدی",
-    "startpos.reignofnether.positions_button.tooltip4": "برداشته شده توسط %s",
-    "startpos.reignofnether.positions_button.tooltip5": "شیفت کلیک برای دیدن مکان خود",
     "startpos.reignofnether.start_button.amount_ready": "(%d/%d بازیکنان)",
     "startpos.reignofnether.start_button.no_reserved_pos": "شما یک مکان را رزرو نکردید!",
     "startpos.reignofnether.cancel_start_button": "لغو شروع بازی",

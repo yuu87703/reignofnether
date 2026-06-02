@@ -1245,11 +1245,6 @@
     "sandbox.reignofnether.exit1": "Salir del Modo Arena",
     "sandbox.reignofnether.exit2": "(Convierte a neutrales todas las unidades y construcciones)",
 
-    "startpos.reignofnether.positions_button.tooltip1": "Ubicaciones Iniciales",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d ubicaciones ocupadas",
-    "startpos.reignofnether.positions_button.tooltip3": "Haz clic para ver la siguiente ubicación",
-    "startpos.reignofnether.positions_button.tooltip4": "Ocupada por %s",
-    "startpos.reignofnether.positions_button.tooltip5": "Shift-clic para ver tu ubicación",
     "startpos.reignofnether.start_button.amount_ready": "(%d/%d jugadores)",
     "startpos.reignofnether.start_button.no_reserved_pos": "¡No has reservado un lugar!",
     "startpos.reignofnether.cancel_start_button": "Cancelar inicio del juego",

@@ -1755,26 +1755,25 @@ public class HudClientEvents {
         // -------------------------
         // Minimap start pos buttons
         // -------------------------
-        Map<Vec2, Button> startPosMapButtons = new HashMap<>();
+        if (MC.player != null && StartPosClientEvents.isEnabled() &&
+                !StartPosClientEvents.isStarting &&
+                !PlayerClientEvents.rtsLocked) {
 
-        for (StartPos startPos : StartPosClientEvents.startPoses) {
-            int xc = startPos.pos.getX();
-            int zc = startPos.pos.getZ();
+            for (StartPos startPos : StartPosClientEvents.startPoses) {
+                int xc = startPos.pos.getX();
+                int zc = startPos.pos.getZ();
 
-            // Render the Button overlaid at the map screen position:
-            if (MinimapClientEvents.isWorldXZinsideMap(xc, zc)) {
-                Button button = startPos.getButton(MC.player.getName().getString());
-                startPosMapButtons.put(new Vec2(xc, zc), button);
+                // Render the Button overlaid at the map screen position:
+                if (MinimapClientEvents.isWorldXZinsideMap(xc, zc)) {
+                    Button button = startPos.getButton(MC.player.getName().getString());
+                    Vec2 worldPos = new Vec2(xc, zc);
+                    Vec2 screenPos = MinimapClientEvents.worldPosToMinimapScreen((int) worldPos.x, (int) worldPos.y);
+                    int btnX = (int) screenPos.x - Button.DEFAULT_ICON_FRAME_SIZE / 2;
+                    int btnY = (int) screenPos.y - Button.DEFAULT_ICON_FRAME_SIZE / 2;
+                    button.render(evt.getGuiGraphics(), btnX, btnY, HudClientEvents.mouseX, HudClientEvents.mouseY);
+                    renderedButtons.add(button);
+                }
             }
-        }
-
-        for (Vec2 vec2 : startPosMapButtons.keySet()) {
-            Vec2 screenPos = MinimapClientEvents.worldPosToMinimapScreen((int) vec2.x, (int) vec2.y);
-            int btnX = (int) screenPos.x - Button.DEFAULT_ICON_FRAME_SIZE / 2;
-            int btnY = (int) screenPos.y - Button.DEFAULT_ICON_FRAME_SIZE / 2;
-            Button button = startPosMapButtons.get(vec2);
-            button.render(evt.getGuiGraphics(), btnX, btnY, HudClientEvents.mouseX, HudClientEvents.mouseY);
-            renderedButtons.add(button);
         }
 
         // ------------------------------------------------------

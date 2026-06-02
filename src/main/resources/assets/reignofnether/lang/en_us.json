@@ -1661,15 +1661,10 @@
     "sandbox.reignofnether.custom_buildings.commands.cooldown": "Cooldown (ticks)",
     "sandbox.reignofnether.custom_buildings.commands.invalid": "Invalid Command",
 
-    "startpos.reignofnether.positions_button.tooltip1": "Starting Locations",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d locations taken",
-    "startpos.reignofnether.positions_button.tooltip3": "Click to see next location",
-    "startpos.reignofnether.positions_button.tooltip4": "Taken by %s",
-    "startpos.reignofnether.positions_button.tooltip5": "Shift-click to see your location",
     "startpos.reignofnether.start_button.ready": "Ready",
     "startpos.reignofnether.start_button.amount_ready": "(%d/%d players)",
-    "startpos.reignofnether.start_button.no_reserved_pos": "You have not reserved a spot!",
-    "startpos.reignofnether.start_button.no_faction": "You have not selected a faction!",
+    "startpos.reignofnether.start_button.no_reserved_pos": "You have not chosen a map position!",
+    "startpos.reignofnether.start_button.no_faction": "You have not chosen a faction!",
     "startpos.reignofnether.cancel_start_button": "Cancel game start",
     "startpos.reignofnether.cancelled_start_game": "Game start cancelled",
     "startpos.reignofnether.starting_game": "Game starting in %d seconds",
@@ -1682,8 +1677,8 @@
     "startpos.reignofnether.ready_button.unready": "Unready",
 
     "startpos.reignofnether.disabled": "Disabled",
-    "startpos.reignofnether.not_reserved": "Click to select",
-    "startpos.reignofnether.reserved": "Taken by: %s",
+    "startpos.reignofnether.not_reserved": "Click to start here",
+    "startpos.reignofnether.reserved": "%s (%s)",
     "startpos.reignofnether.enable": "Right-click to enable",
     "startpos.reignofnether.disable": "Right-click to disable",
 

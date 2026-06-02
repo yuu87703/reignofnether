@@ -1220,11 +1220,6 @@
     "sandbox.reignofnether.exit1": "Выйти из режима песочницы",
     "sandbox.reignofnether.exit2": "(Сделает всех юнитов и здания нейтральными)",
 
-    "startpos.reignofnether.positions_button.tooltip1": "Стартовые позиции",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d позиций занято",
-    "startpos.reignofnether.positions_button.tooltip3": "Нажмите, чтобы увидеть следующую позицию",
-    "startpos.reignofnether.positions_button.tooltip4": "Занято %s",
-    "startpos.reignofnether.positions_button.tooltip5": "Shift+Клик - увидеть свою позицию",
     "startpos.reignofnether.start_button.amount_ready": "(%d/%d игроков)",
     "startpos.reignofnether.start_button.no_reserved_pos": "Вы не зарезервировали место!",
     "startpos.reignofnether.cancel_start_button": "Отменить старт игры",

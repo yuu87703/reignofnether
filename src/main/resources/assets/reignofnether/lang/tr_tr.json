@@ -1243,11 +1243,6 @@
     "sandbox.reignofnether.exit1": "Sandbox Modundan Çık",
     "sandbox.reignofnether.exit2": "(Tüm birimleri ve binaları tarafsız yapar)",
 
-    "startpos.reignofnether.positions_button.tooltip1": "Başlangıç Konumları",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d konum dolu",
-    "startpos.reignofnether.positions_button.tooltip3": "Sonraki konumu görmek için tıkla",
-    "startpos.reignofnether.positions_button.tooltip4": "%s tarafından alındı",
-    "startpos.reignofnether.positions_button.tooltip5": "Kendi konumunu görmek için Shift + tıkla",
     "startpos.reignofnether.start_button.amount_ready": "(%d/%d oyuncu)",
     "startpos.reignofnether.start_button.no_reserved_pos": "Henüz bir yer ayırmadın!",
     "startpos.reignofnether.cancel_start_button": "Oyunun başlamasını iptal et",

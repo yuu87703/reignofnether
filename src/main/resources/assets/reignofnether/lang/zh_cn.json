@@ -1661,11 +1661,6 @@
   "sandbox.reignofnether.custom_buildings.commands.cooldown": "倒计时（刻）",
   "sandbox.reignofnether.custom_buildings.commands.invalid": "无效命令",
 
-  "startpos.reignofnether.positions_button.tooltip1": "起始位置",
-  "startpos.reignofnether.positions_button.tooltip2": "已占据/起始位置总数：%d/%d",
-  "startpos.reignofnether.positions_button.tooltip3": "鼠标左击以查看下一起始位置",
-  "startpos.reignofnether.positions_button.tooltip4": "已被%s占据",
-  "startpos.reignofnether.positions_button.tooltip5": "按住 Shift + 鼠标右击以查看你的起始位置",
   "startpos.reignofnether.start_button.amount_ready": "（玩家/总数：%d/%d）",
   "startpos.reignofnether.start_button.no_reserved_pos": "你还没有选择起始位置！",
   "startpos.reignofnether.cancel_start_button": "中止开始游戏",

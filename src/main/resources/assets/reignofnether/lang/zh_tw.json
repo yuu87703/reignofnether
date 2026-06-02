@@ -1269,11 +1269,6 @@
     "sandbox.reignofnether.custom_buildings.set_invulnerable.tooltip1": "無法被攻擊或損壞",
     "sandbox.reignofnether.custom_buildings.change_icon.tooltip1": "更改圖示方塊",
 
-    "startpos.reignofnether.positions_button.tooltip1": "起始位置",
-    "startpos.reignofnether.positions_button.tooltip2": " 已佔用/起始位置總數：%d/%d",
-    "startpos.reignofnether.positions_button.tooltip3": "滑鼠點擊查看下一個位置",
-    "startpos.reignofnether.positions_button.tooltip4": "被%s佔用",
-    "startpos.reignofnether.positions_button.tooltip5": "Shift 點擊查看你的位置",
     "startpos.reignofnether.start_button.amount_ready": "（玩家/總數：%d/%d ）",
     "startpos.reignofnether.start_button.no_reserved_pos": "你尚未選定起始位置！",
     "startpos.reignofnether.cancel_start_button": "取消遊戲開始",

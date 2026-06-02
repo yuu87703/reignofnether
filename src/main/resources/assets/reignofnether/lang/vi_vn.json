@@ -1248,11 +1248,6 @@
     "sandbox.reignofnether.exit1": "Thoát chế độ Sandbox",
     "sandbox.reignofnether.exit2": "(Đặt tất cả đơn vị và công trình về Trung lập)",
 
-    "startpos.reignofnether.positions_button.tooltip1": "Địa điểm bắt đầu",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d địa điểm đã được chọn",
-    "startpos.reignofnether.positions_button.tooltip3": "Nhấp để xem địa điểm kế tiếp",
-    "startpos.reignofnether.positions_button.tooltip4": "Được %s chọn",
-    "startpos.reignofnether.positions_button.tooltip5": "Shift + nhấp để xem địa điểm bạn chọn",
     "startpos.reignofnether.start_button.amount_ready": "(%d/%d người chơi)",
     "startpos.reignofnether.start_button.no_reserved_pos": "Bạn chưa có chỗ",
     "startpos.reignofnether.cancel_start_button": "Hủy bắt đầu trò chơi",

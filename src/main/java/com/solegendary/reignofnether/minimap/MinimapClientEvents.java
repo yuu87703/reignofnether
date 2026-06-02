@@ -843,9 +843,8 @@ public class MinimapClientEvents {
                             //rgb = PlayerColors.getPlayerDisplayColorHex(startPos.playerName);
                             //if (startPos.faction == Faction.NONE)
                             //    rgb = 0xFFFF00;
-                            rgb = startPos.colorId;
+                            rgb = startPos.getHexColor();
                         }
-
                         int xN = x - xc_world + (mapGuiRadius * 2);
                         int zN = z - zc_world + (mapGuiRadius * 2);
 

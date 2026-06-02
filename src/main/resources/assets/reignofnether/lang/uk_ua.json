@@ -1198,11 +1198,6 @@
     "sandbox.reignofnether.exit1": "Скинути та вийти з режиму пісочниці",
     "sandbox.reignofnether.exit2": "(Знищує всі не-нейтральні об'єкти)",
 
-    "startpos.reignofnether.positions_button.tooltip1": "Початкові позиції",
-    "startpos.reignofnether.positions_button.tooltip2": "%d/%d позицій зайнято",
-    "startpos.reignofnether.positions_button.tooltip3": "Натисніть, щоб побачити наступну позицію",
-    "startpos.reignofnether.positions_button.tooltip4": "Зайнято %s",
-    "startpos.reignofnether.positions_button.tooltip5": "Shift+клік, щоб побачити свою позицію",
     "sandbox.reignofnether.nonunit_control_cheat_off": "Повний контроль юнітів: ВИМК",
     "sandbox.reignofnether.nonunit_control_cheat_on": "Повний контроль юнітів: УВІМК",
     "sandbox.reignofnether.nonunit_control_cheat1": "Контроль усіх мобів, навіть чужих",

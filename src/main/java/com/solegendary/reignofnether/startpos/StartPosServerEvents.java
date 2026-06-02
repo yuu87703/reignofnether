@@ -95,8 +95,8 @@ public class StartPosServerEvents {
             if (startPoses.size() < MAX_START_POSES) {
                 StartPos newStartPos = new StartPos(evt.getPos(),
                         rtsStartBlock.getMapColor(rtsStartBlock.defaultBlockState(),
-                        evt.getLevel(), evt.getPos(),
-                        rtsStartBlock.defaultMapColor()).col
+                            evt.getLevel(), evt.getPos(),
+                            rtsStartBlock.defaultMapColor()).id
                 );
                 startPoses.add(newStartPos);
                 StartPosClientboundPacket.addPos(newStartPos);
