@@ -11,7 +11,7 @@ Bugfixes
 --------
 [🟡] Windcaller attack sounds not playing
 [❌] Fixed chunk generation making too many server logs
-[❌] Add translation logs for entity.reignofnether.ENTITY_NAME
+[🟡] Fixed unit names in messages for survival players dying to RoN units
 [🟡] Iron golem hotkey on Villager units changed to G to fix a conflict with Call to Arms
 [🟡] Fixed windcallers randomly spawning as captains
 
@@ -19,8 +19,8 @@ Quality of Life
 ---------------
 [❌] Waypoint looping (by shift clicking back onto a previous waypoint it will automatically cycle the list once it reaches the end)
 [❌] Gamerule to turn off item drops from blocks (for performance)
-[❌] Hay bales are now harvestable for 20 food each
-[❌] Revamped ready system
+[✔] Hay bales are now harvestable for 20 food each, but takes 20s to gather
+[🟡] Revamped ready system
 
 
 Balance

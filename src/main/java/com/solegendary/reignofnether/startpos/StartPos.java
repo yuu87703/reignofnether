@@ -7,8 +7,10 @@ import com.solegendary.reignofnether.hud.ButtonBuilder;
 import com.solegendary.reignofnether.minimap.MinimapClientEvents;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerColors;
+import com.solegendary.reignofnether.player.PlayerServerboundPacket;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +30,8 @@ public class StartPos {
     public boolean isFromStartBlock = true;
     public boolean enabled = true;
     public boolean ready = false; // player on this spot is ready to start the game
+
+    public static final String BUTTON_NAME = "Start Pos";
 
     public StartPos(BlockPos pos, int colorId) {
         this.pos = pos;
@@ -116,7 +120,7 @@ public class StartPos {
             fcsList.add(fcs(I18n.get("startpos.reignofnether.enable")));
         }
 
-        return new ButtonBuilder("Reserve Pos")
+        return new ButtonBuilder(BUTTON_NAME)
                 .iconResource(faction != null && !playerName.isBlank() && ready ? getCornerTickIcon() : null)
                 .bgIconResource(enabled ? getIcon() : null)
                 .isSelected(() -> StartPosClientEvents.getPos() == this)
@@ -126,9 +130,9 @@ public class StartPos {
                         return;
                     if (StartPosClientEvents.getPos() == this)
                         StartPosServerboundPacket.unreservePos(pos);
-                    else
+                    else {
                         StartPosServerboundPacket.reservePos(pos, StartPosClientEvents.selectedFaction, localPlayerName);
-                    OrthoviewClientEvents.centreCameraOnPos(pos);
+                    }
                 })
                 .onRightClick(() -> {
                     if (!playerName.isBlank())

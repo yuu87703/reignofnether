@@ -12,7 +12,6 @@ import com.solegendary.reignofnether.building.addon.GarrisonableBuildingAddon;
 import com.solegendary.reignofnether.building.buildings.shared.AbstractBridge;
 import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.faction.Faction;
-import com.solegendary.reignofnether.hud.Button;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.nether.NetherBlocks;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
@@ -37,9 +36,7 @@ import com.solegendary.reignofnether.unit.units.villagers.WindcallerUnit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -798,6 +795,10 @@ public class MiscUtil {
 
     // eg. entity.reignofnether.zombie_unit -> zombie
     public static String getSimpleEntityName(Entity entity) {
+        return getSimpleEntityName(entity, false);
+    }
+
+    public static String getSimpleEntityName(Entity entity, boolean includeUnderscores) {
         if (entity instanceof PhantomSummon)
             return "Phantom";
 
@@ -806,16 +807,16 @@ public class MiscUtil {
                 return entity.getType()
                         .getDescription()
                         .getString()
-                        .replace(" ", "")
                         .replace("entity.reignofnether.", "")
                         .replace("_unit", "")
+                        .replace(" ", includeUnderscores ? "_" : " ")
                         .replace(".none", "");
             } else {
                 return entity.getName()
                         .getString()
-                        .replace(" ", "")
                         .replace("entity.reignofnether.", "")
                         .replace("_unit", "")
+                        .replace(" ", includeUnderscores ? "_" : " ")
                         .replace(".none", "");
             }
         } else if (entity != null) {

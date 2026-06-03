@@ -63,7 +63,6 @@ import com.solegendary.reignofnether.unit.units.villagers.VillagerUnit;
 import com.solegendary.reignofnether.util.MiscUtil;
 import com.solegendary.reignofnether.util.MyRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.resources.language.I18n;
@@ -181,32 +180,32 @@ public class HudClientEvents {
         String name = MiscUtil.getSimpleEntityName(entity);
 
         if (entity.isBaby())
-            name = I18n.get("units.neutral.reignofnether.baby") + " " + name;
+            name = I18n.get("entity.reignofnether.reignofnether.baby") + " " + name;
 
         if (!(entity instanceof Unit))
             return name.toLowerCase();
 
         if (entity instanceof MilitiaUnit militiaUnit && militiaUnit.isUsingBow()) {
-            name = I18n.get("units.villagers.reignofnether.militia_archer");
+            name = I18n.get("entity.reignofnether.militia_unit_archer");
         }
         ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
         if (itemStack.getItem() instanceof BannerItem) {
-            name += " " + I18n.get("units.villagers.reignofnether.captain");
+            name += " " + I18n.get("entity.reignofnether.captain");
         }
         if (entity.getPassengers().size() == 1) {
             Entity passenger = entity.getPassengers().get(0);
             if (entity instanceof RavagerUnit && passenger instanceof PillagerUnit) {
-                name = I18n.get("units.villagers.reignofnether.ravager_artillery");
+                name = I18n.get("entity.reignofnether.ravager_unit_artillery");
             } else if (entity instanceof PoisonSpiderUnit && (
                     passenger instanceof SkeletonUnit || passenger instanceof StrayUnit
             )) {
-                name = I18n.get("units.monsters.reignofnether.poison_spider_jockey");
+                name = I18n.get("entity.reignofnether.poison_spider_unit_jockey");
             } else if (entity instanceof SpiderUnit && (
                 passenger instanceof SkeletonUnit || passenger instanceof StrayUnit
             )) {
-                name = I18n.get("units.monsters.reignofnether.spider_jockey");
+                name = I18n.get("entity.reignofnether.spider_unit_jockey");
             }else if (entity instanceof HoglinUnit && passenger instanceof HeadhunterUnit) {
-                name = I18n.get("units.piglins.reignofnether.hoglin_rider");
+                name = I18n.get("entity.reignofnether.hoglin_unit_rider");
             } else {
                 String pName = MiscUtil.getSimpleEntityName(entity.getPassengers().get(0)).replace("_", " ");
                 String nameCap = pName.substring(0, 1).toUpperCase() + pName.substring(1);
@@ -245,11 +244,11 @@ public class HudClientEvents {
                     else
                         name = I18n.get("units.reignofnether.hunter");
                 }
-                default -> name = I18n.get("units.villagers.reignofnether.villager");
+                default -> name = I18n.get("entity.reignofnether.villager_unit");
             }
         }
         if (entity instanceof CreeperUnit cUnit && cUnit.isPowered()) {
-            name = I18n.get("units.monsters.reignofnether.charged_creeper");
+            name = I18n.get("entity.reignofnether.charged_creeper");
         }
         return name;
     }
@@ -692,7 +691,7 @@ public class HudClientEvents {
                     AlliancesClient.canControlAlly(unit)) &&
                 unitButtons.size() < (buttonsPerRow * 2)) {
                 // mob head icon
-                String unitName = MiscUtil.getSimpleEntityName(unit);
+                String unitName = MiscUtil.getSimpleEntityName(unit, true).toLowerCase();
                 String buttonImagePath;
 
                 if (unit.isVehicle()) {
@@ -722,7 +721,7 @@ public class HudClientEvents {
                     .build();
 
                 if (unit.isVehicle() && unit instanceof Unit) {
-                    String passengerName = MiscUtil.getSimpleEntityName(unit.getFirstPassenger());
+                    String passengerName = MiscUtil.getSimpleEntityName(unit.getFirstPassenger(), true);
                     button.bgIconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID,
                         "textures/mobheads/" + passengerName + ".png"
                     );
@@ -1792,6 +1791,14 @@ public class HudClientEvents {
                 return true;
             }
         return false;
+    }
+
+    public static Button getMousedOverStartPosButton() {
+        for (Button button : renderedButtons)
+            if (button.name.equals(StartPos.BUTTON_NAME) && button.isMouseOver(mouseX, mouseY)) {
+                return button;
+            }
+        return null;
     }
 
     public static boolean isMouseOverAnyButtonOrHud() {

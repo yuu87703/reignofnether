@@ -16,6 +16,7 @@ import com.solegendary.reignofnether.cursor.CursorClientEvents;
 import com.solegendary.reignofnether.fogofwar.FogOfWarClientEvents;
 import com.solegendary.reignofnether.guiscreen.TopdownGui;
 import com.solegendary.reignofnether.hud.Button;
+import com.solegendary.reignofnether.hud.HudClientEvents;
 import com.solegendary.reignofnether.keybinds.Keybindings;
 import com.solegendary.reignofnether.orthoview.OrthoviewClientEvents;
 import com.solegendary.reignofnether.player.PlayerClientEvents;
@@ -69,7 +70,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.solegendary.reignofnether.blocks.BlockClientEvents.nightCircleMode;
-import static com.solegendary.reignofnether.hud.HudClientEvents.isMouseOverAnyButton;
+import static com.solegendary.reignofnether.hud.HudClientEvents.*;
 import static com.solegendary.reignofnether.util.MiscUtil.fcs;
 
 public class MinimapClientEvents {
@@ -1006,6 +1007,7 @@ public class MinimapClientEvents {
     public static void onMouseDrag(ScreenEvent.MouseDragged.Pre evt) {
         if (!OrthoviewClientEvents.isEnabled() ||
                 OrthoviewClientEvents.isCameraLocked() ||
+                HudClientEvents.isMouseOverAnyButton() ||
                 !(MC.screen instanceof TopdownGui)) {
             return;
         }
@@ -1054,8 +1056,11 @@ public class MinimapClientEvents {
         boolean altDown = Keybindings.altMod.isDown();
 
         // when clicking on map move player there
-        if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1 && !isMouseOverAnyButton()) {
-            BlockPos moveTo = getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), true);
+        Button startPosButton = getMousedOverStartPosButton();
+        if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1 && (!isMouseOverAnyButton() || startPosButton != null)) {
+            BlockPos moveTo = startPosButton != null ?
+                    getWorldPosOnMinimap((float) startPosButton.x + 11, startPosButton.y + 11, true) :
+                    getWorldPosOnMinimap((float) evt.getMouseX(), (float) evt.getMouseY(), true);
 
             if (MC.player != null && moveTo != null) {
                 if (markerMode) {
