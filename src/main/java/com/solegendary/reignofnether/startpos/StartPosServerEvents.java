@@ -60,7 +60,7 @@ public class StartPosServerEvents {
             if (!startPos.ready || startPos.playerName.isBlank())
                 shouldStartGame = false;
         }
-        if (shouldStartGame && startPoses.size() > 1) {
+        if (shouldStartGame) {
             startGameCountdown();
         }
         if (ready)
