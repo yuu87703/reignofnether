@@ -793,12 +793,16 @@ public class MiscUtil {
         return entity.getAbsorptionAmount();
     }
 
-    // eg. entity.reignofnether.zombie_unit -> zombie
-    public static String getSimpleEntityName(Entity entity) {
-        return getSimpleEntityName(entity, false);
+    // eg. Zombie -> entity.reignofnether.zombie
+    public static String getEntityIconName(Entity entity) {
+        return entity.getType().getDescriptionId()
+                .replace("entity.reignofnether.", "")
+                .replace("_unit", "")
+                .toLowerCase();
     }
 
-    public static String getSimpleEntityName(Entity entity, boolean includeUnderscores) {
+    // eg. Zombie
+    public static String getSimpleEntityName(Entity entity) {
         if (entity instanceof PhantomSummon)
             return "Phantom";
 
@@ -806,18 +810,10 @@ public class MiscUtil {
             if (entity.hasCustomName()) {
                 return entity.getType()
                         .getDescription()
-                        .getString()
-                        .replace("entity.reignofnether.", "")
-                        .replace("_unit", "")
-                        .replace(" ", includeUnderscores ? "_" : " ")
-                        .replace(".none", "");
+                        .getString();
             } else {
                 return entity.getName()
-                        .getString()
-                        .replace("entity.reignofnether.", "")
-                        .replace("_unit", "")
-                        .replace(" ", includeUnderscores ? "_" : " ")
-                        .replace(".none", "");
+                        .getString();
             }
         } else if (entity != null) {
             return entity.getName().getString().toLowerCase();

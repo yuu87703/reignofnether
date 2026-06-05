@@ -48,7 +48,7 @@ public class SpiderProd extends ProductionItem {
 
     private static ResourceLocation getIcon() {
         if (ResearchClient.hasResearch(ProductionItems.RESEARCH_POISON_SPIDERS))
-            return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/cave_spider.png");
+            return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/poison_spider.png");
         else
             return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/spider.png");
     }

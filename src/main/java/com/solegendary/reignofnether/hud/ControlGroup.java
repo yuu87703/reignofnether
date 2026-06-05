@@ -109,7 +109,7 @@ public class ControlGroup {
         // assign the icon resource (won't update if the front entity/building dies)
         if (newGroup) {
             if (hudSelectedEntity != null) {
-                String unitName = MiscUtil.getSimpleEntityName(hudSelectedEntity);
+                String unitName = MiscUtil.getEntityIconName(hudSelectedEntity);
                 iconRl = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/" + unitName + ".png");
             } else if (hudSelectedPlacement != null) {
                 iconRl = hudSelectedPlacement.getBuilding().icon;

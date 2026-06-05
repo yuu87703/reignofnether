@@ -48,7 +48,7 @@ public class PoisonSpiderProd extends ProductionItem {
     public UnitSpawnButton getPlaceButton() {
         return new UnitSpawnButton(
                 itemName,
-                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/cave_spider.png"),
+                ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/poison_spider.png"),
                 List.of(
                         FormattedCharSequence.forward(I18n.get("entity.reignofnether.poison_spider_unit"), Style.EMPTY.withBold(true)),
                         FormattedCharSequence.forward("", Style.EMPTY),
@@ -62,7 +62,7 @@ public class PoisonSpiderProd extends ProductionItem {
     public StartProductionButton getStartButton(ProductionPlacement prodBuilding, Keybinding hotkey) {
         return new StartProductionButton(
             PoisonSpiderProd.itemName,
-            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/cave_spider.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/poison_spider.png"),
             hotkey,
             () -> false,
             () -> ResearchClient.hasResearch(ProductionItems.RESEARCH_POISON_SPIDERS),
@@ -84,7 +84,7 @@ public class PoisonSpiderProd extends ProductionItem {
     public StopProductionButton getCancelButton(ProductionPlacement prodBuilding, boolean first) {
         return new StopProductionButton(
             PoisonSpiderProd.itemName,
-            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/cave_spider.png"),
+            ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/mobheads/poison_spider.png"),
             prodBuilding,
             this,
             first

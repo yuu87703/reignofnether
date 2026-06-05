@@ -11,17 +11,25 @@ Bugfixes
 --------
 [🟡] Windcaller attack sounds not playing
 [❌] Fixed chunk generation making too many server logs
-[🟡] Fixed unit names in messages for survival players dying to RoN units
-[🟡] Iron golem hotkey on Villager units changed to G to fix a conflict with Call to Arms
-[🟡] Fixed windcallers randomly spawning as captains
+[✔] Fixed unit names in messages for survival players dying to RoN units
+[✔] Iron golem hotkey on Villager units changed to G to fix a conflict with Call to Arms
+[✔] Fixed windcallers randomly spawning as captains
 
 Quality of Life
 ---------------
+[🟡] Revamped ready system
+    - Removed the top right start-pos cycling button
+    - Start pos buttons are now all on the minimap - you can click them to reserve a spot or disable the position
+    - The game countdown is no longer started by players manually,
+        - Instead it begins once all enabled start positions are filled and everyone is ready
+
+[✔] Hay bales are now harvestable for 20 food each, but takes 20s to gather
+[✔] Unit portrait names are now translatable
+[✔] Hotkeys are now rebindable in the Minecraft options menu
+    - Thanks @Soly!
+
 [❌] Waypoint looping (by shift clicking back onto a previous waypoint it will automatically cycle the list once it reaches the end)
 [❌] Gamerule to turn off item drops from blocks (for performance)
-[✔] Hay bales are now harvestable for 20 food each, but takes 20s to gather
-[🟡] Revamped ready system
-
 
 Balance
 -------
@@ -30,3 +38,5 @@ Balance
 
 Languages
 ---------
+[✔] Updated Russian (ru_ru)
+    - Thanks @Azore!

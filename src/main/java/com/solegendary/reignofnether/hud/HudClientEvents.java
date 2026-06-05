@@ -186,7 +186,7 @@ public class HudClientEvents {
             return name.toLowerCase();
 
         if (entity instanceof MilitiaUnit militiaUnit && militiaUnit.isUsingBow()) {
-            name = I18n.get("entity.reignofnether.militia_unit_archer");
+            name = I18n.get("entity.reignofnether.militia_archer_unit");
         }
         ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.HEAD);
         if (itemStack.getItem() instanceof BannerItem) {
@@ -195,17 +195,17 @@ public class HudClientEvents {
         if (entity.getPassengers().size() == 1) {
             Entity passenger = entity.getPassengers().get(0);
             if (entity instanceof RavagerUnit && passenger instanceof PillagerUnit) {
-                name = I18n.get("entity.reignofnether.ravager_unit_artillery");
+                name = I18n.get("entity.reignofnether.ravager_artillery");
             } else if (entity instanceof PoisonSpiderUnit && (
                     passenger instanceof SkeletonUnit || passenger instanceof StrayUnit
             )) {
-                name = I18n.get("entity.reignofnether.poison_spider_unit_jockey");
+                name = I18n.get("entity.reignofnether.poison_spider_jockey");
             } else if (entity instanceof SpiderUnit && (
                 passenger instanceof SkeletonUnit || passenger instanceof StrayUnit
             )) {
-                name = I18n.get("entity.reignofnether.spider_unit_jockey");
+                name = I18n.get("entity.reignofnether.spider_jockey");
             }else if (entity instanceof HoglinUnit && passenger instanceof HeadhunterUnit) {
-                name = I18n.get("entity.reignofnether.hoglin_unit_rider");
+                name = I18n.get("entity.reignofnether.hoglin_rider");
             } else {
                 String pName = MiscUtil.getSimpleEntityName(entity.getPassengers().get(0)).replace("_", " ");
                 String nameCap = pName.substring(0, 1).toUpperCase() + pName.substring(1);
@@ -691,7 +691,7 @@ public class HudClientEvents {
                     AlliancesClient.canControlAlly(unit)) &&
                 unitButtons.size() < (buttonsPerRow * 2)) {
                 // mob head icon
-                String unitName = MiscUtil.getSimpleEntityName(unit, true).toLowerCase();
+                String unitName = MiscUtil.getEntityIconName(unit);
                 String buttonImagePath;
 
                 if (unit.isVehicle()) {
@@ -721,7 +721,7 @@ public class HudClientEvents {
                     .build();
 
                 if (unit.isVehicle() && unit instanceof Unit) {
-                    String passengerName = MiscUtil.getSimpleEntityName(unit.getFirstPassenger(), true);
+                    String passengerName = MiscUtil.getEntityIconName(unit.getFirstPassenger());
                     button.bgIconResource = ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID,
                         "textures/mobheads/" + passengerName + ".png"
                     );
