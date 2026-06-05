@@ -127,7 +127,7 @@ public class Button {
     protected void renderHotkey(GuiGraphics guiGraphics, int x, int y) {
         // hotkey letter
         if (this.hotkey != null) {
-            String hotkeyStr = hotkey.buttonLabel;
+            String hotkeyStr = hotkey.getCurrentLabel();
             hotkeyStr = hotkeyStr.substring(0,Math.min(3, hotkeyStr.length()));
             guiGraphics.pose().translate(0,0,1);
             guiGraphics.drawCenteredString(MC.font,

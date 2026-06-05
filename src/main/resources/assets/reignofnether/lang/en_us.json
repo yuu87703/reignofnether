@@ -1748,7 +1748,7 @@
     "key.reignofnether.rot_ccw":      "Rotate Camera Counter-Clockwise",
     "key.reignofnether.reset":        "Reset Camera",
 
-    "key.reignofnether.cancel_build": "Cancel Build",
+    "key.reignofnether.cancel_build": "Cancel Build / Delete Unit",
     "key.reignofnether.attack":       "Attack Command",
     "key.reignofnether.stop":         "Stop Command",
     "key.reignofnether.hold":         "Hold Position Command",

@@ -553,8 +553,8 @@ public class WindcallerUnit extends Pillager implements Unit, AttackerUnit, Rang
 
         level().addFreshEntity(proj);
 
-        if (level().isClientSide())
-            SoundClientEvents.playSoundAtPos(SoundAction.WINDCALLER_WIND_ATTACK, blockPosition(), 2.0F);
+        if (!level().isClientSide())
+            SoundClientboundPacket.playSoundAtPos(SoundAction.WINDCALLER_WIND_ATTACK, blockPosition(), 2.0F);
 
         if (!level().isClientSide() && pTarget instanceof Unit unit)
             FogOfWarClientboundPacket.revealRangedUnit(unit.getOwnerName(), this.getId());

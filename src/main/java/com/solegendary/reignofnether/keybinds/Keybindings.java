@@ -61,7 +61,8 @@ public class Keybindings {
     public static final Keybinding chat        = new Keybinding("key.reignofnether.chat",         GLFW.GLFW_KEY_ENTER,         CATEGORY_RTS, "");
     public static final Keybinding deselect    = new Keybinding("key.reignofnether.deselect",     GLFW.GLFW_KEY_GRAVE_ACCENT,  CATEGORY_RTS, "~");
     public static final Keybinding tab         = new Keybinding("key.reignofnether.tab",          GLFW.GLFW_KEY_TAB,           CATEGORY_RTS, "");
-    public static final Keybinding hotkey9     = new Keybinding("key.reignofnether.hotkey_9",     GLFW.GLFW_KEY_Z,             CATEGORY_RTS, "");
+    public static final Keybinding hotkey9     = new Keybinding("key.reignofnether.hotkey_9",     GLFW.GLFW_KEY_Z,             CATEGORY_RTS, "Z");
+    public static final Keybinding hotkey10     = new Keybinding("key.reignofnether.hotkey_10",     GLFW.GLFW_KEY_X,             CATEGORY_RTS, "X");
 
     public static final Keybinding[] nums = {
         new Keybinding("key.reignofnether.control_group_0", GLFW.GLFW_KEY_0, CATEGORY_RTS, "0"),

@@ -36,6 +36,18 @@ public class Keybinding {
         this.description = description;
     }
 
+    public String getCurrentLabel() {
+        if (mapping == null) {
+            return buttonLabel;
+        }
+        InputConstants.Key key = mapping.getKey();
+        if (key.equals(InputConstants.UNKNOWN)) {
+            return "";
+        }
+        String full = key.getDisplayName().getString();
+        return full.substring(0, Math.min(3, full.length()));
+    }
+
     public int getKey() {
         return mapping != null ? mapping.getKey().getValue() : rawKey;
     }
