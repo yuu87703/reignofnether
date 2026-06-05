@@ -34,9 +34,13 @@ Quality of Life
 Balance
 -------
 
-
-
 Languages
 ---------
 [✔] Updated Russian (ru_ru)
     - Thanks @Azore!
+
+[✔] Updated Simplified Chinese (zh_cn)
+    - Thanks @NumberSir!
+
+[✔] Updated Persian (fa_ir)
+    - Thanks @Alireza!
