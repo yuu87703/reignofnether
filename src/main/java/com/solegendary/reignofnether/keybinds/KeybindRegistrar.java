@@ -14,8 +14,8 @@ public class KeybindRegistrar {
     @SubscribeEvent
     public static void onRegister(RegisterKeyMappingsEvent event) {
         for (Keybinding kb : Keybindings.all()) {
-            if (kb.mapping != null) {
-                event.register(kb.mapping);
+            if (kb.getMapping() != null) {
+                event.register(kb.getMapping());
             }
         }
     }

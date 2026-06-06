@@ -3,11 +3,18 @@ package com.solegendary.reignofnether.keybinds;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.fml.DistExecutor;
 
 public class Keybinding {
-    public final KeyMapping mapping;        // null for raw GLFW bindings
+    private KeyMapping mapping;        // null for raw GLFW bindings or on serverside
+    private boolean mappingInitialised = false; // don't initialise mapping until needed (so that it remains null on server)
+    private final String translationKey;
+    private final String category;
+    private final IKeyConflictContext ctx;
     private final int rawKey;               // fallback when mapping == null
     public final String buttonLabel;        // static display label (also parsed as int for nums[])
     public final String description;        // legacy descriptor, kept for back-compat
@@ -15,8 +22,9 @@ public class Keybinding {
     // Forge-backed binding: appears in vanilla Controls UI, persisted via options.txt
     public Keybinding(String translationKey, int defaultKey, String category,
                       IKeyConflictContext ctx, String buttonLabel) {
-        this.mapping = new KeyMapping(translationKey, ctx,
-                InputConstants.Type.KEYSYM.getOrCreate(defaultKey), category);
+        this.category = category;
+        this.translationKey = translationKey;
+        this.ctx = ctx;
         this.rawKey = defaultKey;
         this.buttonLabel = buttonLabel;
         this.description = translationKey;
@@ -34,6 +42,9 @@ public class Keybinding {
         this.rawKey = rawKey;
         this.buttonLabel = buttonLabel;
         this.description = description;
+        this.translationKey = null;
+        this.category = null;
+        this.ctx = null;
     }
 
     public String getCurrentLabel() {
@@ -48,8 +59,24 @@ public class Keybinding {
         return full.substring(0, Math.min(3, full.length()));
     }
 
+    public KeyMapping getMapping() {
+        if (!mappingInitialised) {
+            mappingInitialised = true;
+            if (translationKey != null && ctx != null && category != null) {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::initMapping);
+            }
+        }
+        return mapping;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void initMapping() {
+        this.mapping = new KeyMapping(translationKey, ctx,
+                InputConstants.Type.KEYSYM.getOrCreate(rawKey), category);
+    }
+
     public int getKey() {
-        return mapping != null ? mapping.getKey().getValue() : rawKey;
+        return getMapping() != null ? getMapping().getKey().getValue() : rawKey;
     }
 
     public boolean isDown() {

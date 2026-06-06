@@ -5,15 +5,14 @@
 [🟡] Partially done and/or needs testing
 [❌] Not done, including unmerged PRs
 
-
-
 Bugfixes
 --------
-[❌] Fixed chunk generation making too many server logs
+[✔] Fixed chunk generation making too many server logs
 [✔] Fixed unit names in messages for survival players dying to RoN units
 [✔] Iron golem hotkey on Villager units changed to G to fix a conflict with Call to Arms
 [✔] Fixed Windcallers randomly spawning as captains
 [✔] Fixed Windcaller attack sounds not playing
+
 
 Quality of Life
 ---------------
