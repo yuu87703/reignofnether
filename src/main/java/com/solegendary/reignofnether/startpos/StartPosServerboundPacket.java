@@ -1,9 +1,11 @@
 package com.solegendary.reignofnether.startpos;
 
+import com.solegendary.reignofnether.ReignOfNether;
 import com.solegendary.reignofnether.registrars.PacketHandler;
 import com.solegendary.reignofnether.faction.Faction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -65,10 +67,26 @@ public class StartPosServerboundPacket {
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         final var success = new AtomicBoolean(false);
         ctx.get().enqueueWork(() -> {
+
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) {
+                ReignOfNether.LOGGER.warn("GameruleServerboundPacket: Sender was null");
+                success.set(false);
+                return;
+            }
+            else if ((action == StartPosAction.ENABLE || action == StartPosAction.DISABLE) &&
+                    !player.hasPermissions(4)) {
+                ReignOfNether.LOGGER.warn("GameruleServerboundPacket: Tried to process packet from " + player.getName() + " with insufficient permissions");
+                success.set(false);
+                return;
+            }
+
             switch (action) {
                 case RESERVE -> {
+                    if (StartPosServerEvents.isStartingGame())
+                        return;
                     for (StartPos startPos : StartPosServerEvents.startPoses) {
-                        if (startPos.pos.equals(blockPos)) {
+                        if (startPos.pos.equals(blockPos) && startPos.enabled) {
                             startPos.reset();
                             startPos.faction = faction;
                             startPos.playerName = playerName;
@@ -80,6 +98,8 @@ public class StartPosServerboundPacket {
                     StartPosServerEvents.setPlayerReady(playerName, false);
                 }
                 case UNRESERVE -> {
+                    if (StartPosServerEvents.isStartingGame())
+                        return;
                     for (StartPos startPos : StartPosServerEvents.startPoses) {
                         if (startPos.pos.equals(blockPos)) {
                             startPos.reset();

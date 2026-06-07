@@ -45,6 +45,10 @@ public class StartPosServerEvents {
     private static int cullTicksMax = 100;
     private static int cullTicks = 0;
 
+    public static boolean isStartingGame() {
+        return startingGame;
+    }
+
     public static void reset(ServerLevel serverLevel) {
         for (StartPos startPos : startPoses) {
             startPos.reset();
@@ -57,11 +61,13 @@ public class StartPosServerEvents {
         for (StartPos startPos : startPoses) {
             if (startPos.playerName.equals(playerName))
                 startPos.ready = ready;
-            if (!startPos.ready || startPos.playerName.isBlank())
+            if (startPos.enabled && (!startPos.ready || startPos.playerName.isBlank()))
                 shouldStartGame = false;
         }
         if (shouldStartGame) {
             startGameCountdown();
+        } else if (startingGame) {
+            cancelStartGameCountdown(false);
         }
         if (ready)
             StartPosClientboundPacket.readyPlayer(playerName);
@@ -70,6 +76,8 @@ public class StartPosServerEvents {
     }
 
     public static void setPosEnabled(BlockPos pos, boolean enable) {
+        if (startingGame)
+            return;
         for (StartPos startPos : startPoses) {
             if (startPos.pos.equals(pos)) {
                 startPos.enabled = enable;
@@ -272,14 +280,17 @@ public class StartPosServerEvents {
 
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent evt) {
+        boolean shouldStopCountdown = false;
         for (StartPos startPos : startPoses) {
             if (evt.getEntity() instanceof ServerPlayer player &&
                     startPos.playerName.equals(player.getName().getString())) {
                 StartPosClientboundPacket.unreservePos(startPos.pos);
                 startPos.reset();
+                shouldStopCountdown = true;
             }
         }
+        if (shouldStopCountdown && startingGame) {
+            cancelStartGameCountdown(false);
+        }
     }
-
-
 }

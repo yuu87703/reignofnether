@@ -1124,6 +1124,9 @@ public class CommandsServerEvents {
 			CommandContext<CommandSourceStack> ctx,
 			String mode
 	) {
+		if (StartPosServerEvents.isStartingGame()) {
+			return 0;
+		}
 		if (RTSMapInfoServerEvents.rtsMapInfo == null) {
 			ctx.getSource().sendFailure(Component.literal("No rtsMapInfo loaded"));
 			return 0;

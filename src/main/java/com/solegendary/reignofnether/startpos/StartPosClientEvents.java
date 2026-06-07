@@ -136,7 +136,7 @@ public class StartPosClientEvents {
                 ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/icon_frame.png"),
                 null,
                 () -> false,
-                () -> !isEnabled() || isStarting || !isReady(),
+                () -> !isEnabled() || !isReady(),
                 () -> true,
                 () -> {
                     if (MC.player != null)

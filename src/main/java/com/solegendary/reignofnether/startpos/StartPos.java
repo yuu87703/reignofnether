@@ -60,22 +60,7 @@ public class StartPos {
                 default -> null;
             };
         }
-        if (colorId == MapColor.COLOR_MAGENTA.id     || colorId == 0xBD44B3) return getIcon("magenta");
-        else if (colorId == MapColor.COLOR_LIGHT_BLUE.id  || colorId == 0x3AAFD9) return getIcon("light_blue");
-        else if (colorId == MapColor.COLOR_ORANGE.id      || colorId == 0xF07613) return getIcon("orange");
-        else if (colorId == MapColor.COLOR_YELLOW.id      || colorId == 0xF8C627) return getIcon("yellow");
-        else if (colorId == MapColor.COLOR_LIGHT_GREEN.id || colorId == 0x70B919) return getIcon("lime");
-        else if (colorId == MapColor.COLOR_PINK.id        || colorId == 0xED8DAC) return getIcon("pink");
-        else if (colorId == MapColor.COLOR_GRAY.id        || colorId == 0x3E4447) return getIcon("gray");
-        else if (colorId == MapColor.COLOR_LIGHT_GRAY.id  || colorId == 0x8E8E86) return getIcon("light_gray");
-        else if (colorId == MapColor.COLOR_CYAN.id        || colorId == 0x158991) return getIcon("cyan");
-        else if (colorId == MapColor.COLOR_PURPLE.id      || colorId == 0x792AAC) return getIcon("purple");
-        else if (colorId == MapColor.COLOR_BLUE.id        || colorId == 0x35399D) return getIcon("blue");
-        else if (colorId == MapColor.COLOR_BROWN.id       || colorId == 0x724728) return getIcon("brown");
-        else if (colorId == MapColor.COLOR_GREEN.id       || colorId == 0x546D1B) return getIcon("green");
-        else if (colorId == MapColor.COLOR_RED.id         || colorId == 0xA12722) return getIcon("red");
-        else if (colorId == MapColor.COLOR_BLACK.id       || colorId == 0x141519) return getIcon("black");
-        else return getIcon("white");
+        return getIcon(MiscUtil.getColorName(colorId, true));
     }
 
     public int getHexColor() {
@@ -105,7 +90,7 @@ public class StartPos {
         return ResourceLocation.fromNamespaceAndPath(ReignOfNether.MOD_ID, "textures/hud/tick_corner.png");
     }
 
-    public Button getButton(String localPlayerName) {
+    public Button getButton(String localPlayerName, boolean isOp) {
         ArrayList<FormattedCharSequence> fcsList = new ArrayList<>();
 
         if (enabled) {
@@ -113,9 +98,14 @@ public class StartPos {
                 fcsList.add(fcs(I18n.get("startpos.reignofnether.not_reserved"), true));
                 fcsList.add(fcs(I18n.get("startpos.reignofnether.disable")));
             } else {
-                fcsList.add(fcs(I18n.get("startpos.reignofnether.reserved", playerName, faction.name()), true));
+                if (ready)
+                    fcsList.add(fcs(I18n.get("startpos.reignofnether.reserved_ready", playerName), true));
+                else
+                    fcsList.add(fcs(I18n.get("startpos.reignofnether.reserved", playerName), true));
+                fcsList.add(fcs(I18n.get("startpos.reignofnether.faction", faction.name()), false));
+                fcsList.add(fcs(I18n.get("startpos.reignofnether.team", MiscUtil.getColorName(colorId, false)), false));
             }
-        } else {
+        } else if (isOp) {
             fcsList.add(fcs(I18n.get("startpos.reignofnether.disabled"), true));
             fcsList.add(fcs(I18n.get("startpos.reignofnether.enable")));
         }

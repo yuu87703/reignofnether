@@ -1678,7 +1678,9 @@
 
   "startpos.reignofnether.disabled": "已禁用",
   "startpos.reignofnether.not_reserved": "点击以在此开始",
-  "startpos.reignofnether.reserved": "%s（%s派系）",
+  "startpos.reignofnether.reserved": "%s",
+  "startpos.reignofnether.reserved_ready": "%s ✔",
+  "startpos.reignofnether.faction": "%s派系",
   "startpos.reignofnether.enable": "鼠标右击以启用",
   "startpos.reignofnether.disable": "鼠标右击以禁用",
 
