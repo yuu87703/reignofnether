@@ -5,7 +5,7 @@ import net.minecraftforge.client.settings.KeyConflictContext;
 
 // Splits the mod's bindings into disjoint "contexts" so the Controls UI
 // doesn't flag intentional default-key overlaps (LEFT for both panPlusX
-// and rotCCW; M for minimapToggle/move; G for hotkey8/gather) as conflicts.
+// and rotCCW; M for minimapToggle/move) as conflicts.
 public enum RtsConflictContext implements IKeyConflictContext {
     PAN,
     ROTATE,

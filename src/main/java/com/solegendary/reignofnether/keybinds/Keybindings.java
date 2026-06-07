@@ -41,28 +41,26 @@ public class Keybindings {
     public static final Keybinding abilitySlot7        = new Keybinding("key.reignofnether.ability_7",    GLFW.GLFW_KEY_U,             CATEGORY_RTS, "U");
     public static final Keybinding abilitySlot8        = new Keybinding("key.reignofnether.ability_8",    GLFW.GLFW_KEY_I,             CATEGORY_RTS, "I");
     public static final Keybinding abilitySlot9        = new Keybinding("key.reignofnether.ability_9",    GLFW.GLFW_KEY_O,             CATEGORY_RTS, "O");
-    public static final Keybinding abilitySlot10        = new Keybinding("key.reignofnether.ability_10",   GLFW.GLFW_KEY_P,             CATEGORY_RTS, "P");
+    public static final Keybinding abilitySlot10       = new Keybinding("key.reignofnether.ability_10",   GLFW.GLFW_KEY_P,             CATEGORY_RTS, "P");
     public static final Keybinding hotkey1        = new Keybinding("key.reignofnether.hotkey_1",        GLFW.GLFW_KEY_V,             CATEGORY_RTS, "V");
     public static final Keybinding hotkey2        = new Keybinding("key.reignofnether.hotkey_2",        GLFW.GLFW_KEY_L,             CATEGORY_RTS, "L");
-    public static final Keybinding minimapToggle        = new Keybinding("key.reignofnether.minimap_toggle",        GLFW.GLFW_KEY_M,             CATEGORY_RTS, "M");
+    public static final Keybinding minimapToggle  = new Keybinding("key.reignofnether.minimap_toggle",        GLFW.GLFW_KEY_M,             CATEGORY_RTS, "M");
     public static final Keybinding hotkey3        = new Keybinding("key.reignofnether.hotkey_3",        GLFW.GLFW_KEY_F,             CATEGORY_RTS, "F");
     public static final Keybinding hotkey4        = new Keybinding("key.reignofnether.hotkey_4",        GLFW.GLFW_KEY_C,             CATEGORY_RTS, "C");
     public static final Keybinding hotkey5        = new Keybinding("key.reignofnether.hotkey_5",        GLFW.GLFW_KEY_D,             CATEGORY_RTS, "D");
     public static final Keybinding hotkey6        = new Keybinding("key.reignofnether.hotkey_6",        GLFW.GLFW_KEY_J,             CATEGORY_RTS, "J");
     public static final Keybinding hotkey7        = new Keybinding("key.reignofnether.hotkey_7",        GLFW.GLFW_KEY_K,             CATEGORY_RTS, "K");
-    public static final Keybinding hotkey8        = new Keybinding("key.reignofnether.hotkey_8",        GLFW.GLFW_KEY_G,             CATEGORY_RTS, "G");
+    public static final Keybinding hotkey8        = new Keybinding("key.reignofnether.hotkey_8",        GLFW.GLFW_KEY_Z,             CATEGORY_RTS, "Z");
+    public static final Keybinding hotkey9        = new Keybinding("key.reignofnether.hotkey_9",        GLFW.GLFW_KEY_X,             CATEGORY_RTS, "X");
     public static final Keybinding attack      = new Keybinding("key.reignofnether.attack",       GLFW.GLFW_KEY_A,             CATEGORY_RTS, "A");
     public static final Keybinding stop        = new Keybinding("key.reignofnether.stop",         GLFW.GLFW_KEY_S,             CATEGORY_RTS, "S");
     public static final Keybinding hold        = new Keybinding("key.reignofnether.hold",         GLFW.GLFW_KEY_H,             CATEGORY_RTS, "H");
-    public static final Keybinding move        = new Keybinding("key.reignofnether.move",         GLFW.GLFW_KEY_M,             CATEGORY_RTS, "M");
     public static final Keybinding build       = new Keybinding("key.reignofnether.build",        GLFW.GLFW_KEY_B,             CATEGORY_RTS, "B");
     public static final Keybinding gather      = new Keybinding("key.reignofnether.gather",       GLFW.GLFW_KEY_G,             CATEGORY_RTS, "G");
     public static final Keybinding garrison    = new Keybinding("key.reignofnether.garrison",     GLFW.GLFW_KEY_N,             CATEGORY_RTS, "N");
     public static final Keybinding chat        = new Keybinding("key.reignofnether.chat",         GLFW.GLFW_KEY_ENTER,         CATEGORY_RTS, "");
     public static final Keybinding deselect    = new Keybinding("key.reignofnether.deselect",     GLFW.GLFW_KEY_GRAVE_ACCENT,  CATEGORY_RTS, "~");
     public static final Keybinding tab         = new Keybinding("key.reignofnether.tab",          GLFW.GLFW_KEY_TAB,           CATEGORY_RTS, "");
-    public static final Keybinding hotkey9     = new Keybinding("key.reignofnether.hotkey_9",     GLFW.GLFW_KEY_Z,             CATEGORY_RTS, "Z");
-    public static final Keybinding hotkey10     = new Keybinding("key.reignofnether.hotkey_10",     GLFW.GLFW_KEY_X,             CATEGORY_RTS, "X");
 
     public static final Keybinding[] nums = {
         new Keybinding("key.reignofnether.control_group_0", GLFW.GLFW_KEY_0, CATEGORY_RTS, "0"),
@@ -103,11 +101,11 @@ public class Keybindings {
         list.add(abilitySlot1); list.add(abilitySlot2); list.add(abilitySlot3); list.add(abilitySlot4); list.add(abilitySlot5);
         list.add(abilitySlot6); list.add(abilitySlot7); list.add(abilitySlot8); list.add(abilitySlot9); list.add(abilitySlot10);
         list.add(hotkey1); list.add(hotkey2); list.add(minimapToggle); list.add(hotkey3); list.add(hotkey4);
-        list.add(hotkey5); list.add(hotkey6); list.add(hotkey7); list.add(hotkey8);
-        list.add(attack); list.add(stop); list.add(hold); list.add(move);
+        list.add(hotkey5); list.add(hotkey6); list.add(hotkey7);
+        list.add(attack); list.add(stop); list.add(hold);
         list.add(build); list.add(gather); list.add(garrison);
         list.add(chat); list.add(deselect); list.add(tab);
-        list.add(hotkey9);
+        list.add(hotkey8); list.add(hotkey9);
         Collections.addAll(list, nums);
         Collections.addAll(list, fnums);
         ALL = Collections.unmodifiableList(list);
