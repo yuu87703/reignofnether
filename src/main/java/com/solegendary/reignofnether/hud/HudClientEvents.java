@@ -1756,7 +1756,8 @@ public class HudClientEvents {
         // -------------------------
         if (MC.player != null && StartPosClientEvents.isEnabled() &&
                 !StartPosClientEvents.isStarting &&
-                !PlayerClientEvents.rtsLocked) {
+                !PlayerClientEvents.rtsLocked &&
+                PlayerClientEvents.rtsPlayers.isEmpty()) {
 
             for (StartPos startPos : StartPosClientEvents.startPoses) {
                 int xc = startPos.pos.getX();
