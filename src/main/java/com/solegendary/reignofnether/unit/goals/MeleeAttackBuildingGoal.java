@@ -49,7 +49,7 @@ public class MeleeAttackBuildingGoal extends MoveToTargetBlockGoal {
             // A1+A5: if the repathed final node matches the previous one, the target is unreachable —
             // stop instead of looping. Otherwise back off exponentially.
             if (this.mob.getNavigation().isDone() && moveTarget != null &&
-                this.mob.getOnPos().distSqr(moveTarget) > 1 && !isAttacking()) {
+                    this.mob.getOnPos().distSqr(moveTarget) > 1 && !isAttacking()) {
                 if (recalcCooldown > 0) {
                     recalcCooldown -= 1;
                 } else {
@@ -64,12 +64,14 @@ public class MeleeAttackBuildingGoal extends MoveToTargetBlockGoal {
                     recalcCooldown = currentMeleeRecalcCooldown;
                 }
             }
-
+            if (buildingTarget == null) {
+                return;
+            }
             calcMoveTarget();
             if (buildingTarget.getBlocksPlaced() <= 0) {
                 stopAttacking();
             }
-            if (isAttacking()) {
+            if (buildingTarget != null && isAttacking()) {
                 BlockPos bp = buildingTarget.centrePos;
                 this.mob.getLookControl().setLookAt(bp.getX(), bp.getY(), bp.getZ());
                 mob.getLookControl().lookAtCooldown = 20;
@@ -138,9 +140,9 @@ public class MeleeAttackBuildingGoal extends MoveToTargetBlockGoal {
                 if (b != null && b.isAttackable()) {
                     this.buildingTarget = b;
                     MiscUtil.addUnitCheckpoint(((Unit) mob), new BlockPos(
-                            buildingTarget.centrePos.getX(),
-                            buildingTarget.originPos.getY() + 1,
-                            buildingTarget.centrePos.getZ()),
+                                    buildingTarget.centrePos.getX(),
+                                    buildingTarget.originPos.getY() + 1,
+                                    buildingTarget.centrePos.getZ()),
                             false
                     );
                 }

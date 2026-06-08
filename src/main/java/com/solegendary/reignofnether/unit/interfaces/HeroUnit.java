@@ -72,7 +72,7 @@ public interface HeroUnit extends Unit {
         for (LivingEntity e : units) {
             if (e instanceof HeroUnit heroUnit &&
                     heroUnit.getOwnerName().equals(ownerName) &&
-                    (e.getName().getString().equals(unitName) || unitName.isBlank())) {
+                    (e.getType().getDescriptionId().equals(unitName) || unitName.isBlank())) {
                 list.add(heroUnit);
             }
         }
