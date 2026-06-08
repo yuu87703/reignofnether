@@ -7,7 +7,10 @@
 
 Bugfixes
 --------
+[❌] Hoglin riders don't refresh their move goals when reaching the current goal
+    - 16 blocks without improvedPathfinding, 64 with it
 
+[🟡] Fixed units stopping periodically when on long move commands
 
 Quality of Life
 ---------------
