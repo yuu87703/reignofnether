@@ -1003,6 +1003,6 @@ public class MiscUtil {
 
     public static String getColorName(int colorIdOrHex, boolean english) {
         ColorEntry entry = COLOR_MAP.getOrDefault(colorIdOrHex, COLOR_ENTRIES[0]);
-        return english ? entry.englishName : String.format("color.reignofnether.%s", entry.englishName);
+        return english ? entry.englishName : I18n.get(String.format("color.reignofnether.%s", entry.englishName));
     }
 }
