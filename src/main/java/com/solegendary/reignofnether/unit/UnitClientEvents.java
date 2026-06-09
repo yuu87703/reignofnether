@@ -621,7 +621,7 @@ public class UnitClientEvents {
     @SuppressWarnings("SequencedCollectionMethodCanBeUsed")
     @SubscribeEvent
     public static void onMouseClick(ScreenEvent.MouseButtonPressed.Post evt) {
-        if (!OrthoviewClientEvents.isEnabled()) return;
+        if (!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) return;
         if (MC.level == null) return;
 
         // prevent clicking behind HUDs
@@ -820,7 +820,7 @@ public class UnitClientEvents {
 
     @SubscribeEvent
     public static void onMouseDrag(ScreenEvent.MouseDragged.Pre evt) {
-        if (!OrthoviewClientEvents.isEnabled() || MC.level == null)
+        if ((!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) || MC.level == null)
             return;
 
         if (Keybindings.altMod.isDown())
@@ -859,7 +859,7 @@ public class UnitClientEvents {
 
     @SubscribeEvent
     public static void onMouseRelease(ScreenEvent.MouseButtonReleased.Post evt) {
-        if (!OrthoviewClientEvents.isEnabled() || MC.level == null)
+        if ((!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) || MC.level == null)
             return;
 
         if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_2) {

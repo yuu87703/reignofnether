@@ -38,6 +38,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -157,6 +158,39 @@ public class CursorClientEvents {
     @SubscribeEvent
     public static void onDrawScreen(ScreenEvent.Render evt) {
         long window = MC.getWindow().getWindow();
+
+        if (OrthoviewClientEvents.guiOnly) {
+            // guiOnly: convert screen cursor → world position via temporary rotation
+            if (MC.player == null || MC.level == null) return;
+            int winW = MC.getWindow().getGuiScaledWidth();
+            int winH = MC.getWindow().getGuiScaledHeight();
+            float sensitivity = 0.15F;
+            float origYaw = MC.player.getYRot();
+            float origPitch = MC.player.getXRot();
+            MC.player.setYRot(origYaw + (float)((evt.getMouseX() - winW/2.0) * sensitivity));
+            MC.player.setXRot(origPitch + (float)((winH/2.0 - evt.getMouseY()) * sensitivity));
+
+            BlockHitResult hit = Item.getPlayerPOVHitResult(MC.level, MC.player, ClipContext.Fluid.NONE);
+            cursorWorldPos = new Vector3d(hit.getLocation().x, hit.getLocation().y, hit.getLocation().z);
+            preselectedBlockPos = hit.getBlockPos();
+
+            // Entity ray trace
+            Vec3 from = MC.player.getEyePosition();
+            Vec3 look = MC.player.getViewVector(1.0F);
+            Vec3 to = from.add(look.x * 200, look.y * 200, look.z * 200);
+            UnitClientEvents.clearPreselectedUnits();
+            for (LivingEntity entity : MiscUtil.getEntitiesWithinRange(cursorWorldPos, 30, LivingEntity.class, MC.level)) {
+                if (entity.getId() == MC.player.getId()) continue;
+                AABB aabb = entity.getBoundingBox().inflate(0.1);
+                if (aabb.clip(from, to).isPresent()) {
+                    UnitClientEvents.addPreselectedUnit(entity);
+                    break;
+                }
+            }
+            MC.player.setYRot(origYaw);
+            MC.player.setXRot(origPitch);
+            return;
+        }
 
         if (!OrthoviewClientEvents.isEnabled() || !(evt.getScreen() instanceof TopdownGui)) {
             if (GLFW.glfwRawMouseMotionSupported()) // raw mouse increases sensitivity massively for some reason
@@ -339,7 +373,7 @@ public class CursorClientEvents {
     @SubscribeEvent
     public static void onMouseClick(ScreenEvent.MouseButtonPressed.Post evt) {
 
-        if (!OrthoviewClientEvents.isEnabled() ||
+        if ((!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) ||
                 MinimapClientEvents.isPointInsideMinimap(evt.getMouseX(), evt.getMouseY()) ||
                 HudClientEvents.isMouseOverAnyButtonOrHud())
             return;
@@ -360,7 +394,7 @@ public class CursorClientEvents {
 
     @SubscribeEvent
     public static void onMouseDrag(ScreenEvent.MouseDragged.Pre evt) {
-        if (!OrthoviewClientEvents.isEnabled())
+        if (!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly)
             return;
 
         if (cursorLeftClickDownPos.x >= 0 || cursorLeftClickDownPos.y >= 0)
@@ -372,7 +406,7 @@ public class CursorClientEvents {
 
     @SubscribeEvent
     public static void onMouseRelease(ScreenEvent.MouseButtonReleased.Post evt) {
-        if (!OrthoviewClientEvents.isEnabled()) return;
+        if (!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) return;
 
         // select a moused over entity by left clicking it
         if (evt.getButton() == GLFW.GLFW_MOUSE_BUTTON_1) {

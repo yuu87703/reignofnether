@@ -71,6 +71,7 @@ public class OrthoviewClientEvents {
     public static LeafHideMethod hideLeavesMethod = LeafHideMethod.NONE;
     public static int enabledCount = 0;
     public static boolean enabled = false;
+    public static boolean guiOnly = false;
     private static boolean cameraMovingByMouse = false; // excludes edgepanning
 
     private static final Minecraft MC = Minecraft.getInstance();
@@ -458,10 +459,29 @@ public class OrthoviewClientEvents {
 
     public static void tryToToggleEnable() {
         if (!OrthoviewClientEvents.isCameraLocked() && MC.gameMode != null) {
-            if (MC.player != null && (
-                    MC.gameMode.getPlayerMode() == GameType.ADVENTURE
-                            || MC.gameMode.getPlayerMode() == GameType.SURVIVAL
-            )) {
+            if (guiOnly || enabled) {
+                // already active — toggle off
+                if (guiOnly) {
+                    guiOnly = false;
+                    PlayerServerboundPacket.disableOrthoview();
+                    TopdownGuiServerboundPacket.closeTopdownGui(MC.player.getId());
+                    if (StartPosClientEvents.hasReservedPos()) {
+                        StartPosClientEvents.selectedFaction = Faction.NONE;
+                        StartPosServerboundPacket.unreservePos(StartPosClientEvents.getPos().pos);
+                    }
+                } else {
+                    toggleEnable();
+                }
+            } else if (MC.player != null && MC.gameMode.getPlayerMode() == GameType.SURVIVAL) {
+                // survival: GUI only, no overhead camera
+                if (MC.level == null || MC.player == null) return;
+                guiOnly = true;
+                PlayerServerboundPacket.enableOrthoview();
+                TopdownGuiServerboundPacket.openTopdownGuiKeepMode(MC.player.getId());
+                MC.options.hideGui = false;
+                MC.getTutorial().stop();
+                TutorialClientEvents.updateStage();
+            } else if (MC.player != null && MC.gameMode.getPlayerMode() == GameType.ADVENTURE) {
                 MC.player.sendSystemMessage(Component.literal(I18n.get("hud.orthoview.reignofnether.ortho_error")));
             } else {
                 toggleEnable();

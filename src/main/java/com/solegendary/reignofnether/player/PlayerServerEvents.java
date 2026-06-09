@@ -800,6 +800,10 @@ public class PlayerServerEvents {
     }
 
     public static void openTopdownGui(int playerId) {
+        openTopdownGui(playerId, false);
+    }
+
+    public static void openTopdownGui(int playerId, boolean keepGameMode) {
         ServerPlayer serverPlayer = getPlayerById(playerId);
 
         if (serverPlayer != null) {
@@ -815,8 +819,10 @@ public class PlayerServerEvents {
             // Mark that this player has the GUI open
             playerGuiOpenStatus.put(playerName, true);
 
-            // Set game mode to SPECTATOR for GUI interaction
-            serverPlayer.setGameMode(GameType.SPECTATOR);
+            // Set game mode to SPECTATOR for GUI interaction (unless keepGameMode is set)
+            if (!keepGameMode) {
+                serverPlayer.setGameMode(GameType.SPECTATOR);
+            }
         } else {
             ReignOfNether.LOGGER.warn("serverPlayer is null, cannot open topdown GUI");
         }

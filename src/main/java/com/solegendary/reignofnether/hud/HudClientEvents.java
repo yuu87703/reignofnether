@@ -269,7 +269,7 @@ public class HudClientEvents {
 
     @SubscribeEvent
     public static void onDrawScreen(ScreenEvent.Render.Post evt) {
-        if (!OrthoviewClientEvents.isEnabled() || !(evt.getScreen() instanceof TopdownGui)) {
+        if ((!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) || !(evt.getScreen() instanceof TopdownGui)) {
             return;
         }
         if (MC.level == null) {
@@ -1853,7 +1853,7 @@ public class HudClientEvents {
         if (evt.phase != TickEvent.Phase.END) {
             return;
         }
-        if (OrthoviewClientEvents.isEnabled()) {
+        if (OrthoviewClientEvents.isEnabled() || OrthoviewClientEvents.guiOnly) {
             portraitRendererUnit.tickAnimation();
         }
 
@@ -1910,7 +1910,7 @@ public class HudClientEvents {
             return;
 
         // Prevent spectator mode options from showing up
-        if (OrthoviewClientEvents.isEnabled()) {
+        if (OrthoviewClientEvents.isEnabled() || OrthoviewClientEvents.guiOnly) {
             for (Keybinding numKey : Keybindings.nums)
                 if (numKey.getKey() == evt.getKeyCode()) {
                     evt.setCanceled(true);

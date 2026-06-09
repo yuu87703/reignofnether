@@ -29,13 +29,15 @@ public class TopdownGuiClientEvents {
         if (evt.phase != TickEvent.Phase.END)
             return;
 
-        if (OrthoviewClientEvents.isEnabled() && Minecraft.getInstance().screen == null) {
+        if ((OrthoviewClientEvents.isEnabled() || OrthoviewClientEvents.guiOnly) && Minecraft.getInstance().screen == null) {
             noScreenTicks += 1;
             if (noScreenTicks >= 3) {
                 if (shouldPause) {
                     shouldPause = false;
                     MC.setScreen(new PauseScreen(true));
                 }
+                else if (OrthoviewClientEvents.guiOnly)
+                    TopdownGuiServerboundPacket.openTopdownGuiKeepMode(MC.player.getId());
                 else
                     TopdownGuiServerboundPacket.openTopdownGui(MC.player.getId());
                 noScreenTicks = 0;
@@ -76,7 +78,7 @@ public class TopdownGuiClientEvents {
     // prevent opening inventory with E or advancements with L
     @SubscribeEvent
     public static void onKeyPress(ScreenEvent.KeyPressed.Pre evt) {
-        if (OrthoviewClientEvents.isEnabled()) {
+        if (OrthoviewClientEvents.isEnabled() || OrthoviewClientEvents.guiOnly) {
             if (evt.getKeyCode() == Keybindings.pause.getKey())
                 shouldPause = true;
             else if (evt.getKeyCode() == MC.options.keyInventory.getKey().getValue())

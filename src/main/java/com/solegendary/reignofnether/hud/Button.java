@@ -257,7 +257,7 @@ public class Button {
 
     // must be done from mouse press event
     public void checkClicked(int mouseX, int mouseY, boolean leftClick) {
-        if (!OrthoviewClientEvents.isEnabled() || !isEnabled.get())
+        if ((!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) || !isEnabled.get())
             return;
 
         if (isMouseOver(mouseX, mouseY) && MC.player != null) {
@@ -274,7 +274,7 @@ public class Button {
 
     // must be done from key press event
     public void checkPressed(int key) {
-        if (!OrthoviewClientEvents.isEnabled() || !isEnabled.get())
+        if ((!OrthoviewClientEvents.isEnabled() && !OrthoviewClientEvents.guiOnly) || !isEnabled.get())
             return;
 
         if (hotkey != null && hotkey.getKey() == key) {

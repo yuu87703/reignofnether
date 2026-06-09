@@ -14,10 +14,14 @@ import java.util.function.Supplier;
 public class TopdownGuiServerboundPacket {
     public boolean topdownGuiOpen = false;
     public int playerId = -1; // to track
+    public boolean keepGameMode = false; // guiOnly: don't force spectator
 
     // client-side helper functions
     public static void openTopdownGui(int playerId) {
         PacketHandler.INSTANCE.sendToServer(new TopdownGuiServerboundPacket(true, playerId));
+    }
+    public static void openTopdownGuiKeepMode(int playerId) {
+        PacketHandler.INSTANCE.sendToServer(new TopdownGuiServerboundPacket(true, playerId, true));
     }
     public static void closeTopdownGui(int playerId) {
         Minecraft.getInstance().popGuiLayer();
@@ -31,14 +35,22 @@ public class TopdownGuiServerboundPacket {
         this.playerId = playerId;
     }
 
+    public TopdownGuiServerboundPacket(Boolean pos, int playerId, boolean keepGameMode) {
+        this.topdownGuiOpen = pos;
+        this.playerId = playerId;
+        this.keepGameMode = keepGameMode;
+    }
+
     public TopdownGuiServerboundPacket(FriendlyByteBuf buffer) {
         this.topdownGuiOpen = buffer.readBoolean();
         this.playerId = buffer.readInt();
+        this.keepGameMode = buffer.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeBoolean(this.topdownGuiOpen);
         buffer.writeInt(this.playerId);
+        buffer.writeBoolean(this.keepGameMode);
     }
 
 
@@ -59,7 +71,7 @@ public class TopdownGuiServerboundPacket {
             }
 
             if (this.topdownGuiOpen)
-                PlayerServerEvents.openTopdownGui(this.playerId);
+                PlayerServerEvents.openTopdownGui(this.playerId, this.keepGameMode);
             else
                 PlayerServerEvents.closeTopdownGui(this.playerId);
 
